@@ -17,19 +17,15 @@
 package com.ivianuu.essentials.util
 
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.ui.common.registerActivityResultCallback
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.util.*
 import kotlin.coroutines.resume
 
 @GivenFun
@@ -50,10 +46,8 @@ suspend fun <I, O> startActivityForResult(
         suspendCancellableCoroutine { continuation ->
             val launcher = activity.activityResultRegistry.register(
                 UUID.randomUUID().toString(),
-                activity,
-                contract,
-                { continuation.resume(it) }
-            )
+                contract
+            ) { continuation.resume(it) }
             launcher.launch(input)
             continuation.invokeOnCancellation { launcher.unregister() }
         }

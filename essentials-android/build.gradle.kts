@@ -29,6 +29,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    api(Deps.AndroidX.Activity.activity)
+    api(Deps.AndroidX.Activity.compose)
     api(Deps.AndroidX.appCompat)
     api(Deps.AndroidX.core)
     api(Deps.AndroidX.Lifecycle.runtime)

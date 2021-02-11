@@ -16,25 +16,19 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
@@ -51,7 +45,7 @@ enum class TopAppBarStyle {
     Primary, Surface
 }
 
-val AmbientTopAppBarStyle = ambientOf { TopAppBarStyle.Primary }
+val LocalTopAppBarStyle = compositionLocalOf { TopAppBarStyle.Primary }
 
 @Composable
 fun TopAppBar(
@@ -59,7 +53,7 @@ fun TopAppBar(
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
-    backgroundColor: Color = when (AmbientTopAppBarStyle.current) {
+    backgroundColor: Color = when (LocalTopAppBarStyle.current) {
         TopAppBarStyle.Primary -> MaterialTheme.colors.primary
         TopAppBarStyle.Surface -> MaterialTheme.colors.surface
     },
@@ -103,7 +97,7 @@ fun TopAppBar(
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = when (AmbientTopAppBarStyle.current) {
+    backgroundColor: Color = when (LocalTopAppBarStyle.current) {
         TopAppBarStyle.Primary -> MaterialTheme.colors.primary
         TopAppBarStyle.Surface -> MaterialTheme.colors.surface
     },
@@ -141,7 +135,7 @@ private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val component = AmbientUiComponent.current.get<AutoTopAppBarComponent>()
+    val component = LocalUiComponent.current.get<AutoTopAppBarComponent>()
     val canGoBack = remember {
         component.navigationState.value.backStack.size > 1
     }

@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
-
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
@@ -38,7 +37,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
-import kotlin.reflect.KClass
 
 class PrefModule<T : Any>(private val name: String) {
     @Given operator fun invoke(

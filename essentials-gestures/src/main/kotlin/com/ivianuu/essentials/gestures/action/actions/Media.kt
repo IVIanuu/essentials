@@ -24,11 +24,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.getAppInfo
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.datastore.android.PrefModule
-import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionIcon
@@ -39,18 +37,16 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
@@ -116,7 +112,7 @@ fun MediaActionSettingsScreen(
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 ListItem(
                     title = { Text(R.string.es_pref_media_app) },

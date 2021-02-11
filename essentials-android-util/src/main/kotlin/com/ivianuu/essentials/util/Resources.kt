@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.font
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.res.ResourcesCompat
@@ -55,8 +54,7 @@ fun floatResource(id: Int, @Given appContext: AppContext): Float =
     ResourcesCompat.getFloat(appContext.resources, id)
 
 @GivenFun
-fun fontResource(id: Int, @Given appContext: AppContext): Font =
-    font(id)
+fun fontResource(id: Int, @Given appContext: AppContext): Font = Font(id)
 
 @GivenFun
 fun intResource(id: Int, @Given appContext: AppContext): Int =

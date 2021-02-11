@@ -23,7 +23,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissio
 import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -42,7 +42,7 @@ fun SecureSettingsScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
     ) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 SecureSettingsHeader(
                     stringResource(

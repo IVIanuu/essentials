@@ -17,15 +17,9 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -48,7 +42,7 @@ fun SimpleDialogListItem(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Providers(AmbientContentAlpha provides ContentAlpha.high) {
+            Providers(LocalContentAlpha provides ContentAlpha.high) {
                 if (leading != null) {
                     leading()
                     Spacer(Modifier.width(24.dp))

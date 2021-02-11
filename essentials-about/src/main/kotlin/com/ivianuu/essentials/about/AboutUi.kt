@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
@@ -43,7 +43,7 @@ fun AboutScreen(
     @Given aboutSection: AboutSection,
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 aboutSection(
                     buildInfo.packageName,

@@ -17,17 +17,7 @@
 package com.ivianuu.essentials.ui.animatable
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.onActive
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 
 @Composable
@@ -36,7 +26,7 @@ fun ProvideAnimatableRoot(
     content: @Composable () -> Unit
 ) {
     val state = remember { AnimatableRoot() }
-    Providers(AmbientAnimatableRoot provides state) {
+    Providers(LocalAnimatableRoot provides state) {
         Box(modifier = modifier.then(Modifier.animatable(Root))) {
             content()
             state.animationOverlayEntries.forEach { overlay ->
@@ -49,7 +39,7 @@ fun ProvideAnimatableRoot(
 }
 
 @Composable
-fun animatableFor(tag: Any): Animatable = AmbientAnimatableRoot.current.animatableFor(tag)
+fun animatableFor(tag: Any): Animatable = LocalAnimatableRoot.current.animatableFor(tag)
 
 @Stable
 class AnimatableRoot {
@@ -74,7 +64,7 @@ class AnimatableRoot {
 
         @Composable
         fun refCount() {
-            onActive {
+            DisposableEffect(true) {
                 refCount++
                 onDispose {
                     refCount--
@@ -98,8 +88,8 @@ internal class AnimationOverlayEntry(
 fun animationOverlay(overlayContent: @Composable () -> Unit) {
     val entry = remember { AnimationOverlayEntry(overlayContent) }
     entry.content = overlayContent
-    val root = AmbientAnimatableRoot.current
-    onActive {
+    val root = LocalAnimatableRoot.current
+    DisposableEffect(true) {
         root.animationOverlayEntries += entry
         onDispose { root.animationOverlayEntries -= entry }
     }
@@ -107,6 +97,6 @@ fun animationOverlay(overlayContent: @Composable () -> Unit) {
 
 val Root = Any()
 
-val AmbientAnimatableRoot = staticAmbientOf<AnimatableRoot> {
+val LocalAnimatableRoot = staticCompositionLocalOf<AnimatableRoot> {
     error("No AnimatableRoot found")
 }

@@ -20,12 +20,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public final class CompositionReferenceAccessor {
+public final class CompositionContextAccessor {
 
     @NotNull
-    public static Map<Ambient<Object>, State<Object>> getAmbientScope(CompositionReference reference) {
+    public static Map<CompositionLocal<Object>, State<Object>> getCompositionLocalScope(CompositionContext context) {
         //noinspection KotlinInternalInJava
-        return reference.getAmbientScope$runtime_release();
+        return context.getCompositionLocalScope$runtime_release();
     }
 
 }

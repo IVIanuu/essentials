@@ -16,21 +16,21 @@
 
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.animation.core.FloatPropKey
-import androidx.compose.animation.core.transitionDefinition
-import androidx.compose.animation.transition
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 fun OpenCloseStackTransition(): StackTransition = { context ->
-    onActive { context.addTo() }
+    DisposableEffect(true) {
+        context.addTo()
+        onDispose {}
+    }
 
     val fromPropsKeys =
         if (context.fromAnimatable != null) remember { OpenClosePropKeys() } else null
     val toPropKeys = if (context.toAnimatable != null) remember { OpenClosePropKeys() } else null
 
-    val transitionState = transition(
+    /*val transitionState = transition(
         definition = remember {
             transitionDefinition<Boolean> {
                 state(false) {
@@ -90,10 +90,10 @@ fun OpenCloseStackTransition(): StackTransition = { context ->
             context.removeFrom()
             context.onComplete()
         }
-    )
+    )*/
 }
 
 private class OpenClosePropKeys {
-    val alpha = FloatPropKey()
-    val scale = FloatPropKey()
+    //val alpha = FloatPropKey()
+    //val scale = FloatPropKey()
 }

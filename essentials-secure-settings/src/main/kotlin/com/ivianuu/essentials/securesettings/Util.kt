@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.securesettings
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.util.showToastRes
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
@@ -35,7 +34,7 @@ import kotlin.coroutines.coroutineContext
 @Composable internal fun SecureSettingsHeader(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.body2.copy(color = AmbientContentColor.current.copy(alpha = 0.6f)),
+        style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
         modifier = Modifier.padding(all = 16.dp)
     )
 }

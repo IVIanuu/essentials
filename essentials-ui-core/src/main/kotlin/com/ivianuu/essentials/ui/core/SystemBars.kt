@@ -19,29 +19,24 @@ package com.ivianuu.essentials.ui.core
 import android.os.Build
 import android.view.View
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.globalBounds
+import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.unit.Bounds
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.Position
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.DpRect
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.ui.AppTheme
@@ -60,16 +55,16 @@ fun overlaySystemBarBgColor(color: Color) =
 @Composable
 fun Modifier.systemBarStyle(
     bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
-    lightIcons: Boolean = AmbientContentColor.current.isDark,
+    lightIcons: Boolean = LocalContentColor.current.isDark,
     elevation: Dp = 0.dp,
 ): Modifier = composed {
-    val systemBarManager = AmbientSystemBarManager.current
+    val systemBarManager = LocalSystemBarManager.current
     var globalBounds by rememberState<Rect?> { null }
-    val density = AmbientDensity.current
+    val density = LocalDensity.current
 
-    onCommit(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
+    DisposableEffect(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
         val dpBounds = with(density) {
-            Bounds(
+            DpRect(
                 left = globalBounds?.left?.toInt()?.toDp() ?: 0.dp,
                 top = globalBounds?.top?.toInt()?.toDp() ?: 0.dp,
                 right = globalBounds?.right?.toInt()?.toDp() ?: 0.dp,
@@ -82,7 +77,7 @@ fun Modifier.systemBarStyle(
         onDispose { systemBarManager.unregisterStyle(style) }
     }
 
-    onGloballyPositioned { globalBounds = it.globalBounds }
+    onGloballyPositioned { globalBounds = it.boundsInWindow() }
 }
 
 @UiDecoratorBinding
@@ -92,7 +87,7 @@ fun ProvideSystemBarManager(content: @Composable () -> Unit) {
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
-        AmbientSystemBarManager provides systemBarManager,
+        LocalSystemBarManager provides systemBarManager,
         content = content
     )
 }
@@ -116,12 +111,12 @@ fun RootSystemBarsStyle(content: @Composable () -> Unit) {
     }
 }
 
-private val AmbientSystemBarManager = staticAmbientOf<SystemBarManager>()
+private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager>()
 
 private data class SystemBarStyle(
     val barColor: Color,
     val lightIcons: Boolean,
-    val bounds: Bounds,
+    val bounds: DpRect,
     val elevation: Dp,
 )
 
@@ -132,16 +127,18 @@ private class SystemBarManager {
     @Composable
     fun updateSystemBars() {
         val activity = compositionActivity
-        onCommit(activity) {
+        DisposableEffect(activity) {
             WindowCompat.setDecorFitsSystemWindows(activity.window, false)
             if (Build.VERSION.SDK_INT >= 29) {
                 activity.window.isStatusBarContrastEnforced = false
                 activity.window.isNavigationBarContrastEnforced = false
             }
+            onDispose { }
         }
 
-        val windowInsets = AmbientInsets.current
-        val density = AmbientDensity.current
+        val layoutDirection = LocalLayoutDirection.current
+        val windowInsets = LocalInsets.current
+        val density = LocalDensity.current
         val screenHeight = with(density) {
             activity.window.decorView.height.toDp()
         }
@@ -150,8 +147,8 @@ private class SystemBarManager {
         }
 
         val statusBarHitPoint = remember(windowInsets) {
-            Position(
-                windowInsets.start,
+            DpOffset(
+                windowInsets.calculateStartPadding(layoutDirection),
                 0.dp
             )
         }
@@ -167,44 +164,46 @@ private class SystemBarManager {
                 }
         }
 
-        onCommit(activity, statusBarStyle?.barColor) {
+        DisposableEffect(activity, statusBarStyle?.barColor) {
             activity.window.statusBarColor =
                 (
                         statusBarStyle?.barColor ?: Color.Black
                             .copy(alpha = 0.2f)
                         ).toArgb()
+            onDispose {  }
         }
 
-        onCommit(activity, statusBarStyle?.lightIcons) {
+        DisposableEffect(activity, statusBarStyle?.lightIcons) {
             activity.window.decorView.systemUiVisibility =
                 activity.window.decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
                     statusBarStyle?.lightIcons ?: false
                 )
+            onDispose { }
         }
 
         if (Build.VERSION.SDK_INT >= 26) {
             val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
                 when {
-                    windowInsets.bottom != 0.dp -> {
-                        Position(
-                            windowInsets.start,
-                            screenHeight - windowInsets.bottom
+                    windowInsets.calculateBottomPadding() != 0.dp -> {
+                        DpOffset(
+                            windowInsets.calculateLeftPadding(layoutDirection),
+                            screenHeight - windowInsets.calculateBottomPadding()
                         )
                     }
-                    windowInsets.start != 0.dp -> {
-                        Position(
+                    windowInsets.calculateLeftPadding(layoutDirection) != 0.dp -> {
+                        DpOffset(
                             0.dp,
                             screenHeight
                         )
                     }
-                    windowInsets.end != 0.dp -> {
-                        Position(
-                            screenWidth - windowInsets.end,
+                    windowInsets.calculateRightPadding(layoutDirection) != 0.dp -> {
+                        DpOffset(
+                            screenWidth - windowInsets.calculateRightPadding(layoutDirection),
                             screenHeight
                         )
                     }
-                    else -> Position(Int.MAX_VALUE.dp, Int.MAX_VALUE.dp)
+                    else -> DpOffset(Int.MAX_VALUE.dp, Int.MAX_VALUE.dp)
                 }
             }
 
@@ -219,26 +218,29 @@ private class SystemBarManager {
                     }
             }
 
-            onCommit(activity, navBarStyle?.barColor) {
+            DisposableEffect(activity, navBarStyle?.barColor) {
                 activity.window.navigationBarColor =
                     (
                             navBarStyle?.barColor ?: Color.Black
                                 .copy(alpha = 0.2f)
                             ).toArgb()
+                onDispose { }
             }
 
-            onCommit(activity, navBarStyle?.lightIcons) {
+            DisposableEffect(activity, navBarStyle?.lightIcons) {
                 activity.window.decorView.systemUiVisibility =
                     activity.window.decorView.systemUiVisibility.setFlag(
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
                         navBarStyle?.lightIcons ?: false
                     )
+                onDispose { }
             }
         } else {
-            onCommit(activity) {
+            DisposableEffect(activity) {
                 activity.window.navigationBarColor = Color.Black
                     .copy(alpha = 0.4f)
                     .toArgb()
+                onDispose { }
             }
         }
     }

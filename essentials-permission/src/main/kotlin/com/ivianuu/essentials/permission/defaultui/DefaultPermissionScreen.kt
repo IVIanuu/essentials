@@ -25,11 +25,10 @@ import androidx.compose.runtime.key
 import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequest
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -50,7 +49,7 @@ fun DefaultPermissionScreen(
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
         }
     ) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             items(state.permissions) { permission ->
                 Permission(
                     permission = permission,

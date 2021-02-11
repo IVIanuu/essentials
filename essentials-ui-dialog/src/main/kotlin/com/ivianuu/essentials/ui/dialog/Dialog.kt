@@ -16,19 +16,11 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.AmbientContentAlpha
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -94,7 +86,7 @@ private fun DialogBody(
                 {
                     ProvideTextStyle(MaterialTheme.typography.h6) {
                         Providers(
-                            AmbientContentAlpha provides ContentAlpha.high,
+                            LocalContentAlpha provides ContentAlpha.high,
                             content = title
                         )
                     }
@@ -104,7 +96,7 @@ private fun DialogBody(
             val styledIcon: @Composable (() -> Unit)? = icon?.let {
                 {
                     Providers(
-                        AmbientContentAlpha provides ContentAlpha.high,
+                        LocalContentAlpha provides ContentAlpha.high,
                         content = icon
                     )
                 }
@@ -130,7 +122,7 @@ private fun DialogBody(
         {
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
                 Providers(
-                    AmbientContentAlpha provides ContentAlpha.medium,
+                    LocalContentAlpha provides ContentAlpha.medium,
                     content = content
                 )
             }

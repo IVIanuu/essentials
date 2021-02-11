@@ -16,23 +16,12 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.preferredHeightIn
-import androidx.compose.material.AmbientContentAlpha
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ripple.AmbientRippleTheme
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.material.ripple.ExperimentalRippleApi
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.Alignment
@@ -63,14 +52,15 @@ fun ListItem(
         modifier = modifier
             .preferredHeightIn(min = minHeight)
             .fillMaxWidth()
-            .background(color = if (selected) AmbientRippleTheme.current.defaultColor() else Color.Transparent)
+            .background(color = if (selected) LocalRippleTheme.current.defaultColor() else Color.Transparent)
             .then(
                 if (onClick != null || onLongClick != null)
-                    Modifier.clickable(
-                        enabled = enabled,
-                        onClick = onClick ?: {},
-                        onLongClick = onLongClick
-                    )
+                    Modifier
+                        .combinedClickable(
+                            enabled = enabled,
+                            onClick = onClick ?: {},
+                            onLongClick = onLongClick
+                        )
                 else Modifier
             ),
         contentAlignment = Alignment.CenterStart
@@ -93,7 +83,7 @@ fun ListItem(
                         contentAlignment = Alignment.Center
                     ) {
                         Providers(
-                            AmbientContentAlpha provides ContentAlpha.high,
+                            LocalContentAlpha provides ContentAlpha.high,
                             content = leading
                         )
                     }
@@ -118,7 +108,7 @@ fun ListItem(
                     if (title != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
                             Providers(
-                                AmbientContentAlpha provides ContentAlpha.high,
+                                LocalContentAlpha provides ContentAlpha.high,
                                 content = title
                             )
                         }
@@ -126,7 +116,7 @@ fun ListItem(
                     if (subtitle != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.body2) {
                             Providers(
-                                AmbientContentAlpha provides ContentAlpha.medium,
+                                LocalContentAlpha provides ContentAlpha.medium,
                                 content = subtitle
                             )
                         }
@@ -150,7 +140,7 @@ fun ListItem(
                         contentAlignment = Alignment.Center
                     ) {
                         Providers(
-                            AmbientContentAlpha provides ContentAlpha.high,
+                            LocalContentAlpha provides ContentAlpha.high,
                             content = trailing
                         )
                     }

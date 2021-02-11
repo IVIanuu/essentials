@@ -24,7 +24,7 @@ import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -43,7 +43,7 @@ fun SecureSettingsPcInstructionsScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
     ) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 SecureSettingsHeader(
                     text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)

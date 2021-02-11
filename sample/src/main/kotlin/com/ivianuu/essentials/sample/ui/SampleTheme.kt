@@ -19,9 +19,8 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.twilight.ui.TwilightTheme
 import com.ivianuu.essentials.ui.AppThemeBinding
-import com.ivianuu.essentials.ui.animatedstack.AmbientStackTransition
+import com.ivianuu.essentials.ui.animatedstack.LocalStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
@@ -35,7 +34,7 @@ fun SampleTheme(
 ) {
     twilightTheme {
         Providers(
-            AmbientStackTransition provides remember { HorizontalStackTransition() },
+            LocalStackTransition provides remember { HorizontalStackTransition() },
             content = content
         )
     }

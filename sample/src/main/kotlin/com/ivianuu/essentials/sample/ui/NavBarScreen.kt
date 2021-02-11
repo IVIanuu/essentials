@@ -26,24 +26,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.permission.requestPermissions
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
@@ -86,10 +74,12 @@ fun NavBarScreen(
             }
 
             var hideNavBar by rememberState { false }
-            onCommit(hideNavBar) { updateNavBarState(hideNavBar) }
+            SideEffect { updateNavBarState(hideNavBar) }
 
             // reshow nav bar when leaving the screen
-            onDispose { updateNavBarState(false) }
+            DisposableEffect(true) {
+                onDispose { updateNavBarState(false) }
+            }
 
             val secureSettingsPermission = remember {
                 WriteSecureSettingsPermission(

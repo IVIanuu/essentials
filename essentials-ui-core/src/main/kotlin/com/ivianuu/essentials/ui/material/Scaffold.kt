@@ -16,19 +16,16 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.emptyContent
-import androidx.compose.runtime.orEmpty
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
-import com.ivianuu.essentials.ui.core.AmbientInsets
 import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.LocalInsets
 import com.ivianuu.essentials.ui.core.ProvideInsets
 
 @Composable
@@ -54,8 +51,8 @@ fun Scaffold(
     ) {
         Scaffold(
             scaffoldState = scaffoldState,
-            topBar = topBar.orEmpty(),
-            bottomBar = bottomBar.orEmpty(),
+            topBar = topBar ?: {},
+            bottomBar = bottomBar ?: {},
             floatingActionButton = if (floatingActionButton != null) (
                     {
                         InsetsPadding(
@@ -67,7 +64,7 @@ fun Scaffold(
                             }
                         }
                     }
-                    ) else emptyContent(),
+                    ) else ({}),
             floatingActionButtonPosition = floatingActionButtonPosition,
             isFloatingActionButtonDocked = isFloatingActionButtonDocked,
             drawerContent = drawerContent,
@@ -76,13 +73,14 @@ fun Scaffold(
             backgroundColor = backgroundColor
         ) { bodyPadding ->
             val insets =
-                if (applyInsets) AmbientInsets.current else PaddingValues()
+                if (applyInsets) LocalInsets.current else PaddingValues()
+            val layoutDirection = LocalLayoutDirection.current
             ProvideInsets(
                 PaddingValues(
-                    start = max(bodyPadding.start, insets.start),
-                    top = if (topBar == null) insets.top else bodyPadding.top,
-                    end = max(bodyPadding.end, insets.end),
-                    bottom = if (bottomBar == null) insets.bottom else bodyPadding.bottom
+                    start = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.calculateStartPadding(layoutDirection)),
+                    top = if (topBar == null) insets.calculateTopPadding() else bodyPadding.calculateTopPadding(),
+                    end = max(bodyPadding.calculateRightPadding(LocalLayoutDirection.current), insets.calculateEndPadding(layoutDirection)),
+                    bottom = if (bottomBar == null) insets.calculateBottomPadding() else bodyPadding.calculateBottomPadding()
                 ),
                 bodyContent
             )

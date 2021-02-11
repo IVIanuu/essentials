@@ -17,14 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,7 +44,7 @@ class TabsKey
 @GivenFun
 @Composable
 fun TabsScreen() {
-    var selectedIndex by savedInstanceState { 0 }
+    var selectedIndex by rememberSaveable { mutableStateOf(0) }
     Scaffold(
         topBar = {
             Surface(

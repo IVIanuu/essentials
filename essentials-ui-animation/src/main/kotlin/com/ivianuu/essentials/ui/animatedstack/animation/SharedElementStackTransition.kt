@@ -21,22 +21,13 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
-import androidx.compose.ui.platform.AmbientDensity
-import com.ivianuu.essentials.ui.animatable.Alpha
-import com.ivianuu.essentials.ui.animatable.MetaProp
-import com.ivianuu.essentials.ui.animatable.animatable
-import com.ivianuu.essentials.ui.animatable.animatableFor
-import com.ivianuu.essentials.ui.animatable.animationOverlay
-import com.ivianuu.essentials.ui.animatable.to
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import com.ivianuu.essentials.ui.animatable.*
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.getValue
@@ -174,7 +165,7 @@ fun SharedElementStackTransition(
                 val currentProps = animatedProps[index]
                 val sharedElementComposable =
                     endAnimatable.getOrElse(SharedElementComposable) { {} }
-                with(AmbientDensity.current) {
+                with(LocalDensity.current) {
                     Box(
                         modifier = Modifier
                             .preferredSize(
@@ -185,7 +176,7 @@ fun SharedElementStackTransition(
                                 x = currentProps.position.x.toDp(),
                                 y = currentProps.position.y.toDp()
                             )
-                            .drawLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
+                            .graphicsLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
                     ) {
                         sharedElementComposable()
                     }

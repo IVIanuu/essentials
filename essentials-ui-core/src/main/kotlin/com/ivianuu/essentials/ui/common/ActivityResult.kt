@@ -20,9 +20,8 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.key
-import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 
 @Composable
@@ -30,7 +29,7 @@ fun <I, O> registerActivityResultCallback(
     contract: ActivityResultContract<I, O>,
     callback: ActivityResultCallback<O>
 ): ActivityResultLauncher<I> {
-    val key = currentComposer.currentCompoundKeyHash
+    val key = currentComposer.compoundKeyHash
 
     val registry = compositionActivity.activityResultRegistry
 
@@ -42,7 +41,7 @@ fun <I, O> registerActivityResultCallback(
         )
     }
 
-    key(launcher) {
+    DisposableEffect(launcher) {
         onDispose {
             launcher.unregister()
         }

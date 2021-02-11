@@ -17,19 +17,12 @@
 package com.ivianuu.essentials.ui.core
 
 import android.view.View
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.ambientOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientDensity
-import androidx.compose.ui.platform.AmbientView
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecoratorBinding
@@ -45,36 +38,36 @@ fun InsetsPadding(
     bottom: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val padding = AmbientInsets.current
+    val padding = LocalInsets.current
     Box(
         modifier = Modifier.absolutePadding(
-            if (start) padding.start else 0.dp,
-            if (top) padding.top else 0.dp,
-            if (end) padding.end else 0.dp,
-            if (bottom) padding.bottom else 0.dp
+            if (start) padding.calculateLeftPadding(LocalLayoutDirection.current) else 0.dp,
+            if (top) padding.calculateTopPadding() else 0.dp,
+            if (end) padding.calculateRightPadding(LocalLayoutDirection.current) else 0.dp,
+            if (bottom) padding.calculateBottomPadding() else 0.dp
         ).then(modifier)
     ) {
         ConsumeInsets(start, top, end, bottom, content)
     }
 }
 
-val AmbientInsets = ambientOf { PaddingValues() }
+val LocalInsets = compositionLocalOf { PaddingValues() }
 
 @Composable
 fun ConsumeInsets(
-    start: Boolean = true,
+    left: Boolean = true,
     top: Boolean = true,
-    end: Boolean = true,
+    right: Boolean = true,
     bottom: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val currentInsets = AmbientInsets.current
+    val currentInsets = LocalInsets.current
     ProvideInsets(
         PaddingValues(
-            if (start) 0.dp else currentInsets.start,
-            if (top) 0.dp else currentInsets.top,
-            if (end) 0.dp else currentInsets.end,
-            if (bottom) 0.dp else currentInsets.bottom
+            if (left) 0.dp else currentInsets.calculateStartPadding(LocalLayoutDirection.current),
+            if (top) 0.dp else currentInsets.calculateTopPadding(),
+            if (right) 0.dp else currentInsets.calculateEndPadding(LocalLayoutDirection.current),
+            if (bottom) 0.dp else currentInsets.calculateBottomPadding()
         ),
         content = content
     )
@@ -85,15 +78,15 @@ fun ProvideInsets(
     insets: PaddingValues,
     content: @Composable () -> Unit,
 ) {
-    Providers(AmbientInsets provides insets, content = content)
+    Providers(LocalInsets provides insets, content = content)
 }
 
 @UiDecoratorBinding
 @GivenFun
 @Composable
 fun ProvideWindowInsets(content: @Composable () -> Unit) {
-    val ownerView = AmbientView.current
-    val density = AmbientDensity.current
+    val ownerView = LocalView.current
+    val density = LocalDensity.current
     var insets by rememberState { PaddingValues() }
 
     val insetsListener = remember {
@@ -128,7 +121,7 @@ fun ProvideWindowInsets(content: @Composable () -> Unit) {
         }
     }
 
-    onCommit(ownerView) {
+    DisposableEffect(ownerView) {
         ownerView.setOnApplyWindowInsetsListener(insetsListener)
         ownerView.addOnAttachStateChangeListener(attachListener)
 
@@ -146,7 +139,18 @@ fun ProvideWindowInsets(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun ambientHorizontalInsets() = AmbientInsets.current.copy(top = 0.dp, bottom = 0.dp)
+fun localHorizontalInsets() = LocalInsets.current.let {
+    val layoutDirection = LocalLayoutDirection.current
+    PaddingValues(
+        start = it.calculateStartPadding(layoutDirection),
+        end = it.calculateEndPadding(layoutDirection)
+    )
+}
 
 @Composable
-fun ambientVerticalInsets() = AmbientInsets.current.copy(start = 0.dp, end = 0.dp)
+fun localVerticalInsets() = LocalInsets.current.let {
+    PaddingValues(
+        top = it.calculateTopPadding(),
+        bottom = it.calculateBottomPadding()
+    )
+}

@@ -22,24 +22,15 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.ImagePainter
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
@@ -64,7 +55,7 @@ class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             enabled = true,
-            icon = singleActionIcon { Icon(ImagePainter(icon), null) }
+            icon = singleActionIcon { Icon(icon, null) }
         )
     }
 

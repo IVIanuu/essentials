@@ -17,15 +17,8 @@
 package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatable.ProvideAnimatableRoot
 import com.ivianuu.essentials.ui.animatable.animatable
@@ -76,7 +69,7 @@ fun <T> AnimatedStack(
 ) {
     ProvideAnimatableRoot {
         val state = remember { AnimatedStackState(children) }
-        state.defaultTransition = AmbientStackTransition.current
+        state.defaultTransition = LocalStackTransition.current
         state.setChildren(children)
         state.runningTransactions.values.toList().forEach {
             key(it) {

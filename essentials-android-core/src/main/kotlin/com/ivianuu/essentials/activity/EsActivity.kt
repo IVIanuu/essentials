@@ -17,16 +17,10 @@
 package com.ivianuu.essentials.activity
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Composition
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.Recomposer
 import androidx.compose.ui.platform.setContent
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
@@ -39,11 +33,6 @@ import com.ivianuu.injekt.component.get
  */
 abstract class EsActivity : AppCompatActivity() {
 
-    protected open val containerId: Int
-        get() = android.R.id.content
-
-    private lateinit var composition: Composition
-
     private val uiComponent by lazy {
         activityComponent.get<() -> UiComponent>()()
     }
@@ -51,17 +40,12 @@ abstract class EsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val container = findViewById<ViewGroup>(containerId)
-        ViewTreeLifecycleOwner.set(container, this)
-        ViewTreeSavedStateRegistryOwner.set(container, this)
-        ViewTreeViewModelStoreOwner.set(container, this)
+        val component = uiComponent.get<EsActivityComponent>()
+        component.runUiWorkers()
 
-        val dependencies = uiComponent.get<EsActivityComponent>()
-        dependencies.runUiWorkers()
-
-        composition = container.setContent(Recomposer.current()) {
-            Providers(AmbientUiComponent provides uiComponent) {
-                dependencies.decorateUi {
+        setContent {
+            Providers(LocalUiComponent provides uiComponent) {
+                component.decorateUi {
                     Content()
                 }
             }
@@ -75,11 +59,6 @@ abstract class EsActivity : AppCompatActivity() {
         } else {
             finishAfterTransition()
         }
-    }
-
-    override fun onDestroy() {
-        composition.dispose()
-        super.onDestroy()
     }
 
     @Composable protected abstract fun Content()

@@ -17,27 +17,22 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.Manifest
-import androidx.compose.material.Icon
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
-import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
@@ -90,7 +85,7 @@ fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
         )
 
         val systemOverlay = SystemOverlayPermission(
-            AmbientContext.current,
+            LocalContext.current,
             Permission.Title to "System overlay",
             Permission.Desc to "This is a desc",
             Permission.Icon to { Icon(Icons.Default.Menu, null) }
@@ -103,7 +98,7 @@ fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
         )
 
         val writeSettings = WriteSettingsPermission(
-            AmbientContext.current,
+            LocalContext.current,
             Permission.Title to "Write settings",
             Permission.Desc to "This is a desc",
             Permission.Icon to { Icon(Icons.Default.Menu, null) }

@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.component.Component
 import com.ivianuu.injekt.component.ComponentElementBinding
@@ -37,4 +35,4 @@ fun uiComponentFactory(
         .build()
 }
 
-val AmbientUiComponent = staticAmbientOf<UiComponent> { error("No UiComponent installed") }
+val LocalUiComponent = staticCompositionLocalOf<UiComponent> { error("No UiComponent installed") }

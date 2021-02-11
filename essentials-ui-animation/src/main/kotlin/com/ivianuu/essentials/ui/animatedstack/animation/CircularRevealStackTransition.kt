@@ -28,7 +28,7 @@ fun CircularRevealStackTransition(
 ): StackTransition = { context ->
     /*if (context.toAnimatable != null) onActive { context.addTo() }
 
-    val originElement = AnimatableRootAmbient.current.getAnimatable(origin)
+    val originElement = LocalAnimatableRoot.current.getAnimatable(origin)
     val capturedOriginBounds = originElement.capturedBounds()
 
     val centerPosition = capturedOriginBounds?.center()

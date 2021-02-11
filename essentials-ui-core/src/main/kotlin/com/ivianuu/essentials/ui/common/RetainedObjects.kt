@@ -20,7 +20,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.DisposableHandle
 
 @Suppress("UNCHECKED_CAST")
@@ -48,24 +48,24 @@ class RetainedObjects {
     }
 }
 
-val AmbientRetainedObjects = staticAmbientOf<RetainedObjects>() {
+val LocalRetainedObjects = staticCompositionLocalOf<RetainedObjects> {
     error("No RetainedObjects specified")
 }
 
 // todo remove once compose is fixed
 @Composable
 inline fun <T> rememberRetained(
-    key: Any = currentComposer.currentCompoundKeyHash,
+    key: Any = currentComposer.compoundKeyHash,
     noinline init: () -> T
 ): T = rememberRetained(inputs = *emptyArray(), key = key, init = init)
 
 @Composable
 inline fun <T> rememberRetained(
     vararg inputs: Any?,
-    key: Any = currentComposer.currentCompoundKeyHash,
+    key: Any = currentComposer.compoundKeyHash,
     noinline init: () -> T
 ): T {
-    val retainedObjects = AmbientRetainedObjects.current
+    val retainedObjects = LocalRetainedObjects.current
     var value: ValueWithInputs<T>? = retainedObjects.getOrNull(key)
     if (value != null && !value.inputs.contentEquals(inputs)) {
         (value as? DisposableHandle)?.dispose()

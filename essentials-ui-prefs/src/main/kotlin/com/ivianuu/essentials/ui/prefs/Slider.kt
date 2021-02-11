@@ -22,14 +22,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.core.rememberState
@@ -313,6 +309,6 @@ fun <T> UnitValueTextProvider(
     unit: UnitValueTextProvider.Unit,
     toString: (T) -> String = { it.toString() }
 ): @Composable (T) -> Unit {
-    val textProvider = UnitValueTextProvider(AmbientContext.current, unit)
+    val textProvider = UnitValueTextProvider(LocalContext.current, unit)
     return { SliderValueText(textProvider(toString(it))) }
 }

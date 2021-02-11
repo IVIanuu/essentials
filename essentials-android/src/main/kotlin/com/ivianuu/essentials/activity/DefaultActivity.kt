@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.activity
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.component.get
 
 class DefaultActivity : EsActivity() {
     @Composable override fun Content() {
-        AmbientUiComponent.current
+        LocalUiComponent.current
             .get<DefaultActivityComponent>()
             .appUi()
     }

@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
@@ -41,7 +41,7 @@ fun Subheader(
             .then(modifier),
         contentAlignment = Alignment.CenterStart
     ) {
-        Providers(AmbientContentColor provides MaterialTheme.colors.secondary) {
+        Providers(LocalContentColor provides MaterialTheme.colors.secondary) {
             ProvideTextStyle(MaterialTheme.typography.body2, text)
         }
     }

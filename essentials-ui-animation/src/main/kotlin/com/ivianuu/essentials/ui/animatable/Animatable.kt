@@ -16,19 +16,12 @@
 
 package com.ivianuu.essentials.ui.animatable
 
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.drawLayer
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.globalBounds
+import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 
 @Stable
@@ -75,7 +68,7 @@ class Animatable(val tag: Any) {
 val Animatable.bounds: Rect?
     get() = layoutCoordinates
         ?.takeIf { it.isAttached }
-        ?.globalBounds
+        ?.boundsInWindow()
 
 val Animatable.width: Int?
     get() = layoutCoordinates

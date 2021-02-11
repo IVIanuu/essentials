@@ -19,25 +19,18 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.savedinstancestate.savedInstanceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
-import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.isLight
-import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
-import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
@@ -54,7 +47,7 @@ class BottomNavigationKey
 @GivenFun
 @Composable
 fun BottomNavigationScreen() {
-    var selectedItem by savedInstanceState { BottomNavItem.values().first() }
+    var selectedItem by rememberSaveable { mutableStateOf(BottomNavItem.values().first()) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Bottom navigation") }) },

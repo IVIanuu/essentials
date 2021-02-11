@@ -27,13 +27,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -45,10 +45,11 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.*
 
-@HomeKeyBinding @Given class HomeKey
+@HomeKeyBinding
+@Given
+class HomeKey
 
 @KeyUiBinding<HomeKey>
 @GivenFun
@@ -79,10 +80,10 @@ fun HomeScreen(
             )
         }
     ) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             items(finalItems) { item ->
                 val color = key(item) {
-                    rememberSavedInstanceState(item) {
+                    rememberSaveable(item) {
                         ColorPickerPalette.values()
                             .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
                             .shuffled()

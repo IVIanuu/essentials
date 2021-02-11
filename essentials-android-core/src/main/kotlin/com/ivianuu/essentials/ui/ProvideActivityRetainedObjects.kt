@@ -18,12 +18,12 @@ package com.ivianuu.essentials.ui
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
+import com.ivianuu.essentials.ui.common.LocalRetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.GivenFun
 
@@ -31,13 +31,15 @@ import com.ivianuu.injekt.GivenFun
 @GivenFun
 @Composable
 fun ProvideActivityRetainedObjects(content: @Composable () -> Unit) {
-    val activity = AmbientContext.currentOrNull as? ComponentActivity
+    val activity = LocalContext.currentOrNull as? ComponentActivity
     if (activity != null) {
         val retainedObjects = remember { RetainedObjects() }
         Providers(
-            AmbientRetainedObjects provides retainedObjects,
+            LocalRetainedObjects provides retainedObjects,
             content = content
         )
-        onDispose { retainedObjects.dispose() }
+        DisposableEffect(true) {
+            onDispose { retainedObjects.dispose() }
+        }
     }
 }

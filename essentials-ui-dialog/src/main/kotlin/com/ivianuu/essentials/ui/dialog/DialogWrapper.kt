@@ -17,16 +17,17 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.common.OnBackPressed
+import androidx.compose.ui.input.pointer.pointerInput
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.InsetsPadding
 
@@ -38,16 +39,17 @@ fun DialogWrapper(
 ) {
     val backPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
     if (!dismissible) {
-        OnBackPressed { }
+        BackHandler { }
     }
 
     Box(
-        modifier = Modifier.tapGestureFilter(
-            onTap = {
-                backPressedDispatcherOwner.onBackPressedDispatcher
-                    .onBackPressed()
+        modifier = Modifier
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    backPressedDispatcherOwner.onBackPressedDispatcher
+                        .onBackPressed()
+                }
             }
-        )
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.6f))
             .then(modifier),
@@ -55,7 +57,8 @@ fun DialogWrapper(
     ) {
         InsetsPadding {
             Box(
-                modifier = Modifier.tapGestureFilter(onTap = {})
+                modifier = Modifier
+                    .pointerInput(Unit) { detectTapGestures {  } }
                     .wrapContentSize(align = Alignment.Center),
                 contentAlignment = Alignment.Center
             ) {

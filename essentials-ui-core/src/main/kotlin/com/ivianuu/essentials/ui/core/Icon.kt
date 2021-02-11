@@ -17,23 +17,21 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.material.Icon
-import androidx.compose.material.AmbientContentColor
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorPainter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 
 @Composable
 fun Icon(
     iconRes: Int,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    tint: Color = AmbientContentColor.current,
+    tint: Color = LocalContentColor.current,
 ) {
     Icon(
-        painter = rememberVectorPainter(vectorResource(iconRes)),
+        painter = painterResource(iconRes),
         contentDescription = contentDescription,
         modifier = modifier,
         tint = tint

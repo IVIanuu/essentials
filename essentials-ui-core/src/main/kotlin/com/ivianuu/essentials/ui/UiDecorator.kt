@@ -18,15 +18,10 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ui.core.ProvideSystemBarManager
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.ForKey
 import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.keyOf
@@ -85,6 +80,7 @@ fun DecorateUi(
 
 typealias AppTheme = @UiDecoratorBinding @Composable (@Composable () -> Unit) -> Unit
 
+@Suppress("USELESS_CAST")
 @Macro
 @Given
 fun <T : @AppThemeBinding @Composable (@Composable () -> Unit) -> Unit> appThemeBindingImpl(@Given instance: T): AppTheme =

@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.animatedstack
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.ivianuu.essentials.ui.animatable.Animatable
 
 abstract class StackTransitionContext(
@@ -41,13 +41,14 @@ val NoOpStackTransition: StackTransition
             if (context.toAnimatable != null) context.addTo()
             if (context.fromAnimatable != null) context.removeFrom()
         }
-        onActive {
+        DisposableEffect(true) {
             context.onComplete()
+            onDispose { }
         }
     }
 
-val AmbientStackTransition =
-    staticAmbientOf { NoOpStackTransition }
+val LocalStackTransition =
+    staticCompositionLocalOf { NoOpStackTransition }
 
 operator fun StackTransition.plus(other: StackTransition): StackTransition = { context ->
     val thisAnimation = this@plus

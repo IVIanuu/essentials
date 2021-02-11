@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.moshi
 
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlin.reflect.typeOf
 
-inline fun <reified T> Moshi.adapter() = adapter<T>(typeOf<T>().asJavaType())
+inline fun <reified T> Moshi.adapter(): JsonAdapter<T> = adapter(typeOf<T>().asJavaType())

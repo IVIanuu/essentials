@@ -22,13 +22,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
@@ -39,7 +33,6 @@ import com.ivianuu.essentials.permission.Desc
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.Title
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.requestPermissions
 import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
@@ -48,7 +41,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext

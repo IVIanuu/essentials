@@ -22,7 +22,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.enforce
+import androidx.compose.ui.unit.constrain
 
 fun Modifier.squared(fit: SquareFit) = this.then(SquaredModifier(fit))
 
@@ -38,7 +38,7 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
         val finalConstraints = constraints.copy(
             maxWidth = size,
             maxHeight = size
-        ).enforce(constraints)
+        ).constrain(constraints)
 
         val placeable = measurable.measure(finalConstraints)
 

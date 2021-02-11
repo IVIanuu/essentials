@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.AmbientUiSavedStateRegistry
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
+import com.ivianuu.essentials.ui.common.LocalRetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.common.AmbientRetainedObjects
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
 import kotlin.reflect.KClass
@@ -90,24 +90,24 @@ private class NavigationContentState(
             enterTransition = options?.enterTransition,
             exitTransition = options?.exitTransition
         ) {
-            val compositionKey = currentComposer.currentCompoundKeyHash
+            val compositionKey = currentComposer.compoundKeyHash
 
-            val savedStateRegistry = remember {
-                UiSavedStateRegistry(
+            val savableStateRegistry = remember {
+                SaveableStateRegistry(
                     restoredValues = savedState.remove(compositionKey),
                     canBeSaved = { true }
                 )
             }
             Providers(
-                AmbientUiSavedStateRegistry provides savedStateRegistry,
-                AmbientRetainedObjects provides retainedObjects
+                LocalSaveableStateRegistry provides savableStateRegistry,
+                LocalRetainedObjects provides retainedObjects
             ) {
                 content()
                 DisposableEffect(true) {
                     isComposing = true
                     onDispose {
                         isComposing = false
-                        savedState[compositionKey] = savedStateRegistry.performSave()
+                        savedState[compositionKey] = savableStateRegistry.performSave()
                         finalizeIfNeeded()
                     }
                 }

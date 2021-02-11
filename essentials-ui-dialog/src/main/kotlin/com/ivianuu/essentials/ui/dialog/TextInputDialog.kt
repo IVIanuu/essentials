@@ -21,7 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -58,7 +58,10 @@ fun TextInputDialog(
                     label = label ?: {}
                 )
 
-                onActive { focusRequester.requestFocus() }
+                DisposableEffect(true) {
+                    focusRequester.requestFocus()
+                    onDispose {  }
+                }
             }
         },
         positiveButton = positiveButton,

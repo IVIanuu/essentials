@@ -16,10 +16,7 @@
 
 package com.ivianuu.essentials.sample
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
 import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d

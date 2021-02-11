@@ -19,14 +19,15 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenFun
@@ -42,7 +43,7 @@ fun DialogListItem(
     dialog: @Composable (dismiss: () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val component = AmbientUiComponent.current.get<DialogListItemComponent>()
+    val component = LocalUiComponent.current.get<DialogListItemComponent>()
     ListItem(
         modifier = modifier,
         title = title?.let { { title() } },

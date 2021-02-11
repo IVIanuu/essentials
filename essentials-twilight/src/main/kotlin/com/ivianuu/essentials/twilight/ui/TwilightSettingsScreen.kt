@@ -20,13 +20,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import com.ivianuu.essentials.datastore.android.dispatchPrefUpdate
-import com.ivianuu.essentials.datastore.android.updatePref
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
@@ -47,7 +45,7 @@ fun TwilightSettingsScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
-        LazyColumn(contentPadding = ambientVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 TwilightMode.values().toList().forEach { mode ->
                     TwilightModeItem(

@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.AmbientIndication
-import androidx.compose.material.Icon
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.InteractionState
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.rememberRipple
@@ -35,7 +35,7 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
 import com.ivianuu.essentials.ui.common.setValue
@@ -54,7 +54,7 @@ fun PopupMenuButton(
             .popupClickable(
                 items = items,
                 onCancel = onCancel,
-                indicationFactory = { rememberRipple(bounded = false) }
+                indication = rememberRipple(bounded = false)
             )
             .then(modifier),
         contentAlignment = Alignment.Center
@@ -67,16 +67,16 @@ fun PopupMenuButton(
 fun Modifier.popupClickable(
     items: List<PopupMenu.Item>,
     onCancel: (() -> Unit)? = null,
-    indicationFactory: @Composable () -> Indication = AmbientIndication.current,
+    indication: Indication = LocalIndication.current,
 ) = composed {
-    val dependencies = AmbientUiComponent.current.get<PopupMenuComponent>()
+    val dependencies = LocalUiComponent.current.get<PopupMenuComponent>()
 
     var coordinates by rememberRef<LayoutCoordinates?> { null }
 
     onGloballyPositioned { coordinates = it }
         .clickable(
             interactionState = remember { InteractionState() },
-            indication = indicationFactory()
+            indication = indication
         ) {
             dependencies.dispatchNavigationAction(
                 Push(

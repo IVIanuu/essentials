@@ -17,18 +17,13 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.activity.OnBackPressedDispatcherOwner
-import androidx.compose.material.Icon
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -38,10 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.compositionActivity
-import com.ivianuu.essentials.ui.core.ambientVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.ListItem
@@ -70,7 +65,7 @@ fun DialogsScreen() {
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = ambientVerticalInsets(),
+            contentPadding = localVerticalInsets(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -209,17 +204,15 @@ fun DialogsScreen() {
                     Dialog(
                         title = { Text("List") },
                         content = {
-                            ScrollableColumn {
-                                (1..100).forEach {
+                            LazyColumn {
+                                items((1..100).toList()) { item ->
                                     ListItem(
                                         title = {
                                             Text(
-                                                "Item: $it"
+                                                "Item: $item"
                                             )
                                         },
-                                        onClick = {
-
-                                        }
+                                        onClick = {}
                                     )
                                 }
                             }
@@ -353,7 +346,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
-    val component = AmbientUiComponent.current.get<DialogLauncherComponent>()
+    val component = LocalUiComponent.current.get<DialogLauncherComponent>()
     Button(
         onClick = {
             component.dispatchNavigationOption(

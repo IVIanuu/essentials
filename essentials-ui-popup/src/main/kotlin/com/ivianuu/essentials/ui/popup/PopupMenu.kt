@@ -17,21 +17,17 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.AmbientUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
@@ -47,7 +43,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = AmbientUiComponent.current.get<PopupMenuComponent>()
+            val dependencies = LocalUiComponent.current.get<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(

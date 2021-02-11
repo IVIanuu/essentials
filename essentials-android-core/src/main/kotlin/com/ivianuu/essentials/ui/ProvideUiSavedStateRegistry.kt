@@ -19,19 +19,20 @@ package com.ivianuu.essentials.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.savedinstancestate.AmbientUiSavedStateRegistry
-import androidx.compose.runtime.savedinstancestate.UiSavedStateRegistry
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.ui.platform.LocalContext
 import com.ivianuu.essentials.ui.core.currentOrNull
 import com.ivianuu.injekt.GivenFun
 
 @UiDecoratorBinding
-@GivenFun @Composable
-fun ProvideUiSavedStateRegistry(content: @Composable () -> Unit) {
-    val activity = AmbientContext.currentOrNull as? ComponentActivity
+@GivenFun
+@Composable
+fun ProvideSavableStateRegistry(content: @Composable () -> Unit) {
+    val activity = LocalContext.currentOrNull as? ComponentActivity
     if (activity != null) {
         Providers(
-            AmbientUiSavedStateRegistry provides UiSavedStateRegistry(emptyMap()) { true },
+            LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
             content = content
         )
     }

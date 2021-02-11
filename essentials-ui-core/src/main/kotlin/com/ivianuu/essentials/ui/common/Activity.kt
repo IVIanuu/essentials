@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 
 // todo remove
 @Composable
 val compositionActivity: ComponentActivity
-    get() = AmbientContext.current as ComponentActivity
+    get() = LocalContext.current as ComponentActivity

@@ -16,19 +16,10 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.twilight.domain.TwilightState
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.rememberRef
@@ -62,9 +53,9 @@ fun TwilightTheme(
 
     var lastColors by rememberRef { targetColors }
 
-    val animation = key(targetColors) { animatedFloat(0f) }
-    onCommit(animation) {
-        animation.animateTo(1f, anim = TweenSpec(durationMillis = 150))
+    val animation = key(targetColors) { remember { Animatable(0f) } }
+    LaunchedEffect(animation) {
+        animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
     }
 
     val animatedColors = remember(animation.value) {

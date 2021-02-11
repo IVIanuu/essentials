@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.common.absorbPointer
 
@@ -44,24 +44,22 @@ fun <T> MultiChoiceListDialog(
         buttonLayout = buttonLayout,
         applyContentPadding = false,
         content = {
-            ScrollableColumn {
-                items.forEachIndexed { index, item ->
-                    key(index) {
-                        MultiChoiceDialogListItem(
-                            title = { item(item) },
-                            checked = item in selectedItems,
-                            onCheckedChange = {
-                                val newSelectedItems = selectedItems.toMutableList()
-                                if (it) {
-                                    newSelectedItems += item
-                                } else {
-                                    newSelectedItems -= item
-                                }
-
-                                onSelectionsChanged(newSelectedItems)
+            LazyColumn {
+                itemsIndexed(items) { index, item ->
+                    MultiChoiceDialogListItem(
+                        title = { item(item) },
+                        checked = item in selectedItems,
+                        onCheckedChange = {
+                            val newSelectedItems = selectedItems.toMutableList()
+                            if (it) {
+                                newSelectedItems += item
+                            } else {
+                                newSelectedItems -= item
                             }
-                        )
-                    }
+
+                            onSelectionsChanged(newSelectedItems)
+                        }
+                    )
                 }
             }
         },

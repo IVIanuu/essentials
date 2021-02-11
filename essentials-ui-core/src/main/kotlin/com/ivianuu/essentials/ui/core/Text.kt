@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.material.AmbientTextStyle
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,7 +49,7 @@ fun Text(
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     onTextLayout: (TextLayoutResult) -> Unit = {},
-    style: TextStyle = AmbientTextStyle.current,
+    style: TextStyle = LocalTextStyle.current,
 ) {
     Text(
         stringResource(textRes),

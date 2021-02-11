@@ -17,9 +17,8 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.DisposableEffect
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -47,9 +46,11 @@ fun CancelUiScope(
     @Given uiScope: UiScope,
     content: @Composable () -> Unit
 ) {
-    onDispose {
-        logger.d { "Cancelling ui scope" }
-        uiScope.cancel()
+    DisposableEffect(true) {
+        onDispose {
+            logger.d { "Cancelling ui scope" }
+            uiScope.cancel()
+        }
     }
     content()
 }

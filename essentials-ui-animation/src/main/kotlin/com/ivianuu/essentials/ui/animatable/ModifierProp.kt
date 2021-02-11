@@ -19,10 +19,10 @@ package com.ivianuu.essentials.ui.animatable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.TransformOrigin
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 
 @Stable
@@ -39,18 +39,18 @@ inline fun <T> composedModifierProp(crossinline apply: @Composable (T) -> Modifi
     modifierProp { value -> Modifier.composed { apply(value) } }
 
 
-inline fun <T> drawLayerProp(crossinline apply: GraphicsLayerScope.(T) -> Unit): ModifierProp<T> =
+inline fun <T> graphicsLayerProp(crossinline apply: GraphicsLayerScope.(T) -> Unit): ModifierProp<T> =
     modifierProp { Modifier.graphicsLayer { apply(it) } }
 
-val ScaleX = drawLayerProp<Float> { scaleX = it }
-val ScaleY = drawLayerProp<Float> { scaleY = it }
-val Alpha = drawLayerProp<Float> { alpha = it }
-val TranslationX = drawLayerProp<Float> { translationX = it }
-val TranslationY = drawLayerProp<Float> { translationY = it }
-val ShadowElevation = drawLayerProp<Float> { shadowElevation = it }
-val RotationX = drawLayerProp<Float> { rotationX = it }
-val RotationY = drawLayerProp<Float> { rotationY = it }
-val RotationZ = drawLayerProp<Float> { rotationZ = it }
-val TransformOrigin = drawLayerProp<TransformOrigin> { transformOrigin = it }
-val Shape = drawLayerProp<Shape> { shape = it }
-val Clip = drawLayerProp<Boolean> { clip = it }
+val ScaleX = graphicsLayerProp<Float> { scaleX = it }
+val ScaleY = graphicsLayerProp<Float> { scaleY = it }
+val Alpha = graphicsLayerProp<Float> { alpha = it }
+val TranslationX = graphicsLayerProp<Float> { translationX = it }
+val TranslationY = graphicsLayerProp<Float> { translationY = it }
+val ShadowElevation = graphicsLayerProp<Float> { shadowElevation = it }
+val RotationX = graphicsLayerProp<Float> { rotationX = it }
+val RotationY = graphicsLayerProp<Float> { rotationY = it }
+val RotationZ = graphicsLayerProp<Float> { rotationZ = it }
+val TransformOrigin = graphicsLayerProp<TransformOrigin> { transformOrigin = it }
+val Shape = graphicsLayerProp<Shape> { shape = it }
+val Clip = graphicsLayerProp<Boolean> { clip = it }
