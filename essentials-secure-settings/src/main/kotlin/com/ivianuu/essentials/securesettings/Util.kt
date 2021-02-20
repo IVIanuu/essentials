@@ -25,13 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.essentials.util.Toaster
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
 
-@Composable internal fun SecureSettingsHeader(text: String) {
+@Composable
+internal fun SecureSettingsHeader(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
@@ -39,18 +39,17 @@ import kotlin.coroutines.coroutineContext
     )
 }
 
-@GivenFun suspend fun popNavigatorOnceSecureSettingsGranted(
+suspend fun DispatchAction<NavigationAction>.popOnceSecureSettingsPermissionIsGranted(
     toast: Boolean = true,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
-    @Given hasSecureSettingsPermission: hasSecureSettingsPermission,
-    @Given showToastRes: showToastRes
+    permission: SecureSettingsPermission,
+    toaster: Toaster
 ) {
     // we check the permission periodically to automatically pop this screen
     // once we got the permission
     while (coroutineContext.isActive) {
-        if (hasSecureSettingsPermission()) {
-            if (toast) showToastRes(R.string.es_secure_settings_permission_granted)
-            dispatchNavigationAction(NavigationAction.PopTop(true))
+        if (permission.isGranted()) {
+            if (toast) toaster.showToast(R.string.es_secure_settings_permission_granted)
+            this(NavigationAction.PopTop(true))
             break
         }
         delay(100)

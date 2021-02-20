@@ -20,13 +20,13 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-@Qualifier annotation class AppWorkerBinding
+@Qualifier
+annotation class AppWorkerBinding
 
 @Macro
 @GivenSetElement
@@ -35,12 +35,14 @@ fun <T : @AppWorkerBinding suspend () -> Unit> appWorkerBindingImpl(@Given insta
 
 typealias AppWorker = suspend () -> Unit
 
-@GivenFun
-fun runAppWorkers(
+typealias AppWorkerRunner = () -> Unit
+
+@Given
+fun appWorkerRunner(
     @Given logger: Logger,
     @Given globalScope: GlobalScope,
     @Given workers: Set<AppWorker>
-) {
+): AppWorkerRunner = {
     logger.d { "run app workers" }
     workers
         .forEach { worker ->

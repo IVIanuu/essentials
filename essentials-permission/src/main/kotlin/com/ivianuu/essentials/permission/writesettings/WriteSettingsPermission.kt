@@ -16,43 +16,30 @@
 
 package com.ivianuu.essentials.permission.writesettings
 
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
-fun WriteSettingsPermission(
-    context: Context,
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.IsWriteSettingsPermission to Unit,
-    Permission.Intent to Intent(
-        Settings.ACTION_MANAGE_WRITE_SETTINGS,
-        "package:${context.packageName}".toUri()
-    ),
-    *metadata
-)
+interface WriteSettingsPermission : Permission
 
-val Permission.Companion.IsWriteSettingsPermission by lazy {
-    Permission.Key<Unit>("IsWriteSettingsPermission")
-}
-
-@PermissionStateProviderBinding
 @Given
-class WriteSettingsPermissionStateProvider(
-    @Given private val appContext: AppContext,
-) : PermissionStateProvider {
+fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
+    @Given context: AppContext
+): PermissionStateProvider<P> = { Settings.System.canWrite(context) }
 
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsWriteSettingsPermission in permission
 
-    override suspend fun isGranted(permission: Permission): Boolean =
-        Settings.System.canWrite(appContext)
+@Given
+fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
+    @Given buildInfo: BuildInfo
+): PermissionIntentFactory<P> = {
+    Intent(
+        Settings.ACTION_MANAGE_WRITE_SETTINGS,
+        "package:${buildInfo.packageName}".toUri()
+    )
 }

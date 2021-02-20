@@ -20,26 +20,28 @@ import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object StopActionId : ActionId("media_stop")
+@Given
+object StopActionId : ActionId("media_stop")
 
 @ActionBinding<StopActionId>
 @Given
-fun stopMediaAction(@Given mediaAction: mediaAction): Action = mediaAction(
-    StopActionId,
-    R.string.es_action_media_stop,
-    singleActionIcon(R.drawable.es_ic_stop)
+fun stopMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = StopActionId,
+    title = resourceProvider.string(R.string.es_action_media_stop),
+    icon = singleActionIcon(R.drawable.es_ic_stop)
 )
 
 @ActionExecutorBinding<StopActionId>
-@GivenFun
-suspend fun sendStopCommand(@Given doMediaAction: doMediaAction) {
-    doMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
+@Given
+fun stopMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+    mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
 @ActionSettingsKeyBinding<StopActionId>

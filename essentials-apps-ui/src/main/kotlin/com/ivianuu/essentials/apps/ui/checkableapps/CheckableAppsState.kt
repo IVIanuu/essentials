@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import com.ivianuu.essentials.apps.getInstalledApps
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
@@ -38,14 +38,14 @@ fun checkableAppsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial CheckableAppsState,
     @Given actions: Actions<CheckableAppsAction>,
+    @Given appRepository: AppRepository,
     @Given checkedAppsSource: CheckedAppsSource,
-    @Given getInstalledApps: getInstalledApps,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged
 ): StateFlow<CheckableAppsState> = scope.state(initial) {
     checkedAppsSource
         .reduce { copy(checkedApps = it) }
         .launchIn(this)
-    reduceResource({ getInstalledApps() }) { copy(allApps = it) }
+    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
         val newCheckedApps = currentState().checkableApps()!!

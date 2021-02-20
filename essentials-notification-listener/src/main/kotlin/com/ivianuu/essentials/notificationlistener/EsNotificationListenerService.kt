@@ -24,7 +24,6 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope

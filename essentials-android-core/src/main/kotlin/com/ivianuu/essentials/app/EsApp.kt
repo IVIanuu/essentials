@@ -29,8 +29,8 @@ import com.ivianuu.injekt.component.get
 abstract class EsApp : Application() {
     override fun onCreate() {
         with(appComponent.get<EsAppComponent>()) {
-            runInitializers()
-            runAppWorkers()
+            appInitializerRunner()
+            appWorkerRunner()
         }
         super.onCreate()
     }
@@ -38,6 +38,6 @@ abstract class EsApp : Application() {
 
 @ComponentElementBinding<AppComponent>
 @Given class EsAppComponent(
-    @Given val runInitializers: runInitializers,
-    @Given val runAppWorkers: runAppWorkers
+    @Given val appInitializerRunner: AppInitializerRunner,
+    @Given val appWorkerRunner: AppWorkerRunner
 )

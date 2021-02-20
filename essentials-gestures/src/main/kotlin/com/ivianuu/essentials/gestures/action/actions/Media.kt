@@ -24,14 +24,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.*
+import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
@@ -41,55 +40,53 @@ import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 
-@GivenFun
-fun mediaAction(
-    id: ActionId,
-    titleRes: Int,
-    icon: Flow<ActionIcon>,
-    @Given stringResource: stringResource,
-): Action = Action(
-    id = id,
-    title = stringResource(titleRes),
-    icon = icon
-)
+typealias MediaActionSender = suspend (Int) -> Unit
 
-@GivenFun
-suspend fun doMediaAction(
-    keycode: Int,
+@Given
+fun mediaActionSender(
     @Given appContext: AppContext,
-    @Given mediaIntent: mediaIntent
-) {
-    appContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_DOWN, keycode), null)
-    appContext.sendOrderedBroadcast(mediaIntent(KeyEvent.ACTION_UP, keycode), null)
+    @Given prefs: Flow<MediaActionPrefs>
+): MediaActionSender = { keycode ->
+    val currentPrefs = prefs.first()
+    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }
 
-@GivenFun
-suspend fun mediaIntent(
+private fun mediaIntentFor(
     keyEvent: Int,
     keycode: Int,
-    @Given mediaActionPrefs: Flow<MediaActionPrefs>,
+    prefs: MediaActionPrefs
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
     putExtra(
         Intent.EXTRA_KEY_EVENT,
         KeyEvent(keyEvent, keycode)
     )
 
-    val mediaApp = mediaActionPrefs.first().mediaApp
+    val mediaApp = prefs.mediaApp
     if (mediaApp != null) {
         `package` = mediaApp
     }
@@ -105,12 +102,12 @@ data class MediaActionPrefs(
 class MediaActionSettingsKey
 
 @KeyUiBinding<MediaActionSettingsKey>
-@GivenFun
-@Composable
-fun MediaActionSettingsScreen(
-    @Given state: @UiState MediaActionSettingsState,
+@Given
+fun mediaActionSettingsKeyUi(
+    @Given stateProvider: @Composable () -> @UiState MediaActionSettingsState,
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
-) {
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
@@ -143,22 +140,23 @@ fun mediaActionSettingsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
     @Given actions: Actions<MediaActionSettingsAction>,
-    @Given getAppInfo: getAppInfo,
+    @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given prefs: Flow<MediaActionPrefs>,
-    @Given pickMediaApp: pushKeyForResult<AppPickerKey, AppInfo>,
-    @Given updatePrefs: updatePref<MediaActionPrefs>,
+    @Given updatePrefs: PrefUpdater<MediaActionPrefs>,
 ): StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
-        .mapNotNull { if (it != null) getAppInfo(it) else null }
+        .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
         .reduceResource(this) { copy(mediaApp = it) }
         .launchIn(this)
 
     actions
         .filterIsInstance<UpdateMediaApp>()
         .onEach {
-            @Suppress("DEPRECATION") val newMediaApp = pickMediaApp(
+            @Suppress("DEPRECATION")
+            val newMediaApp = navigator.pushForResult<AppInfo>(
                 AppPickerKey(
                     intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
                 )

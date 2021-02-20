@@ -17,8 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,9 +33,9 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -41,9 +44,8 @@ val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 class TabsKey
 
 @KeyUiBinding<TabsKey>
-@GivenFun
-@Composable
-fun TabsScreen() {
+@Given
+fun tabsKeyUi(): KeyUi = {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     Scaffold(
         topBar = {

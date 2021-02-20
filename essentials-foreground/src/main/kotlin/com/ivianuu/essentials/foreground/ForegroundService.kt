@@ -18,7 +18,8 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.essentials.foreground.ForegroundState.*
+import com.ivianuu.essentials.foreground.ForegroundState.Background
+import com.ivianuu.essentials.foreground.ForegroundState.Foreground
 import com.ivianuu.essentials.service.EsService
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d

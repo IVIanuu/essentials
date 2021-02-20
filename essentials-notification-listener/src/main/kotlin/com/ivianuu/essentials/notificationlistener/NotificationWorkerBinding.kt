@@ -16,21 +16,27 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-@Qualifier annotation class NotificationWorkerBinding
+@Qualifier
+annotation class NotificationWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @NotificationWorkerBinding suspend () -> Unit> notificationWorkerIntoSet(
+fun <T : @NotificationWorkerBinding suspend () -> Unit> notificationWorkerBindingImpl(
     @Given instance: T): NotificationWorker = instance
 
 typealias NotificationWorker = suspend () -> Unit
 
-@GivenFun
-suspend fun runNotificationWorkers(@Given workers: Set<NotificationWorker>) {
+typealias NotificationWorkerRunner = suspend () -> Unit
+
+@Given
+fun notificationWorkerRunner(@Given workers: Set<NotificationWorker>): NotificationWorkerRunner = {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }

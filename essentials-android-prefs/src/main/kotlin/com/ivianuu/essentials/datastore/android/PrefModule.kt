@@ -28,7 +28,6 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -86,17 +85,20 @@ fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 
-@GivenFun suspend fun <T> updatePref(
-    @Given pref: DataStore<T>,
-    reducer: T.() -> T,
-): T = pref.updateData { reducer(it) }
+typealias PrefUpdater<T> = suspend (T.() -> T) -> T
 
-@GivenFun
-fun <T> dispatchPrefUpdate(
+@Given
+fun <T> prefUpdater(@Given pref: DataStore<T>): PrefUpdater<T> = { reducer ->
+    pref.updateData { reducer(it) }
+}
+
+typealias PrefUpdateDispatcher<T> = (T.() -> T) -> Unit
+
+@Given
+fun <T> prefUpdateDispatcher(
     @Given pref: DataStore<T>,
-    @Given scope: GlobalScope,
-    reducer: T.() -> T,
-) {
+    @Given scope: GlobalScope
+): PrefUpdateDispatcher<T> = { reducer ->
     scope.launch {
         pref.updateData { reducer(it) }
     }

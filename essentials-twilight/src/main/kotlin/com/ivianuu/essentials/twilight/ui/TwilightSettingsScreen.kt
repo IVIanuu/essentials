@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -29,19 +30,19 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<TwilightSettingsKey>
-@GivenFun
-@Composable
-fun TwilightSettingsScreen(
-    @Given dispatchUpdate: dispatchPrefUpdate<TwilightPrefs>,
-    @Given prefs: @UiState TwilightPrefs,
-) {
+@Given
+fun twilightSettingsKeyUi(
+    @Given prefsUpdateDispatcher: PrefUpdateDispatcher<TwilightPrefs>,
+    @Given prefsProvider: @Composable () -> @UiState TwilightPrefs,
+): KeyUi = {
+    val prefs = prefsProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
     ) {
@@ -51,7 +52,7 @@ fun TwilightSettingsScreen(
                     TwilightModeItem(
                         mode = mode,
                         isSelected = prefs.twilightMode == mode,
-                        onClick = { dispatchUpdate { copy(twilightMode = mode) } }
+                        onClick = { prefsUpdateDispatcher { copy(twilightMode = mode) } }
                     )
                 }
 
@@ -59,7 +60,7 @@ fun TwilightSettingsScreen(
 
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
-                    onValueChange = { dispatchUpdate { copy(useBlackInDarkMode = it) } },
+                    onValueChange = { prefsUpdateDispatcher { copy(useBlackInDarkMode = it) } },
                     title = { Text(R.string.es_twilight_use_black) }
                 )
             }

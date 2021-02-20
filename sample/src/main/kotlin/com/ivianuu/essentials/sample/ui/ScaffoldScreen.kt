@@ -24,24 +24,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.absorbPointer
-import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.isLight
+import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 import kotlin.time.milliseconds
 
@@ -52,12 +67,11 @@ val scaffoldHomeItem = HomeItem("Scaffold") { ScaffoldKey() }
 class ScaffoldKey
 
 @KeyUiBinding<ScaffoldKey>
-@GivenFun
-@Composable
-fun ScaffoldScreen(
-    @Given pickFabPosition: pushKeyForResult<FabPositionKey, FabPosition>,
+@Given
+fun scaffoldKeyUi(
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given uiScope: UiScope,
-) {
+): KeyUi = {
     val controls = remember { ScaffoldControls() }
 
     Scaffold(
@@ -142,7 +156,7 @@ fun ScaffoldScreen(
                     title = { Text("Fab location") },
                     onClick = {
                         uiScope.launch {
-                            pickFabPosition(FabPositionKey(controls.fabPosition))
+                            navigator.pushForResult<FabPosition>(FabPositionKey(controls.fabPosition))
                                 ?.let { controls.fabPosition = it }
                         }
                     }

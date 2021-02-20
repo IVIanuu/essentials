@@ -19,17 +19,17 @@ package com.ivianuu.essentials.work
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
 @AppInitializerBinding
-@GivenFun
-fun initializeWorkers(
+@Given
+fun workerAppInitializer(
     @Given appContext: AppContext,
     @Given workerFactory: WorkerFactory,
-) {
+): AppInitializer = {
     WorkManager.initialize(
         appContext,
         Configuration.Builder()

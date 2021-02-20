@@ -21,17 +21,26 @@ import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.preferredSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import com.ivianuu.essentials.ui.animatable.*
+import com.ivianuu.essentials.ui.animatable.Alpha
+import com.ivianuu.essentials.ui.animatable.MetaProp
+import com.ivianuu.essentials.ui.animatable.animatable
+import com.ivianuu.essentials.ui.animatable.animatableFor
+import com.ivianuu.essentials.ui.animatable.animationOverlay
+import com.ivianuu.essentials.ui.animatable.to
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.StackTransitionContext
 import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.util.lerp
 import kotlinx.coroutines.delay
@@ -71,8 +80,8 @@ fun SharedElementStackTransition(
     }
 
     if (bounds.all { it.first != null && it.second != null } || forceRun) {
-        var otherComplete by rememberRef { false }
-        var sharedElementComplete by rememberRef { false }
+        var otherComplete by remember { refOf(false) }
+        var sharedElementComplete by remember { refOf(false) }
 
         fun completeIfPossible() {
             if (otherComplete && (sharedElementComplete || forceRun)) {

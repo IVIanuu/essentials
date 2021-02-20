@@ -23,13 +23,23 @@ import android.util.Base64
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
+import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
@@ -37,8 +47,8 @@ import java.io.ByteArrayOutputStream
 @ActionFactoryBinding
 @Given
 class ShortcutActionFactory(
-    @Given private val logger: Logger,
-    @Given private val sendIntent: sendIntent,
+    @Given private val actionIntentSender: ActionIntentSender,
+    @Given private val logger: Logger
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
@@ -59,27 +69,28 @@ class ShortcutActionFactory(
         )
     }
 
+    @Suppress("DEPRECATION")
     override suspend fun createExecutor(id: String): ActionExecutor {
         val tmp = id.split(DELIMITER)
         val intent = Intent.getIntent(tmp[2])
-        return { sendIntent(intent) }
+        return { actionIntentSender(intent) }
     }
 }
 
 @ActionPickerDelegateBinding
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val pickShortcut: pushKeyForResult<ShortcutPickerKey, Shortcut>,
-    @Given private val stringResource: stringResource,
+    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = stringResource(R.string.es_action_shortcut)
+        get() = resourceProvider.string(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
         Icon(R.drawable.es_ic_content_cut, null)
     }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val shortcut = pickShortcut(ShortcutPickerKey()) ?: return null
+        val shortcut = navigator.pushForResult<Shortcut>(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
         val stream = ByteArrayOutputStream()

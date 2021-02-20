@@ -21,11 +21,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.coroutines.neverFlow
 import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.UiWorker
 import com.ivianuu.essentials.ui.UiWorkerBinding
-
-import com.ivianuu.essentials.ui.uiWorkerBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -36,17 +34,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 @UiWorkerBinding
-@GivenFun
-suspend fun handleAndroidBackPresses(
+@Given
+fun androidBackPressHandler(
     @Given activity: ComponentActivity,
-    @Given dispatchNavigation: DispatchAction<NavigationAction>,
-    @Given navigationState: Flow<NavigationState>,
-) {
-    navigationState
+    @Given navigator: DispatchAction<NavigationAction>,
+    @Given state: Flow<NavigationState>,
+): UiWorker = {
+    state
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()
         .flatMapLatest { if (it) activity.backPresses() else neverFlow() }
-        .onEach { dispatchNavigation(NavigationAction.PopTop()) }
+        .onEach { navigator(NavigationAction.PopTop()) }
         .collect()
 }
 

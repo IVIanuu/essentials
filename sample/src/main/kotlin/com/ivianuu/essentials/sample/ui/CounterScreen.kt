@@ -37,12 +37,12 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -56,12 +56,12 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey
 
 @KeyUiBinding<CounterKey>
-@GivenFun
-@Composable
-fun CounterScreen(
-    @Given state: @UiState CounterState,
+@Given
+fun counterKeyUi(
+    @Given stateProvider: @Composable () -> @UiState CounterState,
     @Given dispatch: DispatchAction<CounterAction>,
-) {
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -98,7 +98,7 @@ fun counterState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial CounterState = CounterState(),
     @Given actions: Actions<CounterAction>,
-    @Given showToast: showToast
+    @Given toaster: Toaster
 ): StateFlow<CounterState> = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
@@ -109,7 +109,7 @@ fun counterState(
         .filterIsInstance<Dec>()
         .onEach {
             if (currentState().count > 0) reduce { copy(count = count.dec()) }
-            else showToast("Value cannot be less than 0!")
+            else toaster.showToast("Value cannot be less than 0!")
         }
         .launchIn(this)
 }

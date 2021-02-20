@@ -18,74 +18,83 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.ui.core.SystemBarManagerProvider
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForKey
 import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.keyOf
 
-@Qualifier annotation class UiDecoratorBinding
+@Qualifier
+annotation class UiDecoratorBinding
 
 @Macro
 @GivenSetElement
-fun <@ForKey T : @UiDecoratorBinding @Composable (@Composable () -> Unit) -> Unit> uiDecoratorBindingImpl(
+fun <T : @UiDecoratorBinding S, @ForKey S : UiDecorator> uiDecoratorBindingImpl(
     @Given instance: T,
-    @Given config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
+    @Given config: UiDecoratorConfig<S> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(
-    keyOf<T>(), instance as @Composable (@Composable () -> Unit) -> Unit, config
+    keyOf<S>(), instance as UiDecorator, config
 )
 
-data class UiDecoratorConfig<out T : @Composable (@Composable () -> Unit) -> Unit>(
-    val dependencies: Set<Key<@Composable (@Composable () -> Unit) -> Unit>> = emptySet(),
-    val dependents: Set<Key<@Composable (@Composable () -> Unit) -> Unit>> = emptySet(),
+data class UiDecoratorConfig<out T : UiDecorator>(
+    val dependencies: Set<Key<UiDecorator>> = emptySet(),
+    val dependents: Set<Key<UiDecorator>> = emptySet(),
 ) {
     companion object {
         val DEFAULT = UiDecoratorConfig<Nothing>(emptySet(), emptySet())
     }
 }
 
+typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
+
 data class UiDecoratorElement(
     val key: Key<*>,
-    val instance: @Composable (@Composable () -> Unit) -> Unit,
+    val decorator: UiDecorator,
     val config: UiDecoratorConfig<*>
 )
 
-@GivenFun
-@Composable
-fun DecorateUi(
-    @Given decorators: Set<UiDecoratorElement>,
-    @Given logger: Logger,
-    content: @Composable () -> Unit
-) {
+typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
+
+@Given
+fun decorateUi(
+    @Given elements: Set<UiDecoratorElement>,
+    @Given logger: Logger
+): DecorateUi = { content ->
     remember {
-        decorators
+        elements
             .sortedGraph(
                 key = { it.key },
                 dependencies = { it.config.dependencies },
                 dependents = { it.config.dependents }
             )
             .reversed()
-            .fold(content) { acc, decorator ->
+            .fold(content) { acc, element ->
                 {
-                    logger.d { "Decorate ui ${decorator.key}" }
-                    decorator.instance(acc)
+                    logger.d { "Decorate ui ${element.key}" }
+                    element.decorator(acc)
                 }
             }
     }()
 }
 
-@Qualifier annotation class AppThemeBinding
+@Qualifier
+annotation class AppThemeBinding
 
-typealias AppTheme = @UiDecoratorBinding @Composable (@Composable () -> Unit) -> Unit
+typealias AppTheme = UiDecorator
 
 @Suppress("USELESS_CAST")
+@UiDecoratorBinding
 @Macro
 @Given
-fun <T : @AppThemeBinding @Composable (@Composable () -> Unit) -> Unit> appThemeBindingImpl(@Given instance: T): AppTheme =
-    instance as @Composable (@androidx.compose.runtime.Composable () -> Unit) -> Unit
+fun <T : @AppThemeBinding AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
+    instance as UiDecorator
 
 @Given
 fun appThemeConfigBindingImpl() =
-    UiDecoratorConfig<AppTheme>(dependencies = setOf(keyOf<ProvideSystemBarManager>()))
+    UiDecoratorConfig<AppTheme>(dependencies = setOf(keyOf<SystemBarManagerProvider>()))

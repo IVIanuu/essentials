@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev743"
+    const val version = "${Build.versionName}-dev744"
 }
 
 object Deps {
@@ -55,10 +55,10 @@ object Deps {
             const val test = "androidx.compose.test:test-core:$version"
         }
 
-        const val dataStore = "androidx.datastore:datastore:1.0.0-alpha05"
+        const val dataStore = "androidx.datastore:datastore:1.0.0-alpha06"
 
         object Lifecycle {
-            private const val version = "2.3.0-beta01"
+            private const val version = "2.3.0"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
         }
 
@@ -69,7 +69,7 @@ object Deps {
             const val runner = "androidx.test:runner:1.2.0"
         }
 
-        const val work = "androidx.work:work-runtime-ktx:2.5.0-beta02"
+        const val work = "androidx.work:work-runtime-ktx:2.5.0"
     }
 
     const val autoService = "com.google.auto.service:auto-service:1.0-rc6"
@@ -93,12 +93,12 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev743"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev744"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev458"
+        private const val version = "0.0.1-dev460"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val component = "com.ivianuu.injekt:injekt-component:$version"
@@ -112,7 +112,7 @@ object Deps {
     const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
 
     object Kotlin {
-        const val version = "1.4.21-2"
+        const val version = "1.4.30"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

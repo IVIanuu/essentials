@@ -21,34 +21,23 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 
-fun InstallUnknownAppsPermission(
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.IsUnknownAppsPermission to Unit,
-    Permission.Intent to Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES"),
-    *metadata
-)
+interface InstallUnknownAppsPermission : Permission
 
-val Permission.Companion.IsUnknownAppsPermission by lazy {
-    Permission.Key<Unit>("IsUnknownAppsPermission")
+@SuppressLint("NewApi")
+@Given
+fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider(
+    @Given packageManager: PackageManager,
+    @Given systemBuildInfo: SystemBuildInfo
+): PermissionStateProvider<P> = {
+    systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
 }
 
-@PermissionStateProviderBinding
 @Given
-class InstallUnknownAppsPermissionStateProvider(
-    @Given private val packageManager: PackageManager,
-    @Given private val systemBuildInfo: com.ivianuu.essentials.util.SystemBuildInfo,
-) : PermissionStateProvider {
-
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsUnknownAppsPermission in permission
-
-    @SuppressLint("NewApi")
-    override suspend fun isGranted(permission: Permission): Boolean =
-        systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
+fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory():
+        PermissionIntentFactory<P> = {
+    Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES")
 }

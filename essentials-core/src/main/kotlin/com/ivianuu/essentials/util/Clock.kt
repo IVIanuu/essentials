@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Given
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-@GivenFun
-fun now(): Duration = System.currentTimeMillis().milliseconds
+typealias now = () -> Duration
+
+@Given
+val defaultNow: now = { System.currentTimeMillis().milliseconds }

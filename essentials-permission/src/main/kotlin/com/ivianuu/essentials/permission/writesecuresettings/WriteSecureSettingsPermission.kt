@@ -18,45 +18,23 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.to
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.securesettings.hasSecureSettingsPermission
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.essentials.securesettings.SecureSettingsPermission
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
 
-fun WriteSecureSettingsPermission(vararg metadata: Permission.Pair<*>) = Permission(
-    Permission.IsWriteSecureSettingsPermission to Unit,
-    *metadata
-)
+interface WriteSecureSettingsPermission : Permission
 
-val Permission.Companion.IsWriteSecureSettingsPermission by lazy {
-    Permission.Key<Unit>("IsWriteSecureSettingsPermission")
-}
-
-@PermissionStateProviderBinding
 @Given
-class WriteSecureSettingsPermissionStateProvider(
-    @Given private val hasSecureSettingsPermission: hasSecureSettingsPermission,
-) : PermissionStateProvider {
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsWriteSecureSettingsPermission in permission
+fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
+    @Given permission: SecureSettingsPermission
+): PermissionRequestHandler<P> = { permission.isGranted() }
 
-    override suspend fun isGranted(permission: Permission): Boolean =
-        hasSecureSettingsPermission()
-}
-
-@PermissionRequestHandlerBinding
 @Given
-class WriteSecureSettingsPermissionRequestHandler(
-    @Given private val requestSecureSettings: pushKeyForResult<SecureSettingsKey, Boolean>,
-) : PermissionRequestHandler {
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsWriteSecureSettingsPermission in permission
-
-    override suspend fun request(permission: Permission) {
-        requestSecureSettings(SecureSettingsKey())
-    }
+fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
+    @Given navigator: DispatchAction<NavigationAction>
+): PermissionRequestHandler<P> = {
+    navigator.pushForResult<Boolean>(SecureSettingsKey())
 }

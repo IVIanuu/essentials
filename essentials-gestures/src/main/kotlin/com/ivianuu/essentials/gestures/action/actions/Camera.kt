@@ -21,25 +21,26 @@ import android.provider.MediaStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object CameraActionId : ActionId("camera")
+@Given
+object CameraActionId : ActionId("camera")
 
 @ActionBinding<CameraActionId>
 @Given
-fun cameraAction(@Given stringResource: stringResource): Action = Action(
+fun cameraAction(@Given resourceProvider: ResourceProvider) = Action(
     id = CameraActionId,
-    title = stringResource(R.string.es_action_camera),
+    title = resourceProvider.string(R.string.es_action_camera),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),
     unlockScreen = true
 )
 
 @ActionExecutorBinding<CameraActionId>
-@GivenFun
-suspend fun openCamera(sendIntent: sendIntent) {
-    sendIntent(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
+@Given
+fun cameraActionExecutor(@Given actionIntentSender: ActionIntentSender): ActionExecutor = {
+    actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
 }

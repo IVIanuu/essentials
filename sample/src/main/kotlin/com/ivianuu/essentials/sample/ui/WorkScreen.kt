@@ -18,15 +18,14 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.sample.work.scheduleTasks
+import com.ivianuu.essentials.sample.work.TestWorkScheduler
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -35,15 +34,14 @@ val workHomeItem = HomeItem("Work") { WorkKey() }
 class WorkKey
 
 @KeyUiBinding<WorkKey>
-@GivenFun
-@Composable
-fun WorkScreen(@Given scheduleTasks: scheduleTasks) {
+@Given
+fun workKeyUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Work") }) }
     ) {
         Button(
             modifier = Modifier.center(),
-            onClick = { scheduleTasks() }
+            onClick = { testWorkScheduler() }
         ) {
             Text("Perform work")
         }

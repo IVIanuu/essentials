@@ -18,16 +18,15 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.processrestart.restartProcess
+import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -37,9 +36,8 @@ val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
 class RestartProcessKey
 
 @KeyUiBinding<RestartProcessKey>
-@GivenFun
-@Composable
-fun RestartProcessScreen(@Given restartProcess: restartProcess) {
+@Given
+fun restartProcessKeyUi(@Given processRestarter: ProcessRestarter): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Restart process") }) }
     ) {
@@ -48,7 +46,7 @@ fun RestartProcessScreen(@Given restartProcess: restartProcess) {
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    restartProcess()
+                    processRestarter()
                 }
             }
         ) {

@@ -24,32 +24,33 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
-import com.ivianuu.essentials.gestures.action.ActionPermissions
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
+import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.dialog.TextInputKey
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
-import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.essentials.util.stringResourceWithArguments
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.keyOf
 
 @ActionFactoryBinding
 @Given
 class KeycodeActionFactory(
-    @Given private val permissions: ActionPermissions,
-    @Given private val runRootCommand: runRootCommand,
-    @Given private val stringResourceWithArguments: stringResourceWithArguments,
+    @Given private val actionRootCommandRunner: ActionRootCommandRunner,
+    @Given private val resourceProvider: ResourceProvider,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
         val keycode = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             id = id,
-            title = stringResourceWithArguments(R.string.es_action_keycode_suffix, listOf(keycode)),
+            title = resourceProvider.string(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
-            permissions = listOf(permissions.root),
+            permissions = listOf(keyOf<ActionRootPermission>()),
             unlockScreen = false,
             enabled = true
         )
@@ -57,26 +58,26 @@ class KeycodeActionFactory(
 
     override suspend fun createExecutor(id: String): ActionExecutor {
         val keycode = id.removePrefix(ACTION_KEY_PREFIX)
-        return { runRootCommand("input keyevent $keycode") }
+        return { actionRootCommandRunner("input keyevent $keycode") }
     }
 }
 
 @ActionPickerDelegateBinding
 @Given
 class KeycodeActionPickerDelegate(
-    @Given private val pickActionKeycode: pushKeyForResult<TextInputKey, String>,
-    @Given private val stringResource: stringResource,
+    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = stringResource(R.string.es_action_keycode)
+        get() = resourceProvider.string(R.string.es_action_keycode)
     override val icon: @Composable () -> Unit
         get() = { Icon(R.drawable.es_ic_keyboard, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val keycode = pickActionKeycode(
+        val keycode = navigator.pushForResult<String>(
             TextInputKey(
-                title = stringResource(R.string.es_keycode_picker_title),
-                label = stringResource(R.string.es_keycode_input_hint),
+                title = resourceProvider.string(R.string.es_keycode_picker_title),
+                label = resourceProvider.string(R.string.es_keycode_input_hint),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 allowEmpty = false
             )

@@ -44,13 +44,14 @@ interface WorkScope {
 
 typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker>
 
-@Qualifier annotation class WorkerBinding<S>
+@Qualifier
+annotation class WorkerBinding<S>
 
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-fun <P : @WorkerBinding<S> suspend () -> ListenableWorker.Result, S : WorkerId> workerBindingImpl(
-    @Given id: S,
+fun <P : @WorkerBinding<I> S, S : suspend () -> ListenableWorker.Result, I : WorkerId> workerBindingImpl(
+    @Given id: I,
     @Given factory: (@Given WorkScope) -> P
 ): WorkerElement = id to factory
 

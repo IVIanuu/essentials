@@ -19,11 +19,10 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.TileAction.TileClicked
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.keyOf
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
@@ -80,12 +79,12 @@ abstract class AbstractFunTileService(
         }
         qsTile.label = when {
             state.label != null -> state.label
-            state.labelRes != null -> component.stringResource(state.labelRes)
+            state.labelRes != null -> component.resourceProvider.string(state.labelRes)
             else -> null
         }
         qsTile.contentDescription = when {
             state.description != null -> state.description
-            state.descriptionRes != null -> component.stringResource(state.descriptionRes)
+            state.descriptionRes != null -> component.resourceProvider.string(state.descriptionRes)
             else -> null
         }
         qsTile.updateTile()
@@ -95,7 +94,7 @@ abstract class AbstractFunTileService(
 @ComponentElementBinding<ServiceComponent>
 @Given
 class FunTileServiceComponent(
-    @Given val stringResource: stringResource,
+    @Given val resourceProvider: ResourceProvider,
     @Given tileStores: Set<TileStateElement>
 ) {
     val tileStores = tileStores.toMap()

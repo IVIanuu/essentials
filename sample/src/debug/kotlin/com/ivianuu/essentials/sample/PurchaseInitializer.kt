@@ -16,22 +16,22 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
 import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.updatePref
+import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @AppInitializerBinding
-@GivenFun
-fun initializePurchases(
+@Given
+fun debugPurchaseAppInitializer(
     @Given globalScope: GlobalScope,
-    @Given updateDebugPrefs: updatePref<DebugBillingPrefs>,
-) {
+    @Given updateDebugPrefs: PrefUpdater<DebugBillingPrefs>,
+): AppInitializer = {
     globalScope.launch {
         updateDebugPrefs {
             copy(products = products + SkuDetails(DummySku))

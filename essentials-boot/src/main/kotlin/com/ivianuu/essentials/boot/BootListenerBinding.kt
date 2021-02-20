@@ -21,11 +21,12 @@ import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
-@Qualifier annotation class BootListenerBinding
+typealias BootListener = suspend () -> Unit
+
+@Qualifier
+annotation class BootListenerBinding
 
 @Macro
 @GivenSetElement
 fun <T : @BootListenerBinding suspend () -> Unit> bootListenerBindingImpl(
     @Given instance: T): BootListener = instance
-
-typealias BootListener = suspend () -> Unit

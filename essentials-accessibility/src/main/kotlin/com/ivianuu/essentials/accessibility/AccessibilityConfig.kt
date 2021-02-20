@@ -18,17 +18,13 @@ package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.coroutines.neverFlow
-import com.ivianuu.essentials.tuples.combine
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -45,7 +41,8 @@ data class AccessibilityConfig(
     val notificationTimeout: Long = 0L,
 )
 
-@Qualifier annotation class AccessibilityConfigBinding
+@Qualifier
+annotation class AccessibilityConfigBinding
 
 @Macro
 @GivenSetElement
@@ -54,11 +51,11 @@ fun <T : @AccessibilityConfigBinding Flow<AccessibilityConfig>> accessibilityCon
 ): () -> Flow<AccessibilityConfig> = instance
 
 @AccessibilityWorkerBinding
-@GivenFun
-suspend fun applyAccessibilityConfig(
+@Given
+fun applyAccessibilityConfig(
     @Given configs: Set<() -> Flow<AccessibilityConfig>>,
     @Given serviceHolder: MutableAccessibilityServiceHolder,
-) {
+): AccessibilityWorker = {
     coroutineScope {
         serviceHolder
             .flatMapLatest { service ->

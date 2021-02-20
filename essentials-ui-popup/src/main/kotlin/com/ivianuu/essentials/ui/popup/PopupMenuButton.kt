@@ -27,7 +27,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -36,9 +39,6 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.LocalUiComponent
-import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.rememberRef
-import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.injekt.component.get
 
@@ -71,14 +71,14 @@ fun Modifier.popupClickable(
 ) = composed {
     val dependencies = LocalUiComponent.current.get<PopupMenuComponent>()
 
-    var coordinates by rememberRef<LayoutCoordinates?> { null }
+    var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
     onGloballyPositioned { coordinates = it }
         .clickable(
             interactionState = remember { InteractionState() },
             indication = indication
         ) {
-            dependencies.dispatchNavigationAction(
+            dependencies.navigator(
                 Push(
                     PopupKey(
                         position = coordinates!!.boundsInRoot(),

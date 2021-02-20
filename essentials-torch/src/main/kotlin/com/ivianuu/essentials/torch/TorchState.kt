@@ -24,7 +24,6 @@ import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 

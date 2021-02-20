@@ -38,8 +38,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.core.toColorOrNull
 import com.ivianuu.essentials.ui.core.toHexString
 import com.ivianuu.essentials.ui.layout.SquareFit
@@ -60,8 +62,8 @@ fun ColorPickerDialog(
     title: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    var currentColor by rememberState { initialColor }
-    var currentScreen by rememberState { ColorPickerTab.Colors }
+    var currentColor by remember { refOf(initialColor) }
+    var currentScreen by remember { refOf(ColorPickerTab.Colors) }
     val otherScreen = when (currentScreen) {
         ColorPickerTab.Colors -> ColorPickerTab.Editor
         ColorPickerTab.Editor -> ColorPickerTab.Colors
@@ -138,7 +140,7 @@ private fun ColorGrid(
     onColorSelected: (Color) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentPalette by rememberState<ColorPickerPalette?> { null }
+    var currentPalette by remember { mutableStateOf<ColorPickerPalette?>(null) }
     AnimatedBox(current = currentPalette) { palette ->
         val items = remember {
             palette
@@ -297,7 +299,7 @@ private fun ColorEditorHeader(
     showAlphaSelector: Boolean,
     onColorChanged: (Color) -> Unit
 ) = key(color) {
-    var hexInput by rememberState { color.toHexString(includeAlpha = showAlphaSelector) }
+    var hexInput by remember { mutableStateOf(color.toHexString(includeAlpha = showAlphaSelector)) }
     TextField(
         modifier = Modifier
             .fillMaxWidth()

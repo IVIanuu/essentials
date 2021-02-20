@@ -20,10 +20,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 
 @Composable
@@ -45,9 +46,11 @@ fun <T> MultiChoiceDialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
-            var selectedItems by rememberState {
-                value
-                    .map { value -> items.first { it.value == value } }
+            var selectedItems by remember {
+                mutableStateOf(
+                    value
+                        .map { value -> items.first { it.value == value } }
+                )
             }
 
             MultiChoiceListDialog(

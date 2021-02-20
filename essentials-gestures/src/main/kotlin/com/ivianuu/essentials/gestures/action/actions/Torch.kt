@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
@@ -27,32 +28,32 @@ import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-@Given object TorchActionId : ActionId("torch")
+@Given
+object TorchActionId : ActionId("torch")
 
 @ActionBinding<TorchActionId>
 @Given
 fun torchAction(
-    @Given stringResource: stringResource,
+    @Given resourceProvider: ResourceProvider,
     @Given torchIcon: Flow<TorchIcon>,
-): Action = Action(
+) = Action(
     id = TorchActionId,
-    title = stringResource(R.string.es_action_torch),
+    title = resourceProvider.string(R.string.es_action_torch),
     icon = torchIcon
 )
 
 @ActionExecutorBinding<TorchActionId>
-@GivenFun
-suspend fun toggleTorch(
+@Given
+fun torchActionExecutor(
     @Given torchState: Flow<TorchState>,
     @Given dispatchTorchAction: DispatchAction<TorchAction>,
-) {
+): ActionExecutor = {
     dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
 }
 

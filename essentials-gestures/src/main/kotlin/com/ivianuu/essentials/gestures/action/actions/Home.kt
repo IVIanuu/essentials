@@ -19,49 +19,50 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-@Given object HomeActionId : ActionId("home")
+@Given
+object HomeActionId : ActionId("home")
 
 @ActionBinding<HomeActionId>
 @Given
 fun homeAction(
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
-): Action = Action(
+    @Given resourceProvider: ResourceProvider,
+) = Action(
     id = HomeActionId,
-    title = stringResource(R.string.es_action_home),
-    permissions = choosePermissions {
-        if (needsHomeIntentWorkaround) emptyList()
-        else listOf(accessibility)
-    },
+    title = resourceProvider.string(R.string.es_action_home),
+    permissions = if (needsHomeIntentWorkaround) emptyList()
+    else accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
 @ActionExecutorBinding<HomeActionId>
-@GivenFun
-suspend fun openHomeScreen(
+@Given
+fun homeActionExecutor(
+    @Given actionIntentSender: ActionIntentSender,
     @Given appContext: AppContext,
-    @Given performGlobalAction: performGlobalAction,
-    @Given sendIntent: sendIntent,
-) {
+    @Given globalActionExecutor: GlobalActionExecutor,
+): ActionExecutor = {
     if (!needsHomeIntentWorkaround) {
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
+        globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {
         runKatching {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
             appContext.sendBroadcast(intent)
         }.onFailure { it.printStackTrace() }
 
-        sendIntent(
+        actionIntentSender(
             Intent(Intent.ACTION_MAIN).apply {
                 addCategory(
                     Intent.CATEGORY_HOME

@@ -20,7 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.CopyAdbCommand
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.Text
@@ -28,18 +31,18 @@ import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<SecureSettingsPcInstructionsKey>
-@GivenFun
-@Composable
-fun SecureSettingsPcInstructionsScreen(
-    @Given state: @UiState SecureSettingsPcInstructionsState,
+@Given
+fun secureSettingsPcInstructionsKeyUi(
+    @Given stateProvider: @Composable () -> @UiState SecureSettingsPcInstructionsState,
     @Given dispatch: DispatchAction<SecureSettingsPcInstructionsAction>,
-) {
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
     ) {

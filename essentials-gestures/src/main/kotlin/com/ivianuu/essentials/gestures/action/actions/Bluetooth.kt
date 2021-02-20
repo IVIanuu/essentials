@@ -17,34 +17,39 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@Given object BluetoothActionId : ActionId("bluetooth")
+@Given
+object BluetoothActionId : ActionId("bluetooth")
 
 @ActionBinding<BluetoothActionId>
 @Given
 fun bluetoothAction(
     @Given bluetoothIcon: Flow<BluetoothIcon>,
-    @Given stringResource: stringResource,
-): Action = Action(
+    @Given resourceProvider: ResourceProvider,
+) = Action(
     id = BluetoothActionId,
-    title = stringResource(R.string.es_action_bluetooth),
+    title = resourceProvider.string(R.string.es_action_bluetooth),
     icon = bluetoothIcon,
     enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
 @ActionExecutorBinding<BluetoothActionId>
-@GivenFun
-suspend fun toggleBluetooth() {
+@Given
+fun bluetoothActionExecutor(): ActionExecutor = {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
             it.disable()
@@ -57,8 +62,8 @@ suspend fun toggleBluetooth() {
 internal typealias BluetoothIcon = ActionIcon
 
 @Given
-fun bluetoothIcon(@Given broadcasts: broadcasts): Flow<BluetoothIcon> {
-    return broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)
+fun bluetoothIcon(@Given broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> {
+    return broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
         .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
         .onStart {
             emit(

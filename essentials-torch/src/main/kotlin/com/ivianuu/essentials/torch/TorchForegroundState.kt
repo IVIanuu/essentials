@@ -23,14 +23,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.foreground.ForegroundState
-import com.ivianuu.essentials.foreground.ForegroundState.*
+import com.ivianuu.essentials.foreground.ForegroundState.Background
+import com.ivianuu.essentials.foreground.ForegroundState.Foreground
 import com.ivianuu.essentials.foreground.ForegroundStateBinding
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,8 +38,11 @@ import kotlinx.coroutines.flow.map
 @ForegroundStateBinding
 @Given
 fun torchForegroundState(
-    @Given createTorchNotification: createTorchNotification,
+    @Given appContext: AppContext,
+    @Given notificationManager: NotificationManager,
+    @Given resourceProvider: ResourceProvider,
     @Given state: Flow<TorchState>,
+    @Given systemBuildInfo: SystemBuildInfo
 ): Flow<ForegroundState> = state
     .map { it.torchEnabled }
     .distinctUntilChanged()
@@ -50,18 +52,17 @@ fun torchForegroundState(
     }
 
 @SuppressLint("NewApi")
-@GivenFun
-fun createTorchNotification(
+private fun createTorchNotification(
     @Given appContext: AppContext,
     @Given notificationManager: NotificationManager,
-    @Given stringResource: stringResource,
+    @Given resourceProvider: ResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
 ): Notification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                stringResource(R.string.es_notif_channel_torch),
+                resourceProvider.string(R.string.es_notif_channel_torch),
                 NotificationManager.IMPORTANCE_LOW
             )
         )
@@ -71,8 +72,8 @@ fun createTorchNotification(
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)
-            setContentTitle(stringResource(R.string.es_notif_title_torch))
-            setContentText(stringResource(R.string.es_notif_text_torch))
+            setContentTitle(resourceProvider.string(R.string.es_notif_title_torch))
+            setContentText(resourceProvider.string(R.string.es_notif_text_torch))
             setContentIntent(
                 PendingIntent.getBroadcast(
                     appContext,

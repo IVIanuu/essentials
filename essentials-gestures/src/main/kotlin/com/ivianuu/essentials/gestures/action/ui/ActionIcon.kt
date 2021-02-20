@@ -23,7 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.Action
 
-@Composable fun ActionIcon(
+@Composable
+fun ActionIcon(
     action: Action,
     modifier: Modifier = Modifier,
 ) {

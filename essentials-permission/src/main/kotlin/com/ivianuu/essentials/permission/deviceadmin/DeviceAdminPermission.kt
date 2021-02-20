@@ -18,46 +18,32 @@ package com.ivianuu.essentials.permission.deviceadmin
 
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-fun DeviceAdminPermission(
-    context: Context,
-    deviceAdminClass: KClass<*>,
-    explanation: String,
-    vararg metadata: Permission.Pair<*>
-): Permission {
-    val component = ComponentName(context, deviceAdminClass.java)
-    return Permission(
-        Permission.DeviceAdminComponent to component,
-        Permission.Intent to Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, explanation)
-        },
-        *metadata
-    )
+interface DeviceAdminPermission {
+    val deviceAdminClass: KClass<*>
+    val explanation: String
 }
 
-val Permission.Companion.DeviceAdminComponent by lazy {
-    Permission.Key<ComponentName>("DeviceAdminComponent")
-}
-
-@PermissionStateProviderBinding
 @Given
-class DeviceAdminPermissionStateProvider(
-    @Given private val devicePolicyManager: DevicePolicyManager,
-) : PermissionStateProvider {
+fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
+    @Given context: AppContext,
+    @Given devicePolicyManager: DevicePolicyManager
+): PermissionStateProvider<P> = { permission ->
+    devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
+}
 
-    override fun handles(permission: Permission): Boolean =
-        Permission.DeviceAdminComponent in permission
-
-    override suspend fun isGranted(permission: Permission): Boolean =
-        devicePolicyManager.isAdminActive(permission[Permission.DeviceAdminComponent])
+@Given
+fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
+    @Given context: AppContext
+): PermissionIntentFactory<P> = { permission ->
+    Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(context, permission.deviceAdminClass.java))
+        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, permission.explanation)
+    }
 }

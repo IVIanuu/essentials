@@ -54,13 +54,15 @@ fun imageLoader(
     }
     .build()
 
-@Qualifier annotation class DecoderBinding
+@Qualifier
+annotation class DecoderBinding
 
 @Macro
 @GivenSetElement
 fun <T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
 
-@Qualifier annotation class FetcherBinding
+@Qualifier
+annotation class FetcherBinding
 
 @Macro
 @GivenSetElement
@@ -72,14 +74,16 @@ data class FetcherPair<T : Any>(
     val type: KClass<T>
 )
 
-@Qualifier annotation class InterceptorBinding
+@Qualifier
+annotation class InterceptorBinding
 
 @Macro
 @GivenSetElement
 fun <T : @InterceptorBinding Interceptor> interceptorBindingImpl(@Given instance: T): Interceptor =
     instance
 
-@Qualifier annotation class MapperBinding
+@Qualifier
+annotation class MapperBinding
 
 @Macro
 @GivenSetElement

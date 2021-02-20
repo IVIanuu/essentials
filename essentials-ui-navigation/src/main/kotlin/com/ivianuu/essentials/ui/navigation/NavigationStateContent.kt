@@ -16,28 +16,34 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.LocalRetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjects
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlin.reflect.KClass
 
-@GivenFun
-@Composable
-fun NavigationStateContent(
-    @Given optionFactories: ()-> Set<NavigationOptionFactory>,
-    @Given uiFactories: () -> Set<KeyUiFactoryBinding>,
-    state: NavigationState,
-    modifier: Modifier = Modifier,
-) {
+typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
+
+@Given
+fun navigationStateContent(
+    @Given optionFactories: Set<NavigationOptionFactory>,
+    @Given uiFactories: Set<KeyUiFactoryBinding>
+): NavigationStateContent = { state, modifier ->
     val contentState = remember {
-        NavigationContentState(optionFactories().toMap(), uiFactories().toMap(),
+        NavigationContentState(optionFactories.toMap(), uiFactories.toMap(),
             state.backStack
         )
     }

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -38,22 +38,21 @@ fun secureSettingsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial SecureSettingsState = SecureSettingsState(),
     @Given actions: Actions<SecureSettingsAction>,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
-    @Given grantSecureSettingsPermissionViaRoot: grantSecureSettingsPermissionViaRoot,
-    @Given popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
-    @Given showToastRes: showToastRes,
+    @Given navigator: DispatchAction<NavigationAction>,
+    @Given permission: SecureSettingsPermission,
+    @Given toaster: Toaster,
 ): StateFlow<SecureSettingsState> = scope.state(initial) {
-    launch { popNavigatorOnceSecureSettingsGranted(true) }
+    launch { navigator.popOnceSecureSettingsPermissionIsGranted(true, permission, toaster) }
     actions
         .onEach { action ->
             when (action) {
-                OpenPcInstructions -> dispatchNavigationAction(
+                OpenPcInstructions -> navigator(
                     NavigationAction.Push(SecureSettingsPcInstructionsKey())
                 )
-                GrantPermissionsViaRoot -> if (grantSecureSettingsPermissionViaRoot()) {
-                    showToastRes(R.string.es_secure_settings_permission_granted)
+                GrantPermissionsViaRoot -> if (permission.grantViaRoot()) {
+                    toaster.showToast(R.string.es_secure_settings_permission_granted)
                 } else {
-                    showToastRes(R.string.es_secure_settings_no_root)
+                    toaster.showToast(R.string.es_secure_settings_no_root)
                 }
             }
         }

@@ -20,22 +20,33 @@ import android.Manifest.permission.WRITE_SECURE_SETTINGS
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.shell.runShellCommand
+import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-@GivenFun suspend fun hasSecureSettingsPermission(
-    @Given appContext: AppContext,
-): Boolean = appContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
-        PackageManager.PERMISSION_GRANTED
+interface SecureSettingsPermission {
 
-@GivenFun suspend fun grantSecureSettingsPermissionViaRoot(
-    @Given buildInfo: BuildInfo,
-    @Given hasSecureSettingsPermission: hasSecureSettingsPermission,
-    @Given runShellCommand: runShellCommand,
-): Boolean = runKatching {
-    runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-    hasSecureSettingsPermission()
-}.getOrElse { false }
+    suspend fun isGranted(): Boolean
+
+    suspend fun grantViaRoot(): Boolean
+
+}
+
+@Given
+class SecureSettingsPermissionImpl(
+    @Given private val appContext: AppContext,
+    @Given private val buildInfo: BuildInfo,
+    @Given private val shell: Shell
+) : @Given SecureSettingsPermission {
+
+    override suspend fun isGranted(): Boolean =
+        appContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+                PackageManager.PERMISSION_GRANTED
+
+    override suspend fun grantViaRoot(): Boolean = runKatching {
+        shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+        isGranted()
+    }.getOrElse { false }
+
+}

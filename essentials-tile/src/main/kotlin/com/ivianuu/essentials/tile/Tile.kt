@@ -51,7 +51,8 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-@Qualifier annotation class TileStateBinding<T : AbstractFunTileService>
+@Qualifier
+annotation class TileStateBinding<T : AbstractFunTileService>
 
 @Macro
 @GivenSetElement

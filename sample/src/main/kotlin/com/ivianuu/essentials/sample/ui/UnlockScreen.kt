@@ -18,20 +18,18 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.unlock.unlockScreen
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -42,13 +40,12 @@ val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 class UnlockKey
 
 @KeyUiBinding<UnlockKey>
-@GivenFun
-@Composable
-fun UnlockScreen(
+@Given
+fun unlockKeyUi(
     @Given screenState: Flow<ScreenState>,
-    @Given showToast: showToast,
-    @Given unlockScreen: unlockScreen,
-) {
+    @Given screenUnlocker: ScreenUnlocker,
+    @Given toaster: Toaster,
+): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {
@@ -57,10 +54,10 @@ fun UnlockScreen(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    showToast("Turn the screen off and on")
+                    toaster.showToast("Turn the screen off and on")
                     screenState.first { it == ScreenState.Locked }
-                    val unlocked = unlockScreen()
-                    showToast("Screen unlocked $unlocked")
+                    val unlocked = screenUnlocker()
+                    toaster.showToast("Screen unlocked $unlocked")
                 }
             }
         ) { Text("Unlock") }

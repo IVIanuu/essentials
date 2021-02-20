@@ -37,15 +37,16 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@GivenFun
-@Composable
-fun CheckableAppsScreen(
-    @Given state: @UiState CheckableAppsState,
+typealias CheckableAppsScreen = @Composable () -> Unit
+
+@Given
+fun checkableAppsScreen(
+    @Given stateProvider: @Composable () -> @UiState CheckableAppsState,
     @Given dispatch: DispatchAction<CheckableAppsAction>,
-) {
+): CheckableAppsScreen = {
+    val state = stateProvider()
     Scaffold(
         topBar = {
             TopAppBar(

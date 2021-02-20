@@ -20,31 +20,37 @@ import android.widget.Toast
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.launch
 
-@GivenFun
-fun showToast(
-    message: String,
-    @Given appContext: AppContext,
-    @Given globalScope: GlobalScope,
-    @Given mainDispatcher: MainDispatcher
-) {
-    globalScope.launch(mainDispatcher) {
-        Toast.makeText(
-            appContext,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+interface Toaster {
+
+    fun showToast(message: String)
+
+    fun showToast(messageRes: Int, vararg arguments: Any?)
+
 }
 
-@GivenFun
-fun showToastRes(
-    messageRes: Int,
-    @Given showToast: showToast,
-    @Given stringResource: stringResource
-) {
-    showToast(stringResource(messageRes))
+@Given
+class ToasterImpl(
+    @Given private val appContext: AppContext,
+    @Given private val globalScope: GlobalScope,
+    @Given private val mainDispatcher: MainDispatcher,
+    @Given private val resourceProvider: ResourceProvider
+) : @Given Toaster {
+
+    override fun showToast(message: String) {
+        globalScope.launch(mainDispatcher) {
+            Toast.makeText(
+                appContext,
+                message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun showToast(messageRes: Int, vararg arguments: Any?) {
+        showToast(resourceProvider.string(messageRes, *arguments))
+    }
+
 }

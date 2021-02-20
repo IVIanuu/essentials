@@ -17,8 +17,11 @@
 package com.ivianuu.essentials.securesettings
 
 import com.ivianuu.essentials.clipboard.ClipboardAction
-import com.ivianuu.essentials.clipboard.ClipboardAction.*
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.*
+import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.CopyAdbCommand
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
@@ -27,6 +30,7 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -41,21 +45,22 @@ fun secureSettingsPcInstructionsState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial SecureSettingsPcInstructionsState,
     @Given actions: Actions<SecureSettingsPcInstructionsAction>,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
-    @Given dispatchClipboardAction: DispatchAction<ClipboardAction>,
-    @Given popNavigatorOnceSecureSettingsGranted: popNavigatorOnceSecureSettingsGranted,
+    @Given navigator: DispatchAction<NavigationAction>,
+    @Given clipboard: DispatchAction<ClipboardAction>,
+    @Given permission: SecureSettingsPermission,
+    @Given toaster: Toaster
 ): StateFlow<SecureSettingsPcInstructionsState> = scope.state(initial) {
-    launch { popNavigatorOnceSecureSettingsGranted(false) }
+    launch { navigator.popOnceSecureSettingsPermissionIsGranted(false, permission, toaster) }
 
     actions
         .filterIsInstance<CopyAdbCommand>()
-        .onEach { dispatchClipboardAction(UpdateClipboard(currentState().secureSettingsAdbCommand)) }
+        .onEach { clipboard(UpdateClipboard(currentState().secureSettingsAdbCommand)) }
         .launchIn(this)
 
     actions
         .filterIsInstance<OpenGadgetHacksTutorial>()
         .onEach {
-            dispatchNavigationAction(
+            navigator(
                 NavigationAction.Push(
                     UrlKey("https://youtu.be/CDuxcrrWLnY")
                 )
@@ -66,7 +71,7 @@ fun secureSettingsPcInstructionsState(
     actions
         .filterIsInstance<OpenLifeHackerTutorial>()
         .onEach {
-            dispatchNavigationAction(
+            navigator(
                 NavigationAction.Push(
                     UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
                 )
@@ -77,7 +82,7 @@ fun secureSettingsPcInstructionsState(
     actions
         .filterIsInstance<OpenXdaTutorial>()
         .onEach {
-            dispatchNavigationAction(
+            navigator(
                 NavigationAction.Push(
                     UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
                 )

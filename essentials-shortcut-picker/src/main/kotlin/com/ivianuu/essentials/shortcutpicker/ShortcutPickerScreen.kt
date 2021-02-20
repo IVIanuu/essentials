@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ImagePainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.DispatchAction
@@ -31,19 +30,19 @@ import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<ShortcutPickerKey>
-@GivenFun
-@Composable
-fun ShortcutPickerScreen(
-    @Given state: @UiState ShortcutPickerState,
+@Given
+fun shortcutPickerKeyUi(
+    @Given stateProvider: @Composable () -> @UiState ShortcutPickerState,
     @Given dispatch: DispatchAction<ShortcutPickerAction>,
-) {
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = {
             TopAppBar(

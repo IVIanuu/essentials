@@ -21,17 +21,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.injekt.GivenFun
-import kotlinx.coroutines.flow.Flow
-import androidx.compose.runtime.getValue
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.Flow
 
 @HomeItemBinding
 @Given
@@ -40,9 +39,8 @@ val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey(
 class DisplayRotationKey
 
 @KeyUiBinding<DisplayRotationKey>
-@GivenFun
-@Composable
-fun DisplayRotationScreen(@Given rotation: Flow<DisplayRotation>) {
+@Given
+fun displayRotationKeyUi(@Given rotation: Flow<DisplayRotation>): KeyUi = {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)

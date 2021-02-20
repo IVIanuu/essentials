@@ -24,13 +24,13 @@ import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
@@ -51,11 +51,11 @@ fun DialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         onClick = {
-            component.dispatchNavigationAction(
+            component.navigator(
                 Push(
                     DialogListItemKey {
                         dialog {
-                            component.dispatchNavigationAction(PopTop())
+                            component.navigator(PopTop())
                         }
                     }
                 )
@@ -67,18 +67,18 @@ fun DialogListItem(
 data class DialogListItemKey(val dialog: @Composable () -> Unit)
 
 @KeyUiBinding<DialogListItemKey>
-@GivenFun
-@Composable
-fun DialogListScreen(@Given key: DialogListItemKey) {
+@Given
+fun dialogListItemKeyUi(@Given key: DialogListItemKey): KeyUi = {
     DialogWrapper { key.dialog() }
 }
 
 @NavigationOptionFactoryBinding
 @Given
-val dialogListScreenNavigationsOptionsFactory get() =
+val dialogListScreenNavigationOptionsFactory =
     DialogNavigationOptionsFactory<DialogListItemKey>()
 
 @ComponentElementBinding<UiComponent>
-@Given class DialogListItemComponent(
-    @Given val dispatchNavigationAction: DispatchAction<NavigationAction>
+@Given
+class DialogListItemComponent(
+    @Given val navigator: DispatchAction<NavigationAction>
 )

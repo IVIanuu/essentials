@@ -20,22 +20,23 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
-@GivenFun
-suspend fun openAppUi(
+typealias AppUiStarter = suspend () -> ComponentActivity
+
+@Given
+fun appUiStarter(
     @Given appContext: AppContext,
     @Given buildInfo: BuildInfo,
     @Given foregroundActivity: Flow<ForegroundActivity>,
     @Given packageManager: PackageManager,
-): ComponentActivity {
+): AppUiStarter = {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-    return foregroundActivity
+    foregroundActivity
         .onStart {
             appContext.startActivity(
                 intent.apply {

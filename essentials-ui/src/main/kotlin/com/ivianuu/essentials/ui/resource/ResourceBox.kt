@@ -22,13 +22,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.core.localHorizontalInsets
 import com.ivianuu.essentials.ui.core.localVerticalInsets
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
@@ -108,7 +109,7 @@ fun <T> ResourceBox(
     success: @Composable (T) -> Unit
 ) {
     // we only wanna animate if the resource type has changed
-    val resourceState = rememberState(resource::class) { resource }
+    val resourceState = remember(resource::class) { mutableStateOf(resource) }
     resourceState.value = resource
 
     AnimatedBox(

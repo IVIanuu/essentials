@@ -23,11 +23,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,16 +43,22 @@ import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.localVerticalInsets
-import com.ivianuu.essentials.ui.core.rememberState
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
+import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
+import com.ivianuu.essentials.ui.dialog.DialogWrapper
+import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
@@ -57,9 +69,8 @@ val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 class DialogsKey
 
 @KeyUiBinding<DialogsKey>
-@GivenFun
-@Composable
-fun DialogsScreen() {
+@Given
+fun dialogsKeyUi(): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {
@@ -226,11 +237,11 @@ fun DialogsScreen() {
             }
             item {
                 val singleChoiceItems = listOf(1, 2, 3, 4, 5)
-                var selectedSingleChoiceItem by rememberState { 1 }
+                var selectedSingleChoiceItem by remember { mutableStateOf(1) }
                 DialogLauncherButton(
                     text = "Single choice list"
                 ) {
-                    var tmpSelectedItem by rememberState { selectedSingleChoiceItem }
+                    var tmpSelectedItem by remember { mutableStateOf(selectedSingleChoiceItem) }
 
                     SingleChoiceListDialog(
                         title = { Text("Single choice") },
@@ -253,11 +264,11 @@ fun DialogsScreen() {
             }
             item {
                 val multiChoiceItems = listOf("A", "B", "C")
-                var selectedMultiChoiceItems by rememberState { multiChoiceItems }
+                var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems) }
                 DialogLauncherButton(
                     text = "Multi choice list"
                 ) {
-                    var tmpSelectedItems by rememberState { selectedMultiChoiceItems }
+                    var tmpSelectedItems by remember { mutableStateOf(selectedMultiChoiceItems) }
 
                     MultiChoiceListDialog(
                         title = { Text("Multi choice") },
@@ -279,7 +290,7 @@ fun DialogsScreen() {
             }
             item {
                 val primaryColor = MaterialTheme.colors.primary
-                var currentColor by rememberState { primaryColor }
+                var currentColor by remember { mutableStateOf(primaryColor) }
                 DialogLauncherButton(text = "Color Picker") { dismiss ->
                     ColorPickerDialog(
                         title = { Text("Color Picker") },
@@ -294,9 +305,9 @@ fun DialogsScreen() {
                 }
             }
             item {
-                var textInputValue by rememberState { "" }
+                var textInputValue by remember { mutableStateOf("") }
                 DialogLauncherButton(text = "Text input") {
-                    var tmpTextInputValue by rememberState { textInputValue }
+                    var tmpTextInputValue by remember { mutableStateOf(textInputValue) }
                     TextInputDialog(
                         value = tmpTextInputValue,
                         onValueChange = { tmpTextInputValue = it },
@@ -349,7 +360,7 @@ private fun DialogLauncherButton(
     val component = LocalUiComponent.current.get<DialogLauncherComponent>()
     Button(
         onClick = {
-            component.dispatchNavigationOption(
+            component.navigator(
                 NavigationAction.Push(
                     DialogLauncherKey {
                         dialog {
@@ -367,9 +378,8 @@ private fun DialogLauncherButton(
 data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 
 @KeyUiBinding<DialogLauncherKey>
-@GivenFun
-@Composable
-fun DialogLauncherDialog(@Given key: DialogLauncherKey) {
+@Given
+fun dialogLauncherKeyUi(@Given key: DialogLauncherKey): KeyUi = {
     DialogWrapper { key.dialog() }
 }
 
@@ -380,5 +390,5 @@ val dialogLauncherDialogNavigationOptionFactory = DialogNavigationOptionsFactory
 @ComponentElementBinding<UiComponent>
 @Given
 class DialogLauncherComponent(
-    @Given val dispatchNavigationOption: DispatchAction<NavigationAction>
+    @Given val navigator: DispatchAction<NavigationAction>
 )

@@ -16,52 +16,120 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ui.navigation.Key
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.memo.memoize
+import com.ivianuu.essentials.permission.ui.PermissionRequestKey
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.util.AppUiStarter
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Interceptor
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.ForKey
+import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.keyOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
-data class Permission(private val metadata: Map<Key<*>, Any?>) {
+interface Permission
 
-    constructor(vararg metadata: Permission.Pair<*>) : this(
-        metadata.associate {
-            it.key to it.value
-        }
-    )
+@Qualifier
+annotation class PermissionBinding
 
-    operator fun <T> get(key: Key<T>): T =
-        metadata[key] as? T ?: error("missing value for $key")
+@Suppress("UNCHECKED_CAST")
+@Macro
+@GivenSetElement
+fun <T : @PermissionBinding P, @ForKey P : Permission>
+        permissionBindingImpl(
+    @Given permission: T,
+    @Given requestHandler: PermissionRequestHandler<P>,
+    @Given stateProvider: PermissionStateProvider<P>
+): PermissionElement<P> = PermissionElement(keyOf<P>(), permission, requestHandler, stateProvider)
 
-    fun <T> getOrNull(key: Key<T>): T? = metadata[key] as? T
+typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
-    operator fun <T> contains(key: Key<T>): Boolean = metadata.containsKey(key)
+typealias PermissionRequestHandler<P> = suspend (P) -> Unit
 
-    class Key<T>(val name: String) : ReadOnlyProperty<Permission, T> {
-        override fun getValue(thisRef: Permission, property: KProperty<*>): T = thisRef[this]
-        override fun toString() = name
+data class PermissionElement<P>(
+    val permissionKey: Key<P>,
+    val permission: P,
+    val requestHandler: PermissionRequestHandler<P>,
+    val stateProvider: PermissionStateProvider<P>
+)
+
+typealias PermissionState<P> = Flow<Boolean>
+
+@Given
+fun <@ForKey P : Permission> permissionState(
+    @Given stateFactory: PermissionStateFactory
+): PermissionState<P> = stateFactory(keyOf<P>())
+
+typealias PermissionStateFactory = (Key<Permission>) -> Flow<Boolean>
+
+@Given
+fun permissionStateFactory(
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given permissions: Map<Key<Permission>, Permission>,
+    @Given stateProviders: Map<Key<Permission>, PermissionStateProvider<Permission>>
+): PermissionStateFactory = { permissionKey: Key<Permission> ->
+    val stateProvider = stateProviders[permissionKey]!!
+    val permission = permissions[permissionKey]!!
+    permissionChanges
+        .map { Unit }
+        .onStart { emit(Unit) }
+        .map {
+            withContext(defaultDispatcher) {
+                stateProvider(permission)
+            }
+        }.distinctUntilChanged()
+}.memoize()
+
+internal val permissionChanges = EventFlow<Unit>()
+
+@Interceptor
+fun <T : PermissionRequestHandler<P>, P : Permission> permissionRequestHandlerInterceptor(
+    factory: () -> T
+): T {
+    val unintercepted = factory()
+    val intercepted: PermissionRequestHandler<P> = { permission ->
+        unintercepted(permission)
+        permissionChanges.emit(Unit)
     }
 
-    data class Pair<T>(val key: Key<T>, val value: T)
-
-    companion object
+    @Suppress("UNCHECKED_CAST")
+    return intercepted as T
 }
 
-infix fun <T> Permission.Key<T>.to(value: T) = Permission.Pair(this, value)
+typealias PermissionRequester = suspend (List<Key<Permission>>) -> Boolean
 
-val Permission.Companion.Title by lazy { Permission.Key<String>("Title") }
-val Permission.Companion.Desc by lazy { Permission.Key<String>("Desc") }
-val Permission.Companion.Icon by lazy { Permission.Key<@Composable () -> Unit>("Icon") }
+@Given
+fun permissionRequester(
+    @Given appUiStarter: AppUiStarter,
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given logger: Logger,
+    @Given navigator: DispatchAction<NavigationAction>,
+    @Given permissionStateFactory: PermissionStateFactory
+): PermissionRequester = { requestedPermissions ->
+    withContext(defaultDispatcher) {
+        logger.d { "request requestedPermissions $requestedPermissions" }
 
-interface PermissionStateProvider {
-    fun handles(permission: Permission): Boolean
-    suspend fun isGranted(permission: Permission): Boolean
+        if (requestedPermissions.all { permissionStateFactory(it).first() })
+            return@withContext true
+
+        val key = PermissionRequestKey(requestedPermissions)
+        appUiStarter()
+        navigator(Push(key))
+
+        return@withContext requestedPermissions.all { permissionStateFactory(it).first() }
+    }
 }
-
-interface PermissionRequestHandler {
-    fun handles(permission: Permission): Boolean
-    suspend fun request(permission: Permission)
-}
-
-typealias PermissionRequestKeyFactory = (PermissionRequest) -> Key
-
-data class PermissionRequest(val permissions: List<Permission>)

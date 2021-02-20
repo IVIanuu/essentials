@@ -18,27 +18,26 @@ package com.ivianuu.essentials.foreground
 
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
 import kotlin.time.milliseconds
 
 @AppWorkerBinding
-@GivenFun
-suspend fun applyAndroidForegroundServiceState(
+@Given
+fun androidForegroundServiceStateWorker(
     @Given appContext: AppContext,
     @Given logger: Logger,
     @Given state: Flow<InternalForegroundState>,
-) {
+): AppWorker = {
     state
         .debounce(300.milliseconds)
         .filter { it.isForeground }

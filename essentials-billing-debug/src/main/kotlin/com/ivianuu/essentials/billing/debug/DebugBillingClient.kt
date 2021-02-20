@@ -41,10 +41,12 @@ import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSE
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.updatePref
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.essentials.datastore.android.PrefUpdater
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.openAppUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -52,14 +54,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Date
 
-@Given class DebugBillingClient(
+@Given
+class DebugBillingClient(
+    @Given private val appUiStarter: AppUiStarter,
     @Given private val buildInfo: BuildInfo,
     @Given private val globalScope: GlobalScope,
-    @Given private val openAppUi: openAppUi,
+    @Given private val navigator: DispatchAction<NavigationAction>,
     @Given private val prefs: Flow<DebugBillingPrefs>,
-    @Given private val updatePrefs: updatePref<DebugBillingPrefs>,
-    @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
-    @Given private val getPurchaseResult: pushKeyForResult<DebugPurchaseKey, SkuDetails>,
+    @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
+    @Given private val purchasesUpdatedListener: PurchasesUpdatedListener
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -153,8 +156,8 @@ import java.util.Date
             .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
 
         globalScope.launch {
-            openAppUi()
-            val purchasedSkuDetails = getPurchaseResult(DebugPurchaseKey(params))
+            appUiStarter()
+            val purchasedSkuDetails = navigator.pushForResult<SkuDetails>(DebugPurchaseKey(params))
 
             if (purchasedSkuDetails != null) {
                 val purchase = purchasedSkuDetails.toPurchase()

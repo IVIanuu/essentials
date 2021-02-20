@@ -16,45 +16,61 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Icon
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
+import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.ui.PermissionUiMetadata
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import kotlin.reflect.KClass
 
-@Scoped<AppComponent>
+@PermissionBinding
 @Given
-class ActionPermissions(@Given appContext: AppContext) {
-    val accessibility = AccessibilityServicePermission(
-        DefaultAccessibilityService::class,
-        Permission.Title to "Accessibility", // todo res
-        Permission.Desc to "Required to click buttons", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_accessibility, null) }
-    )
-    val root = RootPermission(
-        Permission.Title to "Root", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_adb, null) }
-    )
-    val writeSecureSettings = WriteSecureSettingsPermission(
-        Permission.Title to "Write secure settings", // todo res
-        Permission.Desc to "Required to change the navigation bar visibility", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) }
-    )
-    val writeSettings = WriteSettingsPermission(
-        appContext,
-        Permission.Title to "Write Settings", // todo res
-        Permission.Desc to "Required to change settings", // todo res
-        Permission.Icon to { Icon(R.drawable.es_ic_settings, null) } // todo change icon
-    )
+object ActionAccessibilityPermission : AccessibilityServicePermission {
+    override val serviceClass: KClass<out AccessibilityService>
+        get() = DefaultAccessibilityService::class
 }
+
+@Given
+val actionAccessibilityPermissionMetadata = PermissionUiMetadata<ActionAccessibilityPermission>(
+    title = "Accessibility", // todo res
+    desc = "Required to click buttons", // todo res
+    icon = { Icon(R.drawable.es_ic_accessibility, null) }
+)
+
+@PermissionBinding
+@Given
+object ActionRootPermission : RootPermission
+
+@Given
+val actionRootPermissionMetadata = PermissionUiMetadata<ActionRootPermission>(
+    title = "Root", // todo res
+    icon = { Icon(R.drawable.es_ic_adb, null) }
+)
+
+@PermissionBinding
+@Given
+object ActionWriteSecureSettingsPermission : WriteSecureSettingsPermission
+
+@Given
+val actionWriteSecureSettingsPermissionMetadata = PermissionUiMetadata<ActionWriteSecureSettingsPermission>(
+    title = "Write secure settings", // todo res
+    desc = "Required to change the navigation bar visibility", // todo res
+    icon = { Icon(R.drawable.es_ic_settings, null) }
+)
+
+@PermissionBinding
+@Given
+object ActionWriteSettingsPermission : WriteSettingsPermission
+
+@Given
+val actionWriteSettingsPermissionMetadata = PermissionUiMetadata<ActionWriteSettingsPermission>(
+    title = "Write Settings", // todo res
+    desc = "Required to change settings", // todo res
+    icon = { Icon(R.drawable.es_ic_settings, null) } // todo change icon
+)

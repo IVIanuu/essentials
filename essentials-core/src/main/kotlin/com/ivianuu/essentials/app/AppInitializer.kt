@@ -20,7 +20,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedGraph
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
@@ -28,7 +27,10 @@ import com.ivianuu.injekt.common.ForKey
 import com.ivianuu.injekt.common.Key
 import com.ivianuu.injekt.common.keyOf
 
-@Qualifier annotation class AppInitializerBinding
+typealias AppInitializer = () -> Unit
+
+@Qualifier
+annotation class AppInitializerBinding
 
 @Macro
 @GivenSetElement
@@ -39,7 +41,8 @@ fun <@ForKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
     keyOf<T>(), instance, config
 )
 
-@Qualifier annotation class AppInitializerConfigBinding<T : () -> Unit>
+@Qualifier
+annotation class AppInitializerConfigBinding<T : () -> Unit>
 
 data class AppInitializerConfig<out T : () -> Unit>(
     val dependencies: Set<Key<() -> Unit>> = emptySet(),
@@ -56,11 +59,13 @@ data class AppInitializerElement(
     val config: AppInitializerConfig<*>
 )
 
-@GivenFun
-fun runInitializers(
+typealias AppInitializerRunner = () -> Unit
+
+@Given
+fun appInitializerRunner(
     @Given initializers: Set<AppInitializerElement>,
     @Given logger: Logger,
-) {
+): AppInitializerRunner = {
     initializers
         .sortedGraph(
             key = { it.key },

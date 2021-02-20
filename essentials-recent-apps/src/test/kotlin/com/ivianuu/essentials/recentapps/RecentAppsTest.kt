@@ -25,7 +25,6 @@ import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Test
 import org.junit.runner.RunWith

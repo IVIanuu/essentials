@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
-import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.getInstalledApps
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
 import com.ivianuu.essentials.store.Actions
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
@@ -39,16 +40,16 @@ fun appPickerState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial AppPickerState,
     @Given actions: Actions<AppPickerAction>,
-    @Given getInstalledApps: getInstalledApps,
-    @Given popTopKeyWithResult: popTopKeyWithResult<AppInfo>,
+    @Given appRepository: AppRepository,
+    @Given navigator: DispatchAction<NavigationAction>,
 ): StateFlow<AppPickerState> = scope.state(initial) {
-    reduceResource({ getInstalledApps() }) { copy(allApps = it) }
+    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
     actions
         .filterIsInstance<FilterApps>()
         .reduce { copy(appFilter = it.appFilter) }
         .launchIn(this)
     actions
         .filterIsInstance<PickApp>()
-        .onEach { popTopKeyWithResult(it.app) }
+        .onEach { navigator.popWithResult(it.app) }
         .launchIn(this)
 }

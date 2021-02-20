@@ -23,17 +23,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
+import com.ivianuu.essentials.ui.prefs.IntSliderListItem
+import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
+import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
+import com.ivianuu.essentials.ui.prefs.SliderValueText
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
 
@@ -44,12 +53,12 @@ val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 class PrefsKey
 
 @KeyUiBinding<PrefsKey>
-@GivenFun
-@Composable
-fun PrefsScreen(
-    @Given prefs: @UiState SamplePrefs,
-    @Given dispatchUpdate: dispatchPrefUpdate<SamplePrefs>,
-) {
+@Given
+fun prefsKeyUi(
+    @Given prefsProvider: @Composable () -> @UiState SamplePrefs,
+    @Given dispatchUpdate: PrefUpdateDispatcher<SamplePrefs>,
+): KeyUi = {
+    val prefs = prefsProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {

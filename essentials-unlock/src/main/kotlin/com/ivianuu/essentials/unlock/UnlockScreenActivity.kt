@@ -24,7 +24,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
@@ -93,9 +93,9 @@ class UnlockScreenActivity : AppCompatActivity() {
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
             merge(
-                component.broadcasts(Intent.ACTION_SCREEN_OFF),
-                component.broadcasts(Intent.ACTION_SCREEN_ON),
-                component.broadcasts(Intent.ACTION_USER_PRESENT)
+                component.broadcastsFactory(Intent.ACTION_SCREEN_OFF),
+                component.broadcastsFactory(Intent.ACTION_SCREEN_ON),
+                component.broadcastsFactory(Intent.ACTION_USER_PRESENT)
             )
                 .take(1)
                 .onEach {
@@ -127,8 +127,9 @@ class UnlockScreenActivity : AppCompatActivity() {
 }
 
 @ComponentElementBinding<ActivityComponent>
-@Given class UnlockScreenComponent(
-    @Given val broadcasts: broadcasts,
+@Given
+class UnlockScreenComponent(
+    @Given val broadcastsFactory: BroadcastsFactory,
     @Given val keyguardManager: KeyguardManager,
     @Given val logger: Logger,
     @Given val systemBuildInfo: SystemBuildInfo

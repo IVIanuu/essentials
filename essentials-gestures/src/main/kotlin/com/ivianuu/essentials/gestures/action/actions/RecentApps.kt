@@ -17,27 +17,31 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object RecentAppsActionId : ActionId("recent_apps")
+@Given
+object RecentAppsActionId : ActionId("recent_apps")
 
 @ActionBinding<RecentAppsActionId>
 @Given
-fun recentAppsAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    RecentAppsActionId,
-    R.string.es_action_recent_apps,
-    singleActionIcon(R.drawable.es_ic_action_recent_apps)
+fun recentAppsAction(
+    @Given resourceProvider: ResourceProvider
+) = Action(
+    id = RecentAppsActionId,
+    title = resourceProvider.string(R.string.es_action_recent_apps),
+    icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
 @ActionExecutorBinding<RecentAppsActionId>
-@GivenFun
-suspend fun showRecentApps(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+@Given
+fun recentAppsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

@@ -22,30 +22,31 @@ import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object AssistantActionId : ActionId("assistant")
+@Given
+object AssistantActionId : ActionId("assistant")
 
 @ActionBinding<AssistantActionId>
 @Given
 fun assistantAction(
-    @Given stringResource: stringResource,
+    @Given resourceProvider: ResourceProvider,
     @Given searchManager: SearchManager,
-): Action = Action(
+) = Action(
     id = AssistantActionId,
-    title = stringResource(R.string.es_action_assistant),
+    title = resourceProvider.string(R.string.es_action_assistant),
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_google)
 )
 
 @SuppressLint("DiscouragedPrivateApi")
 @ActionExecutorBinding<AssistantActionId>
-@GivenFun
-suspend fun launchAssistant(@Given searchManager: SearchManager) {
+@Given
+fun assistantActionExecutor(@Given searchManager: SearchManager): ActionExecutor = {
     val launchAssist = searchManager.javaClass
         .getDeclaredMethod("launchAssist", Bundle::class.java)
     launchAssist.invoke(searchManager, Bundle())

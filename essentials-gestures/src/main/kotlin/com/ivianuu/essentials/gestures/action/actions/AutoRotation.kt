@@ -18,40 +18,46 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
 import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
+import com.ivianuu.essentials.android.settings.AndroidSettingUpdater
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.android.settings.updateAndroidSetting
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.common.keyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@Given object AutoRotationActionId : ActionId("auto_rotation")
+@Given
+object AutoRotationActionId : ActionId("auto_rotation")
 
 @ActionBinding<AutoRotationActionId>
 @Given
 fun autoRotationAction(
     @Given autoRotationIcon: Flow<AutoRotationIcon>,
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
-): Action = Action(
+    @Given resourceProvider: ResourceProvider,
+) = Action(
     id = AutoRotationActionId,
-    title = stringResource(R.string.es_action_auto_rotation),
-    permissions = choosePermissions { listOf(writeSettings) },
+    title = resourceProvider.string(R.string.es_action_auto_rotation),
+    permissions = listOf(keyOf<ActionWriteSettingsPermission>()),
     unlockScreen = true,
     icon = autoRotationIcon
 )
 
 @ActionExecutorBinding<AutoRotationActionId>
-@GivenFun
-suspend fun toggleAutoRotation(
-    @Given updateAutoRotation: updateAndroidSetting<AutoRotation>,
-) {
+@Given
+fun autoRotationActionExecutor(
+    @Given updateAutoRotation: AndroidSettingUpdater<AutoRotation>,
+): ActionExecutor = {
     updateAutoRotation { if (this != 1) 1 else 0 }
 }
 

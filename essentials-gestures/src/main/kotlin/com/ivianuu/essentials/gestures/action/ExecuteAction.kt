@@ -17,51 +17,53 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.permission.requestPermissions
+import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.unlock.unlockScreen
+import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.withContext
 
-@GivenFun suspend fun executeAction(
-    key: String,
+typealias executeAction = suspend (String) -> Result<Boolean, Throwable>
+
+@Given
+fun executeAction(
+    @Given actionRepository: ActionRepository,
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
-    @Given getAction: getAction,
-    @Given getActionExecutor: getActionExecutor,
-    @Given requestPermissions: requestPermissions,
-    @Given unlockScreen: unlockScreen,
-    @Given showToast: showToast
-): Result<Boolean, Throwable> = withContext(defaultDispatcher) {
-    runKatching {
-        logger.d { "execute $key" }
-        val action = getAction(key)
+    @Given permissionRequester: PermissionRequester,
+    @Given screenUnlocker: ScreenUnlocker,
+    @Given toaster: Toaster
+): executeAction = { key ->
+    withContext(defaultDispatcher) {
+        runKatching {
+            logger.d { "execute $key" }
+            val action = actionRepository.getAction(key)
 
-        // check permissions
-        if (!requestPermissions(action.permissions)) {
-            logger.d { "couldn't get permissions for $key" }
-            return@runKatching false
+            // check permissions
+            if (!permissionRequester(action.permissions)) {
+                logger.d { "couldn't get permissions for $key" }
+                return@runKatching false
+            }
+
+            // unlock screen
+            if (action.unlockScreen && !screenUnlocker()) {
+                logger.d { "couldn't unlock screen for $key" }
+                return@runKatching false
+            }
+
+            logger.d { "fire $key" }
+
+            // fire
+            actionRepository.getActionExecutor(key)()
+            return@runKatching true
+        }.onFailure {
+            it.printStackTrace()
+            toaster.showToast("Failed to execute '$key'") // todo res
         }
-
-        // unlock screen
-        if (action.unlockScreen && !unlockScreen()) {
-            logger.d { "couldn't unlock screen for $key" }
-            return@runKatching false
-        }
-
-        logger.d { "fire $key" }
-
-        // fire
-        getActionExecutor(key)()
-        return@runKatching true
-    }.onFailure {
-        it.printStackTrace()
-        showToast("Failed to execute '$key'") // todo res
     }
 }

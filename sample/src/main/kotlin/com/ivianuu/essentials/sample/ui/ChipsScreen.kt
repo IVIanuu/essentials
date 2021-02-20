@@ -38,10 +38,10 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -51,9 +51,8 @@ class ChipsKey
 
 @KeyUiBinding<ChipsKey>
 @OptIn(ExperimentalLayout::class)
-@GivenFun
-@Composable
-fun ChipsScreen(@Given showToast: showToast) {
+@Given
+fun chipsKeyUi(@Given toaster: Toaster): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Chips") }) }
     ) {
@@ -68,7 +67,7 @@ fun ChipsScreen(@Given showToast: showToast) {
                 remember { Names.shuffled() }.forEach { name ->
                     Chip(
                         name = name,
-                        onClick = { showToast("Clicked $name") }
+                        onClick = { toaster.showToast("Clicked $name") }
                     )
                 }
             }

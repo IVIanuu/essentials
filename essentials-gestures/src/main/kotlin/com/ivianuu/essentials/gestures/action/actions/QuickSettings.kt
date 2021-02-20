@@ -19,27 +19,30 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object QuickSettingsActionId : ActionId("quick_settings")
+@Given
+object QuickSettingsActionId : ActionId("quick_settings")
 
 @ActionBinding<QuickSettingsActionId>
 @Given
-fun quickSettingsAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    QuickSettingsActionId,
-    R.string.es_action_quick_settings,
-    singleActionIcon(Icons.Default.Settings)
+fun quickSettingsAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = QuickSettingsActionId,
+    title = resourceProvider.string(R.string.es_action_quick_settings),
+    permissions = accessibilityActionPermissions,
+    icon = singleActionIcon(Icons.Default.Settings)
 )
 
 @ActionExecutorBinding<QuickSettingsActionId>
-@GivenFun
-suspend fun showQuickSettings(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
+@Given
+fun quickSettingsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
 }

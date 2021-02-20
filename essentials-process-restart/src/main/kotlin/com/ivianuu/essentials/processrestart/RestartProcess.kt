@@ -22,15 +22,17 @@ import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 
-@GivenFun suspend fun restartProcess(
+typealias ProcessRestarter = suspend () -> Unit
+
+@Given
+fun processRestarter(
     @Given appContext: AppContext,
     @Given buildInfo: BuildInfo,
     @Given logger: Logger,
     @Given packageManager: PackageManager,
-) {
+): ProcessRestarter = {
     val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
         .addFlags(FLAG_ACTIVITY_NEW_TASK)
     logger.d { "restart process $intent" }

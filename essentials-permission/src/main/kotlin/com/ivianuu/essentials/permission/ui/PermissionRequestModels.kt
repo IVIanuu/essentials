@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package androidx.compose.runtime;
+package com.ivianuu.essentials.permission.ui
 
-import org.jetbrains.annotations.NotNull;
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.injekt.common.Key
 
-import java.util.Map;
+data class PermissionRequestKey(val permissionsKeys: List<Key<Permission>>)
 
-public final class CompositionContextAccessor {
+data class PermissionRequestState(val permissions: List<UiPermission<*>> = emptyList())
 
-    @NotNull
-    public static Map<CompositionLocal<Object>, State<Object>> getCompositionLocalScope(CompositionContext context) {
-        //noinspection KotlinInternalInJava
-        return context.getCompositionLocalScope$runtime_release();
-    }
+data class UiPermission<P : Permission>(
+    val permissionKey: Key<P>,
+    val metadata: PermissionUiMetadata<P>
+)
 
+sealed class PermissionRequestAction {
+    data class RequestPermission(val permission: UiPermission<*>) : PermissionRequestAction()
 }

@@ -18,9 +18,8 @@ package com.ivianuu.essentials.recentapps
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
-import com.ivianuu.essentials.accessibility.AccessibilityEvents
+import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
@@ -28,24 +27,14 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 
 typealias RecentApps = List<String>
 
 @Scoped<AppComponent>
 @Given
 fun recentApps(
-    @Given accessibilityEvents: AccessibilityEvents,
+    @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given globalScope: GlobalScope,
     @Given logger: Logger,
 ): Flow<RecentApps> {
@@ -83,6 +72,7 @@ fun recentApps(
 }
 
 @AccessibilityConfigBinding
+@Given
 fun recentAppsAccessibilityConfig() = flowOf {
     AccessibilityConfig(
         eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED

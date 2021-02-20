@@ -16,23 +16,9 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.SnapshotMutationPolicy
+import androidx.compose.runtime.structuralEqualityPolicy
 import kotlin.reflect.KProperty
-
-@Composable
-inline fun <T> rememberRef(
-    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    crossinline init: @DisallowComposableCalls () -> T,
-): Ref<T> = remember { refOf(init(), policy) }
-
-@Composable
-inline fun <T> rememberRef(
-    vararg inputs: Any?,
-    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    crossinline init: @DisallowComposableCalls () -> T,
-): Ref<T> = remember(*inputs) {
-    refOf(init(), policy)
-}
 
 fun <T> refOf(
     value: T,

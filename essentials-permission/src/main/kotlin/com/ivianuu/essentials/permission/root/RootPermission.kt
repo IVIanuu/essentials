@@ -18,46 +18,24 @@ package com.ivianuu.essentials.permission.root
 
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.to
-import com.ivianuu.essentials.shell.isShellAvailable
-import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 
-fun RootPermission(vararg metadata: Permission.Pair<*>) = Permission(
-    Permission.IsRootPermission to Unit,
-    *metadata
-)
+interface RootPermission : Permission
 
-val Permission.Companion.IsRootPermission by lazy {
-    Permission.Key<Unit>("IsRootPermission")
-}
-
-@PermissionStateProviderBinding
 @Given
-class RootPermissionStateProvider(
-    @Given private val isShellAvailable: isShellAvailable,
-) : PermissionStateProvider {
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsRootPermission in permission
+fun <P : RootPermission> rootPermissionStateProvider(
+    @Given shell: Shell
+): PermissionStateProvider<P> = { shell.isAvailable() }
 
-    override suspend fun isGranted(permission: Permission): Boolean = isShellAvailable()
-}
-
-@PermissionRequestHandlerBinding
 @Given
-class RootPermissionRequestHandler(
-    @Given private val isShellAvailable: isShellAvailable,
-    @Given private val showToastRes: showToastRes,
-) : PermissionRequestHandler {
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsRootPermission in permission
-
-    override suspend fun request(permission: Permission) {
-        val isOk = isShellAvailable()
-        if (!isOk) showToastRes(R.string.es_no_root)
-    }
+fun <P : RootPermission> rootPermissionRequestHandler(
+    @Given shell: Shell,
+    @Given toaster: Toaster
+): PermissionRequestHandler<P> = {
+    val isOk = shell.isAvailable()
+    if (!isOk) toaster.showToast(R.string.es_no_root)
 }

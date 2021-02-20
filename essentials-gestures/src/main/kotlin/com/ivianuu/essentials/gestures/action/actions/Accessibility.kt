@@ -16,25 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.choosePermissions
-import com.ivianuu.essentials.util.stringResource
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
+import com.ivianuu.injekt.common.keyOf
 
-@GivenFun
-fun accessibilityAction(
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
-    id: ActionId,
-    titleRes: Int,
-    icon: Flow<ActionIcon>,
-): Action = Action(
-    id = id.value,
-    title = stringResource(titleRes),
-    icon = icon,
-    permissions = choosePermissions { listOf(accessibility) }
-)
+val accessibilityActionPermissions = listOf(keyOf<ActionAccessibilityPermission>())

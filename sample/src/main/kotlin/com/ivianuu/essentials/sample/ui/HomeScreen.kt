@@ -41,24 +41,28 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 
 @HomeKeyBinding
 @Given
 class HomeKey
 
 @KeyUiBinding<HomeKey>
-@GivenFun
-@Composable
-fun HomeScreen(
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
+@Given
+fun homeKeyUi(
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given itemsFactory: () -> Set<HomeItem>,
-    @Given showToast: showToast,
-) {
+    @Given toaster: Toaster,
+): KeyUi = {
     val finalItems = remember { itemsFactory().sortedBy { it.title } }
     Scaffold(
         topBar = {
@@ -71,7 +75,7 @@ fun HomeScreen(
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
+                            PopupMenu.Item(onSelected = { toaster.showToast("Selected $title") }) {
                                 Text(title)
                             }
                         }
@@ -96,7 +100,7 @@ fun HomeScreen(
                     item = item,
                     color = color,
                     onClick = {
-                        dispatchNavigationAction(NavigationAction.Push(item.keyFactory(color)))
+                        navigator(NavigationAction.Push(item.keyFactory(color)))
                     }
                 )
 
@@ -141,7 +145,8 @@ private fun HomeItem(
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
 
-@Qualifier annotation class HomeItemBinding
+@Qualifier
+annotation class HomeItemBinding
 
 @Macro
 @GivenSetElement

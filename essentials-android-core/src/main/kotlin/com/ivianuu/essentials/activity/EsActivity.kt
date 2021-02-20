@@ -21,7 +21,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
 import androidx.compose.ui.platform.setContent
-import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.DecorateUi
+import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiWorkerRunner
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
@@ -41,7 +44,7 @@ abstract class EsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val component = uiComponent.get<EsActivityComponent>()
-        component.runUiWorkers()
+        component.uiWorkerRunner()
 
         setContent {
             Providers(LocalUiComponent provides uiComponent) {
@@ -65,7 +68,8 @@ abstract class EsActivity : AppCompatActivity() {
 }
 
 @ComponentElementBinding<ActivityComponent>
-@Given class EsActivityComponent(
+@Given
+class EsActivityComponent(
     @Given val decorateUi: DecorateUi,
-    @Given val runUiWorkers: runUiWorkers
+    @Given val uiWorkerRunner: UiWorkerRunner
 )

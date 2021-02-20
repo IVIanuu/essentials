@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.boot.BootListener
 import com.ivianuu.essentials.boot.BootListenerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @BootListenerBinding
-@GivenFun
-suspend fun logBoot(@Given logger: Logger) {
+@Given
+fun bootLogger(@Given logger: Logger): BootListener = {
     logger.d { "booted!" }
 }

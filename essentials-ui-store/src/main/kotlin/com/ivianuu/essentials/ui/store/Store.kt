@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.store
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
@@ -32,10 +31,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
-@Qualifier annotation class UiStateBinding
+@Qualifier
+annotation class UiStateBinding
 
 @Macro
 @Given
@@ -62,7 +60,10 @@ internal class UiStoreRunner<S>(
     }
 }
 
-@Qualifier annotation class UiState
+@Qualifier
+annotation class UiState
 
-@Given @Composable inline val <T> @Given StateFlow<T>.latest: @UiState T
+@Given
+@Composable
+inline val <T> @Given StateFlow<T>.latest: @UiState T
     get() = collectAsState().value

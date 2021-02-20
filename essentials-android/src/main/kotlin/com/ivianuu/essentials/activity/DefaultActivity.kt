@@ -33,4 +33,5 @@ class DefaultActivity : EsActivity() {
 }
 
 @ComponentElementBinding<ActivityComponent>
-@Given class DefaultActivityComponent(@Given val appUi: AppUi)
+@Given
+class DefaultActivityComponent(@Given val appUi: AppUi)

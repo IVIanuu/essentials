@@ -31,20 +31,20 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @KeyUiBinding<AppPickerKey>
-@GivenFun
-@Composable
-fun AppPickerScreen(
-    @Given state: @UiState AppPickerState,
+@Given
+fun appPickerKeyUi(
+    @Given stateProvider: @Composable () -> @UiState AppPickerState,
     @Given dispatch: DispatchAction<AppPickerAction>,
-) {
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = {
             TopAppBar(

@@ -20,10 +20,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
 
 @Composable
@@ -47,7 +48,7 @@ fun TextInputDialogListItem(
         leading = leading?.let { { leading() } },
         trailing = trailing?.let { { trailing() } },
         dialog = { dismiss ->
-            var currentValue by rememberState(value) { value }
+            var currentValue by remember(value) { mutableStateOf(value) }
 
             TextInputDialog(
                 value = currentValue,

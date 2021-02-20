@@ -18,45 +18,49 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionRootPermission
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.stringResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.common.keyOf
 
-@Given object LockScreenActionId : ActionId("lock_screen")
+@Given
+object LockScreenActionId : ActionId("lock_screen")
 
 @ActionBinding<LockScreenActionId>
 @Given
 fun lockScreenAction(
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
+    @Given resourceProvider: ResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
-): Action = Action(
+) = Action(
     id = LockScreenActionId,
-    title = stringResource(R.string.es_action_lock_screen),
+    title = resourceProvider.string(R.string.es_action_lock_screen),
     icon = singleActionIcon(R.drawable.es_ic_power_settings),
-    permissions = choosePermissions {
-        listOf(
-            if (systemBuildInfo.sdk >= 28) accessibility
-            else root
-        )
-    }
+    permissions = listOf(
+        if (systemBuildInfo.sdk >= 28) keyOf<ActionAccessibilityPermission>()
+        else keyOf<ActionRootPermission>()
+    )
 )
 
 @SuppressLint("InlinedApi")
 @ActionExecutorBinding<LockScreenActionId>
-@GivenFun
-suspend fun doLockScreen(
-    @Given performGlobalAction: performGlobalAction,
-    @Given runRootCommand: runRootCommand,
+@Given
+fun lockScreenActionExecutor(
+    @Given actionRootCommandRunner: ActionRootCommandRunner,
+    @Given globalActionExecutor: GlobalActionExecutor,
     @Given systemBuildInfo: SystemBuildInfo,
-) {
+): ActionExecutor = {
     if (systemBuildInfo.sdk >= 28) {
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+        globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
     } else {
-        runRootCommand("input keyevent 26")
+        actionRootCommandRunner("input keyevent 26")
     }
 }

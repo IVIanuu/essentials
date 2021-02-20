@@ -16,32 +16,13 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.Manifest
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.runtime.RuntimePermission
-import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
@@ -50,13 +31,13 @@ val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 class PermissionsKey
 
 @KeyUiBinding<PermissionsKey>
-@GivenFun
-@Composable
-fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
+@Given
+fun permissionKeyUi(@Given permissionRequester: PermissionRequester): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {
-        val camera = RuntimePermission(
+        TODO()
+        /*val camera = RuntimePermission(
             Manifest.permission.CAMERA,
             Permission.Title to "Camera",
             Permission.Desc to "This is a desc",
@@ -124,6 +105,6 @@ fun PermissionsScreen(@Given requestPermissions: requestPermissions) {
             }
         ) {
             Text("Request")
-        }
+        }*/
     }
 }

@@ -24,11 +24,12 @@ import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import java.io.File
 
-@Qualifier annotation class BackupFileBinding
+@Qualifier
+annotation class BackupFileBinding
 
 @Macro
 @GivenSetElement
-fun <T : @BackupFileBinding File> backupFileImpl(@Given instance: T): BackupFile = instance
+fun <T : @BackupFileBinding File> backupFileBindingImpl(@Given instance: T): BackupFile = instance
 
 typealias BackupFile = File
 
@@ -38,9 +39,11 @@ typealias BackupDir = File
 fun backupDir(@Given dataDir: DataDir): BackupDir =
     dataDir.resolve("files/backups")
 
-@BackupFileBinding @Given
+@BackupFileBinding
+@Given
 fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
 
-@BackupFileBinding @Given
+@BackupFileBinding
+@Given
 fun backupDatabases(@Given dataDir: DataDir) =
     dataDir.resolve("databases")

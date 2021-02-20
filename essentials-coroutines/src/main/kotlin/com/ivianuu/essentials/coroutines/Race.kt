@@ -16,14 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.select
 
 suspend fun <T> raceOf(vararg racers: suspend () -> T): T {

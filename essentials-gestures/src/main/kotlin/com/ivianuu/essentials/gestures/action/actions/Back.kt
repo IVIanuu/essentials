@@ -17,27 +17,30 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object BackActionId : ActionId("back")
+@Given
+object BackActionId : ActionId("back")
 
 @ActionBinding<BackActionId>
 @Given
-fun backAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    BackActionId,
-    R.string.es_action_back,
-    singleActionIcon(R.drawable.es_ic_action_back)
+fun backAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = BackActionId,
+    title = resourceProvider.string(R.string.es_action_back),
+    permissions = accessibilityActionPermissions,
+    icon = singleActionIcon(R.drawable.es_ic_action_back)
 )
 
 @ActionExecutorBinding<BackActionId>
-@GivenFun
-suspend fun pressBack(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+@Given
+fun backActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
 }

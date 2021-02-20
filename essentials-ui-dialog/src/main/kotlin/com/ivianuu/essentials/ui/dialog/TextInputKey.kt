@@ -19,16 +19,18 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
-import com.ivianuu.essentials.ui.core.rememberState
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 data class TextInputKey(
     val initial: String = "",
@@ -41,14 +43,13 @@ data class TextInputKey(
 typealias TextInputResult = String
 
 @KeyUiBinding<TextInputKey>
-@GivenFun
-@Composable
-fun TextInputDialog(
+@Given
+fun textInputKeyUi(
     @Given key: TextInputKey,
-    @Given popTopKeyWithResult: popTopKeyWithResult<TextInputResult>,
-) {
+    @Given navigator: DispatchAction<NavigationAction>
+): KeyUi = {
     DialogWrapper {
-        var currentValue by rememberState { key.initial }
+        var currentValue by remember { mutableStateOf(key.initial) }
         TextInputDialog(
             value = currentValue,
             onValueChange = { currentValue = it },
@@ -58,11 +59,11 @@ fun TextInputDialog(
             positiveButton = {
                 TextButton(
                     enabled = key.allowEmpty || currentValue.isNotEmpty(),
-                    onClick = { popTopKeyWithResult(currentValue) }
+                    onClick = { navigator.popWithResult(currentValue) }
                 ) { Text(R.string.es_ok) }
             },
             negativeButton = {
-                TextButton(onClick = { popTopKeyWithResult(null) }) {
+                TextButton(onClick = { navigator.popWithResult(null) }) {
                     Text(R.string.es_cancel)
                 }
             }
