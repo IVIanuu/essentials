@@ -28,7 +28,7 @@ interface ActionRepository {
 
     suspend fun getActionExecutor(key: String): ActionExecutor
 
-    suspend fun getActionSettingsKey(key: String): ActionSettingsKey
+    suspend fun getActionSettingsKey(key: String): ActionSettingsKey?
 
     suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
 
@@ -65,8 +65,8 @@ class ActionRepositoryImpl(
             ?: error("Unsupported action key $key")
     }
 
-    override suspend fun getActionSettingsKey(key: String): ActionSettingsKey =
-        withContext(defaultDispatcher) { actionSettings[key]!! }
+    override suspend fun getActionSettingsKey(key: String): ActionSettingsKey? =
+        withContext(defaultDispatcher) { actionSettings[key] }
 
     override suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
         actionPickerDelegates.toList()
