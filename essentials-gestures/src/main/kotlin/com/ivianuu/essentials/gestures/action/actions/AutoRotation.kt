@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -48,7 +48,7 @@ fun autoRotationAction(
 ) = Action(
     id = AutoRotationActionId,
     title = resourceProvider.string(R.string.es_action_auto_rotation),
-    permissions = listOf(keyOf<ActionWriteSettingsPermission>()),
+    permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
     unlockScreen = true,
     icon = autoRotationIcon
 )

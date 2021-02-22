@@ -54,7 +54,7 @@ import com.ivianuu.essentials.ui.UiDecoratorConfig
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.setFlag
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Composable
 fun overlaySystemBarBgColor(color: Color) =
@@ -119,7 +119,7 @@ fun rootSystemBarsStyle(): RootSystemBarsStyle = { content ->
 
 @Given
 fun rootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
-    dependencies = setOf(keyOf<AppTheme>(), keyOf<SystemBarManagerProvider>())
+    dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
 )
 
 private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager>()

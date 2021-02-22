@@ -33,7 +33,7 @@ import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -48,7 +48,7 @@ fun killCurrentAppAction(
     id = KillCurrentAppActionId,
     title = resourceProvider.string(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
-    permissions = keyOf<ActionAccessibilityPermission>() + keyOf<ActionRootPermission>()
+    permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
 @ActionExecutorBinding<KillCurrentAppActionId>

@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
@@ -48,10 +48,10 @@ fun permissionRequestUiState(
     @Given appUiStarter: AppUiStarter,
     @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
     @Given key: PermissionRequestKey,
-    @Given metadatas: Map<Key<Permission>, PermissionUiMetadata<Permission>>,
-    @Given permissions: Map<Key<Permission>, Permission>,
+    @Given metadatas: Map<TypeKey<Permission>, PermissionUiMetadata<Permission>>,
+    @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
-    @Given requestHandlers: Map<Key<Permission>, PermissionRequestHandler<Permission>>
+    @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 ): StateFlow<PermissionRequestState> = scope.state(initial) {
     state
         .filter {

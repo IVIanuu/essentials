@@ -26,25 +26,25 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Qualifier
 annotation class UiDecoratorBinding
 
 @Macro
 @GivenSetElement
-fun <T : @UiDecoratorBinding S, @ForKey S : UiDecorator> uiDecoratorBindingImpl(
+fun <T : @UiDecoratorBinding S, @ForTypeKey S : UiDecorator> uiDecoratorBindingImpl(
     @Given instance: T,
     @Given config: UiDecoratorConfig<S> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(
-    keyOf<S>(), instance as UiDecorator, config
+    typeKeyOf<S>(), instance as UiDecorator, config
 )
 
 data class UiDecoratorConfig<out T : UiDecorator>(
-    val dependencies: Set<Key<UiDecorator>> = emptySet(),
-    val dependents: Set<Key<UiDecorator>> = emptySet(),
+    val dependencies: Set<TypeKey<UiDecorator>> = emptySet(),
+    val dependents: Set<TypeKey<UiDecorator>> = emptySet(),
 ) {
     companion object {
         val DEFAULT = UiDecoratorConfig<Nothing>(emptySet(), emptySet())
@@ -54,7 +54,7 @@ data class UiDecoratorConfig<out T : UiDecorator>(
 typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
 data class UiDecoratorElement(
-    val key: Key<*>,
+    val key: TypeKey<*>,
     val decorator: UiDecorator,
     val config: UiDecoratorConfig<*>
 )
@@ -97,4 +97,4 @@ fun <T : @AppThemeBinding AppTheme> appThemeBindingImpl(@Given instance: T): App
 
 @Given
 fun appThemeConfigBindingImpl() =
-    UiDecoratorConfig<AppTheme>(dependencies = setOf(keyOf<SystemBarManagerProvider>()))
+    UiDecoratorConfig<AppTheme>(dependencies = setOf(typeKeyOf<SystemBarManagerProvider>()))

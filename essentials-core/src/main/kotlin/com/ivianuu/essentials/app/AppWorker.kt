@@ -30,7 +30,7 @@ annotation class AppWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @AppWorkerBinding suspend () -> Unit> appWorkerBindingImpl(@Given instance: T): AppWorker =
+fun <T : @AppWorkerBinding AppWorker> appWorkerBindingImpl(@Given instance: T): AppWorker =
     instance
 
 typealias AppWorker = suspend () -> Unit

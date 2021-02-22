@@ -57,6 +57,7 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
@@ -147,7 +148,7 @@ fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background
 
 @ForegroundStateBinding
 @Given
-inline val @Given ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
+inline val @Given ForegroundScreenState.bindForegroundScreenState: Flow<ForegroundState>
     get() = this
 
 typealias ForegroundNotificationFactory = (Int, Color) -> Notification

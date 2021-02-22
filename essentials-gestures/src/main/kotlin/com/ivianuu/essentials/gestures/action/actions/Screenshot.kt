@@ -31,7 +31,7 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.delay
 
 @Given
@@ -47,8 +47,8 @@ fun screenshotAction(
     title = resourceProvider.string(R.string.es_action_screenshot),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
     permissions = listOf(
-        if (systemBuildInfo.sdk >= 28) keyOf<ActionAccessibilityPermission>()
-        else keyOf<ActionRootPermission>()
+        if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
+        else typeKeyOf<ActionRootPermission>()
     )
 )
 

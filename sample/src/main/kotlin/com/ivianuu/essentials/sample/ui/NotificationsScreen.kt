@@ -75,7 +75,7 @@ import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -204,7 +204,7 @@ fun notificationState(
     actions
         .onEach { action ->
             when (action) {
-                is RequestPermissions -> permissionRequester(listOf(keyOf<SampleNotificationsPermission>()))
+                is RequestPermissions -> permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
                 is OpenNotification -> dispatchServiceAction(
                     NotificationsAction.OpenNotification(action.notification.sbn.notification)
                 )

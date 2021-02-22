@@ -23,8 +23,8 @@ import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
@@ -38,10 +38,10 @@ annotation class UiStateBinding
 @Macro
 @Given
 @Composable
-fun <@ForKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
+fun <@ForTypeKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given provider: (@Given CoroutineScope) -> T
-): StateFlow<S> = rememberRetained(keyOf<T>()) {
+): StateFlow<S> = rememberRetained(typeKeyOf<T>()) {
     UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
 }.store
 

@@ -44,6 +44,7 @@ sealed class ForegroundState {
 
 @Qualifier
 annotation class ForegroundStateBinding
+
 @Macro
 @GivenSetElement
 fun <T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(

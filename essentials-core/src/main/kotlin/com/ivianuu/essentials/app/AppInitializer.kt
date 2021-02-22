@@ -23,9 +23,9 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 
 typealias AppInitializer = () -> Unit
 
@@ -34,19 +34,19 @@ annotation class AppInitializerBinding
 
 @Macro
 @GivenSetElement
-fun <@ForKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
+fun <@ForTypeKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
     @Given instance: T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(
-    keyOf<T>(), instance, config
+    typeKeyOf<T>(), instance, config
 )
 
 @Qualifier
 annotation class AppInitializerConfigBinding<T : () -> Unit>
 
 data class AppInitializerConfig<out T : () -> Unit>(
-    val dependencies: Set<Key<() -> Unit>> = emptySet(),
-    val dependents: Set<Key<() -> Unit>> = emptySet(),
+    val dependencies: Set<TypeKey<() -> Unit>> = emptySet(),
+    val dependents: Set<TypeKey<() -> Unit>> = emptySet(),
 ) {
     companion object {
         val DEFAULT = AppInitializerConfig<Nothing>(emptySet(), emptySet())
@@ -54,7 +54,7 @@ data class AppInitializerConfig<out T : () -> Unit>(
 }
 
 data class AppInitializerElement(
-    val key: Key<*>,
+    val key: TypeKey<*>,
     val instance: () -> Unit,
     val config: AppInitializerConfig<*>
 )

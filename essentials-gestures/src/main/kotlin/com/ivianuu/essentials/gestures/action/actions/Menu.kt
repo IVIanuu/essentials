@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Given
 object MenuActionId : ActionId("menu")
@@ -40,7 +40,7 @@ fun menuAction(
     id = "menu",
     title = resourceProvider.string(R.string.es_action_menu),
     icon = singleActionIcon(Icons.Default.MoreVert),
-    permissions = listOf(keyOf<ActionRootPermission>())
+    permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
 @ActionExecutorBinding<MenuActionId>

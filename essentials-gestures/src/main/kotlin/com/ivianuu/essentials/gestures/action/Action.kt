@@ -24,12 +24,13 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 
 data class Action(
     val id: String,
     val title: String,
-    val permissions: List<com.ivianuu.injekt.common.Key<Permission>> = emptyList(),
+    val permissions: List<TypeKey<Permission>> = emptyList(),
     val unlockScreen: Boolean = false,
     val enabled: Boolean = true,
     val icon: Flow<ActionIcon>,
@@ -37,7 +38,7 @@ data class Action(
     constructor(
         id: ActionId,
         title: String,
-        permissions: List<com.ivianuu.injekt.common.Key<Permission>> = emptyList(),
+        permissions: List<TypeKey<Permission>> = emptyList(),
         unlockScreen: Boolean = false,
         enabled: Boolean = true,
         icon: Flow<ActionIcon>
@@ -70,7 +71,7 @@ fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecu
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance
 
-internal operator fun com.ivianuu.injekt.common.Key<Permission>.plus(other: com.ivianuu.injekt.common.Key<Permission>) = listOf(this, other)
+internal operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 interface ActionFactory {
     suspend fun handles(id: String): Boolean

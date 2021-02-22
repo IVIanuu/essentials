@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.permission.ui
 
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.injekt.common.Key
+import com.ivianuu.injekt.common.TypeKey
 
-data class PermissionRequestKey(val permissionsKeys: List<Key<Permission>>)
+data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>)
 
 data class PermissionRequestState(val permissions: List<UiPermission<*>> = emptyList())
 
 data class UiPermission<P : Permission>(
-    val permissionKey: Key<P>,
+    val permissionKey: TypeKey<P>,
     val metadata: PermissionUiMetadata<P>
 )
 

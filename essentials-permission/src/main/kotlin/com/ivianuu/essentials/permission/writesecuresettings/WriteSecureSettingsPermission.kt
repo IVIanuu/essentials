@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.securesettings.SecureSettingsKey
 import com.ivianuu.essentials.securesettings.SecureSettingsPermission
 import com.ivianuu.essentials.store.DispatchAction
@@ -30,7 +31,7 @@ interface WriteSecureSettingsPermission : Permission
 @Given
 fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
     @Given permission: SecureSettingsPermission
-): PermissionRequestHandler<P> = { permission.isGranted() }
+): PermissionStateProvider<P> = { permission.isGranted() }
 
 @Given
 fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(

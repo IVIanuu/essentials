@@ -18,7 +18,7 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.memo.memoize
+import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -30,10 +30,11 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Interceptor
 import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -43,47 +44,54 @@ import kotlinx.coroutines.withContext
 
 interface Permission
 
+class PermissionBindingModule<T : P, P>(private val permissionKey: TypeKey<P>) {
+
+    @Given
+    fun permission(@Given permission: T): P = permission
+
+    @Suppress("UNCHECKED_CAST")
+    @GivenSetElement
+    fun permissionIntoSet(
+        @Given permission: T
+    ): Pair<TypeKey<Permission>, Permission> =
+        (permissionKey to permission) as Pair<TypeKey<Permission>, Permission>
+
+    @Suppress("UNCHECKED_CAST")
+    @GivenSetElement
+    fun requestHandlerIntoSet(
+        @Given requestHandler: PermissionRequestHandler<P>
+    ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
+        (permissionKey to requestHandler) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+
+    @Suppress("UNCHECKED_CAST")
+    @GivenSetElement
+    fun permissionStateIntoSet(
+        @Given state: PermissionState<P>
+    ): Pair<TypeKey<Permission>, PermissionState<Permission>> =
+        (permissionKey to state) as Pair<TypeKey<Permission>, PermissionState<Permission>>
+
+}
+
 @Qualifier
 annotation class PermissionBinding
 
-@Suppress("UNCHECKED_CAST")
 @Macro
-@GivenSetElement
-fun <T : @PermissionBinding P, @ForKey P : Permission>
-        permissionBindingImpl(
-    @Given permission: T,
-    @Given requestHandler: PermissionRequestHandler<P>,
-    @Given stateProvider: PermissionStateProvider<P>
-): PermissionElement<P> = PermissionElement(keyOf<P>(), permission, requestHandler, stateProvider)
+@Module
+fun <T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingImpl(): PermissionBindingModule<T, P> =
+    PermissionBindingModule(typeKeyOf())
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
 typealias PermissionRequestHandler<P> = suspend (P) -> Unit
 
-data class PermissionElement<P>(
-    val permissionKey: Key<P>,
-    val permission: P,
-    val requestHandler: PermissionRequestHandler<P>,
-    val stateProvider: PermissionStateProvider<P>
-)
-
 typealias PermissionState<P> = Flow<Boolean>
 
 @Given
-fun <@ForKey P : Permission> permissionState(
-    @Given stateFactory: PermissionStateFactory
-): PermissionState<P> = stateFactory(keyOf<P>())
-
-typealias PermissionStateFactory = (Key<Permission>) -> Flow<Boolean>
-
-@Given
-fun permissionStateFactory(
+fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
-    @Given permissions: Map<Key<Permission>, Permission>,
-    @Given stateProviders: Map<Key<Permission>, PermissionStateProvider<Permission>>
-): PermissionStateFactory = { permissionKey: Key<Permission> ->
-    val stateProvider = stateProviders[permissionKey]!!
-    val permission = permissions[permissionKey]!!
+    @Given permission: P,
+    @Given stateProvider: PermissionStateProvider<P>
+): PermissionState<P> = deferredFlow {
     permissionChanges
         .map { Unit }
         .onStart { emit(Unit) }
@@ -91,8 +99,16 @@ fun permissionStateFactory(
             withContext(defaultDispatcher) {
                 stateProvider(permission)
             }
-        }.distinctUntilChanged()
-}.memoize()
+        }
+        .distinctUntilChanged()
+}
+
+typealias PermissionStateFactory = (TypeKey<Permission>) -> PermissionState<Boolean>
+
+@Given
+fun permissionStateFactory(
+    @Given permissionStates: Map<TypeKey<Permission>, PermissionState<Permission>>
+): PermissionStateFactory = { permissionStates[it]!! }
 
 internal val permissionChanges = EventFlow<Unit>()
 
@@ -110,7 +126,7 @@ fun <T : PermissionRequestHandler<P>, P : Permission> permissionRequestHandlerIn
     return intercepted as T
 }
 
-typealias PermissionRequester = suspend (List<Key<Permission>>) -> Boolean
+typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
 
 @Given
 fun permissionRequester(

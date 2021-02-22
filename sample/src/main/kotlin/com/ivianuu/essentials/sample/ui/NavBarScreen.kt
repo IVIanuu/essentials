@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
 
 @HomeItemBinding @Given
@@ -115,7 +115,7 @@ fun navBarKeyUi(
                         hideNavBar = !hideNavBar
                     } else {
                         scope.launch {
-                            permissionRequester(listOf(keyOf<NavBarSecureSettingsPermission>()))
+                            permissionRequester(listOf(typeKeyOf<NavBarSecureSettingsPermission>()))
                         }
                     }
                 }

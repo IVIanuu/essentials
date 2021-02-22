@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 
 @ActionFactoryBinding
 @Given
@@ -50,7 +50,7 @@ class KeycodeActionFactory(
             id = id,
             title = resourceProvider.string(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
-            permissions = listOf(keyOf<ActionRootPermission>()),
+            permissions = listOf(typeKeyOf<ActionRootPermission>()),
             unlockScreen = false,
             enabled = true
         )

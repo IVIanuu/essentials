@@ -50,7 +50,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -95,7 +95,7 @@ fun appTrackerKeyUi(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    if (permissionRequester(listOf(keyOf<SampleNotificationsPermission>()))) {
+                    if (permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))) {
                         foregroundState.value = if (currentForegroundState is Foreground) Background
                         else Foreground(notificationFactory(null))
                     }
@@ -116,7 +116,7 @@ fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Ba
 // todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
 @Given
-inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: AppTrackerForegroundState
+inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: Flow<ForegroundState>
     get() = this
 
 typealias AppTrackerNotificationFactory = (String?) -> Notification
