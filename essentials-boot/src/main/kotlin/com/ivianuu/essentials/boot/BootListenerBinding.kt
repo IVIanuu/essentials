@@ -28,5 +28,5 @@ annotation class BootListenerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @BootListenerBinding suspend () -> Unit> bootListenerBindingImpl(
+fun <T : @BootListenerBinding S, S : BootListener> bootListenerBindingImpl(
     @Given instance: T): BootListener = instance

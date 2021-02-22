@@ -23,17 +23,16 @@ import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+typealias AccessibilityWorker = suspend () -> Unit
+
 @Qualifier
 annotation class AccessibilityWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @AccessibilityWorkerBinding suspend () -> Unit> accessibilityWorkerBindingImpl(
+fun <T : @AccessibilityWorkerBinding S, S : AccessibilityWorker> accessibilityWorkerBindingImpl(
     @Given instance: T
 ): AccessibilityWorker = instance
-
-
-typealias AccessibilityWorker = suspend () -> Unit
 
 typealias AccessibilityWorkerRunner = suspend () -> Unit
 

@@ -23,15 +23,15 @@ import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+typealias NotificationWorker = suspend () -> Unit
+
 @Qualifier
 annotation class NotificationWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @NotificationWorkerBinding suspend () -> Unit> notificationWorkerBindingImpl(
+fun <T : @NotificationWorkerBinding S, S : NotificationWorker> notificationWorkerBindingImpl(
     @Given instance: T): NotificationWorker = instance
-
-typealias NotificationWorker = suspend () -> Unit
 
 typealias NotificationWorkerRunner = suspend () -> Unit
 

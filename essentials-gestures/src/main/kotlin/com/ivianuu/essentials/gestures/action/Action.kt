@@ -66,7 +66,7 @@ annotation class ActionExecutorBinding<I : ActionId>
 
 @Macro
 @GivenSetElement
-fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorBindingImpl(
+fun <T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorBindingImpl(
     @Given id: I,
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance

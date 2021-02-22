@@ -26,14 +26,14 @@ import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
+typealias UiWorker = suspend () -> Unit
+
 @Qualifier
 annotation class UiWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @UiWorkerBinding S, S : suspend () -> Unit> uiWorkerBinding(@Given instance: T): UiWorker = instance
-
-typealias UiWorker = suspend () -> Unit
+fun <T : @UiWorkerBinding S, S : UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
 
 typealias UiWorkerRunner = () -> Unit
 

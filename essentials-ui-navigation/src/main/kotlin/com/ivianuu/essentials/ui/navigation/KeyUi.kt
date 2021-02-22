@@ -30,7 +30,7 @@ typealias KeyUi = @Composable () -> Unit
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-inline fun <T : @KeyUiBinding<K> S, S : @Composable () -> Unit, reified K : Key> keyUiBindingImpl(
+inline fun <T : @KeyUiBinding<K> S, S : KeyUi, reified K : Key> keyUiBindingImpl(
     @Given noinline instanceFactory: (@Given K) -> T
 ): KeyUiFactoryBinding = K::class to instanceFactory as (Key) -> KeyUi
 

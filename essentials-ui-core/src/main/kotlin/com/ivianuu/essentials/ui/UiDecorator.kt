@@ -92,7 +92,7 @@ typealias AppTheme = UiDecorator
 @UiDecoratorBinding
 @Macro
 @Given
-fun <T : @AppThemeBinding AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
+fun <T : @AppThemeBinding S, S : AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
     instance as UiDecorator
 
 @Given

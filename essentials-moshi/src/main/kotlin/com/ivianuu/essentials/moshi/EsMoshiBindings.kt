@@ -29,7 +29,7 @@ annotation class JsonAdapterBinding
 
 @Macro
 @GivenSetElement
-fun <T : @JsonAdapterBinding Any> jsonAdapterImpl(@Given instance: T): JsonAdapter = instance
+fun <T : @JsonAdapterBinding Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
 
 typealias JsonAdapter = Any
 

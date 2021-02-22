@@ -50,7 +50,7 @@ annotation class WorkerBinding<S>
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-fun <P : @WorkerBinding<I> S, S : suspend () -> ListenableWorker.Result, I : WorkerId> workerBindingImpl(
+fun <P : @WorkerBinding<I> S, S : Worker, I : WorkerId> workerBindingImpl(
     @Given id: I,
     @Given factory: (@Given WorkScope) -> P
 ): WorkerElement = id to factory

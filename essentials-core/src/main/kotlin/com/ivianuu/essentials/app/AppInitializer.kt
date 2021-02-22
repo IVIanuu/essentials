@@ -34,7 +34,7 @@ annotation class AppInitializerBinding
 
 @Macro
 @GivenSetElement
-fun <@ForTypeKey T : @AppInitializerBinding () -> Unit> appInitializerBindingImpl(
+fun <@ForTypeKey T : @AppInitializerBinding S, S : AppInitializer> appInitializerBindingImpl(
     @Given instance: T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(
