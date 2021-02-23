@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -45,17 +45,18 @@ fun TwilightTheme(
     darkColors: Colors = darkColors(),
     blackColors: Colors = blackColors(),
     typography: Typography = Typography(),
-    twilightState: StateFlow<TwilightState>,
+    twilightState: Flow<TwilightState>,
     content: @Composable () -> Unit
 ) {
-    val targetColors by twilightState
-        .map {
-            if (it.isDark) {
-                if (it.useBlack) blackColors else darkColors
-            } else lightColors
-        }
-        .distinctUntilChanged()
-        .collectAsState(lightColors)
+    val targetColors by remember(twilightState) {
+        twilightState
+            .map {
+                if (it.isDark) {
+                    if (it.useBlack) blackColors else darkColors
+                } else lightColors
+            }
+            .distinctUntilChanged()
+    }.collectAsState(lightColors)
 
     var lastColors by remember { refOf(targetColors) }
 

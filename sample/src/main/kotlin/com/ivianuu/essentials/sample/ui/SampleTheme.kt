@@ -25,11 +25,11 @@ import com.ivianuu.essentials.ui.AppThemeBinding
 import com.ivianuu.essentials.ui.animatedstack.LocalStackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 @AppThemeBinding
 @Given
-fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { content ->
+fun sampleTheme(@Given twilightState: Flow<TwilightState>): AppTheme = { content ->
     TwilightTheme(twilightState = twilightState) {
         Providers(
             LocalStackTransition provides remember { HorizontalStackTransition() },

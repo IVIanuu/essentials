@@ -113,7 +113,6 @@ typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 @Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
 
-// todo remove once injekt fixes effect scoping issues
 @ForegroundStateBinding
 @Given
 inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: Flow<ForegroundState>
