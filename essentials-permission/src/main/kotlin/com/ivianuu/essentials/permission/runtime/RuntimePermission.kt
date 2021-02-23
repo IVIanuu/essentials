@@ -26,14 +26,14 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
 interface RuntimePermission : Permission {
-    val name: String
+    val permissionName: String
 }
 
 @Given
 fun <P : RuntimePermission> runtimePermissionStateProvider(
     @Given context: AppContext
 ): PermissionStateProvider<P> = { permission ->
-    context.checkSelfPermission(permission.name) == PackageManager.PERMISSION_GRANTED
+    context.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
 }
 
 @Given
@@ -42,6 +42,6 @@ fun <P : RuntimePermission> runtimePermissionRequestHandler(
 ): PermissionRequestHandler<P> = { permission ->
     activityResultLauncher.startActivityForResult(
         ActivityResultContracts.RequestPermission(),
-        permission.name
+        permission.permissionName
     )
 }

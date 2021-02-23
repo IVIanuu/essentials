@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.ui.PermissionRequestAction.RequestPermission
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.localVerticalInsets
@@ -47,7 +48,7 @@ fun permissionRequestUiKeyUi(
         LazyColumn(contentPadding = localVerticalInsets()) {
             items(state.permissions) { permission ->
                 Permission(
-                    metadata = permission.metadata,
+                    permission = permission.permission,
                     onClick = { dispatch(RequestPermission(permission)) }
                 )
             }
@@ -58,16 +59,16 @@ fun permissionRequestUiKeyUi(
 @Composable
 private fun Permission(
     onClick: () -> Unit,
-    metadata: PermissionUiMetadata<*>
+    permission: Permission
 ) {
     ListItem(
-        title = { Text(metadata.title) },
-        subtitle = metadata.desc?.let {
+        title = { Text(permission.title) },
+        subtitle = permission.desc?.let {
             {
                 Text(it)
             }
         },
-        leading = metadata.icon,
+        leading = permission.icon,
         trailing = {
             Button(onClick = onClick) { Text("GRANT") } // todo res
         },

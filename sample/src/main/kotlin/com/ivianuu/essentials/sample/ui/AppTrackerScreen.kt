@@ -37,7 +37,6 @@ import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.ui.PermissionUiMetadata
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.layout.center
@@ -146,12 +145,9 @@ fun appTrackerNotificationFactory(
 
 @PermissionBinding
 @Given
-object SampleAccessibilityPermission : AccessibilityServicePermission {
+object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
         get() = DefaultAccessibilityService::class
+    override val title: String = "Accessibility"
+    override val desc: String = "Needs the permission to track the current app"
 }
-
-@Given
-val sampleAccessibilityPermissionMetadata = PermissionUiMetadata<SampleAccessibilityPermission>(
-    title = "Accessibility"
-)

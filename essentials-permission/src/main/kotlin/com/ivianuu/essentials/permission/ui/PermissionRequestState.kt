@@ -48,7 +48,6 @@ fun permissionRequestUiState(
     @Given appUiStarter: AppUiStarter,
     @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
     @Given key: PermissionRequestKey,
-    @Given metadatas: Map<TypeKey<Permission>, PermissionUiMetadata<Permission>>,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
@@ -65,7 +64,7 @@ fun permissionRequestUiState(
     suspend fun updatePermissions() {
         val permissions = key.permissionsKeys
             .filterNot { permissionStateFactory(it).first() }
-            .map { UiPermission(it, metadatas[it]!!) }
+            .map { UiPermission(it, permissions[it]!!) }
         reduce { copy(permissions = permissions) }
     }
 

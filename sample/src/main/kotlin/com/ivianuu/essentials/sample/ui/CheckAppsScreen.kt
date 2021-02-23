@@ -58,7 +58,7 @@ fun checkAppsKeyUi(
                 "Send check apps"
             )
         )
-    }()
+    }.invoke()
 }
 
 @JsonClass(generateAdapter = true)

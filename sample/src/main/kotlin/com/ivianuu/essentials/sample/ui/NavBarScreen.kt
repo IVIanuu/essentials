@@ -26,6 +26,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -40,7 +41,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarManager
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.permission.ui.PermissionUiMetadata
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
@@ -128,11 +128,8 @@ fun navBarKeyUi(
 
 @PermissionBinding
 @Given
-object NavBarSecureSettingsPermission : WriteSecureSettingsPermission
-
-@Given
-val navBarSecureSettingsPermissionMetadata = PermissionUiMetadata<NavBarSecureSettingsPermission>(
-    title = "Write secure settings",
-    desc = "This is a desc",
-    icon = { Icon(Icons.Default.Menu, null) }
-)
+object NavBarSecureSettingsPermission : WriteSecureSettingsPermission {
+    override val title: String = "Write secure settings"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+}

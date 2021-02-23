@@ -25,7 +25,7 @@ data class PermissionRequestState(val permissions: List<UiPermission<*>> = empty
 
 data class UiPermission<P : Permission>(
     val permissionKey: TypeKey<P>,
-    val metadata: PermissionUiMetadata<P>
+    val permission: P
 )
 
 sealed class PermissionRequestAction {

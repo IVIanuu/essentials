@@ -46,7 +46,6 @@ import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.ui.PermissionUiMetadata
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.sample.R
@@ -221,12 +220,8 @@ fun notificationState(
 object SampleNotificationsPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
         get() = DefaultNotificationListenerService::class
+    override val title: String = "Notifications"
 }
-
-@Given
-val sampleNotificationsPermissionMetadata = PermissionUiMetadata<SampleNotificationsPermission>(
-    title = "Notifications"
-)
 
 typealias UiNotifications = List<UiNotification>
 

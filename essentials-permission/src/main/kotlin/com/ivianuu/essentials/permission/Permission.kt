@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.permission
 
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
-import com.ivianuu.essentials.permission.ui.PermissionUiMetadata
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
@@ -43,7 +43,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-interface Permission
+interface Permission {
+    val title: String
+    val desc: String? get() = null
+    val icon: @Composable (() -> Unit)? get() = null
+}
 
 class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: TypeKey<P>) {
 
@@ -56,13 +60,6 @@ class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: 
         @Given permission: T
     ): Pair<TypeKey<Permission>, Permission> =
         (permissionKey to permission) as Pair<TypeKey<Permission>, Permission>
-
-    @Suppress("UNCHECKED_CAST")
-    @GivenSetElement
-    fun permissionMetadataIntoSet(
-        @Given metadata: PermissionUiMetadata<P>
-    ): Pair<TypeKey<Permission>, PermissionUiMetadata<Permission>> =
-        (permissionKey to metadata) as Pair<TypeKey<Permission>, PermissionUiMetadata<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @GivenSetElement
