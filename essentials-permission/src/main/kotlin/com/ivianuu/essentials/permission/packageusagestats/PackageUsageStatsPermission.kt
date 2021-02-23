@@ -22,40 +22,28 @@ import android.os.Process
 import android.provider.Settings
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 
-fun PackageUsageStatsPermission(
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.IsPackageUsageStatsPermission to Unit,
-    Permission.Intent to Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
-    *metadata
-)
+interface PackageUsageStatsPermission : Permission
 
-val Permission.Companion.IsPackageUsageStatsPermission by lazy {
-    Permission.Key<Unit>("IsPackageUsageStatsPermission")
-}
-
-@PermissionStateProviderBinding
+@Suppress("DEPRECATION")
 @Given
-class PackageUsageStatsPermissionStateProvider(
-    @Given private val appOpsManager: AppOpsManager,
-    @Given private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
-) : PermissionStateProvider {
+fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
+    @Given appOpsManager: AppOpsManager,
+    @Given buildInfo: BuildInfo,
+): PermissionStateProvider<P> = {
 
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsPackageUsageStatsPermission in permission
+    val mode = appOpsManager.checkOpNoThrow(
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        Process.myUid(),
+        buildInfo.packageName
+    )
 
-    override suspend fun isGranted(permission: Permission): Boolean {
-        val mode = appOpsManager.checkOpNoThrow(
-            AppOpsManager.OPSTR_GET_USAGE_STATS,
-            Process.myUid(),
-            buildInfo.packageName
-        )
-
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
+    mode == AppOpsManager.MODE_ALLOWED
 }
+
+@Given
+fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory():
+        PermissionIntentFactory<P> = { Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS) }

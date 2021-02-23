@@ -17,17 +17,12 @@
 package com.ivianuu.essentials.util
 
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.app.AppForegroundState
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Test
 import org.junit.runner.RunWith

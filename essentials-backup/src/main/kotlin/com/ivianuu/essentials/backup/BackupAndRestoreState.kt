@@ -23,7 +23,7 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -37,27 +37,27 @@ fun backupAndRestoreState(
     @Given scope: CoroutineScope,
     @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
     @Given actions: Actions<BackupAndRestoreAction>,
-    @Given backupData: backupData,
-    @Given restoreData: restoreData,
-    @Given showToastRes: showToastRes
+    @Given backupCreator: BackupCreator,
+    @Given backupApplier: BackupApplier,
+    @Given toaster: Toaster
 ): StateFlow<BackupAndRestoreState> = scope.state(initial) {
     actions
         .filterIsInstance<BackupData>()
         .onEach {
-            backupData()
+            backupCreator()
                 .onFailure {
                     it.printStackTrace()
-                    showToastRes(R.string.es_backup_error)
+                    toaster.showToast(R.string.es_backup_error)
                 }
         }
         .launchIn(this)
     actions
         .filterIsInstance<RestoreData>()
         .onEach {
-            restoreData()
+            backupApplier()
                 .onFailure {
                     it.printStackTrace()
-                    showToastRes(R.string.es_restore_error)
+                    toaster.showToast(R.string.es_restore_error)
                 }
         }
         .launchIn(this)

@@ -114,7 +114,8 @@ object NoopLogger : Logger {
     }
 }
 
-@Given class DefaultLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
+@Given
+class DefaultLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
         println("[${kind.name}]${tag ?: stackTraceTag} ${render(message, throwable)}")
     }

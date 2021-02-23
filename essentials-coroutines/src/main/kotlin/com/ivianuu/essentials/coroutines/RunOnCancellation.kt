@@ -16,12 +16,16 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.withContext
 
-suspend inline fun <R> runOnCancellation(block: suspend () -> R): R {
+suspend fun <R> runOnCancellation(block: suspend () -> R): R {
     try {
         awaitCancellation()
     } finally {
-        return block()
+        return withContext(NonCancellable) {
+            block()
+        }
     }
 }

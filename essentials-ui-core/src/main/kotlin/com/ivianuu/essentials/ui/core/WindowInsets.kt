@@ -25,8 +25,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Given
 import kotlin.math.max
 
 @Composable
@@ -81,13 +82,14 @@ fun ProvideInsets(
     Providers(LocalInsets provides insets, content = content)
 }
 
+typealias WindowInsetsProvider = UiDecorator
+
 @UiDecoratorBinding
-@GivenFun
-@Composable
-fun ProvideWindowInsets(content: @Composable () -> Unit) {
+@Given
+fun windowInsetsProvider(): WindowInsetsProvider = { content ->
     val ownerView = LocalView.current
     val density = LocalDensity.current
-    var insets by rememberState { PaddingValues() }
+    var insets by remember { mutableStateOf(PaddingValues()) }
 
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, rawInsets ->

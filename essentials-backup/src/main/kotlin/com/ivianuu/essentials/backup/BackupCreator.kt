@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.backup
 
-import android.content.Intent
-import androidx.core.content.FileProvider
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
@@ -25,8 +23,6 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
@@ -35,48 +31,53 @@ import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-@GivenFun suspend fun backupData(
+typealias BackupCreator = suspend () -> Result<Unit, Throwable>
+
+@Given
+fun backupCreator(
     @Given backupDir: BackupDir,
     @Given backupFiles: Set<BackupFile>,
     @Given buildInfo: BuildInfo,
     @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
     @Given ioDispatcher: IODispatcher,
-): Result<Unit, Throwable> = runKatching {
-    withContext(ioDispatcher) {
-        val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
-        val backupFileName =
-            "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+): BackupCreator = {
+    runKatching {
+        withContext(ioDispatcher) {
+            val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
+            val backupFileName =
+                "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
-        val backupFile = backupDir.resolve("$backupFileName.zip")
-            .also {
-                it.parentFile.mkdirs()
-                it.createNewFile()
-            }
-
-        val dest = FileOutputStream(backupFile)
-        val out = ZipOutputStream(BufferedOutputStream(dest))
-
-        backupFiles
-            .flatMap { it.walkTopDown() }
-            .filterNot { it.isDirectory }
-            .filterNot { it.absolutePath in BACKUP_BLACKLIST }
-            .forEach { file ->
-                val content = file.bufferedReader()
-                val entry = ZipEntry(file.name)
-                out.putNextEntry(entry)
-                content.forEachLine {
-                    out.write(it.toByteArray())
+            val backupFile = backupDir.resolve("$backupFileName.zip")
+                .also {
+                    it.parentFile.mkdirs()
+                    it.createNewFile()
                 }
-                content.close()
-            }
 
-        out.close()
+            val dest = FileOutputStream(backupFile)
+            val out = ZipOutputStream(BufferedOutputStream(dest))
 
-        dispatchNavigationAction(
-            NavigationAction.Push(
-                ShareBackupFileKey(backupFile.absolutePath)
+            backupFiles
+                .flatMap { it.walkTopDown() }
+                .filterNot { it.isDirectory }
+                .filterNot { it.absolutePath in BACKUP_BLACKLIST }
+                .forEach { file ->
+                    val content = file.bufferedReader()
+                    val entry = ZipEntry(file.name)
+                    out.putNextEntry(entry)
+                    content.forEachLine {
+                        out.write(it.toByteArray())
+                    }
+                    content.close()
+                }
+
+            out.close()
+
+            dispatchNavigationAction(
+                NavigationAction.Push(
+                    ShareBackupFileKey(backupFile.absolutePath)
+                )
             )
-        )
+        }
     }
 }
 

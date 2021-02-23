@@ -28,7 +28,6 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -39,7 +38,9 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class PrefModule<T : Any>(private val name: String) {
-    @Given operator fun invoke(
+
+    @Given
+    operator fun invoke(
         @Given scope: GlobalScope,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
@@ -71,32 +72,40 @@ class PrefModule<T : Any>(private val name: String) {
                 deferredDataStore.updateData(transform)
         }
     }
+
 }
 
 @Given
-fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
+val <T : Any> @Given DataStore<T>.dataFlow: Flow<T>
+    get() = data
 
-@Given @Composable fun <T : Any> @Given DataStore<T>.uiState(
+@Given
+@Composable
+fun <T : Any> @Given DataStore<T>.uiState(
     @Given initial: @InitialOrFallback T
 ): @UiState T = data.collectAsState(initial).value
 
 @Qualifier internal annotation class InitialOrFallback
 
-@Given inline fun <reified T : Any> initialOrFallback(
+@Given
+inline fun <reified T : Any> initialOrFallback(
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 
-@GivenFun suspend fun <T> updatePref(
-    @Given pref: DataStore<T>,
-    reducer: T.() -> T,
-): T = pref.updateData { reducer(it) }
+typealias PrefUpdater<T> = suspend (T.() -> T) -> T
 
-@GivenFun
-fun <T> dispatchPrefUpdate(
+@Given
+fun <T> prefUpdater(@Given pref: DataStore<T>): PrefUpdater<T> = { reducer ->
+    pref.updateData { reducer(it) }
+}
+
+typealias PrefUpdateDispatcher<T> = (T.() -> T) -> Unit
+
+@Given
+fun <T> prefUpdateDispatcher(
     @Given pref: DataStore<T>,
-    @Given scope: GlobalScope,
-    reducer: T.() -> T,
-) {
+    @Given scope: GlobalScope
+): PrefUpdateDispatcher<T> = { reducer ->
     scope.launch {
         pref.updateData { reducer(it) }
     }

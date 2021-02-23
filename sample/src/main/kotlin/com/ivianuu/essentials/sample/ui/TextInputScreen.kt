@@ -25,7 +25,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,9 +41,9 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -48,9 +52,8 @@ val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 class TextInputKey
 
 @KeyUiBinding<TextInputKey>
-@GivenFun
-@Composable
-fun TextInputScreen() {
+@Given
+fun textInputKeyUi(): KeyUi = {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {

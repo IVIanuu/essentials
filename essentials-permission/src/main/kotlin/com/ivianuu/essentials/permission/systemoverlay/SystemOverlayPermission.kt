@@ -16,43 +16,29 @@
 
 package com.ivianuu.essentials.permission.systemoverlay
 
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
-fun SystemOverlayPermission(
-    context: Context,
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.IsSystemOverlayPermission to Unit,
-    Permission.Intent to Intent(
-        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-        "package:${context.packageName}".toUri()
-    ),
-    *metadata
-)
+interface SystemOverlayPermission : Permission
 
-val Permission.Companion.IsSystemOverlayPermission by lazy {
-    Permission.Key<Unit>("IsSystemOverlayPermission")
-}
-
-@PermissionStateProviderBinding
 @Given
-class SystemOverlayPermissionStateProvider(
-    @Given private val appContext: AppContext,
-) : PermissionStateProvider {
+fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
+    @Given context: AppContext
+): PermissionStateProvider<P> = { Settings.canDrawOverlays(context) }
 
-    override fun handles(permission: Permission): Boolean =
-        Permission.IsSystemOverlayPermission in permission
-
-    override suspend fun isGranted(permission: Permission): Boolean =
-        Settings.canDrawOverlays(appContext)
+@Given
+fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
+    @Given buildInfo: BuildInfo
+): PermissionIntentFactory<P> = {
+    Intent(
+        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+        "package:${buildInfo.packageName}".toUri()
+    )
 }

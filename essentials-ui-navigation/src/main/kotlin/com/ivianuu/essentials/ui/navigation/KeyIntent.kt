@@ -18,14 +18,14 @@ package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-@Qualifier annotation class KeyIntentFactoryBinding<K : Any>
+@Qualifier
+annotation class KeyIntentFactoryBinding<K : Any>
 
 @Suppress("UNCHECKED_CAST")
 @Macro
@@ -37,12 +37,13 @@ inline fun <T : @KeyIntentFactoryBinding<K> (K) -> Intent,
 
 typealias KeyIntentFactoryElement = Pair<KClass<*>, (Key) -> Intent>
 
-@GivenFun
+typealias IntentKeyHandler = (Key) -> Boolean
+
+@Given
 fun intentKeyHandler(
-    key: Key,
     @Given appContext: AppContext,
     @Given intentFactories: Set<KeyIntentFactoryElement>
-): Boolean {
+): IntentKeyHandler = { key ->
     val intentFactory = intentFactories.toMap()[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
@@ -50,5 +51,5 @@ fun intentKeyHandler(
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }
-    return intentFactory != null
+    intentFactory != null
 }

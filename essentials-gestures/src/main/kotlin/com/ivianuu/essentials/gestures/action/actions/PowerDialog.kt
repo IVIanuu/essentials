@@ -17,26 +17,29 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object PowerDialogActionId : ActionId("power_dialog")
+@Given
+object PowerDialogActionId : ActionId("power_dialog")
 
 @ActionBinding<PowerDialogActionId>
-fun powerDialogAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    PowerDialogActionId,
-    R.string.es_action_power_dialog,
-    singleActionIcon(R.drawable.es_ic_power_settings_new)
+fun powerDialogAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = PowerDialogActionId,
+    title = resourceProvider.string(R.string.es_action_power_dialog),
+    permissions = accessibilityActionPermissions,
+    icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
 @ActionExecutorBinding<PowerDialogActionId>
-@GivenFun
-suspend fun showPowerDialog(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+@Given
+fun powerDialogActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

@@ -22,13 +22,13 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-typealias TileStateElement = Pair<Key<AbstractFunTileService>,
+typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>,
             (CoroutineScope, Actions<TileAction>) -> StateFlow<TileState>>
 
 data class TileState(
@@ -51,10 +51,11 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-@Qualifier annotation class TileStateBinding<T : AbstractFunTileService>
+@Qualifier
+annotation class TileStateBinding<T : AbstractFunTileService>
 
 @Macro
 @GivenSetElement
-fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForKey S : AbstractFunTileService> tileStateBindingImpl(
+fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForTypeKey S : AbstractFunTileService> tileStateBindingImpl(
     @Given provider: (@Given CoroutineScope, @Given Actions<TileAction>) -> T,
-): TileStateElement = keyOf<S>() to provider
+): TileStateElement = typeKeyOf<S>() to provider

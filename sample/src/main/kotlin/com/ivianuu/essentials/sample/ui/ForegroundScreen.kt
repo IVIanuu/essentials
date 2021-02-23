@@ -20,11 +20,22 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,17 +47,17 @@ import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
 import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
@@ -58,14 +69,13 @@ class ForegroundKey
 
 @SuppressLint("NewApi")
 @KeyUiBinding<ForegroundKey>
-@GivenFun
-@Composable
-fun ForegroundScreen(
-    @Given createForegroundNotification: createForegroundNotification,
+@Given
+fun foregroundKeyUi(
     @Given foregroundState: ForegroundScreenState,
+    @Given notificationFactory: ForegroundNotificationFactory,
     @Given notificationManager: NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo,
-) {
+): KeyUi = {
     val currentForegroundState by foregroundState.collectAsState()
     if (systemBuildInfo.sdk >= 26) {
         DisposableEffect(true) {
@@ -86,14 +96,14 @@ fun ForegroundScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text("Foreground") }) }
     ) {
-        var count by rememberState(currentForegroundState is Foreground) { 0 }
+        var count by remember(currentForegroundState is Foreground) { mutableStateOf(0) }
 
         if (currentForegroundState is Foreground) {
             LaunchedEffect(true) {
                 while (isActive) {
                     count++
                     foregroundState.value = Foreground(
-                        createForegroundNotification(count, primaryColor)
+                        notificationFactory(count, primaryColor)
                     )
                     delay(1000)
                 }
@@ -115,7 +125,7 @@ fun ForegroundScreen(
             Button(
                 onClick = {
                     foregroundState.value = (if (currentForegroundState is Foreground) Background
-                    else Foreground(createForegroundNotification(count, primaryColor)))
+                    else Foreground(notificationFactory(count, primaryColor)))
                 }
             ) {
                 Text(
@@ -138,17 +148,19 @@ fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background
 
 @ForegroundStateBinding
 @Given
-inline val @Given ForegroundScreenState.bindForegroundScreenState: ForegroundScreenState
+inline val @Given ForegroundScreenState.bindForegroundScreenState: Flow<ForegroundState>
     get() = this
 
-@GivenFun
-fun createForegroundNotification(
-    count: Int,
-    color: Color,
+typealias ForegroundNotificationFactory = (Int, Color) -> Notification
+
+@Given
+fun foregroundNotificationFactory(
     @Given appContext: AppContext
-): Notification = NotificationCompat.Builder(appContext, "foreground")
-    .setSmallIcon(R.drawable.ic_home)
-    .setContentTitle("Foreground")
-    .setContentText("Current progress $count")
-    .setColor(color.toArgb())
-    .build()
+): ForegroundNotificationFactory = { count, color ->
+    NotificationCompat.Builder(appContext, "foreground")
+        .setSmallIcon(R.drawable.ic_home)
+        .setContentTitle("Foreground")
+        .setContentText("Current progress $count")
+        .setColor(color.toArgb())
+        .build()
+}

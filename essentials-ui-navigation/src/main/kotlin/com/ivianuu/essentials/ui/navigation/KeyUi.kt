@@ -25,11 +25,13 @@ import kotlin.reflect.KClass
 
 @Qualifier annotation class KeyUiBinding<K : Key>
 
+typealias KeyUi = @Composable () -> Unit
+
 @Suppress("UNCHECKED_CAST")
 @Macro
 @GivenSetElement
-inline fun <T : @KeyUiBinding<K> @Composable () -> Unit, reified K : Key> keyUiBindingImpl(
+inline fun <T : @KeyUiBinding<K> S, S : KeyUi, reified K : Key> keyUiBindingImpl(
     @Given noinline instanceFactory: (@Given K) -> T
-): KeyUiFactoryBinding = K::class to instanceFactory as (Key) -> @Composable () -> Unit
+): KeyUiFactoryBinding = K::class to instanceFactory as (Key) -> KeyUi
 
-typealias KeyUiFactoryBinding = Pair<KClass<out Key>, (Key) -> @Composable () -> Unit>
+typealias KeyUiFactoryBinding = Pair<KClass<out Key>, (Key) -> KeyUi>

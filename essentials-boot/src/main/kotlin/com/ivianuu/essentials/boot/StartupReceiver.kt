@@ -43,7 +43,8 @@ class StartupReceiver : EsBroadcastReceiver() {
 }
 
 @ComponentElementBinding<ReceiverComponent>
-@Given class StartupReceiverComponent(
+@Given
+class StartupReceiverComponent(
     @Given val bootListeners: Set<BootListener>,
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val logger: Logger

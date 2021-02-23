@@ -19,26 +19,27 @@ package com.ivianuu.essentials.hidenavbar
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
-import android.provider.Settings
 import android.view.Display
 import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
+import com.ivianuu.essentials.android.settings.AndroidSettingUpdater
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.android.settings.updateAndroidSetting
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.Module
 
-@GivenFun suspend fun disableNonSdkInterfaceDetection(
+typealias disableNonSdkInterfaceDetection = suspend () -> Unit
+
+@Given
+fun disableNonSdkInterfaceDetection(
     @Given logger: Logger,
     @Given systemBuildInfo: SystemBuildInfo,
-    @Given updateHiddenApiPolicy: updateAndroidSetting<HiddenApiPolicy>,
-    @Given updateHiddenApiPolicyPrePieApps: updateAndroidSetting<HiddenApiPolicyPrePieApps>,
-    @Given updateHiddenApiPolicyPieApps: updateAndroidSetting<HiddenApiPolicyPieApps>,
-) {
+    @Given updateHiddenApiPolicy: AndroidSettingUpdater<HiddenApiPolicy>,
+    @Given updateHiddenApiPolicyPrePieApps: AndroidSettingUpdater<HiddenApiPolicyPrePieApps>,
+    @Given updateHiddenApiPolicyPieApps: AndroidSettingUpdater<HiddenApiPolicyPieApps>,
+): disableNonSdkInterfaceDetection = {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
         updateHiddenApiPolicy { 1 }
@@ -78,9 +79,11 @@ val hiddenApiPolicyPieAppsBinding =
 @Given
 val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
+typealias OverscanUpdater = (Rect) -> Unit
+
 @SuppressLint("PrivateApi")
-@GivenFun
-fun setOverscan(rect: Rect, @Given logger: Logger) {
+@Given
+fun overscanUpdater(@Given logger: Logger): OverscanUpdater = { rect ->
     logger.d { "set overscan $rect" }
 
     val cls = Class.forName("android.view.IWindowManager\$Stub")

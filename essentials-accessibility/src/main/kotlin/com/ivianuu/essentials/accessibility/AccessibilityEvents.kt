@@ -28,7 +28,6 @@ internal typealias MutableAccessibilityEvents = EventFlow<AccessibilityEvent>
 @Given
 fun mutableAccessibilityEvents(): MutableAccessibilityEvents = EventFlow()
 
-typealias AccessibilityEvents = Flow<AccessibilityEvent>
 @Given
-inline val @Given MutableAccessibilityEvents.accessibilityEvents: AccessibilityEvents
+inline val @Given MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
     get() = this

@@ -22,41 +22,25 @@ import android.service.notification.NotificationListenerService
 import androidx.core.app.NotificationManagerCompat
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-fun NotificationListenerPermission(
-    serviceClass: KClass<out NotificationListenerService>,
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.NotificationListenerClass to serviceClass,
-    Permission.Intent to Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),
-    *metadata
-)
-
-val Permission.Companion.NotificationListenerClass by lazy {
-    Permission.Key<KClass<out NotificationListenerService>>(
-        "NotificationListenerClass"
-    )
+interface NotificationListenerPermission : Permission {
+    val serviceClass: KClass<out NotificationListenerService>
 }
 
-@PermissionStateProviderBinding
 @Given
-class NotificationListenerPermissionStateProvider(
-    @Given private val appContext: AppContext,
-    @Given private val buildInfo: BuildInfo,
-) : PermissionStateProvider {
-
-    override fun handles(permission: Permission): Boolean =
-        Permission.NotificationListenerClass in permission
-
-    override suspend fun isGranted(permission: Permission): Boolean {
-        return NotificationManagerCompat.getEnabledListenerPackages(appContext)
-            .any { it == buildInfo.packageName }
-    }
+fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
+    @Given context: AppContext,
+    @Given buildInfo: BuildInfo
+): PermissionStateProvider<P> = {
+    NotificationManagerCompat.getEnabledListenerPackages(context)
+        .any { it == buildInfo.packageName }
 }
+
+@Given
+fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory():
+        PermissionIntentFactory<P> = { Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS) }

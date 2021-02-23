@@ -23,7 +23,6 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.component.Component
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope

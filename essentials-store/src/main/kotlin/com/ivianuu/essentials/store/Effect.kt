@@ -18,7 +18,6 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ForKey
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow

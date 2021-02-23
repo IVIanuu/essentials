@@ -18,34 +18,27 @@ package com.ivianuu.essentials.billing.debug
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.produceResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -53,14 +46,13 @@ import kotlinx.coroutines.withContext
 data class DebugPurchaseKey(val params: BillingFlowParams)
 
 @KeyUiBinding<DebugPurchaseKey>
-@GivenFun
-@Composable
-fun DebugPurchaseDialog(
+@Given
+fun debugPurchaseKeyUi(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given key: DebugPurchaseKey,
-    @Given popTopKeyWithResult: popTopKeyWithResult<SkuDetails>,
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given prefs: Flow<DebugBillingPrefs>,
-) {
+): KeyUi = {
     DialogWrapper {
         ResourceBox(
             resource = produceResource {
@@ -82,7 +74,7 @@ fun DebugPurchaseDialog(
             }
         ) { skuDetails ->
             if (skuDetails == null) {
-                popTopKeyWithResult(null)
+                navigator.popWithResult(null)
                 return@ResourceBox
             }
             Dialog(
@@ -108,7 +100,7 @@ fun DebugPurchaseDialog(
                             contentColor = guessingContentColorFor(GooglePlayGreen),
                         ),
                         onClick = {
-                            popTopKeyWithResult(skuDetails)
+                            navigator.popWithResult(skuDetails)
                         }
                     ) { Text(R.string.purchase) }
                 }
@@ -119,7 +111,6 @@ fun DebugPurchaseDialog(
 
 @NavigationOptionFactoryBinding
 @Given
-val debugPurchaseDialogNavigationOptionsFactory
-    get() = DialogNavigationOptionsFactory<DebugPurchaseKey>()
+val debugPurchaseDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<DebugPurchaseKey>()
 
 private val GooglePlayGreen = Color(0xFF00A273)

@@ -36,7 +36,8 @@ data class NavigationOptions(
 
 typealias NavigationOptionFactory = Pair<KClass<*>, (Key) -> NavigationOptions>
 
-@Qualifier annotation class NavigationOptionFactoryBinding
+@Qualifier
+annotation class NavigationOptionFactoryBinding
 @Suppress("UNCHECKED_CAST")
 
 @Macro

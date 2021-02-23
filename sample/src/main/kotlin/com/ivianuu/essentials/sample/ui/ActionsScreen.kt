@@ -18,19 +18,20 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.ui.navigation.pushKeyForResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -40,13 +41,12 @@ val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
 class ActionsKey
 
 @KeyUiBinding<ActionsKey>
-@GivenFun
-@Composable
-fun ActionsScreen(
+@Given
+fun actionsKeyUi(
     @Given executeAction: executeAction,
-    @Given pushKeyForResult: pushKeyForResult<ActionPickerKey, ActionPickerResult>,
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given uiScope: UiScope,
-) {
+): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }
     ) {
@@ -54,7 +54,7 @@ fun ActionsScreen(
             modifier = Modifier.center(),
             onClick = {
                 uiScope.launch {
-                    val action = pushKeyForResult(ActionPickerKey())
+                    val action = navigator.pushForResult<ActionPickerResult>(ActionPickerKey())
                         ?.let { it as? ActionPickerResult.Action }
                         ?.actionKey ?: return@launch
 

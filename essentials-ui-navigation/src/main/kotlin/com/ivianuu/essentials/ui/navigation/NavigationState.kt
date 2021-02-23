@@ -22,12 +22,14 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -36,7 +38,7 @@ import kotlinx.coroutines.flow.onEach
 @Scoped<AppComponent>
 @Given
 fun navigationState(
-    @Given intentKeyHandler: intentKeyHandler,
+    @Given IntentKeyHandler: IntentKeyHandler,
     @Given scope: GlobalScope,
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Actions<NavigationAction>
@@ -44,7 +46,7 @@ fun navigationState(
     actions
         .filterIsInstance<Push>()
         .onEach { action ->
-            if (!intentKeyHandler(action.key)) {
+            if (!IntentKeyHandler(action.key)) {
                 reduce {
                     copy(
                         backStack = backStack + action.key,
@@ -60,7 +62,7 @@ fun navigationState(
     actions
         .filterIsInstance<ReplaceTop>()
         .onEach { action ->
-            if (intentKeyHandler(action.key)) {
+            if (IntentKeyHandler(action.key)) {
                 reduce {
                     copy(
                         backStack = backStack.dropLast(1),

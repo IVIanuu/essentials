@@ -17,9 +17,6 @@
 package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.ProduceStateScope
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -28,14 +25,9 @@ import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.StateScope
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.*
 
 sealed class Resource<out T> {
     open operator fun invoke(): T? = null

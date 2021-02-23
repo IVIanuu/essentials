@@ -17,7 +17,11 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -48,7 +52,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            dependencies.dispatchNavigationAction(PopTop())
+                            dependencies.navigator(PopTop())
                             item.onSelected()
                         },
                         content = item.content
@@ -60,8 +64,9 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
 }
 
 @ComponentElementBinding<UiComponent>
-@Given class PopupMenuComponent(
-    @Given val dispatchNavigationAction: DispatchAction<NavigationAction>
+@Given
+class PopupMenuComponent(
+    @Given val navigator: DispatchAction<NavigationAction>
 )
 
 @Composable

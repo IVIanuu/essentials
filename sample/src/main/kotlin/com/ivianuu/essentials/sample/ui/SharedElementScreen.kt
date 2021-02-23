@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -30,11 +29,11 @@ import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTrans
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -43,9 +42,8 @@ val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
 class SharedElementKey(val color: Color)
 
 @KeyUiBinding<SharedElementKey>
-@GivenFun
-@Composable
-fun SharedElementScreen(@Given key: SharedElementKey) {
+@Given
+fun sharedElementKeyUi(@Given key: SharedElementKey): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
@@ -62,8 +60,10 @@ fun SharedElementScreen(@Given key: SharedElementKey) {
 }
 
 @NavigationOptionFactoryBinding
-@GivenFun
-fun createSharedElementNavigationOptions(key: SharedElementKey): NavigationOptions = NavigationOptions(
-    enterTransition = SharedElementStackTransition("Shared element" to "b"),
-    exitTransition = SharedElementStackTransition("Shared element" to "b")
-)
+@Given
+fun sharedElementsNavigationOptionFactory(): (SharedElementKey) -> NavigationOptions = {
+    NavigationOptions(
+        enterTransition = SharedElementStackTransition("Shared element" to "b"),
+        exitTransition = SharedElementStackTransition("Shared element" to "b")
+    )
+}

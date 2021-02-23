@@ -17,45 +17,33 @@
 package com.ivianuu.essentials.permission.ignorebatteryoptimizations
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 
-@SuppressLint("BatteryLife")
-fun IgnoreBatteryOptimizationsPermission(
-    context: Context,
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.IgnoreBatteryOptimizationsPermission to Unit,
-    Permission.Intent to Intent(
-        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-        "package:${context.packageName}".toUri()
-    ),
-    *metadata
-)
+interface IgnoreBatteryOptimizationsPermission : Permission
 
-val Permission.Companion.IgnoreBatteryOptimizationsPermission by lazy {
-    Permission.Key<Unit>("IgnoreBatteryOptimizationsPermission")
+@Given
+fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
+    @Given buildInfo: BuildInfo,
+    @Given powerManager: PowerManager
+): PermissionStateProvider<P> = {
+    powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 }
 
-@PermissionStateProviderBinding
+@SuppressLint("BatteryLife")
 @Given
-class IgnoreBatteryOptimizationsPermissionStateProvider(
-    @Given private val powerManager: PowerManager,
-    @Given private val buildInfo: com.ivianuu.essentials.util.BuildInfo,
-) : PermissionStateProvider {
-
-    override fun handles(permission: Permission): Boolean =
-        Permission.IgnoreBatteryOptimizationsPermission in permission
-
-    override suspend fun isGranted(permission: Permission): Boolean =
-        powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
+fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
+    @Given buildInfo: BuildInfo
+): PermissionIntentFactory<P> = {
+    Intent(
+        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        "package:${buildInfo.packageName}".toUri()
+    )
 }

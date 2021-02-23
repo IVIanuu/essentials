@@ -18,30 +18,30 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 class FabPositionKey(val preselect: FabPosition)
 
 @KeyUiBinding<FabPositionKey>
-@GivenFun
-@Composable
-fun FabPositionDialog(
+@Given
+fun fabPositionKeyUi(
     @Given key: FabPositionKey,
-    @Given popTopKeyWithResult: popTopKeyWithResult<FabPosition>,
-) {
+    @Given navigator: DispatchAction<NavigationAction>,
+): KeyUi = {
     DialogWrapper {
         SingleChoiceListDialog(
             items = FabPosition.values().toList(),
             selectedItem = key.preselect,
-            onSelect = { popTopKeyWithResult(it) },
+            onSelect = { navigator.popWithResult(it) },
             item = { Text(it.name) }
         )
     }

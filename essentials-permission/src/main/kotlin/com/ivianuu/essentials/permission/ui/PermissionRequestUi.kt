@@ -14,36 +14,32 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.permission.defaultui
+package com.ivianuu.essentials.permission.ui
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import com.ivianuu.essentials.permission.Desc
-import com.ivianuu.essentials.permission.Icon
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.Title
-import com.ivianuu.essentials.permission.defaultui.PermissionAction.RequestPermission
+import com.ivianuu.essentials.permission.ui.PermissionRequestAction.RequestPermission
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@KeyUiBinding<DefaultPermissionKey>
-@GivenFun
-@Composable
-fun DefaultPermissionScreen(
-    @Given state: @UiState PermissionState,
-    @Given dispatch: DispatchAction<PermissionAction>,
-) {
+@KeyUiBinding<PermissionRequestKey>
+@Given
+fun permissionRequestUiKeyUi(
+    @Given stateProvider: @Composable () -> @UiState PermissionRequestState,
+    @Given dispatch: DispatchAction<PermissionRequestAction>,
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
@@ -52,7 +48,7 @@ fun DefaultPermissionScreen(
         LazyColumn(contentPadding = localVerticalInsets()) {
             items(state.permissions) { permission ->
                 Permission(
-                    permission = permission,
+                    permission = permission.permission,
                     onClick = { dispatch(RequestPermission(permission)) }
                 )
             }
@@ -65,19 +61,17 @@ private fun Permission(
     onClick: () -> Unit,
     permission: Permission
 ) {
-    key(permission) {
-        ListItem(
-            title = { Text(permission[Permission.Title]) },
-            subtitle = permission.getOrNull(Permission.Desc)?.let {
-                {
-                    Text(it)
-                }
-            },
-            leading = permission.getOrNull(Permission.Icon),
-            trailing = {
-                Button(onClick = onClick) { Text("GRANT") } // todo res
-            },
-            onClick = onClick
-        )
-    }
+    ListItem(
+        title = { Text(permission.title) },
+        subtitle = permission.desc?.let {
+            {
+                Text(it)
+            }
+        },
+        leading = permission.icon,
+        trailing = {
+            Button(onClick = onClick) { Text("GRANT") } // todo res
+        },
+        onClick = onClick
+    )
 }

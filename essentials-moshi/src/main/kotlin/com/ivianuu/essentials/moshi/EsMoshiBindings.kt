@@ -16,16 +16,20 @@
 
 package com.ivianuu.essentials.moshi
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.Moshi
 
-@Qualifier annotation class JsonAdapterBinding
+@Qualifier
+annotation class JsonAdapterBinding
 
 @Macro
 @GivenSetElement
-fun <T : @JsonAdapterBinding Any> jsonAdapterImpl(@Given instance: T): JsonAdapter = instance
+fun <T : @JsonAdapterBinding Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
 
 typealias JsonAdapter = Any
 
@@ -38,5 +42,6 @@ fun moshi(@Given jsonAdapters: Set<JsonAdapter>): Moshi = Moshi.Builder()
     }
     .build()!!
 
-@Given inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
+@Given
+inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
     adapter()

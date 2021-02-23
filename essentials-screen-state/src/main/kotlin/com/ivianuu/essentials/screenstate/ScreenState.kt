@@ -19,13 +19,12 @@ package com.ivianuu.essentials.screenstate
 import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
@@ -41,29 +40,31 @@ import kotlinx.coroutines.withContext
 @Scoped<AppComponent>
 @Given
 fun screenState(
-    @Given broadcasts: broadcasts,
-    @Given getCurrentScreenState: getCurrentScreenState,
+    @Given broadcastsFactory: BroadcastsFactory,
+    @Given defaultDispatcher: DefaultDispatcher,
     @Given globalScope: GlobalScope,
+    @Given keyguardManager: KeyguardManager,
     @Given logger: Logger,
+    @Given powerManager: PowerManager
 ): Flow<ScreenState> {
     return merge(
-        broadcasts(Intent.ACTION_SCREEN_OFF),
-        broadcasts(Intent.ACTION_SCREEN_ON),
-        broadcasts(Intent.ACTION_USER_PRESENT)
+        broadcastsFactory(Intent.ACTION_SCREEN_OFF),
+        broadcastsFactory(Intent.ACTION_SCREEN_ON),
+        broadcastsFactory(Intent.ACTION_USER_PRESENT)
     )
         .onStart { logger.d { "sub for screen state" } }
         .onCompletion { logger.d { "dispose screen state" } }
         .map { Unit }
         .onStart { emit(Unit) }
-        .map { getCurrentScreenState() }
+        .map { getCurrentScreenState(defaultDispatcher, keyguardManager, powerManager) }
         .distinctUntilChanged()
         .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 }
 
-@GivenFun suspend fun getCurrentScreenState(
-    @Given defaultDispatcher: DefaultDispatcher,
-    @Given keyguardManager: KeyguardManager,
-    @Given powerManager: PowerManager,
+private suspend fun getCurrentScreenState(
+    defaultDispatcher: DefaultDispatcher,
+    keyguardManager: KeyguardManager,
+    powerManager: PowerManager,
 ): ScreenState = withContext(defaultDispatcher) {
     if (powerManager.isInteractive) {
         if (keyguardManager.isDeviceLocked) {

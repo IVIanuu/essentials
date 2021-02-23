@@ -19,31 +19,29 @@ package com.ivianuu.essentials.ui.store
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.ui.common.rememberRetained
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForKey
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
-@Qualifier annotation class UiStateBinding
+@Qualifier
+annotation class UiStateBinding
 
 @Macro
 @Given
 @Composable
-fun <@ForKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
+fun <@ForTypeKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given provider: (@Given CoroutineScope) -> T
-): StateFlow<S> = rememberRetained(keyOf<T>()) {
+): StateFlow<S> = rememberRetained(typeKeyOf<T>()) {
     UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
 }.store
 
@@ -62,7 +60,10 @@ internal class UiStoreRunner<S>(
     }
 }
 
-@Qualifier annotation class UiState
+@Qualifier
+annotation class UiState
 
-@Given @Composable inline val <T> @Given StateFlow<T>.latest: @UiState T
+@Given
+@Composable
+inline val <T> @Given StateFlow<T>.latest: @UiState T
     get() = collectAsState().value

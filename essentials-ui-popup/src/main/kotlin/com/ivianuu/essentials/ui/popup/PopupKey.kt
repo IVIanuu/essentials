@@ -29,15 +29,15 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 data class PopupKey(
     val position: Rect,
@@ -46,24 +46,23 @@ data class PopupKey(
 )
 
 @KeyUiBinding<PopupKey>
-@GivenFun
-@Composable
-fun PopupUi(
+@Given
+fun popupKeyUi(
     @Given key: PopupKey,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
-) {
+    @Given navigator: DispatchAction<NavigationAction>,
+): KeyUi = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        dispatchNavigationAction(Pop(key))
+        navigator(Pop(key))
     }
 
-    var dismissed by rememberRef { false }
+    var dismissed by remember { refOf(false) }
 
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            dispatchNavigationAction(Pop(key))
+            navigator(Pop(key))
             if (cancelled) key.onCancel?.invoke()
         }
     }
@@ -84,12 +83,14 @@ fun PopupUi(
 }
 
 @NavigationOptionFactoryBinding
-@GivenFun
-fun createPopupNavigationOptions(key: PopupKey): NavigationOptions = NavigationOptions(
-    opaque = true,
-    enterTransition = FadeStackTransition(),
-    exitTransition = FadeStackTransition()
-)
+@Given
+fun popupKeyNavigationOptions(): (PopupKey) -> NavigationOptions = {
+    NavigationOptions(
+        opaque = true,
+        enterTransition = FadeStackTransition(),
+        exitTransition = FadeStackTransition()
+    )
+}
 
 private val PopupTag = Any()
 

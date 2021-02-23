@@ -21,27 +21,29 @@ import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-@Qualifier annotation class UiWorkerBinding
+typealias UiWorker = suspend () -> Unit
+
+@Qualifier
+annotation class UiWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @UiWorkerBinding suspend () -> Unit> uiWorkerBinding(@Given instance: T): UiWorker = instance
+fun <T : @UiWorkerBinding S, S : UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
 
-typealias UiWorker = suspend () -> Unit
+typealias UiWorkerRunner = () -> Unit
 
-@GivenFun
-fun runUiWorkers(
+@Given
+fun uiWorkerRunner(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
     @Given uiScope: UiScope,
     @Given workers: Set<UiWorker>,
-) {
+): UiWorkerRunner = {
     logger.d { "run ui workers" }
     workers
         .forEach { worker ->

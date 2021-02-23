@@ -21,16 +21,16 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 
 data class Action(
     val id: String,
     val title: String,
-    val permissions: List<Permission> = emptyList(),
+    val permissions: List<TypeKey<Permission>> = emptyList(),
     val unlockScreen: Boolean = false,
     val enabled: Boolean = true,
     val icon: Flow<ActionIcon>,
@@ -38,7 +38,7 @@ data class Action(
     constructor(
         id: ActionId,
         title: String,
-        permissions: List<Permission> = emptyList(),
+        permissions: List<TypeKey<Permission>> = emptyList(),
         unlockScreen: Boolean = false,
         enabled: Boolean = true,
         icon: Flow<ActionIcon>
@@ -49,7 +49,8 @@ typealias ActionIcon = @Composable () -> Unit
 
 abstract class ActionId(val value: String)
 
-@Qualifier annotation class ActionBinding<I : ActionId>
+@Qualifier
+annotation class ActionBinding<I : ActionId>
 
 @Macro
 @GivenSetElement
@@ -60,22 +61,17 @@ fun <T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
 
 typealias ActionExecutor = suspend () -> Unit
 
-@Qualifier annotation class ActionExecutorBinding<I : ActionId>
+@Qualifier
+annotation class ActionExecutorBinding<I : ActionId>
 
 @Macro
 @GivenSetElement
-fun <T : @ActionExecutorBinding<I> suspend () -> Unit, I : ActionId> actionExecutorBindingImpl(
+fun <T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorBindingImpl(
     @Given id: I,
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance
 
-@GivenFun
-fun choosePermissions(
-    @Given permissions: ActionPermissions,
-    chooser: ActionPermissions.() -> List<Permission>,
-): List<Permission> = permissions.chooser()
-
-internal operator fun Permission.plus(other: Permission) = listOf(this, other)
+internal operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 interface ActionFactory {
     suspend fun handles(id: String): Boolean
@@ -83,7 +79,8 @@ interface ActionFactory {
     suspend fun createExecutor(id: String): ActionExecutor
 }
 
-@Qualifier annotation class ActionSettingsKeyBinding<I : ActionId>
+@Qualifier
+annotation class ActionSettingsKeyBinding<I : ActionId>
 
 typealias ActionSettingsKey = Key
 
@@ -94,7 +91,8 @@ fun <T : @ActionSettingsKeyBinding<I> S, S : Any, I : ActionId> actionSettingsKe
     @Given instance: T,
 ): Pair<String, ActionSettingsKey> = id.value to instance
 
-@Qualifier annotation class ActionFactoryBinding
+@Qualifier
+annotation class ActionFactoryBinding
 
 @Macro
 @GivenSetElement
@@ -108,7 +106,8 @@ interface ActionPickerDelegate {
     suspend fun getResult(): ActionPickerResult?
 }
 
-@Qualifier annotation class ActionPickerDelegateBinding
+@Qualifier
+annotation class ActionPickerDelegateBinding
 
 @Macro
 @GivenSetElement

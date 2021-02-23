@@ -17,16 +17,16 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.ui.UiWorker
 import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.awaitCancellation
 
 @UiWorkerBinding
-@GivenFun
-suspend fun UiLogger(@Given logger: Logger) {
+@Given
+fun uiLogger(@Given logger: Logger): UiWorker = {
     runWithCleanup(
         block = {
             logger.d { "hello from ui" }

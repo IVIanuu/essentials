@@ -25,11 +25,10 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.shell.runShellCommand
+import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.util.showToastRes
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
@@ -43,24 +42,27 @@ internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon,
 
 internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id, null) }
 
-@GivenFun suspend fun runRootCommand(
-    command: String,
-    @Given runShellCommand: runShellCommand,
-    @Given showToastRes: showToastRes
-) {
-    runKatching { runShellCommand(command) }
+typealias ActionRootCommandRunner = suspend (String) -> Unit
+
+@Given
+fun actionRootCommandRunner(
+    @Given shell: Shell,
+    @Given toaster: Toaster
+): ActionRootCommandRunner = { command ->
+    runKatching { shell.run(command) }
         .onFailure {
             it.printStackTrace()
-            showToastRes(R.string.es_no_root)
+            toaster.showToast(R.string.es_no_root)
         }
 }
 
-@GivenFun
-fun sendIntent(
-    intent: Intent,
+typealias ActionIntentSender = (Intent) -> Unit
+
+@Given
+fun actionIntentSender(
     @Given appContext: AppContext,
-    @Given showToastRes: showToastRes
-) {
+    @Given toaster: Toaster
+): ActionIntentSender = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     runKatching {
         PendingIntent.getActivity(
@@ -68,6 +70,6 @@ fun sendIntent(
         ).send()
     }.onFailure {
         it.printStackTrace()
-        showToastRes(R.string.es_activity_not_found)
+        toaster.showToast(R.string.es_activity_not_found)
     }
 }

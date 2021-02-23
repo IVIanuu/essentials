@@ -18,22 +18,23 @@ package com.ivianuu.essentials.shell
 
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-@GivenFun
-suspend fun runShellCommand(
-    command: String,
-    @Given runShellCommands: runShellCommands
-): List<String> = runShellCommands(listOf(command))
+interface Shell {
 
-@GivenFun
-suspend fun runShellCommands(
-    commands: List<String>,
-    @Given ioDispatcher: IODispatcher
-): List<String> = withContext(ioDispatcher) { SU.run(commands) }
+    suspend fun isAvailable(): Boolean
 
-@GivenFun
-suspend fun isShellAvailable(@Given ioDispatcher: IODispatcher): Boolean =
-    withContext(ioDispatcher) { SU.available() }
+    suspend fun run(vararg commands: String): List<String>
+
+}
+
+@Given
+class ShellImpl(@Given private val ioDispatcher: IODispatcher) : @Given Shell {
+
+    override suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
+
+    override suspend fun run(vararg commands: String): List<String> =
+        withContext(ioDispatcher) { SU.run(commands) }
+
+}

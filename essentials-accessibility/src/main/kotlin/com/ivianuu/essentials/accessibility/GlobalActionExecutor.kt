@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@GivenFun
-suspend fun performGlobalAction(
-    action: Int,
-    @Given holder: MutableAccessibilityServiceHolder,
-): Boolean = holder.value?.performGlobalAction(action) ?: false
+typealias GlobalActionExecutor = suspend (Int) -> Boolean
+
+@Given
+fun globalActionExecutor(
+    @Given holder: AccessibilityServiceHolder,
+): GlobalActionExecutor = { action ->
+    holder.value?.performGlobalAction(action) ?: false
+}

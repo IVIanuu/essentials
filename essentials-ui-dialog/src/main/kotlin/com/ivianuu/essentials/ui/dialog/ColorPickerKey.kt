@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popTopKeyWithResult
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 data class ColorPickerKey(
     val initialColor: Color,
@@ -34,17 +35,16 @@ data class ColorPickerKey(
 )
 
 @KeyUiBinding<ColorPickerKey>
-@GivenFun
-@Composable
-fun ColorPickerDialog(
+@Given
+fun colorPickerKeyUi(
     @Given key: ColorPickerKey,
-    @Given popTopKeyWithResult: popTopKeyWithResult<Color>,
-) {
+    @Given navigator: DispatchAction<NavigationAction>,
+): KeyUi = {
     DialogWrapper {
         ColorPickerDialog(
             initialColor = key.initialColor,
-            onColorSelected = { popTopKeyWithResult(it) },
-            onCancel = { popTopKeyWithResult(null) },
+            onColorSelected = { navigator.popWithResult(it) },
+            onCancel = { navigator.popWithResult(null) },
             colorPalettes = key.colorPalettes,
             showAlphaSelector = key.showAlphaSelector,
             allowCustomArgb = key.allowCustomArgb,

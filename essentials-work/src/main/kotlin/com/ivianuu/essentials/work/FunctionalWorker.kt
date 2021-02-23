@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.work
 
-import android.content.Context
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.work.WorkerBinding
 import com.ivianuu.injekt.android.work.WorkerContext
 import java.util.UUID

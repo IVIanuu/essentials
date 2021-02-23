@@ -52,7 +52,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
             component.logger.d { "listener connected" }
             component.notificationServiceRef.value = this@DefaultNotificationListenerService
             updateNotifications()
-            component.runNotificationWorkers()
+            component.notificationWorkerRunner()
         }
     }
 
@@ -84,7 +84,7 @@ class DefaultNotificationListenerService : EsNotificationListenerService() {
 class DefaultNotificationListenerServiceComponent(
     @Given val notificationServiceRef: NotificationServiceRef,
     @Given val logger: Logger,
-    @Given val runNotificationWorkers: runNotificationWorkers
+    @Given val notificationWorkerRunner: NotificationWorkerRunner
 )
 
 internal typealias NotificationServiceRef = MutableStateFlow<DefaultNotificationListenerService?>

@@ -22,26 +22,28 @@ import androidx.compose.material.icons.filled.PlayArrow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object PlayPauseActionId : ActionId("media_play_pause")
+@Given
+object PlayPauseActionId : ActionId("media_play_pause")
 
 @ActionBinding<PlayPauseActionId>
 @Given
-fun playPauseMediaAction(@Given mediaAction: mediaAction): Action = mediaAction(
-    PlayPauseActionId,
-    R.string.es_action_media_play_pause,
-    singleActionIcon(Icons.Default.PlayArrow)
+fun playPauseMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = PlayPauseActionId,
+    title = resourceProvider.string(R.string.es_action_media_play_pause),
+    icon = singleActionIcon(Icons.Default.PlayArrow)
 )
 
 @ActionExecutorBinding<PlayPauseActionId>
-@GivenFun
-suspend fun sendPlayPauseCommand(doMediaAction: doMediaAction) {
-    doMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+@Given
+fun playPauseMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+    mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
 @ActionSettingsKeyBinding<PlayPauseActionId>

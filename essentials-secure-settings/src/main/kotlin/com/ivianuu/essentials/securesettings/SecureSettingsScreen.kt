@@ -27,18 +27,18 @@ import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @KeyUiBinding<SecureSettingsKey>
-@GivenFun
-@Composable
-fun SecureSettingsScreen(
+@Given
+fun secureSettingsKeyUi(
     @Given dispatch: DispatchAction<SecureSettingsAction>,
-    @Given state: @UiState SecureSettingsState,
-) {
+    @Given stateProvider: @Composable () -> @UiState SecureSettingsState,
+): KeyUi = {
+    val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
     ) {

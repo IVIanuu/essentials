@@ -21,7 +21,6 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.withContext
 
 fun <T> Flow<T>.onCancel(

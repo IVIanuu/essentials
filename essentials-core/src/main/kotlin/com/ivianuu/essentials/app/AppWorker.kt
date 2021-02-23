@@ -20,27 +20,29 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
-@Qualifier annotation class AppWorkerBinding
+typealias AppWorker = suspend () -> Unit
+
+@Qualifier
+annotation class AppWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @AppWorkerBinding suspend () -> Unit> appWorkerBindingImpl(@Given instance: T): AppWorker =
+fun <T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: T): AppWorker =
     instance
 
-typealias AppWorker = suspend () -> Unit
+typealias AppWorkerRunner = () -> Unit
 
-@GivenFun
-fun runAppWorkers(
+@Given
+fun appWorkerRunner(
     @Given logger: Logger,
     @Given globalScope: GlobalScope,
     @Given workers: Set<AppWorker>
-) {
+): AppWorkerRunner = {
     logger.d { "run app workers" }
     workers
         .forEach { worker ->

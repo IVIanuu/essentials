@@ -19,29 +19,28 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.TileAction.TileClicked
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.common.Key
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class FunTileService1 : AbstractFunTileService(keyOf<FunTileService1>())
-class FunTileService2 : AbstractFunTileService(keyOf<FunTileService2>())
-class FunTileService3 : AbstractFunTileService(keyOf<FunTileService3>())
-class FunTileService4 : AbstractFunTileService(keyOf<FunTileService4>())
-class FunTileService5 : AbstractFunTileService(keyOf<FunTileService5>())
-class FunTileService6 : AbstractFunTileService(keyOf<FunTileService6>())
-class FunTileService7 : AbstractFunTileService(keyOf<FunTileService7>())
-class FunTileService8 : AbstractFunTileService(keyOf<FunTileService8>())
-class FunTileService9 : AbstractFunTileService(keyOf<FunTileService9>())
+class FunTileService1 : AbstractFunTileService(typeKeyOf<FunTileService1>())
+class FunTileService2 : AbstractFunTileService(typeKeyOf<FunTileService2>())
+class FunTileService3 : AbstractFunTileService(typeKeyOf<FunTileService3>())
+class FunTileService4 : AbstractFunTileService(typeKeyOf<FunTileService4>())
+class FunTileService5 : AbstractFunTileService(typeKeyOf<FunTileService5>())
+class FunTileService6 : AbstractFunTileService(typeKeyOf<FunTileService6>())
+class FunTileService7 : AbstractFunTileService(typeKeyOf<FunTileService7>())
+class FunTileService8 : AbstractFunTileService(typeKeyOf<FunTileService8>())
+class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 
 abstract class AbstractFunTileService(
-    private val key: Key<AbstractFunTileService>
+    private val key: TypeKey<AbstractFunTileService>
 ) : EsTileService() {
 
     private val component by lazy {
@@ -80,12 +79,12 @@ abstract class AbstractFunTileService(
         }
         qsTile.label = when {
             state.label != null -> state.label
-            state.labelRes != null -> component.stringResource(state.labelRes)
+            state.labelRes != null -> component.resourceProvider.string(state.labelRes)
             else -> null
         }
         qsTile.contentDescription = when {
             state.description != null -> state.description
-            state.descriptionRes != null -> component.stringResource(state.descriptionRes)
+            state.descriptionRes != null -> component.resourceProvider.string(state.descriptionRes)
             else -> null
         }
         qsTile.updateTile()
@@ -95,7 +94,7 @@ abstract class AbstractFunTileService(
 @ComponentElementBinding<ServiceComponent>
 @Given
 class FunTileServiceComponent(
-    @Given val stringResource: stringResource,
+    @Given val resourceProvider: ResourceProvider,
     @Given tileStores: Set<TileStateElement>
 ) {
     val tileStores = tileStores.toMap()

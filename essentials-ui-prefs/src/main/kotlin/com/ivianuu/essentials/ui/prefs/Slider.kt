@@ -22,13 +22,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
@@ -258,7 +262,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var sliderState by rememberState(value) { toFloat(value) }
+            var sliderState by remember(value) { mutableStateOf(toFloat(value)) }
 
             val floatRange = remember(toFloat, valueRange) {
                 toFloat(valueRange.start)..toFloat(valueRange.endInclusive)

@@ -17,16 +17,17 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Rect
 import com.ivianuu.essentials.ui.animatable.Animatable
 import com.ivianuu.essentials.ui.animatable.bounds
 import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.rememberRef
+import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 
 @Composable
 fun Animatable.rememberFirstNonNullBounds(): Rect? {
-    var capturedBoundsState by rememberRef<Rect?> { null }
+    var capturedBoundsState by remember { refOf<Rect?>(null) }
     if (capturedBoundsState == null && bounds != null) {
         capturedBoundsState = bounds
     }

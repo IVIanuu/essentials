@@ -18,7 +18,8 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.foreground.ForegroundState.*
+import com.ivianuu.essentials.foreground.ForegroundState.Background
+import com.ivianuu.essentials.foreground.ForegroundState.Foreground
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -41,7 +42,9 @@ sealed class ForegroundState {
     object Background : ForegroundState()
 }
 
-@Qualifier annotation class ForegroundStateBinding
+@Qualifier
+annotation class ForegroundStateBinding
+
 @Macro
 @GivenSetElement
 fun <T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(

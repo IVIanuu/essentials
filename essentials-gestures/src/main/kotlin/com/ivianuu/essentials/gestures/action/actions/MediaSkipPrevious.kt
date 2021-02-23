@@ -20,26 +20,28 @@ import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object SkipPreviousActionId : ActionId("media_skip_previous")
+@Given
+object SkipPreviousActionId : ActionId("media_skip_previous")
 
 @ActionBinding<SkipPreviousActionId>
 @Given
-fun skipPreviousMediaAction(@Given mediaAction: mediaAction): Action = mediaAction(
-    SkipPreviousActionId,
-    R.string.es_action_media_skip_previous,
-    singleActionIcon(R.drawable.es_ic_skip_previous)
+fun skipPreviousMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = SkipPreviousActionId,
+    title = resourceProvider.string(R.string.es_action_media_skip_previous),
+    icon = singleActionIcon(R.drawable.es_ic_skip_previous)
 )
 
 @ActionExecutorBinding<SkipPreviousActionId>
-@GivenFun
-suspend fun sendSkipPreviousCommand(@Given doMediaAction: doMediaAction) {
-    doMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+@Given
+fun skipPreviousMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+    mediaActionSender(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
 }
 
 @ActionSettingsKeyBinding<SkipPreviousActionId>

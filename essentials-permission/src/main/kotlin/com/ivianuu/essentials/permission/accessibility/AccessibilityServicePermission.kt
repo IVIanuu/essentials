@@ -23,43 +23,27 @@ import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.PermissionStateProviderBinding
-import com.ivianuu.essentials.permission.intent.Intent
-import com.ivianuu.essentials.permission.to
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 
-fun AccessibilityServicePermission(
-    serviceClass: KClass<out AccessibilityService>,
-    vararg metadata: Permission.Pair<*>
-) = Permission(
-    Permission.AccessibilityServiceClass to serviceClass,
-    Permission.Intent to Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),
-    *metadata
-)
-
-val Permission.Companion.AccessibilityServiceClass by lazy {
-    Permission.Key<KClass<out AccessibilityService>>(
-        "AccessibilityServiceClass"
-    )
+interface AccessibilityServicePermission : Permission {
+    val serviceClass: KClass<out AccessibilityService>
 }
 
-@PermissionStateProviderBinding
 @Given
-class AccessibilityServicePermissionStateProvider(
-    @Given private val accessibilityManager: AccessibilityManager,
-    @Given private val buildInfo: BuildInfo,
-) : PermissionStateProvider {
-
-    override fun handles(permission: Permission): Boolean =
-        Permission.AccessibilityServiceClass in permission
-
-    override suspend fun isGranted(permission: Permission): Boolean {
-        return accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
-            .any {
-                it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
-                    it.resolveInfo.serviceInfo.name == permission[Permission.AccessibilityServiceClass].java.canonicalName
-            }
-    }
+fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
+    @Given accessibilityManager: AccessibilityManager,
+    @Given buildInfo: BuildInfo
+): PermissionStateProvider<P> = { permission ->
+    accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+        .any {
+            it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
+                    it.resolveInfo.serviceInfo.name == permission.serviceClass.java.canonicalName
+        }
 }
+
+@Given
+fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory():
+        PermissionIntentFactory<P> = { Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS) }

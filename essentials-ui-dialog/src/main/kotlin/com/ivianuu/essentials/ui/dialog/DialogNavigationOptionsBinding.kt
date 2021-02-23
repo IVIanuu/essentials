@@ -17,13 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.essentials.ui.navigation.NavigationOptions
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Qualifier
 
 fun <K> DialogNavigationOptionsFactory(): (K) -> NavigationOptions = {
     NavigationOptions(

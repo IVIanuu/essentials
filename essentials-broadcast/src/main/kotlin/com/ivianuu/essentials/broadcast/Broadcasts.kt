@@ -24,33 +24,35 @@ import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-@GivenFun
-fun broadcasts(
-    action: String,
+typealias BroadcastsFactory = (String) -> Flow<Intent>
+
+@Given
+fun broadcastsFactory(
     @Given appContext: AppContext,
     @Given mainDispatcher: MainDispatcher
-): Flow<Intent> = callbackFlow<Intent> {
-    val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            offerSafe(intent)
+): BroadcastsFactory = { action ->
+    callbackFlow<Intent> {
+        val broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                offerSafe(intent)
+            }
         }
-    }
-    appContext.registerReceiver(
-        broadcastReceiver,
-        IntentFilter().apply {
-            addAction(action)
+        appContext.registerReceiver(
+            broadcastReceiver,
+            IntentFilter().apply {
+                addAction(action)
+            }
+        )
+        awaitClose {
+            runKatching {
+                appContext.unregisterReceiver(broadcastReceiver)
+            }
         }
-    )
-    awaitClose {
-        runKatching {
-            appContext.unregisterReceiver(broadcastReceiver)
-        }
-    }
-}.flowOn(mainDispatcher)
+    }.flowOn(mainDispatcher)
+}

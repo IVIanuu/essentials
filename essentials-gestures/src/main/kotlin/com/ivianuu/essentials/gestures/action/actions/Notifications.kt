@@ -19,27 +19,30 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object NotificationsActionId : ActionId("notifications")
+@Given
+object NotificationsActionId : ActionId("notifications")
 
 @ActionBinding<NotificationsActionId>
 @Given
-fun notificationsAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    NotificationsActionId,
-    R.string.es_action_notifications,
-    singleActionIcon(Icons.Default.Notifications)
+fun notificationsAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = NotificationsActionId,
+    title = resourceProvider.string(R.string.es_action_notifications),
+    permissions = accessibilityActionPermissions,
+    icon = singleActionIcon(Icons.Default.Notifications)
 )
 
 @ActionExecutorBinding<NotificationsActionId>
-@GivenFun
-suspend fun showNotificationsShade(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+@Given
+fun notificationsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

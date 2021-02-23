@@ -17,26 +17,27 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-@Qualifier annotation class AccessibilityWorkerBinding
+typealias AccessibilityWorker = suspend () -> Unit
+
+@Qualifier
+annotation class AccessibilityWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @AccessibilityWorkerBinding suspend () -> Unit> accessibilityWorkerBindingImpl(
+fun <T : @AccessibilityWorkerBinding S, S : AccessibilityWorker> accessibilityWorkerBindingImpl(
     @Given instance: T
 ): AccessibilityWorker = instance
 
+typealias AccessibilityWorkerRunner = suspend () -> Unit
 
-typealias AccessibilityWorker = suspend () -> Unit
-
-@GivenFun
-suspend fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker>) {
+@Given
+fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker>): AccessibilityWorkerRunner = {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }

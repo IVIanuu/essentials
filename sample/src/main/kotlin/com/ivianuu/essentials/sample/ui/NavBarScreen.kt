@@ -26,21 +26,30 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
 import com.ivianuu.essentials.hidenavbar.NavBarManager
-import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.PermissionBinding
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.ui.core.rememberState
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
 
 @HomeItemBinding @Given
@@ -49,13 +58,12 @@ val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 class NavBarKey
 
 @KeyUiBinding<NavBarKey>
-@GivenFun
-@Composable
-fun NavBarScreen(
-    @Given hasPermissions: hasPermissions,
+@Given
+fun navBarKeyUi(
     @Given navBarManager: NavBarManager,
-    @Given requestPermissions: requestPermissions,
-) {
+    @Given permissionState: PermissionState<NavBarSecureSettingsPermission>,
+    @Given permissionRequester: PermissionRequester,
+): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
     ) {
@@ -73,7 +81,7 @@ fun NavBarScreen(
                 }
             }
 
-            var hideNavBar by rememberState { false }
+            var hideNavBar by remember { mutableStateOf(false) }
             SideEffect { updateNavBarState(hideNavBar) }
 
             // reshow nav bar when leaving the screen
@@ -81,16 +89,7 @@ fun NavBarScreen(
                 onDispose { updateNavBarState(false) }
             }
 
-            val secureSettingsPermission = remember {
-                WriteSecureSettingsPermission(
-                    Permission.Title to "Write secure settings",
-                    Permission.Desc to "This is a desc",
-                    Permission.Icon to { Icon(Icons.Default.Menu, null) }
-                )
-            }
-
-            val hasPermission by remember { hasPermissions(listOf(secureSettingsPermission)) }
-                .collectAsState(false)
+            val hasPermission by permissionState.collectAsState(false)
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -116,7 +115,7 @@ fun NavBarScreen(
                         hideNavBar = !hideNavBar
                     } else {
                         scope.launch {
-                            requestPermissions(listOf(secureSettingsPermission))
+                            permissionRequester(listOf(typeKeyOf<NavBarSecureSettingsPermission>()))
                         }
                     }
                 }
@@ -125,4 +124,12 @@ fun NavBarScreen(
             }
         }
     }
+}
+
+@PermissionBinding
+@Given
+object NavBarSecureSettingsPermission : WriteSecureSettingsPermission {
+    override val title: String = "Write secure settings"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }

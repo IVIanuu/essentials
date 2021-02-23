@@ -17,27 +17,30 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
-@Given object SplitScreenActionId : ActionId("split_screen")
+@Given
+object SplitScreenActionId : ActionId("split_screen")
 
 @ActionBinding<SplitScreenActionId>
 @Given
-fun splitScreenAction(@Given accessibilityAction: accessibilityAction): Action = accessibilityAction(
-    SplitScreenActionId,
-    R.string.es_action_split_screen,
-    singleActionIcon(R.drawable.es_ic_view_agenda)
+fun splitScreenAction(@Given resourceProvider: ResourceProvider) = Action(
+    id = SplitScreenActionId,
+    title = resourceProvider.string(R.string.es_action_split_screen),
+    permissions = accessibilityActionPermissions,
+    icon = singleActionIcon(R.drawable.es_ic_view_agenda)
 )
 
 @ActionExecutorBinding<SplitScreenActionId>
-@GivenFun
-suspend fun toggleSplitScreen(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+@Given
+fun splitScreenActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

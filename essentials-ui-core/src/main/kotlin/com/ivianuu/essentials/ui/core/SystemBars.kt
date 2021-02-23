@@ -24,7 +24,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Rect
@@ -40,13 +48,13 @@ import androidx.compose.ui.unit.DpRect
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.ui.AppTheme
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.UiDecoratorConfig
 import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.util.setFlag
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.common.keyOf
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Composable
 fun overlaySystemBarBgColor(color: Color) =
@@ -59,7 +67,7 @@ fun Modifier.systemBarStyle(
     elevation: Dp = 0.dp,
 ): Modifier = composed {
     val systemBarManager = LocalSystemBarManager.current
-    var globalBounds by rememberState<Rect?> { null }
+    var globalBounds by remember { mutableStateOf<Rect?>(null) }
     val density = LocalDensity.current
 
     DisposableEffect(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
@@ -80,10 +88,11 @@ fun Modifier.systemBarStyle(
     onGloballyPositioned { globalBounds = it.boundsInWindow() }
 }
 
+typealias SystemBarManagerProvider = UiDecorator
+
 @UiDecoratorBinding
-@GivenFun
-@Composable
-fun ProvideSystemBarManager(content: @Composable () -> Unit) {
+@Given
+fun systemBarManagerProvider(): SystemBarManagerProvider = { content ->
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     Providers(
@@ -92,24 +101,26 @@ fun ProvideSystemBarManager(content: @Composable () -> Unit) {
     )
 }
 
-@Given
-fun RootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
-    dependencies = setOf(keyOf<AppTheme>(), keyOf<ProvideSystemBarManager>())
-)
+typealias RootSystemBarsStyle = UiDecorator
 
 @UiDecoratorBinding
-@GivenFun
-@Composable
-fun RootSystemBarsStyle(content: @Composable () -> Unit) {
+@Given
+fun rootSystemBarsStyle(): RootSystemBarsStyle = { content ->
     Surface {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .systemBarStyle()
         ) {
             content()
         }
     }
 }
+
+@Given
+fun rootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
+    dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
+)
 
 private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager>()
 

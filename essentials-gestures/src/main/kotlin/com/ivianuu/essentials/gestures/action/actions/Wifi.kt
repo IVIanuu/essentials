@@ -16,37 +16,38 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-@Given object WifiActionId : ActionId("wifi")
+@Given
+object WifiActionId : ActionId("wifi")
 
 @ActionBinding<WifiActionId>
 @Given
 fun wifiAction(
-    @Given stringResource: stringResource,
+    @Given resourceProvider: ResourceProvider,
     @Given wifiIcon: Flow<WifiIcon>,
-): Action = Action(
+) = Action(
     id = WifiActionId,
-    title = stringResource(R.string.es_action_wifi),
+    title = resourceProvider.string(R.string.es_action_wifi),
     icon = wifiIcon
 )
 
 @ActionExecutorBinding<WifiActionId>
-@GivenFun
-suspend fun toggleWifi(@Given wifiManager: WifiManager) {
+@Given
+fun wifiActionExecutor(@Given wifiManager: WifiManager): ActionExecutor = {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
@@ -55,9 +56,9 @@ typealias WifiIcon = ActionIcon
 
 @Given
 fun wifiIcon(
-    @Given broadcasts: broadcasts,
+    @Given broadcastsFactory: BroadcastsFactory,
     @Given wifiManager: WifiManager,
-): Flow<WifiIcon> = broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
+): Flow<WifiIcon> = broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =
             it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)

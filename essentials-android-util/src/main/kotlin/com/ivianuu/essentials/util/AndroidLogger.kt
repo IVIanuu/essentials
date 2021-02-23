@@ -28,7 +28,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 
-@Given class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
+@Given
+class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
         when (kind) {
             VERBOSE -> Log.v(tag ?: stackTraceTag, message, throwable)

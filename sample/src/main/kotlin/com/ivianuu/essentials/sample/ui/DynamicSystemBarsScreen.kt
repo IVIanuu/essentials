@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -33,9 +32,9 @@ import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 
 @HomeItemBinding
 @Given
@@ -44,9 +43,8 @@ val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemB
 class DynamicSystemBarsKey
 
 @KeyUiBinding<DynamicSystemBarsKey>
-@GivenFun
-@Composable
-fun DynamicSystemBarsScreen() {
+@Given
+fun dynamicSystemBarsKeyUi(): KeyUi = {
     Box {
         val colors: List<Color> = rememberSaveable {
             ColorPickerPalette.values()

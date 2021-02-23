@@ -17,33 +17,36 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.accessibility.performGlobalAction
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.delay
 
-@Given object LastAppActionId : ActionId("last_app")
+@Given
+object LastAppActionId : ActionId("last_app")
 
 @ActionBinding<LastAppActionId>
 @Given
 fun lastAppAction(
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
-): Action = Action(
+    @Given resourceProvider: ResourceProvider,
+) = Action(
     id = "last_app",
-    title = stringResource(R.string.es_action_last_app),
-    permissions = choosePermissions { listOf(accessibility) },
+    title = resourceProvider.string(R.string.es_action_last_app),
+    permissions = accessibilityActionPermissions,
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
 @ActionExecutorBinding<LastAppActionId>
-@GivenFun
-suspend fun goToLastApp(@Given performGlobalAction: performGlobalAction) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+@Given
+fun lastAppActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
     delay(250)
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

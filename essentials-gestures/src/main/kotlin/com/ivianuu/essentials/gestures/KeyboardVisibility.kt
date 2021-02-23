@@ -16,19 +16,16 @@
 
 package com.ivianuu.essentials.gestures
 
-import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
-import com.ivianuu.essentials.accessibility.AccessibilityEvents
+import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.accessibility.applyAccessibilityConfig
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.awaitCancellation
@@ -38,22 +35,18 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
-import kotlinx.coroutines.isActive
-import kotlin.coroutines.coroutineContext
 
 typealias KeyboardVisible = Boolean
 
 @Scoped<AppComponent>
 @Given
 fun keyboardVisible(
-    @Given accessibilityEvents: AccessibilityEvents,
-    @Given getKeyboardHeight: getKeyboardHeight,
+    @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given globalScope: GlobalScope,
+    @Given inputMethodManager: InputMethodManager
 ): Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&
@@ -63,7 +56,7 @@ fun keyboardVisible(
     .onStart { emit(Unit) }
     .transformLatest {
         emit(true)
-        while ((getKeyboardHeight() ?: 0) > 0) {
+        while ((getKeyboardHeight(inputMethodManager) ?: 0) > 0) {
             delay(100)
         }
         emit(false)
@@ -80,8 +73,7 @@ fun keyboardVisibilityAccessibilityConfig() = flowOf {
     )
 }
 
-@GivenFun
-fun getKeyboardHeight(@Given inputMethodManager: InputMethodManager): Int? {
+private fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
     return runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int

@@ -20,37 +20,28 @@ import android.content.Intent
 import com.ivianuu.essentials.coroutines.raceOf
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionRequestHandlerBinding
-import com.ivianuu.essentials.permission.hasPermissions
-import com.ivianuu.essentials.util.startActivityForIntentResult
+import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
-val Permission.Companion.Intent by lazy {
-    Permission.Key<Intent>(
-        "Intent"
-    )
-}
+typealias PermissionIntentFactory<P> = (P) -> Intent
 
-@PermissionRequestHandlerBinding
 @Given
-class IntentPermissionRequestHandler(
-    @Given private val hasPermissions: hasPermissions,
-    @Given private val startActivityForIntentResult: startActivityForIntentResult,
-) : PermissionRequestHandler {
-
-    override fun handles(permission: Permission): Boolean =
-        Permission.Intent in permission
-
-    override suspend fun request(permission: Permission): Unit = raceOf(
+fun <P : Permission> permissionIntentRequestHandler(
+    @Given activityResultLauncher: ActivityResultLauncher,
+    @Given intentFactory: PermissionIntentFactory<P>,
+    @Given state: PermissionState<P>
+): PermissionRequestHandler<P> = { permission ->
+    raceOf(
         {
             // wait until user navigates back from the permission screen
-            startActivityForIntentResult(permission[Permission.Intent])
+            activityResultLauncher.startActivityForResult(intentFactory(permission))
         },
         {
             // wait until user granted permission
-            while (!hasPermissions(listOf(permission)).first()) {
+            while (!state.first()) {
                 delay(100)
             }
         }

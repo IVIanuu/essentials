@@ -25,32 +25,32 @@ import android.os.Looper
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.android.application
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-@GivenFun
-fun contentChanges(
-    uri: Uri,
+typealias ContentChangesFactory = (Uri) -> Flow<Unit>
+
+@Given
+fun contentChangesFactory(
     @Given contentResolver: ContentResolver,
     @Given mainDispatcher: MainDispatcher,
-): Flow<Unit> = callbackFlow<Unit> {
-    val observer = withContext(mainDispatcher) {
-        object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) {
-                super.onChange(selfChange)
-                offerSafe(Unit)
+): ContentChangesFactory = { uri ->
+    callbackFlow<Unit> {
+        val observer = withContext(mainDispatcher) {
+            object : ContentObserver(Handler(Looper.getMainLooper())) {
+                override fun onChange(selfChange: Boolean) {
+                    super.onChange(selfChange)
+                    offerSafe(Unit)
+                }
             }
         }
-    }
-    contentResolver.registerContentObserver(uri, false, observer)
-    awaitClose { contentResolver.unregisterContentObserver(observer) }
-}.flowOn(mainDispatcher)
+        contentResolver.registerContentObserver(uri, false, observer)
+        awaitClose { contentResolver.unregisterContentObserver(observer) }
+    }.flowOn(mainDispatcher)
+}
 
 @Given
 inline val @Given Application.bindContentResolver: ContentResolver

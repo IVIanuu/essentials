@@ -16,15 +16,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 
 fun <T> Flow<T>.launchOnStart(block: suspend CoroutineScope.() -> Unit) = flow {
     coroutineScope {

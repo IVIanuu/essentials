@@ -20,8 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.activity.EsActivity
 
 class ProcessRestartActivity : AppCompatActivity() {
 
@@ -47,4 +45,5 @@ class ProcessRestartActivity : AppCompatActivity() {
             )
         }
     }
+
 }

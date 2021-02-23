@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,9 +34,9 @@ import com.ivianuu.essentials.billing.BillingManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -47,9 +46,8 @@ val billingHomeItem = HomeItem("Billing") { BillingKey() }
 class BillingKey
 
 @KeyUiBinding<BillingKey>
-@GivenFun
-@Composable
-fun BillingScreen(@Given billingManager: BillingManager) {
+@Given
+fun billingKeyUi(@Given billingManager: BillingManager): KeyUi = {
     val isPurchased = remember { billingManager.isPurchased(DummySku) }
         .collectAsState(false)
 

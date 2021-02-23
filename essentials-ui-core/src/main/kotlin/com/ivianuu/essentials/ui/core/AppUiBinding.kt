@@ -21,10 +21,12 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
-@Qualifier annotation class AppUiBinding
+typealias AppUi = @Composable () -> Unit
+
+@Qualifier
+annotation class AppUiBinding
+
 @Macro
 @Given
-fun <T : @AppUiBinding @Composable () -> Unit> appUiBindingImpl(@Given instance: T): AppUi =
+fun <T : @AppUiBinding S, S : AppUi> appUiBindingImpl(@Given instance: T): AppUi =
     instance as @Composable () -> Unit
-
-typealias AppUi = @Composable () -> Unit

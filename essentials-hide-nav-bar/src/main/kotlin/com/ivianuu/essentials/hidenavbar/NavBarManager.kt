@@ -18,10 +18,10 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.updatePref
+import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -34,14 +34,7 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -51,18 +44,19 @@ import kotlinx.coroutines.withContext
  * Handles the state of the navigation bar
  */
 @Scoped<AppComponent>
-@Given class NavBarManager(
+@Given
+class NavBarManager(
     @Given private val appContext: AppContext,
-    @Given private val broadcasts: broadcasts,
+    @Given private val broadcastsFactory: BroadcastsFactory,
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
     @Given private val displayRotation: Flow<DisplayRotation>,
     @Given private val globalScope: GlobalScope,
     @Given private val logger: Logger,
     @Given private val screenState: Flow<ScreenState>,
-    @Given private val setOverscan: setOverscan,
+    @Given private val setOverscan: OverscanUpdater,
     @Given private val wasNavBarHidden: Flow<WasNavBarHidden>,
-    @Given private val updateWasNavBarHidden: updatePref<WasNavBarHidden>,
+    @Given private val updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
 ) {
 
     private var job: Job? = null
@@ -117,7 +111,7 @@ import kotlinx.coroutines.withContext
                 }
                 // force show on shut downs
                 launch {
-                    broadcasts(Intent.ACTION_SHUTDOWN)
+                    broadcastsFactory(Intent.ACTION_SHUTDOWN)
                         .onEach {
                             mutex.withLock {
                                 job?.cancel()

@@ -19,8 +19,9 @@ package com.ivianuu.essentials.twilight.domain
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
+import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
-import com.ivianuu.essentials.broadcast.broadcasts
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.screenstate.ConfigChanges
@@ -48,9 +49,9 @@ data class TwilightState(
 
 @AppInitializerBinding
 @Given
-fun initializeTwilightState(
+fun twilightStateAppInitializer(
     @Given twilightState: StateFlow<TwilightState>
-) {
+): AppInitializer = {
 }
 
 @Scoped<AppComponent>
@@ -78,10 +79,10 @@ internal typealias BatteryTwilightState = Flow<Boolean>
 
 @Given
 fun batteryTwilightState(
-    @Given broadcasts: broadcasts,
+    @Given broadcastsFactory: BroadcastsFactory,
     @Given powerManager: PowerManager,
 ): BatteryTwilightState {
-    return broadcasts(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+    return broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         .map { Unit }
         .onStart { emit(Unit) }
         .map { powerManager.isPowerSaveMode }
@@ -104,8 +105,8 @@ internal typealias TimeTwilightState = Flow<Boolean>
 
 @Given
 fun timeTwilightState(
-    @Given broadcasts: broadcasts,
-): TimeTwilightState = broadcasts(Intent.ACTION_TIME_TICK)
+    @Given broadcastsFactory: BroadcastsFactory,
+): TimeTwilightState = broadcastsFactory(Intent.ACTION_TIME_TICK)
     .map { Unit }
     .onStart { emit(Unit) }
     .map {

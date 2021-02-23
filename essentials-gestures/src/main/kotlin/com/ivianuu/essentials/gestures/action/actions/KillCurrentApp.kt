@@ -21,53 +21,59 @@ import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
+import com.ivianuu.essentials.gestures.action.ActionBinding
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionRootPermission
+import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.stringResource
+import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-@Given object KillCurrentAppActionId : ActionId("kill_current_app")
+@Given
+object KillCurrentAppActionId : ActionId("kill_current_app")
 
 @ActionBinding<KillCurrentAppActionId>
 @Given
-fun killCurrentAction(
-    @Given choosePermissions: choosePermissions,
-    @Given stringResource: stringResource,
-): Action = Action(
+fun killCurrentAppAction(
+    @Given resourceProvider: ResourceProvider,
+) = Action(
     id = KillCurrentAppActionId,
-    title = stringResource(R.string.es_action_kill_current_app),
+    title = resourceProvider.string(R.string.es_action_kill_current_app),
     icon = singleActionIcon(Icons.Default.Clear),
-    permissions = choosePermissions { accessibility + root }
+    permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
 @ActionExecutorBinding<KillCurrentAppActionId>
-@GivenFun
-suspend fun killCurrentApp(
+@Given
+fun killCurrentAppActionExecutor(
+    @Given actionRootCommandRunner: ActionRootCommandRunner,
     @Given buildInfo: BuildInfo,
     @Given currentAppFlow: Flow<CurrentApp>,
-    @Given getHomePackage: getHomePackage,
-    @Given runRootCommand: runRootCommand,
-) {
+    @Given packageManager: PackageManager
+): ActionExecutor = {
     val currentApp = currentAppFlow.first()
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&
         currentApp != buildInfo.packageName && // we have no suicidal intentions :D
-        currentApp != getHomePackage()
+        currentApp != packageManager.getHomePackage()
     ) {
-        runRootCommand("am force-stop $currentApp")
+        actionRootCommandRunner("am force-stop $currentApp")
     }
 }
 
-@GivenFun
-fun getHomePackage(@Given packageManager: PackageManager): String {
+private fun PackageManager.getHomePackage(): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_HOME)
     }
-    return packageManager.resolveActivity(
+    return resolveActivity(
         intent,
         PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""

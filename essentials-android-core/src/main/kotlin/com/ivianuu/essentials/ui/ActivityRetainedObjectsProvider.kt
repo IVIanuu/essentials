@@ -17,21 +17,20 @@
 package com.ivianuu.essentials.ui
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.ivianuu.essentials.ui.common.LocalRetainedObjects
 import com.ivianuu.essentials.ui.common.RetainedObjects
-import com.ivianuu.essentials.ui.core.currentOrNull
-import com.ivianuu.injekt.GivenFun
+import com.ivianuu.injekt.Given
+
+typealias ActivityRetainedObjectsProvider = UiDecorator
 
 @UiDecoratorBinding
-@GivenFun
-@Composable
-fun ProvideActivityRetainedObjects(content: @Composable () -> Unit) {
-    val activity = LocalContext.currentOrNull as? ComponentActivity
+@Given
+fun activityRetainedObjectsProvider(): ActivityRetainedObjectsProvider = { content ->
+    val activity = LocalContext.current as? ComponentActivity
     if (activity != null) {
         val retainedObjects = remember { RetainedObjects() }
         Providers(

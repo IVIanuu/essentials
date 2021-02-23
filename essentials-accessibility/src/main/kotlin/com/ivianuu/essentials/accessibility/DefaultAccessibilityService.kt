@@ -44,7 +44,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
             }
         }
         connectedScope.launch {
-            component.runAccessibilityWorkers()
+            component.accessibilityWorkerRunner()
         }
     }
 
@@ -67,6 +67,6 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 class DefaultAccessibilityServiceComponent(
     @Given val accessibilityEvents: MutableAccessibilityEvents,
     @Given val logger: Logger,
-    @Given val runAccessibilityWorkers: runAccessibilityWorkers,
+    @Given val accessibilityWorkerRunner: AccessibilityWorkerRunner,
     @Given val serviceHolder: MutableAccessibilityServiceHolder
 )
