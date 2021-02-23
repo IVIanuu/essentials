@@ -221,6 +221,8 @@ object SampleNotificationsPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
         get() = DefaultNotificationListenerService::class
     override val title: String = "Notifications"
+    override val icon: @Composable (() -> Unit)?
+        get() = null
 }
 
 typealias UiNotifications = List<UiNotification>

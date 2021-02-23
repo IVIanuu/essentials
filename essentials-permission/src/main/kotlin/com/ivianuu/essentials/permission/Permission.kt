@@ -46,7 +46,7 @@ import kotlinx.coroutines.withContext
 interface Permission {
     val title: String
     val desc: String? get() = null
-    val icon: @Composable (() -> Unit)? get() = null
+    val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
 class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: TypeKey<P>) {

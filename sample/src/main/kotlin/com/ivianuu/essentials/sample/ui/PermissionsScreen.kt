@@ -34,6 +34,8 @@ import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermi
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -66,7 +68,7 @@ fun permissionKeyUi(@Given permissionRequester: PermissionRequester): KeyUi = {
                             typeKeyOf<SampleCameraPermission>(),
                             typeKeyOf<SamplePhonePermission>(),
                             typeKeyOf<SampleAccessibilityPermission>(),
-                            typeKeyOf<SampleNotificationsPermission>(),
+                            typeKeyOf<SampleNotificationListenerPermission>(),
                             typeKeyOf<SampleSystemOverlayPermission>(),
                             typeKeyOf<SampleWriteSecureSettingsPermission>(),
                             typeKeyOf<SampleWriteSettingsPermission>()
@@ -130,7 +132,7 @@ object SampleSystemOverlayPermission : SystemOverlayPermission {
 
 @PermissionBinding
 @Given
-object SampleWriteSecureSettingsPermission : SystemOverlayPermission {
+object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
     override val title: String = "Write secure settings"
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
@@ -138,7 +140,7 @@ object SampleWriteSecureSettingsPermission : SystemOverlayPermission {
 
 @PermissionBinding
 @Given
-object SampleWriteSettingsPermission : SystemOverlayPermission {
+object SampleWriteSettingsPermission : WriteSettingsPermission {
     override val title: String = "Write settings"
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }

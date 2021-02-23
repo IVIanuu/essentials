@@ -48,10 +48,11 @@ fun checkableAppsState(
     reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
-        val newCheckedApps = currentState().checkableApps()!!
-            .filter { it.isChecked }
-            .mapTo(mutableSetOf()) { it.info.packageName }
-            .reducer(currentState())
+        val newCheckedApps = currentState().checkableApps()
+            ?.filter { it.isChecked }
+            ?.mapTo(mutableSetOf()) { it.info.packageName }
+            ?.reducer(currentState())
+            ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
 

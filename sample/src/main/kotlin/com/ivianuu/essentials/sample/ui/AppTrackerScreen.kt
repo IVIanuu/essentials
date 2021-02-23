@@ -23,6 +23,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -150,4 +151,6 @@ object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
         get() = DefaultAccessibilityService::class
     override val title: String = "Accessibility"
     override val desc: String = "Needs the permission to track the current app"
+    override val icon: @Composable (() -> Unit)?
+        get() = null
 }
