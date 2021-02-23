@@ -22,7 +22,7 @@ typealias GlobalActionExecutor = suspend (Int) -> Boolean
 
 @Given
 fun globalActionExecutor(
-    @Given holder: MutableAccessibilityServiceHolder,
+    @Given holder: AccessibilityServiceHolder,
 ): GlobalActionExecutor = { action ->
     holder.value?.performGlobalAction(action) ?: false
 }

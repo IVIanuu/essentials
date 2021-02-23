@@ -25,6 +25,8 @@ import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
+typealias AppWorker = suspend () -> Unit
+
 @Qualifier
 annotation class AppWorkerBinding
 
@@ -32,8 +34,6 @@ annotation class AppWorkerBinding
 @GivenSetElement
 fun <T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: T): AppWorker =
     instance
-
-typealias AppWorker = suspend () -> Unit
 
 typealias AppWorkerRunner = () -> Unit
 

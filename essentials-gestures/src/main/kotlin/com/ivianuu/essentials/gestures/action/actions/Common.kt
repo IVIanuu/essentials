@@ -44,7 +44,8 @@ internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id, null) }
 
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 
-@Given fun actionRootCommandRunner(
+@Given
+fun actionRootCommandRunner(
     @Given shell: Shell,
     @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->

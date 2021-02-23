@@ -42,5 +42,6 @@ fun moshi(@Given jsonAdapters: Set<JsonAdapter>): Moshi = Moshi.Builder()
     }
     .build()!!
 
-@Given inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
+@Given
+inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
     adapter()

@@ -38,7 +38,9 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class PrefModule<T : Any>(private val name: String) {
-    @Given operator fun invoke(
+
+    @Given
+    operator fun invoke(
         @Given scope: GlobalScope,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
@@ -70,12 +72,16 @@ class PrefModule<T : Any>(private val name: String) {
                 deferredDataStore.updateData(transform)
         }
     }
+
 }
 
 @Given
-fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
+val <T : Any> @Given DataStore<T>.dataFlow: Flow<T>
+    get() = data
 
-@Given @Composable fun <T : Any> @Given DataStore<T>.uiState(
+@Given
+@Composable
+fun <T : Any> @Given DataStore<T>.uiState(
     @Given initial: @InitialOrFallback T
 ): @UiState T = data.collectAsState(initial).value
 
