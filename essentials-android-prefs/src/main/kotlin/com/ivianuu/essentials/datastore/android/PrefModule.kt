@@ -81,7 +81,8 @@ fun <T : Any> @Given DataStore<T>.dataFlow(): Flow<T> = data
 
 @Qualifier internal annotation class InitialOrFallback
 
-@Given inline fun <reified T : Any> initialOrFallback(
+@Given
+inline fun <reified T : Any> initialOrFallback(
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 

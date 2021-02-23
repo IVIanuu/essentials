@@ -64,7 +64,8 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
 }
 
 @ComponentElementBinding<UiComponent>
-@Given class PopupMenuComponent(
+@Given
+class PopupMenuComponent(
     @Given val navigator: DispatchAction<NavigationAction>
 )
 

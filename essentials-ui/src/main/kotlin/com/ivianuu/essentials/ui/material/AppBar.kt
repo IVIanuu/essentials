@@ -16,7 +16,13 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
@@ -148,6 +154,7 @@ private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
 }
 
 @ComponentElementBinding<UiComponent>
-@Given class AutoTopAppBarComponent(
+@Given
+class AutoTopAppBarComponent(
     @Given val navigationState: StateFlow<NavigationState>
 )

@@ -25,7 +25,8 @@ interface AndroidSettingsAdapter<T> {
     fun set(value: T)
 }
 
-@Given class FloatAndroidSettingsAdapter(
+@Given
+class FloatAndroidSettingsAdapter(
     @Given private val contentResolver: ContentResolver,
     @Given private val defaultValue: Float,
     @Given private val name: String,
@@ -55,7 +56,8 @@ interface AndroidSettingsAdapter<T> {
     }
 }
 
-@Given class IntAndroidSettingsAdapter(
+@Given
+class IntAndroidSettingsAdapter(
     @Given private val contentResolver: ContentResolver,
     @Given private val defaultValue: Int,
     @Given private val name: String,
@@ -85,7 +87,8 @@ interface AndroidSettingsAdapter<T> {
     }
 }
 
-@Given class LongAndroidSettingsAdapter(
+@Given
+class LongAndroidSettingsAdapter(
     @Given private val contentResolver: ContentResolver,
     @Given private val defaultValue: Long,
     @Given private val name: String,
@@ -115,7 +118,8 @@ interface AndroidSettingsAdapter<T> {
     }
 }
 
-@Given class StringAndroidSettingsAdapter(
+@Given
+class StringAndroidSettingsAdapter(
     @Given private val contentResolver: ContentResolver,
     @Given private val defaultValue: String,
     @Given private val name: String,

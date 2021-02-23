@@ -37,7 +37,8 @@ abstract class EsApp : Application() {
 }
 
 @ComponentElementBinding<AppComponent>
-@Given class EsAppComponent(
+@Given
+class EsAppComponent(
     @Given val appInitializerRunner: AppInitializerRunner,
     @Given val appWorkerRunner: AppWorkerRunner
 )
