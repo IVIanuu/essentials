@@ -25,26 +25,46 @@ import kotlinx.coroutines.DisposableHandle
 
 @Suppress("UNCHECKED_CAST")
 class RetainedObjects {
+    private var isDisposed = false
+
     private val backing = mutableMapOf<Any, Any?>()
 
-    operator fun <T> get(key: Any): T = backing[key] as T
+    operator fun <T> get(key: Any): T {
+        checkNotDisposed()
+        return backing[key] as T
+    }
 
-    fun <T> getOrNull(key: Any): T? = backing[key] as? T
+    fun <T> getOrNull(key: Any): T? {
+        checkNotDisposed()
+        return backing[key] as? T
+    }
 
     operator fun <T> set(key: Any, value: T) {
+        checkNotDisposed()
         remove(key)
         backing[key] = value
     }
 
-    operator fun contains(key: Any): Boolean = backing.containsKey(key)
+    operator fun contains(key: Any): Boolean {
+        checkNotDisposed()
+        return backing.containsKey(key)
+    }
 
     fun remove(key: Any) {
+        checkNotDisposed()
         val value = backing.remove(key)
         (value as? DisposableHandle)?.dispose()
     }
 
     fun dispose() {
         backing.keys.toList().forEach { remove(it) }
+        isDisposed = true
+    }
+
+    private fun checkNotDisposed() {
+        check(!isDisposed) {
+            "RetainedObjects instance is disposed"
+        }
     }
 }
 
