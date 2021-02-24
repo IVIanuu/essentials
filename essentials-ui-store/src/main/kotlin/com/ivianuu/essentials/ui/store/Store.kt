@@ -24,9 +24,9 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +53,7 @@ inline val <T> @Given StateFlow<T>.flow: Flow<T>
 internal class UiStoreRunner<S>(
     private val coroutineScope: CoroutineScope,
     store: (CoroutineScope) -> StateFlow<S>
-) : DisposableHandle {
+) : Scope.Disposable {
     val store = store(coroutineScope)
     override fun dispose() {
         coroutineScope.cancel()

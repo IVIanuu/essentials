@@ -18,8 +18,8 @@ package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.common.rememberRetained
+import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -27,11 +27,11 @@ import kotlin.coroutines.EmptyCoroutineContext
 @Composable
 fun rememberRetainedCoroutinesScope(
     getContext: () -> CoroutineContext = { EmptyCoroutineContext }
-): CoroutineScope = rememberRetained { ClosableCoroutineScope(CoroutineScope(getContext())) }
+): CoroutineScope = rememberRetained { DisposableCoroutineScope(CoroutineScope(getContext())) }
 
-private class ClosableCoroutineScope(
+private class DisposableCoroutineScope(
     private val coroutineScope: CoroutineScope
-) : CoroutineScope by coroutineScope, DisposableHandle {
+) : CoroutineScope by coroutineScope, Scope.Disposable {
     override fun dispose() {
         coroutineScope.cancel()
     }
