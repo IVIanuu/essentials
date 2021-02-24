@@ -50,6 +50,11 @@ fun navigationStateContent(
     SideEffect {
         contentState.updateBackStack(state.backStack)
     }
+    DisposableEffect(true) {
+        onDispose {
+            contentState.updateBackStack(emptyList())
+        }
+    }
     AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
