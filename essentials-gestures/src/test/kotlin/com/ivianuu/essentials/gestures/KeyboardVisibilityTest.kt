@@ -31,8 +31,8 @@ class KeyboardVisibilityTest {
         var keyboardHeight = 0
         val collector = keyboardVisible(
             accessibilityEvents,
-            { keyboardHeight },
-            this
+            this,
+            { keyboardHeight }
         ).testCollect(this)
 
         keyboardHeight = 1

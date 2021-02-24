@@ -44,8 +44,8 @@ class ScreenStateTest {
         val globalScope = childCoroutineScope(globalScopeDispatcher)
 
         val collector = screenState(
-            broadcasts = { broadcasts },
-            getCurrentScreenState = { currentScreenState },
+            broadcastsFactory = { broadcasts },
+            screenStateProvider = { currentScreenState },
             globalScope = globalScope,
             logger = NoopLogger
         ).testCollect(this)
@@ -62,20 +62,20 @@ class ScreenStateTest {
     }
 
     @Test
-    fun testGetCurrentScreenStateWithScreenOff() = runCancellingBlockingTest {
-        val screenState = getCurrentScreenState(
+    fun testCurrentScreenStateProviderWithScreenOff() = runCancellingBlockingTest {
+        val screenState = currentScreenStateProvider(
             TestCoroutineDispatcher(),
             mockk(),
             mockk {
                 every { isInteractive } returns false
             }
-        )
+        )()
         screenState shouldBe ScreenState.Off
     }
 
     @Test
-    fun testGetCurrentScreenStateWithLockedScreen() = runCancellingBlockingTest {
-        val screenState = getCurrentScreenState(
+    fun testCurrentScreenStateProviderWithLockedScreen() = runCancellingBlockingTest {
+        val screenState = currentScreenStateProvider(
             TestCoroutineDispatcher(),
             mockk {
                 every { isDeviceLocked } returns true
@@ -83,13 +83,13 @@ class ScreenStateTest {
             mockk {
                 every { isInteractive } returns true
             }
-        )
+        )()
         screenState shouldBe ScreenState.Locked
     }
 
     @Test
-    fun testGetCurrentScreenStateWithUnlockedScreen() = runCancellingBlockingTest {
-        val screenState = getCurrentScreenState(
+    fun testCurrentScreenStateProviderWithUnlockedScreen() = runCancellingBlockingTest {
+        val screenState = currentScreenStateProvider(
             TestCoroutineDispatcher(),
             mockk {
                 every { isDeviceLocked } returns false
@@ -97,7 +97,7 @@ class ScreenStateTest {
             mockk {
                 every { isInteractive } returns true
             }
-        )
+        )()
         screenState shouldBe ScreenState.Unlocked
     }
 }

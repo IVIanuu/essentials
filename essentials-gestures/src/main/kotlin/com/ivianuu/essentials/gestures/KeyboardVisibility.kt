@@ -46,7 +46,7 @@ typealias KeyboardVisible = Boolean
 fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given globalScope: GlobalScope,
-    @Given inputMethodManager: InputMethodManager
+    @Given keyboardHeightProvider: KeyboardHeightProvider
 ): Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&
@@ -56,7 +56,7 @@ fun keyboardVisible(
     .onStart { emit(Unit) }
     .transformLatest {
         emit(true)
-        while ((getKeyboardHeight(inputMethodManager) ?: 0) > 0) {
+        while ((keyboardHeightProvider() ?: 0) > 0) {
             delay(100)
         }
         emit(false)
@@ -73,8 +73,13 @@ fun keyboardVisibilityAccessibilityConfig() = flowOf {
     )
 }
 
-private fun getKeyboardHeight(inputMethodManager: InputMethodManager): Int? {
-    return runKatching {
+typealias KeyboardHeightProvider = () -> Int?
+
+@Given
+fun keyboardHeightProvider(
+    @Given inputMethodManager: InputMethodManager
+): KeyboardHeightProvider = {
+    runKatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
     }.getOrNull()

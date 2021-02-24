@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.dispatchAction
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
@@ -57,33 +58,35 @@ class NavigationStateTest {
 
     @Test
     fun testReturnsResultOnPop() = runCancellingBlockingTest {
-        val dispatch = EventFlow<NavigationAction>()
+        val flow = EventFlow<NavigationAction>()
+        val navigator = flow.dispatchAction
         navigationState(
             IntentKeyHandler = { false },
             scope = this,
-            actions = dispatch
+            actions = flow
         ).testCollect(this)
 
         val result = async {
-            pushKeyForResult<String, String>("a", dispatch::emit)
+            navigator.pushForResult<String>("a")
         }
-        popTopKeyWithResult("b", dispatch::emit)
+        navigator.popWithResult("b")
         result.await() shouldBe "b"
     }
 
     @Test
     fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-        val dispatch = EventFlow<NavigationAction>()
+        val flow = EventFlow<NavigationAction>()
+        val navigator = flow.dispatchAction
         navigationState(
             IntentKeyHandler = { false },
             scope = this,
-            actions = dispatch
+            actions = flow
         ).testCollect(this)
 
         val result = async {
-            pushKeyForResult<String, String>("a", dispatch::emit)
+            navigator.pushForResult<String>("a")
         }
-        dispatch.emit(PopTop())
+        flow.emit(PopTop())
         result.await() shouldBe null
     }
 

@@ -41,11 +41,9 @@ import kotlinx.coroutines.withContext
 @Given
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given defaultDispatcher: DefaultDispatcher,
     @Given globalScope: GlobalScope,
-    @Given keyguardManager: KeyguardManager,
     @Given logger: Logger,
-    @Given powerManager: PowerManager
+    @Given screenStateProvider: CurrentScreenStateProvider
 ): Flow<ScreenState> = merge(
     broadcastsFactory(Intent.ACTION_SCREEN_OFF),
     broadcastsFactory(Intent.ACTION_SCREEN_ON),
@@ -55,23 +53,28 @@ fun screenState(
     .onCompletion { logger.d { "dispose screen state" } }
     .map { Unit }
     .onStart { emit(Unit) }
-    .map { getCurrentScreenState(defaultDispatcher, keyguardManager, powerManager) }
+    .map { screenStateProvider() }
     .distinctUntilChanged()
     .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 
-private suspend fun getCurrentScreenState(
-    defaultDispatcher: DefaultDispatcher,
-    keyguardManager: KeyguardManager,
-    powerManager: PowerManager,
-): ScreenState = withContext(defaultDispatcher) {
-    if (powerManager.isInteractive) {
-        if (keyguardManager.isDeviceLocked) {
-            ScreenState.Locked
+typealias CurrentScreenStateProvider = suspend () -> ScreenState
+
+@Given
+fun currentScreenStateProvider(
+    @Given defaultDispatcher: DefaultDispatcher,
+    @Given keyguardManager: KeyguardManager,
+    @Given powerManager: PowerManager,
+): CurrentScreenStateProvider = {
+    withContext(defaultDispatcher) {
+        if (powerManager.isInteractive) {
+            if (keyguardManager.isDeviceLocked) {
+                ScreenState.Locked
+            } else {
+                ScreenState.Unlocked
+            }
         } else {
-            ScreenState.Unlocked
+            ScreenState.Off
         }
-    } else {
-        ScreenState.Off
     }
 }
 

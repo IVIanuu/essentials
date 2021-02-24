@@ -24,8 +24,10 @@ import com.ivianuu.essentials.sample.ui.CounterState
 import com.ivianuu.essentials.sample.ui.counterState
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.util.Toaster
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import org.junit.Test
 
 class SampleTest {
@@ -33,7 +35,7 @@ class SampleTest {
     @Test
     fun testCounter() = runCancellingBlockingTest {
         val actions = EventFlow<CounterAction>()
-        val collector = counterState(scope = this, actions = actions, showToast = {})
+        val collector = counterState(scope = this, actions = actions, toaster = mockk())
             .testCollect(this)
 
         actions.emit(Inc)
@@ -51,8 +53,14 @@ class SampleTest {
         val actions = EventFlow<CounterAction>()
         var toastCalled = false
 
-        counterState(scope = this, actions = actions, showToast = {
-            toastCalled = true
+        counterState(scope = this, actions = actions, toaster = object : Toaster {
+            override fun showToast(message: String) {
+                toastCalled = true
+            }
+
+            override fun showToast(messageRes: Int, vararg arguments: Any?) {
+                toastCalled = true
+            }
         }).testCollect(this)
 
         actions.emit(Dec)
