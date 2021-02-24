@@ -24,7 +24,7 @@ import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.deferredFlow
-import com.ivianuu.essentials.screenstate.ConfigChanges
+import com.ivianuu.essentials.screenstate.ConfigChange
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
@@ -58,9 +58,9 @@ fun twilightStateAppInitializer(
 @Given
 fun twilightState(
     @Given globalScope: GlobalScope,
-    @Given batteryTwilightState: () -> BatteryTwilightState,
-    @Given systemTwilightState: () -> SystemTwilightState,
-    @Given timeTwilightState: () -> TimeTwilightState,
+    @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
+    @Given systemTwilightState: () -> Flow<SystemTwilightState>,
+    @Given timeTwilightState: () -> Flow<TimeTwilightState>,
     @Given twilightPrefs: () -> Flow<TwilightPrefs>,
 ): StateFlow<TwilightState> = deferredFlow {
     twilightPrefs().flatMapLatest { (mode, useBlack) ->
@@ -75,38 +75,36 @@ fun twilightState(
         .distinctUntilChanged()
 }.stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
 
-internal typealias BatteryTwilightState = Flow<Boolean>
+typealias BatteryTwilightState = Boolean
 
 @Given
 fun batteryTwilightState(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given powerManager: PowerManager,
-): BatteryTwilightState {
-    return broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map { powerManager.isPowerSaveMode }
-}
+): Flow<BatteryTwilightState> = broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map { powerManager.isPowerSaveMode }
 
-internal typealias SystemTwilightState = Flow<Boolean>
+typealias SystemTwilightState = Boolean
 
 @Given
 fun systemTwilightState(
-    @Given configChanges: ConfigChanges,
+    @Given configChanges: Flow<ConfigChange>,
     @Given resources: AppResources,
-): SystemTwilightState = configChanges
-    .onStart { emit(Unit) }
+): Flow<SystemTwilightState> = configChanges
+    .onStart { emit(ConfigChange) }
     .map {
         (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
             .UI_MODE_NIGHT_YES
     }
 
-internal typealias TimeTwilightState = Flow<Boolean>
+typealias TimeTwilightState = Boolean
 
 @Given
 fun timeTwilightState(
     @Given broadcastsFactory: BroadcastsFactory,
-): TimeTwilightState = broadcastsFactory(Intent.ACTION_TIME_TICK)
+): Flow<TimeTwilightState> = broadcastsFactory(Intent.ACTION_TIME_TICK)
     .map { Unit }
     .onStart { emit(Unit) }
     .map {

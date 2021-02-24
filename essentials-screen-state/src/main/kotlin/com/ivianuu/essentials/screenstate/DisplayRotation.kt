@@ -60,7 +60,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 @Scoped<AppComponent>
 @Given
 fun displayRotation(
-    @Given configChanges: () -> ConfigChanges,
+    @Given configChanges: () -> Flow<ConfigChange>,
     @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,

@@ -27,16 +27,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-typealias ConfigChanges = Flow<Unit>
+typealias ConfigChange = Unit
 
 @Given
 fun configChanges(
     @Given appContext: AppContext,
     @Given mainDispatcher: MainDispatcher,
-): ConfigChanges = callbackFlow<Unit> {
+): Flow<ConfigChange> = callbackFlow<ConfigChange> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
-            offerSafe(Unit)
+            offerSafe(ConfigChange)
         }
 
         override fun onLowMemory() {

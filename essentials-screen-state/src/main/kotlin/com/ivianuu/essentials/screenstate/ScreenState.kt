@@ -46,20 +46,18 @@ fun screenState(
     @Given keyguardManager: KeyguardManager,
     @Given logger: Logger,
     @Given powerManager: PowerManager
-): Flow<ScreenState> {
-    return merge(
-        broadcastsFactory(Intent.ACTION_SCREEN_OFF),
-        broadcastsFactory(Intent.ACTION_SCREEN_ON),
-        broadcastsFactory(Intent.ACTION_USER_PRESENT)
-    )
-        .onStart { logger.d { "sub for screen state" } }
-        .onCompletion { logger.d { "dispose screen state" } }
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map { getCurrentScreenState(defaultDispatcher, keyguardManager, powerManager) }
-        .distinctUntilChanged()
-        .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
-}
+): Flow<ScreenState> = merge(
+    broadcastsFactory(Intent.ACTION_SCREEN_OFF),
+    broadcastsFactory(Intent.ACTION_SCREEN_ON),
+    broadcastsFactory(Intent.ACTION_USER_PRESENT)
+)
+    .onStart { logger.d { "sub for screen state" } }
+    .onCompletion { logger.d { "dispose screen state" } }
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map { getCurrentScreenState(defaultDispatcher, keyguardManager, powerManager) }
+    .distinctUntilChanged()
+    .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
 
 private suspend fun getCurrentScreenState(
     defaultDispatcher: DefaultDispatcher,
