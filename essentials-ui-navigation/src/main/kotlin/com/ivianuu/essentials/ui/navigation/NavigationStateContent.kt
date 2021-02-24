@@ -30,9 +30,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
-import com.ivianuu.essentials.ui.common.LocalRetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjects
+import com.ivianuu.essentials.ui.common.LocalRetainedScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scope
 import kotlin.reflect.KClass
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
@@ -111,7 +111,7 @@ private class NavigationContentState(
             }
             Providers(
                 LocalSaveableStateRegistry provides savableStateRegistry,
-                LocalRetainedObjects provides retainedObjects
+                LocalRetainedScope provides scope
             ) {
                 content()
                 DisposableEffect(true) {
@@ -128,7 +128,7 @@ private class NavigationContentState(
         private var savedState =
             mutableMapOf<Any, Map<String, List<Any?>>>()
 
-        private val retainedObjects = RetainedObjects()
+        private val scope = Scope()
 
         private var isComposing = false
         private var isDetached = false
@@ -143,7 +143,7 @@ private class NavigationContentState(
             if (isFinalized) return
             if (isComposing || !isDetached) return
             isFinalized = true
-            retainedObjects.dispose()
+            scope.dispose()
         }
     }
 }

@@ -21,24 +21,24 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import com.ivianuu.essentials.ui.common.LocalRetainedObjects
-import com.ivianuu.essentials.ui.common.RetainedObjects
+import com.ivianuu.essentials.ui.common.LocalRetainedScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scope
 
-typealias ActivityRetainedObjectsProvider = UiDecorator
+typealias ActivityRetainedScopeProvider = UiDecorator
 
 @UiDecoratorBinding
 @Given
-fun activityRetainedObjectsProvider(): ActivityRetainedObjectsProvider = { content ->
+fun activityRetainedScopeProvider(): ActivityRetainedScopeProvider = { content ->
     val activity = LocalContext.current as? ComponentActivity
     if (activity != null) {
-        val retainedObjects = remember { RetainedObjects() }
+        val retainedScope = remember { Scope() }
         Providers(
-            LocalRetainedObjects provides retainedObjects,
+            LocalRetainedScope provides retainedScope,
             content = content
         )
         DisposableEffect(true) {
-            onDispose { retainedObjects.dispose() }
+            onDispose { retainedScope.dispose() }
         }
     }
 }
