@@ -16,10 +16,12 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
@@ -28,7 +30,11 @@ fun Modifier.absorbPointer(
 ): Modifier = composed {
     pointerInput(enabled) {
         if (enabled) {
-            detectTapGestures {
+            forEachGesture {
+                awaitPointerEventScope {
+                    awaitFirstDown(requireUnconsumed = false)
+                        .consumeAllChanges()
+                }
             }
         }
     }
