@@ -18,13 +18,13 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,13 +35,13 @@ fun Subheader(
     text: @Composable () -> Unit
 ) {
     Box(
-        modifier = Modifier.preferredHeight(48.dp)
+        modifier = Modifier.height(48.dp)
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
             .then(modifier),
         contentAlignment = Alignment.CenterStart
     ) {
-        Providers(LocalContentColor provides MaterialTheme.colors.secondary) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
             ProvideTextStyle(MaterialTheme.typography.body2, text)
         }
     }

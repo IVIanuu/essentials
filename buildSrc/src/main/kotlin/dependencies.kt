@@ -28,25 +28,23 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev748"
+    const val version = "${Build.versionName}-dev749"
 }
 
 object Deps {
     const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.5.1"
+        "dev.chrisbanes.accompanist:accompanist-coil:0.6.0"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
     object AndroidX {
         object Activity {
-            const val activity = "androidx.activity:activity:1.3.0-alpha02"
-            const val compose = "androidx.activity:activity-compose:1.3.0-alpha02"
+            const val activity = "androidx.activity:activity:1.3.0-alpha03"
+            const val compose = "androidx.activity:activity-compose:1.3.0-alpha03"
         }
-        const val appCompat = "androidx.appcompat:appcompat:1.1.0"
         const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
         object Compose {
-            const val version = "1.0.0-alpha12"
-            const val snapshot = "6994167"
+            const val version = "1.0.0-beta01"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
@@ -93,12 +91,12 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev745"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev749"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev462"
+        private const val version = "0.0.1-dev471"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val component = "com.ivianuu.injekt:injekt-component:$version"

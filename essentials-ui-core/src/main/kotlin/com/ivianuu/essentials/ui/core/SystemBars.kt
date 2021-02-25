@@ -25,8 +25,8 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -95,7 +95,7 @@ typealias SystemBarManagerProvider = UiDecorator
 fun systemBarManagerProvider(): SystemBarManagerProvider = { content ->
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
-    Providers(
+    CompositionLocalProvider(
         LocalSystemBarManager provides systemBarManager,
         content = content
     )
@@ -122,7 +122,9 @@ fun rootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
     dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
 )
 
-private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager>()
+private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
+    error("No system bar manager provided")
+}
 
 private data class SystemBarStyle(
     val barColor: Color,

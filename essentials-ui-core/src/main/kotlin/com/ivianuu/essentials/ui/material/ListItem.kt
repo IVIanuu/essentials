@@ -18,18 +18,28 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.ripple.ExperimentalRippleApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalRippleApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListItem(
     modifier: Modifier = Modifier,
@@ -50,7 +60,7 @@ fun ListItem(
 
     Box(
         modifier = modifier
-            .preferredHeightIn(min = minHeight)
+            .heightIn(min = minHeight)
             .fillMaxWidth()
             .background(color = if (selected) LocalRippleTheme.current.defaultColor() else Color.Transparent)
             .then(
@@ -70,7 +80,7 @@ fun ListItem(
             if (leading != null) {
                 Box(
                     modifier = Modifier
-                        .preferredHeight(minHeight),
+                        .heightIn(minHeight),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Box(
@@ -82,7 +92,7 @@ fun ListItem(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Providers(
+                        CompositionLocalProvider(
                             LocalContentAlpha provides ContentAlpha.high,
                             content = leading
                         )
@@ -107,7 +117,7 @@ fun ListItem(
                 ) {
                     if (title != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-                            Providers(
+                            CompositionLocalProvider(
                                 LocalContentAlpha provides ContentAlpha.high,
                                 content = title
                             )
@@ -115,7 +125,7 @@ fun ListItem(
                     }
                     if (subtitle != null) {
                         ProvideTextStyle(value = MaterialTheme.typography.body2) {
-                            Providers(
+                            CompositionLocalProvider(
                                 LocalContentAlpha provides ContentAlpha.medium,
                                 content = subtitle
                             )
@@ -128,7 +138,7 @@ fun ListItem(
             if (trailing != null) {
                 Box(
                     modifier = Modifier
-                        .preferredHeight(minHeight),
+                        .height(minHeight),
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Box(
@@ -139,7 +149,7 @@ fun ListItem(
                         ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Providers(
+                        CompositionLocalProvider(
                             LocalContentAlpha provides ContentAlpha.high,
                             content = trailing
                         )

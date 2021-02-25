@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -75,7 +75,7 @@ private fun PopupMenuItem(
     content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = Modifier.preferredWidthIn(min = 200.dp)
+        modifier = Modifier.widthIn(min = 200.dp)
             .height(48.dp)
             .clickable(onClick = onSelected),
         contentAlignment = Alignment.CenterStart

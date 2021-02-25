@@ -22,7 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.util.Logger
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.take
 /**
  * Requests a screen unlock
  */
-class UnlockScreenActivity : AppCompatActivity() {
+class UnlockScreenActivity : ComponentActivity() {
 
     private var hasResult = false
     private var valid = true

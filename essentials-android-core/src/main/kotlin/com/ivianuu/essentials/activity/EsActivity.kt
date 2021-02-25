@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.ui.platform.setContent
+import androidx.compose.runtime.CompositionLocalProvider
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
@@ -34,7 +34,7 @@ import com.ivianuu.injekt.component.get
 /**
  * Base activity
  */
-abstract class EsActivity : AppCompatActivity() {
+abstract class EsActivity : ComponentActivity() {
 
     private val uiComponent by lazy {
         activityComponent.get<() -> UiComponent>()()
@@ -47,7 +47,7 @@ abstract class EsActivity : AppCompatActivity() {
         component.uiWorkerRunner()
 
         setContent {
-            Providers(LocalUiComponent provides uiComponent) {
+            CompositionLocalProvider(LocalUiComponent provides uiComponent) {
                 component.decorateUi {
                     Content()
                 }

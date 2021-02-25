@@ -22,7 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.ImagePainter
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.DispatchAction
@@ -69,7 +69,7 @@ private fun Shortcut(
             leading = {
                 Image(
                     modifier = Modifier.size(40.dp),
-                    painter = ImagePainter(info.icon),
+                    painter = BitmapPainter(info.icon),
                     contentDescription = null
                 )
             },

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +30,7 @@ typealias SavableStateRegistryProvider = UiDecorator
 fun savableStateRegistryProvider(): SavableStateRegistryProvider = { content ->
     val activity = LocalContext.current as? ComponentActivity
     if (activity != null) {
-        Providers(
+        CompositionLocalProvider(
             LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
             content = content
         )

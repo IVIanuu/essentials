@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateTo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.animatable.Alpha
 import com.ivianuu.essentials.ui.animatable.Animatable
@@ -40,7 +43,7 @@ fun defaultAnimationSpec(
 )
 
 fun FloatAnimationStackTransition(
-    anim: AnimationSpec<Float> = defaultAnimationSpec(),
+    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
     apply: @Composable (
         fromAnimatable: Animatable?,
         toAnimatable: Animatable?,
@@ -48,23 +51,23 @@ fun FloatAnimationStackTransition(
         progress: Float
     ) -> Unit
 ): StackTransition = { context ->
-    val animation = animatedFloat(0f)
-    context.toAnimatable?.set(Alpha, if (animation.value == 0f) 0f else 1f)
-    remember {
+    val animationState: AnimationState<Float, AnimationVector1D> = remember {
+        AnimationState(0f)
+    }
+    context.toAnimatable?.set(Alpha, if (animationState.value == 0f) 0f else 1f)
+    LaunchedEffect(true) {
         if (context.toAnimatable != null) context.addTo()
-        animation.animateTo(
+        animationState.animateTo(
             targetValue = 1f,
-            anim = anim,
-            onEnd = { _, _ ->
-                if (context.fromAnimatable != null) context.removeFrom()
-                context.onComplete()
-            }
+            animationSpec = animationSpec
         )
+        if (context.fromAnimatable != null) context.removeFrom()
+        context.onComplete()
     }
     apply(
         context.fromAnimatable,
         context.toAnimatable,
         context.isPush,
-        animation.value
+        animationState.value
     )
 }

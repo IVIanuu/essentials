@@ -16,13 +16,21 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
@@ -85,7 +93,7 @@ private fun DialogBody(
             val styledTitle: @Composable (() -> Unit)? = title?.let {
                 {
                     ProvideTextStyle(MaterialTheme.typography.h6) {
-                        Providers(
+                        CompositionLocalProvider(
                             LocalContentAlpha provides ContentAlpha.high,
                             content = title
                         )
@@ -95,7 +103,7 @@ private fun DialogBody(
 
             val styledIcon: @Composable (() -> Unit)? = icon?.let {
                 {
-                    Providers(
+                    CompositionLocalProvider(
                         LocalContentAlpha provides ContentAlpha.high,
                         content = icon
                     )
@@ -121,7 +129,7 @@ private fun DialogBody(
     val finalContent: @Composable (() -> Unit)? = if (content != null) {
         {
             ProvideTextStyle(MaterialTheme.typography.subtitle1) {
-                Providers(
+                CompositionLocalProvider(
                     LocalContentAlpha provides ContentAlpha.medium,
                     content = content
                 )
@@ -272,7 +280,7 @@ private fun DialogButtons(
         AlertDialogButtonLayout.SideBySide -> {
             Row(
                 modifier = Modifier
-                    .preferredHeight(52.dp)
+                    .height(52.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,

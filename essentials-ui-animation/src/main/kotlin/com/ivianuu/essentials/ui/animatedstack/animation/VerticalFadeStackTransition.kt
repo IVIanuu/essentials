@@ -22,9 +22,9 @@ import com.ivianuu.essentials.ui.animatable.setFractionTranslationY
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 
 fun VerticalFadeStackTransition(
-    anim: AnimationSpec<Float> = defaultAnimationSpec(),
+    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
 ): StackTransition {
-    return FloatAnimationStackTransition(anim = anim) { from, to, isPush, progress ->
+    return FloatAnimationStackTransition(animationSpec = animationSpec) { from, to, isPush, progress ->
         if (to != null && isPush) {
             to
                 .set(Alpha, progress)

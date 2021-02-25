@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.Indication
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -75,7 +75,7 @@ fun Modifier.popupClickable(
 
     onGloballyPositioned { coordinates = it }
         .clickable(
-            interactionState = remember { InteractionState() },
+            interactionSource = remember { MutableInteractionSource() },
             indication = indication
         ) {
             dependencies.navigator(

@@ -45,7 +45,7 @@ inline fun <T : Any> rememberRetained(
     return synchronized(scope) {
         var value: ValueWithInputs<T>? = scope.get(key = finalKey)
         if (value != null && !value.inputs.contentEquals(inputs)) {
-            scope.minusAssign<T>(key.hashCode())
+            scope.minusAssign(key.hashCode())
             value = null
         }
 

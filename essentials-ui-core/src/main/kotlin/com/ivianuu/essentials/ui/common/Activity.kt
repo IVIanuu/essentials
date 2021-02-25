@@ -21,6 +21,5 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 // todo remove
-@Composable
 val compositionActivity: ComponentActivity
-    get() = LocalContext.current as ComponentActivity
+    @Composable get() = LocalContext.current as ComponentActivity

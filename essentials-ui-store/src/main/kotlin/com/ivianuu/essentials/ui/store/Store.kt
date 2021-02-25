@@ -64,6 +64,5 @@ internal class UiStoreRunner<S>(
 annotation class UiState
 
 @Given
-@Composable
 inline val <T> @Given StateFlow<T>.latest: @UiState T
-    get() = collectAsState().value
+    @Composable get() = collectAsState().value

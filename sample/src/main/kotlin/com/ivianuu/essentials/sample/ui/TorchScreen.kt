@@ -18,7 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -60,7 +60,7 @@ fun torchKeyUi(
                 "Torch is ${if (state.torchEnabled) "enabled" else "disabled"}",
                 style = MaterialTheme.typography.h4
             )
-            Spacer(Modifier.preferredHeight(8.dp))
+            Spacer(Modifier.height(8.dp))
             Button(
                 onClick = { dispatch(UpdateTorchEnabled(!state.torchEnabled)) }
             ) {

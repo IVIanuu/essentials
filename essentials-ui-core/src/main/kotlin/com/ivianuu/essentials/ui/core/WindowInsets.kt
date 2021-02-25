@@ -79,7 +79,7 @@ fun ProvideInsets(
     insets: PaddingValues,
     content: @Composable () -> Unit,
 ) {
-    Providers(LocalInsets provides insets, content = content)
+    CompositionLocalProvider(LocalInsets provides insets, content = content)
 }
 
 typealias WindowInsetsProvider = UiDecorator

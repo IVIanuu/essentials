@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
@@ -109,7 +109,7 @@ private class NavigationContentState(
                     canBeSaved = { true }
                 )
             }
-            Providers(
+            CompositionLocalProvider(
                 LocalSaveableStateRegistry provides savableStateRegistry,
                 LocalRetainedScope provides scope
             ) {

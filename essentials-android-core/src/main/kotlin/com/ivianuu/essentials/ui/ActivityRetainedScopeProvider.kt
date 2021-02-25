@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Providers
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.ivianuu.essentials.ui.common.LocalRetainedScope
@@ -33,7 +33,7 @@ fun activityRetainedScopeProvider(): ActivityRetainedScopeProvider = { content -
     val activity = LocalContext.current as? ComponentActivity
     if (activity != null) {
         val retainedScope = remember { Scope() }
-        Providers(
+        CompositionLocalProvider(
             LocalRetainedScope provides retainedScope,
             content = content
         )

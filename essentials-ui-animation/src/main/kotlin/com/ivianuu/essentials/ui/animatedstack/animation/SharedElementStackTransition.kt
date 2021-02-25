@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.animateTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.produceState
@@ -51,8 +54,8 @@ val SharedElementComposable = MetaProp<@Composable () -> Unit>()
 
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
-    sharedElementAnim: AnimationSpec<Float> = defaultAnimationSpec(),
-    contentTransition: StackTransition = FadeStackTransition(sharedElementAnim),
+    sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
+    contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
     waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = { context ->
     remember { context.addTo() }
@@ -72,7 +75,9 @@ fun SharedElementStackTransition(
             }
         }
 
-    val animation = animatedFloat(0f)
+    val animationState: AnimationState<Float, AnimationVector1D> = remember {
+        AnimationState(0f)
+    }
 
     val forceRun by produceState(false) {
         delay(waitingTimeout.toLongMilliseconds())
@@ -90,7 +95,7 @@ fun SharedElementStackTransition(
             }
         }
 
-        remember {
+        LaunchedEffect(true) {
             context.toAnimatable?.set(Alpha, 1f)
 
             animatables.forEach { (start, end) ->
@@ -99,19 +104,18 @@ fun SharedElementStackTransition(
                 end[Alpha] = 0f
             }
 
-            animation.animateTo(
+            animationState.animateTo(
                 targetValue = 1f,
-                anim = sharedElementAnim,
-                onEnd = { _, _ ->
-                    sharedElementComplete = true
-                    animatables.forEach { (start, end) ->
-                        // show the "real" elements
-                        start[Alpha] = 1f
-                        end[Alpha] = 1f
-                    }
-                    completeIfPossible()
-                }
+                animationSpec = sharedElementAnimationSpec
             )
+
+            sharedElementComplete = true
+            animatables.forEach { (start, end) ->
+                // show the "real" elements
+                start[Alpha] = 1f
+                end[Alpha] = 1f
+            }
+            completeIfPossible()
         }
 
         contentTransition(
@@ -161,9 +165,9 @@ fun SharedElementStackTransition(
     val animatedProps = propPairs
         .map { (startProps, endProps) ->
             SharedElementProps(
-                position = lerp(startProps.position, endProps.position, animation.value),
-                scaleX = lerp(startProps.scaleX, endProps.scaleX, animation.value),
-                scaleY = lerp(startProps.scaleY, endProps.scaleY, animation.value)
+                position = lerp(startProps.position, endProps.position, animationState.value),
+                scaleX = lerp(startProps.scaleX, endProps.scaleX, animationState.value),
+                scaleY = lerp(startProps.scaleY, endProps.scaleY, animationState.value)
             )
         }
 
@@ -177,7 +181,7 @@ fun SharedElementStackTransition(
                 with(LocalDensity.current) {
                     Box(
                         modifier = Modifier
-                            .preferredSize(
+                            .size(
                                 width = endBounds!!.width.toDp(),
                                 height = endBounds.height.toDp()
                             )

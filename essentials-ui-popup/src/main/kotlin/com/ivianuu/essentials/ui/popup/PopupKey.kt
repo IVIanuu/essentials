@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.ui.popup
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.gesture.tapGestureFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -69,12 +70,16 @@ fun popupKeyUi(
 
     PopupLayout(
         position = key.position,
-        modifier = Modifier.tapGestureFilter(
-            onTap = { dismiss(true) }
-        )
+        modifier = Modifier.pointerInput(true) {
+            detectTapGestures { dismiss(true) }
+        }
     ) {
         Box(
-            modifier = Modifier.tapGestureFilter(onTap = {})
+            modifier = Modifier
+                .pointerInput(true) {
+                    detectTapGestures {
+                    }
+                }
                 .animatable(PopupTag)
         ) {
             key.content()
@@ -120,8 +125,8 @@ private fun PopupLayout(
             x = (position.right - placeable.width).toInt() // todo based on ltr/rtl
         }
 
-        x = x.coerceIn(8.dp.toIntPx(), constraints.maxWidth - placeable.width - 8.dp.toIntPx())
-        y = y.coerceIn(8.dp.toIntPx(), constraints.maxHeight - placeable.height - 8.dp.toIntPx())
+        x = x.coerceIn(8.dp.roundToPx(), constraints.maxWidth - placeable.width - 8.dp.roundToPx())
+        y = y.coerceIn(8.dp.roundToPx(), constraints.maxHeight - placeable.height - 8.dp.roundToPx())
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             placeable.place(x = x, y = y)

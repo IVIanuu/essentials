@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -32,7 +32,7 @@ fun BaseDialog(
     Surface(
         modifier = Modifier
             .padding(all = 32.dp)
-            .preferredWidthIn(min = 280.dp, max = 356.dp)
+            .widthIn(min = 280.dp, max = 356.dp)
             .then(modifier),
         color = MaterialTheme.colors.surface,
         elevation = 24.dp,

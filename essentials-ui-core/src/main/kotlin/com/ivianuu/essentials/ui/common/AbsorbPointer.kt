@@ -16,19 +16,20 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.gesture.rawPressStartGestureFilter
-import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
 fun Modifier.absorbPointer(
-    enabled: Boolean = true,
+    enabled: Boolean = true
 ): Modifier = composed {
-    rawPressStartGestureFilter(
-        onPressStart = {},
-        enabled = enabled,
-        executionPass = PointerEventPass.Initial
-    )
+    pointerInput(enabled) {
+        if (enabled) {
+            detectTapGestures {
+            }
+        }
+    }
 }

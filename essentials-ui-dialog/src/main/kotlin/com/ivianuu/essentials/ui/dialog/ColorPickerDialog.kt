@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -256,7 +256,7 @@ private fun BaseColorGridItem(
             .wrapContentSize(Alignment.Center)
             .clickable(
                 onClick = onClick,
-                interactionState = remember { InteractionState() },
+                interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(bounded = false)
             ),
         contentAlignment = Alignment.Center
@@ -321,9 +321,11 @@ private fun ColorEditorHeader(
                 )
             }
         },
-        backgroundColor = color,
-        activeColor = guessingContentColorFor(color),
-        inactiveColor = guessingContentColorFor(color),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = color,
+            //   activeColor = guessingContentColorFor(color),
+            //        inactiveColor = guessingContentColorFor(color),
+        ),
         textStyle =  MaterialTheme.typography.subtitle1
             .copy(color = guessingContentColorFor(color)),
         value = hexInput,
@@ -377,7 +379,7 @@ private fun ColorComponentItem(
 
         Text(
             text = (255 * value).toInt().toString(),
-            modifier = Modifier.preferredWidthIn(min = 56.dp),
+            modifier = Modifier.widthIn(min = 56.dp),
             style = MaterialTheme.typography.subtitle1
         )
     }
