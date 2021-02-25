@@ -32,7 +32,7 @@ annotation class AppWorkerBinding
 
 @Macro
 @GivenSetElement
-fun <T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: T): AppWorker =
+fun <T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: () -> T): () -> AppWorker =
     instance
 
 typealias AppWorkerRunner = () -> Unit
@@ -41,13 +41,13 @@ typealias AppWorkerRunner = () -> Unit
 fun appWorkerRunner(
     @Given logger: Logger,
     @Given globalScope: GlobalScope,
-    @Given workers: Set<AppWorker>
+    @Given workers: Set<() -> AppWorker>
 ): AppWorkerRunner = {
     logger.d { "run app workers" }
     workers
         .forEach { worker ->
             globalScope.launch {
-                worker()
+                worker()()
             }
         }
 }

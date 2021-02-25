@@ -29,5 +29,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-android-core"))
-    api(project(":essentials-service"))
+    api(Deps.Injekt.androidWork)
 }

@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.content.Intent
-import androidx.core.content.ContextCompat
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.await
 import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -33,20 +34,29 @@ import kotlin.time.milliseconds
 
 @AppWorkerBinding
 @Given
-fun androidForegroundServiceStateWorker(
-    @Given appContext: AppContext,
+fun androidForegroundWorkStarter(
     @Given logger: Logger,
     @Given state: Flow<InternalForegroundState>,
+    @Given workManager: WorkManager
 ): AppWorker = {
     state
         .debounce(300.milliseconds)
         .filter { it.isForeground }
+        .filter {
+            workManager.getWorkInfosByTag(FOREGROUND_TAG)
+                .await()
+                .none { it.state == WorkInfo.State.RUNNING }
+        }
         .onEach {
-            logger.d { "start foreground service $it" }
-            ContextCompat.startForegroundService(
-                appContext,
-                Intent(appContext, ForegroundService::class.java)
+            logger.d { "start foreground worker $it" }
+            workManager.cancelAllWorkByTag(FOREGROUND_TAG)
+            workManager.enqueue(
+                OneTimeWorkRequestBuilder<ForegroundWorker>()
+                    .addTag(FOREGROUND_TAG)
+                    .build()
             )
         }
         .collect()
 }
+
+private const val FOREGROUND_TAG = "foreground_work"

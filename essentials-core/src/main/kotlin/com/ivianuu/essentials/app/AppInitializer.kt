@@ -35,16 +35,13 @@ annotation class AppInitializerBinding
 @Macro
 @GivenSetElement
 fun <@ForTypeKey T : @AppInitializerBinding S, S : AppInitializer> appInitializerBindingImpl(
-    @Given instance: T,
+    @Given instance: () -> T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(
     typeKeyOf<T>(), instance, config
 )
 
-@Qualifier
-annotation class AppInitializerConfigBinding<T : () -> Unit>
-
-data class AppInitializerConfig<out T : () -> Unit>(
+data class AppInitializerConfig<out T : AppInitializer>(
     val dependencies: Set<TypeKey<() -> Unit>> = emptySet(),
     val dependents: Set<TypeKey<() -> Unit>> = emptySet(),
 ) {
@@ -55,7 +52,7 @@ data class AppInitializerConfig<out T : () -> Unit>(
 
 data class AppInitializerElement(
     val key: TypeKey<*>,
-    val instance: () -> Unit,
+    val instance: () -> AppInitializer,
     val config: AppInitializerConfig<*>
 )
 
@@ -74,6 +71,6 @@ fun appInitializerRunner(
         )
         .forEach {
             logger.d { "Initialize ${it.key}" }
-            it.instance()
+            it.instance()()
         }
 }
