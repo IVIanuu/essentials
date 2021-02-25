@@ -26,7 +26,7 @@ class ForegroundWorker(
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
-        logger.d { "start foreground work" }
+        logger.d { "start foreground worker" }
 
         runWithCleanup(
             block = {
@@ -41,10 +41,11 @@ class ForegroundWorker(
                     .collect()
             },
             cleanup = {
-                logger.d { "stop foreground work" }
                 applyState(emptyList())
             }
         )
+
+        logger.d { "stop foreground worker" }
 
         return Result.success()
     }
