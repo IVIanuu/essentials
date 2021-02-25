@@ -37,6 +37,7 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -108,12 +109,18 @@ fun <@ForTypeKey P : Permission> permissionState(
         .distinctUntilChanged()
 }
 
-typealias PermissionStateFactory = (TypeKey<Permission>) -> PermissionState<Boolean>
+typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> PermissionState<Boolean>
 
 @Given
 fun permissionStateFactory(
     @Given permissionStates: Map<TypeKey<Permission>, PermissionState<Permission>>
-): PermissionStateFactory = { permissionStates[it]!! }
+): PermissionStateFactory = { permissions ->
+    combine(
+        *permissions
+            .map { permissionStates[it]!! }
+            .toTypedArray()
+    ) { it.all { it } }
+}
 
 internal val permissionChanges = EventFlow<Unit>()
 
@@ -144,13 +151,13 @@ fun permissionRequester(
     withContext(defaultDispatcher) {
         logger.d { "request requestedPermissions $requestedPermissions" }
 
-        if (requestedPermissions.all { permissionStateFactory(it).first() })
+        if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
             return@withContext true
 
         val key = PermissionRequestKey(requestedPermissions)
         appUiStarter()
         navigator(Push(key))
 
-        return@withContext requestedPermissions.all { permissionStateFactory(it).first() }
+        return@withContext requestedPermissions.all { permissionStateFactory(listOf(it)).first() }
     }
 }

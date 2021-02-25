@@ -55,7 +55,7 @@ fun permissionRequestUiState(
     state
         .filter {
             key.permissionsKeys
-                .all { permissionStateFactory(it).first() }
+                .all { permissionStateFactory(listOf(it)).first() }
         }
         .take(1)
         .onEach { dispatchNavigationAction(NavigationAction.PopTop()) }
@@ -63,7 +63,7 @@ fun permissionRequestUiState(
 
     suspend fun updatePermissions() {
         val permissions = key.permissionsKeys
-            .filterNot { permissionStateFactory(it).first() }
+            .filterNot { permissionStateFactory(listOf(it)).first() }
             .map { UiPermission(it, permissions[it]!!) }
         reduce { copy(permissions = permissions) }
     }
