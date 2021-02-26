@@ -29,7 +29,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Interceptor
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
@@ -67,7 +66,7 @@ class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: 
     fun requestHandlerIntoSet(
         @Given requestHandler: PermissionRequestHandler<P>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-        (permissionKey to requestHandler) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+        (permissionKey to requestHandler.intercept<P>()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @GivenSetElement
@@ -124,18 +123,11 @@ fun permissionStateFactory(
 
 internal val permissionChanges = EventFlow<Unit>()
 
-@Interceptor
-fun <T : PermissionRequestHandler<P>, P : Permission> permissionRequestHandlerInterceptor(
-    factory: () -> T
-): T {
-    val unintercepted = factory()
-    val intercepted: PermissionRequestHandler<P> = { permission ->
-        unintercepted(permission)
+private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
+    return {
+        this(it)
         permissionChanges.emit(Unit)
     }
-
-    @Suppress("UNCHECKED_CAST")
-    return intercepted as T
 }
 
 typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
