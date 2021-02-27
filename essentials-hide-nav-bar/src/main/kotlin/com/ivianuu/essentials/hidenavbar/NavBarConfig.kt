@@ -21,3 +21,5 @@ data class NavBarConfig(
     val rotationMode: NavBarRotationMode = NavBarRotationMode.Nougat,
     val showWhileScreenOff: Boolean = true
 )
+
+typealias NavBarPermissionState = Boolean

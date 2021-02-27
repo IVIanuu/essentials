@@ -30,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Qualifier
@@ -44,6 +45,10 @@ fun <@ForTypeKey T : @UiStateBinding StateFlow<S>, S> uiStateBindingImpl(
 ): StateFlow<S> = rememberRetained(typeKeyOf<T>()) {
     UiStoreRunner(CoroutineScope(Job() + defaultDispatcher), provider)
 }.store
+
+@Given
+inline val <T> @Given MutableStateFlow<T>.stateFlow: StateFlow<T>
+    get() = this
 
 @Given
 inline val <T> @Given StateFlow<T>.flow: Flow<T>

@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
+import com.ivianuu.essentials.app.AppWorker
+import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.PrefUpdater
+import com.ivianuu.essentials.coroutines.neverFlow
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -30,153 +31,135 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
-/**
- * Handles the state of the navigation bar
- */
-@Scoped<AppComponent>
+@AppWorkerBinding
 @Given
-class NavBarManager(
-    @Given private val appContext: AppContext,
-    @Given private val broadcastsFactory: BroadcastsFactory,
-    @Given private val defaultDispatcher: DefaultDispatcher,
-    @Given private val disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
-    @Given private val displayRotation: Flow<DisplayRotation>,
-    @Given private val globalScope: GlobalScope,
-    @Given private val logger: Logger,
-    @Given private val screenState: Flow<ScreenState>,
-    @Given private val setOverscan: OverscanUpdater,
-    @Given private val wasNavBarHidden: Flow<WasNavBarHidden>,
-    @Given private val updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
-) {
-
-    private var job: Job? = null
-    private val mutex = Mutex()
-
-    suspend fun setNavBarConfig(config: NavBarConfig) = withContext(defaultDispatcher) {
-        logger.d { "set nav bar config $config" }
-
-        mutex.withLock {
-            job?.cancel()
-            job = null
-        }
-
-        if (!config.hidden) {
-            logger.d { "not hidden" }
-            if (wasNavBarHidden.first()) {
-                logger.d { "was hidden" }
-                setNavBarConfigInternal(false, config)
-                updateWasNavBarHidden { false }
-            } else {
-                logger.d { "was not hidden" }
-            }
-
-            return@withContext
-        }
-
-        globalScope.launch {
-            val flows = buildList<Flow<*>> {
-                if (config.rotationMode != NavBarRotationMode.Nougat) {
-                    this += displayRotation.drop(1)
-                }
-
-                if (config.showWhileScreenOff) {
-                    this += screenState.drop(1)
-                }
-            }
-
-            // apply config
-            launch {
-                flows.merge()
-                    .onStart { emit(Unit) }
-                    .map {
-                        !config.showWhileScreenOff ||
-                                screenState.first() == ScreenState.Unlocked
-                    }
-                    .onEach { navBarHidden ->
-                        updateWasNavBarHidden { navBarHidden }
-                        setNavBarConfigInternal(navBarHidden, config)
-                    }
-                    .collect()
-            }
-
-            // force show on shut downs
-            launch {
+fun navBarManager(
+    @Given appContext: AppContext,
+    @Given broadcastsFactory: BroadcastsFactory,
+    @Given disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
+    @Given displayRotation: Flow<DisplayRotation>,
+    @Given navBarConfig: Flow<NavBarConfig>,
+    @Given logger: Logger,
+    @Given permissionState: Flow<NavBarPermissionState>,
+    @Given screenState: Flow<ScreenState>,
+    @Given setOverscan: OverscanUpdater
+): AppWorker = {
+    permissionState
+        .flatMapLatest {
+            if (it) {
                 broadcastsFactory(Intent.ACTION_SHUTDOWN)
-                    .onEach {
-                        mutex.withLock {
-                            job?.cancel()
-                            job = null
+                    .map { true }
+                    .onStart { emit(false) }
+                    .flatMapLatest { currentSystemShutdown ->
+                        // force show on shut downs
+                        if (currentSystemShutdown) {
+                            logger.d { "system shutdown force show nav bar" }
+                            flowOf(NavBarConfig(hidden = false))
+                        } else {
+                            navBarConfig
                         }
-
-                        logger.d { "show nav bar because of shutdown" }
-                        setNavBarConfigInternal(false, config)
                     }
-                    .collect()
+            } else {
+                neverFlow()
             }
-        }.also { job ->
-            mutex.withLock { this@NavBarManager.job = job }
+        }
+        .flatMapLatest { currentConfig ->
+            if (currentConfig.hidden) {
+                combine(
+                    displayRotation,
+                    screenState
+                ) { currentDisplayRotation, currentScreenState ->
+                    NavBarState(
+                        config = currentConfig,
+                        rotation = currentDisplayRotation,
+                        screenState = currentScreenState
+                    )
+                }
+            } else {
+                flowOf(
+                    NavBarState(
+                        config = currentConfig,
+                        screenState = ScreenState.Off,
+                        rotation = DisplayRotation.PortraitUp
+                    )
+                )
+            }
+        }
+        .collect { it.apply(appContext, disableNonSdkInterfaceDetection, logger, setOverscan) }
+}
+
+private data class NavBarState(
+    val config: NavBarConfig,
+    val screenState: ScreenState,
+    val rotation: DisplayRotation
+) {
+    val hidden: Boolean
+        get() = !config.showWhileScreenOff || screenState == ScreenState.Unlocked
+}
+
+private suspend fun NavBarState.apply(
+    context: Context,
+    disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
+    logger: Logger,
+    setOverscan: OverscanUpdater
+) {
+    logger.d { "apply nav bar state $this" }
+    runKatching {
+        runKatching {
+            // ensure that we can access non sdk interfaces
+            disableNonSdkInterfaceDetection()
+        }.onFailure { it.printStackTrace() }
+
+        val navBarHeight = getNavigationBarHeight(context, rotation)
+        val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config, rotation)
+        setOverscan(rect)
+    }.onFailure { it.printStackTrace() }
+}
+
+private fun getNavigationBarHeight(
+    context: Context,
+    rotation: DisplayRotation
+): Int {
+    val name = if (rotation.isPortrait) "navigation_bar_height"
+    else "navigation_bar_width"
+    val id = context.resources.getIdentifier(name, "dimen", "android")
+    return if (id > 0) context.resources.getDimensionPixelSize(id) else 0
+}
+
+private fun getOverscanRect(
+    navBarHeight: Int,
+    config: NavBarConfig,
+    rotation: DisplayRotation
+): Rect = when (config.rotationMode) {
+    NavBarRotationMode.Marshmallow -> {
+        when (rotation) {
+            DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
         }
     }
-
-    private suspend fun setNavBarConfigInternal(hidden: Boolean, config: NavBarConfig) {
-        logger.d { "set nav bar hidden config $config hidden $hidden" }
-        runKatching {
-            runKatching {
-                // ensure that we can access non sdk interfaces
-                disableNonSdkInterfaceDetection()
-            }.onFailure { it.printStackTrace() }
-
-            val navBarHeight = getNavigationBarHeight()
-            val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config)
-            setOverscan(rect)
-        }.onFailure { it.printStackTrace() }
+    NavBarRotationMode.Nougat -> {
+        when (rotation) {
+            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+            else -> Rect(0, 0, 0, navBarHeight)
+        }
     }
-
-    private suspend fun getNavigationBarHeight(): Int {
-        val name =
-            if (displayRotation.first().isPortrait) "navigation_bar_height"
-            else "navigation_bar_width"
-        val id = appContext.resources.getIdentifier(name, "dimen", "android")
-        return if (id > 0) appContext.resources.getDimensionPixelSize(id) else 0
-    }
-
-    private suspend fun getOverscanRect(
-        navBarHeight: Int,
-        config: NavBarConfig,
-    ): Rect {
-        val currentRotation = displayRotation.first()
-        return when (config.rotationMode) {
-            NavBarRotationMode.Marshmallow -> {
-                when (currentRotation) {
-                    DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-                    DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
-                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                    DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
-                }
-            }
-            NavBarRotationMode.Nougat -> {
-                when (currentRotation) {
-                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                    else -> Rect(0, 0, 0, navBarHeight)
-                }
-            }
-            NavBarRotationMode.Tablet -> {
-                when (currentRotation) {
-                    DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-                    DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
-                    DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-                    DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
-                }
-            }
+    NavBarRotationMode.Tablet -> {
+        when (rotation) {
+            DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
+            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
         }
     }
 }
+

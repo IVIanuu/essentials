@@ -30,25 +30,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.hidenavbar.NavBarConfig
-import com.ivianuu.essentials.hidenavbar.NavBarManager
+import com.ivianuu.essentials.hidenavbar.NavBarPermissionState
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.component.AppComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @HomeItemBinding @Given
@@ -59,9 +60,9 @@ class NavBarKey
 @KeyUiBinding<NavBarKey>
 @Given
 fun navBarKeyUi(
-    @Given navBarManager: NavBarManager,
     @Given permissionState: PermissionState<NavBarSecureSettingsPermission>,
     @Given permissionRequester: PermissionRequester,
+    @Given navBarConfig: MutableStateFlow<NavBarConfig>
 ): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -71,24 +72,12 @@ fun navBarKeyUi(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val scope = rememberRetainedCoroutinesScope()
-            fun updateNavBarState(navBarHidden: Boolean) {
-                scope.launch {
-                    navBarManager.setNavBarConfig(
-                        NavBarConfig(navBarHidden)
-                    )
-                }
-            }
-
-            var hideNavBar by remember { mutableStateOf(false) }
-            DisposableEffect(hideNavBar) {
-                updateNavBarState(hideNavBar)
-                onDispose { }
-            }
-
+            val currentNavBarConfig by navBarConfig.collectAsState()
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {
-                onDispose { updateNavBarState(false) }
+                onDispose {
+                    navBarConfig.value = NavBarConfig(hidden = false)
+                }
             }
 
             val hasPermission by permissionState.collectAsState(false)
@@ -99,7 +88,7 @@ fun navBarKeyUi(
             ) {
                 Text(
                     text = if (hasPermission) {
-                        if (hideNavBar) {
+                        if (currentNavBarConfig.hidden) {
                             "Nav bar hidden"
                         } else {
                             "Nav bar shown"
@@ -111,10 +100,11 @@ fun navBarKeyUi(
                 )
             }
 
+            val scope = rememberCoroutineScope()
             Button(
                 onClick = {
                     if (hasPermission) {
-                        hideNavBar = !hideNavBar
+                        navBarConfig.value = NavBarConfig(hidden = !currentNavBarConfig.hidden)
                     } else {
                         scope.launch {
                             permissionRequester(listOf(typeKeyOf<NavBarSecureSettingsPermission>()))
@@ -128,6 +118,11 @@ fun navBarKeyUi(
     }
 }
 
+@Scoped<AppComponent>
+@Given
+fun sampleNavBarConfig(): MutableStateFlow<NavBarConfig> =
+    MutableStateFlow(NavBarConfig(hidden = false))
+
 @PermissionBinding
 @Given
 object NavBarSecureSettingsPermission : WriteSecureSettingsPermission {
@@ -135,3 +130,8 @@ object NavBarSecureSettingsPermission : WriteSecureSettingsPermission {
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
+
+@Given
+fun sampleNavBarPermissionState(
+    @Given state: PermissionState<NavBarSecureSettingsPermission>
+): Flow<NavBarPermissionState> = state
