@@ -38,8 +38,8 @@ fun backupCreator(
     @Given backupDir: BackupDir,
     @Given backupFiles: Set<BackupFile>,
     @Given buildInfo: BuildInfo,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
     @Given ioDispatcher: IODispatcher,
+    @Given navigator: DispatchAction<NavigationAction>,
 ): BackupCreator = {
     runKatching {
         withContext(ioDispatcher) {
@@ -72,7 +72,7 @@ fun backupCreator(
 
             out.close()
 
-            dispatchNavigationAction(
+            navigator(
                 NavigationAction.Push(
                     ShareBackupFileKey(backupFile.absolutePath)
                 )
