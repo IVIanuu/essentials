@@ -18,14 +18,15 @@ package com.ivianuu.essentials.backup
 
 import android.content.ContentResolver
 import android.content.Intent
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -39,11 +40,12 @@ fun backupApplier(
     @Given activityResultLauncher: ActivityResultLauncher,
     @Given contentResolver: ContentResolver,
     @Given ioDispatcher: IODispatcher,
+    @Given globalScope: GlobalScope,
     @Given prefsDir: PrefsDir,
     @Given processRestarter: ProcessRestarter
 ): BackupApplier = {
     runKatching {
-        withContext(ioDispatcher) {
+        globalScope.awaitAsync(ioDispatcher) {
             val uri = activityResultLauncher.startActivityForResult(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -51,7 +53,7 @@ fun backupApplier(
                     },
                     ""
                 )
-            ).data?.data ?: return@withContext
+            ).data?.data ?: return@awaitAsync
 
             val buffer = ByteArray(8192)
 

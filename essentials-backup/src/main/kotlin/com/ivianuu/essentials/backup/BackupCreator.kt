@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.backup
 
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.withContext
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -38,11 +39,12 @@ fun backupCreator(
     @Given backupDir: BackupDir,
     @Given backupFiles: Set<BackupFile>,
     @Given buildInfo: BuildInfo,
+    @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
     @Given navigator: DispatchAction<NavigationAction>,
 ): BackupCreator = {
     runKatching {
-        withContext(ioDispatcher) {
+        globalScope.awaitAsync(ioDispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =
                 "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"

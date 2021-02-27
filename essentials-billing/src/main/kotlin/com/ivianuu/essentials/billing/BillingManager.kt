@@ -20,7 +20,9 @@ import com.android.billingclient.api.*
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -59,6 +61,7 @@ class BillingManagerImpl(
     @Given private val appUiStarter: AppUiStarter,
     @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,
     @Given private val defaultDispatcher: DefaultDispatcher,
+    @Given private val globalScope: GlobalScope,
     @Given private val ioDispatcher: IODispatcher,
     @Given private val logger: Logger
 ) : @Given BillingManager {
@@ -74,7 +77,7 @@ class BillingManagerImpl(
         sku: Sku,
         acknowledge: Boolean,
         consumeOldPurchaseIfUnspecified: Boolean,
-    ): Boolean = withContext(defaultDispatcher) {
+    ): Boolean = globalScope.awaitAsync(ioDispatcher) {
         logger.d {
             "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
         }
@@ -92,28 +95,28 @@ class BillingManagerImpl(
 
         ensureConnected()
 
-        val skuDetails = getSkuDetails(sku) ?: return@withContext false
+        val skuDetails = getSkuDetails(sku) ?: return@awaitAsync false
 
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetails)
             .build()
 
         val result = billingClient.launchBillingFlow(activity, billingFlowParams)
-        if (result.responseCode != BillingClient.BillingResponseCode.OK) return@withContext false
+        if (result.responseCode != BillingClient.BillingResponseCode.OK) return@awaitAsync false
 
         refreshes.first()
 
         val success = getIsPurchased(sku)
 
-        if (!acknowledge) return@withContext success
+        if (!acknowledge) return@awaitAsync success
 
-        return@withContext if (success) acknowledgePurchase(sku) else return@withContext false
+        return@awaitAsync if (success) acknowledgePurchase(sku) else return@awaitAsync false
     }
 
-    override suspend fun consumePurchase(sku: Sku): Boolean = withContext(defaultDispatcher) {
+    override suspend fun consumePurchase(sku: Sku): Boolean = globalScope.awaitAsync(defaultDispatcher) {
         ensureConnected()
 
-        val purchase = getPurchase(sku) ?: return@withContext false
+        val purchase = getPurchase(sku) ?: return@awaitAsync false
 
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
@@ -127,14 +130,14 @@ class BillingManagerImpl(
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
-        return@withContext success
+        return@awaitAsync success
     }
 
-    override suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(defaultDispatcher) {
+    override suspend fun acknowledgePurchase(sku: Sku): Boolean = globalScope.awaitAsync(defaultDispatcher) {
         ensureConnected()
-        val purchase = getPurchase(sku) ?: return@withContext false
+        val purchase = getPurchase(sku) ?: return@awaitAsync false
 
-        if (purchase.isAcknowledged) return@withContext true
+        if (purchase.isAcknowledged) return@awaitAsync true
 
         val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
@@ -148,7 +151,7 @@ class BillingManagerImpl(
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
-        return@withContext success
+        return@awaitAsync success
     }
 
     override fun isPurchased(sku: Sku): Flow<Boolean> {

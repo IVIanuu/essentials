@@ -23,6 +23,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
@@ -68,8 +69,9 @@ class PrefModule<T : Any>(private val name: String) {
             override val data: Flow<T>
                 get() = deferredDataStore.data;
 
-            override suspend fun updateData(transform: suspend (t: T) -> T): T =
+            override suspend fun updateData(transform: suspend (t: T) -> T): T = scope.awaitAsync {
                 deferredDataStore.updateData(transform)
+            }
         }
     }
 
