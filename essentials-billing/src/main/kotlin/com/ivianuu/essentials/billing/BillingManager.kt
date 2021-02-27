@@ -197,7 +197,7 @@ class BillingManagerImpl(
 
     private suspend fun ensureConnected() = withContext(ioDispatcher) {
         if (billingClient.isReady) return@withContext
-        if (connecting.getAndSet(true)) return@withContext
+        if (connecting.compareAndSet(false, true)) return@withContext
         suspendCoroutine<Unit> { continuation ->
             logger.d { "start connection" }
             billingClient.startConnection(
