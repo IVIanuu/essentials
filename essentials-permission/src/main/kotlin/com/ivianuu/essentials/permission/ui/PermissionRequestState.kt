@@ -25,6 +25,7 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
@@ -46,8 +47,8 @@ fun permissionRequestUiState(
     @Given initial: @Initial PermissionRequestState = PermissionRequestState(),
     @Given actions: Actions<PermissionRequestAction>,
     @Given appUiStarter: AppUiStarter,
-    @Given dispatchNavigationAction: DispatchAction<NavigationAction>,
     @Given key: PermissionRequestKey,
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
@@ -58,7 +59,7 @@ fun permissionRequestUiState(
                 .all { permissionStateFactory(listOf(it)).first() }
         }
         .take(1)
-        .onEach { dispatchNavigationAction(NavigationAction.PopTop()) }
+        .onEach { navigator.popWithResult(true) }
         .launchIn(this)
 
     suspend fun updatePermissions() {

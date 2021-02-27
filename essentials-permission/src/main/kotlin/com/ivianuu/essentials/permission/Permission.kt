@@ -18,12 +18,11 @@ package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -36,6 +35,7 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -121,12 +121,12 @@ fun permissionStateFactory(
     ) { it.all { it } }
 }
 
-internal val permissionChanges = EventFlow<Unit>()
+internal val permissionChanges = MutableSharedFlow<Unit>()
 
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
     return {
         this(it)
-        permissionChanges.emit(Unit)
+        permissionChanges.tryEmit(Unit)
     }
 }
 
@@ -148,8 +148,6 @@ fun permissionRequester(
 
         val key = PermissionRequestKey(requestedPermissions)
         appUiStarter()
-        navigator(Push(key))
-
-        return@withContext requestedPermissions.all { permissionStateFactory(listOf(it)).first() }
+        return@withContext navigator.pushForResult<Boolean>(key) == true
     }
 }
