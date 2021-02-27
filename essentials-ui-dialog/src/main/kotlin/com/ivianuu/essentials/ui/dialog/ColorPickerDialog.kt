@@ -34,13 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.refOf
-import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.toColorOrNull
 import com.ivianuu.essentials.ui.core.toHexString
@@ -62,8 +58,8 @@ fun ColorPickerDialog(
     title: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    var currentColor by remember { refOf(initialColor) }
-    var currentScreen by remember { refOf(ColorPickerTab.Colors) }
+    var currentColor by remember { mutableStateOf(initialColor) }
+    var currentScreen by remember { mutableStateOf(ColorPickerTab.Colors) }
     val otherScreen = when (currentScreen) {
         ColorPickerTab.Colors -> ColorPickerTab.Editor
         ColorPickerTab.Editor -> ColorPickerTab.Colors
@@ -151,9 +147,7 @@ private fun ColorGrid(
         }
 
         BoxWithConstraints(modifier = modifier) {
-            LazyColumn(
-                modifier = Modifier.padding(all = 4.dp)
-            ) {
+            LazyColumn(modifier = Modifier.padding(all = 4.dp)) {
                 items.chunked(4).forEach { rowItems ->
                     item {
                         Row(
@@ -163,7 +157,7 @@ private fun ColorGrid(
                             rowItems.forEach { item ->
                                 key(item) {
                                     Box(
-                                        modifier = Modifier.size(this@BoxWithConstraints.maxWidth / 4),
+                                        modifier = Modifier.size(this@BoxWithConstraints.maxWidth / rowItems.size),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         when (item) {
@@ -251,7 +245,8 @@ private fun BaseColorGridItem(
     content: @Composable () -> Unit
 ) {
     Box(
-        modifier = Modifier.squared(SquareFit.MatchWidth)
+        modifier = Modifier
+            .squared(SquareFit.MatchWidth)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
             .clickable(
@@ -305,21 +300,15 @@ private fun ColorEditorHeader(
             .fillMaxWidth()
             .height(100.dp)
             .padding(8.dp),
-        visualTransformation = object : VisualTransformation {
-            override fun filter(text: AnnotatedString): TransformedText {
-                return TransformedText(
-                    AnnotatedString("#") + text,
-                    object : OffsetMapping {
-                        override fun originalToTransformed(offset: Int): Int {
-                            return offset + 1
-                        }
+        visualTransformation = { text ->
+            TransformedText(
+                AnnotatedString("#") + text,
+                object : OffsetMapping {
+                    override fun originalToTransformed(offset: Int): Int = offset + 1
 
-                        override fun transformedToOriginal(offset: Int): Int {
-                            return offset - 1
-                        }
-                    }
-                )
-            }
+                    override fun transformedToOriginal(offset: Int): Int = offset - 1
+                }
+            )
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = color,
