@@ -146,8 +146,11 @@ private fun ColorGrid(
                 ?: colors.map { ColorGridItem.Color(it.front) }
         }
 
-        BoxWithConstraints(modifier = modifier) {
-            LazyColumn(modifier = Modifier.padding(all = 4.dp)) {
+        BoxWithConstraints(
+            modifier = Modifier.padding(all = 4.dp)
+                .then(modifier)
+        ) {
+            LazyColumn {
                 items.chunked(4).forEach { rowItems ->
                     item {
                         Row(
@@ -157,7 +160,7 @@ private fun ColorGrid(
                             rowItems.forEach { item ->
                                 key(item) {
                                     Box(
-                                        modifier = Modifier.size(this@BoxWithConstraints.maxWidth / rowItems.size),
+                                        modifier = Modifier.size(this@BoxWithConstraints.maxWidth / 4),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         when (item) {

@@ -36,8 +36,6 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
             SquareFit.MatchHeight -> constraints.maxHeight
         }
         val finalConstraints = constraints.copy(
-            minWidth = size,
-            minHeight = size,
             maxWidth = size,
             maxHeight = size
         ).constrain(constraints)
