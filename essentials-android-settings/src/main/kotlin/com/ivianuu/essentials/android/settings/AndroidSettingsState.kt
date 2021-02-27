@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
-import com.ivianuu.essentials.android.settings.AndroidSettingAction.AwaitInit
 import com.ivianuu.essentials.android.settings.AndroidSettingAction.Update
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
@@ -31,8 +30,11 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -52,8 +54,12 @@ class AndroidSettingStateModule<T : S, S>(
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given initial: @Initial T,
-        @Given actions: Actions<AndroidSettingAction<T>>
-    ): StateFlow<T> = scope.childCoroutineScope(dispatcher).state(initial) {
+        @Given actions: Actions<AndroidSettingAction<T>>,
+        @Given ready: AndroidSettingsStateReady<T>
+    ): StateFlow<T> = scope.childCoroutineScope(dispatcher).state(
+        initial = initial,
+        started = SharingStarted.Eagerly
+    ) {
         val adapter = adapterFactory(name, type, initial)
         contentChangesFactory(
             when (type) {
@@ -67,6 +73,7 @@ class AndroidSettingStateModule<T : S, S>(
             .reduce { it }
             .launchIn(this)
         actions
+            .onStart { ready.value = true }
             .filterIsInstance<Update<S>>()
             .onEach { action ->
                 val newValue = action.reducer(adapter.get())
@@ -74,19 +81,21 @@ class AndroidSettingStateModule<T : S, S>(
                 action.result?.complete(newValue)
             }
             .launchIn(this)
-        actions
-            .filterIsInstance<AwaitInit<S>>()
-            .onEach { it.result.complete(Unit) }
-            .launchIn(this)
     }
 }
+
+internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
+
+@Scoped<AppComponent>
+@Given
+fun <T> androidSettingsStateReady(): AndroidSettingsStateReady<T> =
+    MutableStateFlow(false)
 
 sealed class AndroidSettingAction<T> {
     data class Update<T>(
         val reducer: T.() -> T,
         val result: CompletableDeferred<T>?,
     ) : AndroidSettingAction<T>()
-    data class AwaitInit<T>(val result: CompletableDeferred<Unit>) : AndroidSettingAction<T>()
 }
 
 typealias AndroidSettingUpdater<T> = suspend (T.() -> T) -> T
@@ -94,11 +103,10 @@ typealias AndroidSettingUpdater<T> = suspend (T.() -> T) -> T
 @Given
 fun <T> androidSettingUpdater(
     @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given ready: AndroidSettingsStateReady<T>,
     @Given state: StateFlow<T> // workaround to ensure that the state is initialized
 ): AndroidSettingUpdater<T> = { reducer ->
-    val initResult = CompletableDeferred(Unit)
-    dispatch(AwaitInit(initResult))
-    initResult.await()
+    ready.first { it }
     val result = CompletableDeferred<T>()
     dispatch(Update(reducer, result))
     result.await()
@@ -109,13 +117,12 @@ typealias AndroidSettingUpdateDispatcher<T> = (T.() -> T) -> Unit
 @Given
 fun <T> dispatchAndroidSettingUpdate(
     @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given ready: AndroidSettingsStateReady<T>,
     @Given scope: GlobalScope,
     @Given state: StateFlow<T> // workaround to ensure that the state is initialized
 ): AndroidSettingUpdateDispatcher<T> = { reducer ->
     scope.launch {
-        val initResult = CompletableDeferred(Unit)
-        dispatch(AwaitInit(initResult))
-        initResult.await()
+        ready.first { it }
         dispatch(Update(reducer, null))
     }
 }
