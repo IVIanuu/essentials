@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.DispatchAction
@@ -35,7 +36,6 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -121,12 +121,12 @@ fun permissionStateFactory(
     ) { it.all { it } }
 }
 
-internal val permissionChanges = MutableSharedFlow<Unit>()
+internal val permissionChanges = EventFlow<Unit>()
 
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
     return {
         this(it)
-        permissionChanges.tryEmit(Unit)
+        permissionChanges.emit(Unit)
     }
 }
 
