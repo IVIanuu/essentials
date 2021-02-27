@@ -33,5 +33,4 @@ dependencies {
     api(project(":essentials-android-prefs"))
     api(project(":essentials-android-settings"))
     api(project(":essentials-screen-state"))
-    api(project(":essentials-secure-settings"))
 }

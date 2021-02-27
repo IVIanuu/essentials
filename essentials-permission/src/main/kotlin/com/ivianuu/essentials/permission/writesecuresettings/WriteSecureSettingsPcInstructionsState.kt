@@ -14,43 +14,57 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.permission.writesecuresettings
 
 import com.ivianuu.essentials.clipboard.ClipboardAction
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.CopyAdbCommand
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
+import com.ivianuu.essentials.permission.PermissionStateFactory
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.store.UiStateBinding
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @UiStateBinding
 @Given
-fun secureSettingsPcInstructionsState(
+fun writeSecureSettingsPcInstructionsState(
     @Given scope: CoroutineScope,
-    @Given initial: @Initial SecureSettingsPcInstructionsState,
-    @Given actions: Actions<SecureSettingsPcInstructionsAction>,
+    @Given initial: @Initial WriteSecureSettingsPcInstructionsState,
+    @Given actions: Actions<WriteSecureSettingsPcInstructionsAction>,
     @Given navigator: DispatchAction<NavigationAction>,
     @Given clipboard: DispatchAction<ClipboardAction>,
-    @Given permission: SecureSettingsPermission,
-    @Given toaster: Toaster
-): StateFlow<SecureSettingsPcInstructionsState> = scope.state(initial) {
-    launch { navigator.popOnceSecureSettingsPermissionIsGranted(false, permission, toaster) }
+    @Given key: WriteSecureSettingsPcInstructionsKey,
+    @Given permissionStateFactory: PermissionStateFactory
+): StateFlow<WriteSecureSettingsPcInstructionsState> = scope.state(initial) {
+    launch {
+        val state = permissionStateFactory(listOf(key.permissionKey))
+        while (coroutineContext.isActive) {
+            if (state.first()) {
+                navigator(PopTop())
+                break
+            }
+            delay(200)
+        }
+    }
 
     actions
         .filterIsInstance<CopyAdbCommand>()
@@ -61,7 +75,7 @@ fun secureSettingsPcInstructionsState(
         .filterIsInstance<OpenGadgetHacksTutorial>()
         .onEach {
             navigator(
-                NavigationAction.Push(
+                Push(
                     UrlKey("https://youtu.be/CDuxcrrWLnY")
                 )
             )
@@ -72,7 +86,7 @@ fun secureSettingsPcInstructionsState(
         .filterIsInstance<OpenLifeHackerTutorial>()
         .onEach {
             navigator(
-                NavigationAction.Push(
+                Push(
                     UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
                 )
             )
@@ -83,7 +97,7 @@ fun secureSettingsPcInstructionsState(
         .filterIsInstance<OpenXdaTutorial>()
         .onEach {
             navigator(
-                NavigationAction.Push(
+                Push(
                     UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
                 )
             )

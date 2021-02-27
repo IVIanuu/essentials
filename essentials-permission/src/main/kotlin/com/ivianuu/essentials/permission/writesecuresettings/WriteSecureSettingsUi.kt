@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.securesettings.SecureSettingsAction.OpenPcInstructions
+import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
@@ -32,11 +33,11 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<SecureSettingsKey>
+@KeyUiBinding<WriteSecureSettingsKey>
 @Given
-fun secureSettingsKeyUi(
-    @Given dispatch: DispatchAction<SecureSettingsAction>,
-    @Given stateProvider: @Composable () -> @UiState SecureSettingsState,
+fun writeSecureSettingsKeyUi(
+    @Given dispatch: DispatchAction<WriteSecureSettingsAction>,
+    @Given stateProvider: @Composable () -> @UiState WriteSecureSettingsState,
 ): KeyUi = {
     val state = stateProvider()
     Scaffold(
@@ -45,13 +46,7 @@ fun secureSettingsKeyUi(
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 SecureSettingsHeader(
-                    stringResource(
-                        if (state.showHideNavBarHint) {
-                            R.string.es_pref_secure_settings_header_hide_nav_bar_summary
-                        } else {
-                            R.string.es_pref_secure_settings_header_summary
-                        }
-                    )
+                    stringResource(R.string.es_pref_secure_settings_header_summary)
                 )
 
                 ListItem(

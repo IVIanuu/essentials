@@ -23,6 +23,7 @@ import com.ivianuu.essentials.coroutines.neverFlow
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.UiWorker
 import com.ivianuu.essentials.ui.UiWorkerBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,7 +45,7 @@ fun androidBackPressHandler(
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()
         .flatMapLatest { if (it) activity.backPresses() else neverFlow() }
-        .onEach { navigator(NavigationAction.PopTop()) }
+        .onEach { navigator(PopTop()) }
         .collect()
 }
 

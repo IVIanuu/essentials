@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.CopyAdbCommand
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
-import com.ivianuu.essentials.securesettings.SecureSettingsPcInstructionsAction.OpenXdaTutorial
+import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.Text
@@ -36,11 +37,11 @@ import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<SecureSettingsPcInstructionsKey>
+@KeyUiBinding<WriteSecureSettingsPcInstructionsKey>
 @Given
-fun secureSettingsPcInstructionsKeyUi(
-    @Given stateProvider: @Composable () -> @UiState SecureSettingsPcInstructionsState,
-    @Given dispatch: DispatchAction<SecureSettingsPcInstructionsAction>,
+fun writeSecureSettingsPcInstructionsKeyUi(
+    @Given stateProvider: @Composable () -> @UiState WriteSecureSettingsPcInstructionsState,
+    @Given dispatch: DispatchAction<WriteSecureSettingsPcInstructionsAction>,
 ): KeyUi = {
     val state = stateProvider()
     Scaffold(

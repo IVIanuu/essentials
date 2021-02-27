@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.permission.writesecuresettings
 
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.TypeKey
 
-data class SecureSettingsKey(val showHideNavBarHint: Boolean = false)
+data class WriteSecureSettingsKey(
+    val permissionKey: TypeKey<WriteSecureSettingsPermission>
+)
 
-data class SecureSettingsState(val showHideNavBarHint: Boolean = false)
+object WriteSecureSettingsState
 
-@Given
-fun initialSecureSettingsState(@Given key: SecureSettingsKey): @Initial SecureSettingsState =
-    SecureSettingsState(key.showHideNavBarHint)
-
-sealed class SecureSettingsAction {
-    object GrantPermissionsViaRoot : SecureSettingsAction()
-    object OpenPcInstructions : SecureSettingsAction()
+sealed class WriteSecureSettingsAction {
+    object GrantPermissionsViaRoot : WriteSecureSettingsAction()
+    object OpenPcInstructions : WriteSecureSettingsAction()
 }

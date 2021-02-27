@@ -57,6 +57,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.ComponentElementBinding
@@ -361,7 +362,7 @@ private fun DialogLauncherButton(
     Button(
         onClick = {
             component.navigator(
-                NavigationAction.Push(
+                Push(
                     DialogLauncherKey {
                         dialog {
                             if (dismissible) {

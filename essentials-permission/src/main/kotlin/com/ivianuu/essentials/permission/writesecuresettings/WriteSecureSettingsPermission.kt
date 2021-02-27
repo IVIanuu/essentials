@@ -16,26 +16,34 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
+import android.Manifest
+import android.content.pm.PackageManager
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.securesettings.SecureSettingsKey
-import com.ivianuu.essentials.securesettings.SecureSettingsPermission
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 
 interface WriteSecureSettingsPermission : Permission
 
 @Given
 fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
-    @Given permission: SecureSettingsPermission
-): PermissionStateProvider<P> = { permission.isGranted() }
+    @Given appContext: AppContext
+): PermissionStateProvider<P> = {
+    appContext.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
+            PackageManager.PERMISSION_GRANTED
+}
 
 @Given
-fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
+fun <@ForTypeKey P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
     @Given navigator: DispatchAction<NavigationAction>
 ): PermissionRequestHandler<P> = {
-    navigator.pushForResult<Boolean>(SecureSettingsKey())
+    navigator.pushForResult<Boolean>(
+        WriteSecureSettingsKey(typeKeyOf<P>())
+    )
 }

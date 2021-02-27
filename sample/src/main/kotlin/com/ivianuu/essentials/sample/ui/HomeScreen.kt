@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
@@ -99,9 +100,7 @@ fun homeKeyUi(
                 HomeItem(
                     item = item,
                     color = color,
-                    onClick = {
-                        navigator(NavigationAction.Push(item.keyFactory(color)))
-                    }
+                    onClick = { navigator(Push(item.keyFactory(color))) }
                 )
 
                 if (finalItems.indexOf(item) != finalItems.lastIndex) {

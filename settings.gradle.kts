@@ -52,7 +52,6 @@ include(
     ":essentials-recent-apps",
     ":essentials-result",
     ":essentials-screen-state",
-    ":essentials-secure-settings",
     ":essentials-service",
     ":essentials-shell",
     ":essentials-shortcut-picker",

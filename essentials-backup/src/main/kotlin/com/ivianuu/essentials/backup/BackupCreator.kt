@@ -23,6 +23,7 @@ import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import java.io.BufferedOutputStream
@@ -75,7 +76,7 @@ fun backupCreator(
             out.close()
 
             navigator(
-                NavigationAction.Push(
+                Push(
                     ShareBackupFileKey(backupFile.absolutePath)
                 )
             )

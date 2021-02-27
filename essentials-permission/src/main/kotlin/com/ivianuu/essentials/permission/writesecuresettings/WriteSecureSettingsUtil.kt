@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.securesettings
+package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LocalContentColor
@@ -23,12 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.util.Toaster
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlin.coroutines.coroutineContext
 
 @Composable
 internal fun SecureSettingsHeader(text: String) {
@@ -37,21 +31,4 @@ internal fun SecureSettingsHeader(text: String) {
         style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
         modifier = Modifier.padding(all = 16.dp)
     )
-}
-
-suspend fun DispatchAction<NavigationAction>.popOnceSecureSettingsPermissionIsGranted(
-    toast: Boolean = true,
-    permission: SecureSettingsPermission,
-    toaster: Toaster
-) {
-    // we check the permission periodically to automatically pop this screen
-    // once we got the permission
-    while (coroutineContext.isActive) {
-        if (permission.isGranted()) {
-            if (toast) toaster.showToast(R.string.es_secure_settings_permission_granted)
-            this(NavigationAction.PopTop(true))
-            break
-        }
-        delay(100)
-    }
 }

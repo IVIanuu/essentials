@@ -35,6 +35,6 @@ class ShellImpl(@Given private val ioDispatcher: IODispatcher) : @Given Shell {
     override suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
 
     override suspend fun run(vararg commands: String): List<String> =
-        withContext(ioDispatcher) { SU.run(commands) }
+        withContext(ioDispatcher) { SU.run(commands) ?: emptyList() }
 
 }
