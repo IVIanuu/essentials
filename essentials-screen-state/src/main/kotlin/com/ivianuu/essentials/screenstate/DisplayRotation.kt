@@ -67,24 +67,22 @@ fun displayRotation(
     @Given rotationChanges: () -> Flow<RotationChange>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: WindowManager
-): Flow<DisplayRotation> {
-    return deferredFlow {
-        screenState()
-            .flatMapLatest { currentScreenState ->
-                if (currentScreenState.isOn) {
-                    merge(rotationChanges(), configChanges())
-                        .onStart { logger.d { "sub for rotation" } }
-                        .onCompletion { logger.d { "dispose rotation" } }
-                } else {
-                    logger.d { "do not observe rotation while screen is off" }
-                    emptyFlow()
-                }
+): Flow<DisplayRotation> = deferredFlow {
+    screenState()
+        .flatMapLatest { currentScreenState ->
+            if (currentScreenState.isOn) {
+                merge(rotationChanges(), configChanges())
+                    .onStart { logger.d { "sub for rotation" } }
+                    .onCompletion { logger.d { "dispose rotation" } }
+            } else {
+                logger.d { "do not observe rotation while screen is off" }
+                emptyFlow()
             }
-            .onStart { emit(Unit) }
-            .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
-            .distinctUntilChanged()
-    }.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
-}
+        }
+        .onStart { emit(Unit) }
+        .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
+        .distinctUntilChanged()
+}.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 
 private suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,

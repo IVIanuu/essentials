@@ -28,7 +28,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -82,7 +81,10 @@ fun navBarKeyUi(
             }
 
             var hideNavBar by remember { mutableStateOf(false) }
-            SideEffect { updateNavBarState(hideNavBar) }
+            DisposableEffect(hideNavBar) {
+                updateNavBarState(hideNavBar)
+                onDispose { }
+            }
 
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {

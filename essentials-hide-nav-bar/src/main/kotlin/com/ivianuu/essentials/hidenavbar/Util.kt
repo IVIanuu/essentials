@@ -43,10 +43,12 @@ fun disableNonSdkInterfaceDetection(
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
         updateHiddenApiPolicy { 1 }
+        logger.d { "disabled non sdk on 29" }
     } else if (systemBuildInfo.sdk >= 28) {
         logger.d { "disable non sdk on p" }
         updateHiddenApiPolicyPrePieApps { 1 }
         updateHiddenApiPolicyPieApps { 1 }
+        logger.d { "disabled non sdk on p" }
     }
 }
 

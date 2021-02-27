@@ -33,7 +33,6 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -84,45 +83,44 @@ class NavBarManager(
         }
 
         globalScope.launch {
-            coroutineScope {
-                val flows = buildList<Flow<*>> {
-                    if (config.rotationMode != NavBarRotationMode.Nougat) {
-                        this += displayRotation.drop(1)
+            val flows = buildList<Flow<*>> {
+                if (config.rotationMode != NavBarRotationMode.Nougat) {
+                    this += displayRotation.drop(1)
+                }
+
+                if (config.showWhileScreenOff) {
+                    this += screenState.drop(1)
+                }
+            }
+
+            // apply config
+            launch {
+                flows.merge()
+                    .onStart { emit(Unit) }
+                    .map {
+                        !config.showWhileScreenOff ||
+                                screenState.first() == ScreenState.Unlocked
                     }
-
-                    if (config.showWhileScreenOff) {
-                        this += screenState.drop(1)
+                    .onEach { navBarHidden ->
+                        updateWasNavBarHidden { navBarHidden }
+                        setNavBarConfigInternal(navBarHidden, config)
                     }
-                }
+                    .collect()
+            }
 
-                // apply config
-                launch {
-                    flows.merge()
-                        .onStart { emit(Unit) }
-                        .map {
-                            !config.showWhileScreenOff ||
-                                    screenState.first() == ScreenState.Unlocked
+            // force show on shut downs
+            launch {
+                broadcastsFactory(Intent.ACTION_SHUTDOWN)
+                    .onEach {
+                        mutex.withLock {
+                            job?.cancel()
+                            job = null
                         }
-                        .onEach { navBarHidden ->
-                            updateWasNavBarHidden { navBarHidden }
-                            setNavBarConfigInternal(navBarHidden, config)
-                        }
-                        .collect()
-                }
-                // force show on shut downs
-                launch {
-                    broadcastsFactory(Intent.ACTION_SHUTDOWN)
-                        .onEach {
-                            mutex.withLock {
-                                job?.cancel()
-                                job = null
-                            }
 
-                            logger.d { "show nav bar because of shutdown" }
-                            setNavBarConfigInternal(false, config)
-                        }
-                        .collect()
-                }
+                        logger.d { "show nav bar because of shutdown" }
+                        setNavBarConfigInternal(false, config)
+                    }
+                    .collect()
             }
         }.also { job ->
             mutex.withLock { this@NavBarManager.job = job }
