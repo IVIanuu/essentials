@@ -40,8 +40,9 @@ import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.resource.Idle
@@ -97,16 +98,19 @@ data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
 
-@Module val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
+@Module
+val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 
-class MediaActionSettingsKey
+class MediaActionSettingsKey : Key<Nothing>
 
-@KeyUiBinding<MediaActionSettingsKey>
+@Module
+val mediaActionSettingsKeyModule = KeyModule<MediaActionSettingsKey>()
+
 @Given
 fun mediaActionSettingsUi(
     @Given stateProvider: @Composable () -> @UiState MediaActionSettingsState,
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
-): KeyUi = {
+): KeyUi<MediaActionSettingsKey> = {
     val state = stateProvider()
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {

@@ -18,20 +18,25 @@ package com.ivianuu.essentials.backup
 
 import android.content.Intent
 import androidx.core.content.FileProvider
-import com.ivianuu.essentials.ui.navigation.KeyIntentFactoryBinding
+import com.ivianuu.essentials.ui.navigation.IntentKey
+import com.ivianuu.essentials.ui.navigation.IntentKeyModule
+import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import java.io.File
 
-data class ShareBackupFileKey(val backupFilePath: String)
+data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
 
-@KeyIntentFactoryBinding<ShareBackupFileKey>
+@Module
+val shareBackupFileKeyModule = IntentKeyModule<ShareBackupFileKey>()
+
 @Given
 fun shareBackupFileKeyIntentFactory(
     @Given appContext: AppContext,
     @Given buildInfo: BuildInfo
-): (ShareBackupFileKey) -> Intent = { key ->
+): KeyIntentFactory<ShareBackupFileKey> = { key ->
     val uri = FileProvider.getUriForFile(
         appContext,
         buildInfo.packageName,

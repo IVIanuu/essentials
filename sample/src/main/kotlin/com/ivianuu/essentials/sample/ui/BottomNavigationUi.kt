@@ -40,19 +40,23 @@ import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
 
-class BottomNavigationKey
+class BottomNavigationKey : Key<Nothing>
 
-@KeyUiBinding<BottomNavigationKey>
+@Module
+val bottomNavigationKeyModule = KeyModule<BottomNavigationKey>()
+
 @Given
-fun bottomNavigationUi(): KeyUi = {
+fun bottomNavigationUi(): KeyUi<BottomNavigationKey> = {
     var selectedItem by rememberSaveable { mutableStateOf(BottomNavItem.values().first()) }
 
     Scaffold(

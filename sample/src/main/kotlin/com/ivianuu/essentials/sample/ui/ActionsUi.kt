@@ -27,26 +27,30 @@ import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
 val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
 
-class ActionsKey
+class ActionsKey : Key<Nothing>
 
-@KeyUiBinding<ActionsKey>
+@Module
+val actionsKeyModule = KeyModule<ActionsKey>()
+
 @Given
 fun actionsUi(
     @Given executeAction: executeAction,
     @Given navigator: DispatchAction<NavigationAction>,
     @Given uiScope: UiScope,
-): KeyUi = {
+): KeyUi<ActionsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }
     ) {

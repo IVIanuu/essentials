@@ -27,16 +27,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<BackupAndRestoreKey>
 @Given
 fun backupAndRestoreUi(
     @Given stateProvider: @Composable () -> @UiState BackupAndRestoreState,
     @Given dispatch: DispatchAction<BackupAndRestoreAction>,
-): KeyUi = {
+): KeyUi<BackupAndRestoreKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }

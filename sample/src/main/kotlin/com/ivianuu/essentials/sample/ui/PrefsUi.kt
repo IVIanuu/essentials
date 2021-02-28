@@ -37,8 +37,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
@@ -57,15 +58,17 @@ import kotlinx.coroutines.launch
 @Given
 val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 
-class PrefsKey
+class PrefsKey : Key<Nothing>
 
-@KeyUiBinding<PrefsKey>
+@Module
+val prefsKeyModule = KeyModule<PrefsKey>()
+
 @Given
 fun prefsUi(
     @Given navigator: DispatchAction<NavigationAction>,
     @Given prefsProvider: @Composable () -> @UiState SamplePrefs,
     @Given dispatchUpdate: PrefUpdateDispatcher<SamplePrefs>,
-): KeyUi = {
+): KeyUi<PrefsKey> = {
     val scope = rememberRetainedCoroutinesScope()
     val prefs = prefsProvider()
     Scaffold(

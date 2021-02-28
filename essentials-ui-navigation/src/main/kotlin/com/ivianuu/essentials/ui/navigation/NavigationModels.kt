@@ -20,27 +20,27 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CompletableDeferred
 
-data class NavigationState(val backStack: List<Key> = emptyList())
+data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
 @Given
 fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial NavigationState =
     NavigationState(listOfNotNull(homeKey))
 
 sealed class NavigationAction {
-    data class Push(
-        val key: Key,
-        val deferredResult: CompletableDeferred<out Any?>? = null,
+    data class Push<R : Any>(
+        val key: Key<R>,
+        val deferredResult: CompletableDeferred<R?>? = null,
     ) : NavigationAction()
 
-    data class ReplaceTop(
-        val key: Key,
-        val deferredResult: CompletableDeferred<out Any?>? = null,
+    data class ReplaceTop<R : Any>(
+        val key: Key<R>,
+        val deferredResult: CompletableDeferred<R?>? = null,
     ) : NavigationAction()
 
-    data class Pop(
-        val key: Key,
-        val result: Any? = null,
+    data class Pop<R : Any>(
+        val key: Key<R>,
+        val result: R? = null,
     ) : NavigationAction()
 
-    data class PopTop(val result: Any? = null) : NavigationAction()
+    object PopTop : NavigationAction()
 }

@@ -34,20 +34,24 @@ import com.ivianuu.essentials.billing.BillingManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
 val billingHomeItem = HomeItem("Billing") { BillingKey() }
 
-class BillingKey
+class BillingKey : Key<Nothing>
 
-@KeyUiBinding<BillingKey>
+@Module
+val billingKeyModule = KeyModule<BillingKey>()
+
 @Given
-fun billingUi(@Given billingManager: BillingManager): KeyUi = {
+fun billingUi(@Given billingManager: BillingManager): KeyUi<BillingKey> = {
     val isPurchased = remember { billingManager.isPurchased(DummySku) }
         .collectAsState(false)
 

@@ -31,17 +31,15 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<ShortcutPickerKey>
 @Given
 fun shortcutPickerUi(
     @Given stateProvider: @Composable () -> @UiState ShortcutPickerState,
     @Given dispatch: DispatchAction<ShortcutPickerAction>,
-): KeyUi = {
+): KeyUi<ShortcutPickerKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = {

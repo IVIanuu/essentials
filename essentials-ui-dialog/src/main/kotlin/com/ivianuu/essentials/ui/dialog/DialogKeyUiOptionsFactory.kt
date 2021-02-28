@@ -17,10 +17,11 @@
 package com.ivianuu.essentials.ui.dialog
 
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 
-fun <K> DialogNavigationOptionsFactory(): (K) -> NavigationOptions = {
-    NavigationOptions(
+fun <K> DialogKeyUiOptionsFactory(): KeyUiOptionsFactory<K> = {
+    KeyUiOptions(
         opaque = true,
         transition = FadeStackTransition()
     )

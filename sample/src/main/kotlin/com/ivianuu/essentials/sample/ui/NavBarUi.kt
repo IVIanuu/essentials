@@ -42,9 +42,11 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.AppComponent
@@ -55,15 +57,17 @@ import kotlinx.coroutines.launch
 @HomeItemBinding @Given
 val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
-class NavBarKey
+class NavBarKey : Key<Nothing>
 
-@KeyUiBinding<NavBarKey>
+@Module
+val navBarKeyModule = KeyModule<NavBarKey>()
+
 @Given
 fun navBarUi(
     @Given permissionState: PermissionState<NavBarSecureSettingsPermission>,
     @Given permissionRequester: PermissionRequester,
     @Given navBarConfig: MutableStateFlow<NavBarConfig>
-): KeyUi = {
+): KeyUi<NavBarKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
     ) {

@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
+import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
@@ -54,12 +54,13 @@ import com.ivianuu.essentials.ui.dialog.TextInputDialog
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
@@ -67,11 +68,13 @@ import com.ivianuu.injekt.component.get
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
-class DialogsKey
+class DialogsKey : Key<Nothing>
 
-@KeyUiBinding<DialogsKey>
+@Module
+val dialogsKeyModule = KeyModule<DialogsKey>()
+
 @Given
-fun dialogsUi(): KeyUi = {
+fun dialogsUi(): KeyUi<DialogsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {
@@ -376,17 +379,18 @@ private fun DialogLauncherButton(
     ) { Text(text) }
 }
 
-data class DialogLauncherKey(val dialog: @Composable () -> Unit)
+data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
 
-@KeyUiBinding<DialogLauncherKey>
+@Module
+val dialogLauncherKeyModule = KeyModule<DialogLauncherKey>()
+
 @Given
-fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi = {
+fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
     DialogWrapper { key.dialog() }
 }
 
-@NavigationOptionFactoryBinding
 @Given
-val dialogLauncherDialogNavigationOptionFactory = DialogNavigationOptionsFactory<DialogLauncherKey>()
+val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey>()
 
 @ComponentElementBinding<UiComponent>
 @Given

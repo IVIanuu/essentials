@@ -17,21 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Qualifier
-import kotlin.reflect.KClass
 
-@Qualifier annotation class KeyUiBinding<K : Key>
+typealias KeyUi<K> = @Composable () -> Unit
 
-typealias KeyUi = @Composable () -> Unit
-
-@Suppress("UNCHECKED_CAST")
-@Macro
-@GivenSetElement
-inline fun <T : @KeyUiBinding<K> S, S : KeyUi, reified K : Key> keyUiBindingImpl(
-    @Given noinline instanceFactory: (@Given K) -> T
-): KeyUiFactoryBinding = K::class to instanceFactory as (Key) -> KeyUi
-
-typealias KeyUiFactoryBinding = Pair<KClass<out Key>, (Key) -> KeyUi>
+typealias KeyUiFactory<K> = (K) -> KeyUi<K>

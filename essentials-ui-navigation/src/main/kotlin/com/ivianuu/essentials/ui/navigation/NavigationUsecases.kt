@@ -17,17 +17,12 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import kotlinx.coroutines.CompletableDeferred
 
-suspend fun <R> DispatchAction<NavigationAction>.pushForResult(key: Key): R? {
+suspend fun <R : Any> DispatchAction<NavigationAction>.pushForResult(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     @Suppress("UNCHECKED_CAST")
-    this(Push(key, result as CompletableDeferred<Any?>))
+    this(Push(key, result))
     return result.await()
-}
-
-fun <R> DispatchAction<NavigationAction>.popWithResult(result: R?) {
-    this(PopTop(result))
 }

@@ -41,19 +41,23 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 
-class TextInputKey
+class TextInputKey : Key<Nothing>
 
-@KeyUiBinding<TextInputKey>
+@Module
+val textInputKeyModule = KeyModule<TextInputKey>()
+
 @Given
-fun textInputUi(): KeyUi = {
+fun textInputUi(): KeyUi<TextInputKey> = {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {

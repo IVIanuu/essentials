@@ -20,15 +20,21 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 data class AppPickerKey(
     val appFilter: AppFilter = DefaultAppFilter,
     val title: String? = null,
-)
+) : Key<AppInfo>
+
+@Module
+val appPickerKeyModule = KeyModule<AppPickerKey>()
 
 data class AppPickerState(
     private val allApps: Resource<List<AppInfo>> = Idle,
@@ -40,9 +46,9 @@ data class AppPickerState(
 }
 
 @Given
-fun initialAppPickerState(@Given params: AppPickerKey): @Initial AppPickerState = AppPickerState(
-    appFilter = params.appFilter,
-    title = params.title
+fun initialAppPickerState(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
+    appFilter = key.appFilter,
+    title = key.title
 )
 
 sealed class AppPickerAction {

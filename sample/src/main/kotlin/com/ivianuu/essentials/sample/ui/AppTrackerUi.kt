@@ -43,11 +43,13 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
@@ -63,9 +65,11 @@ import kotlin.reflect.KClass
 @Given
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
-class AppTrackerKey
+class AppTrackerKey : Key<Nothing>
 
-@KeyUiBinding<AppTrackerKey>
+@Module
+val appTrackerKeyModule = KeyModule<AppTrackerKey>()
+
 @Given
 fun appTrackerUi(
     @Given currentApp: Flow<CurrentApp>,
@@ -73,7 +77,7 @@ fun appTrackerUi(
     @Given notificationFactory: AppTrackerNotificationFactory,
     @Given permissionRequester: PermissionRequester,
     @Given toaster: Toaster,
-): KeyUi = {
+): KeyUi<AppTrackerKey> = {
     val currentForegroundState by foregroundState.collectAsState()
 
     if (currentForegroundState is Foreground) {

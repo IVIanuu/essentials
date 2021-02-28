@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
-typealias HomeKey = Key
+typealias HomeKey = Key<Nothing>
 
 @Qualifier
 annotation class HomeKeyBinding

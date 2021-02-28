@@ -36,15 +36,14 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogNavigationOptionsFactory
+import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.Error
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
@@ -52,6 +51,7 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,14 +61,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-data class DebugPurchaseKey(val sku: Sku)
+data class DebugPurchaseKey(val sku: Sku) : Key<SkuDetails>
 
-@KeyUiBinding<DebugPurchaseKey>
+@Module
+val debugPurchaseKeyModule = KeyModule<DebugPurchaseKey>()
+
 @Given
 fun debugPurchaseUi(
     @Given stateProvider: @Composable () -> @UiState DebugPurchaseState,
     @Given dispatch: DispatchAction<DebugPurchaseAction>
-): KeyUi = {
+): KeyUi<DebugPurchaseKey> = {
     DialogWrapper {
         val state = stateProvider()
         val skuDetails = state.skuDetails()
@@ -137,17 +139,16 @@ fun debugPurchaseState(
     state
         .map { it.skuDetails }
         .filterIsInstance<Error>()
-        .onEach { navigator(PopTop()) }
+        .onEach { navigator(Pop(key)) }
         .launchIn(this)
 
     actions
         .filterIsInstance<Purchase>()
-        .onEach { navigator.popWithResult(state.first().skuDetails()!!) }
+        .onEach { navigator(Pop(key, state.first().skuDetails()!!)) }
         .launchIn(this)
 }
 
-@NavigationOptionFactoryBinding
 @Given
-val debugPurchaseDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<DebugPurchaseKey>()
+val debugPurchaseUiOptionsFactory = DialogKeyUiOptionsFactory<DebugPurchaseKey>()
 
 private val GooglePlayGreen = Color(0xFF00A273)

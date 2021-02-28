@@ -25,11 +25,13 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
@@ -39,11 +41,13 @@ import kotlinx.coroutines.isActive
 @Given
 val timerHomeItem = HomeItem("Timer") { TimerKey() }
 
-class TimerKey
+class TimerKey : Key<Nothing>
 
-@KeyUiBinding<TimerKey>
+@Module
+val timerKeyModule = KeyModule<TimerKey>()
+
 @Given
-fun timerUi(@Given stateProvider: @Composable () -> @UiState TimerState): KeyUi = {
+fun timerUi(@Given stateProvider: @Composable () -> @UiState TimerState): KeyUi<TimerKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }

@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.LocalRetainedScope
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scope
 import kotlin.reflect.KClass
@@ -39,16 +40,15 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
 
 @Given
 fun navigationStateContent(
-    @Given optionFactories: Set<NavigationOptionFactory>,
-    @Given uiFactories: Set<KeyUiFactoryBinding>
+    @Given optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
+    @Given uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>
 ): NavigationStateContent = { state, modifier ->
     val contentState = remember {
-        NavigationContentState(optionFactories.toMap(), uiFactories.toMap(),
-            state.backStack
+        NavigationContentState(optionFactories, uiFactories, state.backStack.cast()
         )
     }
     SideEffect {
-        contentState.updateBackStack(state.backStack)
+        contentState.updateBackStack(state.backStack.cast())
     }
     DisposableEffect(true) {
         onDispose {
@@ -59,21 +59,21 @@ fun navigationStateContent(
 }
 
 private class NavigationContentState(
-    var optionFactories: Map<KClass<*>, (Key) -> NavigationOptions> = emptyMap(),
-    var uiFactories: Map<KClass<*>, (Key) -> @Composable () -> Unit> = emptyMap(),
-    backStack: List<Key>,
+    var optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> = emptyMap(),
+    var uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> = emptyMap(),
+    backStack: List<Key<Any>>,
 ) {
 
     private var children by mutableStateOf(emptyList<Child>())
 
-    val stackChildren: List<AnimatedStackChild<Key>>
+    val stackChildren: List<AnimatedStackChild<Key<Any>>>
         get() = children.map { it.stackChild }
 
     init {
         updateBackStack(backStack)
     }
 
-    fun updateBackStack(backStack: List<Key>) {
+    fun updateBackStack(backStack: List<Key<Any>>) {
         val removedChildren = children
             .filter { it.key !in backStack }
         children = backStack
@@ -82,7 +82,7 @@ private class NavigationContentState(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getOrCreateEntry(key: Key): Child {
+    private fun getOrCreateEntry(key: Key<Any>): Child {
         children.firstOrNull { it.key == key }?.let { return it }
         val content = uiFactories[key::class]?.invoke(key)
         checkNotNull(content) { "No factory found for $key" }
@@ -91,8 +91,8 @@ private class NavigationContentState(
     }
 
     private class Child(
-        val key: Key,
-        options: NavigationOptions? = null,
+        val key: Key<Any>,
+        options: KeyUiOptions? = null,
         val content: @Composable () -> Unit,
     ) {
         val stackChild = AnimatedStackChild(

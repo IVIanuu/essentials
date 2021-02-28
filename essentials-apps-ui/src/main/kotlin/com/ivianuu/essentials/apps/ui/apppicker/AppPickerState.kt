@@ -24,7 +24,7 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.popWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
@@ -41,6 +41,7 @@ fun appPickerState(
     @Given initial: @Initial AppPickerState,
     @Given actions: Actions<AppPickerAction>,
     @Given appRepository: AppRepository,
+    @Given key: AppPickerKey,
     @Given navigator: DispatchAction<NavigationAction>,
 ): StateFlow<AppPickerState> = scope.state(initial) {
     reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
@@ -50,6 +51,6 @@ fun appPickerState(
         .launchIn(this)
     actions
         .filterIsInstance<PickApp>()
-        .onEach { navigator.popWithResult(it.app) }
+        .onEach { navigator(Pop(key, it.app)) }
         .launchIn(this)
 }

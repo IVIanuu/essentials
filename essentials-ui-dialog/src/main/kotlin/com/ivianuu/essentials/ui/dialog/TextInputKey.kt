@@ -25,12 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 data class TextInputKey(
     val initial: String = "",
@@ -38,16 +39,18 @@ data class TextInputKey(
     val keyboardOptions: KeyboardOptions = KeyboardOptions(),
     val title: String? = null,
     val allowEmpty: Boolean = true,
-)
+) : Key<String>
+
+@Module
+val textInputKeyModule = KeyModule<TextInputKey>()
 
 typealias TextInputResult = String
 
-@KeyUiBinding<TextInputKey>
 @Given
 fun textInputUi(
     @Given key: TextInputKey,
     @Given navigator: DispatchAction<NavigationAction>
-): KeyUi = {
+): KeyUi<TextInputKey> = {
     DialogWrapper {
         var currentValue by remember { mutableStateOf(key.initial) }
         TextInputDialog(
@@ -59,11 +62,11 @@ fun textInputUi(
             positiveButton = {
                 TextButton(
                     enabled = key.allowEmpty || currentValue.isNotEmpty(),
-                    onClick = { navigator.popWithResult(currentValue) }
+                    onClick = { navigator(Pop(key, currentValue)) }
                 ) { Text(R.string.es_ok) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator.popWithResult(null) }) {
+                TextButton(onClick = { navigator(Pop(key)) }) {
                     Text(R.string.es_cancel)
                 }
             }
@@ -71,6 +74,5 @@ fun textInputUi(
     }
 }
 
-@NavigationOptionFactoryBinding
 @Given
-val textInputDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<TextInputKey>()
+val textInputUiOptionsFactory = DialogKeyUiOptionsFactory<TextInputKey>()

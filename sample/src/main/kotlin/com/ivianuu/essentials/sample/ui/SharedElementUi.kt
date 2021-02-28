@@ -29,21 +29,25 @@ import com.ivianuu.essentials.ui.animatedstack.animation.SharedElementStackTrans
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.NavigationOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
 
-class SharedElementKey(val color: Color)
+class SharedElementKey(val color: Color) : Key<Nothing>
 
-@KeyUiBinding<SharedElementKey>
+@Module
+val sharedElementKeyModule = KeyModule<SharedElementKey>()
+
 @Given
-fun sharedElementUi(@Given key: SharedElementKey): KeyUi = {
+fun sharedElementUi(@Given key: SharedElementKey): KeyUi<SharedElementKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {
@@ -59,10 +63,9 @@ fun sharedElementUi(@Given key: SharedElementKey): KeyUi = {
     }
 }
 
-@NavigationOptionFactoryBinding
 @Given
-fun sharedElementsNavigationOptionFactory(): (SharedElementKey) -> NavigationOptions = {
-    NavigationOptions(
+fun sharedElementsKeyUiOptionsFactory(): KeyUiOptionsFactory<SharedElementKey> = {
+    KeyUiOptions(
         enterTransition = SharedElementStackTransition("Shared element" to "b"),
         exitTransition = SharedElementStackTransition("Shared element" to "b")
     )

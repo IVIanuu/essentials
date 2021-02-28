@@ -33,23 +33,27 @@ import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val torchHomeItem = HomeItem("Torch") { TorchKey() }
 
-class TorchKey
+class TorchKey : Key<Nothing>
 
-@KeyUiBinding<TorchKey>
+@Module
+val torchKeyModule = KeyModule<TorchKey>()
+
 @Given
 fun torchUi(
     @Given stateProvider: @Composable () -> @UiState TorchState,
     @Given dispatch: DispatchAction<TorchAction>,
-): KeyUi = {
+): KeyUi<TorchKey> = {
     val state = stateProvider()
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(

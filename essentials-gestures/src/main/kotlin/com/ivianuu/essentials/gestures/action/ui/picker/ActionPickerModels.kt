@@ -26,13 +26,18 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.injekt.Module
 
 data class ActionPickerKey(
     val showDefaultOption: Boolean = false,
     val showNoneOption: Boolean = false,
-)
+) : Key<ActionPickerResult>
+
+@Module
+val actionPickerKeyModule = KeyModule<ActionPickerKey>()
 
 sealed class ActionPickerResult {
     data class Action(val actionKey: String) : ActionPickerResult()
@@ -50,7 +55,7 @@ sealed class ActionPickerAction {
 sealed class ActionPickerItem {
     data class ActionItem(
         val action: Action,
-        override val settingsKey: Key?,
+        override val settingsKey: Key<Nothing>?,
     ) : ActionPickerItem() {
         override val title: String
             get() = action.title
@@ -68,8 +73,8 @@ sealed class ActionPickerItem {
         override val title: String
             get() = delegate.title
 
-        override val settingsKey: @Composable (() -> Unit)?
-            get() = delegate.settingsUi
+        override val settingsKey: Key<Nothing>?
+            get() = delegate.settingsKey
 
         @Composable
         override fun icon(modifier: Modifier) {
@@ -86,7 +91,7 @@ sealed class ActionPickerItem {
         val getResult: () -> ActionPickerResult?
     ) : ActionPickerItem() {
 
-        override val settingsKey: @Composable (() -> Unit)?
+        override val settingsKey: Key<Nothing>?
             get() = null
 
         @Composable
@@ -98,7 +103,7 @@ sealed class ActionPickerItem {
     }
 
     abstract val title: String
-    abstract val settingsKey: Key?
+    abstract val settingsKey: Key<Nothing>?
 
     @Composable
     abstract fun icon(modifier: Modifier = Modifier)

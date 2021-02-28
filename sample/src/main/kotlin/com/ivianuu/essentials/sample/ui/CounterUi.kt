@@ -37,12 +37,14 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -53,14 +55,16 @@ import kotlinx.coroutines.flow.onEach
 @Given
 val counterHomeItem = HomeItem("Counter") { CounterKey() }
 
-class CounterKey
+class CounterKey : Key<Nothing>
 
-@KeyUiBinding<CounterKey>
+@Module
+val counterKeyModule = KeyModule<CounterKey>()
+
 @Given
 fun counterUi(
     @Given stateProvider: @Composable () -> @UiState CounterState,
     @Given dispatch: DispatchAction<CounterAction>,
-): KeyUi = {
+): KeyUi<CounterKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }

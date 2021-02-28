@@ -29,16 +29,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<PermissionRequestKey>
 @Given
 fun permissionRequestUiUi(
     @Given stateProvider: @Composable () -> @UiState PermissionRequestState,
     @Given dispatch: DispatchAction<PermissionRequestAction>,
-): KeyUi = {
+): KeyUi<PermissionRequestKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = {
