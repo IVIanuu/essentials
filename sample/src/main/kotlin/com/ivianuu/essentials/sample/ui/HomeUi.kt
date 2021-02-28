@@ -59,7 +59,7 @@ class HomeKey
 
 @KeyUiBinding<HomeKey>
 @Given
-fun homeKeyUi(
+fun homeUi(
     @Given navigator: DispatchAction<NavigationAction>,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,

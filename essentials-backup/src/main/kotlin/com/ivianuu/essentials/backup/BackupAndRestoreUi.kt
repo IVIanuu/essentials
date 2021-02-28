@@ -33,7 +33,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<BackupAndRestoreKey>
 @Given
-fun backupAndRestoreKeyUi(
+fun backupAndRestoreUi(
     @Given stateProvider: @Composable () -> @UiState BackupAndRestoreState,
     @Given dispatch: DispatchAction<BackupAndRestoreAction>,
 ): KeyUi = {

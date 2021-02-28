@@ -54,7 +54,7 @@ class PermissionsKey
 
 @KeyUiBinding<PermissionsKey>
 @Given
-fun permissionKeyUi(@Given permissionRequester: PermissionRequester): KeyUi = {
+fun permissionUi(@Given permissionRequester: PermissionRequester): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {

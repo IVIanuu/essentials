@@ -49,9 +49,9 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.result.fold
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsScreenAction.DismissNotification
-import com.ivianuu.essentials.sample.ui.NotificationsScreenAction.OpenNotification
-import com.ivianuu.essentials.sample.ui.NotificationsScreenAction.RequestPermissions
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
@@ -91,9 +91,9 @@ class NotificationsKey
 
 @KeyUiBinding<NotificationsKey>
 @Given
-fun notificationsKeyUi(
-    @Given stateProvider: @Composable () -> @UiState NotificationsScreenState,
-    @Given dispatch: DispatchAction<NotificationsScreenAction>,
+fun notificationsUi(
+    @Given stateProvider: @Composable () -> @UiState NotificationsUiState,
+    @Given dispatch: DispatchAction<NotificationsUiAction>,
 ): KeyUi = {
     val state = stateProvider()
     Scaffold(
@@ -187,13 +187,13 @@ private fun NotificationPermissions(
 @Given
 fun notificationState(
     @Given scope: CoroutineScope,
-    @Given initial: @Initial NotificationsScreenState = NotificationsScreenState(),
-    @Given actions: Actions<NotificationsScreenAction>,
+    @Given initial: @Initial NotificationsUiState = NotificationsUiState(),
+    @Given actions: Actions<NotificationsUiAction>,
     @Given dispatchServiceAction: DispatchAction<NotificationsAction>,
     @Given notifications: Flow<UiNotifications>,
     @Given permissionState: PermissionState<SampleNotificationsPermission>,
     @Given permissionRequester: PermissionRequester
-): StateFlow<NotificationsScreenState> = scope.state(initial) {
+): StateFlow<NotificationsUiState> = scope.state(initial) {
     permissionState
         .reduce { copy(hasPermissions = it) }
         .launchIn(this)
@@ -267,15 +267,15 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
     sbn = this
 )
 
-data class NotificationsScreenState(
+data class NotificationsUiState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle,
 )
 
-sealed class NotificationsScreenAction {
-    object RequestPermissions : NotificationsScreenAction()
-    data class OpenNotification(val notification: UiNotification) : NotificationsScreenAction()
-    data class DismissNotification(val notification: UiNotification) : NotificationsScreenAction()
+sealed class NotificationsUiAction {
+    object RequestPermissions : NotificationsUiAction()
+    data class OpenNotification(val notification: UiNotification) : NotificationsUiAction()
+    data class DismissNotification(val notification: UiNotification) : NotificationsUiAction()
 }
 
 data class UiNotification(

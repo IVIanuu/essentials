@@ -36,7 +36,7 @@ data class ColorPickerKey(
 
 @KeyUiBinding<ColorPickerKey>
 @Given
-fun colorPickerKeyUi(
+fun colorPickerUi(
     @Given key: ColorPickerKey,
     @Given navigator: DispatchAction<NavigationAction>,
 ): KeyUi = {

@@ -47,7 +47,7 @@ class BillingKey
 
 @KeyUiBinding<BillingKey>
 @Given
-fun billingKeyUi(@Given billingManager: BillingManager): KeyUi = {
+fun billingUi(@Given billingManager: BillingManager): KeyUi = {
     val isPurchased = remember { billingManager.isPurchased(DummySku) }
         .collectAsState(false)
 

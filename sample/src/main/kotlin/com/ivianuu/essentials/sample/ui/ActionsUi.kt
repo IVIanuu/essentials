@@ -42,7 +42,7 @@ class ActionsKey
 
 @KeyUiBinding<ActionsKey>
 @Given
-fun actionsKeyUi(
+fun actionsUi(
     @Given executeAction: executeAction,
     @Given navigator: DispatchAction<NavigationAction>,
     @Given uiScope: UiScope,

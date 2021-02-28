@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<ShortcutPickerKey>
 @Given
-fun shortcutPickerKeyUi(
+fun shortcutPickerUi(
     @Given stateProvider: @Composable () -> @UiState ShortcutPickerState,
     @Given dispatch: DispatchAction<ShortcutPickerAction>,
 ): KeyUi = {

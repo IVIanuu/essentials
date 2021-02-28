@@ -44,7 +44,7 @@ class DynamicSystemBarsKey
 
 @KeyUiBinding<DynamicSystemBarsKey>
 @Given
-fun dynamicSystemBarsKeyUi(): KeyUi = {
+fun dynamicSystemBarsUi(): KeyUi = {
     Box {
         val colors: List<Color> = rememberSaveable {
             ColorPickerPalette.values()

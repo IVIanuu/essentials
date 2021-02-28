@@ -71,7 +71,7 @@ class DialogsKey
 
 @KeyUiBinding<DialogsKey>
 @Given
-fun dialogsKeyUi(): KeyUi = {
+fun dialogsUi(): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {
@@ -380,7 +380,7 @@ data class DialogLauncherKey(val dialog: @Composable () -> Unit)
 
 @KeyUiBinding<DialogLauncherKey>
 @Given
-fun dialogLauncherKeyUi(@Given key: DialogLauncherKey): KeyUi = {
+fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi = {
     DialogWrapper { key.dialog() }
 }
 

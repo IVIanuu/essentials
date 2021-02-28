@@ -20,37 +20,46 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
-val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
+val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 
-class RestartProcessKey
+class UnlockKey
 
-@KeyUiBinding<RestartProcessKey>
+@KeyUiBinding<UnlockKey>
 @Given
-fun restartProcessKeyUi(@Given processRestarter: ProcessRestarter): KeyUi = {
+fun unlockUi(
+    @Given screenState: Flow<ScreenState>,
+    @Given screenUnlocker: ScreenUnlocker,
+    @Given toaster: Toaster,
+): KeyUi = {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Restart process") }) }
+        topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {
         val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    processRestarter()
+                    toaster.showToast("Turn the screen off and on")
+                    screenState.first { it == ScreenState.Locked }
+                    val unlocked = screenUnlocker()
+                    toaster.showToast("Screen unlocked $unlocked")
                 }
             }
-        ) {
-            Text("Restart process")
-        }
+        ) { Text("Unlock") }
     }
 }

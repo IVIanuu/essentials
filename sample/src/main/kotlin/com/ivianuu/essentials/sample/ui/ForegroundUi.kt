@@ -70,7 +70,7 @@ class ForegroundKey
 @SuppressLint("NewApi")
 @KeyUiBinding<ForegroundKey>
 @Given
-fun foregroundKeyUi(
+fun foregroundUi(
     @Given foregroundState: ForegroundScreenState,
     @Given notificationFactory: ForegroundNotificationFactory,
     @Given notificationManager: NotificationManager,

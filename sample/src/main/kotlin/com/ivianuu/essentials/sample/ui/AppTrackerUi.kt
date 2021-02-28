@@ -67,7 +67,7 @@ class AppTrackerKey
 
 @KeyUiBinding<AppTrackerKey>
 @Given
-fun appTrackerKeyUi(
+fun appTrackerUi(
     @Given currentApp: Flow<CurrentApp>,
     @Given foregroundState: AppTrackerForegroundState,
     @Given notificationFactory: AppTrackerNotificationFactory,

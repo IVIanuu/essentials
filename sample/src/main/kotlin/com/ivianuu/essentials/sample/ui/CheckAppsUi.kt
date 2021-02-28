@@ -39,7 +39,7 @@ class CheckAppsKey
 
 @KeyUiBinding<CheckAppsKey>
 @Given
-fun checkAppsKeyUi(
+fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
     @Given prefs: Flow<CheckAppsPrefs>,

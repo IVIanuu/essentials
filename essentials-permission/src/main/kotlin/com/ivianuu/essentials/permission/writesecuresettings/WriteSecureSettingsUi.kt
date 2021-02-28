@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<WriteSecureSettingsKey>
 @Given
-fun writeSecureSettingsKeyUi(
+fun writeSecureSettingsUi(
     @Given dispatch: DispatchAction<WriteSecureSettingsAction>,
     @Given stateProvider: @Composable () -> @UiState WriteSecureSettingsState,
 ): KeyUi = {

@@ -61,7 +61,7 @@ class PrefsKey
 
 @KeyUiBinding<PrefsKey>
 @Given
-fun prefsKeyUi(
+fun prefsUi(
     @Given navigator: DispatchAction<NavigationAction>,
     @Given prefsProvider: @Composable () -> @UiState SamplePrefs,
     @Given dispatchUpdate: PrefUpdateDispatcher<SamplePrefs>,

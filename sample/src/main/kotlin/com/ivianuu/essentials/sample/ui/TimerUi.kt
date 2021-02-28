@@ -43,7 +43,7 @@ class TimerKey
 
 @KeyUiBinding<TimerKey>
 @Given
-fun timerKeyUi(@Given stateProvider: @Composable () -> @UiState TimerState): KeyUi = {
+fun timerUi(@Given stateProvider: @Composable () -> @UiState TimerState): KeyUi = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }

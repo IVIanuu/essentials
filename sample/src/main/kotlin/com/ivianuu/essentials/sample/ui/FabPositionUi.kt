@@ -33,7 +33,7 @@ class FabPositionKey(val preselect: FabPosition)
 
 @KeyUiBinding<FabPositionKey>
 @Given
-fun fabPositionKeyUi(
+fun fabPositionUi(
     @Given key: FabPositionKey,
     @Given navigator: DispatchAction<NavigationAction>,
 ): KeyUi = {

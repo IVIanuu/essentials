@@ -52,7 +52,7 @@ class BottomNavigationKey
 
 @KeyUiBinding<BottomNavigationKey>
 @Given
-fun bottomNavigationKeyUi(): KeyUi = {
+fun bottomNavigationUi(): KeyUi = {
     var selectedItem by rememberSaveable { mutableStateOf(BottomNavItem.values().first()) }
 
     Scaffold(

@@ -68,7 +68,7 @@ class ScaffoldKey
 
 @KeyUiBinding<ScaffoldKey>
 @Given
-fun scaffoldKeyUi(
+fun scaffoldUi(
     @Given navigator: DispatchAction<NavigationAction>,
     @Given uiScope: UiScope,
 ): KeyUi = {

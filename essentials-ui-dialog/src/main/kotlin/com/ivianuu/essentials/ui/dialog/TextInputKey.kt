@@ -44,7 +44,7 @@ typealias TextInputResult = String
 
 @KeyUiBinding<TextInputKey>
 @Given
-fun textInputKeyUi(
+fun textInputUi(
     @Given key: TextInputKey,
     @Given navigator: DispatchAction<NavigationAction>
 ): KeyUi = {

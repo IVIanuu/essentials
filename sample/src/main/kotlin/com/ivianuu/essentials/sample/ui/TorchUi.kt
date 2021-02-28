@@ -46,7 +46,7 @@ class TorchKey
 
 @KeyUiBinding<TorchKey>
 @Given
-fun torchKeyUi(
+fun torchUi(
     @Given stateProvider: @Composable () -> @UiState TorchState,
     @Given dispatch: DispatchAction<TorchAction>,
 ): KeyUi = {

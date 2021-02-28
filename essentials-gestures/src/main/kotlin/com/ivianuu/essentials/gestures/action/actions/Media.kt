@@ -103,7 +103,7 @@ class MediaActionSettingsKey
 
 @KeyUiBinding<MediaActionSettingsKey>
 @Given
-fun mediaActionSettingsKeyUi(
+fun mediaActionSettingsUi(
     @Given stateProvider: @Composable () -> @UiState MediaActionSettingsState,
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ): KeyUi = {

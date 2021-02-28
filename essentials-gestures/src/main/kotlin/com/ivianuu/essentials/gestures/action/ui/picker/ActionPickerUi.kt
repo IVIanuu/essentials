@@ -39,7 +39,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<ActionPickerKey>
 @Given
-fun actionPickerKeyUi(
+fun actionPickerUi(
     @Given stateProvider: @Composable () -> @UiState ActionPickerState,
     @Given dispatch: DispatchAction<ActionPickerAction>,
 ): KeyUi = {

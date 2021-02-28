@@ -59,7 +59,7 @@ class NavBarKey
 
 @KeyUiBinding<NavBarKey>
 @Given
-fun navBarKeyUi(
+fun navBarUi(
     @Given permissionState: PermissionState<NavBarSecureSettingsPermission>,
     @Given permissionRequester: PermissionRequester,
     @Given navBarConfig: MutableStateFlow<NavBarConfig>

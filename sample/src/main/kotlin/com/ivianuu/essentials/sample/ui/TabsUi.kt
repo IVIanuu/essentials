@@ -45,7 +45,7 @@ class TabsKey
 
 @KeyUiBinding<TabsKey>
 @Given
-fun tabsKeyUi(): KeyUi = {
+fun tabsUi(): KeyUi = {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     Scaffold(
         topBar = {

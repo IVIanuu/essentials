@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.sample.work.TestWorkScheduler
+import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -29,21 +30,31 @@ import com.ivianuu.injekt.Given
 
 @HomeItemBinding
 @Given
-val workHomeItem = HomeItem("Work") { WorkKey() }
+val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
 
-class WorkKey
+class DrawerKey
 
-@KeyUiBinding<WorkKey>
+@KeyUiBinding<DrawerKey>
 @Given
-fun workKeyUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi = {
+fun drawerUi(): KeyUi = {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Work") }) }
+        topBar = { TopAppBar(title = { Text("Drawer") }) },
+        drawerContent = {
+            Surface(color = Color.Blue) {
+                Text(
+                    text = "Drawer",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.center()
+                )
+            }
+        }
     ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = { testWorkScheduler() }
-        ) {
-            Text("Perform work")
+        Surface(color = Color.Red) {
+            Text(
+                text = "Body",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.center()
+            )
         }
     }
 }

@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<TwilightSettingsKey>
 @Given
-fun twilightSettingsKeyUi(
+fun twilightSettingsUi(
     @Given prefsUpdateDispatcher: PrefUpdateDispatcher<TwilightPrefs>,
     @Given prefsProvider: @Composable () -> @UiState TwilightPrefs,
 ): KeyUi = {

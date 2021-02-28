@@ -43,7 +43,7 @@ class SharedElementKey(val color: Color)
 
 @KeyUiBinding<SharedElementKey>
 @Given
-fun sharedElementKeyUi(@Given key: SharedElementKey): KeyUi = {
+fun sharedElementUi(@Given key: SharedElementKey): KeyUi = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Shared Elements") }) }
     ) {

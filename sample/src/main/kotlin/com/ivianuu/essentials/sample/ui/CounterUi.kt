@@ -57,7 +57,7 @@ class CounterKey
 
 @KeyUiBinding<CounterKey>
 @Given
-fun counterKeyUi(
+fun counterUi(
     @Given stateProvider: @Composable () -> @UiState CounterState,
     @Given dispatch: DispatchAction<CounterAction>,
 ): KeyUi = {

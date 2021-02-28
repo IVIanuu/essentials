@@ -37,7 +37,7 @@ class AboutKey
 
 @KeyUiBinding<AboutKey>
 @Given
-fun aboutKeyUi(
+fun aboutUi(
     @Given aboutSection: AboutSection,
     @Given buildInfo: BuildInfo,
     @Given privacyPolicyUrl: PrivacyPolicyUrl? = null

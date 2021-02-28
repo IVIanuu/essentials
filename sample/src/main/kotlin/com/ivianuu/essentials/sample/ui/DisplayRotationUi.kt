@@ -40,7 +40,7 @@ class DisplayRotationKey
 
 @KeyUiBinding<DisplayRotationKey>
 @Given
-fun displayRotationKeyUi(@Given rotation: Flow<DisplayRotation>): KeyUi = {
+fun displayRotationUi(@Given rotation: Flow<DisplayRotation>): KeyUi = {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)

@@ -18,48 +18,32 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.essentials.sample.work.TestWorkScheduler
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
-import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
-val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
+val workHomeItem = HomeItem("Work") { WorkKey() }
 
-class UnlockKey
+class WorkKey
 
-@KeyUiBinding<UnlockKey>
+@KeyUiBinding<WorkKey>
 @Given
-fun unlockKeyUi(
-    @Given screenState: Flow<ScreenState>,
-    @Given screenUnlocker: ScreenUnlocker,
-    @Given toaster: Toaster,
-): KeyUi = {
+fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi = {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Unlock") }) }
+        topBar = { TopAppBar(title = { Text("Work") }) }
     ) {
-        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    toaster.showToast("Turn the screen off and on")
-                    screenState.first { it == ScreenState.Locked }
-                    val unlocked = screenUnlocker()
-                    toaster.showToast("Screen unlocked $unlocked")
-                }
-            }
-        ) { Text("Unlock") }
+            onClick = { testWorkScheduler() }
+        ) {
+            Text("Perform work")
+        }
     }
 }

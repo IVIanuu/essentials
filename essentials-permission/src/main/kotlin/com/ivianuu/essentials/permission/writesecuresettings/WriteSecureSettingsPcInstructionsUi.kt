@@ -39,7 +39,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<WriteSecureSettingsPcInstructionsKey>
 @Given
-fun writeSecureSettingsPcInstructionsKeyUi(
+fun writeSecureSettingsPcInstructionsUi(
     @Given stateProvider: @Composable () -> @UiState WriteSecureSettingsPcInstructionsState,
     @Given dispatch: DispatchAction<WriteSecureSettingsPcInstructionsAction>,
 ): KeyUi = {

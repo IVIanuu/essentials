@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Given
 
 @KeyUiBinding<PermissionRequestKey>
 @Given
-fun permissionRequestUiKeyUi(
+fun permissionRequestUiUi(
     @Given stateProvider: @Composable () -> @UiState PermissionRequestState,
     @Given dispatch: DispatchAction<PermissionRequestAction>,
 ): KeyUi = {

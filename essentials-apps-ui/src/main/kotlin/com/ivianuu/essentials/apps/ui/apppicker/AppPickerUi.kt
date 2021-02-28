@@ -40,7 +40,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 
 @KeyUiBinding<AppPickerKey>
 @Given
-fun appPickerKeyUi(
+fun appPickerUi(
     @Given stateProvider: @Composable () -> @UiState AppPickerState,
     @Given dispatch: DispatchAction<AppPickerAction>,
 ): KeyUi = {

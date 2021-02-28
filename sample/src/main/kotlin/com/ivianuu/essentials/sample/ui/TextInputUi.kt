@@ -53,7 +53,7 @@ class TextInputKey
 
 @KeyUiBinding<TextInputKey>
 @Given
-fun textInputKeyUi(): KeyUi = {
+fun textInputUi(): KeyUi = {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {

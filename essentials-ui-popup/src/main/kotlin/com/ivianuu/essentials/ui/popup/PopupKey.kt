@@ -48,7 +48,7 @@ data class PopupKey(
 
 @KeyUiBinding<PopupKey>
 @Given
-fun popupKeyUi(
+fun popupUi(
     @Given key: PopupKey,
     @Given navigator: DispatchAction<NavigationAction>,
 ): KeyUi = {

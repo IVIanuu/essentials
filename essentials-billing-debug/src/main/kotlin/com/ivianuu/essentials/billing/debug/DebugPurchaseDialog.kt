@@ -47,7 +47,7 @@ data class DebugPurchaseKey(val params: BillingFlowParams)
 
 @KeyUiBinding<DebugPurchaseKey>
 @Given
-fun debugPurchaseKeyUi(
+fun debugPurchaseUi(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given key: DebugPurchaseKey,
     @Given navigator: DispatchAction<NavigationAction>,
