@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,7 +45,7 @@ fun <T> MultiChoiceListDialog(
         applyContentPadding = false,
         content = {
             LazyColumn {
-                itemsIndexed(items) { index, item ->
+                items(items) { item ->
                     MultiChoiceDialogListItem(
                         title = { item(item) },
                         checked = item in selectedItems,

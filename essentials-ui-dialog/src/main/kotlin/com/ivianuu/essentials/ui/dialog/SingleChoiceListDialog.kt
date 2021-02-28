@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,7 +46,7 @@ fun <T> SingleChoiceListDialog(
         applyContentPadding = false,
         content = {
             LazyColumn {
-                itemsIndexed(items) { index, item ->
+                items(items) { item ->
                     SingleChoiceDialogListItem(
                         title = { item(item) },
                         selected = item == selectedItem,
