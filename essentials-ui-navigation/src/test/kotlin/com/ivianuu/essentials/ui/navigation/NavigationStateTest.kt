@@ -39,7 +39,7 @@ class NavigationStateTest {
     fun testNavigationState() = runCancellingBlockingTest {
         val dispatch = EventFlow<NavigationAction>()
         val collector = navigationState(
-            IntentKeyHandler = { false },
+            intentKeyHandler = { false },
             scope = this,
             actions = dispatch
         ).testCollect(this)
@@ -67,7 +67,7 @@ class NavigationStateTest {
         val flow = EventFlow<NavigationAction>()
         val navigator = flow.dispatchAction
         navigationState(
-            IntentKeyHandler = { false },
+            intentKeyHandler = { false },
             scope = this,
             actions = flow
         ).testCollect(this)
@@ -84,7 +84,7 @@ class NavigationStateTest {
         val flow = EventFlow<NavigationAction>()
         val navigator = flow.dispatchAction
         navigationState(
-            IntentKeyHandler = { false },
+            intentKeyHandler = { false },
             scope = this,
             actions = flow
         ).testCollect(this)

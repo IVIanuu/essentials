@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.onEach
 @Scoped<AppComponent>
 @Given
 fun navigationState(
-    @Given IntentKeyHandler: IntentKeyHandler,
+    @Given intentKeyHandler: IntentKeyHandler,
     @Given scope: GlobalScope,
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Actions<NavigationAction>
@@ -46,7 +46,7 @@ fun navigationState(
     actions
         .filterIsInstance<Push<Any>>()
         .onEach { action ->
-            if (!IntentKeyHandler(action.key)) {
+            if (!intentKeyHandler(action.key)) {
                 reduce {
                     copy(
                         backStack = backStack + action.key,
@@ -62,7 +62,7 @@ fun navigationState(
     actions
         .filterIsInstance<ReplaceTop<Any>>()
         .onEach { action ->
-            if (IntentKeyHandler(action.key)) {
+            if (intentKeyHandler(action.key)) {
                 reduce {
                     copy(
                         backStack = backStack.dropLast(1),
