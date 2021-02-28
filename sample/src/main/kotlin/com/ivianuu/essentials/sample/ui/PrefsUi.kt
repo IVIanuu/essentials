@@ -121,7 +121,7 @@ fun prefsUi(
                     subtitle = { Text("This is a text input preference") },
                     onClick = {
                         scope.launch {
-                            val newTextInput = navigator.pushForResult<String>(
+                            val newTextInput = navigator.pushForResult(
                                 TextInputKey(
                                     initial = prefs.textInput,
                                     label = "Input",
@@ -138,7 +138,7 @@ fun prefsUi(
                     value = Color(prefs.color),
                     onValueChangeRequest = {
                         scope.launch {
-                            val newColor = navigator.pushForResult<Color>(
+                            val newColor = navigator.pushForResult(
                                 ColorPickerKey(
                                     initialColor = Color(prefs.color),
                                     title = "Color"
@@ -158,7 +158,7 @@ fun prefsUi(
                     subtitle = { Text("This is a multi select list preference") },
                     onClick = {
                         scope.launch {
-                            val newItems = navigator.pushForResult<Set<String>>(
+                            val newItems = navigator.pushForResult(
                                 MultiChoiceListKey(
                                     items = listOf(
                                         MultiChoiceListKey.Item("A", "A"),
@@ -180,7 +180,7 @@ fun prefsUi(
                     subtitle = { Text("This is a single item list preference") },
                     onClick = {
                         scope.launch {
-                            val newItem = navigator.pushForResult<String>(
+                            val newItem = navigator.pushForResult(
                                 SingleChoiceListKey(
                                     items = listOf(
                                         SingleChoiceListKey.Item("A", "A"),

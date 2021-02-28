@@ -58,7 +58,7 @@ fun actionsUi(
             modifier = Modifier.center(),
             onClick = {
                 uiScope.launch {
-                    val action = navigator.pushForResult<ActionPickerResult>(ActionPickerKey())
+                    val action = navigator.pushForResult(ActionPickerKey())
                         ?.let { it as? ActionPickerResult.Action }
                         ?.actionKey ?: return@launch
 

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
@@ -82,7 +81,7 @@ class AppActionPickerDelegate(
         get() = { Icon(R.drawable.es_ic_apps, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val app = navigator.pushForResult<AppInfo>(AppPickerKey(launchableAppFilter)) ?: return null
+        val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null
         return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

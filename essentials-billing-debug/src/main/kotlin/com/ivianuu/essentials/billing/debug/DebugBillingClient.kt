@@ -153,7 +153,7 @@ class DebugBillingClient(
     override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
         globalScope.launch {
             appUiStarter()
-            val purchasedSkuDetails = navigator.pushForResult<SkuDetails>(
+            val purchasedSkuDetails = navigator.pushForResult(
                 DebugPurchaseKey(
                     Sku(skuString = params.sku,
                         type = Sku.Type

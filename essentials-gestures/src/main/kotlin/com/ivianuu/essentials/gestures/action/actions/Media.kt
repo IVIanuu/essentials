@@ -160,7 +160,7 @@ fun mediaActionSettingsState(
         .filterIsInstance<UpdateMediaApp>()
         .onEach {
             @Suppress("DEPRECATION")
-            val newMediaApp = navigator.pushForResult<AppInfo>(
+            val newMediaApp = navigator.pushForResult(
                 AppPickerKey(
                     intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
                 )

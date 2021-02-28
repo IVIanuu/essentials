@@ -74,7 +74,7 @@ class KeycodeActionPickerDelegate(
         get() = { Icon(R.drawable.es_ic_keyboard, null) }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val keycode = navigator.pushForResult<String>(
+        val keycode = navigator.pushForResult(
             TextInputKey(
                 title = resourceProvider.string(R.string.es_keycode_picker_title),
                 label = resourceProvider.string(R.string.es_keycode_input_hint),

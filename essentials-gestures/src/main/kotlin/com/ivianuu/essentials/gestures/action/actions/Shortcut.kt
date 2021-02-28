@@ -30,7 +30,6 @@ import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.shortcutpicker.Shortcut
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Icon
@@ -90,7 +89,7 @@ class ShortcutActionPickerDelegate(
     }
 
     override suspend fun getResult(): ActionPickerResult? {
-        val shortcut = navigator.pushForResult<Shortcut>(ShortcutPickerKey()) ?: return null
+        val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
         val stream = ByteArrayOutputStream()
