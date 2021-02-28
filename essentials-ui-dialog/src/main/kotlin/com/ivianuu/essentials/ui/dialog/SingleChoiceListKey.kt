@@ -2,10 +2,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -31,24 +28,17 @@ fun singleChoiceListUi(
     @Given navigator: DispatchAction<NavigationAction>
 ): KeyUi = {
     DialogWrapper {
-        var selectedItem by remember { mutableStateOf(key.selectedItem) }
-
         SingleChoiceListDialog(
             items = remember {
                 key.items
                     .map { it.value }
             },
-            selectedItem = selectedItem,
-            onSelectionChanged = { selectedItem = it },
+            selectedItem = key.selectedItem,
+            onSelectionChanged = { navigator.popWithResult(it) },
             item = { item ->
                 Text(key.items.single { it.value == item }.title)
             },
             title = { Text(key.title) },
-            positiveButton = {
-                TextButton(
-                    onClick = { navigator.popWithResult(selectedItem) }
-                ) { Text(R.string.es_ok) }
-            },
             negativeButton = {
                 TextButton(onClick = { navigator(PopTop()) }) {
                     Text(R.string.es_cancel)
