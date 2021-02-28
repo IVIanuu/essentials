@@ -18,7 +18,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.tuples.parMap
+import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 

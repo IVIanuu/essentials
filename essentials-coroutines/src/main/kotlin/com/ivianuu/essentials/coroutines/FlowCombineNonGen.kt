@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.tuples
+package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.tuples.Tuple2
+import com.ivianuu.essentials.tuples.tupleOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 

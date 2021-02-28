@@ -21,9 +21,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.tuples.parMap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext

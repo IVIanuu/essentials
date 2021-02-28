@@ -26,5 +26,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 dependencies {
     testCompile(project(":essentials-test"))
     compile(Deps.Kotlin.stdlib)
-    compile(Deps.Coroutines.core)
 }

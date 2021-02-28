@@ -19,9 +19,10 @@ package com.ivianuu.essentials.tuples.generator
 import java.io.File
 
 fun main() {
-    val genDir = File("essentials-tuples/src/main/kotlin/com/ivianuu/essentials/tuples/")
-    genDir.mkdirs()
-    generateTuples(genDir)
-    generateFlowCombine(genDir)
-    generatePar(genDir)
+    val tuplesGenDir = File("essentials-tuples/src/main/kotlin/com/ivianuu/essentials/tuples/")
+    val coroutinesGenDir = File("essentials-coroutines/src/main/kotlin/com/ivianuu/essentials/coroutines/")
+    tuplesGenDir.mkdirs()
+    generateTuples(tuplesGenDir)
+    generateFlowCombine(coroutinesGenDir)
+    generatePar(coroutinesGenDir)
 }

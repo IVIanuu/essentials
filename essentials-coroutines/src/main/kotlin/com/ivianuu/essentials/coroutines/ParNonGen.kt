@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.tuples
+package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

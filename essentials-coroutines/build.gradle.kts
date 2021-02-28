@@ -25,6 +25,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
+    compile(project(":essentials-tuples"))
     compile(project(":essentials-sourcekey"))
     compile(Deps.Coroutines.core)
     compile(Deps.Injekt.core)

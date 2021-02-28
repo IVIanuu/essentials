@@ -22,8 +22,12 @@ fun generatePar(genDir: File) {
     val file = genDir.resolve("ParTupled.kt")
     file.createNewFile()
     val code = buildString {
-        appendLine("package com.ivianuu.essentials.tuples")
+        appendLine("package com.ivianuu.essentials.coroutines")
         appendLine()
+        appendLine("import com.ivianuu.essentials.tuples.tupleOf")
+        (2..TUPLES_SIZE).forEach { tuple ->
+            appendLine("import com.ivianuu.essentials.tuples.Tuple$tuple")
+        }
         appendLine()
         (2..TUPLES_SIZE).forEach { tuple ->
             append("suspend fun <")
