@@ -31,6 +31,10 @@ import org.junit.Test
 
 class NavigationStateTest {
 
+    object KeyA : Key<Nothing>
+    object KeyB : Key<Nothing>
+    object KeyC : Key<Nothing>
+
     @Test
     fun testNavigationState() = runCancellingBlockingTest {
         val dispatch = EventFlow<NavigationAction>()
@@ -40,21 +44,23 @@ class NavigationStateTest {
             actions = dispatch
         ).testCollect(this)
 
-        dispatch.emit(Push("a"))
-        dispatch.emit(Pop("a"))
-        dispatch.emit(Push("b"))
-        dispatch.emit(ReplaceTop("c"))
-        dispatch.emit(PopTop("b"))
+        dispatch.emit(Push(KeyA))
+        dispatch.emit(Pop(KeyA))
+        dispatch.emit(Push(KeyB))
+        dispatch.emit(ReplaceTop(KeyC))
+        dispatch.emit(PopTop)
 
         collector.values.shouldContainExactly(
             NavigationState(listOf()),
-            NavigationState(listOf("a")),
+            NavigationState(listOf(KeyA)),
             NavigationState(listOf()),
-            NavigationState(listOf("b")),
-            NavigationState(listOf("c")),
+            NavigationState(listOf(KeyB)),
+            NavigationState(listOf(KeyC)),
             NavigationState(listOf())
         )
     }
+
+    object KeyWithResult : Key<String>
 
     @Test
     fun testReturnsResultOnPop() = runCancellingBlockingTest {
@@ -67,9 +73,9 @@ class NavigationStateTest {
         ).testCollect(this)
 
         val result = async {
-            navigator.pushForResult<String>("a")
+            navigator.pushForResult(KeyWithResult)
         }
-        navigator.popWithResult("b")
+        navigator(Pop(KeyWithResult, "b"))
         result.await() shouldBe "b"
     }
 
@@ -84,9 +90,9 @@ class NavigationStateTest {
         ).testCollect(this)
 
         val result = async {
-            navigator.pushForResult<String>("a")
+            navigator.pushForResult<String>(KeyWithResult)
         }
-        flow.emit(PopTop())
+        flow.emit(PopTop)
         result.await() shouldBe null
     }
 
