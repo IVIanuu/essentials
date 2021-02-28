@@ -146,8 +146,9 @@ fun permissionRequester(
         if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
             return@withContext true
 
-        val key = PermissionRequestKey(requestedPermissions)
         appUiStarter()
-        return@withContext navigator.pushForResult<Boolean>(key) == true
+
+        return@withContext navigator.pushForResult<Boolean>(
+            PermissionRequestKey(requestedPermissions)) == true
     }
 }

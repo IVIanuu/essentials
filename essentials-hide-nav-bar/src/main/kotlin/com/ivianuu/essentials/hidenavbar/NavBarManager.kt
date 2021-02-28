@@ -102,7 +102,7 @@ private data class NavBarState(
     val rotation: DisplayRotation
 ) {
     val hidden: Boolean
-        get() = !config.showWhileScreenOff || screenState == ScreenState.Unlocked
+        get() = config.hidden && (!config.showWhileScreenOff || screenState == ScreenState.Unlocked)
 }
 
 private suspend fun NavBarState.apply(
@@ -119,7 +119,7 @@ private suspend fun NavBarState.apply(
         }.onFailure { it.printStackTrace() }
 
         val navBarHeight = getNavigationBarHeight(context, rotation)
-        val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config, rotation)
+        val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config.rotationMode, rotation)
         setOverscan(rect)
     }.onFailure { it.printStackTrace() }
 }
@@ -136,9 +136,9 @@ private fun getNavigationBarHeight(
 
 private fun getOverscanRect(
     navBarHeight: Int,
-    config: NavBarConfig,
+    rotationMode: NavBarRotationMode,
     rotation: DisplayRotation
-): Rect = when (config.rotationMode) {
+): Rect = when (rotationMode) {
     NavBarRotationMode.Marshmallow -> {
         when (rotation) {
             DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
