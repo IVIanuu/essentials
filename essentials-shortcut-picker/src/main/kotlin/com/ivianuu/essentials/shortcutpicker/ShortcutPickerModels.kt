@@ -16,10 +16,16 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.injekt.Module
 
-class ShortcutPickerKey
+class ShortcutPickerKey : Key<Shortcut>
+
+@Module
+val shortcutPickerKeyModule = KeyModule<ShortcutPickerKey>()
 
 data class ShortcutPickerState(
     val shortcuts: Resource<List<Shortcut>> = Idle,

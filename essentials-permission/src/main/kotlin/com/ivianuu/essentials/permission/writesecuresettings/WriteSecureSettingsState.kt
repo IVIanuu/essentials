@@ -28,8 +28,8 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
-import com.ivianuu.essentials.ui.navigation.popWithResult
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
@@ -61,7 +61,7 @@ fun writeSecureSettingsState(
         while (coroutineContext.isActive) {
             if (state.first()) {
                 toaster.showToast(R.string.es_secure_settings_permission_granted)
-                navigator.popWithResult(true)
+                navigator(Pop(key, true))
                 break
             }
             delay(200)

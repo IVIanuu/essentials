@@ -17,34 +17,37 @@
 package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
-@Qualifier
-annotation class KeyIntentFactoryBinding<K : Any>
+interface IntentKey : Key<Nothing>
 
-@Suppress("UNCHECKED_CAST")
-@Macro
-@GivenSetElement
-inline fun <T : @KeyIntentFactoryBinding<K> (K) -> Intent,
-        reified K : Any> keyIntentFactoryBindingImpl(
-    @Given instance: T
-): KeyIntentFactoryElement = (K::class to instance) as KeyIntentFactoryElement
+class IntentKeyModule<K : IntentKey>(private val keyClass: KClass<K>) {
 
-typealias KeyIntentFactoryElement = Pair<KClass<*>, (Key) -> Intent>
+    @GivenSetElement
+    fun keyIntentFactoryIntoSet(@Given intentFactory: KeyIntentFactory<K>): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> =
+        (keyClass to intentFactory).cast()
 
-typealias IntentKeyHandler = (Key) -> Boolean
+    companion object {
+        inline operator fun <reified K : IntentKey> invoke() = IntentKeyModule(K::class)
+    }
+}
+
+
+typealias KeyIntentFactory<T> = (T) -> Intent
+
+typealias IntentKeyHandler = (Key<*>) -> Boolean
 
 @Given
 fun intentKeyHandler(
     @Given appContext: AppContext,
-    @Given intentFactories: Set<KeyIntentFactoryElement>
-): IntentKeyHandler = { key ->
-    val intentFactory = intentFactories.toMap()[key::class]
+    @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
+): IntentKeyHandler = handler@ { key ->
+    if (key !is IntentKey) return@handler false
+    val intentFactory = intentFactories[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
         appContext.startActivity(

@@ -49,10 +49,12 @@ import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -65,17 +67,19 @@ import kotlinx.coroutines.isActive
 @Given
 val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
-class ForegroundKey
+class ForegroundKey : Key<Nothing>
+
+@Module
+val foregroundKeyModule = KeyModule<ForegroundKey>()
 
 @SuppressLint("NewApi")
-@KeyUiBinding<ForegroundKey>
 @Given
 fun foregroundUi(
     @Given foregroundState: ForegroundScreenState,
     @Given notificationFactory: ForegroundNotificationFactory,
     @Given notificationManager: NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo,
-): KeyUi = {
+): KeyUi<ForegroundKey> = {
     val currentForegroundState by foregroundState.collectAsState()
     if (systemBuildInfo.sdk >= 26) {
         DisposableEffect(true) {

@@ -24,7 +24,7 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.popWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.essentials.util.ActivityResultLauncher
@@ -43,6 +43,7 @@ fun shortcutPickerState(
     @Given initial: @Initial ShortcutPickerState = ShortcutPickerState(),
     @Given actions: Actions<ShortcutPickerAction>,
     @Given activityResultLauncher: ActivityResultLauncher,
+    @Given key: ShortcutPickerKey,
     @Given navigator: DispatchAction<NavigationAction>,
     @Given shortcutRepository: ShortcutRepository,
     @Given toaster: Toaster
@@ -55,7 +56,7 @@ fun shortcutPickerState(
                 val shortcutRequestResult = activityResultLauncher.startActivityForResult(action.shortcut.intent)
                     .data ?: return@onEach
                 val shortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
-                navigator.popWithResult(shortcut)
+                navigator(Pop(key, shortcut))
             }
                 .onFailure {
                     it.printStackTrace()

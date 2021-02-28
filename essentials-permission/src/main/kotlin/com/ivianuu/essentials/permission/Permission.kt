@@ -148,7 +148,7 @@ fun permissionRequester(
 
         appUiStarter()
 
-        return@withContext navigator.pushForResult<Boolean>(
+        return@withContext navigator.pushForResult(
             PermissionRequestKey(requestedPermissions)) == true
     }
 }

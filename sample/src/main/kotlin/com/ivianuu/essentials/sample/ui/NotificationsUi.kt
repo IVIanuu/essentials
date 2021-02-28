@@ -64,8 +64,9 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
@@ -73,6 +74,7 @@ import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.essentials.ui.store.UiStateBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
@@ -87,14 +89,16 @@ import kotlin.reflect.KClass
 @Given
 val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 
-class NotificationsKey
+class NotificationsKey : Key<Nothing>
 
-@KeyUiBinding<NotificationsKey>
+@Module
+val notificationsKeyModule = KeyModule<NotificationsKey>()
+
 @Given
 fun notificationsUi(
     @Given stateProvider: @Composable () -> @UiState NotificationsUiState,
     @Given dispatch: DispatchAction<NotificationsUiAction>,
-): KeyUi = {
+): KeyUi<NotificationsKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }

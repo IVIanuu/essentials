@@ -21,32 +21,39 @@ import android.content.pm.PackageManager
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
-data class AppInfoKey(val packageName: String)
+data class AppInfoKey(val packageName: String) : IntentKey
 
-@KeyIntentFactoryBinding<AppInfoKey>
+@Module
+val appInfoKeyModule = IntentKeyModule<AppInfoKey>()
+
 @Given
-fun appInfoKeyIntentFactory(): (AppInfoKey) -> Intent = { key ->
+fun appInfoKeyIntentFactory(): KeyIntentFactory<AppInfoKey> = { key ->
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:${key.packageName}".toUri()
     }
 }
 
-data class AppKey(val packageName: String)
+data class AppKey(val packageName: String) : IntentKey
 
-@KeyIntentFactoryBinding<AppKey>
+@Module
+val appKeyModule = IntentKeyModule<AppKey>()
+
 @Given
 fun appKeyIntentFactory(
     @Given packageManager: PackageManager
-): (AppKey) -> Intent = { key ->
+): KeyIntentFactory<AppKey> = { key ->
     packageManager.getLaunchIntentForPackage(key.packageName)!!
 }
 
-data class ShareKey(val text: String)
+data class ShareKey(val text: String) : IntentKey
 
-@KeyIntentFactoryBinding<ShareKey>
+@Module
+val shareKeyModule = IntentKeyModule<ShareKey>()
+
 @Given
-fun shareKeyIntentFactory(): (ShareKey) -> Intent = { key ->
+fun shareKeyIntentFactory(): KeyIntentFactory<ShareKey> = { key ->
     Intent.createChooser(
         Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -56,10 +63,12 @@ fun shareKeyIntentFactory(): (ShareKey) -> Intent = { key ->
     )
 }
 
-data class UrlKey(val url: String)
+data class UrlKey(val url: String) : IntentKey
 
-@KeyIntentFactoryBinding<UrlKey>
+@Module
+val urlKeyModule = IntentKeyModule<UrlKey>()
+
 @Given
-fun urlKeyIntentFactory(): (UrlKey) -> Intent = { key ->
+fun urlKeyIntentFactory(): KeyIntentFactory<UrlKey> = { key ->
     Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }
 }

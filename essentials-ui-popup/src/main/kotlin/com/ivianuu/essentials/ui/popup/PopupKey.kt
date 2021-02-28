@@ -32,26 +32,30 @@ import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.KeyUiOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.NavigationOptions
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 data class PopupKey(
     val position: Rect,
     val onCancel: (() -> Unit)?,
     val content: @Composable() () -> Unit,
-)
+) : Key<Nothing>
 
-@KeyUiBinding<PopupKey>
+@Module
+val popupKeyModule = KeyModule<PopupKey>()
+
 @Given
 fun popupUi(
     @Given key: PopupKey,
     @Given navigator: DispatchAction<NavigationAction>,
-): KeyUi = {
+): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
@@ -87,10 +91,9 @@ fun popupUi(
     }
 }
 
-@NavigationOptionFactoryBinding
 @Given
-fun popupKeyNavigationOptions(): (PopupKey) -> NavigationOptions = {
-    NavigationOptions(
+fun popupKeyOptionsFactory(): KeyUiOptionsFactory<PopupKey> = {
+    KeyUiOptions(
         opaque = true,
         enterTransition = FadeStackTransition(),
         exitTransition = FadeStackTransition()

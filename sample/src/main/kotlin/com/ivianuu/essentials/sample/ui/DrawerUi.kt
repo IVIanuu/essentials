@@ -24,19 +24,23 @@ import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
 
-class DrawerKey
+class DrawerKey : Key<Nothing>
 
-@KeyUiBinding<DrawerKey>
+@Module
+val drawerKeyModule = KeyModule<DrawerKey>()
+
 @Given
-fun drawerUi(): KeyUi = {
+fun drawerUi(): KeyUi<DrawerKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {

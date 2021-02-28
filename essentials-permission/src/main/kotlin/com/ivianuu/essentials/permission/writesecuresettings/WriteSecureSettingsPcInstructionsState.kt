@@ -29,7 +29,6 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.store.UiStateBinding
@@ -59,7 +58,7 @@ fun writeSecureSettingsPcInstructionsState(
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
             if (state.first()) {
-                navigator(PopTop())
+                navigator(NavigationAction.Pop(key))
                 break
             }
             delay(200)

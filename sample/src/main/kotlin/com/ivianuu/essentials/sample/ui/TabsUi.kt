@@ -33,19 +33,23 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 
-class TabsKey
+class TabsKey : Key<Nothing>
 
-@KeyUiBinding<TabsKey>
+@Module
+val tabsKeyModule = KeyModule<TabsKey>()
+
 @Given
-fun tabsUi(): KeyUi = {
+fun tabsUi(): KeyUi<TabsKey> = {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     Scaffold(
         topBar = {

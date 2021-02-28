@@ -45,7 +45,7 @@ fun androidBackPressHandler(
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()
         .flatMapLatest { if (it) activity.backPresses() else neverFlow() }
-        .onEach { navigator(PopTop()) }
+        .onEach { navigator(PopTop) }
         .collect()
 }
 

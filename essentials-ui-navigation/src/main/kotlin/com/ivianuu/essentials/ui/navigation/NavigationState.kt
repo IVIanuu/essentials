@@ -44,7 +44,7 @@ fun navigationState(
     @Given actions: Actions<NavigationAction>
 ): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
     actions
-        .filterIsInstance<Push>()
+        .filterIsInstance<Push<Any>>()
         .onEach { action ->
             if (!IntentKeyHandler(action.key)) {
                 reduce {
@@ -60,7 +60,7 @@ fun navigationState(
         .launchIn(this)
 
     actions
-        .filterIsInstance<ReplaceTop>()
+        .filterIsInstance<ReplaceTop<Any>>()
         .onEach { action ->
             if (IntentKeyHandler(action.key)) {
                 reduce {
@@ -85,25 +85,28 @@ fun navigationState(
         .launchIn(this)
 
     actions
-        .filterIsInstance<Pop>()
+        .filterIsInstance<Pop<Any>>()
         .reduce { popKey(it.key, it.result) }
         .launchIn(this)
 
     actions
         .filterIsInstance<PopTop>()
-        .onEach { action ->
+        .onEach {
             val topKey = currentState().backStack.last()
-            reduce { popKey(topKey, action.result) }
+            reduce {
+                @Suppress("UNCHECKED_CAST")
+                popKey(topKey as Key<Any>, null)
+            }
         }
         .launchIn(this)
 }.lens { NavigationState(it.backStack) }
 
-private fun InternalNavigationState.popKey(
-    key: Key,
-    result: Any?,
+private fun <R : Any> InternalNavigationState.popKey(
+    key: Key<R>,
+    result: R?,
 ): InternalNavigationState {
     @Suppress("UNCHECKED_CAST")
-    val deferredResult = results[key] as? CompletableDeferred<Any?>
+    val deferredResult = results[key] as? CompletableDeferred<R?>
     deferredResult?.complete(result)
     return copy(
         backStack = backStack - key,
@@ -112,6 +115,6 @@ private fun InternalNavigationState.popKey(
 }
 
 private data class InternalNavigationState(
-    val backStack: List<Key>,
-    val results: Map<Key, CompletableDeferred<out Any?>>,
+    val backStack: List<Key<*>>,
+    val results: Map<Key<*>, CompletableDeferred<out Any?>>,
 )

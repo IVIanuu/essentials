@@ -17,9 +17,15 @@
 package com.ivianuu.essentials.permission.ui
 
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.TypeKey
 
-data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>)
+data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
+
+@Module
+val permissionRequestKeyModule = KeyModule<PermissionRequestKey>()
 
 data class PermissionRequestState(val permissions: List<UiPermission<*>> = emptyList())
 

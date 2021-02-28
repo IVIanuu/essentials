@@ -25,23 +25,27 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
-class AboutKey
+class AboutKey : Key<Nothing>
 
-@KeyUiBinding<AboutKey>
+@Module
+val aboutKeyModule = KeyModule<AboutKey>()
+
 @Given
 fun aboutUi(
     @Given aboutSection: AboutSection,
     @Given buildInfo: BuildInfo,
     @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
-): KeyUi = {
+): KeyUi<AboutKey> = {
     Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {

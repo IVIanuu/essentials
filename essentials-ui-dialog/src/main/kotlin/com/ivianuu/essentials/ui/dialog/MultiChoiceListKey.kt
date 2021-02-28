@@ -8,28 +8,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.core.Text
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
-import com.ivianuu.essentials.ui.navigation.NavigationOptionFactoryBinding
-import com.ivianuu.essentials.ui.navigation.popWithResult
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
-data class MultiChoiceListKey(
-    val items: List<Item>,
-    val selectedItems: Set<Any>,
+data class MultiChoiceListKey<T : Any>(
+    val items: List<Item<T>>,
+    val selectedItems: Set<T>,
     val title: String
-) {
-    data class Item(val value: Any, val title: String)
+) : Key<Set<T>> {
+    data class Item<T>(val value: T, val title: String)
 }
 
-@KeyUiBinding<MultiChoiceListKey>
+@Module
+fun <T : Any> multiChoiceListKeyModule() = KeyModule<MultiChoiceListKey<T>>()
+
 @Given
-fun multiChoiceListUi(
-    @Given key: MultiChoiceListKey,
+fun <T : Any> multiChoiceListUi(
+    @Given key: MultiChoiceListKey<T>,
     @Given navigator: DispatchAction<NavigationAction>
-): KeyUi = {
+): KeyUi<T> = {
     DialogWrapper {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
@@ -46,11 +48,11 @@ fun multiChoiceListUi(
             title = { Text(key.title) },
             positiveButton = {
                 TextButton(
-                    onClick = { navigator.popWithResult(selectedItems) }
+                    onClick = { navigator(Pop(key, selectedItems)) }
                 ) { Text(R.string.es_ok) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator(PopTop()) }) {
+                TextButton(onClick = { navigator(Pop(key)) }) {
                     Text(R.string.es_cancel)
                 }
             }
@@ -58,6 +60,6 @@ fun multiChoiceListUi(
     }
 }
 
-@NavigationOptionFactoryBinding
 @Given
-val multiChoiceListDialogNavigationOptionsFactory = DialogNavigationOptionsFactory<MultiChoiceListKey>()
+fun <T : Any> multiChoiceListUiOptionsFactory() =
+    DialogKeyUiOptionsFactory<MultiChoiceListKey<T>>()

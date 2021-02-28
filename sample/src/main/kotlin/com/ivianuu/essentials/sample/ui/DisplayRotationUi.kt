@@ -27,20 +27,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 
 @HomeItemBinding
 @Given
 val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
 
-class DisplayRotationKey
+class DisplayRotationKey : Key<Nothing>
 
-@KeyUiBinding<DisplayRotationKey>
+@Module
+val displayRotationKeyModule = KeyModule<DisplayRotationKey>()
+
 @Given
-fun displayRotationUi(@Given rotation: Flow<DisplayRotation>): KeyUi = {
+fun displayRotationUi(@Given rotation: Flow<DisplayRotation>): KeyUi<DisplayRotationKey> = {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)

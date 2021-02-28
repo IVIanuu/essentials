@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.backup
 
-class BackupAndRestoreKey
+import com.ivianuu.essentials.ui.navigation.Key
+
+class BackupAndRestoreKey : Key<Nothing>
 
 object BackupAndRestoreState
 

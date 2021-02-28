@@ -52,7 +52,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            dependencies.navigator(PopTop())
+                            dependencies.navigator(PopTop)
                             item.onSelected()
                         },
                         content = item.content

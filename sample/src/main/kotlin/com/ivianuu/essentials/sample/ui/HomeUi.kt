@@ -41,8 +41,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -51,19 +51,22 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 
 @HomeKeyBinding
 @Given
-class HomeKey
+class HomeKey : Key<Nothing>
 
-@KeyUiBinding<HomeKey>
+@Module
+val homeKeyModule = KeyModule<HomeKey>()
+
 @Given
 fun homeUi(
     @Given navigator: DispatchAction<NavigationAction>,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,
-): KeyUi = {
+): KeyUi<HomeKey> = {
     val finalItems = remember { itemsFactory().sortedBy { it.title } }
     Scaffold(
         topBar = {
@@ -142,7 +145,7 @@ private fun HomeItem(
     )
 }
 
-data class HomeItem(val title: String, val keyFactory: (Color) -> Key)
+data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Nothing>)
 
 @Qualifier
 annotation class HomeItemBinding

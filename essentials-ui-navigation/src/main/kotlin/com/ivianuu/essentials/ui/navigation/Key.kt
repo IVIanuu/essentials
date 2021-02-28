@@ -16,4 +16,26 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-typealias Key = Any
+import com.ivianuu.essentials.util.cast
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.GivenSetElement
+import kotlin.reflect.KClass
+
+interface Key<T>
+
+class KeyModule<K : Key<*>>(private val keyClass: KClass<K>) {
+
+    @GivenSetElement
+    fun keyUiIntoSet(@Given keyUiFactory: (@Given K) -> KeyUi<K>): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
+        (keyClass to keyUiFactory).cast()
+
+    @GivenSetElement
+    fun keyUiOptionFactoryIntoSet(
+        @Given keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
+    ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
+        (keyClass to keyUiOptionsFactory).cast()
+
+    companion object {
+        inline operator fun <reified K : Key<*>> invoke() = KeyModule(K::class)
+    }
+}

@@ -43,7 +43,5 @@ fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvid
 fun <@ForTypeKey P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
     @Given navigator: DispatchAction<NavigationAction>
 ): PermissionRequestHandler<P> = {
-    navigator.pushForResult<Boolean>(
-        WriteSecureSettingsKey(typeKeyOf<P>())
-    )
+    navigator.pushForResult(WriteSecureSettingsKey(typeKeyOf<P>()))
 }

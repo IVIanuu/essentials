@@ -82,11 +82,11 @@ interface ActionFactory {
 @Qualifier
 annotation class ActionSettingsKeyBinding<I : ActionId>
 
-typealias ActionSettingsKey = Key
+typealias ActionSettingsKey = Key<Nothing>
 
 @Macro
 @GivenSetElement
-fun <T : @ActionSettingsKeyBinding<I> S, S : Any, I : ActionId> actionSettingsKeyBindingImpl(
+fun <T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyBindingImpl(
     @Given id: I,
     @Given instance: T,
 ): Pair<String, ActionSettingsKey> = id.value to instance
@@ -102,7 +102,7 @@ fun <T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
 interface ActionPickerDelegate {
     val title: String
     val icon: @Composable () -> Unit
-    val settingsUi: @Composable (() -> Unit)? get() = null
+    val settingsKey: Key<Nothing>? get() = null
     suspend fun getResult(): ActionPickerResult?
 }
 

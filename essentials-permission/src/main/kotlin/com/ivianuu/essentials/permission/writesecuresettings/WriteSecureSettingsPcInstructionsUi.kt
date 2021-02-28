@@ -33,16 +33,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<WriteSecureSettingsPcInstructionsKey>
 @Given
 fun writeSecureSettingsPcInstructionsUi(
     @Given stateProvider: @Composable () -> @UiState WriteSecureSettingsPcInstructionsState,
     @Given dispatch: DispatchAction<WriteSecureSettingsPcInstructionsAction>,
-): KeyUi = {
+): KeyUi<WriteSecureSettingsPcInstructionsKey> = {
     val state = stateProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }

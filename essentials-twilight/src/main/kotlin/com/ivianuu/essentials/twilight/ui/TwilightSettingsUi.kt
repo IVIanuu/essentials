@@ -31,17 +31,15 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 
-@KeyUiBinding<TwilightSettingsKey>
 @Given
 fun twilightSettingsUi(
     @Given prefsUpdateDispatcher: PrefUpdateDispatcher<TwilightPrefs>,
     @Given prefsProvider: @Composable () -> @UiState TwilightPrefs,
-): KeyUi = {
+): KeyUi<TwilightSettingsKey> = {
     val prefs = prefsProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }

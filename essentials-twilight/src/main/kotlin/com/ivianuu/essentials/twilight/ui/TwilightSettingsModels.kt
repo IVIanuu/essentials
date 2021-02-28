@@ -16,4 +16,11 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-class TwilightSettingsKey
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.injekt.Module
+
+class TwilightSettingsKey : Key<Nothing>
+
+@Module
+val twilightSettingsKeyModule = KeyModule<TwilightSettingsKey>()

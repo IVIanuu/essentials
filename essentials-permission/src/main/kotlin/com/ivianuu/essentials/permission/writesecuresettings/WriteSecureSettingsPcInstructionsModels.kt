@@ -17,13 +17,14 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 
-class WriteSecureSettingsPcInstructionsKey(
+data class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
-)
+) : Key<Nothing>
 
 data class WriteSecureSettingsPcInstructionsState(val packageName: String) {
     val secureSettingsAdbCommand =

@@ -23,19 +23,23 @@ import com.ivianuu.essentials.sample.work.TestWorkScheduler
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiBinding
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 
 @HomeItemBinding
 @Given
 val workHomeItem = HomeItem("Work") { WorkKey() }
 
-class WorkKey
+class WorkKey : Key<Nothing>
 
-@KeyUiBinding<WorkKey>
+@Module
+val workKeyModule = KeyModule<WorkKey>()
+
 @Given
-fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi = {
+fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Work") }) }
     ) {
