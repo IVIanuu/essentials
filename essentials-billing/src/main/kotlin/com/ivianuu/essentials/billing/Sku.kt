@@ -23,7 +23,6 @@ data class Sku(
     val skuString: String,
     val type: Type
 ) {
-
     internal fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
         .setType(type.value)
         .setSkusList(listOf(skuString))

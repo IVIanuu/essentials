@@ -139,7 +139,7 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
-    const val playBilling = "com.android.billingclient:billing-ktx:2.1.0"
+    const val playBilling = "com.android.billingclient:billing-ktx:3.0.2"
 
     const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
 

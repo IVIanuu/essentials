@@ -32,11 +32,10 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.RewardLoadParams
-import com.android.billingclient.api.RewardResponseListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
+import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
@@ -63,7 +62,7 @@ class DebugBillingClient(
     @Given private val prefs: Flow<DebugBillingPrefs>,
     @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener
-) : BillingClient() {
+) : @Given BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
 
@@ -105,7 +104,7 @@ class DebugBillingClient(
         clientState = CLOSED
     }
 
-    override fun isFeatureSupported(feature: String?): BillingResult {
+    override fun isFeatureSupported(feature: String): BillingResult {
         return if (!isReady) {
             BillingResult.newBuilder().setResponseCode(BillingResponseCode.SERVICE_DISCONNECTED)
                 .build()
@@ -114,9 +113,9 @@ class DebugBillingClient(
         }
     }
 
-    override fun consumeAsync(consumeParams: ConsumeParams?, listener: ConsumeResponseListener) {
-        val purchaseToken = consumeParams?.purchaseToken
-        if (purchaseToken == null || purchaseToken.isBlank()) {
+    override fun consumeAsync(consumeParams: ConsumeParams, listener: ConsumeResponseListener) {
+        val purchaseToken = consumeParams.purchaseToken
+        if (purchaseToken.isEmpty()) {
             listener.onConsumeResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
@@ -151,13 +150,18 @@ class DebugBillingClient(
         }
     }
 
-    override fun launchBillingFlow(activity: Activity?, params: BillingFlowParams?): BillingResult {
-        if (params == null) return BillingResult.newBuilder()
-            .setResponseCode(BillingResponseCode.DEVELOPER_ERROR).build()
-
+    override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
         globalScope.launch {
             appUiStarter()
-            val purchasedSkuDetails = navigator.pushForResult<SkuDetails>(DebugPurchaseKey(params))
+            val purchasedSkuDetails = navigator.pushForResult<SkuDetails>(
+                DebugPurchaseKey(
+                    Sku(skuString = params.sku,
+                        type = Sku.Type
+                            .values()
+                            .single { it.value == params.skuType }
+                    )
+                )
+            )
 
             if (purchasedSkuDetails != null) {
                 val purchase = purchasedSkuDetails.toPurchase()
@@ -185,7 +189,7 @@ class DebugBillingClient(
     }
 
     override fun queryPurchaseHistoryAsync(
-        skuType: String?,
+        skuType: String,
         listener: PurchaseHistoryResponseListener
     ) {
         if (!isReady) {
@@ -202,7 +206,8 @@ class DebugBillingClient(
             listener.onPurchaseHistoryResponse(
                 BillingResult.newBuilder()
                     .setResponseCode(history.responseCode).build(),
-                history.purchasesList.map { PurchaseHistoryRecord(it.originalJson, it.signature) }
+                history.purchasesList?.map { PurchaseHistoryRecord(it.originalJson, it.signature) }
+                    ?: emptyList()
             )
         }
     }
@@ -232,7 +237,7 @@ class DebugBillingClient(
         }
     }
 
-    override fun queryPurchases(@SkuType skuType: String?): Purchase.PurchasesResult {
+    override fun queryPurchases(skuType: String): Purchase.PurchasesResult {
         if (!isReady) {
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
@@ -241,7 +246,7 @@ class DebugBillingClient(
                 null
             )
         }
-        if (skuType == null || skuType.isBlank()) {
+        if (skuType.isEmpty()) {
             return InternalPurchasesResult(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
@@ -252,31 +257,27 @@ class DebugBillingClient(
         return runBlocking {
             InternalPurchasesResult(
                 BillingResult.newBuilder()
-                    .setResponseCode(BillingClient.BillingResponseCode.OK).build(),
+                    .setResponseCode(BillingResponseCode.OK).build(),
                 prefs.first().purchases.filter { it.signature.endsWith(skuType) }
             )
         }
     }
 
     override fun launchPriceChangeConfirmationFlow(
-        activity: Activity?,
-        params: PriceChangeFlowParams?,
+        activity: Activity,
+        params: PriceChangeFlowParams,
         listener: PriceChangeConfirmationListener
     ) {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun loadRewardedSku(params: RewardLoadParams?, listener: RewardResponseListener) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun acknowledgePurchase(
-        params: AcknowledgePurchaseParams?,
-        listener: AcknowledgePurchaseResponseListener?
+        params: AcknowledgePurchaseParams,
+        listener: AcknowledgePurchaseResponseListener
     ) {
-        val purchaseToken = params?.purchaseToken
-        if (purchaseToken == null || purchaseToken.isBlank()) {
-            listener?.onAcknowledgePurchaseResponse(
+        val purchaseToken = params.purchaseToken
+        if (purchaseToken.isEmpty()) {
+            listener.onAcknowledgePurchaseResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.DEVELOPER_ERROR
                 ).build()
@@ -303,13 +304,13 @@ class DebugBillingClient(
                 updatePrefs {
                     copy(purchases = purchases + updated)
                 }
-                listener?.onAcknowledgePurchaseResponse(
+                listener.onAcknowledgePurchaseResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.OK
                     ).build()
                 )
             } else {
-                listener?.onAcknowledgePurchaseResponse(
+                listener.onAcknowledgePurchaseResponse(
                     BillingResult.newBuilder().setResponseCode(
                         BillingResponseCode.ITEM_NOT_OWNED
                     ).build()
