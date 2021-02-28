@@ -17,8 +17,13 @@
 package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.injekt.Module
 
 class BackupAndRestoreKey : Key<Nothing>
+
+@Module
+val backupAndRestoreKeyModule = KeyModule<BackupAndRestoreKey>()
 
 object BackupAndRestoreState
 

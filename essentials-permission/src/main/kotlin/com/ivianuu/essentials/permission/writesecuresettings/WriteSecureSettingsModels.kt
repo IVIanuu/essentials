@@ -17,11 +17,16 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.TypeKey
 
 data class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
+
+@Module
+val writeSecureSettingsKeyModule = KeyModule<WriteSecureSettingsKey>()
 
 object WriteSecureSettingsState
 
