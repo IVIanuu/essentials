@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.memo
 
-internal inline fun <R> MutableMap<Int, R>.memo(
-    key: Int,
+internal inline fun <K, R> MutableMap<K, R>.memo(
+    key: K,
     compute: () -> R
 ) = synchronized(this) {
     if (containsKey(key)) {

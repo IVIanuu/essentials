@@ -26,17 +26,34 @@ fun generateMemoFunctions(genDir: File) {
         appendLine()
 
         (0..MAX_PARAM_SIZE).forEach { parameterCount ->
-            /*
-            fun <P1, P2, R> ((P1, P2) -> R).memoize(cache: MutableMap<Any, R> = hashMapOf()): (P1, P2) -> R {
-    return { p1, p2 ->
-        var key = p1.hashCode()
-        key += 31 * key + p2.hashCode()
-        cache.memo(key) {
-            this(p1, p2)
+            if (parameterCount == 0) {
+                append("object")
+            } else {
+                append("data class")
+            }
+            append(" HashKey$parameterCount")
+            if (parameterCount != 0) {
+                append("<")
+                (1..parameterCount).forEach { p ->
+                    append("P$p")
+                    if (p != parameterCount) append(", ")
+                }
+                append(">")
+                append("(")
+                if (parameterCount != 0) {
+                    (1..parameterCount).forEach { p ->
+                        append("val p$p: P$p")
+                        if (p != parameterCount) append(", ")
+                    }
+                }
+                append(")")
+            }
+            appendLine()
         }
-    }
-}
-             */
+
+        appendLine()
+
+        (0..MAX_PARAM_SIZE).forEach { parameterCount ->
             append("fun ")
             append("<")
             if (parameterCount != 0) {
@@ -58,7 +75,16 @@ fun generateMemoFunctions(genDir: File) {
 
             append("(")
             appendType()
-            append(").memoize(cache: MutableMap<Int, R> = hashMapOf()): ")
+            append(").memoize(cache: MutableMap<HashKey$parameterCount")
+            if (parameterCount != 0) {
+                append("<")
+                (1..parameterCount).forEach { p ->
+                    append("P$p")
+                    if (p != parameterCount) append(", ")
+                }
+                append(">")
+            }
+            append(", R> = hashMapOf()): ")
             appendType()
             appendLine(" {")
             append("    return { ")
@@ -70,22 +96,16 @@ fun generateMemoFunctions(genDir: File) {
             }
 
             appendLine(" ->")
-
-            append("        var key = ")
-            if (parameterCount == 0) {
-                append("0")
-            } else {
-                append("p1.hashCode()")
-            }
-            appendLine()
-
-            if (parameterCount > 1) {
-                (2..parameterCount).forEach {
-                    appendLine("        key += 31 * key + p${it}.hashCode()")
+            append("        cache.memo(HashKey$parameterCount")
+            if (parameterCount != 0) {
+                append("(")
+                (1..parameterCount).forEach { p ->
+                    append("p$p")
+                    if (p != parameterCount) append(", ")
                 }
+                append(")")
             }
-
-            appendLine("        cache.memo(key) {")
+            appendLine(") {")
             append("            this(")
             if (parameterCount != 0) {
                 (1..parameterCount).forEach { p ->
