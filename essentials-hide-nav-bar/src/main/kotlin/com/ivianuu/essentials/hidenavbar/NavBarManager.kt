@@ -23,6 +23,7 @@ import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.neverFlow
+import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -34,9 +35,11 @@ import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 @AppWorkerBinding
@@ -50,7 +53,9 @@ fun navBarManager(
     @Given logger: Logger,
     @Given permissionState: Flow<NavBarPermissionState>,
     @Given screenState: Flow<ScreenState>,
-    @Given setOverscan: OverscanUpdater
+    @Given setOverscan: OverscanUpdater,
+    @Given updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
+    @Given wasNavBarHidden: Flow<WasNavBarHidden>
 ): AppWorker = {
     permissionState
         .flatMapLatest {
@@ -83,14 +88,21 @@ fun navBarManager(
                         screenState = currentScreenState
                     )
                 }
+                    .onEach {
+                        updateWasNavBarHidden { true }
+                    }
             } else {
-                flowOf(
-                    NavBarState(
-                        config = currentConfig,
-                        screenState = ScreenState.Off,
-                        rotation = DisplayRotation.PortraitUp
+                if (!wasNavBarHidden.first()) {
+                    neverFlow()
+                } else {
+                    flowOf(
+                        NavBarState(
+                            config = currentConfig,
+                            screenState = ScreenState.Off,
+                            rotation = DisplayRotation.PortraitUp
+                        )
                     )
-                )
+                }
             }
         }
         .collect { it.apply(appContext, disableNonSdkInterfaceDetection, logger, setOverscan) }
