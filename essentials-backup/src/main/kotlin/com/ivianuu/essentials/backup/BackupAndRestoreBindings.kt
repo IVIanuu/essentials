@@ -29,15 +29,14 @@ annotation class BackupFileBinding
 
 @Macro
 @GivenSetElement
-fun <T : @BackupFileBinding File> backupFileBindingImpl(@Given instance: T): BackupFile = instance
+fun <T : @BackupFileBinding S, S : File> backupFileBindingImpl(@Given instance: T): BackupFile = instance
 
 typealias BackupFile = File
 
 typealias BackupDir = File
 
 @Given
-fun backupDir(@Given dataDir: DataDir): BackupDir =
-    dataDir.resolve("files/backups")
+fun backupDir(@Given dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 
 @BackupFileBinding
 @Given
@@ -45,5 +44,4 @@ fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
 
 @BackupFileBinding
 @Given
-fun backupDatabases(@Given dataDir: DataDir) =
-    dataDir.resolve("databases")
+fun backupDatabases(@Given dataDir: DataDir) = dataDir.resolve("databases")
