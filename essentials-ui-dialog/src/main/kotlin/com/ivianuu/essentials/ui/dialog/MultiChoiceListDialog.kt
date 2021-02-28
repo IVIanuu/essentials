@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.common.absorbPointer
 @Composable
 fun <T> MultiChoiceListDialog(
     items: List<T>,
-    selectedItems: List<T>,
-    onSelectionsChanged: (List<T>) -> Unit,
+    selectedItems: Set<T>,
+    onSelectionsChanged: (Set<T>) -> Unit,
     item: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
@@ -50,7 +50,7 @@ fun <T> MultiChoiceListDialog(
                         title = { item(item) },
                         checked = item in selectedItems,
                         onCheckedChange = {
-                            val newSelectedItems = selectedItems.toMutableList()
+                            val newSelectedItems = selectedItems.toMutableSet()
                             if (it) {
                                 newSelectedItems += item
                             } else {

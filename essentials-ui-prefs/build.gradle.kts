@@ -30,5 +30,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(project(":essentials-ui-core"))
-    api(project(":essentials-ui-dialog"))
 }

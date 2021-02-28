@@ -24,27 +24,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
+import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
+import com.ivianuu.essentials.ui.dialog.ColorPickerKey
+import com.ivianuu.essentials.ui.dialog.MultiChoiceListKey
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
+import com.ivianuu.essentials.ui.dialog.TextInputKey
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiBinding
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.prefs.ColorDialogListItem
+import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
-import com.ivianuu.essentials.ui.prefs.MultiChoiceDialogListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
-import com.ivianuu.essentials.ui.prefs.SingleChoiceDialogListItem
 import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.ui.prefs.TextInputDialogListItem
 import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.launch
 
 @HomeItemBinding
 @Given
@@ -55,9 +62,11 @@ class PrefsKey
 @KeyUiBinding<PrefsKey>
 @Given
 fun prefsKeyUi(
+    @Given navigator: DispatchAction<NavigationAction>,
     @Given prefsProvider: @Composable () -> @UiState SamplePrefs,
     @Given dispatchUpdate: PrefUpdateDispatcher<SamplePrefs>,
 ): KeyUi = {
+    val scope = rememberRetainedCoroutinesScope()
     val prefs = prefsProvider()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
@@ -103,47 +112,85 @@ fun prefsKeyUi(
                     Text("Dialogs")
                 }
 
-                TextInputDialogListItem(
-                    value = prefs.textInput,
-                    onValueChange = { dispatchUpdate { copy(textInput = it) } },
+                ListItem(
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Text input") },
                     subtitle = { Text("This is a text input preference") },
-                    allowEmpty = false
+                    onClick = {
+                        scope.launch {
+                            val newTextInput = navigator.pushForResult<String>(
+                                TextInputKey(
+                                    initial = prefs.textInput,
+                                    label = "Input",
+                                    title = "Text input",
+                                    allowEmpty = false
+                                )
+                            ) ?: return@launch
+                            dispatchUpdate { copy(textInput = newTextInput) }
+                        }
+                    }
                 )
 
-                ColorDialogListItem(
+                ColorListItem(
                     value = Color(prefs.color),
-                    onValueChange = { dispatchUpdate { copy(color = it.toArgb()) } },
+                    onValueChangeRequest = {
+                        scope.launch {
+                            val newColor = navigator.pushForResult<Color>(
+                                ColorPickerKey(
+                                    initialColor = Color(prefs.color),
+                                    title = "Color"
+                                )
+                            ) ?: return@launch
+                            dispatchUpdate { copy(color = newColor.toArgb()) }
+                        }
+                    },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Color") },
                     subtitle = { Text("This is a color preference") }
                 )
 
-                MultiChoiceDialogListItem(
-                    value = prefs.multiChoice,
-                    onValueChange = { dispatchUpdate { copy(multiChoice = it) } },
+                ListItem(
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Multi select list") },
                     subtitle = { Text("This is a multi select list preference") },
-                    items = listOf(
-                        MultiChoiceDialogListItem.Item("A", "A"),
-                        MultiChoiceDialogListItem.Item("B", "B"),
-                        MultiChoiceDialogListItem.Item("C", "C")
-                    )
+                    onClick = {
+                        scope.launch {
+                            val newItems = navigator.pushForResult<Set<String>>(
+                                MultiChoiceListKey(
+                                    items = listOf(
+                                        MultiChoiceListKey.Item("A", "A"),
+                                        MultiChoiceListKey.Item("B", "B"),
+                                        MultiChoiceListKey.Item("C", "C")
+                                    ),
+                                    selectedItems = prefs.multiChoice,
+                                    title = "Multi select list"
+                                )
+                            ) ?: return@launch
+                            dispatchUpdate { copy(multiChoice = newItems) }
+                        }
+                    }
                 )
 
-                SingleChoiceDialogListItem(
-                    value = prefs.singleChoice,
+                ListItem(
                     modifier = Modifier.interactive(prefs.switch),
-                    onValueChange = { dispatchUpdate { copy(singleChoice = it) } },
                     title = { Text("Single item list") },
                     subtitle = { Text("This is a single item list preference") },
-                    items = listOf(
-                        SingleChoiceDialogListItem.Item("A", "A"),
-                        SingleChoiceDialogListItem.Item("B", "B"),
-                        SingleChoiceDialogListItem.Item("C", "C")
-                    )
+                    onClick = {
+                        scope.launch {
+                            val newItem = navigator.pushForResult<String>(
+                                SingleChoiceListKey(
+                                    items = listOf(
+                                        SingleChoiceListKey.Item("A", "A"),
+                                        SingleChoiceListKey.Item("B", "B"),
+                                        SingleChoiceListKey.Item("C", "C")
+                                    ),
+                                    selectedItem = prefs.singleChoice,
+                                    title = "Single item list"
+                                )
+                            ) ?: return@launch
+                            dispatchUpdate { copy(singleChoice = newItem) }
+                        }
+                    }
                 )
             }
         }
@@ -162,4 +209,5 @@ data class SamplePrefs(
     val singleChoice: String = "C",
 )
 
-@Module val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")
+@Module
+val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")

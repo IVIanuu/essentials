@@ -24,23 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
-import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
-fun ColorDialogListItem(
+fun ColorListItem(
     value: Color,
-    onValueChange: (Color) -> Unit,
+    onValueChangeRequest: () -> Unit,
     title: @Composable (() -> Unit)? = null,
     subtitle: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = null,
-    dialogTitle: @Composable (() -> Unit)? = title,
-    colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
-    showAlphaSelector: Boolean = true,
-    allowCustomArgb: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    DialogListItem(
+    ListItem(
         modifier = modifier,
         title = title,
         subtitle = subtitle,
@@ -55,19 +50,6 @@ fun ColorDialogListItem(
                 )
             ) {}
         },
-        dialog = { dismiss ->
-            ColorPickerDialog(
-                initialColor = value,
-                onColorSelected = {
-                    onValueChange(it)
-                    dismiss()
-                },
-                onCancel = dismiss,
-                colorPalettes = colorPalettes,
-                showAlphaSelector = showAlphaSelector,
-                allowCustomArgb = allowCustomArgb,
-                title = dialogTitle
-            )
-        }
+        onClick = onValueChangeRequest
     )
 }

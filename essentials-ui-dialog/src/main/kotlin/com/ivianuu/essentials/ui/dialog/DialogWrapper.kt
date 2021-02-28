@@ -35,9 +35,9 @@ import com.ivianuu.essentials.ui.core.InsetsPadding
 fun DialogWrapper(
     dismissible: Boolean = true,
     modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = defaultDismissRequestHandler,
     dialog: @Composable () -> Unit,
 ) {
-    val backPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
     if (!dismissible) {
         BackHandler { }
     }
@@ -45,10 +45,7 @@ fun DialogWrapper(
     Box(
         modifier = Modifier
             .pointerInput(Unit) {
-                detectTapGestures {
-                    backPressedDispatcherOwner.onBackPressedDispatcher
-                        .onBackPressed()
-                }
+                detectTapGestures { onDismissRequest() }
             }
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.6f))
@@ -67,3 +64,12 @@ fun DialogWrapper(
         }
     }
 }
+
+private val defaultDismissRequestHandler: () -> Unit
+    @Composable get() {
+        val backPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+        return {
+            backPressedDispatcherOwner.onBackPressedDispatcher
+                .onBackPressed()
+        }
+    }

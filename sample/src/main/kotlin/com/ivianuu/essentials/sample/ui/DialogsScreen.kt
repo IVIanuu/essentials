@@ -248,7 +248,7 @@ fun dialogsKeyUi(): KeyUi = {
                         title = { Text("Single choice") },
                         items = singleChoiceItems,
                         selectedItem = tmpSelectedItem,
-                        onSelect = { tmpSelectedItem = it },
+                        onSelectionChanged = { tmpSelectedItem = it },
 
                         item = { Text("Item: $it") },
                         positiveButton = {
@@ -265,7 +265,7 @@ fun dialogsKeyUi(): KeyUi = {
             }
             item {
                 val multiChoiceItems = listOf("A", "B", "C")
-                var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems) }
+                var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems.toSet()) }
                 DialogLauncherButton(
                     text = "Multi choice list"
                 ) {

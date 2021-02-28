@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.common.absorbPointer
 fun <T> SingleChoiceListDialog(
     items: List<T>,
     selectedItem: T,
-    onSelect: (T) -> Unit,
+    onSelectionChanged: (T) -> Unit,
     item: @Composable (T) -> Unit,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
     icon: @Composable (() -> Unit)? = null,
@@ -50,7 +50,7 @@ fun <T> SingleChoiceListDialog(
                     SingleChoiceDialogListItem(
                         title = { item(item) },
                         selected = item == selectedItem,
-                        onSelect = { onSelect(item) }
+                        onSelect = { onSelectionChanged(item) }
                     )
                 }
             }

@@ -41,7 +41,7 @@ fun fabPositionKeyUi(
         SingleChoiceListDialog(
             items = FabPosition.values().toList(),
             selectedItem = key.preselect,
-            onSelect = { navigator.popWithResult(it) },
+            onSelectionChanged = { navigator.popWithResult(it) },
             item = { Text(it.name) }
         )
     }
