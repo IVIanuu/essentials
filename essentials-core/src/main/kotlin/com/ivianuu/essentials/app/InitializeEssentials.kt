@@ -4,24 +4,23 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.App
 import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.ComponentElement
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.appComponent
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.ComponentInitializer
+import com.ivianuu.injekt.component.ComponentInitializerBinding
 import com.ivianuu.injekt.component.initializeApp
 
 fun App.initializeEssentials(
-    @Given elementsFactory: (@Given AppComponent) -> Set<ComponentElement<AppComponent>>
+    @Given elementsFactory: (@Given AppComponent) -> Set<ComponentElement<AppComponent>>,
+    @Given initializersFactory: (@Given AppComponent) -> Set<ComponentInitializer<AppComponent>>
 ) {
-    initializeApp(elementsFactory)
-    with(appComponent.get<EsInitComponent>()) {
-        appInitializerRunner()
-        appWorkerRunner()
-    }
+    initializeApp(elementsFactory, initializersFactory)
 }
 
-@ComponentElementBinding<AppComponent>
+@ComponentInitializerBinding
 @Given
-class EsInitComponent(
-    @Given val appInitializerRunner: AppInitializerRunner,
-    @Given val appWorkerRunner: AppWorkerRunner
-)
+fun essentialsAppComponentInitializer(
+    @Given appInitializerRunner: AppInitializerRunner,
+    @Given appWorkerRunner: AppWorkerRunner
+): ComponentInitializer<AppComponent> = {
+    appInitializerRunner()
+    appWorkerRunner()
+}

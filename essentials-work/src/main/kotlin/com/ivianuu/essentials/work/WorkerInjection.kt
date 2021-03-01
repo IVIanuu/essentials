@@ -37,7 +37,3 @@ fun workerAppInitializer(
             .build()
     )
 }
-
-@Given
-fun workManager(@Given appContext: AppContext) =
-    WorkManager.getInstance(appContext)
