@@ -30,7 +30,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -76,24 +75,15 @@ val foregroundKeyModule = KeyModule<ForegroundKey>()
 @Given
 fun foregroundUi(
     @Given foregroundState: ForegroundScreenState,
-    @Given notificationFactory: ForegroundNotificationFactory,
-    @Given notificationManager: NotificationManager,
-    @Given systemBuildInfo: SystemBuildInfo,
+    @Given notificationFactory: ForegroundNotificationFactory
 ): KeyUi<ForegroundKey> = {
     val currentForegroundState by foregroundState.collectAsState()
-    if (systemBuildInfo.sdk >= 26) {
-        DisposableEffect(true) {
-            notificationManager.createNotificationChannel(
-                NotificationChannel(
-                    "foreground", "Foreground",
-                    NotificationManager.IMPORTANCE_LOW
-                )
-            )
-            onDispose { }
+
+    DisposableEffect(true) {
+        onDispose {
+            foregroundState.value = Background
         }
     }
-
-    SideEffect { foregroundState.value = Background }
 
     val primaryColor = MaterialTheme.colors.primary
 
@@ -157,10 +147,21 @@ inline val @Given ForegroundScreenState.bindForegroundScreenState: Flow<Foregrou
 
 typealias ForegroundNotificationFactory = (Int, Color) -> Notification
 
+@SuppressLint("NewApi")
 @Given
 fun foregroundNotificationFactory(
-    @Given appContext: AppContext
+    @Given appContext: AppContext,
+    @Given notificationManager: NotificationManager,
+    @Given systemBuildInfo: SystemBuildInfo
 ): ForegroundNotificationFactory = { count, color ->
+    if (systemBuildInfo.sdk >= 26) {
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                "foreground", "Foreground",
+                NotificationManager.IMPORTANCE_LOW
+            )
+        )
+    }
     NotificationCompat.Builder(appContext, "foreground")
         .setSmallIcon(R.drawable.ic_home)
         .setContentTitle("Foreground")
