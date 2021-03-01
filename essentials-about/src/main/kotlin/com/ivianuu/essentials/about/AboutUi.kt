@@ -17,9 +17,10 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -46,7 +47,7 @@ fun aboutUi(
     @Given buildInfo: BuildInfo,
     @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
 ): KeyUi<AboutKey> = {
-    Scaffold(topBar = { TopAppBar(title = { Text(R.string.about_title) }) }) {
+    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 aboutSection(
@@ -67,7 +68,7 @@ fun aboutSection(
 ): AboutSection = { packageName, showHeader, privacyPolicyUrl ->
     if (showHeader) {
         Subheader {
-            Text(R.string.about_title)
+            Text(stringResource(R.string.about_title))
         }
     }
 
@@ -123,10 +124,10 @@ private fun AboutItem(
     navigator: DispatchAction<NavigationAction>,
 ) {
     ListItem(
-        title = { Text(titleRes) },
+        title = { Text(stringResource(titleRes)) },
         subtitle = descRes?.let {
             {
-                Text(it)
+                Text(stringResource(it))
             }
         },
         onClick = { navigator(Push(UrlKey(url()))) }

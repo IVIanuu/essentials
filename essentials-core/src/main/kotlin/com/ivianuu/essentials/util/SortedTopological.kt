@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-fun <T, K> Collection<T>.sortedGraph(
+fun <T, K> Collection<T>.sortedTopological(
     key: (T) -> K,
     dependents: (T) -> Set<K>,
     dependencies: (T) -> Set<K>

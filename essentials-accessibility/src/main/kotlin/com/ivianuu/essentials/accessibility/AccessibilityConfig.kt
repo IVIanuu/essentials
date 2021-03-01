@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
-import com.ivianuu.essentials.coroutines.neverFlow
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
@@ -70,7 +70,7 @@ fun applyAccessibilityConfig(
                     ) { it.filterNotNull() }
                         .map { service to it }
                 } else {
-                    neverFlow()
+                    infiniteEmptyFlow()
                 }
             }
             .onEach { (service, configs) ->

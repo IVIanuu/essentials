@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
@@ -31,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.ResourceProvider
@@ -77,8 +78,9 @@ class AppActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.string(R.string.es_action_app)
-    override val icon: @Composable () -> Unit
-        get() = { Icon(R.drawable.es_ic_apps, null) }
+    override val icon: @Composable () -> Unit = {
+        Icon(painterResource(R.drawable.es_ic_apps), null)
+    }
 
     override suspend fun getResult(): ActionPickerResult? {
         val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null

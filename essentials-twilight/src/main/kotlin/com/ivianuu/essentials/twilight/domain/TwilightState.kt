@@ -23,7 +23,6 @@ import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.screenstate.ConfigChange
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -35,7 +34,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -62,17 +63,19 @@ fun twilightState(
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,
     @Given twilightPrefs: () -> Flow<TwilightPrefs>,
-): StateFlow<TwilightState> = deferredFlow {
-    twilightPrefs().flatMapLatest { (mode, useBlack) ->
-        (when (mode) {
-            TwilightMode.System -> systemTwilightState()
-            TwilightMode.Light -> flowOf(false)
-            TwilightMode.Dark -> flowOf(true)
-            TwilightMode.Battery -> batteryTwilightState()
-            TwilightMode.Time -> timeTwilightState()
-        }).map { TwilightState(it, useBlack) }
+): StateFlow<TwilightState> = flow {
+    twilightPrefs()
+        .flatMapLatest { (mode, useBlack) ->
+            (when (mode) {
+                TwilightMode.System -> systemTwilightState()
+                TwilightMode.Light -> flowOf(false)
+                TwilightMode.Dark -> flowOf(true)
+                TwilightMode.Battery -> batteryTwilightState()
+                TwilightMode.Time -> timeTwilightState()
+            }).map { TwilightState(it, useBlack) }
     }
         .distinctUntilChanged()
+        .let { emitAll(it) }
 }.stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
 
 typealias BatteryTwilightState = Boolean

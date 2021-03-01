@@ -24,14 +24,14 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.Moshi
 
+typealias JsonAdapter = Any
+
 @Qualifier
 annotation class JsonAdapterBinding
 
 @Macro
 @GivenSetElement
-fun <T : @JsonAdapterBinding Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
-
-typealias JsonAdapter = Any
+fun <T : @JsonAdapterBinding S, S : Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
 
 @Scoped<AppComponent>
 @Given
@@ -44,4 +44,4 @@ fun moshi(@Given jsonAdapters: Set<JsonAdapter>): Moshi = Moshi.Builder()
 
 @Given
 inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
-    adapter()
+    adapter(javaTypeOf<T>())

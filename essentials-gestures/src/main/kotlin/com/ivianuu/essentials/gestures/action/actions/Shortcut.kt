@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -32,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -85,7 +85,7 @@ class ShortcutActionPickerDelegate(
     override val title: String
         get() = resourceProvider.string(R.string.es_action_shortcut)
     override val icon: @Composable () -> Unit = {
-        Icon(R.drawable.es_ic_content_cut, null)
+        Icon(painterResource(R.drawable.es_ic_content_cut), null)
     }
 
     override suspend fun getResult(): ActionPickerResult? {

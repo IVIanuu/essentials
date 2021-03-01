@@ -18,13 +18,14 @@ package com.ivianuu.essentials.twilight.ui
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -42,7 +43,7 @@ fun twilightSettingsUi(
 ): KeyUi<TwilightSettingsKey> = {
     val prefs = prefsProvider()
     Scaffold(
-        topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
@@ -54,12 +55,12 @@ fun twilightSettingsUi(
                     )
                 }
 
-                Subheader { Text(R.string.es_twilight_pref_category_more) }
+                Subheader { Text(stringResource(R.string.es_twilight_pref_category_more)) }
 
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
                     onValueChange = { prefsUpdateDispatcher { copy(useBlackInDarkMode = it) } },
-                    title = { Text(R.string.es_twilight_use_black) }
+                    title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }
         }
@@ -74,8 +75,8 @@ private fun TwilightModeItem(
 ) {
     key(mode) {
         ListItem(
-            title = { Text(mode.titleRes) },
-            subtitle = { Text(mode.descRes) },
+            title = { Text(stringResource(mode.titleRes)) },
+            subtitle = { Text(stringResource(mode.descRes)) },
             trailing = {
                 RadioButton(
                     selected = isSelected,

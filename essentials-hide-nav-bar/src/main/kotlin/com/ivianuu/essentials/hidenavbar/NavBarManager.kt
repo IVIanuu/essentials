@@ -22,7 +22,7 @@ import android.graphics.Rect
 import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.neverFlow
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
@@ -47,10 +47,10 @@ import kotlinx.coroutines.flow.onStart
 fun navBarManager(
     @Given appContext: AppContext,
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
     @Given displayRotation: Flow<DisplayRotation>,
     @Given navBarConfig: Flow<NavBarConfig>,
     @Given logger: Logger,
+    @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
     @Given permissionState: Flow<NavBarPermissionState>,
     @Given screenState: Flow<ScreenState>,
     @Given setOverscan: OverscanUpdater,
@@ -73,7 +73,7 @@ fun navBarManager(
                         }
                     }
             } else {
-                neverFlow()
+                infiniteEmptyFlow()
             }
         }
         .flatMapLatest { currentConfig ->
@@ -93,7 +93,7 @@ fun navBarManager(
                     }
             } else {
                 if (!wasNavBarHidden.first()) {
-                    neverFlow()
+                    infiniteEmptyFlow()
                 } else {
                     flowOf(
                         NavBarState(
@@ -105,7 +105,7 @@ fun navBarManager(
                 }
             }
         }
-        .collect { it.apply(appContext, disableNonSdkInterfaceDetection, logger, setOverscan) }
+        .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
 }
 
 private data class NavBarState(
@@ -119,7 +119,7 @@ private data class NavBarState(
 
 private suspend fun NavBarState.apply(
     context: Context,
-    disableNonSdkInterfaceDetection: disableNonSdkInterfaceDetection,
+    disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
     logger: Logger,
     setOverscan: OverscanUpdater
 ) {

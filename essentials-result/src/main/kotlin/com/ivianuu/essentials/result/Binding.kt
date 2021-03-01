@@ -28,14 +28,14 @@ inline fun <V> binding(@BuilderInference block: ResultBinding<V>.() -> V): Resul
 internal object BindException : Exception()
 
 interface ResultBinding<V> {
-    operator fun <T> Result<T, Throwable>.not(): T
+    fun <T> Result<T, Throwable>.invoke(): T
 }
 
 @PublishedApi
 internal class ResultBindingImpl<V> : ResultBinding<V> {
     lateinit var error: Err<Throwable>
 
-    override fun <T> Result<T, Throwable>.not(): T {
+    override fun <T> Result<T, Throwable>.invoke(): T {
         return when (this) {
             is Ok -> value
             is Err -> {

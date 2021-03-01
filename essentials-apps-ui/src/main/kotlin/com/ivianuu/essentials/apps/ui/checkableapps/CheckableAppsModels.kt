@@ -33,10 +33,10 @@ data class CheckableAppsParams(
     val appBarTitle: String
 )
 
-internal typealias CheckedAppsSource = Flow<Set<String>>
+internal typealias CheckedApps = Set<String>
 
 @Given
-fun checkedAppsSource(@Given params: CheckableAppsParams): CheckedAppsSource = params.checkedApps
+fun checkedAppsSource(@Given params: CheckableAppsParams): Flow<CheckedApps> = params.checkedApps
 
 internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
 

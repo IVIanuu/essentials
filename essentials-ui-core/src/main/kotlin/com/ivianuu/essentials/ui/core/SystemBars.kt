@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.core
 
 import android.os.Build
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
@@ -51,7 +53,7 @@ import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.UiDecoratorConfig
-import com.ivianuu.essentials.ui.common.compositionActivity
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.setFlag
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -139,7 +141,7 @@ private class SystemBarManager {
 
     @Composable
     fun updateSystemBars() {
-        val activity = compositionActivity
+        val activity = LocalContext.current.cast<ComponentActivity>()
         DisposableEffect(activity) {
             WindowCompat.setDecorFitsSystemWindows(activity.window, false)
             if (Build.VERSION.SDK_INT >= 29) {

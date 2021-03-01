@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.core.SystemBarManagerProvider
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.sortedGraph
+import com.ivianuu.essentials.util.sortedTopological
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
@@ -68,7 +68,7 @@ fun decorateUi(
 ): DecorateUi = { content ->
     remember {
         elements
-            .sortedGraph(
+            .sortedTopological(
                 key = { it.key },
                 dependencies = { it.config.dependencies },
                 dependents = { it.config.dependents }

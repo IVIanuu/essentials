@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
-import com.ivianuu.essentials.coroutines.neverFlow
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.UiWorker
 import com.ivianuu.essentials.ui.UiWorkerBinding
@@ -44,7 +44,7 @@ fun androidBackPressHandler(
     state
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()
-        .flatMapLatest { if (it) activity.backPresses() else neverFlow() }
+        .flatMapLatest { if (it) activity.backPresses() else infiniteEmptyFlow() }
         .onEach { navigator(PopTop) }
         .collect()
 }

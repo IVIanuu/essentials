@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -340,7 +339,7 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
     TextButton(
         enabled = enabled,
         onClick = {
@@ -360,7 +359,7 @@ private fun DialogLauncherButton(
 ) {
     Spacer(Modifier.height(8.dp))
 
-    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
     val component = LocalUiComponent.current.get<DialogLauncherComponent>()
     Button(
         onClick = {

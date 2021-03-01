@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 
 @Composable
-fun Modifier.interactive(interactive: Boolean): Modifier {
-    return alpha(alpha = if (interactive) 1f else 0.5f)
+fun Modifier.interactive(interactive: Boolean): Modifier =
+    alpha(alpha = if (interactive) 1f else 0.5f)
         .absorbPointer(enabled = !interactive)
-}

@@ -21,12 +21,12 @@ import android.content.Intent
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -40,7 +40,7 @@ internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = 
 
 internal fun singleActionIcon(icon: ImageVector) = singleActionIcon { Icon(icon, null) }
 
-internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(id, null) }
+internal fun singleActionIcon(id: Int) = singleActionIcon { Icon(painterResource(id), null) }
 
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 

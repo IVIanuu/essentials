@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -30,10 +31,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
@@ -80,7 +81,7 @@ fun bottomNavigationUi(): KeyUi<BottomNavigationKey> = {
                             BottomNavigationItem(
                                 selected = item == selectedItem,
                                 onClick = { selectedItem = item },
-                                icon = { Icon(item.icon, null) },
+                                icon = { Icon(painterResource(item.icon), null) },
                                 label = { Text(item.title) }
                             )
                         }

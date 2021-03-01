@@ -21,6 +21,7 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.R
@@ -28,7 +29,6 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.Deselect
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -59,14 +59,14 @@ fun checkableAppsScreen(
                                     dispatch(SelectAll)
                                 }
                             ) {
-                                Text(R.string.es_select_all)
+                                Text(stringResource(R.string.es_select_all))
                             },
                             PopupMenu.Item(
                                 onSelected = {
                                     dispatch(DeselectAll)
                                 }
                             ) {
-                                Text(R.string.es_deselect_all)
+                                Text(stringResource(R.string.es_deselect_all))
                             }
                         )
                     )

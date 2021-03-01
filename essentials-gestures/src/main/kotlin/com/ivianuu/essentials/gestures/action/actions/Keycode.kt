@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -29,7 +31,6 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
@@ -70,8 +71,8 @@ class KeycodeActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.string(R.string.es_action_keycode)
-    override val icon: @Composable () -> Unit
-        get() = { Icon(R.drawable.es_ic_keyboard, null) }
+    override val icon: @Composable () -> Unit =
+        { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
     override suspend fun getResult(): ActionPickerResult? {
         val keycode = navigator.pushForResult(

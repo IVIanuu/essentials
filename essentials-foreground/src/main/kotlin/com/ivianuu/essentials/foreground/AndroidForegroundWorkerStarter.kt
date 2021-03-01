@@ -27,20 +27,17 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
-import kotlin.time.milliseconds
 
 @AppWorkerBinding
 @Given
-fun androidForegroundWorkStarter(
+fun androidForegroundWorkerStarter(
     @Given logger: Logger,
     @Given state: Flow<InternalForegroundState>,
     @Given workManager: WorkManager
 ): AppWorker = {
     state
-        .debounce(300.milliseconds)
         .filter { it.isForeground }
         .filter {
             workManager.getWorkInfosByTag(FOREGROUND_TAG)

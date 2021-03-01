@@ -31,13 +31,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.toColorOrNull
 import com.ivianuu.essentials.ui.core.toHexString
 import com.ivianuu.essentials.ui.layout.SquareFit
@@ -85,7 +85,7 @@ fun ColorPickerDialog(
             }
         },
         negativeButton = {
-            TextButton(onClick = onCancel) { Text(R.string.es_cancel) }
+            TextButton(onClick = onCancel) { Text(stringResource(R.string.es_cancel)) }
         },
         neutralButton = {
             if (allowCustomArgb) {

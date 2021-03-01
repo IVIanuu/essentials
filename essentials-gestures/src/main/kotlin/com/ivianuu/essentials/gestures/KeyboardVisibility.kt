@@ -22,7 +22,6 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
@@ -34,6 +33,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -67,9 +67,11 @@ fun keyboardVisible(
 
 @AccessibilityConfigBinding
 @Given
-fun keyboardVisibilityAccessibilityConfig() = flowOf {
-    AccessibilityConfig(
-        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+fun keyboardVisibilityAccessibilityConfig() = flow {
+    emit(
+        AccessibilityConfig(
+            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
     )
 }
 

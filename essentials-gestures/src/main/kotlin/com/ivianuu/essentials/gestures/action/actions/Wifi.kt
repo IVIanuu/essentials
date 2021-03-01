@@ -16,6 +16,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
+import androidx.compose.material.Icon
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -24,7 +26,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
@@ -71,6 +72,6 @@ fun wifiIcon(
     }
     .map {
         {
-            Icon(it, null)
+            Icon(painterResource(it), null)
         }
     }

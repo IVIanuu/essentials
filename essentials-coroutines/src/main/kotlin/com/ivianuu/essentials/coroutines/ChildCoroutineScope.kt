@@ -17,8 +17,11 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.job
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.coroutineContext
 
 fun CoroutineScope.childCoroutineScope(
     context: CoroutineContext = EmptyCoroutineContext,
@@ -26,3 +29,7 @@ fun CoroutineScope.childCoroutineScope(
 
 suspend fun childCoroutineScope(context: CoroutineContext = EmptyCoroutineContext): CoroutineScope =
     CoroutineScope(childJob() + context)
+
+fun CoroutineScope.childJob() = Job(parent = coroutineContext.job)
+
+suspend fun childJob() = Job(parent = coroutineContext.job)

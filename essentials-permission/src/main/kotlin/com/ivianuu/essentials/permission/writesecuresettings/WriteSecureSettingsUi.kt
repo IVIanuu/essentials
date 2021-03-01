@@ -17,13 +17,13 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -39,7 +39,7 @@ fun writeSecureSettingsUi(
 ): KeyUi<WriteSecureSettingsKey> = {
     val state = stateProvider()
     Scaffold(
-        topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings) }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
@@ -48,14 +48,14 @@ fun writeSecureSettingsUi(
                 )
 
                 ListItem(
-                    title = { Text(R.string.es_pref_use_pc) },
-                    subtitle = { Text(R.string.es_pref_use_pc_summary) },
+                    title = { Text(stringResource(R.string.es_pref_use_pc)) },
+                    subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
                     onClick = { dispatch(OpenPcInstructions) }
                 )
 
                 ListItem(
-                    title = { Text(R.string.es_pref_use_root) },
-                    subtitle = { Text(R.string.es_pref_use_root_summary) },
+                    title = { Text(stringResource(R.string.es_pref_use_root)) },
+                    subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
                     onClick = { dispatch(GrantPermissionsViaRoot) }
                 )
             }

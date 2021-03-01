@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -25,7 +25,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack, null) }) {
-    val onBackPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
     IconButton(
         onClick = { onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed() },
         content = content

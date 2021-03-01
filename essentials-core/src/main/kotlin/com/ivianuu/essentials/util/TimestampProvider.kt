@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Given
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-typealias now = () -> Duration
+typealias TimestampProvider = () -> Duration
 
 @Given
-val defaultNow: now = { System.currentTimeMillis().milliseconds }
+val timestampProvider: TimestampProvider = { System.currentTimeMillis().milliseconds }

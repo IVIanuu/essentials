@@ -20,7 +20,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
 
-suspend fun <R> runOnCancellation(block: suspend () -> R): R {
+suspend inline fun <R> runOnCancellation(crossinline block: suspend () -> R): R {
     try {
         awaitCancellation()
     } finally {

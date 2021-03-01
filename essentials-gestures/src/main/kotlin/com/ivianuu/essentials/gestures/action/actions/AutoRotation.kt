@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
+import androidx.compose.material.Icon
+import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
 import com.ivianuu.essentials.android.settings.AndroidSettingUpdater
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
@@ -29,7 +31,6 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
@@ -70,7 +71,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
         if (it) R.drawable.es_ic_screen_rotation
         else R.drawable.es_ic_screen_lock_rotation
     }
-    .map { { Icon(it, null) } }
+    .map { { Icon(painterResource(it), null) } }
 
 internal typealias AutoRotation = Int
 

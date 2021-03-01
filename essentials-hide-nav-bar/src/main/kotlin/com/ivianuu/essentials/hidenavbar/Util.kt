@@ -30,16 +30,16 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 
-typealias disableNonSdkInterfaceDetection = suspend () -> Unit
+typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 
 @Given
-fun disableNonSdkInterfaceDetection(
+fun nonSdkInterfaceDetectionDisabler(
     @Given logger: Logger,
     @Given systemBuildInfo: SystemBuildInfo,
     @Given updateHiddenApiPolicy: AndroidSettingUpdater<HiddenApiPolicy>,
     @Given updateHiddenApiPolicyPrePieApps: AndroidSettingUpdater<HiddenApiPolicyPrePieApps>,
     @Given updateHiddenApiPolicyPieApps: AndroidSettingUpdater<HiddenApiPolicyPieApps>,
-): disableNonSdkInterfaceDetection = {
+): NonSdkInterfaceDetectionDisabler = {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
         updateHiddenApiPolicy { 1 }

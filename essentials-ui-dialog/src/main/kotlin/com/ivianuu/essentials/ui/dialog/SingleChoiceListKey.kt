@@ -3,8 +3,8 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -43,7 +43,7 @@ fun <T : Any> singleChoiceListUi(
             title = { Text(key.title) },
             negativeButton = {
                 TextButton(onClick = { navigator(Pop(key)) }) {
-                    Text(R.string.es_cancel)
+                    Text(stringResource(R.string.es_cancel))
                 }
             }
         )

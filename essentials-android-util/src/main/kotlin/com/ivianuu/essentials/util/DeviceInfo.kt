@@ -19,10 +19,7 @@ package com.ivianuu.essentials.util
 import android.os.Build
 import com.ivianuu.injekt.Given
 
-data class DeviceInfo(
-    val model: String,
-    val manufacturer: String,
-)
+data class DeviceInfo(val model: String, val manufacturer: String)
 
 @Given
 val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)

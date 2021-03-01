@@ -55,9 +55,11 @@ fun <P : @WorkerBinding<I> S, S : Worker, I : WorkerId> workerBindingImpl(
     @Given factory: (@Given WorkScope) -> P
 ): WorkerElement = id to factory
 
+fun WorkerId.toFunctionalWorkerTag() = WORKER_ID_TAG_PREFIX + value
+
 fun OneTimeWorkRequestBuilder(id: WorkerId): OneTimeWorkRequest.Builder =
     OneTimeWorkRequestBuilder<FunctionalWorker>()
-        .addTag(WORKER_ID_TAG_PREFIX + id.value)
+        .addTag(id.toFunctionalWorkerTag())
 
 fun PeriodicWorkRequestBuilder(
     id: WorkerId,
@@ -67,4 +69,4 @@ fun PeriodicWorkRequestBuilder(
     (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
         repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
     ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
-        .addTag(WORKER_ID_TAG_PREFIX + id.value)
+        .addTag(id.toFunctionalWorkerTag())

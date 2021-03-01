@@ -19,7 +19,6 @@ package com.ivianuu.essentials.permission
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -38,7 +37,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -96,16 +97,18 @@ fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>
-): PermissionState<P> = deferredFlow {
-    permissionChanges
-        .map { Unit }
-        .onStart { emit(Unit) }
-        .map {
-            withContext(defaultDispatcher) {
-                stateProvider(permission)
+): PermissionState<P> = flow {
+    emitAll(
+        permissionChanges
+            .map { Unit }
+            .onStart { emit(Unit) }
+            .map {
+                withContext(defaultDispatcher) {
+                    stateProvider(permission)
+                }
             }
-        }
-        .distinctUntilChanged()
+            .distinctUntilChanged()
+    )
 }
 
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> PermissionState<Boolean>

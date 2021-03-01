@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -37,19 +38,19 @@ fun backupAndRestoreUi(
 ): KeyUi<BackupAndRestoreKey> = {
     val state = stateProvider()
     Scaffold(
-        topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 ListItem(
-                    title = { Text(R.string.es_pref_backup) },
-                    subtitle = { Text(R.string.es_pref_backup_summary) },
+                    title = { Text(stringResource(R.string.es_pref_backup)) },
+                    subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
                     onClick = { dispatch(BackupData) }
                 )
 
                 ListItem(
-                    title = { Text(R.string.es_pref_restore) },
-                    subtitle = { Text(R.string.es_pref_restore_summary) },
+                    title = { Text(stringResource(R.string.es_pref_restore)) },
+                    subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
                     onClick = { dispatch(RestoreData) }
                 )
             }

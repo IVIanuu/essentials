@@ -17,7 +17,11 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,5 +47,11 @@ fun VerticalDivider(
     modifier: Modifier = Modifier,
     color: Color = LocalContentColor.current.copy(alpha = 0.12f),
 ) {
-    Box(modifier = Modifier.fillMaxHeight().width(1.dp).then(modifier))
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(color)
+            .width(1.dp)
+            .then(modifier)
+    )
 }

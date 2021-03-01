@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -38,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
@@ -58,7 +60,6 @@ import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
-import com.ivianuu.essentials.ui.core.Icon
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
@@ -158,7 +159,7 @@ private fun NotificationsList(
                 trailing = if (notification.isClearable) {
                     {
                         IconButton(onClick = { onDismissNotificationClick(notification) }) {
-                            Icon(R.drawable.es_ic_clear, null)
+                            Icon(painterResource(R.drawable.es_ic_clear), null)
                         }
                     }
                 } else null
@@ -263,7 +264,7 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
             }
         },
         failure = {
-            { Icon(R.drawable.es_ic_error, null) }
+            { Icon(painterResource(R.drawable.es_ic_error), null) }
         }
     ),
     color = Color(notification.color),

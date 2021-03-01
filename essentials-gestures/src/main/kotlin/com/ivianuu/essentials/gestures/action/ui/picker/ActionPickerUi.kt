@@ -17,17 +17,18 @@
 package com.ivianuu.essentials.gestures.action.ui.picker
 
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.OpenActionSettings
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Icon
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -43,7 +44,7 @@ fun actionPickerUi(
 ): KeyUi<ActionPickerKey> = {
     val state = stateProvider()
     Scaffold(
-        topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
     ) {
         ResourceLazyColumnFor(state.items) { item ->
             ActionPickerItem(
@@ -65,7 +66,7 @@ private fun ActionPickerItem(
         leading = { item.icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
             IconButton(onClick = onOpenSettingsClick) {
-                Icon(R.drawable.es_ic_settings, null)
+                Icon(painterResource(R.drawable.es_ic_settings), null)
             }
         }) else null,
         title = { Text(item.title) },

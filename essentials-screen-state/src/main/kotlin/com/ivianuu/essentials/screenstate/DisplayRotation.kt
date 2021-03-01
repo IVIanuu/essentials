@@ -23,7 +23,6 @@ import android.view.WindowManager
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.coroutines.deferredFlow
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -36,8 +35,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -67,7 +68,7 @@ fun displayRotation(
     @Given rotationChanges: () -> Flow<RotationChange>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: WindowManager
-): Flow<DisplayRotation> = deferredFlow {
+): Flow<DisplayRotation> = flow {
     screenState()
         .flatMapLatest { currentScreenState ->
             if (currentScreenState.isOn) {
@@ -82,6 +83,7 @@ fun displayRotation(
         .onStart { emit(Unit) }
         .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
         .distinctUntilChanged()
+        .let { emitAll(it) }
 }.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
 
 private suspend fun getCurrentDisplayRotation(

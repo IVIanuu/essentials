@@ -19,10 +19,10 @@ package com.ivianuu.essentials.util
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.junit.Test
 
-class SortGraphTest {
+class SortedTopologicalTest {
 
     @Test
-    fun testSortGraph() {
+    fun testSortedTopologial() {
         val unsorted = listOf(
             Item(
                 key = "c",
@@ -35,7 +35,7 @@ class SortGraphTest {
             Item(key = "b")
         )
 
-        val sorted = unsorted.sortedGraph(
+        val sorted = unsorted.sortedTopological(
             key = { it.key },
             dependencies = { it.dependencies },
             dependents = { it.dependents }
@@ -51,4 +51,5 @@ class SortGraphTest {
         val dependencies: Set<String> = emptySet(),
         val dependents: Set<String> = emptySet()
     )
+
 }

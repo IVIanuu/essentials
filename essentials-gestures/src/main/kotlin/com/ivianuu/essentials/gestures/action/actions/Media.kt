@@ -35,7 +35,6 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -112,11 +111,11 @@ fun mediaActionSettingsUi(
     @Given dispatch: DispatchAction<MediaActionSettingsAction>,
 ): KeyUi<MediaActionSettingsKey> = {
     val state = stateProvider()
-    Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) }) }) {
+    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
                 ListItem(
-                    title = { Text(R.string.es_pref_media_app) },
+                    title = { Text(stringResource(R.string.es_pref_media_app)) },
                     subtitle = {
                         Text(
                             stringResource(

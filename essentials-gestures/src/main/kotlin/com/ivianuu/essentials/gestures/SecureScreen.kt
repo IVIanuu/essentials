@@ -21,7 +21,6 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.coroutines.flowOf
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -31,6 +30,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -62,8 +62,10 @@ fun isOnSecureScreen(
 
 @AccessibilityConfigBinding
 @Given
-fun isOnSecureScreenAccessibilityConfig() = flowOf {
-    AccessibilityConfig(
-        eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+fun isOnSecureScreenAccessibilityConfig() = flow {
+    emit(
+        AccessibilityConfig(
+            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+        )
     )
 }

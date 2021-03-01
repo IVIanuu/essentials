@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.store.DispatchAction
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -49,11 +49,11 @@ fun <T : Any> multiChoiceListUi(
             positiveButton = {
                 TextButton(
                     onClick = { navigator(Pop(key, selectedItems)) }
-                ) { Text(R.string.es_ok) }
+                ) { Text(stringResource(R.string.es_ok)) }
             },
             negativeButton = {
                 TextButton(onClick = { navigator(Pop(key)) }) {
-                    Text(R.string.es_cancel)
+                    Text(stringResource(R.string.es_cancel))
                 }
             }
         )

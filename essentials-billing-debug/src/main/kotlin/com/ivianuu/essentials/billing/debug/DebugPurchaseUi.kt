@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugPurchaseAction.Purchase
@@ -34,7 +35,6 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.Text
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
@@ -105,7 +105,7 @@ fun debugPurchaseUi(
                         contentColor = guessingContentColorFor(GooglePlayGreen),
                     ),
                     onClick = { dispatch(Purchase) }
-                ) { Text(R.string.purchase) }
+                ) { Text(stringResource(R.string.purchase)) }
             }
         )
     }

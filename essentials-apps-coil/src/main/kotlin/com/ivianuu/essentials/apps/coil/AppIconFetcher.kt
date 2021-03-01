@@ -39,7 +39,7 @@ class AppIconFetcher(
     @Given private val packageManager: PackageManager,
     @Given private val resources: AppResources
 ) : @FetcherBinding Fetcher<AppIcon> {
-    override fun key(data: AppIcon): String? = data.packageName
+    override fun key(data: AppIcon): String = data.packageName
 
     override suspend fun fetch(
         pool: BitmapPool,

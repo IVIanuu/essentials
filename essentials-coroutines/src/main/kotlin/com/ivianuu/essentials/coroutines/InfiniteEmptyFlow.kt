@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.moshi
+package com.ivianuu.essentials.coroutines
 
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import kotlin.reflect.typeOf
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-inline fun <reified T> Moshi.adapter(): JsonAdapter<T> = adapter(typeOf<T>().asJavaType())
+fun <T> infiniteEmptyFlow(): Flow<T> = flow {
+    awaitCancellation()
+}

@@ -30,8 +30,8 @@ class ResultBindingTest {
         }
 
         binding {
-            !doSomething()
-            !doSomething()
+            doSomething().invoke()
+            doSomething().invoke()
         }
 
         invocations shouldBe 1

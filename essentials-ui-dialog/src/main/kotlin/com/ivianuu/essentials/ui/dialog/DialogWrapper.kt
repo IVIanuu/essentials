@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import com.ivianuu.essentials.ui.common.compositionActivity
 import com.ivianuu.essentials.ui.core.InsetsPadding
 
 @Composable
@@ -67,7 +66,7 @@ fun DialogWrapper(
 
 private val defaultDismissRequestHandler: () -> Unit
     @Composable get() {
-        val backPressedDispatcherOwner: OnBackPressedDispatcherOwner = compositionActivity
+        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
         return {
             backPressedDispatcherOwner.onBackPressedDispatcher
                 .onBackPressed()
