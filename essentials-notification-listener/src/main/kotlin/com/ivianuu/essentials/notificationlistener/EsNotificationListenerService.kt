@@ -19,57 +19,97 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
-/**
- * Base notification listener service
- */
-abstract class EsNotificationListenerService : NotificationListenerService() {
+class EsNotificationListenerService : NotificationListenerService() {
 
-    val serviceComponent by lazy { createServiceComponent() }
+    private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
+    val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
     private val component by lazy {
-        serviceComponent.get<EsNotificationListenerServiceComponent>()
+        createServiceComponent()
+            .get<EsNotificationListenerServiceComponent>()
     }
 
-    val scope by lazy {
-        CoroutineScope(component.defaultDispatcher)
-    }
-
-    private var _connectedScope: CoroutineScope? = null
-    val connectedScope: CoroutineScope get() = _connectedScope ?: error("Not connected")
+    private var connectedScope: CoroutineScope? = null
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        _connectedScope = CoroutineScope(component.defaultDispatcher)
+        val connectedScope = CoroutineScope(component.defaultDispatcher)
+            .also { this.connectedScope = it }
+        connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            runOnCancellation {
+                component.logger.d { "listener disconnected" }
+                component.notificationServiceRef.value = null
+            }
+        }
+        connectedScope.launch {
+            component.logger.d { "listener connected" }
+            component.notificationServiceRef.value = this@EsNotificationListenerService
+            updateNotifications()
+            component.notificationWorkerRunner()
+        }
+    }
+
+    override fun onNotificationPosted(sbn: StatusBarNotification) {
+        super.onNotificationPosted(sbn)
+        component.logger.d { "notification posted $sbn" }
+        updateNotifications()
+    }
+
+    override fun onNotificationRemoved(sbn: StatusBarNotification) {
+        super.onNotificationRemoved(sbn)
+        component.logger.d { "notification removed $sbn" }
+        updateNotifications()
+    }
+
+    override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
+        super.onNotificationRankingUpdate(rankingMap)
+        component.logger.d { "ranking update $rankingMap" }
+        updateNotifications()
     }
 
     override fun onListenerDisconnected() {
-        _connectedScope?.cancel()
-        _connectedScope = null
+        connectedScope?.cancel()
+        connectedScope = null
         super.onListenerDisconnected()
     }
 
-    override fun onDestroy() {
-        scope.cancel()
-        super.onDestroy()
+    private fun updateNotifications() {
+        _notifications.value =  runKatching { activeNotifications!!.toList() }
+            .getOrElse { emptyList() }
     }
 
-    override fun getActiveNotifications(): Array<StatusBarNotification> =
-        runKatching { super.getActiveNotifications()!! }
-            .getOrElse { emptyArray() }
 }
 
 @ComponentElementBinding<ServiceComponent>
 @Given
 class EsNotificationListenerServiceComponent(
-    @Given val defaultDispatcher: DefaultDispatcher
+    @Given val defaultDispatcher: DefaultDispatcher,
+    @Given val notificationServiceRef: NotificationServiceRef,
+    @Given val logger: Logger,
+    @Given val notificationWorkerRunner: NotificationWorkerRunner
 )
+
+internal typealias NotificationServiceRef = MutableStateFlow<EsNotificationListenerService?>
+
+@Scoped<AppComponent>
+@Given
+fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

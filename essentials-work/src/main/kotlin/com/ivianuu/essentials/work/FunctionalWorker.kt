@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.work
 
+import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -32,7 +33,7 @@ class FunctionalWorker(
     @Given workers: Set<WorkerElement>,
     @Given context: WorkerContext,
     @Given workerParams: WorkerParameters,
-) : EsWorker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
     private val workers = workers
         .toMap()
         .mapKeys { it.key.value }
@@ -62,4 +63,3 @@ class FunctionalWorker(
 }
 
 internal const val WORKER_ID_TAG_PREFIX = "worker_id_"
-

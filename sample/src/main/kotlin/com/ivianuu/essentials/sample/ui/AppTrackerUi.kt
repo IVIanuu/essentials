@@ -30,7 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
@@ -152,7 +152,7 @@ fun appTrackerNotificationFactory(
 @Given
 object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
-        get() = DefaultAccessibilityService::class
+        get() = EsAccessibilityService::class
     override val title: String = "Accessibility"
     override val desc: String = "Needs the permission to track the current app"
     override val icon: @Composable (() -> Unit)?

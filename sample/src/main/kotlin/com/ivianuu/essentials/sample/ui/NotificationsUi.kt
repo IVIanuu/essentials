@@ -40,7 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
+import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
 import com.ivianuu.essentials.notificationlistener.NotificationsState
 import com.ivianuu.essentials.permission.PermissionBinding
@@ -223,7 +223,7 @@ fun notificationState(
 @Given
 object SampleNotificationsPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
-        get() = DefaultNotificationListenerService::class
+        get() = EsNotificationListenerService::class
     override val title: String = "Notifications"
     override val icon: @Composable (() -> Unit)?
         get() = null

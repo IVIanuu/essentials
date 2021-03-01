@@ -16,24 +16,25 @@
 
 package com.ivianuu.essentials.boot
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.broadcast.EsBroadcastReceiver
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ReceiverComponent
+import com.ivianuu.injekt.android.createReceiverComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class StartupReceiver : EsBroadcastReceiver() {
+class StartupReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        val component = receiverComponent.get<StartupReceiverComponent>()
+        val component = createReceiverComponent(context, intent)
+            .get<StartupReceiverComponent>()
         component.logger.d { "on system boot" }
         val scope = CoroutineScope(component.defaultDispatcher)
         component.bootListeners.forEach {

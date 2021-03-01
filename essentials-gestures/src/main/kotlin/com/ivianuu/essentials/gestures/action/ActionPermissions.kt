@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action
 
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
 @Given
 object ActionAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
-        get() = DefaultAccessibilityService::class
+        get() = EsAccessibilityService::class
     override val title: String = "Accessibility"
     override val desc: String = "Required to click buttons"
     override val icon: @Composable () -> Unit = {

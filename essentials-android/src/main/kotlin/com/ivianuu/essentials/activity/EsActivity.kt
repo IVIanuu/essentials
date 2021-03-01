@@ -19,22 +19,19 @@ package com.ivianuu.essentials.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiWorkerRunner
+import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 
-/**
- * Base activity
- */
-abstract class EsActivity : ComponentActivity() {
+class EsActivity : ComponentActivity() {
 
     private val uiComponent by lazy {
         activityComponent.get<() -> UiComponent>()()
@@ -49,7 +46,9 @@ abstract class EsActivity : ComponentActivity() {
         setContent {
             CompositionLocalProvider(LocalUiComponent provides uiComponent) {
                 component.decorateUi {
-                    Content()
+                    LocalUiComponent.current
+                        .get<EsActivityComponent>()
+                        .appUi()
                 }
             }
         }
@@ -64,12 +63,12 @@ abstract class EsActivity : ComponentActivity() {
         }
     }
 
-    @Composable protected abstract fun Content()
 }
 
 @ComponentElementBinding<ActivityComponent>
 @Given
 class EsActivityComponent(
+    @Given val appUi: AppUi,
     @Given val decorateUi: DecorateUi,
     @Given val uiWorkerRunner: UiWorkerRunner
 )

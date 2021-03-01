@@ -1,11 +1,11 @@
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.component.initializeApp
+import android.app.Application
+import com.ivianuu.essentials.app.initializeEssentials
 
-class App : EsApp() {
+class App : Application() {
     override fun onCreate() {
-        initializeApp()
+        initializeEssentials()
         super.onCreate()
     }
 }

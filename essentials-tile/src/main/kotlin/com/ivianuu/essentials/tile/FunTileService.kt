@@ -17,15 +17,20 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
+import android.service.quicksettings.TileService
+import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -41,16 +46,21 @@ class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 
 abstract class AbstractFunTileService(
     private val key: TypeKey<AbstractFunTileService>
-) : EsTileService() {
+) : TileService() {
 
     private val component by lazy {
-        serviceComponent.get<FunTileServiceComponent>()
+        createServiceComponent()
+            .get<FunTileServiceComponent>()
     }
 
     private val tileActions = EventFlow<TileAction>()
 
+    private var listeningScope: CoroutineScope? = null
+
     override fun onStartListening() {
         super.onStartListening()
+        val listeningScope = CoroutineScope(component.defaultDispatcher)
+            .also { this.listeningScope = it }
         listeningScope.launch {
             val store = (component.tileStores[key]
                 ?.invoke(this, tileActions)
@@ -62,6 +72,12 @@ abstract class AbstractFunTileService(
     override fun onClick() {
         super.onClick()
         tileActions.tryEmit(TileClicked)
+    }
+
+    override fun onStopListening() {
+        listeningScope?.cancel()
+        listeningScope = null
+        super.onStopListening()
     }
 
     private fun applyState(state: TileState) {
@@ -94,6 +110,7 @@ abstract class AbstractFunTileService(
 @ComponentElementBinding<ServiceComponent>
 @Given
 class FunTileServiceComponent(
+    @Given val defaultDispatcher: DefaultDispatcher,
     @Given val resourceProvider: ResourceProvider,
     @Given tileStores: Set<TileStateElement>
 ) {

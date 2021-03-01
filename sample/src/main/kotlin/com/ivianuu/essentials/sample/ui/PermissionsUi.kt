@@ -26,8 +26,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.accessibility.DefaultAccessibilityService
-import com.ivianuu.essentials.notificationlistener.DefaultNotificationListenerService
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -110,7 +110,7 @@ object SamplePhonePermission : RuntimePermission {
 @Given
 object SampleAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
-        get() = DefaultAccessibilityService::class
+        get() = EsAccessibilityService::class
     override val title: String = "Accessibility"
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
@@ -120,7 +120,7 @@ object SampleAccessibilityPermission : AccessibilityServicePermission {
 @Given
 object SampleNotificationListenerPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
-        get() = DefaultNotificationListenerService::class
+        get() = EsNotificationListenerService::class
     override val title: String = "Notification listener"
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }

@@ -20,7 +20,6 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.coroutines.GlobalScope
@@ -44,11 +43,13 @@ fun foregroundActivityState(
     application.registerActivityLifecycleCallbacks(
         object : Application.ActivityLifecycleCallbacks {
             override fun onActivityStarted(activity: Activity) {
-                if (activity is EsActivity) offer(activity)
+                if (activity.javaClass.name == "com.ivianuu.essentials.activity.EsActivity")
+                    offer(activity as ComponentActivity)
             }
 
             override fun onActivityStopped(activity: Activity) {
-                if (activity is EsActivity) offer(null)
+                if (activity.javaClass.name == "com.ivianuu.essentials.activity.EsActivity")
+                    offer(null)
             }
 
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
