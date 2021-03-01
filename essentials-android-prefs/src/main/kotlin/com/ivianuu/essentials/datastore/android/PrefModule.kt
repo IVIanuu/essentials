@@ -67,7 +67,7 @@ class PrefModule<T : Any>(private val name: String) {
         }
         return object : DataStore<T> {
             override val data: Flow<T>
-                get() = deferredDataStore.data;
+                get() = deferredDataStore.data
 
             override suspend fun updateData(transform: suspend (t: T) -> T): T = scope.awaitAsync {
                 deferredDataStore.updateData(transform)

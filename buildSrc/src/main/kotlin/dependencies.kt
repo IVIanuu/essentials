@@ -28,7 +28,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev763"
+    const val version = "${Build.versionName}-dev764"
 }
 
 object Deps {
@@ -53,7 +53,7 @@ object Deps {
             const val test = "androidx.compose.test:test-core:$version"
         }
 
-        const val dataStore = "androidx.datastore:datastore:1.0.0-alpha06"
+        const val dataStore = "androidx.datastore:datastore:1.0.0-alpha07"
 
         object Lifecycle {
             private const val version = "2.3.0"
