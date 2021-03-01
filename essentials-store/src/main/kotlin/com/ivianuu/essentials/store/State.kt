@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.store
 
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
@@ -136,3 +137,11 @@ private class StateScopeImpl<S>(
         val acknowledged: CompletableDeferred<S>
     )
 }
+
+@Given
+inline val <T> @Given MutableStateFlow<T>.stateFlow: StateFlow<T>
+    get() = this
+
+@Given
+inline val <T> @Given StateFlow<T>.flow: Flow<T>
+    get() = this
