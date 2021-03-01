@@ -294,7 +294,9 @@ private fun DialogButtons(
         }
         AlertDialogButtonLayout.Stacked -> {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(all = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.End
             ) {
