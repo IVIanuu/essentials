@@ -21,8 +21,9 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-internal typealias MutableActions<T>  = EventFlow<T>
+internal typealias MutableActions<T>  = MutableSharedFlow<T>
 
 @Scoped<AppComponent>
 @Given
@@ -36,4 +37,4 @@ inline val <T> @Given MutableActions<T>.actions: Actions<T>
 typealias DispatchAction<T> = (T) -> Unit
 @Given
 inline val <T> @Given MutableActions<T>.dispatchAction: DispatchAction<T>
-    get() = this::emit
+    get() = { tryEmit(it) }

@@ -61,7 +61,7 @@ abstract class AbstractFunTileService(
 
     override fun onClick() {
         super.onClick()
-        tileActions.emit(TileClicked)
+        tileActions.tryEmit(TileClicked)
     }
 
     private fun applyState(state: TileState) {

@@ -21,8 +21,9 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-internal typealias MutableAccessibilityEvents = EventFlow<AccessibilityEvent>
+internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityEvent>
 
 @Scoped<AppComponent>
 @Given

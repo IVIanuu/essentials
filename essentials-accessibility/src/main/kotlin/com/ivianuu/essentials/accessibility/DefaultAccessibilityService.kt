@@ -50,7 +50,7 @@ class DefaultAccessibilityService : EsAccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         component.logger.d { "on accessibility event $event" }
-        component.accessibilityEvents.emit(
+        component.accessibilityEvents.tryEmit(
             AccessibilityEvent(
                 type = event.eventType,
                 packageName = event.packageName?.toString(),

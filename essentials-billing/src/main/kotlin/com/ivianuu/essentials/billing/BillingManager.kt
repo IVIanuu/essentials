@@ -67,7 +67,7 @@ class BillingManagerImpl(
 ) : @Given BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
-        refreshes.emit(Unit)
+        refreshes.tryEmit(Unit)
     }
 
     private val refreshes = EventFlow<Unit>()
