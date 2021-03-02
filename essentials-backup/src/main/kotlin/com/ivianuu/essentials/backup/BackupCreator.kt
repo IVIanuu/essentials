@@ -24,13 +24,10 @@ import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import java.io.BufferedOutputStream
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.zip.ZipEntry
@@ -47,7 +44,7 @@ fun backupCreator(
     @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: DispatchAction<NavigationAction>
 ): BackupCreator = {
     runKatching {
         globalScope.awaitAsync(ioDispatcher) {
@@ -61,28 +58,25 @@ fun backupCreator(
                     it.createNewFile()
                 }
 
-            val dest = FileOutputStream(backupFile)
-            val out = ZipOutputStream(BufferedOutputStream(dest))
+            val zipOutputStream = ZipOutputStream(backupFile.outputStream())
 
             backupFiles
                 .flatMap { it.walkTopDown() }
                 .filterNot { it.isDirectory }
                 .filterNot { it.absolutePath in BACKUP_BLACKLIST }
+                .filter { it.exists() }
                 .forEach { file ->
                     logger.d { "backup file $file" }
-                    val content = file.bufferedReader()
                     val entry = ZipEntry(file.relativeTo(dataDir).toString())
-                    out.putNextEntry(entry)
-                    content.forEachLine {
-                        out.write(it.toByteArray())
-                    }
-                    content.close()
+                    zipOutputStream.putNextEntry(entry)
+                    file.inputStream().copyTo(zipOutputStream)
+                    zipOutputStream.closeEntry()
                 }
 
-            out.close()
+            zipOutputStream.close()
 
             navigator(
-                Push(
+                NavigationAction.Push(
                     ShareBackupFileKey(backupFile.absolutePath)
                 )
             )
