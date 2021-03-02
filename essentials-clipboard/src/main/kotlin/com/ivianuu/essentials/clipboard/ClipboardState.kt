@@ -18,6 +18,9 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import com.ivianuu.essentials.app.AppInitializer
+import com.ivianuu.essentials.app.AppInitializerBinding
+import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
@@ -26,6 +29,9 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -39,14 +45,14 @@ fun clipboardState(
     @Given initial: @Initial ClipboardState = ClipboardState(),
     @Given actions: Actions<ClipboardAction>,
     @Given clipboardManager: ClipboardManager,
-) = scope.state(initial) {
+): StateFlow<ClipboardState> = scope.state(initial, SharingStarted.Eagerly) {
     clipboardManager.clipboardChanges()
         .map { clipboardManager.primaryClip?.getItemAt(0)?.text?.toString() }
         .reduce { copy(text = it) }
         .launchIn(this)
 
     actions
-        .filterIsInstance<ClipboardAction.UpdateClipboard>()
+        .filterIsInstance<UpdateClipboard>()
         .map { ClipData.newPlainText("", it.value) }
         .onEach { clipboardManager.setPrimaryClip(it) }
         .launchIn(this)
@@ -56,4 +62,10 @@ private fun ClipboardManager.clipboardChanges() = callbackFlow {
     val listener = ClipboardManager.OnPrimaryClipChangedListener { offer(Unit) }
     addPrimaryClipChangedListener(listener)
     awaitClose { removePrimaryClipChangedListener(listener) }
+}
+
+// just to kickstart the clipboard state
+@AppInitializerBinding
+@Given
+fun clipboardInitializer(@Given state: Flow<ClipboardState>): AppInitializer = {
 }
