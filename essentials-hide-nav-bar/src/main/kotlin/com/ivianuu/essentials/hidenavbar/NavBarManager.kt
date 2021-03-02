@@ -48,6 +48,7 @@ fun navBarManager(
     @Given appContext: AppContext,
     @Given broadcastsFactory: BroadcastsFactory,
     @Given displayRotation: Flow<DisplayRotation>,
+    @Given navBarFeatureSupported: NavBarFeatureSupported,
     @Given navBarConfig: Flow<NavBarConfig>,
     @Given logger: Logger,
     @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
@@ -56,7 +57,8 @@ fun navBarManager(
     @Given setOverscan: OverscanUpdater,
     @Given updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>
-): AppWorker = {
+): AppWorker = worker@ {
+    if (!navBarFeatureSupported) return@worker
     permissionState
         .flatMapLatest {
             if (it) {
