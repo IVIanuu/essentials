@@ -19,12 +19,15 @@ package com.ivianuu.essentials.backup
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
+import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.DispatchAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
@@ -40,8 +43,10 @@ fun backupCreator(
     @Given backupDir: BackupDir,
     @Given backupFiles: Set<BackupFile>,
     @Given buildInfo: BuildInfo,
+    @Given dataDir: DataDir,
     @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
+    @Given logger: Logger,
     @Given navigator: DispatchAction<NavigationAction>,
 ): BackupCreator = {
     runKatching {
@@ -64,8 +69,9 @@ fun backupCreator(
                 .filterNot { it.isDirectory }
                 .filterNot { it.absolutePath in BACKUP_BLACKLIST }
                 .forEach { file ->
+                    logger.d { "backup file $file" }
                     val content = file.bufferedReader()
-                    val entry = ZipEntry(file.name)
+                    val entry = ZipEntry(file.relativeTo(dataDir).toString())
                     out.putNextEntry(entry)
                     content.forEachLine {
                         out.write(it.toByteArray())

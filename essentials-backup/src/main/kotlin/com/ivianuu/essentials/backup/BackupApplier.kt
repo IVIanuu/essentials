@@ -21,13 +21,14 @@ import android.content.Intent
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
-import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ActivityResultLauncher
+import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -39,9 +40,10 @@ typealias BackupApplier = suspend () -> Result<Unit, Throwable>
 fun backupApplier(
     @Given activityResultLauncher: ActivityResultLauncher,
     @Given contentResolver: ContentResolver,
-    @Given ioDispatcher: IODispatcher,
+    @Given dataDir: DataDir,
     @Given globalScope: GlobalScope,
-    @Given prefsDir: PrefsDir,
+    @Given ioDispatcher: IODispatcher,
+    @Given logger: Logger,
     @Given processRestarter: ProcessRestarter
 ): BackupApplier = {
     runKatching {
@@ -61,13 +63,13 @@ fun backupApplier(
 
             var entry: ZipEntry? = zipInputStream.nextEntry
             while (entry != null) {
-                val file = File(prefsDir, entry.name)
+                val file = dataDir.resolve(entry.name)
+                logger.d { "restore file $file" }
                 if (file.absolutePath in BACKUP_BLACKLIST) continue
                 val dir = if (entry.isDirectory) file else file.parentFile
                 if (!dir.isDirectory && !dir.mkdirs())
                     throw FileNotFoundException("Failed to ensure directory: " + dir.absolutePath)
-                if (entry.isDirectory)
-                    continue
+                if (entry.isDirectory) continue
                 FileOutputStream(file).use { fileOutputStream ->
                     var count = zipInputStream.read(buffer)
                     while (count != -1) {

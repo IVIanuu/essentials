@@ -45,3 +45,7 @@ fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
 @BackupFileBinding
 @Given
 fun backupDatabases(@Given dataDir: DataDir) = dataDir.resolve("databases")
+
+@BackupFileBinding
+@Given
+fun backupSharedPrefs(@Given dataDir: DataDir) = dataDir.resolve("shared_prefs")
