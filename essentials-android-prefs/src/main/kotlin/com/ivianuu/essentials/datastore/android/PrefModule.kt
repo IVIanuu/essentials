@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
@@ -34,6 +35,10 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
@@ -66,11 +71,15 @@ class PrefModule<T : Any>(private val name: String) {
             )
         }
         return object : DataStore<T> {
-            override val data: Flow<T>
-                get() = deferredDataStore.data
+            private val updates = EventFlow<T>()
+            override val data: Flow<T> = merge(deferredDataStore.data, updates)
+                .distinctUntilChanged()
+                .shareIn(scope, SharingStarted.Lazily, 1)
 
             override suspend fun updateData(transform: suspend (t: T) -> T): T = scope.awaitAsync {
-                deferredDataStore.updateData(transform)
+                val newValue = deferredDataStore.updateData(transform)
+                updates.emit(newValue)
+                newValue
             }
         }
     }
