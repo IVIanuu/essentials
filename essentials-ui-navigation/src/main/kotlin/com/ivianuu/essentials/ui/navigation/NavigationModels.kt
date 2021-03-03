@@ -27,7 +27,6 @@ fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial Navigation
     NavigationState(listOfNotNull(homeKey))
 
 sealed class NavigationAction {
-    object Clear : NavigationAction()
     data class Push<R : Any>(
         val key: Key<R>,
         val deferredResult: CompletableDeferred<R?>? = null,

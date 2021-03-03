@@ -22,7 +22,6 @@ import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Clear
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
@@ -33,7 +32,6 @@ import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -45,23 +43,6 @@ fun navigationState(
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Actions<NavigationAction>
 ): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
-    actions
-        .filterIsInstance<Clear>()
-        .onEach {
-            state.first()
-                .results
-                .values
-                .filterIsInstance<CompletableDeferred<Any?>>()
-                .forEach { it.complete(null) }
-            reduce {
-                copy(
-                    backStack = emptyList(),
-                    results = emptyMap()
-                )
-            }
-        }
-        .launchIn(this)
-
     actions
         .filterIsInstance<Push<Any>>()
         .onEach { action ->
