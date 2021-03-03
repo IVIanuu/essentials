@@ -30,9 +30,9 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -79,7 +79,7 @@ class ShortcutActionFactory(
 @ActionPickerDelegateBinding
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -88,7 +88,7 @@ class ShortcutActionPickerDelegate(
         Icon(painterResource(R.drawable.es_ic_content_cut), null)
     }
 
-    override suspend fun getResult(): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerKey.Result? {
         val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
@@ -102,7 +102,7 @@ class ShortcutActionPickerDelegate(
                     0
                 )
             }"
-        return ActionPickerResult.Action(key)
+        return ActionPickerKey.Result.Action(key)
     }
 }
 

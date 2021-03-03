@@ -26,7 +26,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
@@ -54,7 +54,7 @@ val popupKeyModule = KeyModule<PopupKey>()
 @Given
 fun popupUi(
     @Given key: PopupKey,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
 ): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }

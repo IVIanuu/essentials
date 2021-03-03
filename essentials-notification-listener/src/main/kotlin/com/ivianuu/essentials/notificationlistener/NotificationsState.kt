@@ -18,16 +18,17 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -50,7 +51,7 @@ sealed class NotificationsAction {
 @Scoped<AppComponent>
 @Given
 fun notificationState(
-    @Given actions: Actions<NotificationsAction>,
+    @Given actions: Flow<NotificationsAction>,
     @Given serviceRef: NotificationServiceRef,
     @Given scope: GlobalScope
 ) = scope.state(NotificationsState()) {
@@ -90,3 +91,7 @@ fun notificationState(
         .onEach { it.cancelAllNotifications() }
         .launchIn(this)
 }
+
+@Scoped<AppComponent>
+@Given
+val notificationsActions get() = EventFlow<NotificationsAction>()

@@ -23,7 +23,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,8 +32,8 @@ import androidx.compose.ui.res.stringResource
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugPurchaseAction.Purchase
-import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -42,17 +43,17 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.Error
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -68,11 +69,11 @@ val debugPurchaseKeyModule = KeyModule<DebugPurchaseKey>()
 
 @Given
 fun debugPurchaseUi(
-    @Given stateProvider: @Composable () -> @UiState DebugPurchaseState,
-    @Given dispatch: DispatchAction<DebugPurchaseAction>
+    @Given stateFlow: StateFlow<DebugPurchaseState>,
+    @Given dispatch: Collector<DebugPurchaseAction>
 ): KeyUi<DebugPurchaseKey> = {
     DialogWrapper {
-        val state = stateProvider()
+        val state by stateFlow.collectAsState()
         val skuDetails = state.skuDetails()
         Dialog(
             title = skuDetails?.let {
@@ -119,14 +120,14 @@ sealed class DebugPurchaseAction {
     object Purchase : DebugPurchaseAction()
 }
 
-@UiStateBinding
+@Scoped<KeyUiComponent>
 @Given
 fun debugPurchaseState(
-    @Given scope: CoroutineScope,
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial DebugPurchaseState = DebugPurchaseState(),
-    @Given actions: Actions<DebugPurchaseAction>,
+    @Given actions: Flow<DebugPurchaseAction>,
     @Given key: DebugPurchaseKey,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<DebugBillingPrefs>
 ): StateFlow<DebugPurchaseState> = scope.state(initial) {
     reduceResource(block = {
@@ -147,6 +148,10 @@ fun debugPurchaseState(
         .onEach { navigator(Pop(key, state.first().skuDetails()!!)) }
         .launchIn(this)
 }
+
+@Scoped<KeyUiComponent>
+@Given
+val debugPurchaseActions get() = EventFlow<DebugPurchaseAction>()
 
 @Given
 val debugPurchaseUiOptionsFactory = DialogKeyUiOptionsFactory<DebugPurchaseKey>()

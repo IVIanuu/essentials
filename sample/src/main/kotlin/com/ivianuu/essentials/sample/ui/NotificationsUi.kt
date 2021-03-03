@@ -36,11 +36,14 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
@@ -55,8 +58,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
-import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -68,17 +70,17 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -97,10 +99,10 @@ val notificationsKeyModule = KeyModule<NotificationsKey>()
 
 @Given
 fun notificationsUi(
-    @Given stateProvider: @Composable () -> @UiState NotificationsUiState,
-    @Given dispatch: DispatchAction<NotificationsUiAction>,
+    @Given stateFlow: StateFlow<NotificationsUiState>,
+    @Given dispatch: Collector<NotificationsUiAction>,
 ): KeyUi<NotificationsKey> = {
-    val state = stateProvider()
+    val state by stateFlow.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Notifications") }) }
     ) {
@@ -188,13 +190,13 @@ private fun NotificationPermissions(
     }
 }
 
-@UiStateBinding
+@Scoped<KeyUiComponent>
 @Given
-fun notificationState(
-    @Given scope: CoroutineScope,
+fun uiNotificationState(
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial NotificationsUiState = NotificationsUiState(),
-    @Given actions: Actions<NotificationsUiAction>,
-    @Given dispatchServiceAction: DispatchAction<NotificationsAction>,
+    @Given actions: Flow<NotificationsUiAction>,
+    @Given dispatchServiceAction: Collector<NotificationsAction>,
     @Given notifications: Flow<UiNotifications>,
     @Given permissionState: PermissionState<SampleNotificationsPermission>,
     @Given permissionRequester: PermissionRequester
@@ -218,7 +220,12 @@ fun notificationState(
             }
         }
         .launchIn(this)
+
 }
+
+@Scoped<KeyUiComponent>
+@Given
+val uiNotificationsActions get() = EventFlow<NotificationsUiAction>()
 
 @PermissionBinding
 @Given
@@ -233,7 +240,7 @@ object SampleNotificationsPermission : NotificationListenerPermission {
 typealias UiNotifications = List<UiNotification>
 
 @Given
-fun notifications(
+fun uiNotifications(
     @Given appContext: AppContext,
     @Given serviceState: Flow<NotificationsState>,
 ): Flow<UiNotifications> = serviceState

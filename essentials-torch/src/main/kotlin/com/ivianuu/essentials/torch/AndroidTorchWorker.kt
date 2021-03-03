@@ -21,7 +21,7 @@ import com.ivianuu.essentials.app.AppWorker
 import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.onEach
 @Given
 fun androidTorchWorker(
     @Given cameraManager: CameraManager,
-    @Given dispatch: DispatchAction<TorchAction>,
+    @Given dispatch: Collector<TorchAction>,
     @Given state: Flow<TorchState>,
     @Given toaster: Toaster
 ): AppWorker = {

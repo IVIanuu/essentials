@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import kotlinx.coroutines.CompletableDeferred
 
-suspend fun <R : Any> DispatchAction<NavigationAction>.pushForResult(key: Key<R>): R? {
+suspend fun <R : Any> Collector<NavigationAction>.pushForResult(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     @Suppress("UNCHECKED_CAST")
     this(Push(key, result))

@@ -4,7 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -27,7 +27,7 @@ fun <T : Any> singleChoiceListKeyModule() = KeyModule<SingleChoiceListKey<T>>()
 @Given
 fun <T : Any> singleChoiceListUi(
     @Given key: SingleChoiceListKey<T>,
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<T> = {
     DialogWrapper {
         SingleChoiceListDialog(

@@ -21,18 +21,19 @@ import android.provider.MediaStore
 import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
-import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.localVerticalInsets
@@ -42,19 +43,19 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
-import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.common.Scoped
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -107,10 +108,10 @@ val mediaActionSettingsKeyModule = KeyModule<MediaActionSettingsKey>()
 
 @Given
 fun mediaActionSettingsUi(
-    @Given stateProvider: @Composable () -> @UiState MediaActionSettingsState,
-    @Given dispatch: DispatchAction<MediaActionSettingsAction>,
+    @Given stateFlow: StateFlow<MediaActionSettingsState>,
+    @Given dispatch: Collector<MediaActionSettingsAction>,
 ): KeyUi<MediaActionSettingsKey> = {
-    val state = stateProvider()
+    val state by stateFlow.collectAsState()
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsets()) {
             item {
@@ -137,15 +138,15 @@ sealed class MediaActionSettingsAction {
     object UpdateMediaApp : MediaActionSettingsAction()
 }
 
-@UiStateBinding
+@Scoped<KeyUiComponent>
 @Given
 fun mediaActionSettingsState(
-    @Given scope: CoroutineScope,
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
-    @Given actions: Actions<MediaActionSettingsAction>,
+    @Given actions: Flow<MediaActionSettingsAction>,
     @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<MediaActionPrefs>,
     @Given updatePrefs: PrefUpdater<MediaActionPrefs>,
 ): StateFlow<MediaActionSettingsState> = scope.state(initial) {
@@ -170,3 +171,7 @@ fun mediaActionSettingsState(
         }
         .launchIn(this)
 }
+
+@Scoped<KeyUiComponent>
+@Given
+val mediaActionSettingsActions get() = EventFlow<MediaActionSettingsAction>()

@@ -139,9 +139,26 @@ private class StateScopeImpl<S>(
 }
 
 @Given
-inline val <T> @Given MutableStateFlow<T>.stateFlow: StateFlow<T>
+inline val <T> @Given MutableStateFlow<T>.mutableStateFlowToStateFlow: StateFlow<T>
     get() = this
 
 @Given
-inline val <T> @Given StateFlow<T>.flow: Flow<T>
+inline val <T> @Given MutableStateFlow<T>.mutableStateFlowToFlow: Flow<T>
     get() = this
+
+@Given
+inline val <T> @Given StateFlow<T>.stateFlowToFlow: Flow<T>
+    get() = this
+
+@Given
+inline val <T> @Given MutableSharedFlow<T>.mutableSharedFlowToSharedFlow: SharedFlow<T>
+    get() = this
+
+@Given
+inline val <T> @Given MutableSharedFlow<T>.mutableSharedFlowToFlow: Flow<T>
+    get() = this
+
+@Given
+inline val <T> @Given SharedFlow<T>.sharedFlowToFlow: Flow<T>
+    get() = this
+

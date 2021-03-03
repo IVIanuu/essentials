@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
@@ -33,15 +35,15 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun twilightSettingsUi(
-    @Given prefsUpdateDispatcher: PrefUpdateDispatcher<TwilightPrefs>,
-    @Given prefsProvider: @Composable () -> @UiState TwilightPrefs,
+    @Given prefsFlow: StateFlow<TwilightPrefs>,
+    @Given update: PrefUpdateDispatcher<TwilightPrefs>,
 ): KeyUi<TwilightSettingsKey> = {
-    val prefs = prefsProvider()
+    val prefs by prefsFlow.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
@@ -51,7 +53,7 @@ fun twilightSettingsUi(
                     TwilightModeItem(
                         mode = mode,
                         isSelected = prefs.twilightMode == mode,
-                        onClick = { prefsUpdateDispatcher { copy(twilightMode = mode) } }
+                        onClick = { update { copy(twilightMode = mode) } }
                     )
                 }
 
@@ -59,7 +61,7 @@ fun twilightSettingsUi(
 
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
-                    onValueChange = { prefsUpdateDispatcher { copy(useBlackInDarkMode = it) } },
+                    onValueChange = { update { copy(useBlackInDarkMode = it) } },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

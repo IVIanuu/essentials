@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.torch
 
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
@@ -32,10 +33,13 @@ import kotlinx.coroutines.flow.filterIsInstance
 fun torchState(
     @Given scope: GlobalScope,
     @Given initial: @Initial TorchState = TorchState(),
-    @Given actions: Actions<TorchAction>
+    @Given actions: Flow<TorchAction>
 ): StateFlow<TorchState> = actions
     .filterIsInstance<UpdateTorchEnabled>()
     .state(scope, initial) { copy(torchEnabled = it.value) }
+
+@Given
+val torchActions = EventFlow<TorchAction>()
 
 data class TorchState(val torchEnabled: Boolean = false)
 

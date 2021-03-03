@@ -18,25 +18,46 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.result.onFailure
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.util.ComponentCoroutineScope
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.common.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+
+class BackupAndRestoreKey : Key<Nothing>
+
+@Module
+val backupAndRestoreKeyModule = KeyModule<BackupAndRestoreKey>()
 
 @Given
 fun backupAndRestoreUi(
-    @Given stateProvider: @Composable () -> @UiState BackupAndRestoreState,
-    @Given dispatch: DispatchAction<BackupAndRestoreAction>,
+    @Given stateFlow: StateFlow<BackupAndRestoreState>,
+    @Given dispatch: Collector<BackupAndRestoreAction>,
 ): KeyUi<BackupAndRestoreKey> = {
-    val state = stateProvider()
+    val state by stateFlow.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
@@ -57,3 +78,46 @@ fun backupAndRestoreUi(
         }
     }
 }
+
+object BackupAndRestoreState
+
+sealed class BackupAndRestoreAction {
+    object BackupData : BackupAndRestoreAction()
+    object RestoreData : BackupAndRestoreAction()
+}
+
+@Scoped<KeyUiComponent>
+@Given
+fun backupAndRestoreState(
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
+    @Given actions: Flow<BackupAndRestoreAction>,
+    @Given backupCreator: BackupCreator,
+    @Given backupApplier: BackupApplier,
+    @Given toaster: Toaster
+): StateFlow<BackupAndRestoreState> = scope.state(initial) {
+    actions
+        .filterIsInstance<BackupData>()
+        .onEach {
+            backupCreator()
+                .onFailure {
+                    it.printStackTrace()
+                    toaster.showToast(R.string.es_backup_error)
+                }
+        }
+        .launchIn(this)
+    actions
+        .filterIsInstance<RestoreData>()
+        .onEach {
+            backupApplier()
+                .onFailure {
+                    it.printStackTrace()
+                    toaster.showToast(R.string.es_restore_error)
+                }
+        }
+        .launchIn(this)
+}
+
+@Scoped<KeyUiComponent>
+@Given
+val backupAndRestoreActions get() = EventFlow<BackupAndRestoreAction>()

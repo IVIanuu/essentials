@@ -31,8 +31,8 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.ResourceProvider
@@ -73,7 +73,7 @@ class AppActionFactory(
 @Given
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
-    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -82,9 +82,9 @@ class AppActionPickerDelegate(
         Icon(painterResource(R.drawable.es_ic_apps), null)
     }
 
-    override suspend fun getResult(): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerKey.Result? {
         val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null
-        return ActionPickerResult.Action("$ACTION_KEY_PREFIX${app.packageName}")
+        return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }
 

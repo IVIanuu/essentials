@@ -24,7 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -49,7 +49,7 @@ typealias TextInputResult = String
 @Given
 fun textInputUi(
     @Given key: TextInputKey,
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<TextInputKey> = {
     DialogWrapper {
         var currentValue by remember { mutableStateOf(key.initial) }

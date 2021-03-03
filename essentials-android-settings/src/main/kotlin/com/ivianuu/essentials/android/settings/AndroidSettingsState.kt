@@ -18,11 +18,11 @@ package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
 import com.ivianuu.essentials.android.settings.AndroidSettingAction.Update
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
-import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ContentChangesFactory
@@ -30,6 +30,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +55,7 @@ class AndroidSettingStateModule<T : S, S>(
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given initial: @Initial T,
-        @Given actions: Actions<AndroidSettingAction<T>>,
+        @Given actions: Flow<AndroidSettingAction<T>>,
         @Given ready: AndroidSettingsStateReady<T>
     ): StateFlow<T> = scope.childCoroutineScope(dispatcher).state(
         initial = initial,
@@ -82,6 +83,9 @@ class AndroidSettingStateModule<T : S, S>(
             }
             .launchIn(this)
     }
+
+    @Given
+    val actions = EventFlow<AndroidSettingAction<T>>()
 }
 
 internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
@@ -102,7 +106,7 @@ typealias AndroidSettingUpdater<T> = suspend (T.() -> T) -> T
 
 @Given
 fun <T> androidSettingUpdater(
-    @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given dispatch: Collector<AndroidSettingAction<T>>,
     @Given ready: AndroidSettingsStateReady<T>,
     @Given state: StateFlow<T> // workaround to ensure that the state is initialized
 ): AndroidSettingUpdater<T> = { reducer ->
@@ -116,7 +120,7 @@ typealias AndroidSettingUpdateDispatcher<T> = (T.() -> T) -> Unit
 
 @Given
 fun <T> dispatchAndroidSettingUpdate(
-    @Given dispatch: DispatchAction<AndroidSettingAction<T>>,
+    @Given dispatch: Collector<AndroidSettingAction<T>>,
     @Given ready: AndroidSettingsStateReady<T>,
     @Given scope: GlobalScope,
     @Given state: StateFlow<T> // workaround to ensure that the state is initialized

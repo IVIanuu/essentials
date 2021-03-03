@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.lens
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
@@ -30,18 +30,41 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+data class NavigationState(val backStack: List<Key<*>> = emptyList())
+
+@Given
+fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial NavigationState =
+    NavigationState(listOfNotNull(homeKey))
+
+sealed class NavigationAction {
+    data class Push<R : Any>(
+        val key: Key<R>,
+        val deferredResult: CompletableDeferred<R?>? = null,
+    ) : NavigationAction()
+    data class Pop<R : Any>(
+        val key: Key<R>,
+        val result: R? = null,
+    ) : NavigationAction()
+    object PopTop : NavigationAction()
+    data class ReplaceTop<R : Any>(
+        val key: Key<R>,
+        val deferredResult: CompletableDeferred<R?>? = null,
+    ) : NavigationAction()
+}
+
 @Scoped<AppComponent>
 @Given
 fun navigationState(
-    @Given intentKeyHandler: IntentKeyHandler,
     @Given scope: GlobalScope,
     @Given initial: @Initial NavigationState = NavigationState(),
-    @Given actions: Actions<NavigationAction>
+    @Given actions: Flow<NavigationAction>,
+    @Given intentKeyHandler: IntentKeyHandler
 ): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
     actions
         .filterIsInstance<Push<Any>>()
@@ -100,6 +123,9 @@ fun navigationState(
         }
         .launchIn(this)
 }.lens { NavigationState(it.backStack) }
+
+@Given
+val navigationActions = EventFlow<NavigationAction>()
 
 private fun <R : Any> InternalNavigationState.popKey(
     key: Key<R>,

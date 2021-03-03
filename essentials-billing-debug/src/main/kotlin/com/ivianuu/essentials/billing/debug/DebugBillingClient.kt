@@ -41,7 +41,7 @@ import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNE
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.datastore.android.PrefUpdater
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.AppUiStarter
@@ -58,7 +58,7 @@ class DebugBillingClient(
     @Given private val appUiStarter: AppUiStarter,
     @Given private val buildInfo: BuildInfo,
     @Given private val globalScope: GlobalScope,
-    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val prefs: Flow<DebugBillingPrefs>,
     @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener

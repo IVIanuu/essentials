@@ -21,8 +21,8 @@ import android.content.ClipboardManager
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.injekt.Given
@@ -38,12 +38,18 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
+data class ClipboardState(val text: String? = null)
+
+sealed class ClipboardAction {
+    data class UpdateClipboard(val value: String) : ClipboardAction()
+}
+
 @Scoped<AppComponent>
 @Given
 fun clipboardState(
     @Given scope: GlobalScope,
     @Given initial: @Initial ClipboardState = ClipboardState(),
-    @Given actions: Actions<ClipboardAction>,
+    @Given actions: Flow<ClipboardAction>,
     @Given clipboardManager: ClipboardManager,
 ): StateFlow<ClipboardState> = scope.state(initial, SharingStarted.Eagerly) {
     clipboardManager.clipboardChanges()
@@ -57,6 +63,9 @@ fun clipboardState(
         .onEach { clipboardManager.setPrimaryClip(it) }
         .launchIn(this)
 }
+
+@Given
+val clipboardActions = EventFlow<ClipboardAction>()
 
 private fun ClipboardManager.clipboardChanges() = callbackFlow {
     val listener = ClipboardManager.OnPrimaryClipChangedListener { offer(Unit) }

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Given
@@ -103,7 +103,7 @@ interface ActionPickerDelegate {
     val title: String
     val icon: @Composable () -> Unit
     val settingsKey: Key<Nothing>? get() = null
-    suspend fun getResult(): ActionPickerResult?
+    suspend fun getResult(): ActionPickerKey.Result?
 }
 
 @Qualifier

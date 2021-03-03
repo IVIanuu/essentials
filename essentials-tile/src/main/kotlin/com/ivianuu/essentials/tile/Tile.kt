@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.Macro
@@ -26,10 +25,11 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>,
-            (CoroutineScope, Actions<TileAction>) -> StateFlow<TileState>>
+            (CoroutineScope, Flow<TileAction>) -> StateFlow<TileState>>
 
 data class TileState(
     val icon: Icon? = null,
@@ -57,5 +57,5 @@ annotation class TileStateBinding<T : AbstractFunTileService>
 @Macro
 @GivenSetElement
 fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForTypeKey S : AbstractFunTileService> tileStateBindingImpl(
-    @Given provider: (@Given CoroutineScope, @Given Actions<TileAction>) -> T,
+    @Given provider: (@Given CoroutineScope, @Given Flow<TileAction>) -> T,
 ): TileStateElement = typeKeyOf<S>() to provider

@@ -23,14 +23,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.Actions
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
@@ -40,12 +41,13 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.store.UiState
-import com.ivianuu.essentials.ui.store.UiStateBinding
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
-import kotlinx.coroutines.CoroutineScope
+import com.ivianuu.injekt.common.Scoped
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -62,10 +64,10 @@ val counterKeyModule = KeyModule<CounterKey>()
 
 @Given
 fun counterUi(
-    @Given stateProvider: @Composable () -> @UiState CounterState,
-    @Given dispatch: DispatchAction<CounterAction>,
+    @Given stateFlow: StateFlow<CounterState>,
+    @Given dispatch: Collector<CounterAction>,
 ): KeyUi<CounterKey> = {
-    val state = stateProvider()
+    val state by stateFlow.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -96,12 +98,19 @@ fun counterUi(
     }
 }
 
-@UiStateBinding
+data class CounterState(val count: Int = 0)
+
+sealed class CounterAction {
+    object Inc : CounterAction()
+    object Dec : CounterAction()
+}
+
+@Scoped<KeyUiComponent>
 @Given
 fun counterState(
-    @Given scope: CoroutineScope,
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial CounterState = CounterState(),
-    @Given actions: Actions<CounterAction>,
+    @Given actions: Flow<CounterAction>,
     @Given toaster: Toaster
 ): StateFlow<CounterState> = scope.state(initial) {
     actions
@@ -118,9 +127,6 @@ fun counterState(
         .launchIn(this)
 }
 
-data class CounterState(val count: Int = 0)
-
-sealed class CounterAction {
-    object Inc : CounterAction()
-    object Dec : CounterAction()
-}
+@Scoped<KeyUiComponent>
+@Given
+val counterActions get() = EventFlow<CounterAction>()

@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -64,7 +64,7 @@ typealias AboutSection = @Composable (String, Boolean, PrivacyPolicyUrl?) -> Uni
 
 @Given
 fun aboutSection(
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): AboutSection = { packageName, showHeader, privacyPolicyUrl ->
     if (showHeader) {
         Subheader {
@@ -121,7 +121,7 @@ private fun AboutItem(
     titleRes: Int,
     descRes: Int? = null,
     url: () -> String,
-    navigator: DispatchAction<NavigationAction>,
+    navigator: Collector<NavigationAction>,
 ) {
     ListItem(
         title = { Text(stringResource(titleRes)) },

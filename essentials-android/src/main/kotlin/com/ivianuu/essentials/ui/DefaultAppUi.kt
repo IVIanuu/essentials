@@ -16,20 +16,20 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
-import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.StateFlow
 
 @AppUiBinding
 @Given
 fun defaultAppUi(
-    @Given navigationStateProvider: @Composable () -> @UiState NavigationState,
+    @Given navigationStateFlow: StateFlow<NavigationState>,
     @Given navigationStateContent: NavigationStateContent,
 ): AppUi = {
-    navigationStateContent(navigationStateProvider(), Modifier)
+    navigationStateContent(navigationStateFlow.collectAsState().value, Modifier)
 }

@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -30,7 +30,7 @@ fun <T : Any> multiChoiceListKeyModule() = KeyModule<MultiChoiceListKey<T>>()
 @Given
 fun <T : Any> multiChoiceListUi(
     @Given key: MultiChoiceListKey<T>,
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<T> = {
     DialogWrapper {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }

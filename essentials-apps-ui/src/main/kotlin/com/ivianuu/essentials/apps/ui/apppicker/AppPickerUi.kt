@@ -19,30 +19,63 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.ui.AppFilter
+import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.FilterApps
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.resource.Idle
+import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.store.UiState
+import com.ivianuu.essentials.ui.resource.map
+import com.ivianuu.essentials.ui.resource.reduceResource
+import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.common.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+
+data class AppPickerKey(
+    val appFilter: AppFilter = DefaultAppFilter,
+    val title: String? = null,
+) : Key<AppInfo>
+
+@Module
+val appPickerKeyModule = KeyModule<AppPickerKey>()
 
 @Given
 fun appPickerUi(
-    @Given stateProvider: @Composable () -> @UiState AppPickerState,
-    @Given dispatch: DispatchAction<AppPickerAction>,
+    @Given stateFlow: StateFlow<AppPickerState>,
+    @Given dispatch: Collector<AppPickerAction>,
 ): KeyUi<AppPickerKey> = {
-    val state = stateProvider()
+    val state by stateFlow.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,3 +111,48 @@ private fun AppInfo(
         onClick = onClick
     )
 }
+
+data class AppPickerState(
+    private val allApps: Resource<List<AppInfo>> = Idle,
+    val appFilter: AppFilter = DefaultAppFilter,
+    val title: String? = null
+) {
+    val filteredApps = allApps
+        .map { it.filter(appFilter) }
+}
+
+@Given
+fun initialAppPickerState(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
+    appFilter = key.appFilter,
+    title = key.title
+)
+
+sealed class AppPickerAction {
+    data class FilterApps(val appFilter: AppFilter) : AppPickerAction()
+    data class PickApp(val app: AppInfo) : AppPickerAction()
+}
+
+@Scoped<KeyUiComponent>
+@Given
+fun appPickerState(
+    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given initial: @Initial AppPickerState,
+    @Given actions: Flow<AppPickerAction>,
+    @Given appRepository: AppRepository,
+    @Given key: AppPickerKey,
+    @Given navigator: Collector<NavigationAction>,
+): StateFlow<AppPickerState> = scope.state(initial) {
+    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
+    actions
+        .filterIsInstance<FilterApps>()
+        .reduce { copy(appFilter = it.appFilter) }
+        .launchIn(this)
+    actions
+        .filterIsInstance<PickApp>()
+        .onEach { navigator(Pop(key, it.app)) }
+        .launchIn(this)
+}
+
+@Scoped<KeyUiComponent>
+@Given
+val appPickerActions get() = EventFlow<AppPickerAction>()

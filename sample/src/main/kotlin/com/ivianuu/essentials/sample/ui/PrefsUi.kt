@@ -18,13 +18,14 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.coroutines.rememberRetainedCoroutinesScope
@@ -48,10 +49,10 @@ import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -65,12 +66,12 @@ val prefsKeyModule = KeyModule<PrefsKey>()
 
 @Given
 fun prefsUi(
-    @Given navigator: DispatchAction<NavigationAction>,
-    @Given prefsProvider: @Composable () -> @UiState SamplePrefs,
+    @Given navigator: Collector<NavigationAction>,
+    @Given prefsState: StateFlow<SamplePrefs>,
     @Given dispatchUpdate: PrefUpdateDispatcher<SamplePrefs>,
 ): KeyUi<PrefsKey> = {
     val scope = rememberRetainedCoroutinesScope()
-    val prefs = prefsProvider()
+    val prefs by prefsState.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {

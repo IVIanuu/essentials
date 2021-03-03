@@ -21,7 +21,7 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
@@ -41,7 +41,7 @@ fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvid
 
 @Given
 fun <@ForTypeKey P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): PermissionRequestHandler<P> = {
     navigator.pushForResult(WriteSecureSettingsKey(typeKeyOf<P>()))
 }

@@ -22,7 +22,7 @@ import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.result.Result
 import com.ivianuu.essentials.result.runKatching
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
@@ -44,7 +44,7 @@ fun backupCreator(
     @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
-    @Given navigator: DispatchAction<NavigationAction>
+    @Given navigator: Collector<NavigationAction>
 ): BackupCreator = {
     runKatching {
         globalScope.awaitAsync(ioDispatcher) {

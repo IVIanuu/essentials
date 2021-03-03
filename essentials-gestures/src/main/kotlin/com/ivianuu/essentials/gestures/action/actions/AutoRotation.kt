@@ -75,8 +75,9 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
 
 internal typealias AutoRotation = Int
 
-@Module val autoRotationModule =
-    AndroidSettingStateModule<AutoRotation, Int>(
-        Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
+@Module
+val autoRotationModule = AndroidSettingStateModule<AutoRotation, Int>(
+    Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
 
-@Given val defaultAutoRotation: @Initial AutoRotation = 1
+@Given
+val defaultAutoRotation: @Initial AutoRotation = 1

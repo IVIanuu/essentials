@@ -38,7 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.core.localVerticalInsets
@@ -394,5 +394,5 @@ val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey
 @ComponentElementBinding<UiComponent>
 @Given
 class DialogLauncherComponent(
-    @Given val navigator: DispatchAction<NavigationAction>
+    @Given val navigator: Collector<NavigationAction>
 )

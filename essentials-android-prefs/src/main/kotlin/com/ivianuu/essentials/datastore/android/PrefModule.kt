@@ -16,8 +16,6 @@
 
 package com.ivianuu.essentials.datastore.android
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
@@ -27,13 +25,15 @@ import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.ui.store.UiState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
@@ -77,17 +77,15 @@ class PrefModule<T : Any>(private val name: String) {
 
 }
 
+@Scoped<AppComponent>
 @Given
-val <T : Any> @Given DataStore<T>.dataFlow: Flow<T>
-    get() = data
-
-@Given
-@Composable
-fun <T : Any> @Given DataStore<T>.uiState(
+fun <T : Any> @Given DataStore<T>.stateFlow(
+    @Given scope: GlobalScope,
     @Given initial: @InitialOrFallback T
-): @UiState T = data.collectAsState(initial).value
+): StateFlow<T> = data.stateIn(scope, SharingStarted.Eagerly, initial)
 
-@Qualifier internal annotation class InitialOrFallback
+@Qualifier
+internal annotation class InitialOrFallback
 
 @Given
 inline fun <reified T : Any> initialOrFallback(

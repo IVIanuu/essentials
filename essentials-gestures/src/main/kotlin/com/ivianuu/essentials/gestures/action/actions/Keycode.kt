@@ -29,8 +29,8 @@ import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
@@ -66,7 +66,7 @@ class KeycodeActionFactory(
 @ActionPickerDelegateBinding
 @Given
 class KeycodeActionPickerDelegate(
-    @Given private val navigator: DispatchAction<NavigationAction>,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -74,7 +74,7 @@ class KeycodeActionPickerDelegate(
     override val icon: @Composable () -> Unit =
         { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
-    override suspend fun getResult(): ActionPickerResult? {
+    override suspend fun getResult(): ActionPickerKey.Result? {
         val keycode = navigator.pushForResult(
             TextInputKey(
                 title = resourceProvider.string(R.string.es_keycode_picker_title),
@@ -84,7 +84,7 @@ class KeycodeActionPickerDelegate(
             )
         )?.toIntOrNull() ?: return null
 
-        return ActionPickerResult.Action("$ACTION_KEY_PREFIX$keycode")
+        return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX$keycode")
     }
 }
 

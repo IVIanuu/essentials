@@ -21,8 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerResult
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -48,7 +47,7 @@ val actionsKeyModule = KeyModule<ActionsKey>()
 @Given
 fun actionsUi(
     @Given executeAction: executeAction,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
     @Given uiScope: UiScope,
 ): KeyUi<ActionsKey> = {
     Scaffold(
@@ -59,7 +58,7 @@ fun actionsUi(
             onClick = {
                 uiScope.launch {
                     val action = navigator.pushForResult(ActionPickerKey())
-                        ?.let { it as? ActionPickerResult.Action }
+                        ?.let { it as? ActionPickerKey.Result.Action }
                         ?.actionKey ?: return@launch
 
                     executeAction(action)

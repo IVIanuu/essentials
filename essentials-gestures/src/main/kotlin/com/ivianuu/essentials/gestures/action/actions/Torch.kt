@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.torch.TorchAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.torch.TorchState
@@ -53,7 +53,7 @@ fun torchAction(
 @Given
 fun torchActionExecutor(
     @Given torchState: Flow<TorchState>,
-    @Given dispatchTorchAction: DispatchAction<TorchAction>,
+    @Given dispatchTorchAction: Collector<TorchAction>,
 ): ActionExecutor = {
     dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
 }

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.datastore.android.PrefUpdater
-import com.ivianuu.essentials.store.Actions
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
@@ -38,7 +37,7 @@ import kotlinx.coroutines.flow.onEach
 @Given
 fun testTileState(
     @Given scope: CoroutineScope,
-    @Given actions: Actions<TileAction>,
+    @Given actions: Flow<TileAction>,
     @Given update: PrefUpdater<TwilightPrefs>,
     @Given twilightPrefs: Flow<TwilightPrefs>,
 ) = scope.state(TwilightPrefs().toTileState()) {

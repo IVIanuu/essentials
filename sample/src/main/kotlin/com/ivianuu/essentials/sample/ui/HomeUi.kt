@@ -31,7 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
@@ -63,7 +63,7 @@ val homeKeyModule = KeyModule<HomeKey>()
 
 @Given
 fun homeUi(
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,
 ): KeyUi<HomeKey> = {

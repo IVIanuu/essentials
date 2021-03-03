@@ -20,7 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.store.DispatchAction
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.UiWorker
 import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.onEach
 @Given
 fun androidBackPressHandler(
     @Given activity: ComponentActivity,
-    @Given navigator: DispatchAction<NavigationAction>,
+    @Given navigator: Collector<NavigationAction>,
     @Given state: Flow<NavigationState>,
 ): UiWorker = {
     state
