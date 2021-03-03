@@ -27,20 +27,18 @@ fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial Navigation
     NavigationState(listOfNotNull(homeKey))
 
 sealed class NavigationAction {
+    object Clear : NavigationAction()
     data class Push<R : Any>(
         val key: Key<R>,
         val deferredResult: CompletableDeferred<R?>? = null,
     ) : NavigationAction()
-
-    data class ReplaceTop<R : Any>(
-        val key: Key<R>,
-        val deferredResult: CompletableDeferred<R?>? = null,
-    ) : NavigationAction()
-
     data class Pop<R : Any>(
         val key: Key<R>,
         val result: R? = null,
     ) : NavigationAction()
-
     object PopTop : NavigationAction()
+    data class ReplaceTop<R : Any>(
+        val key: Key<R>,
+        val deferredResult: CompletableDeferred<R?>? = null,
+    ) : NavigationAction()
 }

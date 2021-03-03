@@ -1,4 +1,4 @@
-// injekt-incremental-fix 1614768578766 injekt-end
+// injekt-incremental-fix 1614774430637 injekt-end
 package com.ivianuu.essentials.sample
 
 import android.app.Application
