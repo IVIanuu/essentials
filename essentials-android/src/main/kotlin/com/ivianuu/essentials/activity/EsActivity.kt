@@ -46,7 +46,7 @@ class EsActivity : ComponentActivity() {
         setContent {
             CompositionLocalProvider(LocalUiComponent provides uiComponent) {
                 component.decorateUi {
-                    LocalUiComponent.current
+                    uiComponent
                         .get<EsActivityComponent>()
                         .appUi()
                 }

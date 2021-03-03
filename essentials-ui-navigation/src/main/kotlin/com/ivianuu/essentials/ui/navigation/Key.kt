@@ -26,7 +26,9 @@ interface Key<T>
 class KeyModule<K : Key<*>>(private val keyClass: KClass<K>) {
 
     @GivenSetElement
-    fun keyUiIntoSet(@Given keyUiFactory: (@Given K) -> KeyUi<K>): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
+    fun keyUiIntoSet(
+        @Given keyUiFactory: (@Given K, @Given KeyUiComponent) -> KeyUi<K>
+    ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
         (keyClass to keyUiFactory).cast()
 
     @GivenSetElement

@@ -20,4 +20,4 @@ import androidx.compose.runtime.Composable
 
 typealias KeyUi<K> = @Composable () -> Unit
 
-typealias KeyUiFactory<K> = (K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (K, KeyUiComponent) -> KeyUi<K>
