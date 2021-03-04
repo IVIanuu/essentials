@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.Idle
@@ -47,7 +48,6 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ActivityResultLauncher
-import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
@@ -116,7 +116,7 @@ sealed class ShortcutPickerAction {
 @Scoped<KeyUiComponent>
 @Given
 fun shortcutPickerState(
-    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given scope: KeyUiScope,
     @Given initial: ShortcutPickerState = ShortcutPickerState(),
     @Given actions: Flow<ShortcutPickerAction>,
     @Given activityResultLauncher: ActivityResultLauncher,

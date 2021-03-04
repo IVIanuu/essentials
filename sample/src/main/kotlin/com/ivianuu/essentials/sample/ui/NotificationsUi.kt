@@ -71,11 +71,11 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
-import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
@@ -193,7 +193,7 @@ private fun NotificationPermissions(
 @Scoped<KeyUiComponent>
 @Given
 fun uiNotificationState(
-    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given scope: KeyUiScope,
     @Given initial: @Initial NotificationsUiState = NotificationsUiState(),
     @Given actions: Flow<NotificationsUiAction>,
     @Given dispatchServiceAction: Collector<NotificationsAction>,

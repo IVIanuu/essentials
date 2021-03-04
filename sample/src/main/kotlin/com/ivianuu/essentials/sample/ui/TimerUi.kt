@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.util.ComponentCoroutineScope
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
@@ -66,7 +66,7 @@ data class TimerState(val value: Int = 0)
 @Scoped<KeyUiComponent>
 @Given
 fun timerState(
-    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given scope: KeyUiScope,
     @Given initial: @Initial TimerState = TimerState()
 ): StateFlow<TimerState> = scope.state(initial) {
     while (coroutineContext.isActive) {

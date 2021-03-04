@@ -39,11 +39,11 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.ComponentCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
@@ -135,7 +135,7 @@ sealed class AboutAction {
 @Scoped<KeyUiComponent>
 @Given
 fun aboutState(
-    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given scope: KeyUiScope,
     @Given initial: @Initial AboutState = AboutState(),
     @Given actions: Flow<AboutAction>,
     @Given buildInfo: BuildInfo,

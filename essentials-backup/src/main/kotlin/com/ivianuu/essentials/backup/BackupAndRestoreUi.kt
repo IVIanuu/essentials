@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.util.ComponentCoroutineScope
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
@@ -89,7 +89,7 @@ sealed class BackupAndRestoreAction {
 @Scoped<KeyUiComponent>
 @Given
 fun backupAndRestoreState(
-    @Given scope: ComponentCoroutineScope<KeyUiComponent>,
+    @Given scope: KeyUiScope,
     @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
     @Given actions: Flow<BackupAndRestoreAction>,
     @Given backupCreator: BackupCreator,
