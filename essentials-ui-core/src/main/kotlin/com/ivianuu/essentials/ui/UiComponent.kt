@@ -17,22 +17,14 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.component.ChildComponentModule0
 import com.ivianuu.injekt.component.Component
-import com.ivianuu.injekt.component.ComponentElementBinding
 
 typealias UiComponent = Component
 
-@ComponentElementBinding<ActivityComponent>
-@Given
-fun uiComponentFactory(
-    @Given parent: ActivityComponent,
-    @Given builderFactory: () -> Component.Builder<UiComponent>,
-): () -> UiComponent = {
-    builderFactory()
-        .dependency(parent)
-        .build()
-}
+@Module
+val uiComponentModule = ChildComponentModule0<ActivityComponent, UiComponent>()
 
 val LocalUiComponent = staticCompositionLocalOf<UiComponent> { error("No UiComponent installed") }

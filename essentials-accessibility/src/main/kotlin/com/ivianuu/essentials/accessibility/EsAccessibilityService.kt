@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class EsAccessibilityService : AccessibilityService() {
 
     private val component by lazy {
         createServiceComponent()
-            .get<EsAccessibilityServiceComponent>()
+            .element<EsAccessibilityServiceComponent>()
     }
 
     private var connectedScope: CoroutineScope? = null

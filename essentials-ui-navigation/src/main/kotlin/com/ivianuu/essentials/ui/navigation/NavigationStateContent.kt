@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.ui.common.LocalRetainedScope
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlin.reflect.KClass
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
@@ -50,7 +50,7 @@ fun navigationStateContent(
             optionFactories = optionFactories,
             uiFactories = uiFactories,
             backStack = state.backStack.cast(),
-            keyUiComponentFactory = uiComponent.get()
+            keyUiComponentFactory = uiComponent.element()
         )
     }
     SideEffect {

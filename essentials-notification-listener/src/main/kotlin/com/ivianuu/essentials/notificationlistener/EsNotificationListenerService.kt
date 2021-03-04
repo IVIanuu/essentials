@@ -29,7 +29,7 @@ import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +43,7 @@ class EsNotificationListenerService : NotificationListenerService() {
 
     private val component by lazy {
         createServiceComponent()
-            .get<EsNotificationListenerServiceComponent>()
+            .element<EsNotificationListenerServiceComponent>()
     }
 
     private var connectedScope: CoroutineScope? = null

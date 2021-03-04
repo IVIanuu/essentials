@@ -61,7 +61,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 
 @HomeItemBinding
 @Given
@@ -360,7 +360,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
-    val component = LocalUiComponent.current.get<DialogLauncherComponent>()
+    val component = LocalUiComponent.current.element<DialogLauncherComponent>()
     Button(
         onClick = {
             component.navigator(

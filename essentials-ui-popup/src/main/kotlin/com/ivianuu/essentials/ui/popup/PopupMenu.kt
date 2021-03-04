@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 
 object PopupMenu {
     data class Item(
@@ -47,7 +47,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = LocalUiComponent.current.get<PopupMenuComponent>()
+            val dependencies = LocalUiComponent.current.element<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(

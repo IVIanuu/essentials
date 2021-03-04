@@ -30,20 +30,20 @@ import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity() {
 
     private val uiComponent by lazy {
-        activityComponent.get<() -> UiComponent>()()
+        activityComponent.element<() -> UiComponent>()()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val component = uiComponent.get<EsActivityComponent>()
+        val component = uiComponent.element<EsActivityComponent>()
         component.uiWorkerRunner()
 
         lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {

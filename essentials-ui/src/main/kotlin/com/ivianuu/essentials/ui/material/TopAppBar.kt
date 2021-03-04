@@ -44,7 +44,7 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {
@@ -141,7 +141,7 @@ private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val component = LocalUiComponent.current.get<AutoTopAppBarComponent>()
+    val component = LocalUiComponent.current.element<AutoTopAppBarComponent>()
     val canGoBack = remember {
         component.navigationState.value.backStack.size > 1
     }

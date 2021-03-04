@@ -28,7 +28,7 @@ import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.get
+import com.ivianuu.injekt.component.element
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -50,7 +50,7 @@ abstract class AbstractFunTileService(
 
     private val component by lazy {
         createServiceComponent()
-            .get<FunTileServiceComponent>()
+            .element<FunTileServiceComponent>()
     }
 
     private val tileActions = EventFlow<TileAction>()
@@ -78,6 +78,11 @@ abstract class AbstractFunTileService(
         listeningScope?.cancel()
         listeningScope = null
         super.onStopListening()
+    }
+
+    override fun onDestroy() {
+        component.serviceComponent.dispose()
+        super.onDestroy()
     }
 
     private fun applyState(state: TileState) {
@@ -112,6 +117,7 @@ abstract class AbstractFunTileService(
 class FunTileServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val resourceProvider: ResourceProvider,
+    @Given val serviceComponent: ServiceComponent,
     @Given tileStores: Set<TileStateElement>
 ) {
     val tileStores = tileStores.toMap()
