@@ -8,4 +8,4 @@ typealias NavBarFeatureSupported = Boolean
 @Given
 fun navBarFeatureSupported(
     @Given systemBuildInfo: SystemBuildInfo
-): NavBarFeatureSupported = systemBuildInfo.sdk < 29
+): NavBarFeatureSupported = systemBuildInfo.sdk < 30
