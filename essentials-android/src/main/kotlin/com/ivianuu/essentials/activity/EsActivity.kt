@@ -20,16 +20,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiWorkerRunner
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity() {
 
@@ -43,12 +46,16 @@ class EsActivity : ComponentActivity() {
         val component = uiComponent.get<EsActivityComponent>()
         component.uiWorkerRunner()
 
+        lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+            runOnCancellation {
+                uiComponent.dispose()
+            }
+        }
+
         setContent {
             CompositionLocalProvider(LocalUiComponent provides uiComponent) {
                 component.decorateUi {
-                    uiComponent
-                        .get<EsActivityComponent>()
-                        .appUi()
+                    component.appUi()
                 }
             }
         }
@@ -65,7 +72,7 @@ class EsActivity : ComponentActivity() {
 
 }
 
-@ComponentElementBinding<ActivityComponent>
+@ComponentElementBinding<UiComponent>
 @Given
 class EsActivityComponent(
     @Given val appUi: AppUi,
