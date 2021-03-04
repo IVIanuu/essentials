@@ -20,7 +20,6 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -29,7 +28,6 @@ import com.ivianuu.injekt.android.createServiceComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -47,12 +45,6 @@ class EsAccessibilityService : AccessibilityService() {
         val connectedScope = CoroutineScope(component.defaultDispatcher)
         component.logger.d { "connected" }
         component.serviceHolder.value = this
-        connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
-            runOnCancellation {
-                component.logger.d { "disconnected" }
-                component.serviceHolder.value = null
-            }
-        }
         connectedScope.launch {
             component.accessibilityWorkerRunner()
         }
@@ -74,8 +66,11 @@ class EsAccessibilityService : AccessibilityService() {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
+        component.logger.d { "disconnected" }
         connectedScope?.cancel()
         connectedScope = null
+        component.serviceHolder.value = null
+        component.serviceComponent.dispose()
         return super.onUnbind(intent)
     }
 
@@ -88,5 +83,6 @@ class EsAccessibilityServiceComponent(
     @Given val accessibilityWorkerRunner: AccessibilityWorkerRunner,
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val logger: Logger,
-    @Given val serviceHolder: MutableAccessibilityServiceHolder
+    @Given val serviceHolder: MutableAccessibilityServiceHolder,
+    @Given val serviceComponent: ServiceComponent
 )

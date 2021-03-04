@@ -19,7 +19,6 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.Logger
@@ -32,7 +31,6 @@ import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.get
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +39,7 @@ import kotlinx.coroutines.launch
 class EsNotificationListenerService : NotificationListenerService() {
 
     private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-    val notifications: Flow<List<StatusBarNotification>> by this::_notifications
+    internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
     private val component by lazy {
         createServiceComponent()
@@ -54,12 +52,6 @@ class EsNotificationListenerService : NotificationListenerService() {
         super.onListenerConnected()
         val connectedScope = CoroutineScope(component.defaultDispatcher)
             .also { this.connectedScope = it }
-        connectedScope.launch(start = CoroutineStart.UNDISPATCHED) {
-            runOnCancellation {
-                component.logger.d { "listener disconnected" }
-                component.notificationServiceRef.value = null
-            }
-        }
         connectedScope.launch {
             component.logger.d { "listener connected" }
             component.notificationServiceRef.value = this@EsNotificationListenerService
@@ -87,8 +79,11 @@ class EsNotificationListenerService : NotificationListenerService() {
     }
 
     override fun onListenerDisconnected() {
+        component.logger.d { "listener disconnected" }
         connectedScope?.cancel()
         connectedScope = null
+        component.serviceComponent.dispose()
+        component.notificationServiceRef.value = null
         super.onListenerDisconnected()
     }
 
@@ -105,7 +100,8 @@ class EsNotificationListenerServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val notificationServiceRef: NotificationServiceRef,
     @Given val logger: Logger,
-    @Given val notificationWorkerRunner: NotificationWorkerRunner
+    @Given val notificationWorkerRunner: NotificationWorkerRunner,
+    @Given val serviceComponent: ServiceComponent
 )
 
 internal typealias NotificationServiceRef = MutableStateFlow<EsNotificationListenerService?>
