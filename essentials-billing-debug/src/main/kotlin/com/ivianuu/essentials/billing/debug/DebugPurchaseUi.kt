@@ -112,6 +112,11 @@ fun debugPurchaseUi(
     }
 }
 
+@Given
+val debugPurchaseUiOptionsFactory = DialogKeyUiOptionsFactory<DebugPurchaseKey>()
+
+private val GooglePlayGreen = Color(0xFF00A273)
+
 data class DebugPurchaseState(
     val skuDetails: Resource<SkuDetails> = Idle
 )
@@ -153,7 +158,3 @@ fun debugPurchaseState(
 @Given
 val debugPurchaseActions get() = EventFlow<DebugPurchaseAction>()
 
-@Given
-val debugPurchaseUiOptionsFactory = DialogKeyUiOptionsFactory<DebugPurchaseKey>()
-
-private val GooglePlayGreen = Color(0xFF00A273)

@@ -162,8 +162,9 @@ fun actionPickerState(
         .launchIn(this)
 }
 
+@Scoped<KeyUiComponent>
 @Given
-val actionPickerActions = EventFlow<ActionPickerAction>()
+val actionPickerActions get() = EventFlow<ActionPickerAction>()
 
 private suspend fun getActionPickerItems(
     actionRepository: ActionRepository,

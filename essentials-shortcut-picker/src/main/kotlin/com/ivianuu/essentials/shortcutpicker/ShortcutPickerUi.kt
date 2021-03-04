@@ -115,10 +115,6 @@ sealed class ShortcutPickerAction {
 
 @Scoped<KeyUiComponent>
 @Given
-val shortcutPickerActions = EventFlow<ShortcutPickerAction>()
-
-@Scoped<KeyUiComponent>
-@Given
 fun shortcutPickerState(
     @Given scope: ComponentCoroutineScope<KeyUiComponent>,
     @Given initial: ShortcutPickerState = ShortcutPickerState(),
@@ -146,3 +142,7 @@ fun shortcutPickerState(
         }
         .launchIn(this)
 }
+
+@Scoped<KeyUiComponent>
+@Given
+val shortcutPickerActions get() = EventFlow<ShortcutPickerAction>()
