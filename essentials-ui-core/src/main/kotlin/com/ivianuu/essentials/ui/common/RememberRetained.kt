@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.common.ScopeDisposable
 
 val LocalRetainedScope = staticCompositionLocalOf<Scope> {
     error("No retained scope specified")
@@ -61,8 +62,8 @@ inline fun <T : Any> rememberRetained(
 internal class ValueWithInputs<T>(
     val value: T,
     val inputs: Array<out Any?>
-) : Scope.Disposable {
+) : ScopeDisposable {
     override fun dispose() {
-        (value as? Scope.Disposable)?.dispose()
+        (value as? ScopeDisposable)?.dispose()
     }
 }

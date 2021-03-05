@@ -18,7 +18,7 @@ package com.ivianuu.essentials.ui.coroutines
 
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ui.common.rememberRetained
-import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.common.ScopeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
@@ -31,7 +31,7 @@ fun rememberRetainedCoroutinesScope(
 
 private class DisposableCoroutineScope(
     private val coroutineScope: CoroutineScope
-) : CoroutineScope by coroutineScope, Scope.Disposable {
+) : CoroutineScope by coroutineScope, ScopeDisposable {
     override fun dispose() {
         coroutineScope.cancel()
     }
