@@ -34,11 +34,11 @@ annotation class AppInitializerBinding
 
 @Macro
 @GivenSetElement
-fun <@ForTypeKey T : @AppInitializerBinding S, S : AppInitializer> appInitializerBindingImpl(
+fun <T : @AppInitializerBinding S, @ForTypeKey S : AppInitializer> appInitializerBindingImpl(
     @Given instance: () -> T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(
-    typeKeyOf<T>(), instance, config
+    typeKeyOf<S>(), instance, config
 )
 
 data class AppInitializerConfig<out T : AppInitializer>(

@@ -113,7 +113,7 @@ fun <T, S> Flow<T>.reduceResource(scope: StateScope<S>, reducer: S.(Resource<T>)
     flowAsResource().reduce { reducer(it) }
 }
 
-fun <T> resourceFlow(block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
+fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {
         emit(Loading)
         runKatching {
