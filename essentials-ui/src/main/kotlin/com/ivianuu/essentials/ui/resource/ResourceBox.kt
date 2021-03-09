@@ -45,7 +45,7 @@ fun <T> ResourceLazyColumnFor(
     transition: StackTransition = ResourceBoxDefaults.transition,
     error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
     loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = {},
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
@@ -74,7 +74,7 @@ fun <T> ResourceLazyRowFor(
     transition: StackTransition = ResourceBoxDefaults.transition,
     error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
     loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = {},
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
@@ -103,7 +103,7 @@ fun <T> ResourceBox(
     transition: StackTransition = ResourceBoxDefaults.transition,
     error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
     loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = loading,
+    idle: @Composable () -> Unit = {},
     success: @Composable (T) -> Unit
 ) {
     // we only wanna animate if the resource type has changed
