@@ -142,7 +142,10 @@ fun appPickerState(
     @Given key: AppPickerKey,
     @Given navigator: Collector<NavigationAction>,
 ): StateFlow<AppPickerState> = scope.state(initial) {
-    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
+    reduceResource({
+        //appRepository.getInstalledApps()
+        throw RuntimeException()
+    }) { copy(allApps = it) }
     actions
         .filterIsInstance<FilterApps>()
         .reduce { copy(appFilter = it.appFilter) }

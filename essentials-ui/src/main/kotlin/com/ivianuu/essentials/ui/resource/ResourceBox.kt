@@ -16,15 +16,21 @@
 
 package com.ivianuu.essentials.ui.resource
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
@@ -36,11 +42,9 @@ import com.ivianuu.essentials.ui.layout.center
 fun <T> ResourceLazyColumnFor(
     resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeStackTransition(),
-    fail: @Composable (Throwable) -> Unit = { throw it },
-    loading: @Composable () -> Unit = {
-        CircularProgressIndicator(modifier = Modifier.center())
-    },
+    transition: StackTransition = ResourceBoxDefaults.transition,
+    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
     idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable LazyItemScope.(T) -> Unit,
@@ -49,7 +53,7 @@ fun <T> ResourceLazyColumnFor(
         resource = resource,
         modifier = modifier,
         transition = transition,
-        error = fail,
+        error = error,
         loading = loading,
         idle = idle
     ) { items ->
@@ -67,11 +71,9 @@ fun <T> ResourceLazyColumnFor(
 fun <T> ResourceLazyRowFor(
     resource: Resource<List<T>>,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeStackTransition(),
-    error: @Composable (Throwable) -> Unit = { throw it },
-    loading: @Composable () -> Unit = {
-        CircularProgressIndicator(modifier = Modifier.center())
-    },
+    transition: StackTransition = ResourceBoxDefaults.transition,
+    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
     idle: @Composable () -> Unit = loading,
     successEmpty: @Composable () -> Unit = {},
     successItemContent: @Composable LazyItemScope.(T) -> Unit,
@@ -98,13 +100,9 @@ fun <T> ResourceLazyRowFor(
 fun <T> ResourceBox(
     resource: Resource<T>,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeStackTransition(),
-    error: @Composable (Throwable) -> Unit = {},
-    loading: @Composable () -> Unit = {
-        CircularProgressIndicator(
-            modifier = Modifier.center()
-        )
-    },
+    transition: StackTransition = ResourceBoxDefaults.transition,
+    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
     idle: @Composable () -> Unit = loading,
     success: @Composable (T) -> Unit
 ) {
@@ -123,5 +121,22 @@ fun <T> ResourceBox(
             is Success -> success(currentValue.value)
             is Error -> error(currentValue.error)
         }
+    }
+}
+
+object ResourceBoxDefaults {
+    val transition = FadeStackTransition()
+    val error: @Composable (Throwable) -> Unit = {
+        Text(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            text = it.stackTraceToString(),
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.body1
+        )
+    }
+    val loading: @Composable () -> Unit = {
+        CircularProgressIndicator(modifier = Modifier.center())
     }
 }
