@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
@@ -44,7 +43,7 @@ val timerHomeItem = HomeItem("Timer") { TimerKey() }
 
 class TimerKey : Key<Nothing>
 
-@Module
+@Given
 val timerKeyModule = KeyModule<TimerKey>()
 
 @Given

@@ -23,8 +23,6 @@ import coil.fetch.Fetcher
 import coil.intercept.Interceptor
 import coil.map.Mapper
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
@@ -57,17 +55,16 @@ fun imageLoader(
 @Qualifier
 annotation class DecoderBinding
 
-@Macro
-@GivenSetElement
-fun <T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
+@Given
+fun <@Given T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
 
 @Qualifier
 annotation class FetcherBinding
 
-@Macro
-@GivenSetElement
-inline fun <reified F : @FetcherBinding Fetcher<T>, reified T : Any> fetcherBindingImpl(@Given instance: F): FetcherPair<Any> =
-    FetcherPair(instance, T::class) as FetcherPair<Any>
+@Given
+inline fun <@Given reified F : @FetcherBinding Fetcher<T>, reified T : Any> fetcherBindingImpl(
+    @Given instance: F
+): FetcherPair<Any> = FetcherPair(instance, T::class) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
     val fetcher: Fetcher<T>,
@@ -77,18 +74,18 @@ data class FetcherPair<T : Any>(
 @Qualifier
 annotation class InterceptorBinding
 
-@Macro
-@GivenSetElement
-fun <T : @InterceptorBinding Interceptor> interceptorBindingImpl(@Given instance: T): Interceptor =
-    instance
+@Given
+fun <@Given T : @InterceptorBinding Interceptor> interceptorBindingImpl(
+    @Given instance: T
+): Interceptor = instance
 
 @Qualifier
 annotation class MapperBinding
 
-@Macro
-@GivenSetElement
-inline fun <reified M : @MapperBinding Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
-    @Given instance: M): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
+@Given
+inline fun <@Given reified M : @MapperBinding Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
+    @Given instance: M
+): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
 
 data class MapperPair<T : Any>(
     val mapper: Mapper<T, *>,

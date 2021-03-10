@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.component.AppComponent
@@ -60,7 +59,7 @@ val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
 class NavBarKey : Key<Nothing>
 
-@Module
+@Given
 val navBarKeyModule = KeyModule<NavBarKey>()
 
 @Given

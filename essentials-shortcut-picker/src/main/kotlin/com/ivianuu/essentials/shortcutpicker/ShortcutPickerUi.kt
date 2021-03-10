@@ -50,7 +50,6 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,7 +59,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ShortcutPickerKey : Key<Shortcut>
 
-@Module
+@Given
 val shortcutPickerKeyModule = KeyModule<ShortcutPickerKey>()
 
 @Given

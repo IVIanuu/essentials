@@ -17,14 +17,14 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.component.ChildComponentModule0
 import com.ivianuu.injekt.component.Component
 
 typealias UiComponent = Component
 
-@Module
+@Given
 val uiComponentModule = ChildComponentModule0<ActivityComponent, UiComponent>()
 
 val LocalUiComponent = staticCompositionLocalOf<UiComponent> { error("No UiComponent installed") }

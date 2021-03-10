@@ -18,8 +18,6 @@ package com.ivianuu.essentials.foreground
 
 import android.app.Notification
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.flow.Flow
 
@@ -31,8 +29,8 @@ sealed class ForegroundState {
 @Qualifier
 annotation class ForegroundStateBinding
 
-@Macro
-@GivenSetElement
-fun <T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(
-    @Given instance: T): Flow<ForegroundState> = instance
+typealias ForegroundStateElement = Flow<ForegroundState>
 
+@Given
+fun <@Given T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(
+    @Given instance: T): ForegroundStateElement = instance

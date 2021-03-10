@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
 typealias BootListener = suspend () -> Unit
@@ -26,7 +24,6 @@ typealias BootListener = suspend () -> Unit
 @Qualifier
 annotation class BootListenerBinding
 
-@Macro
-@GivenSetElement
-fun <T : @BootListenerBinding S, S : BootListener> bootListenerBindingImpl(
+@Given
+fun <@Given T : @BootListenerBinding S, S : BootListener> bootListenerBindingImpl(
     @Given instance: T): BootListener = instance

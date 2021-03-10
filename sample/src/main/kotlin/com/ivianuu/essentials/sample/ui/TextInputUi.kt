@@ -45,15 +45,13 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 @HomeItemBinding
 @Given
 val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 
 class TextInputKey : Key<Nothing>
 
-@Module
+@Given
 val textInputKeyModule = KeyModule<TextInputKey>()
 
 @Given

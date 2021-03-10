@@ -19,10 +19,10 @@ package com.ivianuu.essentials.hidenavbar
 import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 internal typealias WasNavBarHidden = Boolean
 
-@Module val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden")
+@Given
+val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden")
 
-@Given val defaultWasNavBarHidden: @Initial WasNavBarHidden = false
+@Given
+val defaultWasNavBarHidden: @Initial WasNavBarHidden = false

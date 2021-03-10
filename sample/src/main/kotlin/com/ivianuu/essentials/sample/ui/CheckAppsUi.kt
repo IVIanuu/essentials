@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +37,7 @@ val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
 
 class CheckAppsKey : Key<Nothing>
 
-@Module
+@Given
 val checkAppsKeyModule = KeyModule<CheckAppsKey>()
 
 @Given
@@ -69,4 +68,4 @@ data class CheckAppsPrefs(
     @Json(name = "checked_apps") val checkedApps: Set<String> = emptySet(),
 )
 
-@Module val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
+@Given val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")

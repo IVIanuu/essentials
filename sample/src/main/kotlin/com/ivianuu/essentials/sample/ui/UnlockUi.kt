@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -41,7 +40,7 @@ val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 
 class UnlockKey : Key<Nothing>
 
-@Module
+@Given
 val unlockKeyModule = KeyModule<UnlockKey>()
 
 @Given

@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +48,7 @@ import kotlinx.coroutines.flow.onEach
 
 class BackupAndRestoreKey : Key<Nothing>
 
-@Module
+@Given
 val backupAndRestoreKeyModule = KeyModule<BackupAndRestoreKey>()
 
 @Given

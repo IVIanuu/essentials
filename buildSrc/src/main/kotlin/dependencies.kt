@@ -28,12 +28,12 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.essentials"
     const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev781"
+    const val version = "${Build.versionName}-dev783"
 }
 
 object Deps {
     const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.6.0"
+        "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
     object AndroidX {
@@ -44,7 +44,7 @@ object Deps {
         const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
         object Compose {
-            const val version = "1.0.0-beta01"
+            const val version = "1.0.0-beta02"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
@@ -82,7 +82,7 @@ object Deps {
     const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
 
     object Coroutines {
-        private const val version = "1.4.2"
+        private const val version = "1.4.3"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -91,12 +91,12 @@ object Deps {
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev780"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev783"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev482"
+        private const val version = "0.0.1-dev483"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val component = "com.ivianuu.injekt:injekt-component:$version"
@@ -110,7 +110,7 @@ object Deps {
     const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
 
     object Kotlin {
-        const val version = "1.4.30"
+        const val version = "1.4.31"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
         const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

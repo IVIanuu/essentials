@@ -45,7 +45,6 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
@@ -61,7 +60,7 @@ data class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Module
+@Given
 val writeSecureSettingsKeyModule = KeyModule<WriteSecureSettingsKey>()
 
 @Given

@@ -11,8 +11,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 data class SingleChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItem: T,
@@ -21,7 +19,7 @@ data class SingleChoiceListKey<T : Any>(
     data class Item<T : Any>(val value: T, val title: String)
 }
 
-@Module
+@Given
 fun <T : Any> singleChoiceListKeyModule() = KeyModule<SingleChoiceListKey<T>>()
 
 @Given

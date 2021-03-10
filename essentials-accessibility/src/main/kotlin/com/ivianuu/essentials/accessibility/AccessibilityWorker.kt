@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -28,9 +26,8 @@ typealias AccessibilityWorker = suspend () -> Unit
 @Qualifier
 annotation class AccessibilityWorkerBinding
 
-@Macro
-@GivenSetElement
-fun <T : @AccessibilityWorkerBinding S, S : AccessibilityWorker> accessibilityWorkerBindingImpl(
+@Given
+fun <@Given T : @AccessibilityWorkerBinding S, S : AccessibilityWorker> accessibilityWorkerBindingImpl(
     @Given instance: T
 ): AccessibilityWorker = instance
 

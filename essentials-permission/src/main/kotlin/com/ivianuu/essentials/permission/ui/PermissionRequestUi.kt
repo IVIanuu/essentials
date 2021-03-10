@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +57,7 @@ import kotlinx.coroutines.launch
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
-@Module
+@Given
 val permissionRequestKeyModule = KeyModule<PermissionRequestKey>()
 
 @Given

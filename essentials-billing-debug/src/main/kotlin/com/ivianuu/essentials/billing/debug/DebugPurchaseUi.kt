@@ -52,7 +52,6 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,7 +63,7 @@ import kotlinx.coroutines.flow.onEach
 
 data class DebugPurchaseKey(val sku: Sku) : Key<SkuDetails>
 
-@Module
+@Given
 val debugPurchaseKeyModule = KeyModule<DebugPurchaseKey>()
 
 @Given

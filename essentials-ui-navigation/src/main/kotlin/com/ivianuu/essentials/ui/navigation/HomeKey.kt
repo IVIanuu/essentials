@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 
 typealias HomeKey = Key<Nothing>
@@ -25,6 +24,7 @@ typealias HomeKey = Key<Nothing>
 @Qualifier
 annotation class HomeKeyBinding
 
-@Macro
 @Given
-fun <T : @HomeKeyBinding S, S : Key<Nothing>> homeKeyBindingImpl(@Given instance: T): HomeKey = instance
+fun <@Given T : @HomeKeyBinding S, S : Key<Nothing>> homeKeyBindingImpl(
+    @Given instance: T
+): HomeKey = instance

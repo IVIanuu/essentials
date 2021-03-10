@@ -24,8 +24,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import java.util.UUID
 import kotlin.time.Duration
@@ -48,9 +46,8 @@ typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker>
 annotation class WorkerBinding<S>
 
 @Suppress("UNCHECKED_CAST")
-@Macro
-@GivenSetElement
-fun <P : @WorkerBinding<I> S, S : Worker, I : WorkerId> workerBindingImpl(
+@Given
+fun <@Given P : @WorkerBinding<I> S, S : Worker, I : WorkerId> workerBindingImpl(
     @Given id: I,
     @Given factory: (@Given WorkScope) -> P
 ): WorkerElement = id to factory

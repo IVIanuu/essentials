@@ -50,7 +50,6 @@ import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -61,7 +60,7 @@ val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 
 class PrefsKey : Key<Nothing>
 
-@Module
+@Given
 val prefsKeyModule = KeyModule<PrefsKey>()
 
 @Given
@@ -213,5 +212,5 @@ data class SamplePrefs(
     val singleChoice: String = "C",
 )
 
-@Module
+@Given
 val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")

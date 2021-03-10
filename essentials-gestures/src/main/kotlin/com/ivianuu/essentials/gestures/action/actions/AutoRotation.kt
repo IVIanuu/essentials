@@ -33,7 +33,6 @@ import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -75,7 +74,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
 
 internal typealias AutoRotation = Int
 
-@Module
+@Given
 val autoRotationModule = AndroidSettingStateModule<AutoRotation, Int>(
     Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
 

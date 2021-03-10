@@ -21,8 +21,6 @@ import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
@@ -31,9 +29,8 @@ typealias UiWorker = suspend () -> Unit
 @Qualifier
 annotation class UiWorkerBinding
 
-@Macro
-@GivenSetElement
-fun <T : @UiWorkerBinding S, S : UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
+@Given
+fun <@Given T : @UiWorkerBinding S, S : UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
 
 typealias UiWorkerRunner = () -> Unit
 

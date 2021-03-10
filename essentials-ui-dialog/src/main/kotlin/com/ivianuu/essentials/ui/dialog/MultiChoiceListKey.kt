@@ -14,8 +14,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 data class MultiChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItems: Set<T>,
@@ -24,7 +22,7 @@ data class MultiChoiceListKey<T : Any>(
     data class Item<T>(val value: T, val title: String)
 }
 
-@Module
+@Given
 fun <T : Any> multiChoiceListKeyModule() = KeyModule<MultiChoiceListKey<T>>()
 
 @Given

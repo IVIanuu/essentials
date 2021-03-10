@@ -18,8 +18,6 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
@@ -54,8 +52,7 @@ sealed class TileAction {
 @Qualifier
 annotation class TileStateBinding<T : AbstractFunTileService>
 
-@Macro
-@GivenSetElement
-fun <T : @TileStateBinding<S> StateFlow<TileState>, @ForTypeKey S : AbstractFunTileService> tileStateBindingImpl(
+@Given
+fun <@Given T : @TileStateBinding<S> StateFlow<TileState>, @ForTypeKey S : AbstractFunTileService> tileStateBindingImpl(
     @Given provider: (@Given CoroutineScope, @Given Flow<TileAction>) -> T,
 ): TileStateElement = typeKeyOf<S>() to provider

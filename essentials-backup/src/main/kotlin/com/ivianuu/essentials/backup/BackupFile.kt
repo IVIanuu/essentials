@@ -19,17 +19,16 @@ package com.ivianuu.essentials.backup
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import java.io.File
 
 @Qualifier
 annotation class BackupFileBinding
 
-@Macro
-@GivenSetElement
-fun <T : @BackupFileBinding S, S : File> backupFileBindingImpl(@Given instance: T): BackupFile = instance
+@Given
+fun <@Given T : @BackupFileBinding S, S : File> backupFileBindingImpl(
+    @Given instance: T
+): BackupFile = instance
 
 typealias BackupFile = File
 

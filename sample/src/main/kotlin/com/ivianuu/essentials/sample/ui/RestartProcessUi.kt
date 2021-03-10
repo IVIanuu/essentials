@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -37,7 +36,7 @@ val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
 
 class RestartProcessKey : Key<Nothing>
 
-@Module
+@Given
 val restartProcessKeyModule = KeyModule<RestartProcessKey>()
 
 @Given

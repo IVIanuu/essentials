@@ -25,8 +25,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 data class ColorPickerKey(
     val initialColor: Color,
     val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
@@ -35,7 +33,7 @@ data class ColorPickerKey(
     val showAlphaSelector: Boolean = false,
 ) : Key<Color>
 
-@Module
+@Given
 val colorPickerKeyModule = KeyModule<ColorPickerKey>()
 
 @Given

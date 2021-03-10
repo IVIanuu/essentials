@@ -61,7 +61,6 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -80,7 +79,7 @@ data class ActionPickerKey(
     }
 }
 
-@Module
+@Given
 val actionPickerKeyModule = KeyModule<ActionPickerKey>()
 
 @Given

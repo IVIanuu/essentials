@@ -51,7 +51,6 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
@@ -68,7 +67,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Nothing>
 
-@Module
+@Given
 val writeSecureSettingsPcInstructionsKeyModule = KeyModule<WriteSecureSettingsPcInstructionsKey>()
 
 @Given

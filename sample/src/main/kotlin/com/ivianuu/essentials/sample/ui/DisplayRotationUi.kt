@@ -31,7 +31,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.Flow
 
 @HomeItemBinding
@@ -40,7 +39,7 @@ val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey(
 
 class DisplayRotationKey : Key<Nothing>
 
-@Module
+@Given
 val displayRotationKeyModule = KeyModule<DisplayRotationKey>()
 
 @Given

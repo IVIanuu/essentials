@@ -25,7 +25,6 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +34,7 @@ import kotlinx.coroutines.flow.onEach
 
 class NavBarUnsupportedKey : Key<Nothing>
 
-@Module
+@Given
 val navBarUnsupportedKeyModule = KeyModule<NavBarUnsupportedKey>()
 
 @Given

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.datastore.android.PrefModule
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Given
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -27,5 +27,5 @@ data class TwilightPrefs(
     @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 
-@Module
+@Given
 val twilightPrefsModule = PrefModule<TwilightPrefs>("twilight_prefs")

@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -41,7 +40,7 @@ val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
 
 class ActionsKey : Key<Nothing>
 
-@Module
+@Given
 val actionsKeyModule = KeyModule<ActionsKey>()
 
 @Given

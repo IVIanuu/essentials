@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.launch
 
 @HomeItemBinding
@@ -47,7 +46,7 @@ val billingHomeItem = HomeItem("Billing") { BillingKey() }
 
 class BillingKey : Key<Nothing>
 
-@Module
+@Given
 val billingKeyModule = KeyModule<BillingKey>()
 
 @Given

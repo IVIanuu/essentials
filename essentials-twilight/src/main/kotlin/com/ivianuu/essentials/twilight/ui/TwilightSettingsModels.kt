@@ -18,9 +18,9 @@ package com.ivianuu.essentials.twilight.ui
 
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
-import com.ivianuu.injekt.Module
+import com.ivianuu.injekt.Given
 
 class TwilightSettingsKey : Key<Nothing>
 
-@Module
+@Given
 val twilightSettingsKeyModule = KeyModule<TwilightSettingsKey>()

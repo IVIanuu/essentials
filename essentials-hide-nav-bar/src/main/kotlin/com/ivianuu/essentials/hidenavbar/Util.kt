@@ -28,8 +28,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 
 @Given
@@ -54,7 +52,7 @@ fun nonSdkInterfaceDetectionDisabler(
 
 internal typealias HiddenApiPolicy = Int
 
-@Module
+@Given
 val hiddenApiPolicyModule =
     AndroidSettingStateModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 
@@ -63,7 +61,7 @@ val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
 
 internal typealias HiddenApiPolicyPrePieApps = Int
 
-@Module
+@Given
 val hiddenApiPolicyPrePieAppsModule =
     AndroidSettingStateModule<HiddenApiPolicyPrePieApps, Int>("hidden_api_policy_pre_p_apps",
         AndroidSettingsType.GLOBAL)
@@ -73,7 +71,7 @@ val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
 
 internal typealias HiddenApiPolicyPieApps = Int
 
-@Module
+@Given
 val hiddenApiPolicyPieAppsBinding =
     AndroidSettingStateModule<HiddenApiPolicyPieApps, Int>("hidden_api_policy_p_apps",
         AndroidSettingsType.GLOBAL)

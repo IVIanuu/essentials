@@ -59,7 +59,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.element
 
@@ -69,7 +68,7 @@ val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
 class DialogsKey : Key<Nothing>
 
-@Module
+@Given
 val dialogsKeyModule = KeyModule<DialogsKey>()
 
 @Given
@@ -380,7 +379,7 @@ private fun DialogLauncherButton(
 
 data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
 
-@Module
+@Given
 val dialogLauncherKeyModule = KeyModule<DialogLauncherKey>()
 
 @Given

@@ -28,15 +28,13 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 @HomeItemBinding
 @Given
 val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
 
 class DrawerKey : Key<Nothing>
 
-@Module
+@Given
 val drawerKeyModule = KeyModule<DrawerKey>()
 
 @Given

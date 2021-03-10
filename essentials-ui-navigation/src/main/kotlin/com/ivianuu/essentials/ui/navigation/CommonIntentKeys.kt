@@ -21,11 +21,10 @@ import android.content.pm.PackageManager
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 
 data class AppInfoKey(val packageName: String) : IntentKey
 
-@Module
+@Given
 val appInfoKeyModule = IntentKeyModule<AppInfoKey>()
 
 @Given
@@ -37,7 +36,7 @@ fun appInfoKeyIntentFactory(): KeyIntentFactory<AppInfoKey> = { key ->
 
 data class AppKey(val packageName: String) : IntentKey
 
-@Module
+@Given
 val appKeyModule = IntentKeyModule<AppKey>()
 
 @Given
@@ -49,7 +48,7 @@ fun appKeyIntentFactory(
 
 data class ShareKey(val text: String) : IntentKey
 
-@Module
+@Given
 val shareKeyModule = IntentKeyModule<ShareKey>()
 
 @Given
@@ -65,7 +64,7 @@ fun shareKeyIntentFactory(): KeyIntentFactory<ShareKey> = { key ->
 
 data class UrlKey(val url: String) : IntentKey
 
-@Module
+@Given
 val urlKeyModule = IntentKeyModule<UrlKey>()
 
 @Given

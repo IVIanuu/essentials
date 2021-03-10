@@ -21,7 +21,6 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.datastore.android.PrefModule
 import com.ivianuu.essentials.moshi.JsonAdapterBinding
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -33,7 +32,7 @@ data class DebugBillingPrefs(
     @Json(name = "billing_purchases") val purchases: List<Purchase> = emptyList(),
 )
 
-@Module
+@Given
 val debugBillingPrefsModule = PrefModule<DebugBillingPrefs>("debug_billing_prefs")
 
 @JsonAdapterBinding

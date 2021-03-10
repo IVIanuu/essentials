@@ -23,8 +23,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedTopological
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
@@ -33,9 +31,8 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Qualifier
 annotation class UiDecoratorBinding
 
-@Macro
-@GivenSetElement
-fun <T : @UiDecoratorBinding S, @ForTypeKey S : UiDecorator> uiDecoratorBindingImpl(
+@Given
+fun <@Given T : @UiDecoratorBinding S, @ForTypeKey S : UiDecorator> uiDecoratorBindingImpl(
     @Given instance: T,
     @Given config: UiDecoratorConfig<S> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(
@@ -90,9 +87,8 @@ typealias AppTheme = UiDecorator
 
 @Suppress("USELESS_CAST")
 @UiDecoratorBinding
-@Macro
 @Given
-fun <T : @AppThemeBinding S, S : AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
+fun <@Given T : @AppThemeBinding S, S : AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
     instance as UiDecorator
 
 @Given

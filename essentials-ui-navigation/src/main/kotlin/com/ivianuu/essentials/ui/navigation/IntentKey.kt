@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.navigation
 import android.content.Intent
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
 import com.ivianuu.injekt.android.AppContext
 import kotlin.reflect.KClass
 
@@ -27,9 +26,10 @@ interface IntentKey : Key<Nothing>
 
 class IntentKeyModule<K : IntentKey>(private val keyClass: KClass<K>) {
 
-    @GivenSetElement
-    fun keyIntentFactoryIntoSet(@Given intentFactory: KeyIntentFactory<K>): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> =
-        (keyClass to intentFactory).cast()
+    @Given
+    fun keyIntentFactory(
+        @Given intentFactory: KeyIntentFactory<K>
+    ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
     companion object {
         inline operator fun <reified K : IntentKey> invoke() = IntentKeyModule(K::class)

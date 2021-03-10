@@ -20,8 +20,6 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -44,9 +42,8 @@ data class AccessibilityConfig(
 @Qualifier
 annotation class AccessibilityConfigBinding
 
-@Macro
-@GivenSetElement
-fun <T : @AccessibilityConfigBinding Flow<AccessibilityConfig>> accessibilityConfigBindingImpl(
+@Given
+fun <@Given T : @AccessibilityConfigBinding Flow<AccessibilityConfig>> accessibilityConfigBindingImpl(
     @Given instance: () -> T
 ): () -> Flow<AccessibilityConfig> = instance
 

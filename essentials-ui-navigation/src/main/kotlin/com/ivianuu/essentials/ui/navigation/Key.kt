@@ -18,21 +18,20 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
 import kotlin.reflect.KClass
 
 interface Key<T>
 
 class KeyModule<K : Key<*>>(private val keyClass: KClass<K>) {
 
-    @GivenSetElement
-    fun keyUiIntoSet(
+    @Given
+    fun keyUi(
         @Given keyUiFactory: (@Given K, @Given KeyUiComponent) -> KeyUi<K>
     ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
         (keyClass to keyUiFactory).cast()
 
-    @GivenSetElement
-    fun keyUiOptionFactoryIntoSet(
+    @Given
+    fun keyUiOptionFactory(
         @Given keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
     ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
         (keyClass to keyUiOptionsFactory).cast()

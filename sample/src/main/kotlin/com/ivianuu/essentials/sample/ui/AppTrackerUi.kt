@@ -49,7 +49,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
@@ -67,7 +66,7 @@ val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
 class AppTrackerKey : Key<Nothing>
 
-@Module
+@Given
 val appTrackerKeyModule = KeyModule<AppTrackerKey>()
 
 @Given

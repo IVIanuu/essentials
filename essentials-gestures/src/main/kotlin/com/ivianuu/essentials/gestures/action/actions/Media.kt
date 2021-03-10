@@ -51,7 +51,6 @@ import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.squareup.moshi.Json
@@ -98,12 +97,12 @@ data class MediaActionPrefs(
     @Json(name = "media_app") val mediaApp: String? = null,
 )
 
-@Module
+@Given
 val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey : Key<Nothing>
 
-@Module
+@Given
 val mediaActionSettingsKeyModule = KeyModule<MediaActionSettingsKey>()
 
 @Given

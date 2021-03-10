@@ -21,8 +21,6 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
@@ -52,9 +50,8 @@ abstract class ActionId(val value: String)
 @Qualifier
 annotation class ActionBinding<I : ActionId>
 
-@Macro
-@GivenSetElement
-fun <T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
+@Given
+fun <@Given T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
     @Given id: I,
     @Given provider: () -> T,
 ): Pair<String, () -> Action> = id.value to provider
@@ -64,9 +61,8 @@ typealias ActionExecutor = suspend () -> Unit
 @Qualifier
 annotation class ActionExecutorBinding<I : ActionId>
 
-@Macro
-@GivenSetElement
-fun <T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorBindingImpl(
+@Given
+fun <@Given T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorBindingImpl(
     @Given id: I,
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance
@@ -84,9 +80,8 @@ annotation class ActionSettingsKeyBinding<I : ActionId>
 
 typealias ActionSettingsKey = Key<Nothing>
 
-@Macro
-@GivenSetElement
-fun <T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyBindingImpl(
+@Given
+fun <@Given T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyBindingImpl(
     @Given id: I,
     @Given instance: T,
 ): Pair<String, ActionSettingsKey> = id.value to instance
@@ -94,9 +89,8 @@ fun <T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionS
 @Qualifier
 annotation class ActionFactoryBinding
 
-@Macro
-@GivenSetElement
-fun <T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
+@Given
+fun <@Given T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
     @Given instance: T): ActionFactory = instance
 
 interface ActionPickerDelegate {
@@ -109,7 +103,6 @@ interface ActionPickerDelegate {
 @Qualifier
 annotation class ActionPickerDelegateBinding
 
-@Macro
-@GivenSetElement
-fun <T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegateBindingImpl(
+@Given
+fun <@Given T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegateBindingImpl(
     @Given instance: T): ActionPickerDelegate = instance

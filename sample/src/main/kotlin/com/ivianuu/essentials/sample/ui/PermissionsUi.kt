@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
@@ -54,7 +53,7 @@ val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 
 class PermissionsKey : Key<Nothing>
 
-@Module
+@Given
 val permissionsKeyModule = KeyModule<PermissionsKey>()
 
 @Given

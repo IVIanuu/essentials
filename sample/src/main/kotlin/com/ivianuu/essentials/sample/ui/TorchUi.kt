@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import kotlinx.coroutines.flow.StateFlow
 
 @HomeItemBinding
@@ -47,7 +46,7 @@ val torchHomeItem = HomeItem("Torch") { TorchKey() }
 
 class TorchKey : Key<Nothing>
 
-@Module
+@Given
 val torchKeyModule = KeyModule<TorchKey>()
 
 @Given

@@ -20,8 +20,6 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.sortedTopological
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
@@ -32,9 +30,8 @@ typealias AppInitializer = () -> Unit
 @Qualifier
 annotation class AppInitializerBinding
 
-@Macro
-@GivenSetElement
-fun <T : @AppInitializerBinding S, @ForTypeKey S : AppInitializer> appInitializerBindingImpl(
+@Given
+fun <@Given T : @AppInitializerBinding S, @ForTypeKey S : AppInitializer> appInitializerBindingImpl(
     @Given instance: () -> T,
     @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(

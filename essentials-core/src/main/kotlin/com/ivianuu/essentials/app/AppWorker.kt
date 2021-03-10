@@ -20,8 +20,6 @@ import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.launch
 
@@ -30,9 +28,8 @@ typealias AppWorker = suspend () -> Unit
 @Qualifier
 annotation class AppWorkerBinding
 
-@Macro
-@GivenSetElement
-fun <T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: () -> T): () -> AppWorker =
+@Given
+fun <@Given T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: () -> T): () -> AppWorker =
     instance
 
 typealias AppWorkerRunner = () -> Unit

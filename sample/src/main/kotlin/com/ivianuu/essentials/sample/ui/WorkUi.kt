@@ -27,15 +27,13 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
-
 @HomeItemBinding
 @Given
 val workHomeItem = HomeItem("Work") { WorkKey() }
 
 class WorkKey : Key<Nothing>
 
-@Module
+@Given
 val workKeyModule = KeyModule<WorkKey>()
 
 @Given

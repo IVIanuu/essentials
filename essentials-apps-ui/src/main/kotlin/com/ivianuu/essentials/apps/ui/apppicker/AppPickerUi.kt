@@ -53,7 +53,6 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.common.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
@@ -67,7 +66,7 @@ data class AppPickerKey(
     val title: String? = null,
 ) : Key<AppInfo>
 
-@Module
+@Given
 val appPickerKeyModule = KeyModule<AppPickerKey>()
 
 @Given

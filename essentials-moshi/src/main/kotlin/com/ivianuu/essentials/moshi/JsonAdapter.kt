@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -29,9 +27,8 @@ typealias JsonAdapter = Any
 @Qualifier
 annotation class JsonAdapterBinding
 
-@Macro
-@GivenSetElement
-fun <T : @JsonAdapterBinding S, S : Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
+@Given
+fun <@Given T : @JsonAdapterBinding S, S : Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
 
 @Scoped<AppComponent>
 @Given

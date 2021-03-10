@@ -49,16 +49,13 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 
 @HomeKeyBinding
 @Given
 class HomeKey : Key<Nothing>
 
-@Module
+@Given
 val homeKeyModule = KeyModule<HomeKey>()
 
 @Given
@@ -150,7 +147,6 @@ data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Nothing>)
 @Qualifier
 annotation class HomeItemBinding
 
-@Macro
-@GivenSetElement
-fun <T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
+@Given
+fun <@Given T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
     instance

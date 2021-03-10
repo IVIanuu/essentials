@@ -77,7 +77,6 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.flowAsResource
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
@@ -94,7 +93,7 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 
 class NotificationsKey : Key<Nothing>
 
-@Module
+@Given
 val notificationsKeyModule = KeyModule<NotificationsKey>()
 
 @Given

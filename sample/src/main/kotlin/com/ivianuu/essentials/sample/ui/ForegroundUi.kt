@@ -53,7 +53,6 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -68,7 +67,7 @@ val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
 class ForegroundKey : Key<Nothing>
 
-@Module
+@Given
 val foregroundKeyModule = KeyModule<ForegroundKey>()
 
 @SuppressLint("NewApi")

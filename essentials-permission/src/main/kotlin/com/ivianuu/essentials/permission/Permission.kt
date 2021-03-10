@@ -27,9 +27,6 @@ import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.GivenSetElement
-import com.ivianuu.injekt.Macro
-import com.ivianuu.injekt.Module
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
@@ -54,22 +51,22 @@ class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: 
     fun permission(@Given permission: T): P = permission
 
     @Suppress("UNCHECKED_CAST")
-    @GivenSetElement
-    fun permissionIntoSet(
+    @Given
+    fun permissionSetElement(
         @Given permission: T
     ): Pair<TypeKey<Permission>, Permission> =
         (permissionKey to permission) as Pair<TypeKey<Permission>, Permission>
 
     @Suppress("UNCHECKED_CAST")
-    @GivenSetElement
-    fun requestHandlerIntoSet(
+    @Given
+    fun requestHandler(
         @Given requestHandler: PermissionRequestHandler<P>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
         (permissionKey to requestHandler.intercept<P>()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
-    @GivenSetElement
-    fun permissionStateIntoSet(
+    @Given
+    fun permissionState(
         @Given state: PermissionState<P>
     ): Pair<TypeKey<Permission>, PermissionState<Permission>> =
         (permissionKey to state) as Pair<TypeKey<Permission>, PermissionState<Permission>>
@@ -79,10 +76,9 @@ class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: 
 @Qualifier
 annotation class PermissionBinding
 
-@Macro
-@Module
-fun <T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingImpl(): PermissionBindingModule<T, P> =
-    PermissionBindingModule(typeKeyOf())
+@Given
+fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingImpl(
+): PermissionBindingModule<T, P> = PermissionBindingModule(typeKeyOf())
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
