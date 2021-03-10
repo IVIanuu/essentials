@@ -30,6 +30,7 @@ fun ActionIcon(
 ) {
     Box(
         modifier = modifier,
+        propagateMinConstraints = true,
         contentAlignment = Alignment.Center
     ) {
         action.icon.collectAsState(null).value?.invoke()
