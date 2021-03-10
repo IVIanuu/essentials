@@ -26,4 +26,8 @@
     <string name="es_pref_show_nav_bar_screen_off">Show while screen is off</string>
     <string name="es_pref_show_nav_bar_screen_off_summary">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>
 
+    <string name="es_nav_bar_unsupported_title">Unsupported</string>
+    <string name="es_nav_bar_unsupported_content">Hiding the navigation bar is not supported on this android version because google removed the ability for apps to change the overscan settings</string>
+    <string name="es_more_infos">More Info\'s</string>
+
 </resources>

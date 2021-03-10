@@ -17,7 +17,7 @@
 <resources>
     <!-- Dialogs -->
     <string name="es_cancel">Cancel</string>
-    <string name="es_action_close">Close</string>
+    <string name="es_close">Close</string>
     <string name="es_ok">OK</string>
 
     <!-- Color picker -->

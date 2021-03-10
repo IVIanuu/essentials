@@ -54,7 +54,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@HomeItemBinding @Given
+@HomeItemBinding
+@Given
 val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
 class NavBarKey : Key<Nothing>
