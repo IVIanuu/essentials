@@ -18,16 +18,14 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.Eager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,7 +42,7 @@ sealed class ClipboardAction {
     data class UpdateClipboard(val value: String) : ClipboardAction()
 }
 
-@Scoped<AppComponent>
+@Eager<AppComponent>
 @Given
 fun clipboardState(
     @Given scope: GlobalScope,
@@ -71,10 +69,4 @@ private fun ClipboardManager.clipboardChanges() = callbackFlow {
     val listener = ClipboardManager.OnPrimaryClipChangedListener { offer(Unit) }
     addPrimaryClipChangedListener(listener)
     awaitClose { removePrimaryClipChangedListener(listener) }
-}
-
-// just to kickstart the clipboard state
-@AppInitializerBinding
-@Given
-fun clipboardInitializer(@Given state: Flow<ClipboardState>): AppInitializer = {
 }

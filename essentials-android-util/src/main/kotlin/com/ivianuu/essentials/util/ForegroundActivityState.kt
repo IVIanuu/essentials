@@ -20,12 +20,10 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.Eager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +32,7 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Scoped<AppComponent>
+@Eager<AppComponent>
 @Given
 fun foregroundActivityState(
     @Given application: Application,
@@ -71,8 +69,3 @@ fun foregroundActivityState(
 
     awaitClose()
 }.stateIn(globalScope, SharingStarted.Eagerly, null)
-
-@AppInitializerBinding
-@Given
-fun foregroundActivityStateInitializer(@Given state: Flow<ForegroundActivity>): AppInitializer = {
-}

@@ -56,7 +56,7 @@ interface ResourceProvider {
 }
 
 @Given
-class ResourceProviderImpl(@Given private val appContext: AppContext) : @Given ResourceProvider {
+class ResourceProviderImpl(@Given private val appContext: AppContext) : ResourceProvider {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun bitmap(id: Int): ImageBitmap =

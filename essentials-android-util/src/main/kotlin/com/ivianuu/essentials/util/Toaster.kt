@@ -37,7 +37,7 @@ class ToasterImpl(
     @Given private val globalScope: GlobalScope,
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val resourceProvider: ResourceProvider
-) : @Given Toaster {
+) : Toaster {
 
     override fun showToast(message: String) {
         globalScope.launch(mainDispatcher) {

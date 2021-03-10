@@ -19,8 +19,6 @@ package com.ivianuu.essentials.twilight.domain
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
-import com.ivianuu.essentials.app.AppInitializer
-import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChange
@@ -28,8 +26,8 @@ import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.component.Eager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -48,14 +46,7 @@ data class TwilightState(
     val useBlack: Boolean = false,
 )
 
-@AppInitializerBinding
-@Given
-fun twilightStateAppInitializer(
-    @Given twilightState: StateFlow<TwilightState>
-): AppInitializer = {
-}
-
-@Scoped<AppComponent>
+@Eager<AppComponent>
 @Given
 fun twilightState(
     @Given globalScope: GlobalScope,

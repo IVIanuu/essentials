@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.store
 
-import com.ivianuu.injekt.Given
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
@@ -137,28 +136,3 @@ private class StateScopeImpl<S>(
         val acknowledged: CompletableDeferred<S>
     )
 }
-
-@Given
-inline val <T> @Given MutableStateFlow<T>.mutableStateFlowToStateFlow: StateFlow<T>
-    get() = this
-
-@Given
-inline val <T> @Given MutableStateFlow<T>.mutableStateFlowToFlow: Flow<T>
-    get() = this
-
-@Given
-inline val <T> @Given StateFlow<T>.stateFlowToFlow: Flow<T>
-    get() = this
-
-@Given
-inline val <T> @Given MutableSharedFlow<T>.mutableSharedFlowToSharedFlow: SharedFlow<T>
-    get() = this
-
-@Given
-inline val <T> @Given MutableSharedFlow<T>.mutableSharedFlowToFlow: Flow<T>
-    get() = this
-
-@Given
-inline val <T> @Given SharedFlow<T>.sharedFlowToFlow: Flow<T>
-    get() = this
-

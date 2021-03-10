@@ -1,3 +1,4 @@
+// injekt-incremental-fix 1615382656101 injekt-end
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -52,6 +53,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
@@ -157,7 +159,7 @@ fun actionPickerState(
                 if (!permissionRequester(pickedAction.permissions)) return@onEach
             }
 
-            navigator(NavigationAction.Pop(key, result))
+            navigator(Pop(key, result))
         }
         .launchIn(this)
 }

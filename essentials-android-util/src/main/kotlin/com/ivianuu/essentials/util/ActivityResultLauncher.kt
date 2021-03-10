@@ -44,7 +44,7 @@ interface ActivityResultLauncher {
 class ActivityResultLauncherImpl(
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val appUiStarter: AppUiStarter
-) : @Given ActivityResultLauncher {
+) : ActivityResultLauncher {
 
     override suspend fun startActivityForResult(intent: Intent): ActivityResult =
         startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)

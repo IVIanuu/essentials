@@ -42,7 +42,7 @@ class ActionRepositoryImpl(
     @Given private val actionsExecutors: Map<String, ActionExecutor>,
     @Given private val actionPickerDelegates: Set<ActionPickerDelegate>,
     @Given private val actionSettings: Map<String, ActionSettingsKey>
-) : @Given ActionRepository {
+) : ActionRepository {
 
     override suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
         actions.values.map { it() }

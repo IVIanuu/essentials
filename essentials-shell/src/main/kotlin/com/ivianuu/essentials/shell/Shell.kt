@@ -30,7 +30,7 @@ interface Shell {
 }
 
 @Given
-class ShellImpl(@Given private val ioDispatcher: IODispatcher) : @Given Shell {
+class ShellImpl(@Given private val ioDispatcher: IODispatcher) : Shell {
 
     override suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
 

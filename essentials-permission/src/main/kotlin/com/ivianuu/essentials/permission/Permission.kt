@@ -37,9 +37,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -97,19 +95,15 @@ fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>
-): PermissionState<P> = flow {
-    emitAll(
-        permissionChanges
-            .map { Unit }
-            .onStart { emit(Unit) }
-            .map {
-                withContext(defaultDispatcher) {
-                    stateProvider(permission)
-                }
-            }
-            .distinctUntilChanged()
-    )
-}
+): PermissionState<P> = permissionChanges
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .map {
+        withContext(defaultDispatcher) {
+            stateProvider(permission)
+        }
+    }
+    .distinctUntilChanged()
 
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> PermissionState<Boolean>
 

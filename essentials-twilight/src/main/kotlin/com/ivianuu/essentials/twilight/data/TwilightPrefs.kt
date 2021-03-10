@@ -27,4 +27,5 @@ data class TwilightPrefs(
     @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 
-@Module val twilightPrefsModule = PrefModule<TwilightPrefs>("twilight_prefs")
+@Module
+val twilightPrefsModule = PrefModule<TwilightPrefs>("twilight_prefs")

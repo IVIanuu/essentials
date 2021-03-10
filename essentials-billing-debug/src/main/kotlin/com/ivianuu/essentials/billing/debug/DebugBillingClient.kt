@@ -62,7 +62,7 @@ class DebugBillingClient(
     @Given private val prefs: Flow<DebugBillingPrefs>,
     @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener
-) : @Given BillingClient() {
+) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
 

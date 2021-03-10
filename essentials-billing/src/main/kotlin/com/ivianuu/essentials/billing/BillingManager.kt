@@ -64,7 +64,7 @@ class BillingManagerImpl(
     @Given private val globalScope: GlobalScope,
     @Given private val ioDispatcher: IODispatcher,
     @Given private val logger: Logger
-) : @Given BillingManager {
+) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
         refreshes.tryEmit(Unit)

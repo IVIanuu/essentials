@@ -31,7 +31,7 @@ class FloatAndroidSettingsAdapter(
     @Given private val defaultValue: Float,
     @Given private val name: String,
     @Given private val type: AndroidSettingsType,
-) : @Given AndroidSettingsAdapter<Float> {
+) : AndroidSettingsAdapter<Float> {
     override fun get(): Float = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(
             contentResolver, name,
@@ -62,7 +62,7 @@ class IntAndroidSettingsAdapter(
     @Given private val defaultValue: Int,
     @Given private val name: String,
     @Given private val type: AndroidSettingsType,
-) : @Given AndroidSettingsAdapter<Int> {
+) : AndroidSettingsAdapter<Int> {
     override fun get(): Int = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getInt(
             contentResolver, name,
@@ -93,7 +93,7 @@ class LongAndroidSettingsAdapter(
     @Given private val defaultValue: Long,
     @Given private val name: String,
     @Given private val type: AndroidSettingsType,
-) : @Given AndroidSettingsAdapter<Long> {
+) : AndroidSettingsAdapter<Long> {
     override fun get(): Long = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getLong(
             contentResolver, name,
@@ -124,7 +124,7 @@ class StringAndroidSettingsAdapter(
     @Given private val defaultValue: String,
     @Given private val name: String,
     @Given private val type: AndroidSettingsType,
-) : @Given AndroidSettingsAdapter<String> {
+) : AndroidSettingsAdapter<String> {
     override fun get(): String = when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getString(contentResolver, name)
         AndroidSettingsType.SECURE -> Settings.Secure.getString(contentResolver, name)

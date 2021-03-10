@@ -27,4 +27,4 @@ annotation class HomeKeyBinding
 
 @Macro
 @Given
-fun <T : @HomeKeyBinding HomeKey> homeKeyBindingImpl(@Given instance: T): HomeKey = instance
+fun <T : @HomeKeyBinding S, S : Key<Nothing>> homeKeyBindingImpl(@Given instance: T): HomeKey = instance

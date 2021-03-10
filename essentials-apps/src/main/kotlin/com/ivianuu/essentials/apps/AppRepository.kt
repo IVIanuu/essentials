@@ -34,7 +34,7 @@ interface AppRepository {
 class AppRepositoryImpl(
     @Given private val ioDispatcher: IODispatcher,
     @Given private val packageManager: PackageManager
-) : @Given AppRepository {
+) : AppRepository {
 
     override suspend fun getInstalledApps(): List<AppInfo> = withContext(ioDispatcher) {
         packageManager.getInstalledApplications(0)
