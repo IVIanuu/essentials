@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.android.prefs.PrefUpdater
 import com.ivianuu.essentials.app.AppInitializer
 import com.ivianuu.essentials.app.AppInitializerBinding
 import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
 import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch

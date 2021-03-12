@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.datastore.android
+package com.ivianuu.essentials.android.prefs
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
@@ -75,14 +75,14 @@ class PrefModule<T : Any>(private val name: String) {
         }
     }
 
-}
+    @Scoped<AppComponent>
+    @Given
+    fun @Given DataStore<T>.stateFlow(
+        @Given scope: GlobalScope,
+        @Given initial: @InitialOrFallback T
+    ): StateFlow<T> = data.stateIn(scope, SharingStarted.Eagerly, initial)
 
-@Scoped<AppComponent>
-@Given
-fun <T : Any> @Given DataStore<T>.stateFlow(
-    @Given scope: GlobalScope,
-    @Given initial: @InitialOrFallback T
-): StateFlow<T> = data.stateIn(scope, SharingStarted.Eagerly, initial)
+}
 
 @Qualifier
 internal annotation class InitialOrFallback

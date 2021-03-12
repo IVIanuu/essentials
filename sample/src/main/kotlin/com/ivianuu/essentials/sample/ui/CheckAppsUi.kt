@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefUpdateDispatcher
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.datastore.android.PrefModule
-import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi

@@ -24,13 +24,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefUpdater
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.datastore.android.PrefModule
-import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.store.Collector

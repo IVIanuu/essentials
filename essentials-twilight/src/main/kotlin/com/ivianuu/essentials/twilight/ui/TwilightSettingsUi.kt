@@ -24,7 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
+import com.ivianuu.essentials.android.prefs.PrefUpdateDispatcher
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs

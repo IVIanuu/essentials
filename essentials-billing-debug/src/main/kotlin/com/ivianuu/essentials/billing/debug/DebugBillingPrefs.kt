@@ -18,7 +18,7 @@ package com.ivianuu.essentials.billing.debug
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.moshi.JsonAdapterBinding
 import com.ivianuu.injekt.Given
 import com.squareup.moshi.FromJson

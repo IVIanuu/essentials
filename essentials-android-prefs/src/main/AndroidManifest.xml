@@ -14,4 +14,4 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.ivianuu.essentials.datastore.android" />
+<manifest package="com.ivianuu.essentials.android.prefs" />

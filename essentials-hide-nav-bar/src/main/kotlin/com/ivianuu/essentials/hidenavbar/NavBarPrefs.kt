@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.injekt.Given
 internal typealias WasNavBarHidden = Boolean

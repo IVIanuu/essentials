@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.twilight.data
 
-import com.ivianuu.essentials.datastore.android.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.injekt.Given
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

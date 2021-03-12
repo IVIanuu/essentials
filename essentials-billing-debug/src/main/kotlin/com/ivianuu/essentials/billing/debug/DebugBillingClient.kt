@@ -35,12 +35,12 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
+import com.ivianuu.essentials.android.prefs.PrefUpdater
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
 import com.ivianuu.essentials.coroutines.GlobalScope
-import com.ivianuu.essentials.datastore.android.PrefUpdater
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult

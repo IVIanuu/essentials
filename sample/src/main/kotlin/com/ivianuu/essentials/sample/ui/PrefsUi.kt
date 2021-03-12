@@ -23,8 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.datastore.android.PrefModule
-import com.ivianuu.essentials.datastore.android.PrefUpdateDispatcher
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefUpdateDispatcher
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsets

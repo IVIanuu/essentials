@@ -39,6 +39,8 @@ android {
 dependencies {
     implementation(project(":essentials-android"))
     implementation(project(":essentials-android-core"))
+    implementation(project(":essentials-android-prefs"))
+    implementation(project(":essentials-android-settings"))
     implementation(project(":essentials-about"))
     implementation(project(":essentials-accessibility"))
     implementation(project(":essentials-apps"))
@@ -54,7 +56,6 @@ dependencies {
     implementation(project(":essentials-notification-listener"))
     implementation(project(":essentials-permission"))
     implementation(project(":essentials-process-restart"))
-    implementation(project(":essentials-shell"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-shortcut-picker"))
     implementation(project(":essentials-tile"))
