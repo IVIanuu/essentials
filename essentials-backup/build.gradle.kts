@@ -23,9 +23,7 @@ plugins {
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 dependencies {
     api(project(":essentials-android-core"))
@@ -33,3 +31,5 @@ dependencies {
     api(project(":essentials-ui"))
     api(project(":essentials-process-restart"))
 }
+
+plugins.apply("com.vanniktech.maven.publish")

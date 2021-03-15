@@ -25,12 +25,6 @@ object Build {
     const val versionName = "0.0.1"
 }
 
-object Publishing {
-    const val groupId = "com.ivianuu.essentials"
-    const val vcsUrl = "https://github.com/IVIanuu/essentials"
-    const val version = "${Build.versionName}-dev786"
-}
-
 object Deps {
     const val accompanistCoil =
         "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
@@ -70,9 +64,7 @@ object Deps {
         const val work = "androidx.work:work-runtime-ktx:2.5.0"
     }
 
-    const val autoService = "com.google.auto.service:auto-service:1.0-rc6"
-
-    const val bintrayGradlePlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5"
+    const val autoService = "com.google.auto.service:auto-service:1.0-rc7"
 
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
@@ -90,13 +82,15 @@ object Deps {
 
     const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
 
+    const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
+
     const val essentialsGradlePlugin =
         "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev786"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev487"
+        private const val version = "0.0.1-dev491"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val component = "com.ivianuu.injekt:injekt-component:$version"
@@ -137,15 +131,11 @@ object Deps {
         const val codegen = "dev.zacsweers.moshisealed:moshi-sealed-codegen:$version"
     }
 
-    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
+    const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.14.2"
 
     const val playBilling = "com.android.billingclient:billing-ktx:3.0.2"
 
-    const val processingX = "com.ivianuu.processingx:processingx:0.0.1-dev4"
-
     const val roboelectric = "org.robolectric:robolectric:4.3.1"
-
-    const val spotlessGradlePlugin = "com.diffplug.spotless:spotless-plugin-gradle:3.26.1"
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.+"
 

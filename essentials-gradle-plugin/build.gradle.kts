@@ -23,8 +23,6 @@ plugins {
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-//apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-lint.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-publish.gradle")
 
 gradlePlugin {
     plugins {
@@ -45,9 +43,9 @@ buildConfig {
     clsName = "BuildConfig"
     packageName = "com.ivianuu.essentials.gradle"
 
-    version = Publishing.version
-    buildConfigField("String", "GROUP_ID", Publishing.groupId)
-    buildConfigField("String", "ARTIFACT_ID", "essentials-kotlin-compiler")
+    version = property("VERSION_NAME").toString()
+    buildConfigField("String", "GROUP_ID", property("GROUP").toString())
+    buildConfigField("String", "ARTIFACT_ID", property("POM_ARTIFACT_ID").toString())
 
     buildConfigField("String", "COMPOSE_GROUP_ID", "androidx.compose.compiler")
     buildConfigField("String", "COMPOSE_ARTIFACT_ID", "compiler")
@@ -62,6 +60,7 @@ dependencies {
     implementation(Deps.Kotlin.gradlePlugin)
     implementation(Deps.Kotlin.gradlePluginApi)
     implementation(Deps.Injekt.gradlePlugin)
-    implementation(Deps.spotlessGradlePlugin)
     implementation(Deps.versionsGradlePlugin)
 }
+
+plugins.apply("com.vanniktech.maven.publish")
