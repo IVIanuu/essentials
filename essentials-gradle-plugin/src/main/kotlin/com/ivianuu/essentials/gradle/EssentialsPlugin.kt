@@ -16,29 +16,30 @@
 
 package com.ivianuu.essentials.gradle
 
+import com.github.benmanes.gradle.versions.VersionsPlugin
 import com.google.auto.service.AutoService
 import org.gradle.api.Project
-import org.gradle.api.tasks.compile.AbstractCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
+import org.gradle.api.provider.Provider
+import com.ivianuu.injekt.gradle.InjektPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinGradleSubplugin
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
-@AutoService(KotlinGradleSubplugin::class)
-open class EssentialsGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
+@AutoService(KotlinCompilerPluginSupportPlugin::class)
+open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
+    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
+        kotlinCompilation.target.project.plugins.hasPlugin(EssentialsPlugin::class.java)
 
-    override fun isApplicable(project: Project, task: AbstractCompile): Boolean =
-        project.plugins.hasPlugin(EssentialsGradlePlugin::class.java)
+    override fun apply(target: Project) {
+        with(target.plugins) {
+            apply(InjektPlugin::class.java)
+            apply(VersionsPlugin::class.java)
+        }
+    }
 
-    override fun apply(
-        project: Project,
-        kotlinCompile: AbstractCompile,
-        javaCompile: AbstractCompile?,
-        variantData: Any?,
-        androidProjectHandler: Any?,
-        kotlinCompilation: KotlinCompilation<KotlinCommonOptions>?
-    ): List<SubpluginOption> = emptyList()
+    override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> =
+        kotlinCompilation.target.project.provider { emptyList() }
 
     override fun getCompilerPluginId(): String = "com.ivianuu.essentials"
 

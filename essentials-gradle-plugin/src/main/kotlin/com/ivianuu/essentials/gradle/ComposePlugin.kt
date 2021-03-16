@@ -18,27 +18,22 @@ package com.ivianuu.essentials.gradle
 
 import com.google.auto.service.AutoService
 import org.gradle.api.Project
-import org.gradle.api.tasks.compile.AbstractCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
+import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinGradleSubplugin
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
-@AutoService(KotlinGradleSubplugin::class)
-open class ComposeGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
+@AutoService(KotlinCompilerPluginSupportPlugin::class)
+open class ComposePlugin : KotlinCompilerPluginSupportPlugin {
+    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
+        kotlinCompilation.target.project.plugins.hasPlugin(ComposePlugin::class.java)
 
-    override fun isApplicable(project: Project, task: AbstractCompile): Boolean =
-        project.plugins.hasPlugin(ComposeGradlePlugin::class.java)
+    override fun apply(target: Project) {
+    }
 
-    override fun apply(
-        project: Project,
-        kotlinCompile: AbstractCompile,
-        javaCompile: AbstractCompile?,
-        variantData: Any?,
-        androidProjectHandler: Any?,
-        kotlinCompilation: KotlinCompilation<KotlinCommonOptions>?
-    ): List<SubpluginOption> = emptyList()
+    override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> =
+        kotlinCompilation.target.project.provider { emptyList() }
 
     override fun getCompilerPluginId(): String = "androidx.compose"
 
