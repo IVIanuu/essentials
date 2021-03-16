@@ -47,7 +47,7 @@ class StartupReceiver : BroadcastReceiver() {
 @ComponentElementBinding<ReceiverComponent>
 @Given
 class StartupReceiverComponent(
-    @Given val bootListeners: Set<BootListener>,
+    @Given val bootListeners: Set<BootListener> = emptySet(),
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val logger: Logger,
     @Given val receiverComponent: ReceiverComponent

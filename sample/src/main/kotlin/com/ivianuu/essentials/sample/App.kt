@@ -80,7 +80,6 @@ import com.ivianuu.injekt.component.*
 class App : Application() {
     override fun onCreate() {
         initializeEssentials()
-        
         super.onCreate()
     }
 }
