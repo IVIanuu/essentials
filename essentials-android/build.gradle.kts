@@ -17,7 +17,7 @@
 plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
-    id("com.ivianuu.compose")
+    id("com.ivianuu.essentials.compose")
     kotlin("android")
 }
 

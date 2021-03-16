@@ -32,7 +32,7 @@ gradlePlugin {
                 "com.ivianuu.essentials.gradle.EssentialsPlugin"
         }
         create("composePlugin") {
-            id = "com.ivianuu.compose"
+            id = "com.ivianuu.essentials.compose"
             implementationClass =
                 "com.ivianuu.essentials.gradle.ComposePlugin"
         }
