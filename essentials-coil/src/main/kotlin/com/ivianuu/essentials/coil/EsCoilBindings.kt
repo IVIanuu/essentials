@@ -33,10 +33,10 @@ import kotlin.reflect.KClass
 @Given
 fun imageLoader(
     @Given appContext: AppContext,
-    @Given decoders: Set<Decoder>,
-    @Given fetchers: Set<FetcherPair<Any>>,
-    @Given interceptors: Set<Interceptor>,
-    @Given mappers: Set<MapperPair<Any>>,
+    @Given decoders: Set<Decoder> = emptySet(),
+    @Given fetchers: Set<FetcherPair<Any>> = emptySet(),
+    @Given interceptors: Set<Interceptor> = emptySet(),
+    @Given mappers: Set<MapperPair<Any>> = emptySet(),
 ): ImageLoader = ImageLoader.Builder(appContext)
     .componentRegistry {
         decoders.forEach { add(it) }
