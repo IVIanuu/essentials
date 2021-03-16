@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.accessibility.AccessibilityWorker
-import com.ivianuu.essentials.accessibility.AccessibilityWorkerBinding
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.awaitCancellation
 
-@AccessibilityWorkerBinding
 @Given
 fun accessibilityLogger(@Given logger: Logger): AccessibilityWorker = {
     runWithCleanup(

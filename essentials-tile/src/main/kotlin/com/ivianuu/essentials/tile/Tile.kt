@@ -27,9 +27,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>,
-            (CoroutineScope, Flow<TileAction>) -> StateFlow<TileState>>
+            (CoroutineScope, Flow<TileAction>) -> StateFlow<TileState<*>>>
 
-data class TileState(
+data class TileState<T : AbstractFunTileService>(
     val icon: Icon? = null,
     val iconRes: Int? = null,
     val label: String? = null,
@@ -49,10 +49,7 @@ sealed class TileAction {
     object TileClicked : TileAction()
 }
 
-@Qualifier
-annotation class TileStateBinding<T : AbstractFunTileService>
-
 @Given
-fun <@Given T : @TileStateBinding<S> StateFlow<TileState>, @ForTypeKey S : AbstractFunTileService> tileStateBindingImpl(
+fun <@Given T : StateFlow<TileState<S>>, @ForTypeKey S : AbstractFunTileService> tileStateElement(
     @Given provider: (@Given CoroutineScope, @Given Flow<TileAction>) -> T,
 ): TileStateElement = typeKeyOf<S>() to provider

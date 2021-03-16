@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.injekt.Given
-@HomeItemBinding
+
 @Given
 val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
 

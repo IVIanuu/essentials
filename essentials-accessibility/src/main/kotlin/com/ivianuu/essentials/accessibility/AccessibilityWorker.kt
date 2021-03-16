@@ -23,18 +23,10 @@ import kotlinx.coroutines.launch
 
 typealias AccessibilityWorker = suspend () -> Unit
 
-@Qualifier
-annotation class AccessibilityWorkerBinding
-
-@Given
-fun <@Given T : @AccessibilityWorkerBinding S, S : AccessibilityWorker> accessibilityWorkerBindingImpl(
-    @Given instance: T
-): AccessibilityWorker = instance
-
 typealias AccessibilityWorkerRunner = suspend () -> Unit
 
 @Given
-fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker>): AccessibilityWorkerRunner = {
+fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker> = emptySet()): AccessibilityWorkerRunner = {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }

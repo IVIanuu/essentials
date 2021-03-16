@@ -52,7 +52,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@HomeItemBinding
 @Given
 val counterHomeItem = HomeItem("Counter") { CounterKey() }
 

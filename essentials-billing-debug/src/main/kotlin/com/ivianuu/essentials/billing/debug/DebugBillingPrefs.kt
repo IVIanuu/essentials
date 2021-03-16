@@ -19,7 +19,7 @@ package com.ivianuu.essentials.billing.debug
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.moshi.JsonAdapterBinding
+import com.ivianuu.essentials.moshi.JsonAdapter
 import com.ivianuu.injekt.Given
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
@@ -35,19 +35,21 @@ data class DebugBillingPrefs(
 @Given
 val debugBillingPrefsModule = PrefModule<DebugBillingPrefs>("debug_billing_prefs")
 
-@JsonAdapterBinding
 @Given
-class PurchaseAdapter {
-    @ToJson fun toJson(purchase: Purchase) = "${purchase.originalJson}=:=${purchase.signature}"
-    @FromJson fun fromJson(value: String): Purchase {
+class PurchaseAdapter : JsonAdapter() {
+    @ToJson
+    fun toJson(purchase: Purchase) = "${purchase.originalJson}=:=${purchase.signature}"
+    @FromJson
+    fun fromJson(value: String): Purchase {
         val tmp = value.split("=:=")
         return Purchase(tmp[0], tmp[1])
     }
 }
 
-@JsonAdapterBinding
 @Given
-class SkuDetailsAdapter {
-    @ToJson fun toJson(skuDetails: SkuDetails) = skuDetails.originalJson
-    @FromJson fun fromJson(value: String): SkuDetails = SkuDetails(value)
+class SkuDetailsAdapter : JsonAdapter() {
+    @ToJson
+    fun toJson(skuDetails: SkuDetails) = skuDetails.originalJson
+    @FromJson
+    fun fromJson(value: String): SkuDetails = SkuDetails(value)
 }

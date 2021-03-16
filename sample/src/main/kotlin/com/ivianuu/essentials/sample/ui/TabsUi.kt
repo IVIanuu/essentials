@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
-@HomeItemBinding
 @Given
 val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 

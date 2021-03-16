@@ -87,7 +87,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
 
-@HomeItemBinding
 @Given
 val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 

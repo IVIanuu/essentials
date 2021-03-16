@@ -30,7 +30,7 @@ abstract class WorkerId(val value: String)
 @WorkerBinding
 @Given
 class FunctionalWorker(
-    @Given workers: Set<WorkerElement>,
+    @Given workers: Set<WorkerElement> = emptySet(),
     @Given context: WorkerContext,
     @Given workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {

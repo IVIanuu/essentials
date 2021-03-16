@@ -143,10 +143,3 @@ private fun HomeItem(
 }
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Nothing>)
-
-@Qualifier
-annotation class HomeItemBinding
-
-@Given
-fun <@Given T : @HomeItemBinding HomeItem> homeItemBindingImpl(@Given instance: T): HomeItem =
-    instance

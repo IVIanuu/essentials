@@ -51,7 +51,7 @@ abstract class ActionId(val value: String)
 annotation class ActionBinding<I : ActionId>
 
 @Given
-fun <@Given T : @ActionBinding<I> Action, I : ActionId> actionBindingImpl(
+fun <@Given T : @ActionBinding<I> Action, I : ActionId> actionPair(
     @Given id: I,
     @Given provider: () -> T,
 ): Pair<String, () -> Action> = id.value to provider
@@ -62,7 +62,7 @@ typealias ActionExecutor = suspend () -> Unit
 annotation class ActionExecutorBinding<I : ActionId>
 
 @Given
-fun <@Given T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorBindingImpl(
+fun <@Given T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorPair(
     @Given id: I,
     @Given instance: T
 ): Pair<String, ActionExecutor> = id.value to instance
@@ -81,7 +81,7 @@ annotation class ActionSettingsKeyBinding<I : ActionId>
 typealias ActionSettingsKey = Key<Nothing>
 
 @Given
-fun <@Given T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyBindingImpl(
+fun <@Given T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyPair(
     @Given id: I,
     @Given instance: T,
 ): Pair<String, ActionSettingsKey> = id.value to instance
@@ -104,5 +104,5 @@ interface ActionPickerDelegate {
 annotation class ActionPickerDelegateBinding
 
 @Given
-fun <@Given T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegateBindingImpl(
+fun <@Given T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegate(
     @Given instance: T): ActionPickerDelegate = instance

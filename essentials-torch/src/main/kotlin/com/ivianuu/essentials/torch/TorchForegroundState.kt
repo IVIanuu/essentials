@@ -26,7 +26,6 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
@@ -35,7 +34,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-@ForegroundStateBinding
 @Given
 fun torchForegroundState(
     @Given state: Flow<TorchState>,

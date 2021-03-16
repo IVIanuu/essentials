@@ -45,7 +45,7 @@ interface Permission {
     val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: TypeKey<P>) {
+class PermissionModule<T : P, P : Permission>(private val permissionKey: TypeKey<P>) {
 
     @Given
     fun permission(@Given permission: T): P = permission
@@ -77,8 +77,8 @@ class PermissionBindingModule<T : P, P : Permission>(private val permissionKey: 
 annotation class PermissionBinding
 
 @Given
-fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingImpl(
-): PermissionBindingModule<T, P> = PermissionBindingModule(typeKeyOf())
+fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingModule(
+): PermissionModule<T, P> = PermissionModule(typeKeyOf())
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 

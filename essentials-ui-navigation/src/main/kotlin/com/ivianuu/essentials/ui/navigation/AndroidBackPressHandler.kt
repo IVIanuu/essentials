@@ -22,7 +22,6 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.UiWorker
-import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.channels.awaitClose
@@ -34,7 +33,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@UiWorkerBinding
 @Given
 fun androidBackPressHandler(
     @Given activity: ComponentActivity,

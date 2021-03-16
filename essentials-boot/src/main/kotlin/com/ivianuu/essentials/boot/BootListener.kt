@@ -20,10 +20,3 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 
 typealias BootListener = suspend () -> Unit
-
-@Qualifier
-annotation class BootListenerBinding
-
-@Given
-fun <@Given T : @BootListenerBinding S, S : BootListener> bootListenerBindingImpl(
-    @Given instance: T): BootListener = instance

@@ -27,15 +27,13 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 typealias AppInitializer = () -> Unit
 
-@Qualifier
-annotation class AppInitializerBinding
-
+// todo remove type parameter S once injekt is fixed
 @Given
-fun <@Given T : @AppInitializerBinding S, @ForTypeKey S : AppInitializer> appInitializerBindingImpl(
+fun <@Given @ForTypeKey T : S, S : AppInitializer> appInitializerElement(
     @Given instance: () -> T,
-    @Given config: AppInitializerConfig<T> = AppInitializerConfig.DEFAULT
+    @Given config: AppInitializerConfig<S> = AppInitializerConfig.DEFAULT
 ): AppInitializerElement = AppInitializerElement(
-    typeKeyOf<S>(), instance, config
+    typeKeyOf<T>(), instance, config
 )
 
 data class AppInitializerConfig<out T : AppInitializer>(
@@ -57,7 +55,7 @@ typealias AppInitializerRunner = () -> Unit
 
 @Given
 fun appInitializerRunner(
-    @Given initializers: Set<AppInitializerElement>,
+    @Given initializers: Set<AppInitializerElement> = emptySet(),
     @Given logger: Logger,
 ): AppInitializerRunner = {
     initializers

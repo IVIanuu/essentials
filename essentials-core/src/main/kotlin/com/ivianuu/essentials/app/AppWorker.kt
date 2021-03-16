@@ -25,20 +25,13 @@ import kotlinx.coroutines.launch
 
 typealias AppWorker = suspend () -> Unit
 
-@Qualifier
-annotation class AppWorkerBinding
-
-@Given
-fun <@Given T : @AppWorkerBinding S, S : AppWorker> appWorkerBindingImpl(@Given instance: () -> T): () -> AppWorker =
-    instance
-
 typealias AppWorkerRunner = () -> Unit
 
 @Given
 fun appWorkerRunner(
     @Given logger: Logger,
     @Given globalScope: GlobalScope,
-    @Given workers: Set<() -> AppWorker>
+    @Given workers: Set<() -> AppWorker> = emptySet()
 ): AppWorkerRunner = {
     logger.d { "run app workers" }
     workers

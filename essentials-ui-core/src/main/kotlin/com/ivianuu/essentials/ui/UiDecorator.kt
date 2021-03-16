@@ -28,15 +28,13 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 
-@Qualifier
-annotation class UiDecoratorBinding
-
+// todo remove type parameter S once injekt is fixed
 @Given
-fun <@Given T : @UiDecoratorBinding S, @ForTypeKey S : UiDecorator> uiDecoratorBindingImpl(
+fun <@Given @ForTypeKey T : S, S : UiDecorator> uiDecoratorElement(
     @Given instance: T,
     @Given config: UiDecoratorConfig<S> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(
-    typeKeyOf<S>(), instance as UiDecorator, config
+    typeKeyOf<T>(), instance as UiDecorator, config
 )
 
 data class UiDecoratorConfig<out T : UiDecorator>(
@@ -60,7 +58,7 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 @Given
 fun decorateUi(
-    @Given elements: Set<UiDecoratorElement>,
+    @Given elements: Set<UiDecoratorElement> = emptySet(),
     @Given logger: Logger
 ): DecorateUi = { content ->
     remember {
@@ -80,17 +78,7 @@ fun decorateUi(
     }()
 }
 
-@Qualifier
-annotation class AppThemeBinding
-
 typealias AppTheme = UiDecorator
 
-@Suppress("USELESS_CAST")
-@UiDecoratorBinding
 @Given
-fun <@Given T : @AppThemeBinding S, S : AppTheme> appThemeBindingImpl(@Given instance: T): AppTheme =
-    instance as UiDecorator
-
-@Given
-fun appThemeConfigBindingImpl() =
-    UiDecoratorConfig<AppTheme>(dependencies = setOf(typeKeyOf<SystemBarManagerProvider>()))
+val appThemeConfig = UiDecoratorConfig<AppTheme>(dependencies = setOf(typeKeyOf<SystemBarManagerProvider>()))

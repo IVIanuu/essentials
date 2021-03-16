@@ -37,7 +37,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding
 @Given
 val timerHomeItem = HomeItem("Timer") { TimerKey() }
 

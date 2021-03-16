@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.gestures
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.GlobalScope
@@ -60,9 +59,8 @@ fun isOnSecureScreen(
     .onEach { logger.d { "on secure screen changed: $it" } }
     .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
 
-@AccessibilityConfigBinding
 @Given
-fun isOnSecureScreenAccessibilityConfig() = flow {
+val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {
     emit(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED

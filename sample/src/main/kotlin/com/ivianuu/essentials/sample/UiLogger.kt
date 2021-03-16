@@ -18,13 +18,11 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.UiWorker
-import com.ivianuu.essentials.ui.UiWorkerBinding
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.awaitCancellation
 
-@UiWorkerBinding
 @Given
 fun uiLogger(@Given logger: Logger): UiWorker = {
     runWithCleanup(

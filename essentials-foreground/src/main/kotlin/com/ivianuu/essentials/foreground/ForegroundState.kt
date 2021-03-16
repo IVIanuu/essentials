@@ -25,12 +25,3 @@ sealed class ForegroundState {
     data class Foreground(val notification: Notification) : ForegroundState()
     object Background : ForegroundState()
 }
-
-@Qualifier
-annotation class ForegroundStateBinding
-
-typealias ForegroundStateElement = Flow<ForegroundState>
-
-@Given
-fun <@Given T : @ForegroundStateBinding S, S : Flow<ForegroundState>> foregroundStateBindingImpl(
-    @Given instance: T): ForegroundStateElement = instance

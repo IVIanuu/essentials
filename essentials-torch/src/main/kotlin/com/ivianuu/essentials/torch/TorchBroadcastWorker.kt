@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.app.AppWorker
-import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
@@ -25,7 +24,6 @@ import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
-@AppWorkerBinding
 @Given
 fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,

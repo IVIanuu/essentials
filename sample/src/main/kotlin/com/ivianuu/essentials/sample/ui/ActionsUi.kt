@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
-@HomeItemBinding
 @Given
 val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
 

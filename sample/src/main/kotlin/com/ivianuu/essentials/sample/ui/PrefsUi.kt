@@ -54,7 +54,6 @@ import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-@HomeItemBinding
 @Given
 val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 

@@ -37,9 +37,7 @@ object HomeActionId : ActionId("home")
 
 @ActionBinding<HomeActionId>
 @Given
-fun homeAction(
-    @Given resourceProvider: ResourceProvider,
-) = Action(
+fun homeAction(@Given resourceProvider: ResourceProvider) = Action(
     id = HomeActionId,
     title = resourceProvider.string(R.string.es_action_home),
     permissions = if (needsHomeIntentWorkaround) emptyList()

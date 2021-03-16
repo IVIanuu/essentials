@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.recentapps
 
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.GlobalScope
@@ -70,7 +69,6 @@ fun recentApps(
         .shareIn(globalScope, SharingStarted.Eagerly, 1)
 }
 
-@AccessibilityConfigBinding
 @Given
 fun recentAppsAccessibilityConfig() = flowOf {
     AccessibilityConfig(

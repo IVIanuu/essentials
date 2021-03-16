@@ -29,7 +29,7 @@ import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
-typealias Worker = suspend () -> ListenableWorker.Result
+typealias Worker<I> = suspend () -> ListenableWorker.Result
 
 interface WorkScope {
     val inputData: Data
@@ -40,16 +40,12 @@ interface WorkScope {
     suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
-typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker>
+typealias WorkerElement = Pair<WorkerId, (@Given WorkScope) -> Worker<*>>
 
-@Qualifier
-annotation class WorkerBinding<S>
-
-@Suppress("UNCHECKED_CAST")
 @Given
-fun <@Given P : @WorkerBinding<I> S, S : Worker, I : WorkerId> workerBindingImpl(
+fun <@Given T : Worker<I>, I : WorkerId> workerElement(
     @Given id: I,
-    @Given factory: (@Given WorkScope) -> P
+    @Given factory: (@Given WorkScope) -> T
 ): WorkerElement = id to factory
 
 fun WorkerId.toFunctionalWorkerTag() = WORKER_ID_TAG_PREFIX + value

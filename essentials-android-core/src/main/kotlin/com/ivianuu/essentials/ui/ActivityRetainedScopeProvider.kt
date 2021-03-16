@@ -27,7 +27,6 @@ import com.ivianuu.injekt.common.Scope
 
 typealias ActivityRetainedScopeProvider = UiDecorator
 
-@UiDecoratorBinding
 @Given
 fun activityRetainedScopeProvider(): ActivityRetainedScopeProvider = { content ->
     val activity = LocalContext.current as? ComponentActivity

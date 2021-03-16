@@ -21,7 +21,6 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.tile.TileStateBinding
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
@@ -33,7 +32,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@TileStateBinding<FunTileService1>
 @Given
 fun testTileState(
     @Given scope: CoroutineScope,
@@ -58,7 +56,7 @@ fun testTileState(
         .launchIn(this)
 }
 
-private fun TwilightPrefs.toTileState() = TileState(
+private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
     label = twilightMode.name,
     status = if (twilightMode == TwilightMode.Light) TileState.Status.Active
     else TileState.Status.Inactive

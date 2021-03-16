@@ -19,13 +19,11 @@ package com.ivianuu.essentials.ui
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUi
-import com.ivianuu.essentials.ui.core.AppUiBinding
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.StateFlow
 
-@AppUiBinding
 @Given
 fun defaultAppUi(
     @Given navigationStateFlow: StateFlow<NavigationState>,

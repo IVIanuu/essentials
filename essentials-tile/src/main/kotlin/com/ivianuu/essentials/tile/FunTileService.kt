@@ -85,7 +85,7 @@ abstract class AbstractFunTileService(
         super.onDestroy()
     }
 
-    private fun applyState(state: TileState) {
+    private fun applyState(state: TileState<*>) {
         val qsTile = qsTile ?: return
 
         qsTile.state = when (state.status) {
@@ -118,7 +118,7 @@ class FunTileServiceComponent(
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val resourceProvider: ResourceProvider,
     @Given val serviceComponent: ServiceComponent,
-    @Given tileStores: Set<TileStateElement>
+    @Given tileStores: Set<TileStateElement> = emptySet()
 ) {
     val tileStores = tileStores.toMap()
 }

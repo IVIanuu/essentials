@@ -23,7 +23,6 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
 import com.ivianuu.essentials.work.WorkScope
 import com.ivianuu.essentials.work.Worker
-import com.ivianuu.essentials.work.WorkerBinding
 import com.ivianuu.essentials.work.WorkerId
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
@@ -31,9 +30,8 @@ import kotlinx.coroutines.delay
 @Given
 object TestWorkerId : WorkerId("test")
 
-@WorkerBinding<TestWorkerId>
 @Given
-fun testWorker(@Given scope: WorkScope, @Given logger: Logger): Worker = {
+fun testWorker(@Given scope: WorkScope, @Given logger: Logger): Worker<TestWorkerId> = {
     logger.d { "start work in scope: $scope" }
     delay(5000)
     logger.d { "finish work in scope: $scope" }

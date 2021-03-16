@@ -24,7 +24,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 @Scoped<AppComponent>
 @Given
 fun internalForegroundState(
-    @Given foregroundStates: Set<ForegroundStateElement>,
+    @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
     @Given globalScope: GlobalScope,
     @Given logger: Logger,
 ): Flow<InternalForegroundState> = combine(

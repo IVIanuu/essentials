@@ -18,7 +18,6 @@ package com.ivianuu.essentials.gestures
 
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityConfigBinding
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.GlobalScope
@@ -65,9 +64,8 @@ fun keyboardVisible(
     .distinctUntilChanged()
     .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
 
-@AccessibilityConfigBinding
 @Given
-fun keyboardVisibilityAccessibilityConfig() = flow {
+val keyboardVisibilityAccessibilityConfig = flow {
     emit(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED

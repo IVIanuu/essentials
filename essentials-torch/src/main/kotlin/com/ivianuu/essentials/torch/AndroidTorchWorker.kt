@@ -18,7 +18,6 @@ package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.app.AppWorker
-import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.Collector
@@ -29,7 +28,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
-@AppWorkerBinding
 @Given
 fun androidTorchWorker(
     @Given cameraManager: CameraManager,

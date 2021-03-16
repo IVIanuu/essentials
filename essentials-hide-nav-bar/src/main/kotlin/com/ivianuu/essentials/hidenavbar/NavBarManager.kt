@@ -21,7 +21,6 @@ import android.content.Intent
 import android.graphics.Rect
 import com.ivianuu.essentials.android.prefs.PrefUpdater
 import com.ivianuu.essentials.app.AppWorker
-import com.ivianuu.essentials.app.AppWorkerBinding
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.result.onFailure
@@ -42,7 +41,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-@AppWorkerBinding
 @Given
 fun navBarManager(
     @Given appContext: AppContext,

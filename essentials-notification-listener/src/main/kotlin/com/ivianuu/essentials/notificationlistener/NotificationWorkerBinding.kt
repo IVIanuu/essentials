@@ -23,17 +23,10 @@ import kotlinx.coroutines.launch
 
 typealias NotificationWorker = suspend () -> Unit
 
-@Qualifier
-annotation class NotificationWorkerBinding
-
-@Given
-fun <@Given T : @NotificationWorkerBinding S, S : NotificationWorker> notificationWorkerBindingImpl(
-    @Given instance: T): NotificationWorker = instance
-
 typealias NotificationWorkerRunner = suspend () -> Unit
 
 @Given
-fun notificationWorkerRunner(@Given workers: Set<NotificationWorker>): NotificationWorkerRunner = {
+fun notificationWorkerRunner(@Given workers: Set<NotificationWorker> = emptySet()): NotificationWorkerRunner = {
     coroutineScope {
         workers.forEach { worker ->
             launch { worker() }

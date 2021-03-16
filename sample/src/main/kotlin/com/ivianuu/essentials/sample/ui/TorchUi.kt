@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.StateFlow
 
-@HomeItemBinding
 @Given
 val torchHomeItem = HomeItem("Torch") { TorchKey() }
 

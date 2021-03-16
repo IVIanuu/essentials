@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.injekt.Given
 import kotlin.math.max
 
@@ -84,7 +83,6 @@ fun ProvideInsets(
 
 typealias WindowInsetsProvider = UiDecorator
 
-@UiDecoratorBinding
 @Given
 fun windowInsetsProvider(): WindowInsetsProvider = { content ->
     val ownerView = LocalView.current

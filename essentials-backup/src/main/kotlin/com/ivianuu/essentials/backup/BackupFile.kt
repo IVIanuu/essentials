@@ -22,14 +22,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import java.io.File
 
-@Qualifier
-annotation class BackupFileBinding
-
-@Given
-fun <@Given T : @BackupFileBinding S, S : File> backupFileBindingImpl(
-    @Given instance: T
-): BackupFile = instance
-
 typealias BackupFile = File
 
 typealias BackupDir = File
@@ -37,14 +29,11 @@ typealias BackupDir = File
 @Given
 fun backupDir(@Given dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 
-@BackupFileBinding
 @Given
-fun backupPrefs(@Given prefsDir: PrefsDir) = prefsDir
+fun backupPrefs(@Given prefsDir: PrefsDir): BackupFile = prefsDir
 
-@BackupFileBinding
 @Given
-fun backupDatabases(@Given dataDir: DataDir) = dataDir.resolve("databases")
+fun backupDatabases(@Given dataDir: DataDir): BackupFile = dataDir.resolve("databases")
 
-@BackupFileBinding
 @Given
-fun backupSharedPrefs(@Given dataDir: DataDir) = dataDir.resolve("shared_prefs")
+fun backupSharedPrefs(@Given dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")

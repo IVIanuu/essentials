@@ -44,7 +44,6 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -61,7 +60,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
-@HomeItemBinding
 @Given
 val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
@@ -138,11 +136,6 @@ typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 @Scoped<AppComponent>
 @Given
 fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
-
-@ForegroundStateBinding
-@Given
-inline val @Given ForegroundScreenState.bindForegroundScreenState: Flow<ForegroundState>
-    get() = this
 
 typealias ForegroundNotificationFactory = (Int, Color) -> Notification
 

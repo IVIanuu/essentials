@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
-@HomeItemBinding
 @Given
 val billingHomeItem = HomeItem("Billing") { BillingKey() }
 

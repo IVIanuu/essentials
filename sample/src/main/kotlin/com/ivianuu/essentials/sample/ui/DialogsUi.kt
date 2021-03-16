@@ -62,7 +62,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.ComponentElementBinding
 import com.ivianuu.injekt.component.element
 
-@HomeItemBinding
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 

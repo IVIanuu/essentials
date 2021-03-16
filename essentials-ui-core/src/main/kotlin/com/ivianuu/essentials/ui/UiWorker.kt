@@ -26,12 +26,6 @@ import kotlinx.coroutines.launch
 
 typealias UiWorker = suspend () -> Unit
 
-@Qualifier
-annotation class UiWorkerBinding
-
-@Given
-fun <@Given T : @UiWorkerBinding S, S : UiWorker> uiWorkerBinding(@Given instance: T): UiWorker = instance
-
 typealias UiWorkerRunner = () -> Unit
 
 @Given
@@ -39,7 +33,7 @@ fun uiWorkerRunner(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
     @Given uiScope: UiScope,
-    @Given workers: Set<UiWorker>,
+    @Given workers: Set<UiWorker> = emptySet(),
 ): UiWorkerRunner = {
     logger.d { "run ui workers" }
     workers

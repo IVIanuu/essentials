@@ -37,11 +37,11 @@ interface ActionRepository {
 @Given
 class ActionRepositoryImpl(
     @Given private val defaultDispatcher: DefaultDispatcher,
-    @Given private val actions: Map<String, () -> Action>,
-    @Given private val actionFactories: () -> Set<ActionFactory>,
-    @Given private val actionsExecutors: Map<String, ActionExecutor>,
-    @Given private val actionPickerDelegates: Set<ActionPickerDelegate>,
-    @Given private val actionSettings: Map<String, ActionSettingsKey>
+    @Given private val actions: Map<String, () -> Action> = emptyMap(),
+    @Given private val actionFactories: () -> Set<ActionFactory> = { emptySet() },
+    @Given private val actionsExecutors: Map<String, ActionExecutor> = emptyMap(),
+    @Given private val actionPickerDelegates: Set<ActionPickerDelegate> = emptySet(),
+    @Given private val actionSettings: Map<String, ActionSettingsKey> = emptyMap()
 ) : ActionRepository {
 
     override suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {

@@ -47,7 +47,6 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-@HomeItemBinding
 @Given
 val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 

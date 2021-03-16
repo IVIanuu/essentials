@@ -28,7 +28,6 @@ import coil.fetch.Fetcher
 import coil.size.OriginalSize
 import coil.size.PixelSize
 import coil.size.Size
-import com.ivianuu.essentials.coil.FetcherBinding
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
 
@@ -38,7 +37,7 @@ data class AppIcon(val packageName: String)
 class AppIconFetcher(
     @Given private val packageManager: PackageManager,
     @Given private val resources: AppResources
-) : @FetcherBinding Fetcher<AppIcon> {
+) : Fetcher<AppIcon> {
     override fun key(data: AppIcon): String = data.packageName
 
     override suspend fun fetch(

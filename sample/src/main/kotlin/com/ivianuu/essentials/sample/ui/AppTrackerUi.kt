@@ -34,7 +34,6 @@ import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.foreground.ForegroundStateBinding
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -60,7 +59,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-@HomeItemBinding
 @Given
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
@@ -115,11 +113,6 @@ typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 @Scoped<AppComponent>
 @Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
-
-@ForegroundStateBinding
-@Given
-inline val @Given AppTrackerForegroundState.bindAppTrackerForegroundState: Flow<ForegroundState>
-    get() = this
 
 typealias AppTrackerNotificationFactory = (String?) -> Notification
 

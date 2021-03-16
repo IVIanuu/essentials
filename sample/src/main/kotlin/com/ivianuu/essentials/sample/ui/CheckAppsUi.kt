@@ -31,7 +31,6 @@ import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@HomeItemBinding
 @Given
 val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
 

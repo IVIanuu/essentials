@@ -25,6 +25,6 @@ typealias HomeKey = Key<Nothing>
 annotation class HomeKeyBinding
 
 @Given
-fun <@Given T : @HomeKeyBinding S, S : Key<Nothing>> homeKeyBindingImpl(
+fun <@Given T : @HomeKeyBinding S, S : Key<Nothing>> homeKey(
     @Given instance: T
 ): HomeKey = instance

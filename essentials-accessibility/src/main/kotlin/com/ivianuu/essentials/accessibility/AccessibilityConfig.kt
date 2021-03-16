@@ -39,18 +39,9 @@ data class AccessibilityConfig(
     val notificationTimeout: Long = 0L,
 )
 
-@Qualifier
-annotation class AccessibilityConfigBinding
-
-@Given
-fun <@Given T : @AccessibilityConfigBinding Flow<AccessibilityConfig>> accessibilityConfigBindingImpl(
-    @Given instance: () -> T
-): () -> Flow<AccessibilityConfig> = instance
-
-@AccessibilityWorkerBinding
 @Given
 fun applyAccessibilityConfig(
-    @Given configs: Set<() -> Flow<AccessibilityConfig>>,
+    @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
     @Given serviceHolder: MutableAccessibilityServiceHolder,
 ): AccessibilityWorker = {
     coroutineScope {

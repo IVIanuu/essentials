@@ -52,17 +52,8 @@ fun imageLoader(
     }
     .build()
 
-@Qualifier
-annotation class DecoderBinding
-
 @Given
-fun <@Given T : @DecoderBinding Decoder> decoderBindingImpl(@Given instance: T): Decoder = instance
-
-@Qualifier
-annotation class FetcherBinding
-
-@Given
-inline fun <@Given reified F : @FetcherBinding Fetcher<T>, reified T : Any> fetcherBindingImpl(
+inline fun <@Given reified F : Fetcher<T>, reified T : Any> fetcherPair(
     @Given instance: F
 ): FetcherPair<Any> = FetcherPair(instance, T::class) as FetcherPair<Any>
 
@@ -71,19 +62,8 @@ data class FetcherPair<T : Any>(
     val type: KClass<T>
 )
 
-@Qualifier
-annotation class InterceptorBinding
-
 @Given
-fun <@Given T : @InterceptorBinding Interceptor> interceptorBindingImpl(
-    @Given instance: T
-): Interceptor = instance
-
-@Qualifier
-annotation class MapperBinding
-
-@Given
-inline fun <@Given reified M : @MapperBinding Mapper<T, V>, reified T : Any, reified V : Any> mapperBindingImpl(
+inline fun <@Given reified M : Mapper<T, V>, reified T : Any, reified V : Any> mapperPair(
     @Given instance: M
 ): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
 

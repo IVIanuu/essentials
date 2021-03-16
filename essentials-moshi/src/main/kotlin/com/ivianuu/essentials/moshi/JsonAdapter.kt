@@ -24,15 +24,9 @@ import com.squareup.moshi.Moshi
 
 typealias JsonAdapter = Any
 
-@Qualifier
-annotation class JsonAdapterBinding
-
-@Given
-fun <@Given T : @JsonAdapterBinding S, S : Any> jsonAdapterBindingImpl(@Given instance: T): JsonAdapter = instance
-
 @Scoped<AppComponent>
 @Given
-fun moshi(@Given jsonAdapters: Set<JsonAdapter>): Moshi = Moshi.Builder()
+fun moshi(@Given jsonAdapters: Set<JsonAdapter> = emptySet()): Moshi = Moshi.Builder()
     .apply {
         jsonAdapters
             .forEach { adapter -> add(adapter) }

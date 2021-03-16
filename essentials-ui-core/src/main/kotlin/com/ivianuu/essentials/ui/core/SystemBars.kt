@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.UiDecoratorBinding
 import com.ivianuu.essentials.ui.UiDecoratorConfig
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.setFlag
@@ -92,9 +91,8 @@ fun Modifier.systemBarStyle(
 
 typealias SystemBarManagerProvider = UiDecorator
 
-@UiDecoratorBinding
 @Given
-fun systemBarManagerProvider(): SystemBarManagerProvider = { content ->
+val systemBarManagerProvider: SystemBarManagerProvider = { content ->
     val systemBarManager = remember { SystemBarManager() }
     systemBarManager.updateSystemBars()
     CompositionLocalProvider(
@@ -105,9 +103,8 @@ fun systemBarManagerProvider(): SystemBarManagerProvider = { content ->
 
 typealias RootSystemBarsStyle = UiDecorator
 
-@UiDecoratorBinding
 @Given
-fun rootSystemBarsStyle(): RootSystemBarsStyle = { content ->
+val rootSystemBarsStyle: RootSystemBarsStyle = { content ->
     Surface {
         Box(
             modifier = Modifier
@@ -120,7 +117,7 @@ fun rootSystemBarsStyle(): RootSystemBarsStyle = { content ->
 }
 
 @Given
-fun rootSystemBarsStyleConfig() = UiDecoratorConfig<RootSystemBarsStyle>(
+val rootSystemBarsStyleConfig = UiDecoratorConfig<RootSystemBarsStyle>(
     dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
 )
 
