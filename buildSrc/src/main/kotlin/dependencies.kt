@@ -85,17 +85,17 @@ object Deps {
     const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev786"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev789"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev491"
+        private const val version = "0.0.1-dev493"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
-        const val component = "com.ivianuu.injekt:injekt-component:$version"
-        const val core = "com.ivianuu.injekt:injekt-core:$version"
-        const val common = "com.ivianuu.injekt:injekt-common:$version"
+        const val component = "com.ivianuu.injekt:injekt-component-jvm:$version"
+        const val core = "com.ivianuu.injekt:injekt-core-jvm:$version"
+        const val common = "com.ivianuu.injekt:injekt-common-jvm:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 

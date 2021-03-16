@@ -29,12 +29,12 @@ gradlePlugin {
         create("essentialsPlugin") {
             id = "com.ivianuu.essentials"
             implementationClass =
-                "com.ivianuu.essentials.gradle.EssentialsGradlePlugin"
+                "com.ivianuu.essentials.gradle.EssentialsPlugin"
         }
         create("composePlugin") {
-            id = "androidx.compose"
+            id = "com.ivianuu.compose"
             implementationClass =
-                "com.ivianuu.essentials.gradle.ComposeGradlePlugin"
+                "com.ivianuu.essentials.gradle.ComposePlugin"
         }
     }
 }
@@ -53,14 +53,14 @@ buildConfig {
 }
 
 dependencies {
-    implementation(Deps.androidGradlePlugin)
+    api(Deps.androidGradlePlugin)
     implementation(Deps.autoService)
     kapt(Deps.autoService)
 
     implementation(Deps.Kotlin.gradlePlugin)
     implementation(Deps.Kotlin.gradlePluginApi)
-    implementation(Deps.Injekt.gradlePlugin)
-    implementation(Deps.versionsGradlePlugin)
+    api(Deps.Injekt.gradlePlugin)
+    api(Deps.versionsGradlePlugin)
 }
 
 plugins.apply("com.vanniktech.maven.publish")
