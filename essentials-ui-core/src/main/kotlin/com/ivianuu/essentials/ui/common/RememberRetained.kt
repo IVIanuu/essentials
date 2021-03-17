@@ -44,7 +44,7 @@ inline fun <T : Any> rememberRetained(
     val finalKey = key.hashCode()
     val scope = LocalRetainedScope.current
     return synchronized(scope) {
-        var value: ValueWithInputs<T>? = scope.get(key = finalKey)
+        var value: ValueWithInputs<T>? = scope.get(finalKey)
         if (value != null && !value.inputs.contentEquals(inputs)) {
             scope.remove(key.hashCode())
             value = null
