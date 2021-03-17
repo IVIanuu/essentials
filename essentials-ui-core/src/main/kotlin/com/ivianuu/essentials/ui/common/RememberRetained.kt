@@ -20,6 +20,7 @@ package com.ivianuu.essentials.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.ScopeDisposable
@@ -31,14 +32,14 @@ val LocalRetainedScope = staticCompositionLocalOf<Scope> {
 // todo remove once compose is fixed
 @Composable
 inline fun <T : Any> rememberRetained(
-    key: Any = currentComposer.compoundKeyHash,
+    key: Any = currentCompositeKeyHash,
     noinline init: () -> T
 ): T = rememberRetained(inputs = *emptyArray(), key = key, init = init)
 
 @Composable
 inline fun <T : Any> rememberRetained(
     vararg inputs: Any?,
-    key: Any = currentComposer.compoundKeyHash,
+    key: Any = currentCompositeKeyHash,
     noinline init: () -> T
 ): T {
     val finalKey = key.hashCode()

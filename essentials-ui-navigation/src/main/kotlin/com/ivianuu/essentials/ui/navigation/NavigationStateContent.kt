@@ -21,6 +21,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -110,7 +111,7 @@ private class NavigationContentState(
             enterTransition = options?.enterTransition,
             exitTransition = options?.exitTransition
         ) {
-            val compositionKey = currentComposer.compoundKeyHash
+            val compositionKey = currentCompositeKeyHash
 
             val savableStateRegistry = remember {
                 SaveableStateRegistry(
