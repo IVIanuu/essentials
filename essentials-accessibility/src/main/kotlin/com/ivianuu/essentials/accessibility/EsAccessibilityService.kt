@@ -43,6 +43,7 @@ class EsAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         val connectedScope = CoroutineScope(component.defaultDispatcher)
+            .also { this.connectedScope = it }
         component.logger.d { "connected" }
         component.serviceHolder.value = this
         connectedScope.launch {
