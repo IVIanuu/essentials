@@ -46,13 +46,13 @@ inline fun <T : Any> rememberRetained(
     return synchronized(scope) {
         var value: ValueWithInputs<T>? = scope.get(key = finalKey)
         if (value != null && !value.inputs.contentEquals(inputs)) {
-            scope.minusAssign(key.hashCode())
+            scope.remove(key.hashCode())
             value = null
         }
 
         if (value == null) {
             value = ValueWithInputs(init(), inputs)
-            scope[finalKey] = value
+            scope.set(finalKey, value)
         }
         value.value
     }

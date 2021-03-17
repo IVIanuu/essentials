@@ -45,7 +45,7 @@ interface Permission {
     val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-class PermissionModule<T : P, P : Permission>(private val permissionKey: TypeKey<P>) {
+class PermissionModule<T : P, @ForTypeKey P : Permission> {
 
     @Given
     fun permission(@Given permission: T): P = permission
@@ -55,21 +55,21 @@ class PermissionModule<T : P, P : Permission>(private val permissionKey: TypeKey
     fun permissionSetElement(
         @Given permission: T
     ): Pair<TypeKey<Permission>, Permission> =
-        (permissionKey to permission) as Pair<TypeKey<Permission>, Permission>
+        (typeKeyOf<P>() to permission) as Pair<TypeKey<Permission>, Permission>
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun requestHandler(
         @Given requestHandler: PermissionRequestHandler<P>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-        (permissionKey to requestHandler.intercept<P>()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+        (typeKeyOf<P>() to requestHandler.intercept<P>()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionState(
         @Given state: PermissionState<P>
     ): Pair<TypeKey<Permission>, PermissionState<Permission>> =
-        (permissionKey to state) as Pair<TypeKey<Permission>, PermissionState<Permission>>
+        (typeKeyOf<P>() to state) as Pair<TypeKey<Permission>, PermissionState<Permission>>
 
 }
 
@@ -77,8 +77,8 @@ class PermissionModule<T : P, P : Permission>(private val permissionKey: TypeKey
 annotation class PermissionBinding
 
 @Given
-fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionBindingModule(
-): PermissionModule<T, P> = PermissionModule(typeKeyOf())
+fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionModule(
+): PermissionModule<T, P> = PermissionModule()
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 

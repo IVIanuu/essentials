@@ -1,4 +1,4 @@
-// injekt-incremental-fix 1615976957222 injekt-end
+// injekt-incremental-fix 1616024181782 injekt-end
 package com.ivianuu.essentials.sample
 
 import android.app.Application
@@ -79,6 +79,7 @@ import com.ivianuu.injekt.component.*
 
 class App : Application() {
     override fun onCreate() {
+        println()
         initializeEssentials()
         super.onCreate()
     }

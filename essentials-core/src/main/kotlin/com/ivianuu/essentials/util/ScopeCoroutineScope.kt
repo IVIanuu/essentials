@@ -5,7 +5,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.ScopeDisposable
-import com.ivianuu.injekt.common.invoke
+import com.ivianuu.injekt.common.getOrCreate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -18,7 +18,7 @@ typealias ScopeCoroutineScope<S> = CoroutineScope
 fun <@ForTypeKey S : Scope> scopeCoroutineScope(
     @Given scope: S,
     @Given dispatcher: ScopeCoroutineDispatcher<S>
-): ScopeCoroutineScope<S> = scope {
+): ScopeCoroutineScope<S> = scope.getOrCreate {
     object : CoroutineScope, ScopeDisposable {
         override val coroutineContext: CoroutineContext = Job() + dispatcher
         override fun dispose() {
