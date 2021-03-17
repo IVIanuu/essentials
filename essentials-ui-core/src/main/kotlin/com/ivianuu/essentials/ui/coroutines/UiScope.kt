@@ -17,11 +17,12 @@
 package com.ivianuu.essentials.ui.coroutines
 
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.util.ComponentCoroutineScope
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 
 typealias UiScope = CoroutineScope
 
 @Given
-inline fun @Given ComponentCoroutineScope<UiComponent>.uiScope(): UiScope = this
+inline val @Given ScopeCoroutineScope<UiComponent>.uiScope: UiScope
+    get() = this
