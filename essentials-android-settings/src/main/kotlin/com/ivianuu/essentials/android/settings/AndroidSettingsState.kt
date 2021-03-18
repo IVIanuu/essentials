@@ -31,6 +31,7 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -86,6 +87,41 @@ class AndroidSettingStateModule<T : S, S>(
 
     @Given
     val actions = EventFlow<AndroidSettingAction<T>>()
+
+    @Scoped<AppComponent>
+    @Given
+    fun collector(
+        @Given actions: MutableSharedFlow<AndroidSettingAction<T>>,
+        @Suppress("UNUSED_PARAMETER") @Given state: StateFlow<T>, // inject to start state
+        @Given ready: AndroidSettingsStateReady<T>,
+        @Given scope: ScopeCoroutineScope<AppComponent>
+    ): Collector<AndroidSettingAction<T>> = { action ->
+        scope.launch {
+            ready.first()
+            actions.tryEmit(action)
+        }
+    }
+}
+
+enum class AndroidSettingsType {
+    GLOBAL, SECURE, SYSTEM
+}
+
+sealed class AndroidSettingAction<T> {
+    data class Update<T>(
+        val result: CompletableDeferred<T>? = null,
+        val reducer: T.() -> T
+    ) : AndroidSettingAction<T>()
+}
+
+suspend fun <T : Any> Collector<AndroidSettingAction<T>>.update(reducer: T.() -> T): T {
+    val result = CompletableDeferred<T>()
+    this(Update(result, reducer))
+    return result.await()
+}
+
+fun <T : Any> Collector<AndroidSettingAction<T>>.dispatchUpdate(reducer: T.() -> T) {
+    this(Update(reducer = reducer))
 }
 
 internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
@@ -94,39 +130,3 @@ internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
 @Given
 fun <T> androidSettingsStateReady(): AndroidSettingsStateReady<T> =
     MutableStateFlow(false)
-
-sealed class AndroidSettingAction<T> {
-    data class Update<T>(
-        val reducer: T.() -> T,
-        val result: CompletableDeferred<T>?,
-    ) : AndroidSettingAction<T>()
-}
-
-typealias AndroidSettingUpdater<T> = suspend (T.() -> T) -> T
-
-@Given
-fun <T> androidSettingUpdater(
-    @Given dispatch: Collector<AndroidSettingAction<T>>,
-    @Given ready: AndroidSettingsStateReady<T>,
-    @Given state: StateFlow<T> // workaround to ensure that the state is initialized
-): AndroidSettingUpdater<T> = { reducer ->
-    ready.first { it }
-    val result = CompletableDeferred<T>()
-    dispatch(Update(reducer, result))
-    result.await()
-}
-
-typealias AndroidSettingUpdateDispatcher<T> = (T.() -> T) -> Unit
-
-@Given
-fun <T> dispatchAndroidSettingUpdate(
-    @Given dispatch: Collector<AndroidSettingAction<T>>,
-    @Given ready: AndroidSettingsStateReady<T>,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
-    @Given state: StateFlow<T> // workaround to ensure that the state is initialized
-): AndroidSettingUpdateDispatcher<T> = { reducer ->
-    scope.launch {
-        ready.first { it }
-        dispatch(Update(reducer, null))
-    }
-}

@@ -24,7 +24,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefUpdateDispatcher
+import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.dispatchUpdate
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -41,7 +43,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Given
 fun twilightSettingsUi(
     @Given prefsFlow: StateFlow<TwilightPrefs>,
-    @Given update: PrefUpdateDispatcher<TwilightPrefs>,
+    @Given dispatch: Collector<PrefAction<TwilightPrefs>>,
 ): KeyUi<TwilightSettingsKey> = {
     val prefs by prefsFlow.collectAsState()
     Scaffold(
@@ -53,7 +55,9 @@ fun twilightSettingsUi(
                     TwilightModeItem(
                         mode = mode,
                         isSelected = prefs.twilightMode == mode,
-                        onClick = { update { copy(twilightMode = mode) } }
+                        onClick = {
+                            dispatch.dispatchUpdate { copy(twilightMode = mode) }
+                        }
                     )
                 }
 
@@ -61,7 +65,9 @@ fun twilightSettingsUi(
 
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
-                    onValueChange = { update { copy(useBlackInDarkMode = it) } },
+                    onValueChange = {
+                        dispatch.dispatchUpdate { copy(useBlackInDarkMode = it) }
+                    },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -30,6 +31,7 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
 import com.squareup.moshi.JsonAdapter
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +41,6 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class PrefModule<T : Any>(private val name: String) {
-
     @Given
     fun prefDataStore(
         @Given scope: ScopeCoroutineScope<AppComponent>,
@@ -77,11 +78,43 @@ class PrefModule<T : Any>(private val name: String) {
 
     @Scoped<AppComponent>
     @Given
-    fun @Given DataStore<T>.stateFlow(
+    fun stateFlow(
+        @Given dataStore: DataStore<T>,
         @Given scope: ScopeCoroutineScope<AppComponent>,
         @Given initial: @InitialOrFallback T
-    ): StateFlow<T> = data.stateIn(scope, SharingStarted.Eagerly, initial)
+    ): StateFlow<T> = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
 
+    @Scoped<AppComponent>
+    @Given
+    fun prefActionCollector(
+        @Given dataStore: DataStore<T>,
+        @Given scope: ScopeCoroutineScope<AppComponent>
+    ): Collector<PrefAction<T>> = { action ->
+        when (action) {
+            is PrefAction.Update -> {
+                scope.launch {
+                    dataStore.updateData { action.reducer(it) }
+                }
+            }
+        }
+    }
+}
+
+sealed class PrefAction<T : Any> {
+    data class Update<T : Any>(
+        val result: CompletableDeferred<T>? = null,
+        val reducer: T.() -> T
+    ) : PrefAction<T>()
+}
+
+suspend fun <T : Any> Collector<PrefAction<T>>.update(reducer: T.() -> T): T {
+    val result = CompletableDeferred<T>()
+    this(PrefAction.Update(result, reducer))
+    return result.await()
+}
+
+fun <T : Any> Collector<PrefAction<T>>.dispatchUpdate(reducer: T.() -> T) {
+    this(PrefAction.Update(reducer = reducer))
 }
 
 @Qualifier
@@ -92,21 +125,3 @@ inline fun <reified T : Any> initialOrFallback(
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
 
-typealias PrefUpdater<T> = suspend (T.() -> T) -> T
-
-@Given
-fun <T> prefUpdater(@Given pref: DataStore<T>): PrefUpdater<T> = { reducer ->
-    pref.updateData { reducer(it) }
-}
-
-typealias PrefUpdateDispatcher<T> = (T.() -> T) -> Unit
-
-@Given
-fun <T> prefUpdateDispatcher(
-    @Given pref: DataStore<T>,
-    @Given scope: ScopeCoroutineScope<AppComponent>
-): PrefUpdateDispatcher<T> = { reducer ->
-    scope.launch {
-        pref.updateData { reducer(it) }
-    }
-}

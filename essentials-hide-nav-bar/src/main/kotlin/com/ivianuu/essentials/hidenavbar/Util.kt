@@ -20,9 +20,11 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
+import com.ivianuu.essentials.android.settings.AndroidSettingAction
 import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
-import com.ivianuu.essentials.android.settings.AndroidSettingUpdater
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.android.settings.update
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
@@ -34,18 +36,18 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 fun nonSdkInterfaceDetectionDisabler(
     @Given logger: Logger,
     @Given systemBuildInfo: SystemBuildInfo,
-    @Given updateHiddenApiPolicy: AndroidSettingUpdater<HiddenApiPolicy>,
-    @Given updateHiddenApiPolicyPrePieApps: AndroidSettingUpdater<HiddenApiPolicyPrePieApps>,
-    @Given updateHiddenApiPolicyPieApps: AndroidSettingUpdater<HiddenApiPolicyPieApps>,
+    @Given hiddenApiPolicyCollector: Collector<AndroidSettingAction<HiddenApiPolicy>>,
+    @Given hiddenApiPolicyPrePieAppsCollector: Collector<AndroidSettingAction<HiddenApiPolicyPieApps>>,
+    @Given hiddenApiPolicyPieAppsCollector: Collector<AndroidSettingAction<HiddenApiPolicyPieApps>>,
 ): NonSdkInterfaceDetectionDisabler = {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
-        updateHiddenApiPolicy { 1 }
+        hiddenApiPolicyCollector.update { 1 }
         logger.d { "disabled non sdk on 29" }
     } else if (systemBuildInfo.sdk >= 28) {
         logger.d { "disable non sdk on p" }
-        updateHiddenApiPolicyPrePieApps { 1 }
-        updateHiddenApiPolicyPieApps { 1 }
+        hiddenApiPolicyPrePieAppsCollector.update { 1 }
+        hiddenApiPolicyPieAppsCollector.update { 1 }
         logger.d { "disabled non sdk on p" }
     }
 }

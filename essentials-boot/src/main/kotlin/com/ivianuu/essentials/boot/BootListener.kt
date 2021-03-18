@@ -16,7 +16,4 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-
 typealias BootListener = suspend () -> Unit

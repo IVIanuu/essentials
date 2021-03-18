@@ -19,9 +19,10 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
+import com.ivianuu.essentials.android.settings.AndroidSettingAction
 import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
-import com.ivianuu.essentials.android.settings.AndroidSettingUpdater
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.android.settings.update
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
@@ -30,6 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -56,9 +58,9 @@ fun autoRotationAction(
 @ActionExecutorBinding<AutoRotationActionId>
 @Given
 fun autoRotationActionExecutor(
-    @Given updateAutoRotation: AndroidSettingUpdater<AutoRotation>,
+    @Given rotationSettingActionCollector: Collector<AndroidSettingAction<AutoRotation>>,
 ): ActionExecutor = {
-    updateAutoRotation { if (this != 1) 1 else 0 }
+    rotationSettingActionCollector.update { if (this != 1) 1 else 0 }
 }
 
 internal typealias AutoRotationIcon = ActionIcon

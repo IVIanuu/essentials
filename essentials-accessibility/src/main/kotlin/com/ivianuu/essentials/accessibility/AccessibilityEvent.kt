@@ -16,6 +16,13 @@
 
 package com.ivianuu.essentials.accessibility
 
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.component.AppComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+
 data class AccessibilityEvent(
     val type: Int,
     val packageName: String?,
@@ -24,3 +31,13 @@ data class AccessibilityEvent(
 )
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
+
+internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityEvent>
+
+@Scoped<AppComponent>
+@Given
+fun mutableAccessibilityEvents(): MutableAccessibilityEvents = EventFlow()
+
+@Given
+inline val @Given MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
+    get() = this

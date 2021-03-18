@@ -19,7 +19,6 @@ package com.ivianuu.essentials.apps.ui
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.memo.memoize
 import com.ivianuu.injekt.Given
 
 typealias AppFilter = (AppInfo) -> Boolean
@@ -27,14 +26,21 @@ typealias AppFilter = (AppInfo) -> Boolean
 val DefaultAppFilter: AppFilter = { true }
 
 typealias LaunchableAppFilter = AppFilter
+
 @Given
 fun LaunchableAppFilter(
     @Given packageManager: PackageManager
-): LaunchableAppFilter = { app: AppInfo ->
-    packageManager.getLaunchIntentForPackage(app.packageName) != null
-}.memoize()
+): LaunchableAppFilter {
+    val cache = mutableMapOf<String, Boolean>()
+    return { app: AppInfo ->
+        cache.getOrPut(app.packageName) {
+            packageManager.getLaunchIntentForPackage(app.packageName) != null
+        }
+    }
+}
 
 typealias IntentAppFilter = AppFilter
+
 @Given
 fun IntentAppFilter(
     @Given packageManager: PackageManager,

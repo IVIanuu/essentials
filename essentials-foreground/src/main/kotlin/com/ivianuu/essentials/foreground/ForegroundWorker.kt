@@ -24,7 +24,6 @@ class ForegroundWorker(
     @Given private val notificationManager: NotificationManager,
     @Given private val logger: Logger
 ) : CoroutineWorker(appContext, params) {
-
     override suspend fun doWork(): Result {
         logger.d { "start foreground worker" }
 
@@ -78,5 +77,4 @@ class ForegroundWorker(
                 }
         }
     }
-
 }

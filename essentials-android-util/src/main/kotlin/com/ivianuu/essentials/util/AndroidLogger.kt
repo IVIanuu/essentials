@@ -41,16 +41,16 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
             WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
         }
     }
+    companion object {
+        @Scoped<AppComponent>
+        @Given
+        fun androidLogger(
+            @Given buildInfo: BuildInfo,
+            @Given androidLoggerFactory: () -> @Factory AndroidLogger,
+            @Given noopLoggerFactory: () -> @Factory NoopLogger
+        ): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
+    }
 }
 
-@Scoped<AppComponent>
 @Given
-fun androidLogger(
-    @Given buildInfo: BuildInfo,
-    @Given androidLoggerFactory: () -> @Factory AndroidLogger,
-    @Given noopLoggerFactory: () -> @Factory NoopLogger
-): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
-
-@Given
-inline val @Given BuildInfo.defaultLoggingEnabled: LoggingEnabled
-    get() = isDebug
+fun defaultLoggingEnabled(@Given buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug

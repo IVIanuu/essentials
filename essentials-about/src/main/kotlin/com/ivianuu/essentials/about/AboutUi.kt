@@ -223,3 +223,5 @@ fun aboutState(
 @Scoped<KeyUiComponent>
 @Given
 val aboutActions get() = EventFlow<AboutAction>()
+
+typealias PrivacyPolicyUrl = String

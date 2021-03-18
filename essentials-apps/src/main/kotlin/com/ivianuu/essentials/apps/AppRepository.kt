@@ -23,19 +23,18 @@ import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
 interface AppRepository {
-
     suspend fun getInstalledApps(): List<AppInfo>
 
     suspend fun getAppInfo(packageName: String): AppInfo
-
 }
+
+data class AppInfo(val packageName: String, val appName: String)
 
 @Given
 class AppRepositoryImpl(
     @Given private val ioDispatcher: IODispatcher,
     @Given private val packageManager: PackageManager
 ) : AppRepository {
-
     override suspend fun getInstalledApps(): List<AppInfo> = withContext(ioDispatcher) {
         packageManager.getInstalledApplications(0)
             .parMap {
@@ -56,5 +55,4 @@ class AppRepositoryImpl(
                 .toString()
         )
     }
-
 }

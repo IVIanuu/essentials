@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.android.prefs.PrefUpdater
+import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.dispatchUpdate
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
 import com.ivianuu.essentials.billing.debug.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
@@ -28,12 +30,9 @@ import kotlinx.coroutines.launch
 
 @Given
 fun debugPurchaseAppInitializer(
-    @Given scope: ScopeCoroutineScope<AppComponent>,
-    @Given updateDebugPrefs: PrefUpdater<DebugBillingPrefs>,
+    @Given prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
 ): ScopeInitializer<AppComponent> = {
-    scope.launch {
-        updateDebugPrefs {
-            copy(products = products + SkuDetails(DummySku))
-        }
+    prefActionCollector.dispatchUpdate {
+        copy(products = products + SkuDetails(DummySku))
     }
 }

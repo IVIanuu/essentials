@@ -24,8 +24,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.android.prefs.PrefAction
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.android.prefs.PrefUpdater
+import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
@@ -147,7 +148,7 @@ fun mediaActionSettingsState(
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<MediaActionPrefs>,
-    @Given updatePrefs: PrefUpdater<MediaActionPrefs>,
+    @Given prefsActionCollector: Collector<PrefAction<MediaActionPrefs>>,
 ): StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
@@ -165,7 +166,7 @@ fun mediaActionSettingsState(
                 )
             )
             if (newMediaApp != null) {
-                updatePrefs { copy(mediaApp = newMediaApp.packageName) }
+                prefsActionCollector.update { copy(mediaApp = newMediaApp.packageName) }
             }
         }
         .launchIn(this)

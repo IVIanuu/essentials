@@ -19,7 +19,8 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
-import com.ivianuu.essentials.android.prefs.PrefUpdater
+import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
@@ -27,6 +28,7 @@ import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -54,8 +56,8 @@ fun navBarManager(
     @Given permissionState: Flow<NavBarPermissionState>,
     @Given screenState: Flow<ScreenState>,
     @Given setOverscan: OverscanUpdater,
-    @Given updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
-    @Given wasNavBarHidden: Flow<WasNavBarHidden>
+    @Given wasNavBarHidden: Flow<WasNavBarHidden>,
+    @Given wasNavBarHiddenCollector: Collector<PrefAction<WasNavBarHidden>>
 ): ScopeWorker<AppComponent> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
@@ -90,7 +92,7 @@ fun navBarManager(
                     )
                 }
                     .onEach {
-                        updateWasNavBarHidden { true }
+                        wasNavBarHiddenCollector.update { true }
                     }
             } else {
                 if (!wasNavBarHidden.first()) {

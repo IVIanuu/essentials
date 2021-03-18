@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -40,7 +39,7 @@ fun broadcastsFactory(
     callbackFlow<Intent> {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                offerSafe(intent)
+                runKatching { offer(intent) }
             }
         }
         appContext.registerReceiver(

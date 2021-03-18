@@ -28,7 +28,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
 interface ResourceProvider {
-
     fun bitmap(id: Int): ImageBitmap
 
     fun boolean(id: Int): Boolean
@@ -52,12 +51,10 @@ interface ResourceProvider {
     fun string(id: Int, vararg arguments: Any?): String
 
     fun stringArray(id: Int): Array<String>
-
 }
 
 @Given
 class ResourceProviderImpl(@Given private val appContext: AppContext) : ResourceProvider {
-
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun bitmap(id: Int): ImageBitmap =
         appContext.getDrawable(id)!!.toImageBitmap()
@@ -92,5 +89,4 @@ class ResourceProviderImpl(@Given private val appContext: AppContext) : Resource
         appContext.getString(id, *arguments)
 
     override fun stringArray(id: Int): Array<String> = appContext.resources.getStringArray(id)
-
 }

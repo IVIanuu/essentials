@@ -35,7 +35,8 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
-import com.ivianuu.essentials.android.prefs.PrefUpdater
+import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
@@ -60,7 +61,7 @@ class DebugBillingClient(
     @Given private val buildInfo: BuildInfo,
     @Given private val navigator: Collector<NavigationAction>,
     @Given private val prefs: Flow<DebugBillingPrefs>,
-    @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
+    @Given private val prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
     @Given private val scope: ScopeCoroutineScope<AppComponent>
 ) : BillingClient() {
@@ -131,7 +132,7 @@ class DebugBillingClient(
                 it.purchaseToken == purchaseToken
             }
             if (purchase != null) {
-                updatePrefs {
+                prefActionCollector.update {
                     copy(purchases = purchases.filterNot { it.purchaseToken == purchaseToken })
                 }
                 listener.onConsumeResponse(
@@ -166,7 +167,7 @@ class DebugBillingClient(
 
             if (purchasedSkuDetails != null) {
                 val purchase = purchasedSkuDetails.toPurchase()
-                updatePrefs {
+                prefActionCollector.update {
                     copy(purchases = purchases + purchase)
                 }
                 purchasesUpdatedListener.onPurchasesUpdated(
@@ -302,7 +303,7 @@ class DebugBillingClient(
                     isAutoRenewing = purchase.isAutoRenewing,
                     developerPayload = purchase.developerPayload
                 )
-                updatePrefs {
+                prefActionCollector.update {
                     copy(purchases = purchases + updated)
                 }
                 listener.onAcknowledgePurchaseResponse(

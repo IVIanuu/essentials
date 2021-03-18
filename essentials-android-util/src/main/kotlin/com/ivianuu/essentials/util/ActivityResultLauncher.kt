@@ -28,7 +28,6 @@ import java.util.UUID
 import kotlin.coroutines.resume
 
 interface ActivityResultLauncher {
-
     suspend fun startActivityForResult(
         intent: Intent
     ): ActivityResult
@@ -37,7 +36,6 @@ interface ActivityResultLauncher {
         contract: ActivityResultContract<I, O>,
         input: I
     ): O
-
 }
 
 @Given
@@ -45,7 +43,6 @@ class ActivityResultLauncherImpl(
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val appUiStarter: AppUiStarter
 ) : ActivityResultLauncher {
-
     override suspend fun startActivityForResult(intent: Intent): ActivityResult =
         startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
@@ -65,5 +62,4 @@ class ActivityResultLauncherImpl(
             }
         }
     }
-
 }
