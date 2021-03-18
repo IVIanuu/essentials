@@ -17,24 +17,17 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.core.AnimationSpec
-import com.ivianuu.essentials.ui.animatable.ScaleX
-import com.ivianuu.essentials.ui.animatable.ScaleY
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
 
-fun ScaleStackTransition(
-    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
-): StackTransition {
-    return FloatAnimationStackTransition(animationSpec = animationSpec) { from, to, isPush, progress ->
-        if (to != null && isPush) {
-            to
-                .set(ScaleX, progress)
-                .set(ScaleY, progress)
-        }
-
-        if (from != null && !isPush) {
-            from
-                .set(ScaleX, 1f - progress)
-                .set(ScaleY, 1f - progress)
-        }
-    }
+class ScaleStackTransition(
+    private val spec: AnimationSpec<Float> = defaultAnimationSpec()
+) : StackTransition {
+    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = spec
+    override fun createToModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier.scale(scaleX = progress, scaleY = progress) else Modifier
+    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier else Modifier.scale(scaleX = 1f - progress, scaleY = 1f - progress)
 }

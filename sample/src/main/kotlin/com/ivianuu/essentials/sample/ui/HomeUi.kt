@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.animatedstack.animation.SharedElement
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -120,13 +119,11 @@ private fun HomeItem(
     ListItem(
         title = { Text(item.title) },
         leading = {
-            SharedElement(item.title) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(color, CircleShape)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(color, CircleShape)
+            )
         },
         trailing = {
             PopupMenuButton(

@@ -17,16 +17,17 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.core.AnimationSpec
-import com.ivianuu.essentials.ui.animatable.setFractionTranslationY
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
+import com.ivianuu.essentials.ui.animatedstack.fractionalTranslation
 
-fun VerticalStackTransition(
-    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
-): StackTransition {
-    return FloatAnimationStackTransition(animationSpec = animationSpec) { from, to, isPush, progress ->
-        if (isPush) to
-            ?.setFractionTranslationY(1f - progress)
-        else from
-            ?.setFractionTranslationY(progress)
-    }
+class VerticalStackTransition(
+    private val spec: AnimationSpec<Float> = defaultAnimationSpec()
+) : StackTransition {
+    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = spec
+    override fun createToModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier.fractionalTranslation(translationYFraction = 1f - progress) else Modifier
+    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier else Modifier.fractionalTranslation(translationYFraction = 1f - progress)
 }

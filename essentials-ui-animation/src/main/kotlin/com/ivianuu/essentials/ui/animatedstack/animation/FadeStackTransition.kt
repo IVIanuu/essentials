@@ -17,12 +17,18 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.core.AnimationSpec
-import com.ivianuu.essentials.ui.animatable.Alpha
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
 import kotlin.time.milliseconds
 
-fun FadeStackTransition(
-    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(duration = 180.milliseconds),
-) = FloatAnimationStackTransition(animationSpec = animationSpec) { from, to, _, progress ->
-    to?.set(Alpha, progress)
-    from?.set(Alpha, 1f - progress)
+class FadeStackTransition(
+    private val spec: AnimationSpec<Float> = defaultAnimationSpec(duration = 180.milliseconds)
+) : StackTransition {
+    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = spec
+    override fun createToModifier(progress: Float, isPush: Boolean): Modifier = Modifier
+        .alpha(progress)
+    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier = Modifier
+        .alpha(1f - progress)
 }

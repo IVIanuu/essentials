@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,94 +16,43 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.essentials.ui.animatable.Animatable
+import androidx.compose.ui.Modifier
+import kotlin.time.Duration
+import kotlin.time.milliseconds
 
-abstract class StackTransitionContext(
-    val fromAnimatable: Animatable?,
-    val toAnimatable: Animatable?,
-    val isPush: Boolean
-) {
-    abstract fun addTo()
-    abstract fun removeFrom()
-    abstract fun onComplete()
+interface StackTransition {
+    fun createSpec(isPush: Boolean): AnimationSpec<Float>
+    fun createToModifier(
+        progress: Float,
+        isPush: Boolean
+    ): Modifier
+    fun createFromModifier(
+        progress: Float,
+        isPush: Boolean
+    ): Modifier
 }
 
-typealias StackTransition = @Composable (StackTransitionContext) -> Unit
-
-// todo make this a single instance once compose is fixed
-val NoOpStackTransition: StackTransition
-    get() = { context ->
-        remember {
-            if (context.toAnimatable != null) context.addTo()
-            if (context.fromAnimatable != null) context.removeFrom()
-        }
-        DisposableEffect(true) {
-            context.onComplete()
-            onDispose { }
-        }
-    }
+object NoOpStackTransition : StackTransition {
+    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = tween(durationMillis = 0)
+    override fun createToModifier(progress: Float, isPush: Boolean): Modifier = Modifier
+    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier = Modifier
+}
 
 val LocalStackTransition =
-    staticCompositionLocalOf { NoOpStackTransition }
+    staticCompositionLocalOf<StackTransition> { NoOpStackTransition }
 
-operator fun StackTransition.plus(other: StackTransition): StackTransition = { context ->
-    val thisAnimation = this@plus
-
-    val completedAnimations = remember { mutableSetOf<StackTransition>() }
-
-    fun completeIfPossible() {
-        if (thisAnimation in completedAnimations && other in completedAnimations) {
-            context.onComplete()
-        }
-    }
-
-    thisAnimation(
-        remember {
-            object : StackTransitionContext(
-                context.fromAnimatable,
-                context.toAnimatable,
-                context.isPush
-            ) {
-                override fun addTo() {
-                    context.addTo()
-                }
-
-                override fun removeFrom() {
-                    context.removeFrom()
-                }
-
-                override fun onComplete() {
-                    completedAnimations += thisAnimation
-                    completeIfPossible()
-                }
-            }
-        }
-    )
-
-    other(
-        remember {
-            object : StackTransitionContext(
-                context.fromAnimatable,
-                context.toAnimatable,
-                context.isPush
-            ) {
-                override fun addTo() {
-                    context.addTo()
-                }
-
-                override fun removeFrom() {
-                    context.removeFrom()
-                }
-
-                override fun onComplete() {
-                    completedAnimations += other
-                    completeIfPossible()
-                }
-            }
-        }
-    )
-}
+fun defaultAnimationSpec(
+    duration: Duration = 300.milliseconds,
+    delay: Duration = 0.milliseconds,
+    easing: Easing = FastOutSlowInEasing
+) = TweenSpec<Float>(
+    durationMillis = duration.toLongMilliseconds().toInt(),
+    delay = delay.toLongMilliseconds().toInt(),
+    easing = easing
+)

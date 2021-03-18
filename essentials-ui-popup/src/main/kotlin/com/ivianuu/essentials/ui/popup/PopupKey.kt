@@ -27,7 +27,6 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.animatable.animatable
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
@@ -82,7 +81,6 @@ fun popupUi(
                     detectTapGestures {
                     }
                 }
-                .animatable(PopupTag)
         ) {
             key.content()
         }
@@ -97,8 +95,6 @@ fun popupKeyOptionsFactory(): KeyUiOptionsFactory<PopupKey> = {
         exitTransition = FadeStackTransition()
     )
 }
-
-private val PopupTag = Any()
 
 @Composable
 private fun PopupLayout(

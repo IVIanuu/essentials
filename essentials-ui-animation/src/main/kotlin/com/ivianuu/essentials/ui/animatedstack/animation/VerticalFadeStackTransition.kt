@@ -17,23 +17,21 @@
 package com.ivianuu.essentials.ui.animatedstack.animation
 
 import androidx.compose.animation.core.AnimationSpec
-import com.ivianuu.essentials.ui.animatable.Alpha
-import com.ivianuu.essentials.ui.animatable.setFractionTranslationY
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
+import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
+import com.ivianuu.essentials.ui.animatedstack.fractionalTranslation
 
-fun VerticalFadeStackTransition(
-    animationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
-): StackTransition {
-    return FloatAnimationStackTransition(animationSpec = animationSpec) { from, to, isPush, progress ->
-        if (to != null && isPush) {
-            to
-                .set(Alpha, progress)
-                .setFractionTranslationY(0.3f * (1f - progress))
-        }
-        if (from != null && !isPush) {
-            from
-                .set(Alpha, 1f - progress)
-                .setFractionTranslationY(0.3f * progress)
-        }
-    }
+class VerticalFadeStackTransition(
+    private val spec: AnimationSpec<Float> = defaultAnimationSpec()
+) : StackTransition {
+    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = spec
+    override fun createToModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier.alpha(progress)
+            .fractionalTranslation(translationYFraction = 0.3f * (1f - progress))
+        else Modifier
+    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier =
+        if (isPush) Modifier else Modifier.alpha(1f - progress)
+            .fractionalTranslation(translationYFraction = 0.3f * progress)
 }

@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.animateTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.animatable.ProvideAnimatableRoot
-import com.ivianuu.essentials.ui.animatable.animatable
-import com.ivianuu.essentials.ui.animatable.animatableFor
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 
 @Composable
@@ -67,20 +67,18 @@ fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
     children: List<AnimatedStackChild<T>>,
 ) {
-    ProvideAnimatableRoot {
-        val state = remember { AnimatedStackState(children) }
-        state.defaultTransition = LocalStackTransition.current
-        state.setChildren(children)
-        state.runningTransactions.values.toList().forEach {
-            key(it) {
-                it.run()
-            }
+    val state = remember { AnimatedStackState(children) }
+    state.defaultTransition = LocalStackTransition.current
+    state.setChildren(children)
+    state.runningTransactions.values.toList().forEach {
+        key(it) {
+            it.run()
         }
-        Box(modifier = modifier) {
-            state.visibleChildren.toList().forEach {
-                key(it.key) {
-                    it.content()
-                }
+    }
+    Box(modifier = modifier) {
+        state.visibleChildren.toList().forEach {
+            key(it.key) {
+                it.content()
             }
         }
     }
@@ -94,7 +92,7 @@ internal class AnimatedStackState<T>(
     private var _children = initialChildren
     val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
 
-    var defaultTransition = NoOpStackTransition
+    var defaultTransition: StackTransition = NoOpStackTransition
 
     val runningTransactions = mutableStateMapOf<T, AnimatedStackTransaction<T>>()
 
@@ -217,13 +215,13 @@ class AnimatedStackChild<T>(
     val exitTransition: StackTransition? = null,
     val content: @Composable () -> Unit
 ) {
-
     var isAnimating by mutableStateOf(false)
         internal set
+    internal var transitionModifier: Modifier by mutableStateOf(Modifier)
 
     @Composable
     internal fun content() {
-        Box(modifier = Modifier.animatable(this)) {
+        Box(modifier = transitionModifier) {
             content.invoke()
         }
     }
@@ -233,8 +231,8 @@ class AnimatedStackChild<T>(
 internal class AnimatedStackTransaction<T>(
     val from: AnimatedStackChild<T>?,
     val to: AnimatedStackChild<T>?,
-    val isPush: Boolean,
-    val transition: StackTransition,
+    private val isPush: Boolean,
+    private val transition: StackTransition,
     private val state: AnimatedStackState<T>
 ) {
 
@@ -246,46 +244,28 @@ internal class AnimatedStackTransaction<T>(
 
     private val removesFrom = from != null && (!isPush || !to!!.opaque)
 
-    private var needsCompletion by mutableStateOf(false)
-    private var completed by mutableStateOf(false)
-
     @Composable
     fun run() {
         remember { from?.isAnimating = true }
 
-        val fromAnimatable = from?.let { animatableFor(it) }
-        val toAnimatable = to?.let { animatableFor(it) }
-
-        val context = remember {
-            object : StackTransitionContext(
-                fromAnimatable = fromAnimatable,
-                toAnimatable = toAnimatable,
-                isPush = isPush
-            ) {
-                override fun addTo() {
-                    checkNotNull(to)
-                    if (to !in state.visibleChildren)
-                        this@AnimatedStackTransaction.addTo()
-                }
-
-                override fun removeFrom() {
-                    checkNotNull(from)
-                    if (from in state.visibleChildren)
-                        this@AnimatedStackTransaction.removeFrom()
-                }
-
-                override fun onComplete() {
-                    check(!needsCompletion) {
-                        "onComplete() must be called only once"
-                    }
-                    if (!completed) needsCompletion = true
-                }
-            }
+        val animationState: AnimationState<Float, AnimationVector1D> = remember {
+            AnimationState(0f)
+        }
+        DisposableEffect(animationState.value) {
+            from?.transitionModifier = transition.createFromModifier(animationState.value, isPush)
+            to?.transitionModifier = transition.createToModifier(animationState.value, isPush)
+            onDispose {  }
         }
 
-        transition(context)
-
-        if (needsCompletion && !completed) {
+        LaunchedEffect(true) {
+            if (to !in state.visibleChildren)
+                this@AnimatedStackTransaction.addTo()
+            animationState.animateTo(
+                targetValue = 1f,
+                animationSpec = transition.createSpec(isPush)
+            )
+            if (from in state.visibleChildren)
+                this@AnimatedStackTransaction.removeFrom()
             complete()
         }
     }
@@ -294,16 +274,18 @@ internal class AnimatedStackTransaction<T>(
         complete()
     }
 
-    fun complete() {
+    private fun complete() {
         if (to != null && to !in state.visibleChildren) addTo()
         if (removesFrom && from in state.visibleChildren) removeFrom()
         to?.isAnimating = false
+        to?.transitionModifier = Modifier
         from?.isAnimating = false
+        from?.transitionModifier = Modifier
         state.runningTransactions -= transactionKey
     }
 
     private fun addTo() {
-        val to = to!!
+        if (to == null) return
         to.isAnimating = true
 
         val oldToIndex = state.visibleChildren.indexOf(to)
@@ -319,7 +301,7 @@ internal class AnimatedStackTransaction<T>(
     }
 
     private fun removeFrom() {
-        val from = from!!
+        if (from == null) return
         from.isAnimating = false
         state.visibleChildren -= from
     }
