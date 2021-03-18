@@ -20,7 +20,6 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.Eager
@@ -36,7 +35,7 @@ typealias ForegroundActivity = ComponentActivity?
 @Given
 fun foregroundActivityState(
     @Given application: Application,
-    @Given globalScope: GlobalScope
+    @Given scope: ScopeCoroutineScope<AppComponent>
 ): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {
     application.registerActivityLifecycleCallbacks(
         object : Application.ActivityLifecycleCallbacks {
@@ -68,4 +67,4 @@ fun foregroundActivityState(
     )
 
     awaitClose()
-}.stateIn(globalScope, SharingStarted.Eagerly, null)
+}.stateIn(scope, SharingStarted.Eagerly, null)

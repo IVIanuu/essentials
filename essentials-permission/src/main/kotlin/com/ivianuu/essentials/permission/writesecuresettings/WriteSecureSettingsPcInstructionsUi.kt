@@ -44,12 +44,12 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
@@ -154,7 +154,7 @@ sealed class WriteSecureSettingsPcInstructionsAction {
 @Scoped<KeyUiComponent>
 @Given
 fun writeSecureSettingsPcInstructionsState(
-    @Given scope: KeyUiScope,
+    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial WriteSecureSettingsPcInstructionsState,
     @Given actions: Flow<WriteSecureSettingsPcInstructionsAction>,
     @Given navigator: Collector<NavigationAction>,

@@ -19,12 +19,12 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -53,7 +53,7 @@ sealed class NotificationsAction {
 fun notificationState(
     @Given actions: Flow<NotificationsAction>,
     @Given serviceRef: NotificationServiceRef,
-    @Given scope: GlobalScope
+    @Given scope: ScopeCoroutineScope<AppComponent>
 ) = scope.state(NotificationsState()) {
     serviceRef
         .reduce { copy(isConnected = it != null) }

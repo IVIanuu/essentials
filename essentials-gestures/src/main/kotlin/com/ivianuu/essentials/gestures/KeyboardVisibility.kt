@@ -20,9 +20,9 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -44,8 +44,8 @@ typealias KeyboardVisible = Boolean
 @Given
 fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
-    @Given globalScope: GlobalScope,
-    @Given keyboardHeightProvider: KeyboardHeightProvider
+    @Given keyboardHeightProvider: KeyboardHeightProvider,
+    @Given scope: ScopeCoroutineScope<AppComponent>
 ): Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&
@@ -62,7 +62,7 @@ fun keyboardVisible(
         awaitCancellation()
     }
     .distinctUntilChanged()
-    .stateIn(globalScope, SharingStarted.WhileSubscribed(1000), false)
+    .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
 @Given
 val keyboardVisibilityAccessibilityConfig = flow {

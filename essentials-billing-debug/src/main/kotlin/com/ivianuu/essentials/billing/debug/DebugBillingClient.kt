@@ -40,13 +40,14 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.debug.DebugBillingClient.ClientState.DISCONNECTED
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -57,11 +58,11 @@ import java.util.Date
 class DebugBillingClient(
     @Given private val appUiStarter: AppUiStarter,
     @Given private val buildInfo: BuildInfo,
-    @Given private val globalScope: GlobalScope,
     @Given private val navigator: Collector<NavigationAction>,
     @Given private val prefs: Flow<DebugBillingPrefs>,
     @Given private val updatePrefs: PrefUpdater<DebugBillingPrefs>,
-    @Given private val purchasesUpdatedListener: PurchasesUpdatedListener
+    @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
+    @Given private val scope: ScopeCoroutineScope<AppComponent>
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null
@@ -125,7 +126,7 @@ class DebugBillingClient(
             return
         }
 
-        globalScope.launch {
+        scope.launch {
             val purchase = prefs.first().purchases.firstOrNull {
                 it.purchaseToken == purchaseToken
             }
@@ -151,7 +152,7 @@ class DebugBillingClient(
     }
 
     override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
-        globalScope.launch {
+        scope.launch {
             appUiStarter()
             val purchasedSkuDetails = navigator.pushForResult(
                 DebugPurchaseKey(
@@ -201,7 +202,7 @@ class DebugBillingClient(
             )
             return
         }
-        globalScope.launch {
+        scope.launch {
             val history = queryPurchases(skuType)
             listener.onPurchaseHistoryResponse(
                 BillingResult.newBuilder()
@@ -225,7 +226,7 @@ class DebugBillingClient(
             )
             return
         }
-        globalScope.launch {
+        scope.launch {
             listener.onSkuDetailsResponse(
                 BillingResult.newBuilder().setResponseCode(
                     BillingResponseCode.OK
@@ -285,7 +286,7 @@ class DebugBillingClient(
             return
         }
 
-        globalScope.launch {
+        scope.launch {
             val purchase = prefs.first().purchases.singleOrNull {
                 it.purchaseToken == purchaseToken
             }

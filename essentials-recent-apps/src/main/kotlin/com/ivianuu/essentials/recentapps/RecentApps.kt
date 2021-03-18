@@ -19,8 +19,8 @@ package com.ivianuu.essentials.recentapps
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -33,8 +33,8 @@ typealias RecentApps = List<String>
 @Given
 fun recentApps(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
-    @Given globalScope: GlobalScope,
     @Given logger: Logger,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
 ): Flow<RecentApps> {
     return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
@@ -66,7 +66,7 @@ fun recentApps(
         }
         .distinctUntilChanged()
         .onEach { logger.d { "recent apps changed $it" } }
-        .shareIn(globalScope, SharingStarted.Eagerly, 1)
+        .shareIn(scope, SharingStarted.Eagerly, 1)
 }
 
 @Given

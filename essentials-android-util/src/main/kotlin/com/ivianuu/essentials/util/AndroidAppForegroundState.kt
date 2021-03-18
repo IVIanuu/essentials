@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.essentials.app.AppForegroundState
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -26,8 +26,8 @@ import kotlinx.coroutines.flow.stateIn
 
 @Given
 fun androidAppForegroundState(
-    @Given globalScope: GlobalScope,
     @Given foregroundActivity: Flow<ForegroundActivity>,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
 ): Flow<AppForegroundState> = foregroundActivity
     .map { if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND }
-    .stateIn(globalScope, SharingStarted.WhileSubscribed(), AppForegroundState.BACKGROUND)
+    .stateIn(scope, SharingStarted.WhileSubscribed(), AppForegroundState.BACKGROUND)

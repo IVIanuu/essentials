@@ -20,9 +20,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
 import com.ivianuu.injekt.component.Eager
@@ -45,7 +45,7 @@ sealed class ClipboardAction {
 @Eager<AppComponent>
 @Given
 fun clipboardState(
-    @Given scope: GlobalScope,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given initial: @Initial ClipboardState = ClipboardState(),
     @Given actions: Flow<ClipboardAction>,
     @Given clipboardManager: ClipboardManager,

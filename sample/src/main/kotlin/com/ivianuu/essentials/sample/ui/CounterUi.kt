@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -106,7 +106,7 @@ sealed class CounterAction {
 @Scoped<KeyUiComponent>
 @Given
 fun counterState(
-    @Given scope: KeyUiScope,
+    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial CounterState = CounterState(),
     @Given actions: Flow<CounterAction>,
     @Given toaster: Toaster

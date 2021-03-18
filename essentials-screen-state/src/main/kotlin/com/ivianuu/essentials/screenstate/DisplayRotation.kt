@@ -20,11 +20,11 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.offerSafe
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -62,10 +62,10 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 @Given
 fun displayRotation(
     @Given configChanges: () -> Flow<ConfigChange>,
-    @Given globalScope: GlobalScope,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
     @Given rotationChanges: () -> Flow<RotationChange>,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: WindowManager
 ): Flow<DisplayRotation> = flow {
@@ -84,7 +84,7 @@ fun displayRotation(
         .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
         .distinctUntilChanged()
         .let { emitAll(it) }
-}.shareIn(globalScope, SharingStarted.WhileSubscribed(1000), 1)
+}.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
 
 private suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.coroutines.UiScope
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
@@ -46,7 +47,7 @@ val actionsKeyModule = KeyModule<ActionsKey>()
 fun actionsUi(
     @Given executeAction: executeAction,
     @Given navigator: Collector<NavigationAction>,
-    @Given uiScope: UiScope,
+    @Given scope: ScopeCoroutineScope<UiComponent>,
 ): KeyUi<ActionsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }
@@ -54,7 +55,7 @@ fun actionsUi(
         Button(
             modifier = Modifier.center(),
             onClick = {
-                uiScope.launch {
+                scope.launch {
                     val action = navigator.pushForResult(ActionPickerKey())
                         ?.let { it as? ActionPickerKey.Result.Action }
                         ?.actionKey ?: return@launch

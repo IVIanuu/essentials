@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -25,8 +25,8 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 @Given
 fun internalForegroundState(
     @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
-    @Given globalScope: GlobalScope,
     @Given logger: Logger,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
 ): Flow<InternalForegroundState> = combine(
     foregroundStates
         .mapIndexed { index, foregroundState ->
@@ -39,4 +39,4 @@ fun internalForegroundState(
     .onEach { current ->
         logger.d { "Internal foreground state changed $current" }
     }
-    .shareIn(globalScope, SharingStarted.Lazily, 1)
+    .shareIn(scope, SharingStarted.Lazily, 1)

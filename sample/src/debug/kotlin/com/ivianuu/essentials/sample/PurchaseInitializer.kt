@@ -20,18 +20,18 @@ import com.ivianuu.essentials.android.prefs.PrefUpdater
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
 import com.ivianuu.essentials.billing.debug.SkuDetails
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.sample.ui.DummySku
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.launch
 
 @Given
 fun debugPurchaseAppInitializer(
-    @Given globalScope: GlobalScope,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given updateDebugPrefs: PrefUpdater<DebugBillingPrefs>,
 ): ScopeInitializer<AppComponent> = {
-    globalScope.launch {
+    scope.launch {
         updateDebugPrefs {
             copy(products = products + SkuDetails(DummySku))
         }

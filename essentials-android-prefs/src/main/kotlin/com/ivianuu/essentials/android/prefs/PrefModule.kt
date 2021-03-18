@@ -19,12 +19,12 @@ package com.ivianuu.essentials.android.prefs
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.Scoped
@@ -41,8 +41,8 @@ import java.io.OutputStream
 class PrefModule<T : Any>(private val name: String) {
 
     @Given
-    operator fun invoke(
-        @Given scope: GlobalScope,
+    fun prefDataStore(
+        @Given scope: ScopeCoroutineScope<AppComponent>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given adapterFactory: () -> JsonAdapter<T>,
@@ -78,7 +78,7 @@ class PrefModule<T : Any>(private val name: String) {
     @Scoped<AppComponent>
     @Given
     fun @Given DataStore<T>.stateFlow(
-        @Given scope: GlobalScope,
+        @Given scope: ScopeCoroutineScope<AppComponent>,
         @Given initial: @InitialOrFallback T
     ): StateFlow<T> = data.stateIn(scope, SharingStarted.Eagerly, initial)
 
@@ -104,7 +104,7 @@ typealias PrefUpdateDispatcher<T> = (T.() -> T) -> Unit
 @Given
 fun <T> prefUpdateDispatcher(
     @Given pref: DataStore<T>,
-    @Given scope: GlobalScope
+    @Given scope: ScopeCoroutineScope<AppComponent>
 ): PrefUpdateDispatcher<T> = { reducer ->
     scope.launch {
         pref.updateData { reducer(it) }

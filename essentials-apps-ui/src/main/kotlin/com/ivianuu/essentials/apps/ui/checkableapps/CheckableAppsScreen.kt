@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.Idle
@@ -51,6 +50,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.resource.reduceResource
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -183,7 +183,7 @@ sealed class CheckableAppsAction {
 @Scoped<KeyUiComponent>
 @Given
 fun checkableAppsState(
-    @Given scope: KeyUiScope,
+    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial CheckableAppsState,
     @Given actions: Flow<CheckableAppsAction>,
     @Given appRepository: AppRepository,

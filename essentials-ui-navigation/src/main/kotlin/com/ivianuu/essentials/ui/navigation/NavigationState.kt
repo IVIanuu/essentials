@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.lens
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
@@ -26,6 +25,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -61,7 +61,7 @@ sealed class NavigationAction {
 @Scoped<AppComponent>
 @Given
 fun navigationState(
-    @Given scope: GlobalScope,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Flow<NavigationAction>,
     @Given intentKeyHandler: IntentKeyHandler

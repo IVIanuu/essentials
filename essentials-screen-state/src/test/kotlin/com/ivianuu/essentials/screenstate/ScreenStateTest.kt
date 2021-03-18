@@ -46,7 +46,7 @@ class ScreenStateTest {
         val collector = screenState(
             broadcastsFactory = { broadcasts },
             screenStateProvider = { currentScreenState },
-            globalScope = globalScope,
+            scope = globalScope,
             logger = NoopLogger
         ).testCollect(this)
 

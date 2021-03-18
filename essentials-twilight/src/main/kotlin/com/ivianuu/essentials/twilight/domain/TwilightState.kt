@@ -20,10 +20,10 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.screenstate.ConfigChange
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
 import com.ivianuu.injekt.component.AppComponent
@@ -49,7 +49,7 @@ data class TwilightState(
 @Eager<AppComponent>
 @Given
 fun twilightState(
-    @Given globalScope: GlobalScope,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,
@@ -67,7 +67,7 @@ fun twilightState(
     }
         .distinctUntilChanged()
         .let { emitAll(it) }
-}.stateIn(globalScope, SharingStarted.Eagerly, TwilightState(false, false))
+}.stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
 
 typealias BatteryTwilightState = Boolean
 

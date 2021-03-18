@@ -20,11 +20,11 @@ import com.android.billingclient.api.*
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -61,9 +61,9 @@ class BillingManagerImpl(
     @Given private val appUiStarter: AppUiStarter,
     @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,
     @Given private val defaultDispatcher: DefaultDispatcher,
-    @Given private val globalScope: GlobalScope,
     @Given private val ioDispatcher: IODispatcher,
-    @Given private val logger: Logger
+    @Given private val logger: Logger,
+    @Given private val scope: ScopeCoroutineScope<AppComponent>
 ) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->
@@ -77,7 +77,7 @@ class BillingManagerImpl(
         sku: Sku,
         acknowledge: Boolean,
         consumeOldPurchaseIfUnspecified: Boolean,
-    ): Boolean = globalScope.awaitAsync(ioDispatcher) {
+    ): Boolean = scope.awaitAsync(ioDispatcher) {
         logger.d {
             "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
         }
@@ -113,7 +113,7 @@ class BillingManagerImpl(
         return@awaitAsync if (success) acknowledgePurchase(sku) else return@awaitAsync false
     }
 
-    override suspend fun consumePurchase(sku: Sku): Boolean = globalScope.awaitAsync(defaultDispatcher) {
+    override suspend fun consumePurchase(sku: Sku): Boolean = scope.awaitAsync(defaultDispatcher) {
         ensureConnected()
 
         val purchase = getPurchase(sku) ?: return@awaitAsync false
@@ -133,7 +133,7 @@ class BillingManagerImpl(
         return@awaitAsync success
     }
 
-    override suspend fun acknowledgePurchase(sku: Sku): Boolean = globalScope.awaitAsync(defaultDispatcher) {
+    override suspend fun acknowledgePurchase(sku: Sku): Boolean = scope.awaitAsync(defaultDispatcher) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@awaitAsync false
 

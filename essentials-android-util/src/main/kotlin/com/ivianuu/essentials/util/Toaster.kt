@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.util
 
 import android.widget.Toast
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.launch
 
 interface Toaster {
@@ -34,13 +34,13 @@ interface Toaster {
 @Given
 class ToasterImpl(
     @Given private val appContext: AppContext,
-    @Given private val globalScope: GlobalScope,
     @Given private val mainDispatcher: MainDispatcher,
-    @Given private val resourceProvider: ResourceProvider
+    @Given private val resourceProvider: ResourceProvider,
+    @Given private val scope: ScopeCoroutineScope<AppComponent>
 ) : Toaster {
 
     override fun showToast(message: String) {
-        globalScope.launch(mainDispatcher) {
+        scope.launch(mainDispatcher) {
             Toast.makeText(
                 appContext,
                 message,

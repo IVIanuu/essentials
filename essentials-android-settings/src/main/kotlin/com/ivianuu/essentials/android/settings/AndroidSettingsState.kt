@@ -19,13 +19,13 @@ package com.ivianuu.essentials.android.settings
 import android.provider.Settings
 import com.ivianuu.essentials.android.settings.AndroidSettingAction.Update
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ContentChangesFactory
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -49,8 +49,8 @@ class AndroidSettingStateModule<T : S, S>(
     @Suppress("UNCHECKED_CAST")
     @Scoped<AppComponent>
     @Given
-    operator fun invoke(
-        @Given scope: GlobalScope,
+    fun settingsState(
+        @Given scope: ScopeCoroutineScope<AppComponent>,
         @Given dispatcher: IODispatcher,
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
         @Given contentChangesFactory: ContentChangesFactory,
@@ -122,7 +122,7 @@ typealias AndroidSettingUpdateDispatcher<T> = (T.() -> T) -> Unit
 fun <T> dispatchAndroidSettingUpdate(
     @Given dispatch: Collector<AndroidSettingAction<T>>,
     @Given ready: AndroidSettingsStateReady<T>,
-    @Given scope: GlobalScope,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given state: StateFlow<T> // workaround to ensure that the state is initialized
 ): AndroidSettingUpdateDispatcher<T> = { reducer ->
     scope.launch {

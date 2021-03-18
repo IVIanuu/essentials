@@ -40,9 +40,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -104,7 +104,7 @@ sealed class WriteSecureSettingsAction {
 @Scoped<KeyUiComponent>
 @Given
 fun writeSecureSettingsState(
-    @Given scope: KeyUiScope,
+    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial WriteSecureSettingsState = WriteSecureSettingsState,
     @Given actions: Flow<WriteSecureSettingsAction>,
     @Given buildInfo: BuildInfo,

@@ -21,8 +21,8 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.GlobalScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
@@ -41,8 +41,8 @@ import kotlinx.coroutines.withContext
 @Given
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given globalScope: GlobalScope,
     @Given logger: Logger,
+    @Given scope: ScopeCoroutineScope<AppComponent>,
     @Given screenStateProvider: CurrentScreenStateProvider
 ): Flow<ScreenState> = merge(
     broadcastsFactory(Intent.ACTION_SCREEN_OFF),
@@ -55,7 +55,7 @@ fun screenState(
     .onStart { emit(Unit) }
     .map { screenStateProvider() }
     .distinctUntilChanged()
-    .shareIn(globalScope, SharingStarted.WhileSubscribed(), 1)
+    .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
 typealias CurrentScreenStateProvider = suspend () -> ScreenState
 

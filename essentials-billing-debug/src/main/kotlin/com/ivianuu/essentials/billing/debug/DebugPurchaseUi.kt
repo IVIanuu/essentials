@@ -44,13 +44,13 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.Error
 import com.ivianuu.essentials.ui.resource.Idle
 import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -127,7 +127,7 @@ sealed class DebugPurchaseAction {
 @Scoped<KeyUiComponent>
 @Given
 fun debugPurchaseState(
-    @Given scope: KeyUiScope,
+    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
     @Given initial: @Initial DebugPurchaseState = DebugPurchaseState(),
     @Given actions: Flow<DebugPurchaseAction>,
     @Given key: DebugPurchaseKey,
