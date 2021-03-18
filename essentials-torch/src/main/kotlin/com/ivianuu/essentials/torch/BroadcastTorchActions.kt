@@ -16,23 +16,18 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.state.SourceFlow
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 
 @Given
-fun torchBroadcastWorker(
-    @Given broadcastsFactory: BroadcastsFactory,
-    @Given dispatch: Collector<TorchAction>
-): ScopeWorker<AppComponent> = {
+fun broadcastTorchActions(
+    @Given broadcastsFactory: BroadcastsFactory
+): SourceFlow<TorchAction, AppComponent> =
     broadcastsFactory(ACTION_DISABLE_TORCH)
-        .onEach { dispatch(UpdateTorchEnabled(false)) }
-        .collect()
-}
+        .map { UpdateTorchEnabled(false) }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"

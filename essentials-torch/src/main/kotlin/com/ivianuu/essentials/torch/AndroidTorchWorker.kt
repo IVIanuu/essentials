@@ -17,16 +17,15 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
-import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.result.runKatching
+import com.ivianuu.essentials.state.EffectFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @Given
@@ -35,17 +34,14 @@ fun androidTorchWorker(
     @Given dispatch: Collector<TorchAction>,
     @Given state: Flow<TorchState>,
     @Given toaster: Toaster
-): ScopeWorker<AppComponent> = {
-    state
-        .onEach { currentState ->
-            val cameraId = cameraManager.cameraIdList[0]
-            runKatching {
-                cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
-            }.onFailure {
-                it.printStackTrace()
-                toaster.showToast(R.string.es_failed_to_toggle_torch)
-                dispatch(UpdateTorchEnabled(false))
-            }
+): EffectFlow<AppComponent> = state
+    .onEach { currentState ->
+        val cameraId = cameraManager.cameraIdList[0]
+        runKatching {
+            cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
+        }.onFailure {
+            it.printStackTrace()
+            toaster.showToast(R.string.es_failed_to_toggle_torch)
+            dispatch(UpdateTorchEnabled(false))
         }
-        .collect()
-}
+    }
