@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui
+package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.ui.coroutines.UiScope
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.component.Component
 import kotlinx.coroutines.launch
 
-typealias UiWorker = suspend () -> Unit
+typealias ScopeWorker<S> = suspend () -> Unit
 
-typealias UiWorkerRunner = () -> Unit
+typealias ScopeWorkerRunner<S> = ScopeInitializer<S>
 
 @Given
-fun uiWorkerRunner(
-    @Given defaultDispatcher: DefaultDispatcher,
+fun <@ForTypeKey S : Component> scopeWorkerRunner(
     @Given logger: Logger,
-    @Given uiScope: UiScope,
-    @Given workers: Set<UiWorker> = emptySet(),
-): UiWorkerRunner = {
-    logger.d { "run ui workers" }
+    @Given scope: ScopeCoroutineScope<S>,
+    @Given workers: Set<() -> ScopeWorker<S>> = emptySet()
+): ScopeWorkerRunner<S> = {
+    logger.d { "${typeKeyOf<S>()} run scope workers" }
     workers
         .forEach { worker ->
-            uiScope.launch(defaultDispatcher) {
-                worker()
+            scope.launch {
+                worker()()
             }
         }
 }

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import com.ivianuu.essentials.android.prefs.PrefUpdater
-import com.ivianuu.essentials.app.AppWorker
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.result.onFailure
@@ -31,6 +31,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -55,7 +56,7 @@ fun navBarManager(
     @Given setOverscan: OverscanUpdater,
     @Given updateWasNavBarHidden: PrefUpdater<WasNavBarHidden>,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>
-): AppWorker = worker@ {
+): ScopeWorker<AppComponent> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
         .flatMapLatest {

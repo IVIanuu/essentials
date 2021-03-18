@@ -25,7 +25,6 @@ import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.UiWorkerRunner
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.activityComponent
@@ -44,7 +43,6 @@ class EsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val component = uiComponent.element<EsActivityComponent>()
-        component.uiWorkerRunner()
 
         lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
@@ -76,6 +74,5 @@ class EsActivity : ComponentActivity() {
 @Given
 class EsActivityComponent(
     @Given val appUi: AppUi,
-    @Given val decorateUi: DecorateUi,
-    @Given val uiWorkerRunner: UiWorkerRunner
+    @Given val decorateUi: DecorateUi
 )

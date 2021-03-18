@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.app.AppWorker
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.component.AppComponent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.onEach
 fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given dispatch: Collector<TorchAction>
-): AppWorker = {
+): ScopeWorker<AppComponent> = {
     broadcastsFactory(ACTION_DISABLE_TORCH)
         .onEach { dispatch(UpdateTorchEnabled(false)) }
         .collect()

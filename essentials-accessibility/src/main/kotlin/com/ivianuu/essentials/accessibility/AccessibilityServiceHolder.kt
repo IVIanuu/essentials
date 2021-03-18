@@ -17,6 +17,9 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.app.Service
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.component.AppComponent
@@ -35,3 +38,12 @@ typealias AccessibilityServiceHolder = StateFlow<AccessibilityService?>
 @Given
 inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
         get() = this
+
+@Given
+fun accessibilityServiceHolderWorker(
+    @Given holder: MutableAccessibilityServiceHolder,
+    @Given service: Service
+): ScopeWorker<AccessibilityComponent> = {
+    holder.value = service as AccessibilityService
+    runOnCancellation { holder.value = null }
+}

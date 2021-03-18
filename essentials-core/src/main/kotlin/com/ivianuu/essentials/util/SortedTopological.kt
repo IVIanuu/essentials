@@ -21,6 +21,7 @@ fun <T, K> Collection<T>.sortedTopological(
     dependents: (T) -> Set<K>,
     dependencies: (T) -> Set<K>
 ): List<T> {
+    if (isEmpty()) return emptyList()
     val sortedItems = mutableListOf<T>()
     var lastItems = emptyList<T>()
     val realDependencies = mutableMapOf<K, MutableSet<K>>()

@@ -1,4 +1,4 @@
-// injekt-incremental-fix 1616024181782 injekt-end
+// injekt-incremental-fix 1616061457818 injekt-end
 package com.ivianuu.essentials.sample
 
 import android.app.Application
@@ -49,7 +49,6 @@ import com.ivianuu.essentials.permission.writesecuresettings.*
 import com.ivianuu.essentials.permission.writesettings.*
 import com.ivianuu.essentials.processrestart.*
 import com.ivianuu.essentials.recentapps.*
-import com.ivianuu.essentials.sample.*
 import com.ivianuu.essentials.sample.tile.*
 import com.ivianuu.essentials.sample.ui.*
 import com.ivianuu.essentials.sample.work.*

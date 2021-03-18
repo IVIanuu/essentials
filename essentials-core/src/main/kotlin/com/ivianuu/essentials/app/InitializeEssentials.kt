@@ -13,12 +13,3 @@ fun App.initializeEssentials(
 ) {
     initializeApp(elementsFactory, initializersFactory)
 }
-
-@Given
-fun essentialsAppComponentInitializer(
-    @Given appInitializerRunner: AppInitializerRunner,
-    @Given appWorkerRunner: AppWorkerRunner
-): ComponentInitializer<AppComponent> = {
-    appInitializerRunner()
-    appWorkerRunner()
-}

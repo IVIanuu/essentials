@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
@@ -42,8 +43,8 @@ data class AccessibilityConfig(
 @Given
 fun applyAccessibilityConfig(
     @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
-    @Given serviceHolder: MutableAccessibilityServiceHolder,
-): AccessibilityWorker = {
+    @Given serviceHolder: AccessibilityServiceHolder,
+): ScopeWorker<AccessibilityComponent> = {
     coroutineScope {
         serviceHolder
             .flatMapLatest { service ->

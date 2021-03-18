@@ -18,18 +18,14 @@ package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.component.ChildComponentModule0
+import com.ivianuu.injekt.component.Component
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-typealias NotificationWorker = suspend () -> Unit
-
-typealias NotificationWorkerRunner = suspend () -> Unit
+typealias NotificationComponent = Component
 
 @Given
-fun notificationWorkerRunner(@Given workers: Set<NotificationWorker> = emptySet()): NotificationWorkerRunner = {
-    coroutineScope {
-        workers.forEach { worker ->
-            launch { worker() }
-        }
-    }
-}
+val notificationComponentModule =
+    ChildComponentModule0<ServiceComponent, NotificationComponent>()

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
@@ -46,18 +47,13 @@ class EsNotificationListenerService : NotificationListenerService() {
             .element<EsNotificationListenerServiceComponent>()
     }
 
-    private var connectedScope: CoroutineScope? = null
+    private var notificationComponent: NotificationComponent? = null
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        val connectedScope = CoroutineScope(component.defaultDispatcher)
-            .also { this.connectedScope = it }
-        connectedScope.launch {
-            component.logger.d { "listener connected" }
-            component.notificationServiceRef.value = this@EsNotificationListenerService
-            updateNotifications()
-            component.notificationWorkerRunner()
-        }
+        component.logger.d { "listener connected" }
+        notificationComponent = component.notificationComponentFactory()
+        updateNotifications()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
@@ -80,10 +76,9 @@ class EsNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerDisconnected() {
         component.logger.d { "listener disconnected" }
-        connectedScope?.cancel()
-        connectedScope = null
+        notificationComponent?.dispose()
+        notificationComponent = null
         component.serviceComponent.dispose()
-        component.notificationServiceRef.value = null
         super.onListenerDisconnected()
     }
 
@@ -97,15 +92,8 @@ class EsNotificationListenerService : NotificationListenerService() {
 @ComponentElementBinding<ServiceComponent>
 @Given
 class EsNotificationListenerServiceComponent(
-    @Given val defaultDispatcher: DefaultDispatcher,
-    @Given val notificationServiceRef: NotificationServiceRef,
     @Given val logger: Logger,
-    @Given val notificationWorkerRunner: NotificationWorkerRunner,
+    @Given val notificationComponentFactory: () -> NotificationComponent,
     @Given val serviceComponent: ServiceComponent
 )
 
-internal typealias NotificationServiceRef = MutableStateFlow<EsNotificationListenerService?>
-
-@Scoped<AppComponent>
-@Given
-fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)

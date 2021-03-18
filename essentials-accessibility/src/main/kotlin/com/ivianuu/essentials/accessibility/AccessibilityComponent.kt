@@ -18,18 +18,14 @@ package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.component.ChildComponentModule0
+import com.ivianuu.injekt.component.Component
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-typealias AccessibilityWorker = suspend () -> Unit
-
-typealias AccessibilityWorkerRunner = suspend () -> Unit
+typealias AccessibilityComponent = Component
 
 @Given
-fun runAccessibilityWorkers(@Given workers: Set<AccessibilityWorker> = emptySet()): AccessibilityWorkerRunner = {
-    coroutineScope {
-        workers.forEach { worker ->
-            launch { worker() }
-        }
-    }
-}
+val accessibilityComponentModule =
+    ChildComponentModule0<ServiceComponent, AccessibilityComponent>()

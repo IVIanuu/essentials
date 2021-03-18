@@ -38,17 +38,12 @@ class EsAccessibilityService : AccessibilityService() {
             .element<EsAccessibilityServiceComponent>()
     }
 
-    private var connectedScope: CoroutineScope? = null
+    private var accessibilityComponent: AccessibilityComponent? = null
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        val connectedScope = CoroutineScope(component.defaultDispatcher)
-            .also { this.connectedScope = it }
         component.logger.d { "connected" }
-        component.serviceHolder.value = this
-        connectedScope.launch {
-            component.accessibilityWorkerRunner()
-        }
+        accessibilityComponent = component.accessibilityComponentFactory()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -68,9 +63,8 @@ class EsAccessibilityService : AccessibilityService() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         component.logger.d { "disconnected" }
-        connectedScope?.cancel()
-        connectedScope = null
-        component.serviceHolder.value = null
+        accessibilityComponent?.dispose()
+        accessibilityComponent = null
         component.serviceComponent.dispose()
         return super.onUnbind(intent)
     }
@@ -81,9 +75,7 @@ class EsAccessibilityService : AccessibilityService() {
 @Given
 class EsAccessibilityServiceComponent(
     @Given val accessibilityEvents: MutableAccessibilityEvents,
-    @Given val accessibilityWorkerRunner: AccessibilityWorkerRunner,
-    @Given val defaultDispatcher: DefaultDispatcher,
+    @Given val accessibilityComponentFactory: () -> AccessibilityComponent,
     @Given val logger: Logger,
-    @Given val serviceHolder: MutableAccessibilityServiceHolder,
     @Given val serviceComponent: ServiceComponent
 )

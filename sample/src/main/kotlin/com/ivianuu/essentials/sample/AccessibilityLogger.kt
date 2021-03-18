@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.accessibility.AccessibilityWorker
+import com.ivianuu.essentials.accessibility.AccessibilityComponent
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -24,7 +25,7 @@ import com.ivianuu.injekt.Given
 import kotlinx.coroutines.awaitCancellation
 
 @Given
-fun accessibilityLogger(@Given logger: Logger): AccessibilityWorker = {
+fun accessibilityLogger(@Given logger: Logger): ScopeWorker<AccessibilityComponent> = {
     runWithCleanup(
         block = {
             logger.d { "hello from accessibility" }
