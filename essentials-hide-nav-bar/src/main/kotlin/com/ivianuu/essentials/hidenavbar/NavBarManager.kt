@@ -67,6 +67,7 @@ fun navBarManager(
                     .map { true }
                     .onStart { emit(false) }
                     .flatMapLatest { currentSystemShutdown ->
+                        logger.d { "current system shut down $currentSystemShutdown" }
                         // force show on shut downs
                         if (currentSystemShutdown) {
                             logger.d { "system shutdown force show nav bar" }
@@ -80,6 +81,7 @@ fun navBarManager(
             }
         }
         .flatMapLatest { currentConfig ->
+            logger.d { "current config $currentConfig" }
             if (currentConfig.hidden) {
                 combine(
                     displayRotation,
