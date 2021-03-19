@@ -28,7 +28,7 @@ dependencies {
     compile(Deps.Coroutines.core)
     compile(Deps.Injekt.core)
     compile(Deps.Injekt.common)
-    compile(Deps.Injekt.component)
+    compile(Deps.Injekt.scope)
     compile(Deps.Kotlin.stdlib)
     testCompile(project(":essentials-test"))
 }

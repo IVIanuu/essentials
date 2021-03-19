@@ -53,8 +53,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -133,7 +133,7 @@ fun foregroundUi(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
 

@@ -25,11 +25,11 @@ import coil.map.Mapper
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlin.reflect.KClass
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun imageLoader(
     @Given appContext: AppContext,

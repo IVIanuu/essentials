@@ -49,9 +49,9 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -110,7 +110,7 @@ fun appTrackerUi(
 
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun appTrackerForegroundState(): AppTrackerForegroundState = MutableStateFlow(Background)
 

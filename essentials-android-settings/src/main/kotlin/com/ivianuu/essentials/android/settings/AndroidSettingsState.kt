@@ -27,8 +27,8 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,10 +48,10 @@ class AndroidSettingStateModule<T : S, S>(
     private val type: AndroidSettingsType
 ) {
     @Suppress("UNCHECKED_CAST")
-    @Scoped<AppComponent>
+    @Scoped<AppGivenScope>
     @Given
     fun settingsState(
-        @Given scope: ScopeCoroutineScope<AppComponent>,
+        @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
         @Given contentChangesFactory: ContentChangesFactory,
@@ -88,13 +88,13 @@ class AndroidSettingStateModule<T : S, S>(
     @Given
     val actions = EventFlow<AndroidSettingAction<T>>()
 
-    @Scoped<AppComponent>
+    @Scoped<AppGivenScope>
     @Given
     fun collector(
         @Given actions: MutableSharedFlow<AndroidSettingAction<T>>,
         @Suppress("UNUSED_PARAMETER") @Given state: StateFlow<T>, // inject to start state
         @Given ready: AndroidSettingsStateReady<T>,
-        @Given scope: ScopeCoroutineScope<AppComponent>
+        @Given scope: ScopeCoroutineScope<AppGivenScope>
     ): Collector<AndroidSettingAction<T>> = { action ->
         scope.launch {
             ready.first()
@@ -126,7 +126,7 @@ fun <T : Any> Collector<AndroidSettingAction<T>>.dispatchUpdate(reducer: T.() ->
 
 internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun <T> androidSettingsStateReady(): AndroidSettingsStateReady<T> =
     MutableStateFlow(false)

@@ -18,24 +18,16 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.app.ScopeInitializer
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.result.getOrElse
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import com.ivianuu.injekt.android.ServiceGivenScope
+import com.ivianuu.injekt.android.createServiceGivenScope
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class EsNotificationListenerService : NotificationListenerService() {
 
@@ -43,16 +35,16 @@ class EsNotificationListenerService : NotificationListenerService() {
     internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
     private val component by lazy {
-        createServiceComponent()
+        createServiceGivenScope()
             .element<EsNotificationListenerServiceComponent>()
     }
 
-    private var notificationComponent: NotificationComponent? = null
+    private var notificationGivenScope: NotificationGivenScope? = null
 
     override fun onListenerConnected() {
         super.onListenerConnected()
         component.logger.d { "listener connected" }
-        notificationComponent = component.notificationComponentFactory()
+        notificationGivenScope = component.notificationGivenScopeFactory()
         updateNotifications()
     }
 
@@ -76,9 +68,9 @@ class EsNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerDisconnected() {
         component.logger.d { "listener disconnected" }
-        notificationComponent?.dispose()
-        notificationComponent = null
-        component.serviceComponent.dispose()
+        notificationGivenScope?.dispose()
+        notificationGivenScope = null
+        component.serviceGivenScope.dispose()
         super.onListenerDisconnected()
     }
 
@@ -89,11 +81,11 @@ class EsNotificationListenerService : NotificationListenerService() {
 
 }
 
-@ComponentElementBinding<ServiceComponent>
+@GivenScopeElementBinding<ServiceGivenScope>
 @Given
 class EsNotificationListenerServiceComponent(
     @Given val logger: Logger,
-    @Given val notificationComponentFactory: () -> NotificationComponent,
-    @Given val serviceComponent: ServiceComponent
+    @Given val notificationGivenScopeFactory: () -> NotificationGivenScope,
+    @Given val serviceGivenScope: ServiceGivenScope
 )
 

@@ -21,14 +21,14 @@ import android.app.Service
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal typealias MutableAccessibilityServiceHolder = MutableStateFlow<AccessibilityService?>
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun mutableAccessibilityServiceHolder(): MutableAccessibilityServiceHolder =
     MutableStateFlow(null)
@@ -43,7 +43,7 @@ inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: 
 fun accessibilityServiceHolderWorker(
     @Given holder: MutableAccessibilityServiceHolder,
     @Given service: Service
-): ScopeWorker<AccessibilityComponent> = {
+): ScopeWorker<AccessibilityGivenScope> = {
     holder.value = service as AccessibilityService
     runOnCancellation { holder.value = null }
 }

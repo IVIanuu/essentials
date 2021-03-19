@@ -18,14 +18,14 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.awaitCancellation
 
 @Given
-fun uiLogger(@Given logger: Logger): ScopeWorker<UiComponent> = {
+fun uiLogger(@Given logger: Logger): ScopeWorker<UiGivenScope> = {
     runWithCleanup(
         block = {
             logger.d { "hello from ui" }

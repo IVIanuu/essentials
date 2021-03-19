@@ -18,19 +18,18 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.android.ServiceGivenScope
+import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -49,39 +48,38 @@ abstract class AbstractFunTileService(
 ) : TileService() {
 
     private val component by lazy {
-        createServiceComponent()
+        createServiceGivenScope()
             .element<FunTileServiceComponent>()
     }
 
-    private val tileActions = EventFlow<TileAction>()
-
-    private var listeningScope: CoroutineScope? = null
+    private var tileStateComponent: TileStateComponent? = null
 
     override fun onStartListening() {
         super.onStartListening()
-        val listeningScope = CoroutineScope(component.defaultDispatcher)
-            .also { this.listeningScope = it }
-        listeningScope.launch {
-            val store = (component.tileStores[key]
-                ?.invoke(this, tileActions)
+        val tileStateComponent = component.tileGivenScopeFactory()
+            .element<TileStateComponent>()
+            .also { this.tileStateComponent = it }
+        tileStateComponent.scope.launch {
+            val state = (tileStateComponent.tileStores[key]
+                ?.invoke()
                 ?: error("No tile found for $key"))
-            store.collect { applyState(it) }
+            state.collect { applyState(it) }
         }
     }
 
     override fun onClick() {
         super.onClick()
-        tileActions.tryEmit(TileClicked)
+        tileStateComponent!!.tileActionCollector(TileClicked)
     }
 
     override fun onStopListening() {
-        listeningScope?.cancel()
-        listeningScope = null
+        tileStateComponent?.tileGivenScope?.dispose()
+        tileStateComponent = null
         super.onStopListening()
     }
 
     override fun onDestroy() {
-        component.serviceComponent.dispose()
+        component.serviceGivenScope.dispose()
         super.onDestroy()
     }
 
@@ -112,13 +110,25 @@ abstract class AbstractFunTileService(
     }
 }
 
-@ComponentElementBinding<ServiceComponent>
+@GivenScopeElementBinding<ServiceGivenScope>
 @Given
 class FunTileServiceComponent(
-    @Given val defaultDispatcher: DefaultDispatcher,
     @Given val resourceProvider: ResourceProvider,
-    @Given val serviceComponent: ServiceComponent,
-    @Given tileStores: Set<TileStateElement> = emptySet()
+    @Given val serviceGivenScope: ServiceGivenScope,
+    @Given val tileGivenScopeFactory: () -> TileGivenScope
+)
+
+@GivenScopeElementBinding<TileGivenScope>
+@Given
+class TileStateComponent(
+    @Given tileStateElements: Set<TileStateElement> = emptySet(),
+    @Given val scope: ScopeCoroutineScope<TileGivenScope>,
+    @Given val tileActionCollector: Collector<TileAction>,
+    @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileStores = tileStores.toMap()
+    val tileStores = tileStateElements.toMap()
 }
+
+@Scoped<TileGivenScope>
+@Given
+val tileActions get() = EventFlow<TileAction>()

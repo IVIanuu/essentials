@@ -22,7 +22,7 @@ import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.channels.awaitClose
@@ -39,7 +39,7 @@ fun androidBackPressHandler(
     @Given activity: ComponentActivity,
     @Given navigator: Collector<NavigationAction>,
     @Given state: Flow<NavigationState>,
-): ScopeWorker<UiComponent> = {
+): ScopeWorker<UiGivenScope> = {
     state
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()

@@ -18,13 +18,13 @@ package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import com.squareup.moshi.Moshi
 
 typealias JsonAdapter = Any
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun moshi(@Given jsonAdapters: Set<JsonAdapter> = emptySet()): Moshi = Moshi.Builder()
     .apply {

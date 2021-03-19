@@ -20,7 +20,7 @@ import android.widget.Toast
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.launch
 
 interface Toaster {
@@ -34,7 +34,7 @@ class ToasterImpl(
     @Given private val appContext: AppContext,
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val resourceProvider: ResourceProvider,
-    @Given private val scope: ScopeCoroutineScope<AppComponent>
+    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : Toaster {
     override fun showToast(message: String) {
         scope.launch(mainDispatcher) {

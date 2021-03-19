@@ -29,10 +29,9 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
+import com.ivianuu.injekt.android.ActivityGivenScope
+import com.ivianuu.injekt.android.activityGivenScope
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -58,7 +57,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
         requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-        val component = activityComponent.element<UnlockScreenComponent>()
+        val component = activityGivenScope.element<UnlockScreenComponent>()
 
         component.logger.d { "unlock screen for $requestId" }
 
@@ -126,7 +125,7 @@ class UnlockScreenActivity : ComponentActivity() {
     }
 }
 
-@ComponentElementBinding<ActivityComponent>
+@GivenScopeElementBinding<ActivityGivenScope>
 @Given
 class UnlockScreenComponent(
     @Given val broadcastsFactory: BroadcastsFactory,

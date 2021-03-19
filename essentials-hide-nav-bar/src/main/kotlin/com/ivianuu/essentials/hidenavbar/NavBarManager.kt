@@ -33,7 +33,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -58,7 +58,7 @@ fun navBarManager(
     @Given setOverscan: OverscanUpdater,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>,
     @Given wasNavBarHiddenCollector: Collector<PrefAction<WasNavBarHidden>>
-): ScopeWorker<AppComponent> = worker@ {
+): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
         .flatMapLatest {

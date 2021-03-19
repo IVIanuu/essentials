@@ -22,9 +22,11 @@ import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
+import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +38,7 @@ import kotlinx.coroutines.flow.onEach
 
 @Given
 fun testTileState(
-    @Given scope: CoroutineScope,
+    @Given scope: ScopeCoroutineScope<TileGivenScope>,
     @Given actions: Flow<TileAction>,
     @Given prefActionCollector: Collector<PrefAction<TwilightPrefs>>,
     @Given twilightPrefs: Flow<TwilightPrefs>,

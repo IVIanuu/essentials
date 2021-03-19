@@ -1,8 +1,6 @@
-// injekt-incremental-fix 1616071757115 injekt-end
 package com.ivianuu.essentials.sample
 
 import android.app.Application
-import com.ivianuu.essentials.app.initializeEssentials
 import com.ivianuu.essentials.about.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.activity.*
@@ -63,7 +61,6 @@ import com.ivianuu.essentials.twilight.domain.*
 import com.ivianuu.essentials.twilight.ui.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.coroutines.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -74,11 +71,8 @@ import com.ivianuu.essentials.work.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*
 import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.component.*
+import com.ivianuu.injekt.scope.*
 
-class App : Application() {
-    override fun onCreate() {
-        initializeEssentials()
-        super.onCreate()
-    }
+class App : Application(), AppGivenScopeOwner {
+    override val appGivenScope: AppGivenScope by lazy { createAppGivenScope() }
 }

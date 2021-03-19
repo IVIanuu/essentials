@@ -20,10 +20,10 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun releaseBillingClient(
     @Given appContext: AppContext,

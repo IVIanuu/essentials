@@ -29,7 +29,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.zip.ZipEntry
@@ -46,7 +46,7 @@ fun backupCreator(
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
     @Given navigator: Collector<NavigationAction>,
-    @Given scope: ScopeCoroutineScope<AppComponent>
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
     runKatching {
         scope.awaitAsync(ioDispatcher) {

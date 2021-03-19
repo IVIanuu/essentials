@@ -24,8 +24,8 @@ import com.ivianuu.essentials.result.getOrNull
 import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -40,12 +40,12 @@ import kotlinx.coroutines.flow.transformLatest
 
 typealias KeyboardVisible = Boolean
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given keyboardHeightProvider: KeyboardHeightProvider,
-    @Given scope: ScopeCoroutineScope<AppComponent>
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&

@@ -28,13 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.LocalUiComponent
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.LocalUiGivenScope
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
 object PopupMenu {
     data class Item(
@@ -47,7 +46,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = LocalUiComponent.current.element<PopupMenuComponent>()
+            val dependencies = LocalUiGivenScope.current.element<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
@@ -63,7 +62,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
     }
 }
 
-@ComponentElementBinding<UiComponent>
+@GivenScopeElementBinding<UiGivenScope>
 @Given
 class PopupMenuComponent(
     @Given val navigator: Collector<NavigationAction>

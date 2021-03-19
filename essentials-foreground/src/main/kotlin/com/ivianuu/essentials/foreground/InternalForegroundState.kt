@@ -4,8 +4,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -21,12 +21,12 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
     val isForeground: Boolean get() = infos.any { it.state is ForegroundState.Foreground }
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun internalForegroundState(
     @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
 ): Flow<InternalForegroundState> = combine(
     foregroundStates
         .mapIndexed { index, foregroundState ->

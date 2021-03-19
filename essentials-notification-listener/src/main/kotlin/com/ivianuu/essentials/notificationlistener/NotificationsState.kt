@@ -26,8 +26,8 @@ import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
@@ -48,12 +48,12 @@ sealed class NotificationsAction {
     object DismissAllNotifications : NotificationsAction()
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun notificationState(
     @Given actions: Flow<NotificationsAction>,
     @Given serviceRef: NotificationServiceRef,
-    @Given scope: ScopeCoroutineScope<AppComponent>
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
 ) = scope.state(NotificationsState()) {
     serviceRef
         .reduce { copy(isConnected = it != null) }
@@ -92,6 +92,6 @@ fun notificationState(
         .launchIn(this)
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 val notificationsActions get() = EventFlow<NotificationsAction>()

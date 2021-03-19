@@ -24,7 +24,7 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -35,7 +35,7 @@ fun androidForegroundWorkerStarter(
     @Given logger: Logger,
     @Given state: Flow<InternalForegroundState>,
     @Given workManager: WorkManager
-): ScopeWorker<AppComponent> = {
+): ScopeWorker<AppGivenScope> = {
     state
         .filter { it.isForeground }
         .filter {

@@ -38,12 +38,12 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -114,10 +114,10 @@ sealed class PermissionRequestAction {
 }
 
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun permissionRequestState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial PermissionRequestState = PermissionRequestState(),
     @Given actions: Flow<PermissionRequestAction>,
     @Given appUiStarter: AppUiStarter,
@@ -155,6 +155,6 @@ fun permissionRequestState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val permissionRequestActions get() = EventFlow<PermissionRequestAction>()

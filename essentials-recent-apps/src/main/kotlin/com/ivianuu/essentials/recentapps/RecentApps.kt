@@ -23,18 +23,18 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.*
 
 typealias RecentApps = List<String>
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun recentApps(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
 ): Flow<RecentApps> {
     return accessibilityEvents
         .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }

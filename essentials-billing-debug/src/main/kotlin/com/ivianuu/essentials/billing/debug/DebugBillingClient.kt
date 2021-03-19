@@ -48,7 +48,7 @@ import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ class DebugBillingClient(
     @Given private val prefs: Flow<DebugBillingPrefs>,
     @Given private val prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
-    @Given private val scope: ScopeCoroutineScope<AppComponent>
+    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : BillingClient() {
 
     private var billingClientStateListener: BillingClientStateListener? = null

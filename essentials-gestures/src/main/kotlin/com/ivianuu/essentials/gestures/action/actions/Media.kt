@@ -44,7 +44,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.resource.Idle
@@ -53,7 +53,7 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
@@ -138,10 +138,10 @@ sealed class MediaActionSettingsAction {
     object UpdateMediaApp : MediaActionSettingsAction()
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun mediaActionSettingsState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial MediaActionSettingsState = MediaActionSettingsState(),
     @Given actions: Flow<MediaActionSettingsAction>,
     @Given appRepository: AppRepository,
@@ -172,6 +172,6 @@ fun mediaActionSettingsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val mediaActionSettingsActions get() = EventFlow<MediaActionSettingsAction>()

@@ -23,8 +23,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -36,12 +36,12 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias IsOnSecureScreen = Boolean
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun isOnSecureScreen(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
 ): Flow<IsOnSecureScreen> = accessibilityEvents
     .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
     .map { it.packageName to it.className }

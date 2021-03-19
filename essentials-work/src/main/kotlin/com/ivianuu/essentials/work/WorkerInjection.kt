@@ -22,13 +22,13 @@ import androidx.work.WorkerFactory
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
 fun workerAppInitializer(
     @Given appContext: AppContext,
     @Given workerFactory: WorkerFactory,
-): ScopeInitializer<AppComponent> = {
+): ScopeInitializer<AppGivenScope> = {
     WorkManager.initialize(
         appContext,
         Configuration.Builder()

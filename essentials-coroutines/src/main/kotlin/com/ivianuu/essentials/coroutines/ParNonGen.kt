@@ -53,7 +53,7 @@ suspend fun <T> Iterable<T>.parForEach(
     concurrency: Int = defaultConcurrency,
     action: suspend (T) -> Unit
 ) {
-    parMap(concurrency) { action(it); it }
+    parMap(concurrency) { action(it) }
 }
 
 internal val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {

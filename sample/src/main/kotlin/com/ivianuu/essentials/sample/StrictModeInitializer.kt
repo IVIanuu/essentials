@@ -19,10 +19,10 @@ package com.ivianuu.essentials.sample
 import android.os.StrictMode
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
-fun strictModeInitializer(): ScopeInitializer<AppComponent> = {
+fun strictModeInitializer(): ScopeInitializer<AppGivenScope> = {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
             .detectAll()

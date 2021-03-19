@@ -28,8 +28,8 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,14 +58,14 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     LandscapeRight(false)
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun displayRotation(
     @Given configChanges: () -> Flow<ConfigChange>,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
     @Given rotationChanges: () -> Flow<RotationChange>,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: WindowManager
 ): Flow<DisplayRotation> = flow {

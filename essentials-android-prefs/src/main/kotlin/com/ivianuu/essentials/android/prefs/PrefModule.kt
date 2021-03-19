@@ -28,8 +28,8 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -43,12 +43,12 @@ import java.io.OutputStream
 class PrefModule<T : Any>(private val name: String) {
     @Given
     fun prefDataStore(
-        @Given scope: ScopeCoroutineScope<AppComponent>,
+        @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given adapterFactory: () -> JsonAdapter<T>,
         @Given prefsDir: () -> PrefsDir
-    ): @Scoped<AppComponent> DataStore<T> {
+    ): @Scoped<AppGivenScope> DataStore<T> {
         val deferredDataStore: DataStore<T> by lazy {
             DataStoreFactory.create(
                 produceFile = { prefsDir().resolve(name) },
@@ -76,19 +76,19 @@ class PrefModule<T : Any>(private val name: String) {
         }
     }
 
-    @Scoped<AppComponent>
+    @Scoped<AppGivenScope>
     @Given
     fun stateFlow(
         @Given dataStore: DataStore<T>,
-        @Given scope: ScopeCoroutineScope<AppComponent>,
+        @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given initial: @InitialOrFallback T
     ): StateFlow<T> = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
 
-    @Scoped<AppComponent>
+    @Scoped<AppGivenScope>
     @Given
     fun prefActionCollector(
         @Given dataStore: DataStore<T>,
-        @Given scope: ScopeCoroutineScope<AppComponent>
+        @Given scope: ScopeCoroutineScope<AppGivenScope>
     ): Collector<PrefAction<T>> = { action ->
         when (action) {
             is PrefAction.Update -> {

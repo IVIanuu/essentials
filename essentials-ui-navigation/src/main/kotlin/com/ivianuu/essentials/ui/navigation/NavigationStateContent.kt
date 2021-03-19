@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,13 +28,11 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
-import com.ivianuu.essentials.ui.common.LocalRetainedScope
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.element
 import kotlin.reflect.KClass
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
@@ -45,13 +42,13 @@ fun navigationStateContent(
     @Given optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
     @Given uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>
 ): NavigationStateContent = { state, modifier ->
-    val uiComponent = LocalUiComponent.current
+    val uiGivenScope = LocalUiGivenScope.current
     val contentState = remember {
         NavigationContentState(
             optionFactories = optionFactories,
             uiFactories = uiFactories,
             backStack = state.backStack.cast(),
-            keyUiComponentFactory = uiComponent.element()
+            keyUiGivenScopeFactory = uiGivenScope.element()
         )
     }
     SideEffect {
@@ -68,7 +65,7 @@ fun navigationStateContent(
 private class NavigationContentState(
     var optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> = emptyMap(),
     var uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> = emptyMap(),
-    var keyUiComponentFactory: () -> KeyUiComponent,
+    var keyUiGivenScopeFactory: () -> KeyUiGivenScope,
     backStack: List<Key<Any>>,
 ) {
 
@@ -92,7 +89,7 @@ private class NavigationContentState(
     @Suppress("UNCHECKED_CAST")
     private fun getOrCreateEntry(key: Key<Any>): Child {
         children.firstOrNull { it.key == key }?.let { return it }
-        val component = keyUiComponentFactory()
+        val component = keyUiGivenScopeFactory()
         val content = uiFactories[key::class]?.invoke(key, component)
         checkNotNull(content) { "No factory found for $key" }
         val options = optionFactories[key::class]?.invoke(key)
@@ -103,7 +100,7 @@ private class NavigationContentState(
         val key: Key<Any>,
         options: KeyUiOptions? = null,
         val content: @Composable () -> Unit,
-        val component: KeyUiComponent
+        val givenScope: KeyUiGivenScope
     ) {
         val stackChild = AnimatedStackChild(
             key = key,
@@ -120,9 +117,8 @@ private class NavigationContentState(
                 )
             }
             CompositionLocalProvider(
-                LocalKeyUiComponent provides component,
-                LocalSaveableStateRegistry provides savableStateRegistry,
-                LocalRetainedScope provides component
+                LocalKeyUiGivenScope provides givenScope,
+                LocalSaveableStateRegistry provides savableStateRegistry
             ) {
                 content()
                 DisposableEffect(true) {
@@ -152,7 +148,7 @@ private class NavigationContentState(
             if (isFinalized) return
             if (isComposing || !isDetached) return
             isFinalized = true
-            component.dispose()
+            givenScope.dispose()
         }
     }
 }

@@ -7,16 +7,16 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.scope.GivenScope
 
 typealias ScopeInitializer<S> = () -> Unit
 
 // todo remove type parameter S once injekt is fixed
 @Given
-fun <@Given @ForTypeKey T : S, S : ScopeInitializer<U>, U : Component> scopeInitializerElement(
+fun <@Given @ForTypeKey T : U, U : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
     @Given instance: () -> T,
-    @Given config: ScopeInitializerConfig<S> = ScopeInitializerConfig.DEFAULT
-): ScopeInitializerElement<U> = ScopeInitializerElement(
+    @Given config: ScopeInitializerConfig<U> = ScopeInitializerConfig.DEFAULT
+): ScopeInitializerElement<S> = ScopeInitializerElement(
     typeKeyOf<T>(), instance, config
 )
 
@@ -36,10 +36,10 @@ data class ScopeInitializerElement<S>(
 )
 
 @Given
-fun <@ForTypeKey S : Component> scopeInitializerRunner(
+fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
     @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
     @Given logger: Logger,
-): com.ivianuu.injekt.component.ComponentInitializer<S> = {
+): com.ivianuu.injekt.scope.GivenScopeInitializer<S> = {
     initializers
         .sortedTopological(
             key = { it.key },

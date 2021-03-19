@@ -24,7 +24,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
     compile(Deps.Injekt.core)
-    compile(Deps.Injekt.component)
+    compile(Deps.Injekt.scope)
     compile(Deps.Kotlin.stdlib)
 }
 

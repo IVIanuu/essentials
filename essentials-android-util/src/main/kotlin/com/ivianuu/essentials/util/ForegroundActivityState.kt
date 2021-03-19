@@ -21,8 +21,8 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
-import com.ivianuu.injekt.component.Eager
+import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Eager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,11 +31,11 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Eager<AppComponent>
+@Eager<AppGivenScope>
 @Given
 fun foregroundActivityState(
     @Given application: Application,
-    @Given scope: ScopeCoroutineScope<AppComponent>
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {
     application.registerActivityLifecycleCallbacks(
         object : Application.ActivityLifecycleCallbacks {

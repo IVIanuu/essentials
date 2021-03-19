@@ -31,8 +31,8 @@ dependencies {
     compile(project(":essentials-store"))
     compile(project(":essentials-tuples"))
 
-    compile(Deps.Injekt.component)
     compile(Deps.Injekt.core)
+    compile(Deps.Injekt.scope)
 
     compile(Deps.Kotlin.stdlib)
 

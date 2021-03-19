@@ -25,8 +25,8 @@ import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 
 @Factory
 @Given
@@ -42,7 +42,7 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
         }
     }
     companion object {
-        @Scoped<AppComponent>
+        @Scoped<AppGivenScope>
         @Given
         fun androidLogger(
             @Given buildInfo: BuildInfo,

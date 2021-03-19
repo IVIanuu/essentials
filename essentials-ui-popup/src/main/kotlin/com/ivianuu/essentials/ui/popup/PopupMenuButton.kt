@@ -38,9 +38,8 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
-import com.ivianuu.injekt.component.element
 
 @Composable
 fun PopupMenuButton(
@@ -69,7 +68,7 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indication: Indication = LocalIndication.current,
 ) = composed {
-    val dependencies = LocalUiComponent.current.element<PopupMenuComponent>()
+    val dependencies = LocalUiGivenScope.current.element<PopupMenuComponent>()
 
     var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

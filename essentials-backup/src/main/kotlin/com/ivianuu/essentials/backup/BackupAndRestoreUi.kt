@@ -35,11 +35,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -85,10 +85,10 @@ sealed class BackupAndRestoreAction {
     object RestoreData : BackupAndRestoreAction()
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun backupAndRestoreState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
     @Given actions: Flow<BackupAndRestoreAction>,
     @Given backupCreator: BackupCreator,
@@ -117,6 +117,6 @@ fun backupAndRestoreState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val backupAndRestoreActions get() = EventFlow<BackupAndRestoreAction>()

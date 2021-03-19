@@ -27,8 +27,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -54,7 +54,7 @@ interface BillingManager {
 
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 class BillingManagerImpl(
     @Given private val appForegroundState: Flow<AppForegroundState>,
@@ -63,7 +63,7 @@ class BillingManagerImpl(
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val ioDispatcher: IODispatcher,
     @Given private val logger: Logger,
-    @Given private val scope: ScopeCoroutineScope<AppComponent>
+    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : BillingManager {
 
     private val billingClient = billingClientFactory { _, _ ->

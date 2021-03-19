@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -47,7 +47,7 @@ val actionsKeyModule = KeyModule<ActionsKey>()
 fun actionsUi(
     @Given executeAction: executeAction,
     @Given navigator: Collector<NavigationAction>,
-    @Given scope: ScopeCoroutineScope<UiComponent>,
+    @Given scope: ScopeCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }

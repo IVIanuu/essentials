@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.Error
@@ -52,7 +52,7 @@ import com.ivianuu.essentials.ui.resource.Resource
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -124,10 +124,10 @@ sealed class DebugPurchaseAction {
     object Purchase : DebugPurchaseAction()
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun debugPurchaseState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial DebugPurchaseState = DebugPurchaseState(),
     @Given actions: Flow<DebugPurchaseAction>,
     @Given key: DebugPurchaseKey,
@@ -153,7 +153,7 @@ fun debugPurchaseState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val debugPurchaseActions get() = EventFlow<DebugPurchaseAction>()
 

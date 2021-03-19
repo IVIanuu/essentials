@@ -23,32 +23,31 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ReceiverComponent
-import com.ivianuu.injekt.android.createReceiverComponent
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
+import com.ivianuu.injekt.android.ReceiverGivenScope
+import com.ivianuu.injekt.android.createReceiverGivenScope
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class StartupReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        val component = createReceiverComponent(context, intent)
+        val component = createReceiverGivenScope(context, intent)
             .element<StartupReceiverComponent>()
         component.logger.d { "on system boot" }
         val scope = CoroutineScope(component.defaultDispatcher)
         component.bootListeners.forEach {
             scope.launch { it() }
         }
-        component.receiverComponent.dispose()
+        component.receiverGivenScope.dispose()
     }
 }
 
-@ComponentElementBinding<ReceiverComponent>
+@GivenScopeElementBinding<ReceiverGivenScope>
 @Given
 class StartupReceiverComponent(
     @Given val bootListeners: Set<BootListener> = emptySet(),
     @Given val defaultDispatcher: DefaultDispatcher,
     @Given val logger: Logger,
-    @Given val receiverComponent: ReceiverComponent
+    @Given val receiverGivenScope: ReceiverGivenScope
 )

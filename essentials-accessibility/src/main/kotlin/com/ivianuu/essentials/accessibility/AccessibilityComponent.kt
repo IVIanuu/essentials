@@ -17,15 +17,12 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.component.ChildComponentModule0
-import com.ivianuu.injekt.component.Component
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import com.ivianuu.injekt.android.ServiceGivenScope
+import com.ivianuu.injekt.scope.ChildGivenScopeModule0
+import com.ivianuu.injekt.scope.GivenScope
 
-typealias AccessibilityComponent = Component
+typealias AccessibilityGivenScope = GivenScope
 
 @Given
-val accessibilityComponentModule =
-    ChildComponentModule0<ServiceComponent, AccessibilityComponent>()
+val accessibilityGivenScopeModule =
+    ChildGivenScopeModule0<ServiceGivenScope, AccessibilityGivenScope>()

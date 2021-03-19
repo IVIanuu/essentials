@@ -42,7 +42,7 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.Idle
@@ -52,7 +52,7 @@ import com.ivianuu.essentials.ui.resource.map
 import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -180,10 +180,10 @@ sealed class CheckableAppsAction {
     data class UpdateAppCheckState(val app: CheckableApp, val value: Boolean) : CheckableAppsAction()
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun checkableAppsState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial CheckableAppsState,
     @Given actions: Flow<CheckableAppsAction>,
     @Given appRepository: AppRepository,
@@ -223,6 +223,6 @@ fun checkableAppsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val checkableAppsActions get() = EventFlow<CheckableAppsAction>()

@@ -90,12 +90,12 @@ object Deps {
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev497"
+        private const val version = "0.0.1-dev498"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
-        const val component = "com.ivianuu.injekt:injekt-component-jvm:$version"
         const val core = "com.ivianuu.injekt:injekt-core-jvm:$version"
         const val common = "com.ivianuu.injekt:injekt-common-jvm:$version"
+        const val scope = "com.ivianuu.injekt:injekt-scope-jvm:$version"
         const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
     }
 

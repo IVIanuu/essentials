@@ -26,7 +26,7 @@ class KeyModule<K : Key<*>>(private val keyClass: KClass<K>) {
 
     @Given
     fun keyUi(
-        @Given keyUiFactory: (@Given K, @Given KeyUiComponent) -> KeyUi<K>
+        @Given keyUiFactory: (@Given K, @Given KeyUiGivenScope) -> KeyUi<K>
     ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
         (keyClass to keyUiFactory).cast()
 

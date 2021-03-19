@@ -18,14 +18,14 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.notificationlistener.NotificationComponent
+import com.ivianuu.essentials.notificationlistener.NotificationGivenScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.awaitCancellation
 
 @Given
-fun notificationWorkLogger(@Given logger: Logger): ScopeWorker<NotificationComponent> = {
+fun notificationWorkLogger(@Given logger: Logger): ScopeWorker<NotificationGivenScope> = {
     runWithCleanup(
         block = {
             logger.d { "hello from notifications" }

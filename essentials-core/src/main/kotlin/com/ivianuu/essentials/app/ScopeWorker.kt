@@ -22,7 +22,7 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.launch
 
 typealias ScopeWorker<S> = suspend () -> Unit
@@ -30,7 +30,7 @@ typealias ScopeWorker<S> = suspend () -> Unit
 typealias ScopeWorkerRunner<S> = ScopeInitializer<S>
 
 @Given
-fun <@ForTypeKey S : Component> scopeWorkerRunner(
+fun <@ForTypeKey S : GivenScope> scopeWorkerRunner(
     @Given logger: Logger,
     @Given scope: ScopeCoroutineScope<S>,
     @Given workers: Set<() -> ScopeWorker<S>> = emptySet()

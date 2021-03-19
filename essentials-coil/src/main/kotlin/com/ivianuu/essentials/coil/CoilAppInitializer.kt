@@ -20,9 +20,9 @@ import coil.Coil
 import coil.ImageLoader
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
-fun coilAppInitializer(@Given imageLoaderFactory: () -> ImageLoader): ScopeInitializer<AppComponent> = {
+fun coilAppInitializer(@Given imageLoaderFactory: () -> ImageLoader): ScopeInitializer<AppGivenScope> = {
     Coil.setImageLoader(imageLoaderFactory)
 }

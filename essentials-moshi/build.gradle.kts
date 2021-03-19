@@ -25,7 +25,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
     compile(Deps.Injekt.core)
     compile(Deps.Injekt.common)
-    compile(Deps.Injekt.component)
+    compile(Deps.Injekt.scope)
     compile(Deps.Moshi.moshi)
     compile(Deps.Moshi.adapters)
     compile(Deps.MoshiSealed.annotations)

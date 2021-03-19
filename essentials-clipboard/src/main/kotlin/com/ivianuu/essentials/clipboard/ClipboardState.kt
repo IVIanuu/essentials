@@ -24,8 +24,8 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
-import com.ivianuu.injekt.component.Eager
+import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Eager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,10 +42,10 @@ sealed class ClipboardAction {
     data class UpdateClipboard(val value: String) : ClipboardAction()
 }
 
-@Eager<AppComponent>
+@Eager<AppGivenScope>
 @Given
 fun clipboardState(
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial ClipboardState = ClipboardState(),
     @Given actions: Flow<ClipboardAction>,
     @Given clipboardManager: ClipboardManager,

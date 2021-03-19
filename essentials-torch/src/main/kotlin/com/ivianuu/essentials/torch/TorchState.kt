@@ -22,16 +22,16 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun torchState(
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial TorchState = TorchState(),
     @Given actions: Flow<TorchAction>
 ): StateFlow<TorchState> = actions

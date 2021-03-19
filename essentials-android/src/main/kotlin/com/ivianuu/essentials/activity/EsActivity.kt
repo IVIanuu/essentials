@@ -23,35 +23,34 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.LocalUiComponent
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.LocalUiGivenScope
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
+import com.ivianuu.injekt.android.activityGivenScope
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity() {
 
-    private val uiComponent by lazy {
-        activityComponent.element<() -> UiComponent>()()
+    private val uiGivenScope by lazy {
+        activityGivenScope.element<() -> UiGivenScope>()()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val component = uiComponent.element<EsActivityComponent>()
+        val component = uiGivenScope.element<EsActivityComponent>()
 
         lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
-                uiComponent.dispose()
+                uiGivenScope.dispose()
             }
         }
 
         setContent {
-            CompositionLocalProvider(LocalUiComponent provides uiComponent) {
+            CompositionLocalProvider(LocalUiGivenScope provides uiGivenScope) {
                 component.decorateUi {
                     component.appUi()
                 }
@@ -70,7 +69,7 @@ class EsActivity : ComponentActivity() {
 
 }
 
-@ComponentElementBinding<UiComponent>
+@GivenScopeElementBinding<UiGivenScope>
 @Given
 class EsActivityComponent(
     @Given val appUi: AppUi,

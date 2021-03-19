@@ -39,8 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.LocalUiComponent
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.LocalUiGivenScope
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.localVerticalInsets
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
@@ -59,8 +59,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
@@ -358,7 +357,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
-    val component = LocalUiComponent.current.element<DialogLauncherComponent>()
+    val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
     Button(
         onClick = {
             component.navigator(
@@ -389,7 +388,7 @@ fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = 
 @Given
 val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey>()
 
-@ComponentElementBinding<UiComponent>
+@GivenScopeElementBinding<UiGivenScope>
 @Given
 class DialogLauncherComponent(
     @Given val navigator: Collector<NavigationAction>

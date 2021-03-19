@@ -18,13 +18,13 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.component.ChildComponentModule0
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.android.ActivityGivenScope
+import com.ivianuu.injekt.scope.ChildGivenScopeModule0
+import com.ivianuu.injekt.scope.GivenScope
 
-typealias UiComponent = Component
+typealias UiGivenScope = GivenScope
 
 @Given
-val uiComponentModule = ChildComponentModule0<ActivityComponent, UiComponent>()
+val uiGivenScopeModule = ChildGivenScopeModule0<ActivityGivenScope, UiGivenScope>()
 
-val LocalUiComponent = staticCompositionLocalOf<UiComponent> { error("No UiComponent installed") }
+val LocalUiGivenScope = staticCompositionLocalOf<UiGivenScope> { error("No UiGivenScope provided") }

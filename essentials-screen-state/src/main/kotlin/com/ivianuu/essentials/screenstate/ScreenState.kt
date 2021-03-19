@@ -25,8 +25,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,12 +37,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given screenStateProvider: CurrentScreenStateProvider
 ): Flow<ScreenState> = merge(
     broadcastsFactory(Intent.ACTION_SCREEN_OFF),

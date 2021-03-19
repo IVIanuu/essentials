@@ -27,8 +27,8 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,10 +58,10 @@ sealed class NavigationAction {
     ) : NavigationAction()
 }
 
-@Scoped<AppComponent>
+@Scoped<AppGivenScope>
 @Given
 fun navigationState(
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Flow<NavigationAction>,
     @Given intentKeyHandler: IntentKeyHandler

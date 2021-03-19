@@ -29,7 +29,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import java.util.zip.ZipInputStream
 
 typealias BackupApplier = suspend () -> Result<Unit, Throwable>
@@ -42,7 +42,7 @@ fun backupApplier(
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
     @Given processRestarter: ProcessRestarter,
-    @Given scope: ScopeCoroutineScope<AppComponent>
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupApplier = {
     runKatching {
         scope.awaitAsync(ioDispatcher) {

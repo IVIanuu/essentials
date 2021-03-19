@@ -19,15 +19,17 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.scope.ChildGivenScopeModule0
+import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>,
-            (CoroutineScope, Flow<TileAction>) -> StateFlow<TileState<*>>>
+typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>>
 
 data class TileState<T : AbstractFunTileService>(
     val icon: Icon? = null,
@@ -51,5 +53,10 @@ sealed class TileAction {
 
 @Given
 fun <@Given T : StateFlow<TileState<S>>, @ForTypeKey S : AbstractFunTileService> tileStateElement(
-    @Given provider: (@Given CoroutineScope, @Given Flow<TileAction>) -> T,
+    @Given provider: () -> T,
 ): TileStateElement = typeKeyOf<S>() to provider
+
+typealias TileGivenScope = GivenScope
+
+@Given
+val tileGivenScopeModule = ChildGivenScopeModule0<ServiceGivenScope, TileGivenScope>()

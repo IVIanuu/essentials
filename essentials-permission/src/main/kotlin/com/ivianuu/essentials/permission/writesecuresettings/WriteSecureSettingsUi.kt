@@ -39,13 +39,13 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -101,10 +101,10 @@ sealed class WriteSecureSettingsAction {
     object OpenPcInstructions : WriteSecureSettingsAction()
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 fun writeSecureSettingsState(
-    @Given scope: ScopeCoroutineScope<KeyUiComponent>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial WriteSecureSettingsState = WriteSecureSettingsState,
     @Given actions: Flow<WriteSecureSettingsAction>,
     @Given buildInfo: BuildInfo,
@@ -143,6 +143,6 @@ fun writeSecureSettingsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiComponent>
+@Scoped<KeyUiGivenScope>
 @Given
 val writeSecureSettingsActions get() = EventFlow<WriteSecureSettingsAction>()

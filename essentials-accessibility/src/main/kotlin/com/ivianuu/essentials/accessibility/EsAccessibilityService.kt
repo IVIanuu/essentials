@@ -19,31 +19,26 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.component.ComponentElementBinding
-import com.ivianuu.injekt.component.element
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import com.ivianuu.injekt.android.ServiceGivenScope
+import com.ivianuu.injekt.android.createServiceGivenScope
+import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
 class EsAccessibilityService : AccessibilityService() {
 
     private val component by lazy {
-        createServiceComponent()
+        createServiceGivenScope()
             .element<EsAccessibilityServiceComponent>()
     }
 
-    private var accessibilityComponent: AccessibilityComponent? = null
+    private var accessibilityGivenScope: AccessibilityGivenScope? = null
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         component.logger.d { "connected" }
-        accessibilityComponent = component.accessibilityComponentFactory()
+        accessibilityGivenScope = component.accessibilityGivenScopeFactory()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -63,19 +58,19 @@ class EsAccessibilityService : AccessibilityService() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         component.logger.d { "disconnected" }
-        accessibilityComponent?.dispose()
-        accessibilityComponent = null
-        component.serviceComponent.dispose()
+        accessibilityGivenScope?.dispose()
+        accessibilityGivenScope = null
+        component.serviceGivenScope.dispose()
         return super.onUnbind(intent)
     }
 
 }
 
-@ComponentElementBinding<ServiceComponent>
+@GivenScopeElementBinding<ServiceGivenScope>
 @Given
 class EsAccessibilityServiceComponent(
     @Given val accessibilityEvents: MutableAccessibilityEvents,
-    @Given val accessibilityComponentFactory: () -> AccessibilityComponent,
+    @Given val accessibilityGivenScopeFactory: () -> AccessibilityGivenScope,
     @Given val logger: Logger,
-    @Given val serviceComponent: ServiceComponent
+    @Given val serviceGivenScope: ServiceGivenScope
 )

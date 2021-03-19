@@ -25,13 +25,13 @@ import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.AppComponent
+import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.launch
 
 @Given
 fun debugPurchaseAppInitializer(
     @Given prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
-): ScopeInitializer<AppComponent> = {
+): ScopeInitializer<AppGivenScope> = {
     prefActionCollector.dispatchUpdate {
         copy(products = products + SkuDetails(DummySku))
     }

@@ -1,16 +1,16 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.component.ChildComponentModule0
-import com.ivianuu.injekt.component.Component
+import com.ivianuu.injekt.scope.ChildGivenScopeModule0
+import com.ivianuu.injekt.scope.GivenScope
 
-typealias KeyUiComponent = Component
+typealias KeyUiGivenScope = GivenScope
 
 @Given
-val keyUiComponentModule = ChildComponentModule0<UiComponent, KeyUiComponent>()
+val keyUiGivenScopeModule = ChildGivenScopeModule0<UiGivenScope, KeyUiGivenScope>()
 
-val LocalKeyUiComponent = staticCompositionLocalOf<KeyUiComponent> {
-    error("No key ui component provided")
+val LocalKeyUiGivenScope = staticCompositionLocalOf<KeyUiGivenScope> {
+    error("No KeyUiGivenScope provided")
 }

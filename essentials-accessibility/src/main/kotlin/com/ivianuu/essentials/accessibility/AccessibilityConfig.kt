@@ -21,7 +21,6 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.util.addFlag
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,7 +43,7 @@ data class AccessibilityConfig(
 fun applyAccessibilityConfig(
     @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
     @Given serviceHolder: AccessibilityServiceHolder,
-): ScopeWorker<AccessibilityComponent> = {
+): ScopeWorker<AccessibilityGivenScope> = {
     coroutineScope {
         serviceHolder
             .flatMapLatest { service ->

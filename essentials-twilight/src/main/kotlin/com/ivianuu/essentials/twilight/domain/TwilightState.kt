@@ -26,8 +26,8 @@ import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
-import com.ivianuu.injekt.component.AppComponent
-import com.ivianuu.injekt.component.Eager
+import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Eager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -46,10 +46,10 @@ data class TwilightState(
     val useBlack: Boolean = false,
 )
 
-@Eager<AppComponent>
+@Eager<AppGivenScope>
 @Given
 fun twilightState(
-    @Given scope: ScopeCoroutineScope<AppComponent>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,
