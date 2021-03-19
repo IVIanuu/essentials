@@ -18,8 +18,8 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.result.getOrElse
-import com.ivianuu.essentials.result.runKatching
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -75,7 +75,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     }
 
     private fun updateNotifications() {
-        _notifications.value =  runKatching { activeNotifications!!.toList() }
+        _notifications.value =  runCatching { activeNotifications!!.toList() }
             .getOrElse { emptyList() }
     }
 

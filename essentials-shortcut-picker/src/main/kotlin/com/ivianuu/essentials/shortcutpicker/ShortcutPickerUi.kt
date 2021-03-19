@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.state
@@ -128,16 +128,15 @@ fun shortcutPickerState(
     actions
         .filterIsInstance<PickShortcut>()
         .onEach { action ->
-            runKatching {
+            runCatching {
                 val shortcutRequestResult = activityResultLauncher.startActivityForResult(action.shortcut.intent)
                     .data ?: return@onEach
                 val shortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
                 navigator(Pop(key, shortcut))
+            }.onFailure {
+                it.printStackTrace()
+                toaster.showToast(R.string.es_failed_to_pick_shortcut)
             }
-                .onFailure {
-                    it.printStackTrace()
-                    toaster.showToast(R.string.es_failed_to_pick_shortcut)
-                }
         }
         .launchIn(this)
 }

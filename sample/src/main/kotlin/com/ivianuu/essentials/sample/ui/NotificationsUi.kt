@@ -43,6 +43,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
@@ -52,8 +54,6 @@ import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.result.fold
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
@@ -253,7 +253,7 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
         ?.toString() ?: "",
     text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
         ?.toString() ?: "",
-    icon = runKatching {
+    icon = runCatching {
         notification.smallIcon
             .loadDrawable(appContext)
             .toImageBitmap()

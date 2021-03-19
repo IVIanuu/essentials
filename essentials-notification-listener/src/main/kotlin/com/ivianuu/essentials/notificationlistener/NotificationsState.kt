@@ -18,11 +18,11 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -67,7 +67,7 @@ fun notificationState(
     actions
         .filterIsInstance<OpenNotification>()
         .onEach { action ->
-            runKatching { action.notification.contentIntent.send() }
+            runCatching { action.notification.contentIntent.send() }
         }
         .launchIn(this)
 

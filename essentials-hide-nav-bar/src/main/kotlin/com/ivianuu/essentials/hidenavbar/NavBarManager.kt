@@ -19,13 +19,13 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.android.prefs.PrefAction
 import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.store.Collector
@@ -127,8 +127,8 @@ private suspend fun NavBarState.apply(
     setOverscan: OverscanUpdater
 ) {
     logger.d { "apply nav bar state $this" }
-    runKatching {
-        runKatching {
+    runCatching {
+        runCatching {
             // ensure that we can access non sdk interfaces
             disableNonSdkInterfaceDetection()
         }.onFailure { it.printStackTrace() }

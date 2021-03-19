@@ -19,8 +19,8 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.runKatching
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 
 val Color.isDark: Boolean
     get() = ColorUtils.calculateLuminance(toArgb()) < 0.5
@@ -72,11 +72,11 @@ fun Color.toHexString(includeAlpha: Boolean = true) = if (this.toArgb() == 0) {
 }
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true) =
-    runKatching { toHexString(includeAlpha) }.getOrNull()
+    runCatching { toHexString(includeAlpha) }.getOrElse { null }
 
 fun String.toColor(): Color {
     val finalColorString = if (startsWith("#")) this else "#$this"
     return Color(android.graphics.Color.parseColor(finalColorString))
 }
 
-fun String.toColorOrNull(): Color? = runKatching { toColor() }.getOrNull()
+fun String.toColorOrNull(): Color? = runCatching { toColor() }.getOrElse { null }

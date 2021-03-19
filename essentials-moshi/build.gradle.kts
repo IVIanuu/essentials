@@ -30,7 +30,6 @@ dependencies {
     compile(Deps.Moshi.adapters)
     compile(Deps.MoshiSealed.annotations)
     compile(Deps.Kotlin.stdlib)
-    compile(project(":essentials-sourcekey"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

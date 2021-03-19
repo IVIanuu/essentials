@@ -18,12 +18,12 @@ package com.ivianuu.essentials.backup
 
 import android.content.ContentResolver
 import android.content.Intent
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
@@ -44,7 +44,7 @@ fun backupApplier(
     @Given processRestarter: ProcessRestarter,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupApplier = {
-    runKatching {
+    runCatching {
         scope.awaitAsync(ioDispatcher) {
             val uri = activityResultLauncher.startActivityForResult(
                 Intent.createChooser(

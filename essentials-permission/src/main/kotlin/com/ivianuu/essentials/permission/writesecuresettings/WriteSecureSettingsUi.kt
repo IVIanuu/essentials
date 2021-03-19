@@ -21,13 +21,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
@@ -131,13 +131,12 @@ fun writeSecureSettingsState(
                 OpenPcInstructions -> navigator(
                     NavigationAction.Push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
                 )
-                GrantPermissionsViaRoot -> runKatching {
+                GrantPermissionsViaRoot -> runCatching {
                     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+                }.onFailure {
+                    it.printStackTrace()
+                    toaster.showToast(R.string.es_secure_settings_no_root)
                 }
-                    .onFailure {
-                        it.printStackTrace()
-                        toaster.showToast(R.string.es_secure_settings_no_root)
-                    }
             }
         }
         .launchIn(this)

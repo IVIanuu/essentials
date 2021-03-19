@@ -18,8 +18,8 @@ package com.ivianuu.essentials.screenstate
 
 import android.content.ComponentCallbacks2
 import android.content.res.Configuration
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.channels.awaitClose
@@ -36,7 +36,7 @@ fun configChanges(
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
-            runKatching { offer(ConfigChange) }
+            runCatching { offer(ConfigChange) }
         }
 
         override fun onLowMemory() {

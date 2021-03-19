@@ -22,8 +22,8 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +43,7 @@ fun contentChangesFactory(
             object : ContentObserver(Handler(Looper.getMainLooper())) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
-                    runKatching { offer(Unit) }
+                    runCatching { offer(Unit) }
                 }
             }
         }

@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.gestures
 
 import android.view.inputmethod.InputMethodManager
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -79,8 +79,8 @@ typealias KeyboardHeightProvider = () -> Int?
 fun keyboardHeightProvider(
     @Given inputMethodManager: InputMethodManager
 ): KeyboardHeightProvider = {
-    runKatching {
+    runCatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
-    }.getOrNull()
+    }.getOrElse { null }
 }

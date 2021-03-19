@@ -22,10 +22,10 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -49,7 +49,7 @@ fun actionRootCommandRunner(
     @Given shell: Shell,
     @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->
-    runKatching { shell.run(command) }
+    runCatching { shell.run(command) }
         .onFailure {
             it.printStackTrace()
             toaster.showToast(R.string.es_no_root)
@@ -64,7 +64,7 @@ fun actionIntentSender(
     @Given toaster: Toaster
 ): ActionIntentSender = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    runKatching {
+    runCatching {
         PendingIntent.getActivity(
             appContext, 99, intent, 0, null
         ).send()

@@ -20,9 +20,9 @@ import android.hardware.SensorManager
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowManager
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
@@ -109,7 +109,7 @@ fun rotationChanges(
     val listener = object :
         OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
         override fun onOrientationChanged(orientation: Int) {
-            runKatching { offer(RotationChange) }
+            runCatching { offer(RotationChange) }
         }
     }
     listener.enable()

@@ -21,10 +21,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.result.onFailure
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state

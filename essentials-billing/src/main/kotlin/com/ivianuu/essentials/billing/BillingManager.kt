@@ -37,7 +37,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 interface BillingManager {
-
     suspend fun purchase(
         sku: Sku,
         acknowledge: Boolean = true,
@@ -51,7 +50,6 @@ interface BillingManager {
     fun isPurchased(sku: Sku): Flow<Boolean>
 
     suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
-
 }
 
 @Scoped<AppGivenScope>
@@ -65,7 +63,6 @@ class BillingManagerImpl(
     @Given private val logger: Logger,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : BillingManager {
-
     private val billingClient = billingClientFactory { _, _ ->
         refreshes.tryEmit(Unit)
     }

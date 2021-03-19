@@ -24,7 +24,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
     compile(project(":essentials-tuples"))
-    compile(project(":essentials-sourcekey"))
     compile(Deps.Coroutines.core)
     compile(Deps.Injekt.core)
     compile(Deps.Injekt.common)

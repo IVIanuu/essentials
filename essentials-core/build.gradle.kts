@@ -27,7 +27,6 @@ dependencies {
 
     compile(project(":essentials-coroutines"))
     compile(project(":essentials-moshi"))
-    compile(project(":essentials-result"))
     compile(project(":essentials-store"))
     compile(project(":essentials-tuples"))
 
@@ -35,6 +34,8 @@ dependencies {
     compile(Deps.Injekt.scope)
 
     compile(Deps.Kotlin.stdlib)
+
+    compile(Deps.kotlinResult)
 
     testCompile(project(":essentials-test"))
 }

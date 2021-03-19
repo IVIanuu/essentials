@@ -20,10 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.fold
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.store.StateScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -116,7 +116,7 @@ fun <T, S> Flow<T>.reduceResource(scope: StateScope<S>, reducer: S.(Resource<T>)
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {
         emit(Loading)
-        runKatching {
+        runCatching {
             block(object : FlowCollector<T> {
                 override suspend fun emit(value: T) {
                     this@flow.emit(Success(value))
@@ -144,7 +144,7 @@ fun <T> produceResource(
     producer: suspend CoroutineScope.() -> T
 ): Resource<T> = produceState<Resource<T>>(Idle, *subjects) {
     value = Loading
-    value = runKatching { producer() }.toResource()
+    value = runCatching { producer() }.toResource()
 }.value
 
 inline fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(

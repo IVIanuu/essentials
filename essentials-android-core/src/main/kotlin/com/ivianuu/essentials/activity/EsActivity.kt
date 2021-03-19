@@ -33,7 +33,6 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity() {
-
     private val uiGivenScope by lazy {
         activityGivenScope.element<() -> UiGivenScope>()()
     }
@@ -66,7 +65,6 @@ class EsActivity : ComponentActivity() {
             finishAfterTransition()
         }
     }
-
 }
 
 @GivenScopeElementBinding<UiGivenScope>

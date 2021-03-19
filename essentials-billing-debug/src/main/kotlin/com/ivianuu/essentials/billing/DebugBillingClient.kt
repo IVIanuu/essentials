@@ -65,7 +65,6 @@ class DebugBillingClient(
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : BillingClient() {
-
     private var billingClientStateListener: BillingClientStateListener? = null
 
     private enum class ClientState {

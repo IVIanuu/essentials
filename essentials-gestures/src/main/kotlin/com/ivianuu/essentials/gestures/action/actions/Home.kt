@@ -26,8 +26,6 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -55,7 +53,7 @@ fun homeActionExecutor(
     if (!needsHomeIntentWorkaround) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {
-        runKatching {
+        runCatching {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
             appContext.sendBroadcast(intent)
         }.onFailure { it.printStackTrace() }

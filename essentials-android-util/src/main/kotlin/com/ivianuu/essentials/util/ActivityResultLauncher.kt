@@ -28,14 +28,9 @@ import java.util.UUID
 import kotlin.coroutines.resume
 
 interface ActivityResultLauncher {
-    suspend fun startActivityForResult(
-        intent: Intent
-    ): ActivityResult
+    suspend fun startActivityForResult(intent: Intent): ActivityResult
 
-    suspend fun <I, O> startActivityForResult(
-        contract: ActivityResultContract<I, O>,
-        input: I
-    ): O
+    suspend fun <I, O> startActivityForResult(contract: ActivityResultContract<I, O>, input: I): O
 }
 
 @Given

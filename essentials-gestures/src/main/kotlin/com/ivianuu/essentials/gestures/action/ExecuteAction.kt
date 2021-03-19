@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.onFailure
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.Toaster
@@ -40,27 +40,27 @@ fun executeAction(
     @Given toaster: Toaster
 ): executeAction = { key ->
     withContext(defaultDispatcher) {
-        runKatching {
+        runCatching {
             logger.d { "execute $key" }
             val action = actionRepository.getAction(key)
 
             // check permissions
             if (!permissionRequester(action.permissions)) {
                 logger.d { "couldn't get permissions for $key" }
-                return@runKatching false
+                return@runCatching false
             }
 
             // unlock screen
             if (action.unlockScreen && !screenUnlocker()) {
                 logger.d { "couldn't unlock screen for $key" }
-                return@runKatching false
+                return@runCatching false
             }
 
             logger.d { "fire $key" }
 
             // fire
             actionRepository.getActionExecutor(key)()
-            return@runKatching true
+            return@runCatching true
         }.onFailure {
             it.printStackTrace()
             toaster.showToast("Failed to execute '$key'") // todo res

@@ -20,8 +20,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.channels.awaitClose
@@ -39,7 +39,7 @@ fun broadcastsFactory(
     callbackFlow<Intent> {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                runKatching { offer(intent) }
+                runCatching { offer(intent) }
             }
         }
         appContext.registerReceiver(
@@ -49,7 +49,7 @@ fun broadcastsFactory(
             }
         )
         awaitClose {
-            runKatching {
+            runCatching {
                 appContext.unregisterReceiver(broadcastReceiver)
             }
         }

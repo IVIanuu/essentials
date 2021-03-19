@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.backup
 
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.DataDir
-import com.ivianuu.essentials.result.Result
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
@@ -48,7 +48,7 @@ fun backupCreator(
     @Given navigator: Collector<NavigationAction>,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
-    runKatching {
+    runCatching {
         scope.awaitAsync(ioDispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =

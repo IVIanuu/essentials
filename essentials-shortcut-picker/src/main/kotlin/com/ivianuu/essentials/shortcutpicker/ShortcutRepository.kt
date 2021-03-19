@@ -20,10 +20,10 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.result.getOrNull
-import com.ivianuu.essentials.result.runKatching
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
@@ -38,7 +38,7 @@ class ShortcutRepository(
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
-                runKatching {
+                runCatching {
                     Shortcut(
                         intent = Intent().apply {
                             action = Intent.ACTION_CREATE_SHORTCUT
@@ -50,7 +50,7 @@ class ShortcutRepository(
                         name = resolveInfo.loadLabel(packageManager).toString(),
                         icon = resolveInfo.loadIcon(packageManager).toImageBitmap()
                     )
-                }.getOrNull()
+                }.getOrElse { null }
             }
             .filterNotNull()
             .sortedBy { it.name }
