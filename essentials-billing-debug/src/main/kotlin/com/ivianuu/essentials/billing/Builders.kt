@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing.debug
+package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.billing.Sku
 import org.json.JSONObject
 
 fun Purchase(

@@ -35,8 +35,8 @@ class AndroidAppForegroundStateTest {
     fun testAndroidAppForegroundState() = runCancellingBlockingTest {
         val activities = MutableStateFlow<ComponentActivity?>(null)
         val collector = androidAppForegroundState(
-            this,
-            activities
+            activities,
+            this
         ).testCollect(this)
 
         activities.emit(mockk())

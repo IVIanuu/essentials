@@ -14,7 +14,7 @@ import com.ivianuu.essentials.apps.ui.apppicker.*
 import com.ivianuu.essentials.apps.ui.checkableapps.*
 import com.ivianuu.essentials.backup.*
 import com.ivianuu.essentials.billing.*
-import com.ivianuu.essentials.billing.debug.*
+import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.boot.*
 import com.ivianuu.essentials.broadcast.*
 import com.ivianuu.essentials.clipboard.*

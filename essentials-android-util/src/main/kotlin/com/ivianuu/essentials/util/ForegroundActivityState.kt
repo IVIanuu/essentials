@@ -20,6 +20,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Eager
@@ -40,13 +41,11 @@ fun foregroundActivityState(
     application.registerActivityLifecycleCallbacks(
         object : Application.ActivityLifecycleCallbacks {
             override fun onActivityStarted(activity: Activity) {
-                if (activity.javaClass.name == "com.ivianuu.essentials.activity.EsActivity")
-                    offer(activity as ComponentActivity)
+                if (activity is EsActivity) offer(activity as ComponentActivity)
             }
 
             override fun onActivityStopped(activity: Activity) {
-                if (activity.javaClass.name == "com.ivianuu.essentials.activity.EsActivity")
-                    offer(null)
+                if (activity is EsActivity) offer(null)
             }
 
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

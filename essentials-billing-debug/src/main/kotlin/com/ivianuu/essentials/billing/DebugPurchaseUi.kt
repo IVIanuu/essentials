@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing.debug
+package com.ivianuu.essentials.billing
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,8 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.billing.DebugBillingPrefs
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.billing.debug.DebugPurchaseAction.Purchase
+import com.ivianuu.essentials.billing.DebugPurchaseAction.Purchase
+import com.ivianuu.essentials.billing.debug.R
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial

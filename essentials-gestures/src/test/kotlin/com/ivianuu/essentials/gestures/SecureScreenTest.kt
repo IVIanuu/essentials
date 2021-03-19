@@ -32,8 +32,8 @@ class SecureScreenTest {
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
         val collector = isOnSecureScreen(
             accessibilityEvents,
-            this,
-            NoopLogger
+            NoopLogger,
+            this
         ).testCollect(this)
 
         val idleEvent = AccessibilityEvent(AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,

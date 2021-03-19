@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.app.Application
+import androidx.activity.ComponentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.test.runCancellingBlockingTest
@@ -42,6 +43,7 @@ class ForegroundActivityStateTest {
             application,
             this
         ).testCollect(this)
+        advanceUntilIdle()
 
         val activity = mockk<EsActivity>()
         callbacks.onActivityStarted(activity)

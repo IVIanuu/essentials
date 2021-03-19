@@ -19,14 +19,12 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.android.prefs.PrefAction
 import com.ivianuu.essentials.android.prefs.dispatchUpdate
 import com.ivianuu.essentials.app.ScopeInitializer
-import com.ivianuu.essentials.billing.debug.DebugBillingPrefs
-import com.ivianuu.essentials.billing.debug.SkuDetails
+import com.ivianuu.essentials.billing.DebugBillingPrefs
+import com.ivianuu.essentials.billing.SkuDetails
 import com.ivianuu.essentials.sample.ui.DummySku
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.launch
 
 @Given
 fun debugPurchaseAppInitializer(
