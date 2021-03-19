@@ -85,8 +85,9 @@ class AndroidSettingStateModule<T : S, S>(
             .launchIn(this)
     }
 
+    @Scoped<AppGivenScope>
     @Given
-    val actions = EventFlow<AndroidSettingAction<T>>()
+    val actions get() = EventFlow<AndroidSettingAction<T>>()
 
     @Scoped<AppGivenScope>
     @Given
