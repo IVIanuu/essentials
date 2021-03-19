@@ -30,6 +30,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
     api(project(":essentials-android-data"))
     api(project(":essentials-ui"))
+    testImplementation(project(":essentials-android-test"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
