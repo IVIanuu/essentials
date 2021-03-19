@@ -93,7 +93,8 @@ class PrefModule<T : Any>(private val name: String) {
         when (action) {
             is PrefAction.Update -> {
                 scope.launch {
-                    dataStore.updateData { action.reducer(it) }
+                    val newValue = dataStore.updateData { action.reducer(it) }
+                    action.result?.complete(newValue)
                 }
             }
         }
