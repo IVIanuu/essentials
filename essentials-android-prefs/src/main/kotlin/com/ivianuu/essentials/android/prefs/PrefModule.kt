@@ -56,10 +56,10 @@ class PrefModule<T : Any>(private val name: String) {
                     override val defaultValue: T
                         get() = initialFactory()
                     private val adapter by lazy(adapterFactory)
-                    override fun readFrom(input: InputStream): T =
+                    override suspend fun readFrom(input: InputStream): T =
                         adapter.fromJson(String(input.readBytes()))!!
 
-                    override fun writeTo(t: T, output: OutputStream) {
+                    override suspend fun writeTo(t: T, output: OutputStream) {
                         output.write(adapter.toJson(t)!!.toByteArray())
                     }
                 },
