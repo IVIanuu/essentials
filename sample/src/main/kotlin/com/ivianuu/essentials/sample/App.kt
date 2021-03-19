@@ -74,5 +74,5 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 
 class App : Application(), AppGivenScopeOwner {
-    override val appGivenScope: AppGivenScope by lazy { createAppGivenScope() }
+    override val appGivenScope by lazy { createAppGivenScope() }
 }

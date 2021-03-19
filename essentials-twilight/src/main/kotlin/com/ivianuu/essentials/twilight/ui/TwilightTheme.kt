@@ -38,6 +38,8 @@ import com.ivianuu.essentials.ui.material.lerp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun TwilightTheme(
@@ -45,18 +47,15 @@ fun TwilightTheme(
     darkColors: Colors = darkColors(),
     blackColors: Colors = blackColors(),
     typography: Typography = Typography(),
-    twilightState: Flow<TwilightState>,
+    twilightState: StateFlow<TwilightState>,
     content: @Composable () -> Unit
 ) {
-    val targetColors by remember(twilightState) {
-        twilightState
-            .map {
-                if (it.isDark) {
-                    if (it.useBlack) blackColors else darkColors
-                } else lightColors
-            }
-            .distinctUntilChanged()
-    }.collectAsState(lightColors)
+    val currentState by twilightState.collectAsState()
+    val targetColors = remember(currentState) {
+        if (currentState.isDark) {
+            if (currentState.useBlack) blackColors else darkColors
+        } else lightColors
+    }
 
     var lastColors by remember { refOf(targetColors) }
 
