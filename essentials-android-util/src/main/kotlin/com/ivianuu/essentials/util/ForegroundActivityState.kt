@@ -16,54 +16,28 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Activity
-import android.app.Application
-import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.ivianuu.essentials.activity.EsActivity
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.ActivityGivenScope
 import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Eager
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.stateIn
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.MutableStateFlow
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Eager<AppGivenScope>
+@Scoped<AppGivenScope>
 @Given
-fun foregroundActivityState(
-    @Given application: Application,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
-): Flow<ForegroundActivity> = callbackFlow<ForegroundActivity> {
-    application.registerActivityLifecycleCallbacks(
-        object : Application.ActivityLifecycleCallbacks {
-            override fun onActivityStarted(activity: Activity) {
-                if (activity is EsActivity) offer(activity as ComponentActivity)
-            }
+val foregroundActivityState get() = MutableStateFlow<ForegroundActivity>(null)
 
-            override fun onActivityStopped(activity: Activity) {
-                if (activity is EsActivity) offer(null)
-            }
-
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-            }
-
-            override fun onActivityResumed(activity: Activity) {
-            }
-
-            override fun onActivityPaused(activity: Activity) {
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            }
-        }
-    )
-
-    awaitClose()
-}.stateIn(scope, SharingStarted.Eagerly, null)
+@Given
+fun foregroundActivityStateWorker(
+    @Given activity: ComponentActivity,
+    @Given state: MutableStateFlow<ForegroundActivity>
+): ScopeWorker<ActivityGivenScope> = worker@ {
+    if (activity !is EsActivity) return@worker
+    state.value = activity
+    runOnCancellation { state.value = null }
+}
