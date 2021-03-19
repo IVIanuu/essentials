@@ -31,6 +31,6 @@ fun debugPurchaseAppInitializer(
     @Given prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
 ): ScopeInitializer<AppGivenScope> = {
     prefActionCollector.dispatchUpdate {
-        copy(products = products + SkuDetails(DummySku))
+        copy(products = if (products.isEmpty()) listOf(SkuDetails(DummySku)) else products)
     }
 }
