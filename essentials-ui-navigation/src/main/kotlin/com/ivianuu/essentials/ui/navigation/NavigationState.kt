@@ -25,7 +25,9 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -64,11 +66,13 @@ fun navigationState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial NavigationState = NavigationState(),
     @Given actions: Flow<NavigationAction>,
-    @Given intentKeyHandler: IntentKeyHandler
+    @Given intentKeyHandler: IntentKeyHandler,
+    @Given logger: Logger
 ): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
     actions
         .filterIsInstance<Push<Any>>()
         .onEach { action ->
+            logger.d { "push $action" }
             if (!intentKeyHandler(action.key)) {
                 reduce {
                     copy(
@@ -85,6 +89,7 @@ fun navigationState(
     actions
         .filterIsInstance<ReplaceTop<Any>>()
         .onEach { action ->
+            logger.d { "replace top $action" }
             if (intentKeyHandler(action.key)) {
                 reduce {
                     copy(
@@ -109,13 +114,17 @@ fun navigationState(
 
     actions
         .filterIsInstance<Pop<Any>>()
-        .reduce { popKey(it.key, it.result) }
+        .reduce {
+            logger.d { "pop $it" }
+            popKey(it.key, it.result)
+        }
         .launchIn(this)
 
     actions
         .filterIsInstance<PopTop>()
         .onEach {
             val topKey = currentState().backStack.last()
+            logger.d { "pop top $topKey" }
             reduce {
                 @Suppress("UNCHECKED_CAST")
                 popKey(topKey as Key<Any>, null)
