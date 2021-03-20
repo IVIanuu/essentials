@@ -14,35 +14,29 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
-data class MultiChoiceListKey<T : Any>(
-    val items: List<Item<T>>,
-    val selectedItems: Set<T>,
+
+data class MultiChoiceListKey(
+    val items: List<String>,
+    val selectedItems: Set<String>,
     val title: String
-) : Key<Set<T>> {
-    data class Item<T>(val value: T, val title: String)
-}
+) : Key<Set<String>>
 
 @Given
-fun <T : Any> multiChoiceListKeyModule() = KeyModule<MultiChoiceListKey<T>>()
+val multiChoiceListKeyModule = KeyModule<MultiChoiceListKey>()
 
 @Given
 fun <T : Any> multiChoiceListUi(
-    @Given key: MultiChoiceListKey<T>,
+    @Given key: MultiChoiceListKey,
     @Given navigator: Collector<NavigationAction>
 ): KeyUi<T> = {
     DialogWrapper {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
         MultiChoiceListDialog(
-            items = remember {
-                key.items
-                    .map { it.value }
-            },
+            items = key.items,
             selectedItems = selectedItems,
             onSelectionsChanged = { selectedItems = it },
-            item = { item ->
-                Text(key.items.single { it.value == item }.title)
-            },
+            item = { Text(it) },
             title = { Text(key.title) },
             positiveButton = {
                 TextButton(
@@ -59,5 +53,4 @@ fun <T : Any> multiChoiceListUi(
 }
 
 @Given
-fun <T : Any> multiChoiceListUiOptionsFactory() =
-    DialogKeyUiOptionsFactory<MultiChoiceListKey<T>>()
+val multiChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<MultiChoiceListKey>()

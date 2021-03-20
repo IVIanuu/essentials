@@ -23,7 +23,6 @@ import kotlin.reflect.KClass
 interface Key<T>
 
 class KeyModule<K : Key<*>>(private val keyClass: KClass<K>) {
-
     @Given
     fun keyUi(
         @Given keyUiFactory: (@Given K, @Given KeyUiGivenScope) -> KeyUi<K>

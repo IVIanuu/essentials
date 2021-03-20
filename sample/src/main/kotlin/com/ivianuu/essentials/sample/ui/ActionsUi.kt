@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
 @Given
-val actionsHomeItem: HomeItem = HomeItem("Actions") { ActionsKey() }
+val actionsHomeItem = HomeItem("Actions") { ActionsKey() }
 
 class ActionsKey : Key<Nothing>
 

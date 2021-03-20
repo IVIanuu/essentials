@@ -17,22 +17,16 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runWithCleanup
-import com.ivianuu.essentials.notificationlistener.NotificationGivenScope
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.awaitCancellation
+import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.scope.GivenScope
 
 @Given
-fun notificationWorkLogger(@Given logger: Logger): ScopeWorker<NotificationGivenScope> = {
-    runWithCleanup(
-        block = {
-            logger.d { "hello from notifications" }
-            awaitCancellation()
-        },
-        cleanup = {
-            logger.d { "bye from notifications" }
-        }
-    )
+fun <@ForTypeKey S : GivenScope> scopeLogger(@Given logger: Logger): ScopeWorker<S> = {
+    logger.d { "${typeKeyOf<S>()} created" }
+    runOnCancellation { logger.d { "${typeKeyOf<S>()} disposed" } }
 }

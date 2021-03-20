@@ -170,11 +170,7 @@ fun prefsUi(
                         scope.launch {
                             val newItems = navigator.pushForResult(
                                 MultiChoiceListKey(
-                                    items = listOf(
-                                        MultiChoiceListKey.Item("A", "A"),
-                                        MultiChoiceListKey.Item("B", "B"),
-                                        MultiChoiceListKey.Item("C", "C")
-                                    ),
+                                    items = listOf("A", "B", "C"),
                                     selectedItems = prefs.multiChoice,
                                     title = "Multi select list"
                                 )
@@ -192,11 +188,7 @@ fun prefsUi(
                         scope.launch {
                             val newItem = navigator.pushForResult(
                                 SingleChoiceListKey(
-                                    items = listOf(
-                                        SingleChoiceListKey.Item("A", "A"),
-                                        SingleChoiceListKey.Item("B", "B"),
-                                        SingleChoiceListKey.Item("C", "C")
-                                    ),
+                                    items = listOf("A", "B", "C"),
                                     selectedItem = prefs.singleChoice,
                                     title = "Single item list"
                                 )

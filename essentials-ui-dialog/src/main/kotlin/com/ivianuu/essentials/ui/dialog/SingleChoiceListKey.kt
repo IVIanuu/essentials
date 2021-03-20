@@ -10,34 +10,29 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
-data class SingleChoiceListKey<T : Any>(
-    val items: List<Item<T>>,
-    val selectedItem: T,
+
+data class SingleChoiceListKey(
+    val items: List<String>,
+    val selectedItem: String,
     val title: String
-) : Key<T> {
-    data class Item<T : Any>(val value: T, val title: String)
-}
+) : Key<String>
 
 @Given
-fun <T : Any> singleChoiceListKeyModule() = KeyModule<SingleChoiceListKey<T>>()
+val singleChoiceListKeyModule = KeyModule<SingleChoiceListKey>()
 
 @Given
 fun <T : Any> singleChoiceListUi(
-    @Given key: SingleChoiceListKey<T>,
+    @Given key: SingleChoiceListKey,
     @Given navigator: Collector<NavigationAction>
 ): KeyUi<T> = {
     DialogWrapper {
         SingleChoiceListDialog(
-            items = remember {
-                key.items
-                    .map { it.value }
-            },
+            items = key.items,
             selectedItem = key.selectedItem,
             onSelectionChanged = { navigator(Pop(key, it)) },
-            item = { item ->
-                Text(key.items.single { it.value == item }.title)
-            },
+            item = { Text(it) },
             title = { Text(key.title) },
             negativeButton = {
                 TextButton(onClick = { navigator(Pop(key)) }) {
@@ -49,5 +44,4 @@ fun <T : Any> singleChoiceListUi(
 }
 
 @Given
-fun <T : Any> singleChoiceListUiOptionsFactory() =
-    DialogKeyUiOptionsFactory<SingleChoiceListKey<T>>()
+val singleChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<SingleChoiceListKey>()
