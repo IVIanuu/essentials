@@ -17,12 +17,9 @@
 package com.ivianuu.essentials.util
 
 import android.app.Application
-import androidx.activity.ComponentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test

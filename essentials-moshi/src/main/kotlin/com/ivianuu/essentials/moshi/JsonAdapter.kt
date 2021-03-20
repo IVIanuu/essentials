@@ -17,9 +17,8 @@
 package com.ivianuu.essentials.moshi
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import com.squareup.moshi.Moshi
 
 typealias JsonAdapter = Any

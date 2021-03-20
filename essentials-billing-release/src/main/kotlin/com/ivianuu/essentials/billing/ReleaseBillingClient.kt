@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.billing.release
+package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 
 @Scoped<AppGivenScope>
 @Given

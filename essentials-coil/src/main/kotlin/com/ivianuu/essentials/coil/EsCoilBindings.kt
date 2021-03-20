@@ -23,10 +23,9 @@ import coil.fetch.Fetcher
 import coil.intercept.Interceptor
 import coil.map.Mapper
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
 
 @Scoped<AppGivenScope>

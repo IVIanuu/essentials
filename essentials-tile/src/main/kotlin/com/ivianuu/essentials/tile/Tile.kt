@@ -18,15 +18,12 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.ChildGivenScopeModule0
 import com.ivianuu.injekt.scope.GivenScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>>

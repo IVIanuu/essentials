@@ -28,8 +28,8 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow

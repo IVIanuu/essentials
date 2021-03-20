@@ -48,7 +48,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 
 @HomeKeyBinding
 @Given

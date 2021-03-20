@@ -18,7 +18,6 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        jcenter()
         mavenCentral()
         maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
@@ -41,7 +40,6 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        jcenter()
         mavenCentral()
         maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")

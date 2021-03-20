@@ -28,7 +28,6 @@ import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first

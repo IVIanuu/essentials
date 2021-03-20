@@ -27,8 +27,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import org.json.JSONObject

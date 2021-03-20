@@ -51,8 +51,8 @@ import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

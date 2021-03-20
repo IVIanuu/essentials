@@ -24,8 +24,8 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

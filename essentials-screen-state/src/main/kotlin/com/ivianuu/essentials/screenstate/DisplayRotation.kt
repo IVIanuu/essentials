@@ -28,8 +28,8 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

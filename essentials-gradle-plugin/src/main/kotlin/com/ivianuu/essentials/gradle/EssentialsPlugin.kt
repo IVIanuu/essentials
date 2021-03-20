@@ -18,9 +18,9 @@ package com.ivianuu.essentials.gradle
 
 import com.github.benmanes.gradle.versions.VersionsPlugin
 import com.google.auto.service.AutoService
+import com.ivianuu.injekt.gradle.InjektPlugin
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import com.ivianuu.injekt.gradle.InjektPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact

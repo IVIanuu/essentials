@@ -40,7 +40,6 @@ import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CLOSED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.CONNECTED
 import com.ivianuu.essentials.billing.DebugBillingClient.ClientState.DISCONNECTED
-import com.ivianuu.essentials.billing.DebugPurchaseKey
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult

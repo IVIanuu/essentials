@@ -46,7 +46,6 @@ interface Permission {
 }
 
 class PermissionModule<T : P, @ForTypeKey P : Permission> {
-
     @Given
     fun permission(@Given permission: T): P = permission
 
@@ -54,8 +53,7 @@ class PermissionModule<T : P, @ForTypeKey P : Permission> {
     @Given
     fun permissionSetElement(
         @Given permission: T
-    ): Pair<TypeKey<Permission>, Permission> =
-        (typeKeyOf<P>() to permission) as Pair<TypeKey<Permission>, Permission>
+    ): Pair<TypeKey<Permission>, Permission> = typeKeyOf<P>() to permission
 
     @Suppress("UNCHECKED_CAST")
     @Given
@@ -68,9 +66,7 @@ class PermissionModule<T : P, @ForTypeKey P : Permission> {
     @Given
     fun permissionState(
         @Given state: PermissionState<P>
-    ): Pair<TypeKey<Permission>, PermissionState<Permission>> =
-        (typeKeyOf<P>() to state) as Pair<TypeKey<Permission>, PermissionState<Permission>>
-
+    ): Pair<TypeKey<Permission>, PermissionState<Permission>> = typeKeyOf<P>() to state
 }
 
 @Qualifier

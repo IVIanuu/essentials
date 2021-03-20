@@ -43,8 +43,8 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter

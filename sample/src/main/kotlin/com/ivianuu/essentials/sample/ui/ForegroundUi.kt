@@ -53,10 +53,9 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 

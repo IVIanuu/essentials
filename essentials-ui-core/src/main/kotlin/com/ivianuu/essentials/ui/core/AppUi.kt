@@ -17,7 +17,5 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 
 typealias AppUi = @Composable () -> Unit

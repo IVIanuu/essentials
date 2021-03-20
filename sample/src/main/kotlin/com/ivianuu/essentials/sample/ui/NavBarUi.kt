@@ -46,9 +46,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
