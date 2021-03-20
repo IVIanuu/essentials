@@ -60,8 +60,11 @@ fun tabsUi(): KeyUi<TabsKey> = {
                         title = { Text("Tabs") },
                         elevation = 0.dp
                     )
-                    TabRow(selectedTabIndex = selectedIndex) {
-                        TabItems.forEachIndexed { index, color ->
+                    TabRow(
+                        selectedTabIndex = selectedIndex,
+                        backgroundColor = MaterialTheme.colors.primary
+                    ) {
+                        TabItems.indices.forEach { index ->
                             Tab(
                                 selected = selectedIndex == index,
                                 onClick = { selectedIndex = index },
