@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.systemoverlay
+package com.ivianuu.essentials.accessibility
 
 import android.app.Service
 import android.view.WindowManager
