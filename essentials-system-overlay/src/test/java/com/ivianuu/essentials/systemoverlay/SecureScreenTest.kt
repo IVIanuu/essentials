@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.systemoverlay
 
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.systemoverlay.isOnSecureScreen
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.util.NoopLogger

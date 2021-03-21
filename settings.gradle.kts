@@ -52,6 +52,7 @@ include(
     ":essentials-shell",
     ":essentials-shortcut-picker",
     ":essentials-store",
+    ":essentials-system-overlay",
     ":essentials-test",
     ":essentials-tile",
     ":essentials-torch",

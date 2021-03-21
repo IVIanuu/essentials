@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.systemoverlay
 
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.systemoverlay.keyboardVisible
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly

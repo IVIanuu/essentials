@@ -107,7 +107,7 @@ fun permissionStateFactory(
         *permissions
             .map { permissionStates[it]!! }
             .toTypedArray()
-    ) { it.all { it } }
+    ) { states -> states.all { it } }
 }
 
 internal val permissionChanges = EventFlow<Unit>()

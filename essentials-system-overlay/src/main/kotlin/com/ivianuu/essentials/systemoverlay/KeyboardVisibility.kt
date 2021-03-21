@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.gestures
+package com.ivianuu.essentials.systemoverlay
 
 import android.view.inputmethod.InputMethodManager
 import com.github.michaelbull.result.getOrElse

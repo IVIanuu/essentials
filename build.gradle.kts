@@ -19,6 +19,7 @@ buildscript {
         mavenLocal()
         google()
         mavenCentral()
+        jcenter()
         maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://plugins.gradle.org/m2")
@@ -41,6 +42,7 @@ allprojects {
         mavenLocal()
         google()
         mavenCentral()
+        jcenter()
         maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
