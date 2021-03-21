@@ -46,7 +46,6 @@ data class TwilightState(
     val useBlack: Boolean = false,
 )
 
-@Eager<AppGivenScope>
 @Given
 fun twilightState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
@@ -54,7 +53,7 @@ fun twilightState(
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,
     @Given twilightPrefs: () -> Flow<TwilightPrefs>,
-): StateFlow<TwilightState> = flow {
+): @Eager<AppGivenScope> StateFlow<TwilightState> = flow {
     twilightPrefs()
         .flatMapLatest { (mode, useBlack) ->
             (when (mode) {

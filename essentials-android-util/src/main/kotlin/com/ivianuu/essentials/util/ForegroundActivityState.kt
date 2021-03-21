@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 typealias ForegroundActivity = ComponentActivity?
 
-@Scoped<AppGivenScope>
 @Given
-val foregroundActivityState get() = MutableStateFlow<ForegroundActivity>(null)
+val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundActivity>
+    get() = MutableStateFlow(null)
 
 @Given
 fun foregroundActivityStateWorker(

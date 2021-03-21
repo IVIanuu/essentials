@@ -29,16 +29,18 @@ import com.ivianuu.injekt.Given
 @Given
 object InputMethodActionId : ActionId("input_method")
 
-@ActionBinding<InputMethodActionId>
 @Given
-fun inputMethodAction(@Given resourceProvider: ResourceProvider) = Action(
+fun inputMethodAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<InputMethodActionId> Action = Action(
     id = "input_method",
     title = resourceProvider.string(R.string.es_action_input_method),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
 )
 
-@ActionExecutorBinding<InputMethodActionId>
 @Given
-fun inputMethodActionExecutor(@Given inputMethodManager: InputMethodManager): ActionExecutor = {
+fun inputMethodActionExecutor(
+    @Given inputMethodManager: InputMethodManager
+): @ActionExecutorBinding<InputMethodActionId> ActionExecutor = {
     inputMethodManager.showInputMethodPicker()
 }

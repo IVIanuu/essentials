@@ -52,6 +52,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -112,7 +113,6 @@ sealed class ShortcutPickerAction {
     data class PickShortcut(val shortcut: Shortcut) : ShortcutPickerAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun shortcutPickerState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -123,7 +123,7 @@ fun shortcutPickerState(
     @Given navigator: Collector<NavigationAction>,
     @Given shortcutRepository: ShortcutRepository,
     @Given toaster: Toaster
-) = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerState> = scope.state(initial) {
     reduceResource({ shortcutRepository.getAllShortcuts() }) { copy(shortcuts = it) }
     actions
         .filterIsInstance<PickShortcut>()
@@ -141,6 +141,6 @@ fun shortcutPickerState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val shortcutPickerActions get() = EventFlow<ShortcutPickerAction>()
+val shortcutPickerActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<ShortcutPickerAction>
+    get() = EventFlow()

@@ -30,17 +30,19 @@ import com.ivianuu.injekt.Given
 @Given
 object BackActionId : ActionId("back")
 
-@ActionBinding<BackActionId>
 @Given
-fun backAction(@Given resourceProvider: ResourceProvider) = Action(
+fun backAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<BackActionId> Action = Action(
     id = BackActionId,
     title = resourceProvider.string(R.string.es_action_back),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_action_back)
 )
 
-@ActionExecutorBinding<BackActionId>
 @Given
-fun backActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun backActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<BackActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
 }

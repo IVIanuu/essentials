@@ -23,14 +23,14 @@ import com.squareup.moshi.Moshi
 
 typealias JsonAdapter = Any
 
-@Scoped<AppGivenScope>
 @Given
-fun moshi(@Given jsonAdapters: Set<JsonAdapter> = emptySet()): Moshi = Moshi.Builder()
-    .apply {
-        jsonAdapters
-            .forEach { adapter -> add(adapter) }
-    }
-    .build()!!
+fun moshi(@Given jsonAdapters: Set<JsonAdapter> = emptySet()): @Scoped<AppGivenScope> Moshi =
+    Moshi.Builder()
+        .apply {
+            jsonAdapters
+                .forEach { adapter -> add(adapter) }
+        }
+        .build()!!
 
 @Given
 inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =

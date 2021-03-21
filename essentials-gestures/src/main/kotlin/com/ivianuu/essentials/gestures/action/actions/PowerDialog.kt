@@ -30,16 +30,19 @@ import com.ivianuu.injekt.Given
 @Given
 object PowerDialogActionId : ActionId("power_dialog")
 
-@ActionBinding<PowerDialogActionId>
-fun powerDialogAction(@Given resourceProvider: ResourceProvider) = Action(
+@Given
+fun powerDialogAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<PowerDialogActionId> Action = Action(
     id = PowerDialogActionId,
     title = resourceProvider.string(R.string.es_action_power_dialog),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
-@ActionExecutorBinding<PowerDialogActionId>
 @Given
-fun powerDialogActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun powerDialogActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<PowerDialogActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

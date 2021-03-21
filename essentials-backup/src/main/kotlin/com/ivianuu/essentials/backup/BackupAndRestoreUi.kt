@@ -41,6 +41,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -85,7 +86,6 @@ sealed class BackupAndRestoreAction {
     object RestoreData : BackupAndRestoreAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun backupAndRestoreState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -94,7 +94,7 @@ fun backupAndRestoreState(
     @Given backupCreator: BackupCreator,
     @Given backupApplier: BackupApplier,
     @Given toaster: Toaster
-): StateFlow<BackupAndRestoreState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreState> = scope.state(initial) {
     actions
         .filterIsInstance<BackupData>()
         .onEach {
@@ -117,6 +117,6 @@ fun backupAndRestoreState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val backupAndRestoreActions get() = EventFlow<BackupAndRestoreAction>()
+val backupAndRestoreActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<BackupAndRestoreAction>
+    get() = EventFlow()

@@ -40,13 +40,12 @@ import kotlinx.coroutines.flow.transformLatest
 
 typealias KeyboardVisible = Boolean
 
-@Scoped<AppGivenScope>
 @Given
 fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given keyboardHeightProvider: KeyboardHeightProvider,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
-): Flow<KeyboardVisible> = accessibilityEvents
+): @Scoped<AppGivenScope> Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&
                 it.className == "android.inputmethodservice.SoftInputWindow"

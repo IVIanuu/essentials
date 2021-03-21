@@ -46,6 +46,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
@@ -113,8 +114,6 @@ sealed class PermissionRequestAction {
     data class RequestPermission(val permission: UiPermission<*>) : PermissionRequestAction()
 }
 
-
-@Scoped<KeyUiGivenScope>
 @Given
 fun permissionRequestState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -126,7 +125,7 @@ fun permissionRequestState(
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
-): StateFlow<PermissionRequestState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<PermissionRequestState> = scope.state(initial) {
     state
         .filter {
             key.permissionsKeys
@@ -155,6 +154,6 @@ fun permissionRequestState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val permissionRequestActions get() = EventFlow<PermissionRequestAction>()
+val permissionRequestActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<PermissionRequestAction>
+    get() = EventFlow()

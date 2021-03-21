@@ -35,20 +35,20 @@ import kotlinx.coroutines.flow.onStart
 @Given
 object WifiActionId : ActionId("wifi")
 
-@ActionBinding<WifiActionId>
 @Given
 fun wifiAction(
     @Given resourceProvider: ResourceProvider,
     @Given wifiIcon: Flow<WifiIcon>,
-) = Action(
+): @ActionBinding<WifiActionId> Action = Action(
     id = WifiActionId,
     title = resourceProvider.string(R.string.es_action_wifi),
     icon = wifiIcon
 )
 
-@ActionExecutorBinding<WifiActionId>
 @Given
-fun wifiActionExecutor(@Given wifiManager: WifiManager): ActionExecutor = {
+fun wifiActionExecutor(
+    @Given wifiManager: WifiManager
+): @ActionExecutorBinding<WifiActionId> ActionExecutor = {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }

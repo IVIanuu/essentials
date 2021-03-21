@@ -42,13 +42,13 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
         }
     }
     companion object {
-        @Scoped<AppGivenScope>
         @Given
         fun androidLogger(
             @Given buildInfo: BuildInfo,
             @Given androidLoggerFactory: () -> @Factory AndroidLogger,
             @Given noopLoggerFactory: () -> @Factory NoopLogger
-        ): Logger = if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
+        ): @Scoped<AppGivenScope> Logger =
+            if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
     }
 }
 

@@ -30,21 +30,23 @@ import com.ivianuu.injekt.Given
 @Given
 object SkipNextActionId : ActionId("media_skip_next")
 
-@ActionBinding<SkipNextActionId>
 @Given
-fun skipNextMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+fun skipNextMediaAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<SkipNextActionId> Action = Action(
     id = SkipNextActionId,
     title = resourceProvider.string(R.string.es_action_media_skip_next),
     icon = singleActionIcon(R.drawable.es_ic_skip_next)
 )
 
-@ActionExecutorBinding<SkipNextActionId>
 @Given
-fun skipNextMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+fun skipNextMediaActionExecutor(
+    @Given mediaActionSender: MediaActionSender
+): @ActionExecutorBinding<SkipNextActionId> ActionExecutor = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
 }
 
-@ActionSettingsKeyBinding<SkipNextActionId>
 @Given
-inline val skipNextMediaActionSettingsKey: MediaActionSettingsKey
+inline val skipNextMediaActionSettingsKey:
+        @ActionSettingsKeyBinding<SkipNextActionId> MediaActionSettingsKey
     get() = MediaActionSettingsKey()

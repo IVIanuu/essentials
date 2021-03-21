@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 internal typealias NotificationServiceRef = MutableStateFlow<EsNotificationListenerService?>
 
-@Scoped<AppGivenScope>
 @Given
-fun notificationServiceRef(): NotificationServiceRef = MutableStateFlow(null)
+fun notificationServiceRef(): @Scoped<AppGivenScope> NotificationServiceRef =
+    MutableStateFlow(null)
 
 @Given
 fun notificationServiceRefWorker(

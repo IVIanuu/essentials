@@ -30,17 +30,19 @@ import com.ivianuu.injekt.Given
 @Given
 object CameraActionId : ActionId("camera")
 
-@ActionBinding<CameraActionId>
 @Given
-fun cameraAction(@Given resourceProvider: ResourceProvider) = Action(
+fun cameraAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<CameraActionId> Action = Action(
     id = CameraActionId,
     title = resourceProvider.string(R.string.es_action_camera),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),
     unlockScreen = true
 )
 
-@ActionExecutorBinding<CameraActionId>
 @Given
-fun cameraActionExecutor(@Given actionIntentSender: ActionIntentSender): ActionExecutor = {
+fun cameraActionExecutor(
+    @Given actionIntentSender: ActionIntentSender
+): @ActionExecutorBinding<CameraActionId> ActionExecutor = {
     actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
 }

@@ -76,20 +76,19 @@ class PrefModule<T : Any>(private val name: String) {
         }
     }
 
-    @Scoped<AppGivenScope>
     @Given
     fun stateFlow(
         @Given dataStore: DataStore<T>,
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given initial: @InitialOrFallback T
-    ): StateFlow<T> = dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
+    ): @Scoped<AppGivenScope> StateFlow<T> =
+        dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
 
-    @Scoped<AppGivenScope>
     @Given
     fun prefActionCollector(
         @Given dataStore: DataStore<T>,
         @Given scope: ScopeCoroutineScope<AppGivenScope>
-    ): Collector<PrefAction<T>> = { action ->
+    ): @Scoped<AppGivenScope> Collector<PrefAction<T>> = { action ->
         when (action) {
             is PrefAction.Update -> {
                 scope.launch {

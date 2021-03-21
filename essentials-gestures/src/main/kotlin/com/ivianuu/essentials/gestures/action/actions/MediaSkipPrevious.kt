@@ -30,21 +30,23 @@ import com.ivianuu.injekt.Given
 @Given
 object SkipPreviousActionId : ActionId("media_skip_previous")
 
-@ActionBinding<SkipPreviousActionId>
 @Given
-fun skipPreviousMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+fun skipPreviousMediaAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<SkipPreviousActionId> Action = Action(
     id = SkipPreviousActionId,
     title = resourceProvider.string(R.string.es_action_media_skip_previous),
     icon = singleActionIcon(R.drawable.es_ic_skip_previous)
 )
 
-@ActionExecutorBinding<SkipPreviousActionId>
 @Given
-fun skipPreviousMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+fun skipPreviousMediaActionExecutor(
+    @Given mediaActionSender: MediaActionSender
+): @ActionExecutorBinding<SkipPreviousActionId> ActionExecutor = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
 }
 
-@ActionSettingsKeyBinding<SkipPreviousActionId>
 @Given
-inline val skipPreviousMediaActionSettingsKey: MediaActionSettingsKey
+inline val skipPreviousMediaActionSettingsKey:
+        @ActionSettingsKeyBinding<SkipPreviousActionId> MediaActionSettingsKey
     get() = MediaActionSettingsKey()

@@ -30,18 +30,18 @@ import com.ivianuu.injekt.Given
 @Given
 object RecentAppsActionId : ActionId("recent_apps")
 
-@ActionBinding<RecentAppsActionId>
 @Given
 fun recentAppsAction(
     @Given resourceProvider: ResourceProvider
-) = Action(
+): @ActionBinding<RecentAppsActionId> Action = Action(
     id = RecentAppsActionId,
     title = resourceProvider.string(R.string.es_action_recent_apps),
     icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
-@ActionExecutorBinding<RecentAppsActionId>
 @Given
-fun recentAppsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun recentAppsActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<RecentAppsActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

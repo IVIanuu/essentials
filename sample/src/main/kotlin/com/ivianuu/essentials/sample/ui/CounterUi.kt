@@ -47,6 +47,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -103,14 +104,13 @@ sealed class CounterAction {
     object Dec : CounterAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun counterState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial CounterState = CounterState(),
     @Given actions: Flow<CounterAction>,
     @Given toaster: Toaster
-): StateFlow<CounterState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<CounterState> = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
         .reduce { copy(count = count.inc()) }
@@ -125,6 +125,6 @@ fun counterState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val counterActions get() = EventFlow<CounterAction>()
+val counterActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<CounterAction>
+    get() = EventFlow()

@@ -32,17 +32,19 @@ import com.ivianuu.injekt.Given
 @Given
 object NotificationsActionId : ActionId("notifications")
 
-@ActionBinding<NotificationsActionId>
 @Given
-fun notificationsAction(@Given resourceProvider: ResourceProvider) = Action(
+fun notificationsAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<NotificationsActionId> Action = Action(
     id = NotificationsActionId,
     title = resourceProvider.string(R.string.es_action_notifications),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(Icons.Default.Notifications)
 )
 
-@ActionExecutorBinding<NotificationsActionId>
 @Given
-fun notificationsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun notificationsActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<NotificationsActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

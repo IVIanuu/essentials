@@ -55,6 +55,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -180,7 +181,6 @@ sealed class CheckableAppsAction {
     data class UpdateAppCheckState(val app: CheckableApp, val value: Boolean) : CheckableAppsAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun checkableAppsState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -189,7 +189,7 @@ fun checkableAppsState(
     @Given appRepository: AppRepository,
     @Given checkedApps: Flow<CheckedApps>,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged
-): StateFlow<CheckableAppsState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<CheckableAppsState> = scope.state(initial) {
     checkedApps
         .reduce { copy(checkedApps = it) }
         .launchIn(this)
@@ -223,6 +223,6 @@ fun checkableAppsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val checkableAppsActions get() = EventFlow<CheckableAppsAction>()
+val checkableAppsActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<CheckableAppsAction>
+    get() = EventFlow()

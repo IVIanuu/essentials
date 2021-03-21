@@ -32,17 +32,19 @@ import com.ivianuu.injekt.Given
 @Given
 object SearchActionId : ActionId("search")
 
-@ActionBinding<SearchActionId>
 @Given
-fun searchAction(@Given resourceProvider: ResourceProvider) = Action(
+fun searchAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<SearchActionId> Action = Action(
     id = "search",
     title = resourceProvider.string(R.string.es_action_search),
     icon = singleActionIcon(Icons.Default.Search)
 )
 
-@ActionExecutorBinding<SearchActionId>
 @Given
-fun searchActionExecutor(@Given intentSender: ActionIntentSender): ActionExecutor = {
+fun searchActionExecutor(
+    @Given intentSender: ActionIntentSender
+): @ActionExecutorBinding<SearchActionId> ActionExecutor = {
     intentSender(
         Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(

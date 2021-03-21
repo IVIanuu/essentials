@@ -32,21 +32,23 @@ import com.ivianuu.injekt.Given
 @Given
 object PlayPauseActionId : ActionId("media_play_pause")
 
-@ActionBinding<PlayPauseActionId>
 @Given
-fun playPauseMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+fun playPauseMediaAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<PlayPauseActionId> Action = Action(
     id = PlayPauseActionId,
     title = resourceProvider.string(R.string.es_action_media_play_pause),
     icon = singleActionIcon(Icons.Default.PlayArrow)
 )
 
-@ActionExecutorBinding<PlayPauseActionId>
 @Given
-fun playPauseMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+fun playPauseMediaActionExecutor(
+    @Given mediaActionSender: MediaActionSender
+): @ActionExecutorBinding<PlayPauseActionId> ActionExecutor = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@ActionSettingsKeyBinding<PlayPauseActionId>
 @Given
-inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey
+inline val playPauseMediaActionSettingsKey:
+        @ActionSettingsKeyBinding<PlayPauseActionId> MediaActionSettingsKey
     get() = MediaActionSettingsKey()

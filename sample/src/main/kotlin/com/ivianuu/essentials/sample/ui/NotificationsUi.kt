@@ -81,6 +81,7 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -188,7 +189,6 @@ private fun NotificationPermissions(
     }
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun uiNotificationState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -198,7 +198,7 @@ fun uiNotificationState(
     @Given notifications: Flow<UiNotifications>,
     @Given permissionState: PermissionState<SampleNotificationsPermission>,
     @Given permissionRequester: PermissionRequester
-): StateFlow<NotificationsUiState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<NotificationsUiState> = scope.state(initial) {
     permissionState
         .reduce { copy(hasPermissions = it) }
         .launchIn(this)
@@ -221,9 +221,9 @@ fun uiNotificationState(
 
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val uiNotificationsActions get() = EventFlow<NotificationsUiAction>()
+val uiNotificationsActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<NotificationsUiAction>
+    get() = EventFlow()
 
 @PermissionBinding
 @Given

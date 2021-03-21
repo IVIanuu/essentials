@@ -58,7 +58,6 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     LandscapeRight(false)
 }
 
-@Scoped<AppGivenScope>
 @Given
 fun displayRotation(
     @Given configChanges: () -> Flow<ConfigChange>,
@@ -68,7 +67,7 @@ fun displayRotation(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: WindowManager
-): Flow<DisplayRotation> = flow {
+): @Scoped<AppGivenScope> Flow<DisplayRotation> = flow {
     screenState()
         .flatMapLatest { currentScreenState ->
             if (currentScreenState.isOn) {

@@ -29,17 +29,19 @@ import com.ivianuu.injekt.Given
 @Given
 object VolumeActionId : ActionId("volume")
 
-@ActionBinding<VolumeActionId>
 @Given
-fun volumeAction(@Given resourceProvider: ResourceProvider) = Action(
+fun volumeAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<VolumeActionId> Action = Action(
     id = VolumeActionId,
     title = resourceProvider.string(R.string.es_action_volume),
     icon = singleActionIcon(R.drawable.es_ic_volume_up)
 )
 
-@ActionExecutorBinding<VolumeActionId>
 @Given
-fun volumeActionExecutor(@Given audioManager: AudioManager): ActionExecutor = {
+fun volumeActionExecutor(
+    @Given audioManager: AudioManager
+): @ActionExecutorBinding<VolumeActionId> ActionExecutor = {
     audioManager.adjustStreamVolume(
         AudioManager.STREAM_MUSIC,
         AudioManager.ADJUST_SAME,

@@ -47,6 +47,7 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -131,7 +132,6 @@ sealed class AboutAction {
     object OpenPrivacyPolicy : AboutAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun aboutState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -140,7 +140,7 @@ fun aboutState(
     @Given buildInfo: BuildInfo,
     @Given navigator: Collector<NavigationAction>,
     @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
-): StateFlow<AboutState> = scope.state(initial.copy(privacyPolicyUrl = privacyPolicyUrl)) {
+): @Scoped<KeyUiGivenScope> StateFlow<AboutState> = scope.state(initial.copy(privacyPolicyUrl = privacyPolicyUrl)) {
     actions
         .filterIsInstance<Rate>()
         .onEach {
@@ -220,8 +220,8 @@ fun aboutState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val aboutActions get() = EventFlow<AboutAction>()
+val aboutActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<AboutAction>
+    get() = EventFlow()
 
 typealias PrivacyPolicyUrl = String

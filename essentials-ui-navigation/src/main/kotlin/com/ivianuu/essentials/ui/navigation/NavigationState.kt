@@ -60,7 +60,6 @@ sealed class NavigationAction {
     ) : NavigationAction()
 }
 
-@Scoped<AppGivenScope>
 @Given
 fun navigationState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
@@ -68,7 +67,8 @@ fun navigationState(
     @Given actions: Flow<NavigationAction>,
     @Given intentKeyHandler: IntentKeyHandler,
     @Given logger: Logger
-): StateFlow<NavigationState> = scope.state(InternalNavigationState(initial.backStack, emptyMap())) {
+): @Scoped<AppGivenScope> StateFlow<NavigationState> = scope.state(
+    InternalNavigationState(initial.backStack, emptyMap())) {
     actions
         .filterIsInstance<Push<Any>>()
         .onEach { action ->

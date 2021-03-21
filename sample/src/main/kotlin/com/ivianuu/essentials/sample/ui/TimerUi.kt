@@ -61,12 +61,11 @@ fun timerUi(@Given stateFlow: StateFlow<TimerState>): KeyUi<TimerKey> = {
 
 data class TimerState(val value: Int = 0)
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun timerState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial TimerState = TimerState()
-): StateFlow<TimerState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<TimerState> = scope.state(initial) {
     while (coroutineContext.isActive) {
         reduce { copy(value = value.inc()) }
         delay(1000)

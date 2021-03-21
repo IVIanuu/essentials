@@ -33,9 +33,10 @@ import com.ivianuu.injekt.android.AppContext
 @Given
 object HomeActionId : ActionId("home")
 
-@ActionBinding<HomeActionId>
 @Given
-fun homeAction(@Given resourceProvider: ResourceProvider) = Action(
+fun homeAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<HomeActionId> Action = Action(
     id = HomeActionId,
     title = resourceProvider.string(R.string.es_action_home),
     permissions = if (needsHomeIntentWorkaround) emptyList()
@@ -43,13 +44,12 @@ fun homeAction(@Given resourceProvider: ResourceProvider) = Action(
     icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
-@ActionExecutorBinding<HomeActionId>
 @Given
 fun homeActionExecutor(
     @Given actionIntentSender: ActionIntentSender,
     @Given appContext: AppContext,
     @Given globalActionExecutor: GlobalActionExecutor,
-): ActionExecutor = {
+): @ActionExecutorBinding<HomeActionId> ActionExecutor = {
     if (!needsHomeIntentWorkaround) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {

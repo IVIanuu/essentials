@@ -27,6 +27,7 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -75,7 +76,6 @@ sealed class NavBarUnsupportedAction {
     object Close : NavBarUnsupportedAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun navBarUnsupportedState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -83,7 +83,7 @@ fun navBarUnsupportedState(
     @Given actions: Flow<NavBarUnsupportedAction>,
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Collector<NavigationAction>
-): StateFlow<NavBarUnsupportedState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<NavBarUnsupportedState> = scope.state(initial) {
     actions
         .filterIsInstance<OpenMoreInfos>()
         .onEach {
@@ -103,6 +103,6 @@ fun navBarUnsupportedState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val navBarUnsupportedActions get() = EventFlow<NavBarUnsupportedAction>()
+val navBarUnsupportedActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<NavBarUnsupportedAction>
+    get() = EventFlow()

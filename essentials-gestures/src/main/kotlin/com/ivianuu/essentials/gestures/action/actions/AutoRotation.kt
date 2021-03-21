@@ -42,12 +42,11 @@ import kotlinx.coroutines.flow.map
 @Given
 object AutoRotationActionId : ActionId("auto_rotation")
 
-@ActionBinding<AutoRotationActionId>
 @Given
 fun autoRotationAction(
     @Given autoRotationIcon: Flow<AutoRotationIcon>,
     @Given resourceProvider: ResourceProvider,
-) = Action(
+): @ActionBinding<AutoRotationActionId> Action = Action(
     id = AutoRotationActionId,
     title = resourceProvider.string(R.string.es_action_auto_rotation),
     permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
@@ -55,11 +54,10 @@ fun autoRotationAction(
     icon = autoRotationIcon
 )
 
-@ActionExecutorBinding<AutoRotationActionId>
 @Given
 fun autoRotationActionExecutor(
     @Given rotationSettingActionCollector: Collector<AndroidSettingAction<AutoRotation>>,
-): ActionExecutor = {
+): @ActionExecutorBinding<AutoRotationActionId> ActionExecutor = {
     rotationSettingActionCollector.update { if (this != 1) 1 else 0 }
 }
 

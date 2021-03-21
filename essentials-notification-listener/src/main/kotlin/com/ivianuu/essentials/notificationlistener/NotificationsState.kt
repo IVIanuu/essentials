@@ -29,6 +29,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -48,13 +50,12 @@ sealed class NotificationsAction {
     object DismissAllNotifications : NotificationsAction()
 }
 
-@Scoped<AppGivenScope>
 @Given
 fun notificationState(
     @Given actions: Flow<NotificationsAction>,
     @Given serviceRef: NotificationServiceRef,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
-) = scope.state(NotificationsState()) {
+): @Scoped<AppGivenScope> StateFlow<NotificationsState> = scope.state(NotificationsState()) {
     serviceRef
         .reduce { copy(isConnected = it != null) }
         .launchIn(this)
@@ -92,6 +93,6 @@ fun notificationState(
         .launchIn(this)
 }
 
-@Scoped<AppGivenScope>
 @Given
-val notificationsActions get() = EventFlow<NotificationsAction>()
+val notificationsActions: @Scoped<AppGivenScope> MutableSharedFlow<NotificationsAction>
+    get() = EventFlow()

@@ -32,19 +32,19 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Given
 object MenuActionId : ActionId("menu")
 
-@ActionBinding<MenuActionId>
 @Given
 fun menuAction(
     @Given resourceProvider: ResourceProvider
-) = Action(
+): @ActionBinding<MenuActionId> Action = Action(
     id = "menu",
     title = resourceProvider.string(R.string.es_action_menu),
     icon = singleActionIcon(Icons.Default.MoreVert),
     permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
-@ActionExecutorBinding<MenuActionId>
 @Given
-fun menuActionExecutor(@Given actionRootCommandRunner: ActionRootCommandRunner): ActionExecutor = {
+fun menuActionExecutor(
+    @Given actionRootCommandRunner: ActionRootCommandRunner
+): @ActionExecutorBinding<MenuActionId> ActionExecutor = {
     actionRootCommandRunner("input keyevent 82")
 }

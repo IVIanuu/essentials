@@ -21,13 +21,12 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
     val isForeground: Boolean get() = infos.any { it.state is ForegroundState.Foreground }
 }
 
-@Scoped<AppGivenScope>
 @Given
 fun internalForegroundState(
     @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
     @Given logger: Logger,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
-): Flow<InternalForegroundState> = combine(
+): @Scoped<AppGivenScope> Flow<InternalForegroundState> = combine(
     foregroundStates
         .mapIndexed { index, foregroundState ->
             foregroundState

@@ -38,23 +38,21 @@ import kotlinx.coroutines.flow.map
 @Given
 object TorchActionId : ActionId("torch")
 
-@ActionBinding<TorchActionId>
 @Given
 fun torchAction(
     @Given resourceProvider: ResourceProvider,
     @Given torchIcon: Flow<TorchIcon>,
-) = Action(
+): @ActionBinding<TorchActionId> Action = Action(
     id = TorchActionId,
     title = resourceProvider.string(R.string.es_action_torch),
     icon = torchIcon
 )
 
-@ActionExecutorBinding<TorchActionId>
 @Given
 fun torchActionExecutor(
     @Given torchState: Flow<TorchState>,
     @Given dispatchTorchAction: Collector<TorchAction>,
-): ActionExecutor = {
+): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
     dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
 }
 

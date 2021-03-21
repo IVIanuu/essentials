@@ -55,6 +55,7 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -151,7 +152,6 @@ sealed class WriteSecureSettingsPcInstructionsAction {
     object OpenXdaTutorial : WriteSecureSettingsPcInstructionsAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun writeSecureSettingsPcInstructionsState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -161,7 +161,7 @@ fun writeSecureSettingsPcInstructionsState(
     @Given clipboard: Collector<ClipboardAction>,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given permissionStateFactory: PermissionStateFactory
-): StateFlow<WriteSecureSettingsPcInstructionsState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsState> = scope.state(initial) {
     launch {
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
@@ -212,6 +212,7 @@ fun writeSecureSettingsPcInstructionsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val writeSecureSettingsPcInstructionsActions get() = EventFlow<WriteSecureSettingsPcInstructionsAction>()
+val writeSecureSettingsPcInstructionsActions:
+        @Scoped<KeyUiGivenScope> MutableSharedFlow<WriteSecureSettingsPcInstructionsAction>
+    get() = EventFlow()

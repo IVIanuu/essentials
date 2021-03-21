@@ -36,21 +36,19 @@ import kotlinx.coroutines.flow.onStart
 @Given
 object BluetoothActionId : ActionId("bluetooth")
 
-@ActionBinding<BluetoothActionId>
 @Given
 fun bluetoothAction(
     @Given bluetoothIcon: Flow<BluetoothIcon>,
     @Given resourceProvider: ResourceProvider,
-) = Action(
+): @ActionBinding<BluetoothActionId> Action = Action(
     id = BluetoothActionId,
     title = resourceProvider.string(R.string.es_action_bluetooth),
     icon = bluetoothIcon,
     enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-@ActionExecutorBinding<BluetoothActionId>
 @Given
-fun bluetoothActionExecutor(): ActionExecutor = {
+fun bluetoothActionExecutor(): @ActionExecutorBinding<BluetoothActionId> ActionExecutor = {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
             it.disable()

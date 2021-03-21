@@ -132,9 +132,9 @@ fun foregroundUi(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Scoped<AppGivenScope>
 @Given
-fun foregroundScreenState(): ForegroundScreenState = MutableStateFlow(Background)
+fun foregroundScreenState(): @Scoped<AppGivenScope> ForegroundScreenState =
+    MutableStateFlow(Background)
 
 typealias ForegroundNotificationFactory = (Int, Color) -> Notification
 

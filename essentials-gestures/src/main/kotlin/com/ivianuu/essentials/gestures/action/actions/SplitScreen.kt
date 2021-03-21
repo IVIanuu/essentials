@@ -30,17 +30,19 @@ import com.ivianuu.injekt.Given
 @Given
 object SplitScreenActionId : ActionId("split_screen")
 
-@ActionBinding<SplitScreenActionId>
 @Given
-fun splitScreenAction(@Given resourceProvider: ResourceProvider) = Action(
+fun splitScreenAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<SplitScreenActionId> Action = Action(
     id = SplitScreenActionId,
     title = resourceProvider.string(R.string.es_action_split_screen),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-@ActionExecutorBinding<SplitScreenActionId>
 @Given
-fun splitScreenActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun splitScreenActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<SplitScreenActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

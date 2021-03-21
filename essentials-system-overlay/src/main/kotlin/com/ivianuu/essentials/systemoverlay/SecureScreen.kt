@@ -36,13 +36,12 @@ import kotlinx.coroutines.flow.stateIn
 
 typealias IsOnSecureScreen = Boolean
 
-@Scoped<AppGivenScope>
 @Given
 fun isOnSecureScreen(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given logger: Logger,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
-): Flow<IsOnSecureScreen> = accessibilityEvents
+): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
     .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
     .map { it.packageName to it.className }
     .filter { it.second != "android.inputmethodservice.SoftInputWindow" }

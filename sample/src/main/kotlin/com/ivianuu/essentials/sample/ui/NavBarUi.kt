@@ -121,9 +121,8 @@ fun navBarUi(
     }
 }
 
-@Scoped<AppGivenScope>
 @Given
-fun sampleNavBarConfig(): MutableStateFlow<NavBarConfig> =
+fun sampleNavBarConfig(): @Scoped<AppGivenScope> MutableStateFlow<NavBarConfig> =
     MutableStateFlow(NavBarConfig(hidden = false))
 
 @PermissionBinding

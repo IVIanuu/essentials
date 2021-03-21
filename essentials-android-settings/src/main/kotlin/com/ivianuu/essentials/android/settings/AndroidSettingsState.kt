@@ -48,7 +48,6 @@ class AndroidSettingStateModule<T : S, S>(
     private val type: AndroidSettingsType
 ) {
     @Suppress("UNCHECKED_CAST")
-    @Scoped<AppGivenScope>
     @Given
     fun settingsState(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
@@ -58,7 +57,7 @@ class AndroidSettingStateModule<T : S, S>(
         @Given initial: @Initial T,
         @Given actions: Flow<AndroidSettingAction<T>>,
         @Given ready: AndroidSettingsStateReady<T>
-    ): StateFlow<T> = scope.childCoroutineScope(dispatcher).state(
+    ): @Scoped<AppGivenScope> StateFlow<T> = scope.childCoroutineScope(dispatcher).state(
         initial = initial,
         started = SharingStarted.Eagerly
     ) {
@@ -85,18 +84,17 @@ class AndroidSettingStateModule<T : S, S>(
             .launchIn(this)
     }
 
-    @Scoped<AppGivenScope>
     @Given
-    val actions get() = EventFlow<AndroidSettingAction<T>>()
+    val actions: @Scoped<AppGivenScope> MutableSharedFlow<AndroidSettingAction<T>>
+        get() = EventFlow()
 
-    @Scoped<AppGivenScope>
     @Given
     fun collector(
         @Given actions: MutableSharedFlow<AndroidSettingAction<T>>,
         @Suppress("UNUSED_PARAMETER") @Given state: StateFlow<T>, // inject to start state
         @Given ready: AndroidSettingsStateReady<T>,
         @Given scope: ScopeCoroutineScope<AppGivenScope>
-    ): Collector<AndroidSettingAction<T>> = { action ->
+    ): @Scoped<AppGivenScope> Collector<AndroidSettingAction<T>> = { action ->
         scope.launch {
             ready.first()
             actions.tryEmit(action)
@@ -127,7 +125,6 @@ fun <T : Any> Collector<AndroidSettingAction<T>>.dispatchUpdate(reducer: T.() ->
 
 internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
 
-@Scoped<AppGivenScope>
 @Given
-fun <T> androidSettingsStateReady(): AndroidSettingsStateReady<T> =
+fun <T> androidSettingsStateReady(): @Scoped<AppGivenScope> AndroidSettingsStateReady<T> =
     MutableStateFlow(false)

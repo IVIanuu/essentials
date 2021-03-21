@@ -28,13 +28,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
-@Scoped<AppGivenScope>
 @Given
 fun torchState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial TorchState = TorchState(),
     @Given actions: Flow<TorchAction>
-): StateFlow<TorchState> = actions
+): @Scoped<AppGivenScope> StateFlow<TorchState> = actions
     .filterIsInstance<UpdateTorchEnabled>()
     .state(scope, initial) { copy(torchEnabled = it.value) }
 

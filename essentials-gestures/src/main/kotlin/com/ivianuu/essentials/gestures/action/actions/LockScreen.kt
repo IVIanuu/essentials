@@ -35,12 +35,11 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Given
 object LockScreenActionId : ActionId("lock_screen")
 
-@ActionBinding<LockScreenActionId>
 @Given
 fun lockScreenAction(
     @Given resourceProvider: ResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
-) = Action(
+): @ActionBinding<LockScreenActionId> Action = Action(
     id = LockScreenActionId,
     title = resourceProvider.string(R.string.es_action_lock_screen),
     icon = singleActionIcon(R.drawable.es_ic_power_settings),
@@ -51,13 +50,12 @@ fun lockScreenAction(
 )
 
 @SuppressLint("InlinedApi")
-@ActionExecutorBinding<LockScreenActionId>
 @Given
 fun lockScreenActionExecutor(
     @Given actionRootCommandRunner: ActionRootCommandRunner,
     @Given globalActionExecutor: GlobalActionExecutor,
     @Given systemBuildInfo: SystemBuildInfo,
-): ActionExecutor = {
+): @ActionExecutorBinding<LockScreenActionId> ActionExecutor = {
     if (systemBuildInfo.sdk >= 28) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
     } else {

@@ -30,21 +30,23 @@ import com.ivianuu.injekt.Given
 @Given
 object StopActionId : ActionId("media_stop")
 
-@ActionBinding<StopActionId>
 @Given
-fun stopMediaAction(@Given resourceProvider: ResourceProvider) = Action(
+fun stopMediaAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<StopActionId> Action = Action(
     id = StopActionId,
     title = resourceProvider.string(R.string.es_action_media_stop),
     icon = singleActionIcon(R.drawable.es_ic_stop)
 )
 
-@ActionExecutorBinding<StopActionId>
 @Given
-fun stopMediaActionExecutor(@Given mediaActionSender: MediaActionSender): ActionExecutor = {
+fun stopMediaActionExecutor(
+    @Given mediaActionSender: MediaActionSender
+): @ActionExecutorBinding<StopActionId> ActionExecutor = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
-@ActionSettingsKeyBinding<StopActionId>
 @Given
-inline val stopMediaActionSettingsKey: MediaActionSettingsKey
+inline val stopMediaActionSettingsKey:
+        @ActionSettingsKeyBinding<StopActionId> MediaActionSettingsKey
     get() = MediaActionSettingsKey()

@@ -37,14 +37,13 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
-@Scoped<AppGivenScope>
 @Given
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given logger: Logger,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given screenStateProvider: CurrentScreenStateProvider
-): Flow<ScreenState> = merge(
+): @Scoped<AppGivenScope> Flow<ScreenState> = merge(
     broadcastsFactory(Intent.ACTION_SCREEN_OFF),
     broadcastsFactory(Intent.ACTION_SCREEN_ON),
     broadcastsFactory(Intent.ACTION_USER_PRESENT)

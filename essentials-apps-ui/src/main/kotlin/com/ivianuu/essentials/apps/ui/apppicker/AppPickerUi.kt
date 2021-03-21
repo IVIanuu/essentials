@@ -56,6 +56,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -131,7 +132,6 @@ sealed class AppPickerAction {
     data class PickApp(val app: AppInfo) : AppPickerAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun appPickerState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -140,7 +140,7 @@ fun appPickerState(
     @Given appRepository: AppRepository,
     @Given key: AppPickerKey,
     @Given navigator: Collector<NavigationAction>,
-): StateFlow<AppPickerState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<AppPickerState> = scope.state(initial) {
     reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
     actions
         .filterIsInstance<FilterApps>()
@@ -152,6 +152,6 @@ fun appPickerState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val appPickerActions get() = EventFlow<AppPickerAction>()
+val appPickerActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<AppPickerAction>
+    get() = EventFlow()

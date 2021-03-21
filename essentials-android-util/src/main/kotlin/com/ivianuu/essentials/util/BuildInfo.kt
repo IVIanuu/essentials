@@ -29,12 +29,11 @@ data class BuildInfo(
     val versionCode: Int,
 )
 
-@Scoped<AppGivenScope>
 @Given
 fun androidBuildInfo(
     @Given appContext: AppContext,
     @Given packageManager: PackageManager
-): BuildInfo {
+): @Scoped<AppGivenScope> BuildInfo {
     val appInfo = appContext.applicationInfo
     val packageInfo = packageManager
         .getPackageInfo(appInfo.packageName, 0)

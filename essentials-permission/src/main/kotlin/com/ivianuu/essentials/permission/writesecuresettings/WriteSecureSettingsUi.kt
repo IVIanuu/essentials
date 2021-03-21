@@ -49,6 +49,7 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -101,7 +102,6 @@ sealed class WriteSecureSettingsAction {
     object OpenPcInstructions : WriteSecureSettingsAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun writeSecureSettingsState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -113,7 +113,7 @@ fun writeSecureSettingsState(
     @Given permissionStateFactory: PermissionStateFactory,
     @Given shell: Shell,
     @Given toaster: Toaster
-): StateFlow<WriteSecureSettingsState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsState> = scope.state(initial) {
     launch {
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
@@ -142,6 +142,6 @@ fun writeSecureSettingsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val writeSecureSettingsActions get() = EventFlow<WriteSecureSettingsAction>()
+val writeSecureSettingsActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<WriteSecureSettingsAction>
+    get() = EventFlow()

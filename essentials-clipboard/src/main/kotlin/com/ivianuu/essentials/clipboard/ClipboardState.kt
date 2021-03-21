@@ -42,14 +42,13 @@ sealed class ClipboardAction {
     data class UpdateClipboard(val value: String) : ClipboardAction()
 }
 
-@Eager<AppGivenScope>
 @Given
 fun clipboardState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given initial: @Initial ClipboardState = ClipboardState(),
     @Given actions: Flow<ClipboardAction>,
     @Given clipboardManager: ClipboardManager,
-): StateFlow<ClipboardState> = scope.state(initial, SharingStarted.Eagerly) {
+): @Eager<AppGivenScope> StateFlow<ClipboardState> = scope.state(initial, SharingStarted.Eagerly) {
     clipboardManager.clipboardChanges()
         .map { clipboardManager.primaryClip?.getItemAt(0)?.text?.toString() }
         .reduce { copy(text = it) }

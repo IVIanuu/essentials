@@ -63,6 +63,7 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -126,7 +127,6 @@ sealed class ActionPickerAction {
     data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun actionPickerState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -137,7 +137,7 @@ fun actionPickerState(
     @Given navigator: Collector<NavigationAction>,
     @Given permissionRequester: PermissionRequester,
     @Given resourceProvider: ResourceProvider
-): StateFlow<ActionPickerState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerState> = scope.state(initial) {
     reduceResource({ getActionPickerItems(actionRepository, key, resourceProvider) }) {
         copy(items = it)
     }
@@ -163,9 +163,9 @@ fun actionPickerState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val actionPickerActions get() = EventFlow<ActionPickerAction>()
+val actionPickerActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<ActionPickerAction>
+    get() = EventFlow()
 
 private suspend fun getActionPickerItems(
     actionRepository: ActionRepository,

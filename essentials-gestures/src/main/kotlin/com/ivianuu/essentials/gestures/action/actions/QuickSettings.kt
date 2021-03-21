@@ -32,17 +32,19 @@ import com.ivianuu.injekt.Given
 @Given
 object QuickSettingsActionId : ActionId("quick_settings")
 
-@ActionBinding<QuickSettingsActionId>
 @Given
-fun quickSettingsAction(@Given resourceProvider: ResourceProvider) = Action(
+fun quickSettingsAction(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<QuickSettingsActionId> Action = Action(
     id = QuickSettingsActionId,
     title = resourceProvider.string(R.string.es_action_quick_settings),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(Icons.Default.Settings)
 )
 
-@ActionExecutorBinding<QuickSettingsActionId>
 @Given
-fun quickSettingsActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun quickSettingsActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<QuickSettingsActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
 }

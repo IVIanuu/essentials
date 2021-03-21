@@ -30,6 +30,7 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -129,6 +130,6 @@ class TileStateComponent(
     val tileStores = tileStateElements.toMap()
 }
 
-@Scoped<TileGivenScope>
 @Given
-val tileActions get() = EventFlow<TileAction>()
+val tileActions: @Scoped<TileGivenScope> MutableSharedFlow<TileAction>
+    get() = EventFlow()

@@ -31,11 +31,10 @@ import kotlinx.coroutines.delay
 @Given
 object LastAppActionId : ActionId("last_app")
 
-@ActionBinding<LastAppActionId>
 @Given
 fun lastAppAction(
     @Given resourceProvider: ResourceProvider,
-) = Action(
+): @ActionBinding<LastAppActionId> Action = Action(
     id = "last_app",
     title = resourceProvider.string(R.string.es_action_last_app),
     permissions = accessibilityActionPermissions,
@@ -43,9 +42,10 @@ fun lastAppAction(
     icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
-@ActionExecutorBinding<LastAppActionId>
 @Given
-fun lastAppActionExecutor(@Given globalActionExecutor: GlobalActionExecutor): ActionExecutor = {
+fun lastAppActionExecutor(
+    @Given globalActionExecutor: GlobalActionExecutor
+): @ActionExecutorBinding<LastAppActionId> ActionExecutor = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
     delay(250)
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)

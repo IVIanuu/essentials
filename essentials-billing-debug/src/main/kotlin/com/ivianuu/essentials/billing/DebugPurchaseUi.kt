@@ -54,6 +54,7 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -124,7 +125,6 @@ sealed class DebugPurchaseAction {
     object Purchase : DebugPurchaseAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun debugPurchaseState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -133,7 +133,7 @@ fun debugPurchaseState(
     @Given key: DebugPurchaseKey,
     @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<DebugBillingPrefs>
-): StateFlow<DebugPurchaseState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<DebugPurchaseState> = scope.state(initial) {
     reduceResource(block = {
         prefs.first().products.firstOrNull {
             it.type == key.sku.type.value &&
@@ -153,7 +153,7 @@ fun debugPurchaseState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val debugPurchaseActions get() = EventFlow<DebugPurchaseAction>()
+val debugPurchaseActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<DebugPurchaseAction>
+    get() = EventFlow()
 

@@ -57,6 +57,7 @@ import com.ivianuu.injekt.scope.Scoped
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -138,7 +139,6 @@ sealed class MediaActionSettingsAction {
     object UpdateMediaApp : MediaActionSettingsAction()
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
 fun mediaActionSettingsState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
@@ -149,7 +149,7 @@ fun mediaActionSettingsState(
     @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<MediaActionPrefs>,
     @Given prefUpdater: Collector<PrefAction<MediaActionPrefs>>,
-): StateFlow<MediaActionSettingsState> = scope.state(initial) {
+): @Scoped<KeyUiGivenScope> StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
@@ -172,6 +172,7 @@ fun mediaActionSettingsState(
         .launchIn(this)
 }
 
-@Scoped<KeyUiGivenScope>
 @Given
-val mediaActionSettingsActions get() = EventFlow<MediaActionSettingsAction>()
+val mediaActionSettingsActions:
+        @Scoped<KeyUiGivenScope> MutableSharedFlow<MediaActionSettingsAction>
+    get() = EventFlow()

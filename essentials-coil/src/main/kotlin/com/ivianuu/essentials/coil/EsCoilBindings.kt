@@ -28,7 +28,6 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
 
-@Scoped<AppGivenScope>
 @Given
 fun imageLoader(
     @Given appContext: AppContext,
@@ -36,7 +35,7 @@ fun imageLoader(
     @Given fetchers: Set<FetcherPair<Any>> = emptySet(),
     @Given interceptors: Set<Interceptor> = emptySet(),
     @Given mappers: Set<MapperPair<Any>> = emptySet(),
-): ImageLoader = ImageLoader.Builder(appContext)
+): @Scoped<AppGivenScope> ImageLoader = ImageLoader.Builder(appContext)
     .componentRegistry {
         decoders.forEach { add(it) }
         interceptors.forEach { add(it) }

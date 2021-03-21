@@ -31,12 +31,10 @@ import com.ivianuu.injekt.Given
 @Given
 object AssistantActionId : ActionId("assistant")
 
-@ActionBinding<AssistantActionId>
 @Given
 fun assistantAction(
-    @Given resourceProvider: ResourceProvider,
-    @Given searchManager: SearchManager,
-) = Action(
+    @Given resourceProvider: ResourceProvider
+): @ActionBinding<AssistantActionId> Action = Action(
     id = AssistantActionId,
     title = resourceProvider.string(R.string.es_action_assistant),
     unlockScreen = true,
@@ -44,9 +42,10 @@ fun assistantAction(
 )
 
 @SuppressLint("DiscouragedPrivateApi")
-@ActionExecutorBinding<AssistantActionId>
 @Given
-fun assistantActionExecutor(@Given searchManager: SearchManager): ActionExecutor = {
+fun assistantActionExecutor(
+    @Given searchManager: SearchManager
+): @ActionExecutorBinding<AssistantActionId> ActionExecutor = {
     val launchAssist = searchManager.javaClass
         .getDeclaredMethod("launchAssist", Bundle::class.java)
     launchAssist.invoke(searchManager, Bundle())

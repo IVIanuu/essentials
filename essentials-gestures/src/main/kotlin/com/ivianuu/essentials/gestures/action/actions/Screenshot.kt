@@ -37,12 +37,11 @@ import kotlinx.coroutines.delay
 @Given
 object ScreenshotActionId : ActionId("screenshot")
 
-@ActionBinding<ScreenshotActionId>
 @Given
 fun screenshotAction(
     @Given resourceProvider: ResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
-) = Action(
+): @ActionBinding<ScreenshotActionId> Action = Action(
     id = "screenshot",
     title = resourceProvider.string(R.string.es_action_screenshot),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
@@ -53,13 +52,12 @@ fun screenshotAction(
 )
 
 @SuppressLint("InlinedApi")
-@ActionExecutorBinding<ScreenshotActionId>
 @Given
 fun screenshotActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor,
     @Given shell: Shell,
     @Given systemBuildInfo: SystemBuildInfo,
-): ActionExecutor = {
+): @ActionExecutorBinding<ScreenshotActionId> ActionExecutor = {
     delay(500)
     if (systemBuildInfo.sdk >= 28) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
