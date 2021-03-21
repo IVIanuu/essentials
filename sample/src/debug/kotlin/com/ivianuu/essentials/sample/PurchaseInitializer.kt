@@ -28,9 +28,9 @@ import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
 fun debugPurchaseAppInitializer(
-    @Given prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
+    @Given prefUpdater: Collector<PrefAction<DebugBillingPrefs>>,
 ): ScopeInitializer<AppGivenScope> = {
-    prefActionCollector.dispatchUpdate {
+    prefUpdater.dispatchUpdate {
         copy(products = if (products.isEmpty()) listOf(SkuDetails(DummySku)) else products)
     }
 }

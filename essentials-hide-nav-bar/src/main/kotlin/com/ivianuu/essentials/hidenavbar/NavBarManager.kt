@@ -57,7 +57,7 @@ fun navBarManager(
     @Given screenState: Flow<ScreenState>,
     @Given setOverscan: OverscanUpdater,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>,
-    @Given wasNavBarHiddenCollector: Collector<PrefAction<WasNavBarHidden>>
+    @Given wasNavBarHiddenUpdater: Collector<PrefAction<WasNavBarHidden>>
 ): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
@@ -94,7 +94,7 @@ fun navBarManager(
                     )
                 }
                     .onEach {
-                        wasNavBarHiddenCollector.update { true }
+                        wasNavBarHiddenUpdater.update { true }
                     }
             } else {
                 if (!wasNavBarHidden.first()) {

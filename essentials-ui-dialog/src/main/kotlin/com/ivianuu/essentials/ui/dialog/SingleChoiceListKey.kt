@@ -2,6 +2,7 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
@@ -11,26 +12,33 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
 
-data class SingleChoiceListKey(
-    val items: List<String>,
-    val selectedItem: String,
+data class SingleChoiceListKey<T : Any>(
+    val items: List<Item<T>>,
+    val selectedItem: T,
     val title: String
-) : Key<String>
+) : Key<T> {
+    data class Item<T : Any>(val value: T, val title: String)
+}
 
 @Given
-val singleChoiceListKeyModule = KeyModule<SingleChoiceListKey>()
+val singleChoiceListKeyModule = KeyModule<SingleChoiceListKey<Any>>()
 
 @Given
-fun <T : Any> singleChoiceListUi(
-    @Given key: SingleChoiceListKey,
+fun singleChoiceListUi(
+    @Given key: SingleChoiceListKey<Any>,
     @Given navigator: Collector<NavigationAction>
-): KeyUi<T> = {
+): KeyUi<SingleChoiceListKey<Any>> = {
     DialogWrapper {
         SingleChoiceListDialog(
-            items = key.items,
+            items = remember {
+                key.items
+                    .map { it.value }
+            },
             selectedItem = key.selectedItem,
             onSelectionChanged = { navigator(Pop(key, it)) },
-            item = { Text(it) },
+            item = { item ->
+                Text(key.items.single { it.value == item }.title)
+            },
             title = { Text(key.title) },
             negativeButton = {
                 TextButton(onClick = { navigator(Pop(key)) }) {
@@ -42,4 +50,5 @@ fun <T : Any> singleChoiceListUi(
 }
 
 @Given
-val singleChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<SingleChoiceListKey>()
+val singleChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<SingleChoiceListKey<Any>>()
+

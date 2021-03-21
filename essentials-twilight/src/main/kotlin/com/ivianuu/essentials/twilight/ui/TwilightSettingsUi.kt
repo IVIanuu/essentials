@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Given
 fun twilightSettingsUi(
     @Given prefsFlow: StateFlow<TwilightPrefs>,
-    @Given dispatch: Collector<PrefAction<TwilightPrefs>>,
+    @Given prefUpdater: Collector<PrefAction<TwilightPrefs>>,
 ): KeyUi<TwilightSettingsKey> = {
     val prefs by prefsFlow.collectAsState()
     Scaffold(
@@ -56,7 +56,7 @@ fun twilightSettingsUi(
                         mode = mode,
                         isSelected = prefs.twilightMode == mode,
                         onClick = {
-                            dispatch.dispatchUpdate { copy(twilightMode = mode) }
+                            prefUpdater.dispatchUpdate { copy(twilightMode = mode) }
                         }
                     )
                 }
@@ -66,7 +66,7 @@ fun twilightSettingsUi(
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
                     onValueChange = {
-                        dispatch.dispatchUpdate { copy(useBlackInDarkMode = it) }
+                        prefUpdater.dispatchUpdate { copy(useBlackInDarkMode = it) }
                     },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )

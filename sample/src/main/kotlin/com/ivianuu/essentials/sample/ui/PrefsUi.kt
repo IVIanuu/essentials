@@ -68,7 +68,7 @@ val prefsKeyModule = KeyModule<PrefsKey>()
 fun prefsUi(
     @Given navigator: Collector<NavigationAction>,
     @Given prefsState: StateFlow<SamplePrefs>,
-    @Given prefActionCollector: Collector<PrefAction<SamplePrefs>>,
+    @Given prefUpdater: Collector<PrefAction<SamplePrefs>>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {
     val prefs by prefsState.collectAsState()
@@ -80,7 +80,7 @@ fun prefsUi(
                 SwitchListItem(
                     value = prefs.switch,
                     onValueChange = {
-                        prefActionCollector.dispatchUpdate { copy(switch = it) }
+                        prefUpdater.dispatchUpdate { copy(switch = it) }
                     },
                     title = { Text("Switch") }
                 )
@@ -90,7 +90,7 @@ fun prefsUi(
                 CheckboxListItem(
                     value = prefs.checkbox,
                     onValueChange = {
-                        prefActionCollector.dispatchUpdate { copy(checkbox = it) }
+                        prefUpdater.dispatchUpdate { copy(checkbox = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Checkbox") },
@@ -100,7 +100,7 @@ fun prefsUi(
                 RadioButtonListItem(
                     value = prefs.radioButton,
                     onValueChange = {
-                        prefActionCollector.dispatchUpdate { copy(radioButton = it) }
+                        prefUpdater.dispatchUpdate { copy(radioButton = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Radio Button") },
@@ -110,7 +110,7 @@ fun prefsUi(
                 IntSliderListItem(
                     value = prefs.slider,
                     onValueChange = {
-                        prefActionCollector.dispatchUpdate { copy(slider = it) }
+                        prefUpdater.dispatchUpdate { copy(slider = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Slider") },
@@ -138,7 +138,7 @@ fun prefsUi(
                                     allowEmpty = false
                                 )
                             ) ?: return@launch
-                            prefActionCollector.dispatchUpdate { copy(textInput = newTextInput) }
+                            prefUpdater.dispatchUpdate { copy(textInput = newTextInput) }
                         }
                     }
                 )
@@ -153,7 +153,7 @@ fun prefsUi(
                                     title = "Color"
                                 )
                             ) ?: return@launch
-                            prefActionCollector.dispatchUpdate { copy(color = newColor.toArgb()) }
+                            prefUpdater.dispatchUpdate { copy(color = newColor.toArgb()) }
                         }
                     },
                     modifier = Modifier.interactive(prefs.switch),
@@ -169,12 +169,16 @@ fun prefsUi(
                         scope.launch {
                             val newItems = navigator.pushForResult(
                                 MultiChoiceListKey(
-                                    items = listOf("A", "B", "C"),
+                                    items = listOf(
+                                        MultiChoiceListKey.Item("A", "A"),
+                                        MultiChoiceListKey.Item("B", "B"),
+                                        MultiChoiceListKey.Item("C", "C")
+                                    ),
                                     selectedItems = prefs.multiChoice,
                                     title = "Multi select list"
                                 )
                             ) ?: return@launch
-                            prefActionCollector.dispatchUpdate { copy(multiChoice = newItems) }
+                            prefUpdater.dispatchUpdate { copy(multiChoice = newItems) }
                         }
                     }
                 )
@@ -187,12 +191,16 @@ fun prefsUi(
                         scope.launch {
                             val newItem = navigator.pushForResult(
                                 SingleChoiceListKey(
-                                    items = listOf("A", "B", "C"),
+                                    items = listOf(
+                                        SingleChoiceListKey.Item("A", "A"),
+                                        SingleChoiceListKey.Item("B", "B"),
+                                        SingleChoiceListKey.Item("C", "C")
+                                    ),
                                     selectedItem = prefs.singleChoice,
                                     title = "Single item list"
                                 )
                             ) ?: return@launch
-                            prefActionCollector.dispatchUpdate { copy(singleChoice = newItem) }
+                            prefUpdater.dispatchUpdate { copy(singleChoice = newItem) }
                         }
                     }
                 )

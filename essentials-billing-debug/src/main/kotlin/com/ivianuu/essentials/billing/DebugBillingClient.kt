@@ -60,7 +60,7 @@ class DebugBillingClient(
     @Given private val buildInfo: BuildInfo,
     @Given private val navigator: Collector<NavigationAction>,
     @Given private val prefs: Flow<DebugBillingPrefs>,
-    @Given private val prefActionCollector: Collector<PrefAction<DebugBillingPrefs>>,
+    @Given private val prefUpdater: Collector<PrefAction<DebugBillingPrefs>>,
     @Given private val purchasesUpdatedListener: PurchasesUpdatedListener,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : BillingClient() {
@@ -130,7 +130,7 @@ class DebugBillingClient(
                 it.purchaseToken == purchaseToken
             }
             if (purchase != null) {
-                prefActionCollector.update {
+                prefUpdater.update {
                     copy(purchases = purchases.filterNot { it.purchaseToken == purchaseToken })
                 }
                 listener.onConsumeResponse(
@@ -165,7 +165,7 @@ class DebugBillingClient(
 
             if (purchasedSkuDetails != null) {
                 val purchase = purchasedSkuDetails.toPurchase()
-                prefActionCollector.update {
+                prefUpdater.update {
                     copy(purchases = purchases + purchase)
                 }
                 purchasesUpdatedListener.onPurchasesUpdated(
@@ -301,7 +301,7 @@ class DebugBillingClient(
                     isAutoRenewing = purchase.isAutoRenewing,
                     developerPayload = purchase.developerPayload
                 )
-                prefActionCollector.update {
+                prefUpdater.update {
                     copy(purchases = purchases + updated)
                 }
                 listener.onAcknowledgePurchaseResponse(

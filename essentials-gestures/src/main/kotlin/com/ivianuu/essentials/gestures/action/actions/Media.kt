@@ -148,7 +148,7 @@ fun mediaActionSettingsState(
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given navigator: Collector<NavigationAction>,
     @Given prefs: Flow<MediaActionPrefs>,
-    @Given prefsActionCollector: Collector<PrefAction<MediaActionPrefs>>,
+    @Given prefUpdater: Collector<PrefAction<MediaActionPrefs>>,
 ): StateFlow<MediaActionSettingsState> = scope.state(initial) {
     prefs
         .map { it.mediaApp }
@@ -166,7 +166,7 @@ fun mediaActionSettingsState(
                 )
             )
             if (newMediaApp != null) {
-                prefsActionCollector.update { copy(mediaApp = newMediaApp.packageName) }
+                prefUpdater.update { copy(mediaApp = newMediaApp.packageName) }
             }
         }
         .launchIn(this)

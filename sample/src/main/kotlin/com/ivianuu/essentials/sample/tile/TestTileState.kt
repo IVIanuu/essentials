@@ -39,8 +39,8 @@ import kotlinx.coroutines.flow.onEach
 fun testTileState(
     @Given scope: ScopeCoroutineScope<TileGivenScope>,
     @Given actions: Flow<TileAction>,
-    @Given prefActionCollector: Collector<PrefAction<TwilightPrefs>>,
     @Given twilightPrefs: Flow<TwilightPrefs>,
+    @Given twilightPrefUpdater: Collector<PrefAction<TwilightPrefs>>,
 ) = scope.state(TwilightPrefs().toTileState()) {
     twilightPrefs
         .reduce { it.toTileState() }
@@ -52,7 +52,7 @@ fun testTileState(
             else TwilightMode.Light
         }
         .onEach { twilightMode ->
-            prefActionCollector.update {
+            twilightPrefUpdater.update {
                 copy(twilightMode = twilightMode)
             }
         }
