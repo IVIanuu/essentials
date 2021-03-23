@@ -1,3 +1,4 @@
+import com.ivianuu.injekt.gradle.withGivenCalls
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
@@ -39,7 +40,7 @@ android {
 }
 
 tasks.withType<KotlinCompile> {
-    incremental = false
+    withGivenCalls()
 }
 
 dependencies {

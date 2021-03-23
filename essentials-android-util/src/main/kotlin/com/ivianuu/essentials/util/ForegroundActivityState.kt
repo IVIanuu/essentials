@@ -17,6 +17,9 @@
 package com.ivianuu.essentials.util
 
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runOnCancellation
@@ -38,6 +41,10 @@ fun foregroundActivityStateWorker(
     @Given state: MutableStateFlow<ForegroundActivity>
 ): ScopeWorker<ActivityGivenScope> = worker@ {
     if (activity !is EsActivity) return@worker
-    state.value = activity
-    runOnCancellation { state.value = null }
+    val observer = LifecycleEventObserver { _, _ ->
+        state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+            activity else null
+    }
+    activity.lifecycle.addObserver(observer)
+    runOnCancellation { activity.lifecycle.removeObserver(observer) }
 }

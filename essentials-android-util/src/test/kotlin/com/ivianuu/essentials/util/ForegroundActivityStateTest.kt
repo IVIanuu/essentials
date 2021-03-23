@@ -16,12 +16,16 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Application
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.launch
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -30,23 +34,26 @@ class ForegroundActivityStateTest {
 
     @Test
     fun testForegroundActivityState() = runCancellingBlockingTest {
-        lateinit var callbacks: Application.ActivityLifecycleCallbacks
-        val application = mockk<Application> {
-            every { registerActivityLifecycleCallbacks(any()) } answers {
-                callbacks = arg(0)
-            }
+        val foregroundState = foregroundActivityState
+        lateinit var lifecycle: LifecycleRegistry
+        val activity = mockk<EsActivity> {
+            lifecycle = LifecycleRegistry(this)
+            every { this@mockk.lifecycle } returns lifecycle
         }
-        val collector = foregroundActivityState(
-            application,
-            this
-        ).testCollect(this)
+        launch {
+            foregroundActivityStateWorker(activity, foregroundState)()
+        }
+        val collector = foregroundState.testCollect(this)
         advanceUntilIdle()
 
-        val activity = mockk<EsActivity>()
-        callbacks.onActivityStarted(activity)
-        callbacks.onActivityStopped(activity)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
 
         collector.values.shouldContainExactly(
+            null,
+            activity,
             null,
             activity,
             null
