@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
+import com.ivianuu.essentials.util.NoopLogger
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.async
@@ -37,18 +38,19 @@ class NavigationStateTest {
 
     @Test
     fun testNavigationState() = runCancellingBlockingTest {
-        val dispatch = EventFlow<NavigationAction>()
+        val actions = EventFlow<NavigationAction>()
         val collector = navigationState(
             intentKeyHandler = { false },
             scope = this,
-            actions = dispatch
+            actions = actions,
+            logger = NoopLogger
         ).testCollect(this)
 
-        dispatch.emit(Push(KeyA))
-        dispatch.emit(Pop(KeyA))
-        dispatch.emit(Push(KeyB))
-        dispatch.emit(ReplaceTop(KeyC))
-        dispatch.emit(PopTop)
+        actions.emit(Push(KeyA))
+        actions.emit(Pop(KeyA))
+        actions.emit(Push(KeyB))
+        actions.emit(ReplaceTop(KeyC))
+        actions.emit(PopTop)
 
         collector.values.shouldContainExactly(
             NavigationState(listOf()),
@@ -64,12 +66,13 @@ class NavigationStateTest {
 
     @Test
     fun testReturnsResultOnPop() = runCancellingBlockingTest {
-        val flow = EventFlow<NavigationAction>()
-        val navigator = collector(flow)
+        val actions = EventFlow<NavigationAction>()
+        val navigator = collector(actions)
         navigationState(
             intentKeyHandler = { false },
             scope = this,
-            actions = flow
+            actions = actions,
+            logger = NoopLogger
         ).testCollect(this)
 
         val result = async {
@@ -81,18 +84,19 @@ class NavigationStateTest {
 
     @Test
     fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-        val flow = EventFlow<NavigationAction>()
-        val navigator = collector(flow)
+        val actions = EventFlow<NavigationAction>()
+        val navigator = collector(actions)
         navigationState(
             intentKeyHandler = { false },
             scope = this,
-            actions = flow
+            actions = actions,
+            logger = NoopLogger
         ).testCollect(this)
 
         val result = async {
             navigator.pushForResult(KeyWithResult)
         }
-        flow.emit(PopTop)
+        actions.emit(PopTop)
         result.await() shouldBe null
     }
 
