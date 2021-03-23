@@ -22,12 +22,14 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityGivenScope
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
 
 typealias ForegroundActivity = ComponentActivity?
 
@@ -38,6 +40,7 @@ val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundA
 @Given
 fun foregroundActivityStateWorker(
     @Given activity: ComponentActivity,
+    @Given dispatcher: MainDispatcher,
     @Given state: MutableStateFlow<ForegroundActivity>
 ): ScopeWorker<ActivityGivenScope> = worker@ {
     if (activity !is EsActivity) return@worker
@@ -45,6 +48,8 @@ fun foregroundActivityStateWorker(
         state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
             activity else null
     }
-    activity.lifecycle.addObserver(observer)
-    runOnCancellation { activity.lifecycle.removeObserver(observer) }
+    withContext(dispatcher) {
+        activity.lifecycle.addObserver(observer)
+        runOnCancellation { activity.lifecycle.removeObserver(observer) }
+    }
 }

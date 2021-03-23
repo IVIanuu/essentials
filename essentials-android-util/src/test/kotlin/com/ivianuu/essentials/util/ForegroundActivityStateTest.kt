@@ -25,6 +25,7 @@ import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,7 +42,7 @@ class ForegroundActivityStateTest {
             every { this@mockk.lifecycle } returns lifecycle
         }
         launch {
-            foregroundActivityStateWorker(activity, foregroundState)()
+            foregroundActivityStateWorker(activity, Dispatchers.Main, foregroundState)()
         }
         val collector = foregroundState.testCollect(this)
         advanceUntilIdle()
