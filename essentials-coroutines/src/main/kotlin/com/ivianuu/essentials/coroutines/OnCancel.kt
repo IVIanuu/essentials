@@ -41,6 +41,7 @@ fun <T> Flow<T>.onCancel(
                     action(collector)
                 }
             }
+            throw e
         }
     }
 }
