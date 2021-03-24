@@ -203,6 +203,7 @@ class BillingManagerImpl(
             billingClient.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(result: BillingResult) {
+                        if (!connecting.get()) return
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             logger.d { "connected" }
                             continuation.resume(Unit)

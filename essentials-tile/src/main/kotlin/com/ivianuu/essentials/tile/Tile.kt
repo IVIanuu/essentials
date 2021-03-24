@@ -23,6 +23,7 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.ChildGivenScopeModule0
+import com.ivianuu.injekt.scope.DefaultGivenScope
 import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -53,7 +54,7 @@ fun <@Given T : StateFlow<TileState<S>>, @ForTypeKey S : AbstractFunTileService>
     @Given provider: () -> T,
 ): TileStateElement = typeKeyOf<S>() to provider
 
-typealias TileGivenScope = GivenScope
+typealias TileGivenScope = DefaultGivenScope
 
 @Given
 val tileGivenScopeModule = ChildGivenScopeModule0<ServiceGivenScope, TileGivenScope>()

@@ -139,7 +139,7 @@ object Deps {
 
     const val roboelectric = "org.robolectric:robolectric:4.3.1"
 
-    const val superUser = "eu.chainfire:libsuperuser:1.0.0"
+    const val superUser = "eu.chainfire:libsuperuser:1.0.0.201704021214"
 
     const val turbine = "app.cash.turbine:turbine:0.2.1"
 

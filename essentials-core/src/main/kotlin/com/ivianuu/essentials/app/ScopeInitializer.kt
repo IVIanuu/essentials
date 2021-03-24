@@ -39,6 +39,7 @@ data class ScopeInitializerElement<S>(
 fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
     @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
     @Given logger: Logger,
+    @Given workerRunner: ScopeWorkerRunner<S>
 ): com.ivianuu.injekt.scope.GivenScopeInitializer<S> = {
     initializers
         .sortedTopological(
@@ -50,4 +51,5 @@ fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
             logger.d { "${typeKeyOf<S>()} initialize ${it.key}" }
             it.instance()()
         }
+    workerRunner()
 }

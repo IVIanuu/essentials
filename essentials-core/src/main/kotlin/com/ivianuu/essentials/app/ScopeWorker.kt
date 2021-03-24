@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 typealias ScopeWorker<S> = suspend () -> Unit
 
-typealias ScopeWorkerRunner<S> = ScopeInitializer<S>
+typealias ScopeWorkerRunner<S> = () -> Unit
 
 @Given
 fun <@ForTypeKey S : GivenScope> scopeWorkerRunner(

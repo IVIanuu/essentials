@@ -1,3 +1,5 @@
+@file:Suppress("UnusedImport")
+
 package com.ivianuu.essentials.sample
 
 import android.app.Application
@@ -73,6 +75,7 @@ import com.ivianuu.injekt.android.work.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 
-class App : Application(), AppGivenScopeOwner {
-    override val appGivenScope by lazy { createAppGivenScope() }
+class App : EsApp() {
+    override fun buildAppGivenScope(): AppGivenScope =
+        createAppGivenScope()
 }
