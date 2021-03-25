@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -53,6 +54,7 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.squareup.moshi.JsonClass
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -67,11 +69,11 @@ val prefsKeyModule = KeyModule<PrefsKey>()
 @Given
 fun prefsUi(
     @Given navigator: Collector<NavigationAction>,
-    @Given prefsState: StateFlow<SamplePrefs>,
+    @Given prefsState: Flow<SamplePrefs>,
     @Given prefUpdater: Collector<PrefAction<SamplePrefs>>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {
-    val prefs by prefsState.collectAsState()
+    val prefs by prefsState.collectAsState(remember { SamplePrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {

@@ -77,12 +77,7 @@ class PrefModule<T : Any>(private val name: String) {
     }
 
     @Given
-    fun stateFlow(
-        @Given dataStore: DataStore<T>,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>,
-        @Given initial: @InitialOrFallback T
-    ): @Scoped<AppGivenScope> StateFlow<T> =
-        dataStore.data.stateIn(scope, SharingStarted.Eagerly, initial)
+    fun flow(@Given dataStore: DataStore<T>): Flow<T> = dataStore.data
 
     @Given
     fun prefActionCollector(
@@ -124,4 +119,3 @@ internal annotation class InitialOrFallback
 inline fun <reified T : Any> initialOrFallback(
     @Given initial: @Initial T? = null
 ): @InitialOrFallback T = initial ?: T::class.java.newInstance()
-

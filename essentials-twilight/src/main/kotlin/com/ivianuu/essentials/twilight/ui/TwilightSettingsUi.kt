@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.android.prefs.PrefAction
 import com.ivianuu.essentials.android.prefs.dispatchUpdate
@@ -38,14 +39,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun twilightSettingsUi(
-    @Given prefsFlow: StateFlow<TwilightPrefs>,
+    @Given prefsFlow: Flow<TwilightPrefs>,
     @Given prefUpdater: Collector<PrefAction<TwilightPrefs>>,
 ): KeyUi<TwilightSettingsKey> = {
-    val prefs by prefsFlow.collectAsState()
+    val prefs by prefsFlow.collectAsState(remember { TwilightPrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
