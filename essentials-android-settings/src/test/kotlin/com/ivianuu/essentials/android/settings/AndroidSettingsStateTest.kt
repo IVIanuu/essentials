@@ -2,13 +2,11 @@ package com.ivianuu.essentials.android.settings
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.collector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -27,27 +25,26 @@ class AndroidSettingsStateTest {
                 contentChanges.tryEmit(Unit)
             }
         }
-        val actions = EventFlow<AndroidSettingAction<Int>>()
-        val actionCollector = collector(actions)
-        val ready = MutableStateFlow(false)
-        val state = AndroidSettingStateModule<Int, Int>(
+        val module = AndroidSettingStateModule<Int, Int>(
             "name",
             AndroidSettingsType.GLOBAL
-        ).settingsState(
-            scope = this,
-            dispatcher = TestCoroutineDispatcher(),
-            adapterFactory = { _, _, _ -> adapter },
-            contentChangesFactory = { contentChanges },
-            initial = value,
-            actions = actions,
-            ready = ready
         )
-        advanceUntilIdle()
+        val actionCollector = module.collector(
+            scope = this,
+            adapter = adapter,
+            dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!
+        )
+        val state = module.settingsState(
+            scope = this,
+            adapter = adapter,
+            dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
+            contentChangesFactory = { contentChanges }
+        )
 
-        ready.value shouldBe true
         value shouldBe 0
 
         val stateCollector = state.testCollect(this)
+        advanceUntilIdle()
 
         // initial state
         stateCollector.values.shouldHaveSize(1)
@@ -65,13 +62,14 @@ class AndroidSettingsStateTest {
 
         // dispatched updates
         actionCollector.dispatchUpdate { value + 1 }
-        advanceUntilIdle()
+        contentChanges.tryEmit(Unit)
         value shouldBe 2
         stateCollector.values.shouldHaveSize(3)
         stateCollector.values[2] shouldBe 2
 
         // updates with result
         actionCollector.update { value - 1 } shouldBe 1
+        contentChanges.tryEmit(Unit)
         value shouldBe 1
         stateCollector.values.shouldHaveSize(4)
         stateCollector.values[3] shouldBe 1

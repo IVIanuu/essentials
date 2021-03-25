@@ -20,10 +20,8 @@ import android.provider.Settings
 import com.ivianuu.essentials.android.settings.AndroidSettingAction.Update
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -32,36 +30,27 @@ import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AndroidSettingStateModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
 ) {
-    @Suppress("UNCHECKED_CAST")
     @Given
     fun settingsState(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
-        @Given dispatcher: IODispatcher,
-        @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
+        @Given adapter: AndroidSettingsAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
-        @Given initial: @Initial T,
-        @Given actions: Flow<AndroidSettingAction<T>>,
-        @Given ready: AndroidSettingsStateReady<T>
-    ): @Scoped<AppGivenScope> StateFlow<T> = scope.childCoroutineScope(dispatcher).state(
-        initial = initial,
-        started = SharingStarted.Eagerly
-    ) {
-        val adapter = adapterFactory(name, type, initial)
+        @Given dispatcher: IODispatcher
+    ): @Scoped<AppGivenScope> Flow<T> = flow {
         contentChangesFactory(
             when (type) {
                 AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
@@ -70,19 +59,14 @@ class AndroidSettingStateModule<T : S, S>(
             }
         )
             .onStart { emit(Unit) }
-            .map { adapter.get() as T }
-            .reduce { it }
-            .launchIn(this)
-        actions
-            .onStart { ready.value = true }
-            .filterIsInstance<Update<S>>()
-            .onEach { action ->
-                val newValue = action.reducer(adapter.get())
-                adapter.set(newValue)
-                action.result?.complete(newValue)
+            .map {
+                withContext(dispatcher) {
+                    adapter.get()
+                }
             }
-            .launchIn(this)
-    }
+            .distinctUntilChanged()
+            .let { emitAll(it) }
+    }.shareIn(scope, SharingStarted.Lazily, 1)
 
     @Given
     val actions: @Scoped<AppGivenScope> MutableSharedFlow<AndroidSettingAction<T>>
@@ -90,16 +74,29 @@ class AndroidSettingStateModule<T : S, S>(
 
     @Given
     fun collector(
-        @Given actions: MutableSharedFlow<AndroidSettingAction<T>>,
-        @Suppress("UNUSED_PARAMETER") @Given state: StateFlow<T>, // inject to start state
-        @Given ready: AndroidSettingsStateReady<T>,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>
+        @Given scope: ScopeCoroutineScope<AppGivenScope>,
+        @Given adapter: AndroidSettingsAdapter<T>,
+        @Given dispatcher: IODispatcher
     ): @Scoped<AppGivenScope> Collector<AndroidSettingAction<T>> = { action ->
-        scope.launch {
-            ready.first()
-            actions.tryEmit(action)
+        scope.launch(dispatcher) {
+            when (action) {
+                is Update -> {
+                    val newValue = action.reducer(adapter.get())
+                    adapter.set(newValue)
+                    action.result?.complete(newValue)
+                }
+            }
         }
     }
+
+    @Suppress("UNCHECKED_CAST")
+    @Given
+    fun adapter(
+        @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
+        @Given initial: @Initial T
+    ): AndroidSettingsAdapter<T> =
+        adapterFactory(name, type, initial) as AndroidSettingsAdapter<T>
+
 }
 
 enum class AndroidSettingsType {
@@ -122,9 +119,3 @@ suspend fun <T : Any> Collector<AndroidSettingAction<T>>.update(reducer: T.() ->
 fun <T : Any> Collector<AndroidSettingAction<T>>.dispatchUpdate(reducer: T.() -> T) {
     this(Update(reducer = reducer))
 }
-
-internal typealias AndroidSettingsStateReady<T> = MutableStateFlow<Boolean>
-
-@Given
-fun <T> androidSettingsStateReady(): @Scoped<AppGivenScope> AndroidSettingsStateReady<T> =
-    MutableStateFlow(false)
