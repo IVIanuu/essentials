@@ -28,6 +28,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -45,8 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.DpRect
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.ui.AppTheme
@@ -67,29 +68,21 @@ fun Modifier.systemBarStyle(
     lightIcons: Boolean = LocalContentColor.current.isDark,
     elevation: Dp = 0.dp,
 ): Modifier = composed {
+    val style = remember {
+        SystemBarStyle(bgColor, lightIcons, elevation)
+    }
+    SideEffect {
+        style.barColor = bgColor
+        style.lightIcons = lightIcons
+        style.elevation = elevation
+    }
     val systemBarManager = LocalSystemBarManager.current
-    var globalBounds by remember { mutableStateOf<Rect?>(null) }
-    val density = LocalDensity.current
-    val dpBounds = remember(density, globalBounds) {
-        with(density) {
-            DpRect(
-                left = globalBounds?.left?.toInt()?.toDp() ?: 0.dp,
-                top = globalBounds?.top?.toInt()?.toDp() ?: 0.dp,
-                right = globalBounds?.right?.toInt()?.toDp() ?: 0.dp,
-                bottom = globalBounds?.bottom?.toInt()?.toDp() ?: 0.dp
-            )
-        }
-    }
-    val style = remember(bgColor, lightIcons, dpBounds, elevation) {
-        SystemBarStyle(bgColor, lightIcons, dpBounds, elevation)
+    DisposableEffect(systemBarManager, style) {
+        systemBarManager.styles += style
+        onDispose { systemBarManager.styles -= style }
     }
 
-    DisposableEffect(style) {
-        systemBarManager.registerStyle(style)
-        onDispose { systemBarManager.unregisterStyle(style) }
-    }
-
-    onGloballyPositioned { globalBounds = it.boundsInWindow() }
+    onGloballyPositioned { style.bounds = it.boundsInWindow() }
 }
 
 typealias SystemBarManagerProvider = UiDecorator
@@ -97,7 +90,7 @@ typealias SystemBarManagerProvider = UiDecorator
 @Given
 val systemBarManagerProvider: SystemBarManagerProvider = { content ->
     val systemBarManager = remember { SystemBarManager() }
-    systemBarManager.updateSystemBars()
+    systemBarManager.Apply()
     CompositionLocalProvider(
         LocalSystemBarManager provides systemBarManager,
         content = content
@@ -128,19 +121,19 @@ private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
     error("No system bar manager provided")
 }
 
-private data class SystemBarStyle(
-    val barColor: Color,
-    val lightIcons: Boolean,
-    val bounds: DpRect,
-    val elevation: Dp,
-)
+private class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
+    var barColor by mutableStateOf(barColor)
+    var lightIcons by mutableStateOf(lightIcons)
+    var bounds by mutableStateOf(Rect(0f, 0f, 0f, 0f))
+    var elevation by mutableStateOf(elevation)
+}
 
 private class SystemBarManager {
 
     val styles = mutableStateListOf<SystemBarStyle>()
 
     @Composable
-    fun updateSystemBars() {
+    fun Apply() {
         val activity = LocalContext.current.cast<ComponentActivity>()
         DisposableEffect(activity) {
             WindowCompat.setDecorFitsSystemWindows(activity.window, false)
@@ -151,24 +144,21 @@ private class SystemBarManager {
             onDispose { }
         }
 
-        val layoutDirection = LocalLayoutDirection.current
         val windowInsets = LocalInsets.current
         val density = LocalDensity.current
-        val screenHeight = with(density) {
-            activity.window.decorView.height.toDp()
-        }
-        val screenWidth = with(density) {
-            activity.window.decorView.width.toDp()
+
+        val statusBarHitPoint = remember(density, windowInsets) {
+            with(density) {
+                Offset(
+                    windowInsets.calculateLeftPadding(LayoutDirection.Ltr).toPx(),
+                    0f
+                )
+            }
         }
 
-        val statusBarHitPoint = remember(windowInsets) {
-            DpOffset(
-                windowInsets.calculateStartPadding(layoutDirection),
-                0.dp
-            )
-        }
+        val stylesSnapshot = styles.toList()
 
-        val statusBarStyle = remember(statusBarHitPoint, styles.toList()) {
+        val statusBarStyle = remember(statusBarHitPoint, stylesSnapshot) {
             styles
                 .sortedBy { it.elevation }
                 .lastOrNull {
@@ -179,50 +169,37 @@ private class SystemBarManager {
                 }
         }
 
-        DisposableEffect(activity, statusBarStyle?.barColor) {
+        DisposableEffect(activity, statusBarStyle?.barColor, statusBarStyle?.lightIcons) {
             activity.window.statusBarColor =
-                (
-                        statusBarStyle?.barColor ?: Color.Black
-                            .copy(alpha = 0.2f)
-                        ).toArgb()
-            onDispose {  }
-        }
-
-        DisposableEffect(activity, statusBarStyle?.lightIcons) {
+                (statusBarStyle?.barColor ?: Color.Black.copy(alpha = 0.2f)).toArgb()
             activity.window.decorView.systemUiVisibility =
                 activity.window.decorView.systemUiVisibility.setFlag(
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR,
                     statusBarStyle?.lightIcons ?: false
                 )
-            onDispose { }
+            onDispose {  }
         }
 
         if (Build.VERSION.SDK_INT >= 26) {
-            val navBarHitPoint = remember(windowInsets, screenWidth, screenHeight) {
-                when {
-                    windowInsets.calculateBottomPadding() != 0.dp -> {
-                        DpOffset(
-                            windowInsets.calculateLeftPadding(layoutDirection),
-                            screenHeight - windowInsets.calculateBottomPadding()
-                        )
+            val screenHeight = activity.window.decorView.height.toFloat()
+            val screenWidth = activity.window.decorView.width.toFloat()
+            val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
+                with(density) {
+                    val bottomPadding = windowInsets.calculateBottomPadding().toPx()
+                    val leftPadding = windowInsets.calculateLeftPadding(LayoutDirection.Ltr)
+                        .toPx()
+                    val rightPadding = windowInsets.calculateRightPadding(LayoutDirection.Ltr)
+                        .toPx()
+                    when {
+                        bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding)
+                        leftPadding > 0f -> Offset(0f, screenHeight)
+                        rightPadding > 0f  -> Offset(screenWidth - rightPadding, screenHeight)
+                        else -> Offset(0f, 0f)
                     }
-                    windowInsets.calculateLeftPadding(layoutDirection) != 0.dp -> {
-                        DpOffset(
-                            0.dp,
-                            screenHeight
-                        )
-                    }
-                    windowInsets.calculateRightPadding(layoutDirection) != 0.dp -> {
-                        DpOffset(
-                            screenWidth - windowInsets.calculateRightPadding(layoutDirection),
-                            screenHeight
-                        )
-                    }
-                    else -> DpOffset(Int.MAX_VALUE.dp, Int.MAX_VALUE.dp)
                 }
             }
 
-            val navBarStyle = remember(navBarHitPoint, styles.toList()) {
+            val navBarStyle = remember(navBarHitPoint, stylesSnapshot) {
                 styles
                     .sortedBy { it.elevation }
                     .lastOrNull {
@@ -233,16 +210,12 @@ private class SystemBarManager {
                     }
             }
 
-            DisposableEffect(activity, navBarStyle?.barColor) {
+            DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.lightIcons) {
                 activity.window.navigationBarColor =
                     (
                             navBarStyle?.barColor ?: Color.Black
                                 .copy(alpha = 0.2f)
                             ).toArgb()
-                onDispose { }
-            }
-
-            DisposableEffect(activity, navBarStyle?.lightIcons) {
                 activity.window.decorView.systemUiVisibility =
                     activity.window.decorView.systemUiVisibility.setFlag(
                         View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
@@ -258,13 +231,5 @@ private class SystemBarManager {
                 onDispose { }
             }
         }
-    }
-
-    fun registerStyle(style: SystemBarStyle) {
-        styles += style
-    }
-
-    fun unregisterStyle(style: SystemBarStyle) {
-        styles -= style
     }
 }
