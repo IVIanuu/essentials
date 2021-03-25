@@ -26,19 +26,27 @@ object Build {
 }
 
 object Deps {
-    const val accompanistCoil =
-        "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
+    object Accompanist {
+        private const val version = "0.7.0"
+        const val coil = "com.google.accompanist:accompanist-coil:$version"
+        const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
+        const val insets = "com.google.accompanist:accompanist-insets:$version"
+        const val pager = "com.google.accompanist:accompanist-pager:$version"
+        const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
+        const val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:$version"
+    }
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
     object AndroidX {
         object Activity {
-            const val activity = "androidx.activity:activity:1.3.0-alpha03"
-            const val compose = "androidx.activity:activity-compose:1.3.0-alpha03"
+            private const val version = "1.3.0-alpha05"
+            const val activity = "androidx.activity:activity:$version"
+            const val compose = "androidx.activity:activity-compose:$version"
         }
         const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
         object Compose {
-            const val version = "1.0.0-beta02"
+            const val version = "1.0.0-beta03"
 
             const val compiler = "androidx.compose.compiler:compiler:$version"
             const val core = "androidx.compose.ui:ui:$version"
@@ -50,7 +58,7 @@ object Deps {
         const val dataStore = "androidx.datastore:datastore:1.0.0-alpha08"
 
         object Lifecycle {
-            private const val version = "2.3.0"
+            private const val version = "2.3.1"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
         }
 
@@ -69,9 +77,9 @@ object Deps {
     const val buildConfigGradlePlugin =
         "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
 
-    const val coil = "io.coil-kt:coil:1.1.0"
+    const val coil = "io.coil-kt:coil:1.1.1"
 
-    const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.2.7"
+    const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
 
     object Coroutines {
         private const val version = "1.4.3"
@@ -85,12 +93,12 @@ object Deps {
     const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev806"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev808"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
     object Injekt {
-        private const val version = "0.0.1-dev506"
+        private const val version = "0.0.1-dev507"
         const val android = "com.ivianuu.injekt:injekt-android:$version"
         const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
         const val core = "com.ivianuu.injekt:injekt-core-jvm:$version"
@@ -101,7 +109,7 @@ object Deps {
 
     const val junit = "junit:junit:4.13"
 
-    const val kotestAssertions = "io.kotest:kotest-assertions-core:4.3.0"
+    const val kotestAssertions = "io.kotest:kotest-assertions-core:4.4.3"
 
     object Kotlin {
         const val version = "1.4.31"
@@ -118,7 +126,7 @@ object Deps {
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
-    const val mockk = "io.mockk:mockk:1.10.0"
+    const val mockk = "io.mockk:mockk:1.11.0"
 
     object Moshi {
         private const val version = "1.9.2"
@@ -128,20 +136,18 @@ object Deps {
     }
 
     object MoshiSealed {
-        private const val version = "0.1.0"
-        const val annotations = "dev.zacsweers.moshisealed:moshi-sealed-annotations:$version"
-        const val codegen = "dev.zacsweers.moshisealed:moshi-sealed-codegen:$version"
+        private const val version = "0.9.2"
+        const val codegen = "dev.zacsweers.moshix:moshi-sealed-codegen:$version"
+        const val runtime = "dev.zacsweers.moshix:moshi-sealed-runtime:$version"
     }
 
     const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.14.2"
 
-    const val playBilling = "com.android.billingclient:billing-ktx:3.0.2"
+    const val playBilling = "com.android.billingclient:billing-ktx:3.0.3"
 
-    const val roboelectric = "org.robolectric:robolectric:4.3.1"
+    const val roboelectric = "org.robolectric:robolectric:4.4"
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.201704021214"
 
     const val turbine = "app.cash.turbine:turbine:0.2.1"
-
-    const val versionsGradlePlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
 }

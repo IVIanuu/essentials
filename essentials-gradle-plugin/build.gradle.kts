@@ -60,7 +60,6 @@ dependencies {
     implementation(Deps.Kotlin.gradlePlugin)
     implementation(Deps.Kotlin.gradlePluginApi)
     api(Deps.Injekt.gradlePlugin)
-    api(Deps.versionsGradlePlugin)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

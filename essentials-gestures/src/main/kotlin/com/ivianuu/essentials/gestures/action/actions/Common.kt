@@ -24,13 +24,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
+import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -53,7 +54,6 @@ import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
-import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -24,9 +24,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 
 dependencies {
     implementation(Deps.Moshi.codegen)
-    implementation(Deps.MoshiSealed.annotations)
     implementation(Deps.MoshiSealed.codegen)
-
+    implementation(Deps.MoshiSealed.runtime)
     implementation(Deps.Kotlin.stdlib)
 }
 

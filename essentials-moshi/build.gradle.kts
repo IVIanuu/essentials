@@ -28,7 +28,7 @@ dependencies {
     compile(Deps.Injekt.scope)
     compile(Deps.Moshi.moshi)
     compile(Deps.Moshi.adapters)
-    compile(Deps.MoshiSealed.annotations)
+    compile(Deps.MoshiSealed.runtime)
     compile(Deps.Kotlin.stdlib)
 }
 

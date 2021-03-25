@@ -27,6 +27,11 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
+    api(Deps.Accompanist.flowLayout)
+    api(Deps.Accompanist.insets)
+    api(Deps.Accompanist.pager)
+    api(Deps.Accompanist.pagerIndicators)
+    api(Deps.Accompanist.systemUiController)
     api(Deps.AndroidX.core)
     api(Deps.AndroidX.Compose.core)
     api(Deps.AndroidX.Compose.material)
