@@ -70,9 +70,8 @@ fun Modifier.systemBarStyle(
     val systemBarManager = LocalSystemBarManager.current
     var globalBounds by remember { mutableStateOf<Rect?>(null) }
     val density = LocalDensity.current
-
-    DisposableEffect(systemBarManager, globalBounds, density, bgColor, lightIcons, elevation) {
-        val dpBounds = with(density) {
+    val dpBounds = remember(density, globalBounds) {
+        with(density) {
             DpRect(
                 left = globalBounds?.left?.toInt()?.toDp() ?: 0.dp,
                 top = globalBounds?.top?.toInt()?.toDp() ?: 0.dp,
@@ -80,8 +79,12 @@ fun Modifier.systemBarStyle(
                 bottom = globalBounds?.bottom?.toInt()?.toDp() ?: 0.dp
             )
         }
+    }
+    val style = remember(bgColor, lightIcons, dpBounds, elevation) {
+        SystemBarStyle(bgColor, lightIcons, dpBounds, elevation)
+    }
 
-        val style = SystemBarStyle(bgColor, lightIcons, dpBounds, elevation)
+    DisposableEffect(style) {
         systemBarManager.registerStyle(style)
         onDispose { systemBarManager.unregisterStyle(style) }
     }

@@ -30,10 +30,8 @@ object Deps {
         private const val version = "0.7.0"
         const val coil = "com.google.accompanist:accompanist-coil:$version"
         const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
-        const val insets = "com.google.accompanist:accompanist-insets:$version"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
         const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
-        const val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:$version"
     }
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
 
