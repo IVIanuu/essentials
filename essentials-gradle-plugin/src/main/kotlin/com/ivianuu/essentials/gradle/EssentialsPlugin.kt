@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.github.benmanes.gradle.versions.VersionsPlugin
 import com.google.auto.service.AutoService
 import com.ivianuu.injekt.gradle.InjektPlugin
 import org.gradle.api.Project
@@ -34,7 +33,6 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
     override fun apply(target: Project) {
         with(target.plugins) {
             apply(InjektPlugin::class.java)
-            apply(VersionsPlugin::class.java)
         }
     }
 

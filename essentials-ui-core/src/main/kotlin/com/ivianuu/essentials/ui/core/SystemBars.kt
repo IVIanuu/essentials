@@ -65,7 +65,7 @@ fun overlaySystemBarBgColor(color: Color) =
 @Composable
 fun Modifier.systemBarStyle(
     bgColor: Color = overlaySystemBarBgColor(MaterialTheme.colors.surface),
-    lightIcons: Boolean = LocalContentColor.current.isDark,
+    lightIcons: Boolean = bgColor.isLight,
     elevation: Dp = 0.dp,
 ): Modifier = composed {
     val style = remember {
