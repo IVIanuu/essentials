@@ -9,6 +9,7 @@ import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
@@ -20,7 +21,7 @@ fun <@ForTypeKey S : GivenScope> scopeCoroutineScope(
     @Given dispatcher: ScopeCoroutineDispatcher<S>
 ): ScopeCoroutineScope<S> = scope.getOrCreateScopedValue {
     object : CoroutineScope, GivenScopeDisposable {
-        override val coroutineContext: CoroutineContext = Job() + dispatcher
+        override val coroutineContext: CoroutineContext = SupervisorJob() + dispatcher
         override fun dispose() {
             coroutineContext.cancel()
         }
