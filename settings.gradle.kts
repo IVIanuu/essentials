@@ -29,8 +29,6 @@ include(
     ":essentials-apps-ui",
     ":essentials-backup",
     ":essentials-billing",
-    ":essentials-billing-debug",
-    ":essentials-billing-release",
     ":essentials-boot",
     ":essentials-broadcast",
     ":essentials-clipboard",
