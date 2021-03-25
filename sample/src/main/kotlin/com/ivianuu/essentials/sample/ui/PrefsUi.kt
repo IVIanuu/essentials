@@ -55,7 +55,6 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Given

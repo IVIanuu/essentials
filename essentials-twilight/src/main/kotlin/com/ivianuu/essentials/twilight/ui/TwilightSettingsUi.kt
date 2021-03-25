@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun twilightSettingsUi(

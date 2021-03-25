@@ -24,7 +24,6 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.ChildGivenScopeModule0
 import com.ivianuu.injekt.scope.DefaultGivenScope
-import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.flow.StateFlow
 
 typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>>

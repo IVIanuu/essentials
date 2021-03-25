@@ -19,7 +19,6 @@ package com.ivianuu.essentials.util
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import com.ivianuu.essentials.activity.EsActivity
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.MainDispatcher

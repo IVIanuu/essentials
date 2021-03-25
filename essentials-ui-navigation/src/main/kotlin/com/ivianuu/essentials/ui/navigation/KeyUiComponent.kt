@@ -5,7 +5,6 @@ import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.ChildGivenScopeModule0
 import com.ivianuu.injekt.scope.DefaultGivenScope
-import com.ivianuu.injekt.scope.GivenScope
 
 typealias KeyUiGivenScope = DefaultGivenScope
 

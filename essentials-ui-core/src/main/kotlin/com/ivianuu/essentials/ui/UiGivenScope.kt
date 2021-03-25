@@ -21,7 +21,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityGivenScope
 import com.ivianuu.injekt.scope.ChildGivenScopeModule0
 import com.ivianuu.injekt.scope.DefaultGivenScope
-import com.ivianuu.injekt.scope.GivenScope
 
 typealias UiGivenScope = DefaultGivenScope
 
