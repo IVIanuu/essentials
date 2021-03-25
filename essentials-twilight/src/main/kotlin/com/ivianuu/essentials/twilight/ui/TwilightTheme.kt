@@ -20,6 +20,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -43,6 +44,7 @@ fun TwilightTheme(
     darkColors: Colors = darkColors(),
     blackColors: Colors = blackColors(),
     typography: Typography = Typography(),
+    shapes: Shapes = Shapes(),
     twilightState: StateFlow<TwilightState>,
     content: @Composable () -> Unit
 ) {
@@ -72,6 +74,7 @@ fun TwilightTheme(
     MaterialTheme(
         colors = animatedColors,
         typography = typography,
+        shapes = shapes,
         content = content
     )
 }
