@@ -323,7 +323,7 @@ class DebugBillingClient(
         val json =
             """{"orderId":"$sku","packageName":"${buildInfo.packageName}","productId":
       |"$sku","autoRenewing":true,"purchaseTime":"${Date().time}","acknowledged":false,"purchaseToken":
-      |"0987654321", "purchaseState":1}""".trimMargin()
+      |"0987654321", "purchaseState":0}""".trimMargin()
         return Purchase(json, "debug-signature-$sku-$type")
     }
 }

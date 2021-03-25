@@ -30,6 +30,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.concurrent.atomic.AtomicBoolean
@@ -67,8 +69,10 @@ class BillingManagerImpl(
         refreshes.tryEmit(Unit)
     }
 
+    private var isConnected = false
+    private val connectionMutex = Mutex()
+
     private val refreshes = EventFlow<Unit>()
-    private val connecting = AtomicBoolean(false)
 
     override suspend fun purchase(
         sku: Sku,
@@ -82,7 +86,7 @@ class BillingManagerImpl(
         if (consumeOldPurchaseIfUnspecified) {
             val oldPurchase = getPurchase(sku)
             if (oldPurchase != null) {
-                if (oldPurchase.realPurchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
+                if (oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
                     consumePurchase(sku)
                 }
             }
@@ -174,7 +178,7 @@ class BillingManagerImpl(
     private suspend fun getIsPurchased(sku: Sku): Boolean = withContext(defaultDispatcher) {
         ensureConnected()
         val purchase = getPurchase(sku) ?: return@withContext false
-        val isPurchased = purchase.realPurchaseState == Purchase.PurchaseState.PURCHASED
+        val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
         logger.d { "get is purchased for $sku result is $isPurchased for $purchase" }
         return@withContext isPurchased
     }
@@ -195,23 +199,24 @@ class BillingManagerImpl(
             .also { logger.d { "got sku details $it for $sku" } }
     }
 
-    private suspend fun ensureConnected() = withContext(ioDispatcher) {
-        if (billingClient.isReady) return@withContext
-        if (connecting.compareAndSet(false, true)) return@withContext
+    private suspend fun ensureConnected() = connectionMutex.withLock {
+        if (isConnected) return@withLock
+        if (billingClient.isReady) {
+            isConnected = true
+            return@withLock
+        }
         suspendCoroutine<Unit> { continuation ->
             logger.d { "start connection" }
             billingClient.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(result: BillingResult) {
-                        if (!connecting.get()) return
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             logger.d { "connected" }
+                            isConnected = true
                             continuation.resume(Unit)
                         } else {
                             logger.d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
                         }
-
-                        connecting.set(false)
                     }
 
                     override fun onBillingServiceDisconnected() {
@@ -222,6 +227,4 @@ class BillingManagerImpl(
         }
     }
 
-    private val Purchase.realPurchaseState: Int
-        get() = JSONObject(originalJson).optInt("purchaseState", 0)
 }
