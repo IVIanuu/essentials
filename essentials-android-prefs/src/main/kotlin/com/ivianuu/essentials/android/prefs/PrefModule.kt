@@ -19,6 +19,7 @@ package com.ivianuu.essentials.android.prefs
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -60,7 +61,8 @@ class PrefModule<T : Any>(private val name: String) {
                         output.write(adapter.toJson(t)!!.toByteArray())
                     }
                 },
-                scope = scope.childCoroutineScope(dispatcher)
+                scope = scope.childCoroutineScope(dispatcher),
+                corruptionHandler = ReplaceFileCorruptionHandler { initialFactory() }
             )
         }
         return object : DataStore<T> {
