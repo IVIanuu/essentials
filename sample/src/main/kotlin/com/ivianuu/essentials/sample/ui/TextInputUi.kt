@@ -36,7 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -127,7 +127,7 @@ fun textInputUi(): KeyUi<TextInputKey> = {
                 }
             }*/
 
-            LazyColumn(contentPadding = localVerticalInsets()) {
+            LazyColumn(contentPadding = localVerticalInsetsPadding()) {
                 items(items) { item ->
                     ListItem(title = { Text(item) })
                 }

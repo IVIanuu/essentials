@@ -32,7 +32,8 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.core.toPaddingValues
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -73,7 +74,7 @@ fun writeSecureSettingsUi(
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
-        LazyColumn(contentPadding = localVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SecureSettingsHeader(
                     stringResource(R.string.es_pref_secure_settings_header_summary)

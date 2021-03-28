@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.animatedstack.StackTransition
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.core.localHorizontalInsets
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localHorizontalInsetsPadding
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.layout.center
 
 @Composable
@@ -59,7 +59,7 @@ fun <T> ResourceLazyColumnFor(
     ) { items ->
         if (items.isNotEmpty()) {
             LazyColumn(
-                contentPadding = localVerticalInsets()
+                contentPadding = localVerticalInsetsPadding()
             ) { items(items) { successItemContent(it) } }
         } else {
             successEmpty()
@@ -87,7 +87,7 @@ fun <T> ResourceLazyRowFor(
         idle = idle
     ) { items ->
         if (items.isNotEmpty()) {
-            LazyRow(contentPadding = localHorizontalInsets()) {
+            LazyRow(contentPadding = localHorizontalInsetsPadding()) {
                 items(items) { successItemContent(it) }
             }
         } else {

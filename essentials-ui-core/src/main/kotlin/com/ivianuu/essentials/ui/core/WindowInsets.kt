@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecorator
@@ -32,26 +33,33 @@ import kotlin.math.max
 @Composable
 fun InsetsPadding(
     modifier: Modifier = Modifier,
-    start: Boolean = true,
+    left: Boolean = true,
     top: Boolean = true,
-    end: Boolean = true,
+    right: Boolean = true,
     bottom: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val padding = LocalInsets.current
+    val currentInsets = LocalInsets.current
     Box(
         modifier = Modifier.absolutePadding(
-            if (start) padding.calculateLeftPadding(LocalLayoutDirection.current) else 0.dp,
-            if (top) padding.calculateTopPadding() else 0.dp,
-            if (end) padding.calculateRightPadding(LocalLayoutDirection.current) else 0.dp,
-            if (bottom) padding.calculateBottomPadding() else 0.dp
+            if (left) currentInsets.left else 0.dp,
+            if (top) currentInsets.top else 0.dp,
+            if (right) currentInsets.right else 0.dp,
+            if (bottom) currentInsets.bottom else 0.dp
         ).then(modifier)
     ) {
-        ConsumeInsets(start, top, end, bottom, content)
+        ConsumeInsets(left, top, right, bottom, content)
     }
 }
 
-val LocalInsets = compositionLocalOf { PaddingValues() }
+data class Insets(
+    val left: Dp = 0.dp,
+    val top: Dp = 0.dp,
+    val right: Dp = 0.dp,
+    val bottom: Dp = 0.dp
+)
+
+val LocalInsets = compositionLocalOf { Insets() }
 
 @Composable
 fun ConsumeInsets(
@@ -63,11 +71,11 @@ fun ConsumeInsets(
 ) {
     val currentInsets = LocalInsets.current
     ProvideInsets(
-        PaddingValues(
-            if (left) 0.dp else currentInsets.calculateStartPadding(LocalLayoutDirection.current),
-            if (top) 0.dp else currentInsets.calculateTopPadding(),
-            if (right) 0.dp else currentInsets.calculateEndPadding(LocalLayoutDirection.current),
-            if (bottom) 0.dp else currentInsets.calculateBottomPadding()
+        currentInsets.copy(
+            if (left) 0.dp else currentInsets.left,
+            if (top) 0.dp else currentInsets.top,
+            if (right) 0.dp else currentInsets.right,
+            if (bottom) 0.dp else currentInsets.bottom
         ),
         content = content
     )
@@ -75,7 +83,7 @@ fun ConsumeInsets(
 
 @Composable
 fun ProvideInsets(
-    insets: PaddingValues,
+    insets: Insets,
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(LocalInsets provides insets, content = content)
@@ -87,7 +95,7 @@ typealias WindowInsetsProvider = UiDecorator
 fun windowInsetsProvider(): WindowInsetsProvider = { content ->
     val ownerView = LocalView.current
     val density = LocalDensity.current
-    var insets by remember { mutableStateOf(PaddingValues()) }
+    var insets by remember { mutableStateOf(Insets()) }
 
     val insetsListener = remember {
         View.OnApplyWindowInsetsListener { _, rawInsets ->
@@ -98,10 +106,10 @@ fun windowInsetsProvider(): WindowInsetsProvider = { content ->
             val imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime())
 
             with(density) {
-                insets = PaddingValues(
-                    start = max(systemBarInsets.left, imeInsets.left).toDp(),
+                insets = Insets(
+                    left = max(systemBarInsets.left, imeInsets.left).toDp(),
                     top = max(systemBarInsets.top, imeInsets.top).toDp(),
-                    end = max(systemBarInsets.right, imeInsets.right).toDp(),
+                    right = max(systemBarInsets.right, imeInsets.right).toDp(),
                     bottom = max(systemBarInsets.bottom, imeInsets.bottom).toDp(),
                 )
             }
@@ -139,18 +147,15 @@ fun windowInsetsProvider(): WindowInsetsProvider = { content ->
 }
 
 @Composable
-fun localHorizontalInsets() = LocalInsets.current.let {
-    val layoutDirection = LocalLayoutDirection.current
-    PaddingValues(
-        start = it.calculateStartPadding(layoutDirection),
-        end = it.calculateEndPadding(layoutDirection)
-    )
+fun localHorizontalInsetsPadding() = LocalInsets.current.let {
+    PaddingValues(start = it.left, end = it.right)
 }
 
 @Composable
-fun localVerticalInsets() = LocalInsets.current.let {
-    PaddingValues(
-        top = it.calculateTopPadding(),
-        bottom = it.calculateBottomPadding()
-    )
+fun localVerticalInsetsPadding() = LocalInsets.current.let {
+    PaddingValues(top = it.top, bottom = it.bottom)
 }
+
+fun Insets.toPaddingValues() = PaddingValues(
+    start = left, top = top, end = right, bottom = bottom
+)

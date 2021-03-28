@@ -30,7 +30,7 @@ import com.ivianuu.essentials.android.prefs.dispatchUpdate
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.ColorPickerKey
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListKey
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -76,7 +76,7 @@ fun prefsUi(
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
-        LazyColumn(contentPadding = localVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SwitchListItem(
                     value = prefs.switch,

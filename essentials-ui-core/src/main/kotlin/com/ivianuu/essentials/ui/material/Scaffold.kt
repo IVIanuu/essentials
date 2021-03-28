@@ -19,8 +19,6 @@ package com.ivianuu.essentials.ui.material
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
@@ -33,6 +31,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.max
+import com.ivianuu.essentials.ui.core.Insets
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.LocalInsets
 import com.ivianuu.essentials.ui.core.ProvideInsets
@@ -53,9 +52,9 @@ fun Scaffold(
     bodyContent: @Composable () -> Unit
 ) {
     InsetsPadding(
-        start = applyInsets,
+        left = applyInsets,
         top = false,
-        end = applyInsets,
+        right = applyInsets,
         bottom = false
     ) {
         Scaffold(
@@ -81,15 +80,13 @@ fun Scaffold(
             drawerElevation = drawerElevation,
             backgroundColor = backgroundColor
         ) { bodyPadding ->
-            val insets =
-                if (applyInsets) LocalInsets.current else PaddingValues()
-            val layoutDirection = LocalLayoutDirection.current
+            val insets = if (applyInsets) LocalInsets.current else Insets()
             ProvideInsets(
-                PaddingValues(
-                    start = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.calculateStartPadding(layoutDirection)),
-                    top = if (topBar == null) insets.calculateTopPadding() else bodyPadding.calculateTopPadding(),
-                    end = max(bodyPadding.calculateRightPadding(LocalLayoutDirection.current), insets.calculateEndPadding(layoutDirection)),
-                    bottom = if (bottomBar == null) insets.calculateBottomPadding() else bodyPadding.calculateBottomPadding()
+                Insets(
+                    left = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.left),
+                    top = if (topBar == null) insets.top else bodyPadding.calculateTopPadding(),
+                    right = max(bodyPadding.calculateRightPadding(LocalLayoutDirection.current), insets.right),
+                    bottom = if (bottomBar == null) insets.bottom else bodyPadding.calculateBottomPadding()
                 ),
                 bodyContent
             )

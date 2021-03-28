@@ -37,7 +37,8 @@ import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.core.toPaddingValues
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -114,7 +115,7 @@ fun mediaActionSettingsUi(
 ): KeyUi<MediaActionSettingsKey> = {
     val state by stateFlow.collectAsState()
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) }) }) {
-        LazyColumn(contentPadding = localVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_media_app)) },

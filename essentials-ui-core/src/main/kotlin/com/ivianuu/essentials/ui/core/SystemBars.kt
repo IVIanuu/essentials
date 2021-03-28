@@ -150,7 +150,7 @@ private class SystemBarManager {
         val statusBarHitPoint = remember(density, windowInsets) {
             with(density) {
                 Offset(
-                    windowInsets.calculateLeftPadding(LayoutDirection.Ltr).toPx(),
+                    windowInsets.left.toPx(),
                     0f
                 )
             }
@@ -185,11 +185,9 @@ private class SystemBarManager {
             val screenWidth = activity.window.decorView.width.toFloat()
             val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
                 with(density) {
-                    val bottomPadding = windowInsets.calculateBottomPadding().toPx()
-                    val leftPadding = windowInsets.calculateLeftPadding(LayoutDirection.Ltr)
-                        .toPx()
-                    val rightPadding = windowInsets.calculateRightPadding(LayoutDirection.Ltr)
-                        .toPx()
+                    val bottomPadding = windowInsets.bottom.toPx()
+                    val leftPadding = windowInsets.left.toPx()
+                    val rightPadding = windowInsets.right.toPx()
                     when {
                         bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding)
                         leftPadding > 0f -> Offset(0f, screenHeight)

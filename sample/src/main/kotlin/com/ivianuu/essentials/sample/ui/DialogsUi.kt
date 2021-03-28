@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -76,7 +76,7 @@ fun dialogsUi(): KeyUi<DialogsKey> = {
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = localVerticalInsets(),
+            contentPadding = localVerticalInsetsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

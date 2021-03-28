@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigationState
@@ -122,7 +121,7 @@ fun TopAppBar(
                 ) else Modifier
                 ).then(modifier)
     ) {
-        InsetsPadding(start = false, end = false, bottom = false) {
+        InsetsPadding(left = false, right = false, bottom = false) {
             Row(
                 modifier = Modifier.height(DefaultAppBarHeight)
                     .fillMaxWidth()

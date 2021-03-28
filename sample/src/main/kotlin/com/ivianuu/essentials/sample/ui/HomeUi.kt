@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
@@ -83,7 +83,7 @@ fun homeUi(
             )
         }
     ) {
-        LazyColumn(contentPadding = localVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(finalItems) { item ->
                 val color = key(item) {
                     rememberSaveable(item) {

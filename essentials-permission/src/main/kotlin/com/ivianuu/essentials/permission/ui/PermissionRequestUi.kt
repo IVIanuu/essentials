@@ -31,7 +31,8 @@ import com.ivianuu.essentials.permission.ui.PermissionRequestAction.RequestPermi
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsets
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.core.toPaddingValues
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -72,7 +73,7 @@ fun permissionRequestUiUi(
             TopAppBar(title = { Text("Required Permissions") }) // todo customizable and/or res
         }
     ) {
-        LazyColumn(contentPadding = localVerticalInsets()) {
+        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(state.permissions) { permission ->
                 Permission(
                     permission = permission.permission,
