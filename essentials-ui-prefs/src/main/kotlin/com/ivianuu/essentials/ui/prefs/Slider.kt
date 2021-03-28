@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -33,10 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlin.time.Duration
 
 @Composable
@@ -262,17 +267,30 @@ fun <T : Comparable<T>> BaseSliderListItem(
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var sliderState by remember(value) { mutableStateOf(toFloat(value)) }
+            var internalValue by remember(value) { mutableStateOf(toFloat(value)) }
 
             val floatRange = remember(toFloat, valueRange) {
                 toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
             }
 
+            // workaround to reset the internal value if the value doesn't change
+            val internalValueResetNotifier = remember(value) { EventFlow<Float>() }
+            LaunchedEffect(internalValueResetNotifier) {
+                internalValueResetNotifier
+                    .collect {
+                        delay(100)
+                        if (internalValue == it) {
+                            internalValue = toFloat(value)
+                        }
+                    }
+            }
+
             Slider(
-                value = sliderState,
-                onValueChange = { sliderState = it },
+                value = internalValue,
+                onValueChange = { internalValue = it },
                 onValueChangeEnd = {
-                    onValueChange(fromFloat(sliderState))
+                    onValueChange(fromFloat(internalValue))
+                    internalValueResetNotifier.tryEmit(internalValue)
                 },
                 valueRange = floatRange,
                 stepPolicy = remember(stepPolicy) {
@@ -288,7 +306,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     modifier = Modifier.widthIn(min = 72.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    valueText(fromFloat(sliderState))
+                    valueText(fromFloat(internalValue))
                 }
             }
         }
