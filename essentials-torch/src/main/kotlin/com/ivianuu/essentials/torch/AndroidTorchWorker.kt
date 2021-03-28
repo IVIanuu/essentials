@@ -38,8 +38,8 @@ fun androidTorchWorker(
 ): ScopeWorker<AppGivenScope> = {
     state
         .onEach { currentState ->
-            val cameraId = cameraManager.cameraIdList[0]
             runCatching {
+                val cameraId = cameraManager.cameraIdList[0]
                 cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
             }.onFailure {
                 it.printStackTrace()
