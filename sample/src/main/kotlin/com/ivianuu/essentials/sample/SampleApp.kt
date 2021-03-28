@@ -56,6 +56,8 @@ import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.shortcutpicker.*
 import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.systemoverlay.blacklist.*
+import com.ivianuu.essentials.systemoverlay.*
 import com.ivianuu.essentials.tile.*
 import com.ivianuu.essentials.torch.*
 import com.ivianuu.essentials.twilight.data.*
@@ -75,7 +77,7 @@ import com.ivianuu.injekt.android.work.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 
-class App : EsApp() {
+class SampleApp : EsApp() {
     override fun buildAppGivenScope(): AppGivenScope =
         createAppGivenScope()
 }
