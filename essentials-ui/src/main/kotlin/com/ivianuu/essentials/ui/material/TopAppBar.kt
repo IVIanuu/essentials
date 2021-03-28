@@ -38,7 +38,8 @@ import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.core.isDark
+import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.injekt.Given
@@ -110,16 +111,22 @@ fun TopAppBar(
     applySystemBarStyle: Boolean = true,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val systemBarStyleModifier = if (applySystemBarStyle) {
+        val systemBarBackgroundColor = if (LocalTopAppBarStyle.current == TopAppBarStyle.Primary ||
+            backgroundColor.isDark) Color.Black.copy(alpha = 0.2f)
+        else Color.White.copy(alpha = 0.4f)
+        val lightIcons = backgroundColor.isLight
+        Modifier.systemBarStyle(
+            bgColor = systemBarBackgroundColor,
+            lightIcons = lightIcons,
+            elevation = elevation
+        )
+    } else Modifier
     Surface(
         color = backgroundColor,
         contentColor = contentColor,
         elevation = elevation,
-        modifier = (
-                if (applySystemBarStyle) Modifier.systemBarStyle(
-                    bgColor = overlaySystemBarBgColor(backgroundColor),
-                    elevation = elevation
-                ) else Modifier
-                ).then(modifier)
+        modifier = systemBarStyleModifier.then(modifier)
     ) {
         InsetsPadding(left = false, right = false, bottom = false) {
             Row(
