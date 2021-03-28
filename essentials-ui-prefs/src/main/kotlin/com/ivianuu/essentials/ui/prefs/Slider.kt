@@ -276,14 +276,12 @@ fun <T : Comparable<T>> BaseSliderListItem(
             }
 
             // workaround to reset the internal value if the value doesn't change
-            val internalValueResetNotifier = remember(value) { EventFlow<Float>() }
+            val internalValueResetNotifier = remember { EventFlow<Unit>() }
             LaunchedEffect(internalValueResetNotifier) {
                 internalValueResetNotifier
                     .collect {
                         delay(100)
-                        if (internalValue == it) {
-                            internalValue = toFloat(value)
-                        }
+                        internalValue = toFloat(value)
                     }
             }
 
@@ -292,7 +290,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
                 onValueChange = { internalValue = it },
                 onValueChangeEnd = {
                     onValueChange(fromFloat(internalValue))
-                    internalValueResetNotifier.tryEmit(internalValue)
+                    internalValueResetNotifier.tryEmit(Unit)
                 },
                 valueRange = floatRange,
                 stepPolicy = remember(stepPolicy) {
