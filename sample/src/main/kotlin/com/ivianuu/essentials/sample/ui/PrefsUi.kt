@@ -49,7 +49,6 @@ import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
-import com.ivianuu.essentials.ui.prefs.SliderValueText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -118,7 +117,7 @@ fun prefsUi(
                     subtitle = { Text("This is a slider preference") },
                     stepPolicy = incrementingStepPolicy(5),
                     valueRange = 0..100,
-                    valueText = { SliderValueText(it) }
+                    valueText = { Text(it.toString()) }
                 )
 
                 Subheader(modifier = Modifier.interactive(prefs.switch)) {

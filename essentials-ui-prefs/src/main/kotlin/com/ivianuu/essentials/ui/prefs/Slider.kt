@@ -20,9 +20,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -306,7 +308,11 @@ fun <T : Comparable<T>> BaseSliderListItem(
                     modifier = Modifier.widthIn(min = 72.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    valueText(fromFloat(internalValue))
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.body2
+                    ) {
+                        valueText(fromFloat(internalValue))
+                    }
                 }
             }
         }
@@ -314,16 +320,8 @@ fun <T : Comparable<T>> BaseSliderListItem(
 }
 
 @Composable
-fun <T> SliderValueText(value: T) {
-    Text(
-        text = value.toString(),
-        style = MaterialTheme.typography.body2
-    )
-}
-
-@Composable
 fun <T> SimpleValueTextProvider(toString: (T) -> String = { it.toString() }): @Composable (T) -> Unit {
-    return { SliderValueText(toString(it)) }
+    return { Text(toString(it)) }
 }
 
 @Composable
@@ -332,5 +330,5 @@ fun <T> UnitValueTextProvider(
     toString: (T) -> String = { it.toString() }
 ): @Composable (T) -> Unit {
     val textProvider = UnitValueTextProvider(LocalContext.current, unit)
-    return { SliderValueText(textProvider(toString(it))) }
+    return { Text(textProvider(toString(it))) }
 }
