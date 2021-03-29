@@ -86,39 +86,47 @@ fun writeSecureSettingsPcInstructionsUi(
                 SecureSettingsHeader(
                     text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
                 )
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_secure_settings_step_1)) },
                     subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_1_summary)) }
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_secure_settings_step_2)) },
                     subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_2_summary)) }
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_secure_settings_step_3)) },
                     subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_3_summary)) }
                 )
-
+            }
+            item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
                     onClick = { dispatch(OpenGadgetHacksTutorial) }
                 )
-
+            }
+            item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
                     onClick = { dispatch(OpenLifeHackerTutorial) }
                 )
-
+            }
+            item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
                     onClick = { dispatch(OpenXdaTutorial) }
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_secure_settings_step_4)) },
                     subtitle = {

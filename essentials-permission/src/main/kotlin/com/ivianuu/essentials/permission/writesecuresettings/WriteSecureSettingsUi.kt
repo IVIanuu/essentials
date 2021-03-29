@@ -79,13 +79,15 @@ fun writeSecureSettingsUi(
                 SecureSettingsHeader(
                     stringResource(R.string.es_pref_secure_settings_header_summary)
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
                     onClick = { dispatch(OpenPcInstructions) }
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },

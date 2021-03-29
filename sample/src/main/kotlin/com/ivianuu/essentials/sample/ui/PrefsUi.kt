@@ -84,9 +84,11 @@ fun prefsUi(
                     },
                     title = { Text("Switch") }
                 )
-
+            }
+            item {
                 Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
-
+            }
+            item {
                 CheckboxListItem(
                     value = prefs.checkbox,
                     onValueChange = {
@@ -97,6 +99,8 @@ fun prefsUi(
                     subtitle = { Text("This is a checkbox preference") }
                 )
 
+            }
+            item {
                 RadioButtonListItem(
                     value = prefs.radioButton,
                     onValueChange = {
@@ -106,7 +110,8 @@ fun prefsUi(
                     title = { Text("Radio Button") },
                     subtitle = { Text("This is a radio button preference") }
                 )
-
+            }
+            item {
                 IntSliderListItem(
                     value = prefs.slider,
                     onValueChange = {
@@ -119,11 +124,13 @@ fun prefsUi(
                     valueRange = 0..100,
                     valueText = { Text(it.toString()) }
                 )
-
+            }
+            item {
                 Subheader(modifier = Modifier.interactive(prefs.switch)) {
                     Text("Dialogs")
                 }
-
+            }
+            item {
                 ListItem(
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Text input") },
@@ -142,7 +149,8 @@ fun prefsUi(
                         }
                     }
                 )
-
+            }
+            item {
                 ColorListItem(
                     value = Color(prefs.color),
                     onValueChangeRequest = {
@@ -160,7 +168,8 @@ fun prefsUi(
                     title = { Text("Color") },
                     subtitle = { Text("This is a color preference") }
                 )
-
+            }
+            item {
                 ListItem(
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Multi select list") },
@@ -182,7 +191,8 @@ fun prefsUi(
                         }
                     }
                 )
-
+            }
+            item {
                 ListItem(
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Single item list") },

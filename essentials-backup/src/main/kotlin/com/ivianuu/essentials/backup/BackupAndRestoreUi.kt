@@ -69,7 +69,8 @@ fun backupAndRestoreUi(
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
                     onClick = { dispatch(BackupData) }
                 )
-
+            }
+            item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
