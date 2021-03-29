@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable

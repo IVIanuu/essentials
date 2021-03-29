@@ -37,7 +37,6 @@ import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.core.toPaddingValues
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

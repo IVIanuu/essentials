@@ -23,7 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.android.prefs.PrefAction
@@ -33,7 +32,6 @@ import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.core.toPaddingValues
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader

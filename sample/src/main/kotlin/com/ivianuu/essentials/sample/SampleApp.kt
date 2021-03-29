@@ -76,7 +76,6 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
-import com.ivianuu.essentials.ui.mvi.*
 
 class SampleApp : EsApp() {
     override fun buildAppGivenScope(): AppGivenScope =

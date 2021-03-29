@@ -18,7 +18,6 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme

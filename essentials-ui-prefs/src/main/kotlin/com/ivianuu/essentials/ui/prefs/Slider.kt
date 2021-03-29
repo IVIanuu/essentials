@@ -41,7 +41,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlin.time.Duration

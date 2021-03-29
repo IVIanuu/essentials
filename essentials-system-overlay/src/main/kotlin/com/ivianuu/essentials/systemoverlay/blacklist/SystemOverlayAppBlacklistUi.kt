@@ -13,7 +13,7 @@ import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.*
+import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.UpdateAppBlacklist
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi

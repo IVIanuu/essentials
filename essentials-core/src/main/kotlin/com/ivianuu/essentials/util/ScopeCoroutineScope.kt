@@ -8,7 +8,6 @@ import com.ivianuu.injekt.scope.GivenScopeDisposable
 import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
