@@ -15,7 +15,8 @@
   -->
 
 <resources>
-    <string name="es_pref_nav_bar_hidden">Hide navigation bar</string>
+    <string name="es_nav_bar_title">Navigation bar</string>
+    <string name="es_pref_hide_nav_bar">Hide navigation bar</string>
 
     <string name="es_pref_nav_bar_rotation_mode">Navigation bar behavior</string>
     <string name="es_pref_nav_bar_rotation_mode_summary">Select the location of the navigation bar in landscape mode</string>
@@ -23,11 +24,7 @@
     <string name="es_nav_bar_rotation_mode_nougat">Bottom side of the device (Android 7.1+)</string>
     <string name="es_nav_bar_rotation_mode_tablet">Bottom side of the screen (tablet)</string>
 
-    <string name="es_pref_show_nav_bar_screen_off">Show while screen is off</string>
-    <string name="es_pref_show_nav_bar_screen_off_summary">This will show the navigation bar while the screen is off or locked. Disabling this option leads to display cutouts on the lock screen and wake-up issues on some devices.</string>
-
     <string name="es_nav_bar_unsupported_title">Unsupported</string>
     <string name="es_nav_bar_unsupported_content">Hiding the navigation bar is not supported on this android version because google removed the ability for apps to change the overscan settings</string>
     <string name="es_more_infos">More Info\'s</string>
-
 </resources>
