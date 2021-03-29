@@ -90,19 +90,17 @@ private fun Shortcut(
     onClick: () -> Unit,
     info: Shortcut
 ) {
-    key(info) {
-        ListItem(
-            leading = {
-                Image(
-                    modifier = Modifier.size(40.dp),
-                    painter = BitmapPainter(info.icon),
-                    contentDescription = null
-                )
-            },
-            title = { Text(info.name) },
-            onClick = onClick
-        )
-    }
+    ListItem(
+        leading = {
+            Image(
+                modifier = Modifier.size(40.dp),
+                painter = BitmapPainter(info.icon),
+                contentDescription = null
+            )
+        },
+        title = { Text(info.name) },
+        onClick = onClick
+    )
 }
 
 data class ShortcutPickerState(

@@ -85,14 +85,12 @@ fun homeUi(
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(finalItems) { item ->
-                val color = key(item) {
-                    rememberSaveable(item) {
-                        ColorPickerPalette.values()
-                            .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
-                            .shuffled()
-                            .first()
-                            .front
-                    }
+                val color = rememberSaveable(item) {
+                    ColorPickerPalette.values()
+                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                        .shuffled()
+                        .first()
+                        .front
                 }
 
                 HomeItem(

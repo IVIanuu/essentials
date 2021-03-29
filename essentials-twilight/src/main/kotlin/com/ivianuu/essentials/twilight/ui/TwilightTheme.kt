@@ -57,7 +57,7 @@ fun TwilightTheme(
 
     var lastColors by remember { refOf(targetColors) }
 
-    val animation = key(targetColors) { remember { Animatable(0f) } }
+    val animation = remember(targetColors) { Animatable(0f) }
     LaunchedEffect(animation) {
         animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
     }

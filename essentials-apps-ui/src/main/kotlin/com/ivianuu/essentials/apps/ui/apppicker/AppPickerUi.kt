@@ -84,12 +84,10 @@ fun appPickerUi(
         }
     ) {
         ResourceLazyColumnFor(state.filteredApps) { app ->
-            key(app.packageName) {
-                AppInfo(
-                    onClick = { dispatch(PickApp(app)) },
-                    app = app
-                )
-            }
+            AppInfo(
+                onClick = { dispatch(PickApp(app)) },
+                app = app
+            )
         }
     }
 }

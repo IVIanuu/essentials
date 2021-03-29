@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.runtime.key
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,18 +55,16 @@ fun dynamicSystemBarsUi(): KeyUi<DynamicSystemBarsKey> = {
         }
         LazyColumn {
             items(colors) { color ->
-                key(color) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .background(color)
-                            .systemBarStyle(
-                                bgColor = Color.Black.copy(alpha = 0.2f),
-                                lightIcons = color.isLight
-                            )
-                    )
-                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                        .background(color)
+                        .systemBarStyle(
+                            bgColor = Color.Black.copy(alpha = 0.2f),
+                            lightIcons = color.isLight
+                        )
+                )
             }
         }
 
