@@ -30,6 +30,7 @@ fun systemOverlayBlacklistState(
             if (it) SystemOverlayBlacklistState.ENABLED
             else SystemOverlayBlacklistState.DISABLED
         }
+        .distinctUntilChanged()
         .onEach { logger.d { "system overlay enabled $it" } }
         // after that check the lock screen setting
         .switchIfStillEnabled { lockScreenState }
