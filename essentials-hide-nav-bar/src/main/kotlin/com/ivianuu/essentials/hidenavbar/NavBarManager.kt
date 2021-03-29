@@ -92,10 +92,9 @@ fun navBarManager(
                         rotation = currentDisplayRotation,
                         screenState = currentScreenState
                     )
+                }.onEach { currentState ->
+                    wasNavBarHiddenUpdater.update { currentState.hidden }
                 }
-                    .onEach {
-                        wasNavBarHiddenUpdater.update { true }
-                    }
             } else {
                 if (!wasNavBarHidden.first()) {
                     infiniteEmptyFlow()
