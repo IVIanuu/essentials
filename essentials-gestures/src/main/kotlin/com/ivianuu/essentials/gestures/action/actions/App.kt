@@ -20,6 +20,8 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
@@ -44,13 +46,16 @@ class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
     @Given private val appRepository: AppRepository,
     @Given private val packageManager: PackageManager,
+    @Given private val resourceProvider: ResourceProvider
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
         val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             id = id,
-            title = appRepository.getAppInfo(packageName).appName,
+            title = runCatching {
+                appRepository.getAppInfo(packageName).appName
+            }.getOrElse { resourceProvider.string(R.string.es_unknown_action_name) },
             unlockScreen = true,
             enabled = true,
             icon = coilActionIcon(AppIcon(packageName))

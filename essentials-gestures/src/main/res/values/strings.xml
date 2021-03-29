@@ -61,6 +61,7 @@
     <string name="es_keycode_picker_title">Keycode</string>
     <string name="es_keycode_input_hint">Type in the keycode</string>
 
+    <string name="es_unknown_action_name">Unknown</string>
     <string name="es_activity_not_found">Failed to launch screen!</string>
 
 </resources>
