@@ -65,7 +65,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-data class WriteSecureSettingsPcInstructionsKey(
+class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Nothing>
 

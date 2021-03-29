@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
 
-data class MultiChoiceListKey<T : Any>(
+class MultiChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItems: Set<T>,
     val title: String

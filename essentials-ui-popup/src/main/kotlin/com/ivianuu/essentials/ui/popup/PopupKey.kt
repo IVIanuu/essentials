@@ -39,7 +39,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
-data class PopupKey(
+
+class PopupKey(
     val position: Rect,
     val onCancel: (() -> Unit)?,
     val content: @Composable() () -> Unit,

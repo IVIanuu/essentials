@@ -12,7 +12,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.injekt.Given
 
-data class SingleChoiceListKey<T : Any>(
+class SingleChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItem: T,
     val title: String

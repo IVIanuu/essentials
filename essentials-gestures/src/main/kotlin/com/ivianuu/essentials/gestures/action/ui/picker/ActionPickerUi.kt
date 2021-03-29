@@ -69,7 +69,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-data class ActionPickerKey(
+class ActionPickerKey(
     val showDefaultOption: Boolean = false,
     val showNoneOption: Boolean = false,
 ) : Key<ActionPickerKey.Result> {
