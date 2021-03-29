@@ -19,8 +19,8 @@
 
     <application>
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}"
+            android:name=".BackupFileProvider"
+            android:authorities="${applicationId}.backupprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
