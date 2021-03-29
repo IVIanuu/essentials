@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -42,7 +43,7 @@ fun ColorListItem(
         leading = leading,
         trailing = {
             Surface(
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier.requiredSize(40.dp),
                 color = value,
                 border = BorderStroke(
                     width = 1.dp,
