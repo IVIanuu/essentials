@@ -96,7 +96,7 @@ fun appTrackerUi(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    if (permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))) {
+                    if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
                         foregroundState.value = if (currentForegroundState is Foreground) Background
                         else Foreground(notificationFactory(null))
                     }

@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -31,6 +33,7 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -87,7 +90,7 @@ fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>
-): PermissionState<P> = permissionChanges
+): PermissionState<P> = permissionRefreshes
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
@@ -110,12 +113,18 @@ fun permissionStateFactory(
     ) { states -> states.all { it } }
 }
 
-internal val permissionChanges = EventFlow<Unit>()
+internal val permissionRefreshes = EventFlow<Unit>()
+
+@Given
+fun <S : GivenScope> permissionRefreshesWorker(): ScopeWorker<S> = {
+    permissionRefreshes.tryEmit(Unit)
+    runOnCancellation { permissionRefreshes.tryEmit(Unit) }
+}
 
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
     return {
         this(it)
-        permissionChanges.emit(Unit)
+        permissionRefreshes.emit(Unit)
     }
 }
 
