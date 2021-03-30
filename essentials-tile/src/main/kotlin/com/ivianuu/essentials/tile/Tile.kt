@@ -35,14 +35,14 @@ data class TileState<T : AbstractFunTileService>(
     val labelRes: Int? = null,
     val description: String? = null,
     val descriptionRes: Int? = null,
-    val status: Status = Status.Active
+    val status: Status = Status.ACTIVE
 ) {
     enum class Status {
-        Unavailable, Active, Inactive
+        UNAVAILABLE, ACTIVE, INACTIVE
     }
 }
 
-fun Boolean.toTileStatus() = if (this) TileState.Status.Active else TileState.Status.Inactive
+fun Boolean.toTileStatus() = if (this) TileState.Status.ACTIVE else TileState.Status.INACTIVE
 
 sealed class TileAction {
     object TileClicked : TileAction()

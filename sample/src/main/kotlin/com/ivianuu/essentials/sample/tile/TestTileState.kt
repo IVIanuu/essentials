@@ -61,6 +61,6 @@ fun testTileState(
 
 private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
     label = twilightMode.name,
-    status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.Active
-    else TileState.Status.Inactive
+    status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.ACTIVE
+    else TileState.Status.INACTIVE
 )

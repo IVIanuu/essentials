@@ -49,13 +49,13 @@ import kotlinx.coroutines.withContext
 
 enum class DisplayRotation(val isPortrait: Boolean) {
     // 0 degrees
-    PortraitUp(true),
+    PORTRAIT_UP(true),
     // 90 degrees
-    LandscapeLeft(false),
+    LANDSCAPE_LEFT(false),
     // 180 degrees
-    PortraitDown(true),
+    PORTRAIT_DOWN(true),
     // 270 degrees
-    LandscapeRight(false)
+    LANDSCAPE_RIGHT(false)
 }
 
 @Given
@@ -90,10 +90,10 @@ private suspend fun getCurrentDisplayRotation(
     windowManager: WindowManager,
 ) = withContext(ioDispatcher) {
     when (windowManager.defaultDisplay.rotation) {
-        Surface.ROTATION_0 -> DisplayRotation.PortraitUp
-        Surface.ROTATION_90 -> DisplayRotation.LandscapeLeft
-        Surface.ROTATION_180 -> DisplayRotation.PortraitDown
-        Surface.ROTATION_270 -> DisplayRotation.LandscapeRight
+        Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
+        Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
+        Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
+        Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
         else -> error("unexpected rotation")
     }
 }

@@ -59,14 +59,14 @@ fun ColorPickerDialog(
     modifier: Modifier = Modifier
 ) {
     var currentColor by remember { mutableStateOf(initialColor) }
-    var currentScreen by remember { mutableStateOf(ColorPickerTab.Colors) }
+    var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
     val otherScreen = when (currentScreen) {
-        ColorPickerTab.Colors -> ColorPickerTab.Editor
-        ColorPickerTab.Editor -> ColorPickerTab.Colors
+        ColorPickerTab.COLORS -> ColorPickerTab.EDITOR
+        ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
     }
 
-    if (!allowCustomArgb && currentScreen == ColorPickerTab.Editor) {
-        currentScreen = ColorPickerTab.Colors
+    if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
+        currentScreen = ColorPickerTab.COLORS
     }
 
     Dialog(
@@ -107,7 +107,7 @@ fun ColorPickerDialog(
                 transition = FadeStackTransition()
             ) { currentScreen ->
                 when (currentScreen) {
-                    ColorPickerTab.Colors -> {
+                    ColorPickerTab.COLORS -> {
                         ColorGrid(
                             modifier = Modifier.fillMaxSize(),
                             currentColor = currentColor,
@@ -115,7 +115,7 @@ fun ColorPickerDialog(
                             onColorSelected = { currentColor = it }
                         )
                     }
-                    ColorPickerTab.Editor -> {
+                    ColorPickerTab.EDITOR -> {
                         ColorEditor(
                             modifier = Modifier.fillMaxSize(),
                             color = currentColor,
@@ -249,7 +249,7 @@ private fun BaseColorGridItem(
 ) {
     Box(
         modifier = Modifier
-            .squared(SquareFit.MatchWidth)
+            .squared(SquareFit.FIT_WIDTH)
             .padding(all = 4.dp)
             .wrapContentSize(Alignment.Center)
             .clickable(
@@ -278,7 +278,7 @@ private fun ColorEditor(
         )
 
         ColorComponent.values()
-            .filter { it != ColorComponent.Alpha || showAlphaSelector }
+            .filter { it != ColorComponent.ALPHA || showAlphaSelector }
             .forEach { component ->
                 key(component) {
                     ColorComponentItem(
@@ -381,28 +381,28 @@ private enum class ColorComponent(
     val title: String,
     val color: @Composable () -> Color
 ) {
-    Alpha(
+    ALPHA(
         title = "A",
         color = { LocalContentColor.current }
     ) {
         override fun extract(color: Color) = color.alpha
         override fun apply(color: Color, value: Float) = color.copy(alpha = value)
     },
-    Red(
+    RED(
         title = "R",
         color = { Color.Red }
     ) {
         override fun extract(color: Color) = color.red
         override fun apply(color: Color, value: Float) = color.copy(red = value)
     },
-    Green(
+    GREEN(
         title = "G",
         color = { Color.Green }
     ) {
         override fun extract(color: Color) = color.green
         override fun apply(color: Color, value: Float) = color.copy(green = value)
     },
-    Blue(
+    BLUE(
         title = "B",
         color = { Color.Blue }
     ) {
@@ -418,5 +418,5 @@ private enum class ColorComponent(
 private enum class ColorPickerTab(
     val title: String,
 ) {
-    Colors("Colors"), Editor("Custom")
+    COLORS("Colors"), EDITOR("Custom")
 }

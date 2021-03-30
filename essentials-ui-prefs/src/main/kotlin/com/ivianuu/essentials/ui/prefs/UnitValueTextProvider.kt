@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.prefs
 
 import android.content.Context
-import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Dp
-import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Millis
-import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Percentage
-import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Px
-import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.Seconds
+import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.DP
+import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.MILLIS
+import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.PERCENTAGE
+import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.PX
+import com.ivianuu.essentials.ui.prefs.UnitValueTextProvider.Unit.SECONDS
 
 class UnitValueTextProvider(
     private val context: Context,
@@ -29,14 +29,14 @@ class UnitValueTextProvider(
 ) : (String) -> String {
 
     override fun invoke(value: String) = when (unit) {
-        Dp -> context.getString(R.string.es_seek_bar_pref_format_dp, value)
-        Millis -> context.getString(R.string.es_seek_bar_pref_format_millis, value)
-        Percentage -> context.getString(R.string.es_seek_bar_pref_format_percentage, value)
-        Px -> context.getString(R.string.es_seek_bar_pref_format_px, value)
-        Seconds -> context.getString(R.string.es_seek_bar_pref_format_seconds, value)
+        DP -> context.getString(R.string.es_seek_bar_pref_format_dp, value)
+        MILLIS -> context.getString(R.string.es_seek_bar_pref_format_millis, value)
+        PERCENTAGE -> context.getString(R.string.es_seek_bar_pref_format_percentage, value)
+        PX -> context.getString(R.string.es_seek_bar_pref_format_px, value)
+        SECONDS -> context.getString(R.string.es_seek_bar_pref_format_seconds, value)
     }
 
     enum class Unit {
-        Dp, Millis, Percentage, Px, Seconds
+        DP, MILLIS, PERCENTAGE, PX, SECONDS
     }
 }

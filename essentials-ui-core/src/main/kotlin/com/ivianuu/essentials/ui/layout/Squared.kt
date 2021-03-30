@@ -32,8 +32,8 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
         constraints: Constraints
     ): MeasureResult {
         val size = when (fit) {
-            SquareFit.MatchWidth -> constraints.maxWidth
-            SquareFit.MatchHeight -> constraints.maxHeight
+            SquareFit.FIT_WIDTH -> constraints.maxWidth
+            SquareFit.FIT_HEIGHT -> constraints.maxHeight
         }
         val finalConstraints = constraints.copy(
             maxWidth = size,
@@ -47,5 +47,5 @@ private data class SquaredModifier(val fit: SquareFit) : LayoutModifier {
 }
 
 enum class SquareFit {
-    MatchWidth, MatchHeight
+    FIT_WIDTH, FIT_HEIGHT
 }

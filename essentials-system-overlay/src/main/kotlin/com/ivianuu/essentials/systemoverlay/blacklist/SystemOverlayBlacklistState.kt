@@ -70,7 +70,7 @@ fun lockScreenSystemOverlayEnabledState(
             screenState
                 .map {
                     logger.d { "screen state $it disable on lock $disableOnLockScreen" }
-                    if (it != ScreenState.Unlocked) {
+                    if (it != ScreenState.UNLOCKED) {
                         logger.d { "hide: on lock screen" }
                         SystemOverlayBlacklistState.HIDDEN
                     } else {
@@ -99,7 +99,7 @@ fun secureScreenSystemOverlayBlacklistState(
             screenState
                 .onEach { logger.d { "screen state $it" } }
                 .flatMapLatest { screenState ->
-                    if (screenState == ScreenState.Unlocked) {
+                    if (screenState == ScreenState.UNLOCKED) {
                         isOnSecureScreen
                             .onEach { logger.d { "is on secure screen $it" } }
                             .map {
@@ -137,7 +137,7 @@ fun userBlacklistSystemOverlayBlacklistState(
                 .onEach { logger.d { "screen state $it" } }
                 .flatMapLatest { screenState ->
                     // only check the current app if the screen is on
-                    if (screenState == ScreenState.Unlocked) {
+                    if (screenState == ScreenState.UNLOCKED) {
                         currentApp
                             .onEach { logger.d { "current app $it" } }
                             .map { currentApp ->

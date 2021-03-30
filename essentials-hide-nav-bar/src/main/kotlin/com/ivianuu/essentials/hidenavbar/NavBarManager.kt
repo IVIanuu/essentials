@@ -102,8 +102,8 @@ fun navBarManager(
                     flowOf(
                         NavBarState(
                             config = currentConfig,
-                            screenState = ScreenState.Off,
-                            rotation = DisplayRotation.PortraitUp
+                            screenState = ScreenState.OFF,
+                            rotation = DisplayRotation.PORTRAIT_UP
                         )
                     )
                 }
@@ -118,7 +118,7 @@ private data class NavBarState(
     val rotation: DisplayRotation
 ) {
     val hidden: Boolean
-        get() = config.hidden && (!config.showWhileScreenOff || screenState == ScreenState.Unlocked)
+        get() = config.hidden && (!config.showWhileScreenOff || screenState == ScreenState.UNLOCKED)
 }
 
 private suspend fun NavBarState.apply(
@@ -155,26 +155,26 @@ private fun getOverscanRect(
     rotationMode: NavBarRotationMode,
     rotation: DisplayRotation
 ): Rect = when (rotationMode) {
-    NavBarRotationMode.Marshmallow -> {
+    NavBarRotationMode.MARSHMALLOW -> {
         when (rotation) {
-            DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.LandscapeLeft -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-            DisplayRotation.LandscapeRight -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.LANDSCAPE_LEFT -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, navBarHeight, 0, 0)
         }
     }
-    NavBarRotationMode.Nougat -> {
+    NavBarRotationMode.NOUGAT -> {
         when (rotation) {
-            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
             else -> Rect(0, 0, 0, navBarHeight)
         }
     }
     NavBarRotationMode.Tablet -> {
         when (rotation) {
-            DisplayRotation.PortraitUp -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.LandscapeLeft -> Rect(navBarHeight, 0, 0, 0)
-            DisplayRotation.PortraitDown -> Rect(0, navBarHeight, 0, 0)
-            DisplayRotation.LandscapeRight -> Rect(0, 0, navBarHeight, 0)
+            DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
+            DisplayRotation.LANDSCAPE_LEFT -> Rect(navBarHeight, 0, 0, 0)
+            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
+            DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, 0, navBarHeight, 0)
         }
     }
 }

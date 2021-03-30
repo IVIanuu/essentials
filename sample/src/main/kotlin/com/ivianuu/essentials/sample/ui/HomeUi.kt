@@ -86,7 +86,7 @@ fun homeUi(
             items(finalItems) { item ->
                 val color = rememberSaveable(item) {
                     ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.Black && it != ColorPickerPalette.White }
+                        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.White }
                         .shuffled()
                         .first()
                         .front

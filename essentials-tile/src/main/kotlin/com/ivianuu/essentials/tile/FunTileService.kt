@@ -88,9 +88,9 @@ abstract class AbstractFunTileService(
         val qsTile = qsTile ?: return
 
         qsTile.state = when (state.status) {
-            TileState.Status.Active -> android.service.quicksettings.Tile.STATE_ACTIVE
-            TileState.Status.Inactive -> android.service.quicksettings.Tile.STATE_INACTIVE
-            TileState.Status.Unavailable -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
+            TileState.Status.ACTIVE -> android.service.quicksettings.Tile.STATE_ACTIVE
+            TileState.Status.INACTIVE -> android.service.quicksettings.Tile.STATE_INACTIVE
+            TileState.Status.UNAVAILABLE -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
         }
         qsTile.icon = when {
             state.icon != null -> state.icon

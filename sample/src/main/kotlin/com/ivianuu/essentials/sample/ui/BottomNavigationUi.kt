@@ -103,27 +103,27 @@ private enum class BottomNavItem(
     val icon: Int,
     val color: Color
 ) {
-    Home(
+    HOME(
         title = "Home",
         icon = R.drawable.ic_home,
         color = Color.Yellow
     ),
-    Mails(
+    MAILS(
         title = "Mails",
         icon = R.drawable.ic_email,
         color = Color.Red
     ),
-    Search(
+    SEARCH(
         title = "Search",
         icon = R.drawable.ic_search,
         color = Color.Blue
     ),
-    Schedule(
+    SCHEDULE(
         title = "Schedule",
         icon = R.drawable.ic_view_agenda,
         color = Color.Cyan
     ),
-    Settings(
+    SETTINGS(
         title = "Settings",
         icon = R.drawable.ic_settings,
         color = Color.Green

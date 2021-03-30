@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.billing
 
 enum class BillingFeature(val value: String) {
-    Subscriptions("subscriptions"),
-    SubscriptionsUpdate("subscriptionsUpdate"),
-    InAppItemsOnVr("inAppItemsOnVr"),
-    SubscriptionsOnVr("subscriptionsOnVr"),
-    PriceChangeConfirmation("priceChangeConfirmation")
+    SUBSCRIPTIONS("subscriptions"),
+    SUBSCRIPTIONS_UPDATE("subscriptionsUpdate"),
+    IN_APP_ITEMS_ON_VR("inAppItemsOnVr"),
+    SUBSCRIPTIONS_ON_VAR("subscriptionsOnVr"),
+    PRICE_CHANGE_CONFIRMATION("priceChangeConfirmation")
 }

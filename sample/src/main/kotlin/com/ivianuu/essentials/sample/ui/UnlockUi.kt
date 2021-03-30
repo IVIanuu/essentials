@@ -57,7 +57,7 @@ fun unlockUi(
             onClick = {
                 scope.launch {
                     toaster.showToast("Turn the screen off and on")
-                    screenState.first { it == ScreenState.Locked }
+                    screenState.first { it == ScreenState.LOCKED }
                     val unlocked = screenUnlocker()
                     toaster.showToast("Screen unlocked $unlocked")
                 }

@@ -29,7 +29,7 @@ data class Sku(
         .build()
 
     enum class Type(val value: String) {
-        InApp(BillingClient.SkuType.INAPP),
-        Subs(BillingClient.SkuType.SUBS)
+        IN_APP(BillingClient.SkuType.INAPP),
+        SUBS(BillingClient.SkuType.SUBS)
     }
 }

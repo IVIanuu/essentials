@@ -39,7 +39,7 @@ class ScreenStateTest {
     @Test
     fun testScreenState() = runCancellingBlockingTest {
         val broadcasts = EventFlow<Intent>()
-        var currentScreenState = ScreenState.Off
+        var currentScreenState = ScreenState.OFF
         val globalScopeDispatcher = TestCoroutineDispatcher()
         val globalScope = childCoroutineScope(globalScopeDispatcher)
 
@@ -52,13 +52,13 @@ class ScreenStateTest {
 
         globalScopeDispatcher.runCurrent()
 
-        currentScreenState = ScreenState.Locked
+        currentScreenState = ScreenState.LOCKED
         broadcasts.emit(Intent())
-        currentScreenState = ScreenState.Unlocked
+        currentScreenState = ScreenState.UNLOCKED
         broadcasts.emit(Intent())
 
         collector.values
-            .shouldContainExactly(ScreenState.Off, ScreenState.Locked, ScreenState.Unlocked)
+            .shouldContainExactly(ScreenState.OFF, ScreenState.LOCKED, ScreenState.UNLOCKED)
     }
 
     @Test
@@ -70,7 +70,7 @@ class ScreenStateTest {
                 every { isInteractive } returns false
             }
         )()
-        screenState shouldBe ScreenState.Off
+        screenState shouldBe ScreenState.OFF
     }
 
     @Test
@@ -84,7 +84,7 @@ class ScreenStateTest {
                 every { isInteractive } returns true
             }
         )()
-        screenState shouldBe ScreenState.Locked
+        screenState shouldBe ScreenState.LOCKED
     }
 
     @Test
@@ -98,6 +98,6 @@ class ScreenStateTest {
                 every { isInteractive } returns true
             }
         )()
-        screenState shouldBe ScreenState.Unlocked
+        screenState shouldBe ScreenState.UNLOCKED
     }
 }

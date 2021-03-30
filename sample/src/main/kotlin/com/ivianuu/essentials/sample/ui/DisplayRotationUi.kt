@@ -52,10 +52,10 @@ fun displayRotationUi(@Given rotation: Flow<DisplayRotation>): KeyUi<DisplayRota
         val currentRotation by rotation.collectAsState(null)
         Text(
             text = when (currentRotation) {
-                DisplayRotation.PortraitUp -> "Portrait up"
-                DisplayRotation.LandscapeLeft -> "Landscape left"
-                DisplayRotation.PortraitDown -> "Portrait down"
-                DisplayRotation.LandscapeRight -> "Landscape right"
+                DisplayRotation.PORTRAIT_UP -> "Portrait up"
+                DisplayRotation.LANDSCAPE_LEFT -> "Landscape left"
+                DisplayRotation.PORTRAIT_DOWN -> "Portrait down"
+                DisplayRotation.LANDSCAPE_RIGHT -> "Landscape right"
                 null -> "Unknown"
             },
             style = MaterialTheme.typography.h4

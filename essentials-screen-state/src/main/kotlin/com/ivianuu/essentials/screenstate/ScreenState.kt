@@ -67,16 +67,16 @@ fun currentScreenStateProvider(
     withContext(defaultDispatcher) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
-                ScreenState.Locked
+                ScreenState.LOCKED
             } else {
-                ScreenState.Unlocked
+                ScreenState.UNLOCKED
             }
         } else {
-            ScreenState.Off
+            ScreenState.OFF
         }
     }
 }
 
 enum class ScreenState(val isOn: Boolean) {
-    Off(false), Locked(true), Unlocked(true)
+    OFF(false), LOCKED(true), UNLOCKED(true)
 }

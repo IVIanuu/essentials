@@ -18,7 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 data class NavBarConfig(
     val hidden: Boolean,
-    val rotationMode: NavBarRotationMode = NavBarRotationMode.Nougat,
+    val rotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
     val showWhileScreenOff: Boolean = true
 )
 

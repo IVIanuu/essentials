@@ -47,10 +47,10 @@ import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {
-    Primary, Surface
+    PRIMARY, SURFACE
 }
 
-val LocalTopAppBarStyle = compositionLocalOf { TopAppBarStyle.Primary }
+val LocalTopAppBarStyle = compositionLocalOf { TopAppBarStyle.PRIMARY }
 
 @Composable
 fun TopAppBar(
@@ -59,8 +59,8 @@ fun TopAppBar(
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
     backgroundColor: Color = when (LocalTopAppBarStyle.current) {
-        TopAppBarStyle.Primary -> MaterialTheme.colors.primary
-        TopAppBarStyle.Surface -> MaterialTheme.colors.surface
+        TopAppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+        TopAppBarStyle.SURFACE -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
@@ -103,8 +103,8 @@ fun TopAppBar(
 fun TopAppBar(
     modifier: Modifier = Modifier,
     backgroundColor: Color = when (LocalTopAppBarStyle.current) {
-        TopAppBarStyle.Primary -> MaterialTheme.colors.primary
-        TopAppBarStyle.Surface -> MaterialTheme.colors.surface
+        TopAppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+        TopAppBarStyle.SURFACE -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
@@ -112,7 +112,7 @@ fun TopAppBar(
     content: @Composable RowScope.() -> Unit,
 ) {
     val systemBarStyleModifier = if (applySystemBarStyle) {
-        val systemBarBackgroundColor = if (LocalTopAppBarStyle.current == TopAppBarStyle.Primary ||
+        val systemBarBackgroundColor = if (LocalTopAppBarStyle.current == TopAppBarStyle.PRIMARY ||
             backgroundColor.isDark) Color.Black.copy(alpha = 0.2f)
         else Color.White.copy(alpha = 0.4f)
         val lightIcons = backgroundColor.isLight

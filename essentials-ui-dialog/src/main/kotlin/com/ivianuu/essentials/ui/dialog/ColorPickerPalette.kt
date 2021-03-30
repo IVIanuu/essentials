@@ -22,7 +22,7 @@ enum class ColorPickerPalette(
     val front: Color,
     val colors: List<Color>
 ) {
-    Red(
+    RED(
         front = Color(0xFFF44336),
         colors = listOf(
             Color(0xFFFFEBEE),
@@ -42,7 +42,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Pink(
+    PINK(
         front = Color(0xFFE91E63),
         colors = listOf(
             Color(0xFFFCE4EC),
@@ -62,7 +62,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Purple(
+    PURPLE(
         front = Color(0xFF9C27B0),
         colors = listOf(
             Color(0xFFF3E5F5),
@@ -82,7 +82,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    DeepPurple(
+    DEEP_PURPLE(
         front = Color(0xFF673AB7),
         colors = listOf(
             Color(0xFFEDE7F6),
@@ -102,7 +102,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Indigo(
+    INDIGO(
         front = Color(0xFF3F51B5),
         colors = listOf(
             Color(0xFFE8EAF6),
@@ -122,7 +122,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Blue(
+    BLUE(
         front = Color(0xFF2196F3),
         colors = listOf(
             Color(0xFFE3F2FD),
@@ -142,7 +142,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    LightBlue(
+    LIGHT_BLUE(
         front = Color(0xFF03A9F4),
         colors = listOf(
             Color(0xFFE1F5FE),
@@ -164,7 +164,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Cyan(
+    CYAN(
         front = Color(0xFF00BCD4),
         colors = listOf(
             Color(0xFFE0F7FA),
@@ -184,7 +184,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Teal(
+    TEAL(
         front = Color(0xFF009688),
         colors = listOf(
             Color(0xFFE0F2F1),
@@ -204,7 +204,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Green(
+    GREEN(
         front = Color(0xFF4CAF50),
         colors = listOf(
             Color(0xFFE8F5E9),
@@ -224,7 +224,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    LightGreen(
+    LIGHT_GREEN(
         front = Color(0xFF8BC34A),
         colors = listOf(
             Color(0xFFF1F8E9),
@@ -244,7 +244,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Lime(
+    LIME(
         front = Color(0xFFCDDC39),
         colors = listOf(
             Color(0xFFF9FBE7),
@@ -264,7 +264,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Yellow(
+    YELLOW(
         front = Color(0xFFFFEB3B),
         colors = listOf(
             Color(0xFFFFFDE7),
@@ -284,7 +284,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Amber(
+    AMBER(
         front = Color(0xFFFFC107),
         colors = listOf(
             Color(0xFFFFF8E1),
@@ -304,7 +304,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Orange(
+    ORANGE(
         front = Color(0xFFFF9800),
         colors = listOf(
             Color(0xFFFFF3E0),
@@ -324,7 +324,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    DeepOrange(
+    DEEP_ORANGE(
         front = Color(0xFFFF5722),
         colors = listOf(
             Color(0xFFFBE9E7),
@@ -344,7 +344,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Brown(
+    BROWN(
         front = Color(0xFF795548),
         colors = listOf(
             Color(0xFFEFEBE9),
@@ -360,7 +360,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Grey(
+    GREY(
         front = Color(0xFF9E9E9E),
         colors = listOf(
             Color(0xFFFAFAFA),
@@ -376,7 +376,7 @@ enum class ColorPickerPalette(
         )
     ),
 
-    BlueGrey(
+    BLUE_GREY(
         front = Color(0xFF607D8B),
         colors = listOf(
             Color(0xFFECEFF1),
@@ -392,12 +392,12 @@ enum class ColorPickerPalette(
         )
     ),
 
-    Black(
+    BLACK(
         front = Color(0xFF000000),
         colors = listOf(Color(0xFF000000))
     ),
 
-    White(
+    WHITE(
         front = Color(0xFFFFFFFF),
         colors = listOf(Color(0xFFFFFFFF))
     );
