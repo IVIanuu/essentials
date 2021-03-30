@@ -20,7 +20,6 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
-        maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://plugins.gradle.org/m2")
     }
@@ -33,6 +32,7 @@ buildscript {
         classpath(Deps.essentialsGradlePlugin)
         classpath(Deps.Injekt.gradlePlugin)
         classpath(Deps.Kotlin.gradlePlugin)
+        classpath(Deps.KotlinSerialization.gradlePlugin)
         classpath(Deps.mavenPublishGradlePlugin)
     }
 }
@@ -43,7 +43,6 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
-        maven("https://dl.bintray.com/ivianuu/maven/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }

@@ -52,9 +52,9 @@ import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 @Given
 val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
@@ -219,7 +219,7 @@ fun prefsUi(
     }
 }
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class SamplePrefs(
     val switch: Boolean = false,
     val checkbox: Boolean = false,

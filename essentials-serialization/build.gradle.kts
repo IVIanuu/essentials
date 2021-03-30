@@ -16,6 +16,7 @@
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
     id("com.ivianuu.injekt")
 }
 
@@ -26,9 +27,7 @@ dependencies {
     compile(Deps.Injekt.core)
     compile(Deps.Injekt.common)
     compile(Deps.Injekt.scope)
-    compile(Deps.Moshi.moshi)
-    compile(Deps.Moshi.adapters)
-    compile(Deps.MoshiSealed.runtime)
+    compile(Deps.KotlinSerialization.json)
     compile(Deps.Kotlin.stdlib)
 }
 

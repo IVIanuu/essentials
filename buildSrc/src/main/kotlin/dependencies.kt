@@ -118,6 +118,11 @@ object Deps {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
     }
 
+    object KotlinSerialization {
+        const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
+        const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
+    }
+
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
 
     const val kotlinxImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
@@ -125,19 +130,6 @@ object Deps {
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
     const val mockk = "io.mockk:mockk:1.11.0"
-
-    object Moshi {
-        private const val version = "1.9.2"
-        const val adapters = "com.squareup.moshi:moshi-adapters:$version"
-        const val moshi = "com.squareup.moshi:moshi:$version"
-        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:$version"
-    }
-
-    object MoshiSealed {
-        private const val version = "0.9.2"
-        const val codegen = "dev.zacsweers.moshix:moshi-sealed-codegen:$version"
-        const val runtime = "dev.zacsweers.moshix:moshi-sealed-runtime:$version"
-    }
 
     const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.14.2"
 

@@ -31,10 +31,12 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -44,7 +46,8 @@ class PrefModule<T : Any>(private val name: String) {
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
-        @Given adapterFactory: () -> JsonAdapter<T>,
+        @Given jsonFactory: () -> Json,
+        @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir
     ): @Scoped<AppGivenScope> DataStore<T> {
         val deferredDataStore: DataStore<T> by lazy {
@@ -53,12 +56,12 @@ class PrefModule<T : Any>(private val name: String) {
                 serializer = object : Serializer<T> {
                     override val defaultValue: T
                         get() = initialFactory()
-                    private val adapter by lazy(adapterFactory)
+                    private val json by lazy(jsonFactory)
+                    private val serializer by lazy(serializerFactory)
                     override suspend fun readFrom(input: InputStream): T =
-                        adapter.fromJson(String(input.readBytes()))!!
-
+                        json.decodeFromString(serializer, String(input.readBytes()))
                     override suspend fun writeTo(t: T, output: OutputStream) {
-                        output.write(adapter.toJson(t)!!.toByteArray())
+                        output.write(json.encodeToString(serializer, t).toByteArray())
                     }
                 },
                 scope = scope.childCoroutineScope(dispatcher),

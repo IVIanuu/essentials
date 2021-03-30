@@ -54,8 +54,6 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.Scoped
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,6 +63,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 typealias MediaActionSender = suspend (Int) -> Unit
 
@@ -94,9 +94,9 @@ private fun mediaIntentFor(
     }
 }
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class MediaActionPrefs(
-    @Json(name = "media_app") val mediaApp: String? = null,
+    @SerialName("media_app") val mediaApp: String? = null,
 )
 
 @Given

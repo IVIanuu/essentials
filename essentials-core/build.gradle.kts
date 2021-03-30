@@ -26,7 +26,7 @@ dependencies {
     compile(Deps.Coroutines.core)
 
     compile(project(":essentials-coroutines"))
-    compile(project(":essentials-moshi"))
+    compile(project(":essentials-serialization"))
     compile(project(":essentials-store"))
     compile(project(":essentials-tuples"))
 

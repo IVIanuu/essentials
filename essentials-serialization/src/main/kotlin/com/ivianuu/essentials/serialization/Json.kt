@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.moshi
+package com.ivianuu.essentials.serialization
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import com.squareup.moshi.Moshi
-
-typealias JsonAdapter = Any
-
-@Given
-fun moshi(@Given jsonAdapters: Set<JsonAdapter> = emptySet()): @Scoped<AppGivenScope> Moshi =
-    Moshi.Builder()
-        .apply {
-            jsonAdapters
-                .forEach { adapter -> add(adapter) }
-        }
-        .build()!!
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.serializer
 
 @Given
-inline fun <reified T> @Given Moshi.jsonAdapter(): com.squareup.moshi.JsonAdapter<T> =
-    adapter(javaTypeOf<T>())
+fun json(): @Scoped<AppGivenScope> Json = Json {
+    serializersModule = SerializersModule {
+    }
+}
+
+@Given
+inline fun <reified T> kSerializer(@Given json: Json): KSerializer<T> =
+    json.serializersModule.serializer()
