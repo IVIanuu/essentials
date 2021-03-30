@@ -94,9 +94,8 @@ typealias PermissionState<P> = Boolean
 fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given stateProvider: PermissionStateProvider<P>
-): @Scoped<AppGivenScope> Flow<PermissionState<P>> = permissionRefreshes
+): Flow<PermissionState<P>> = permissionRefreshes
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
@@ -104,8 +103,6 @@ fun <@ForTypeKey P : Permission> permissionState(
             stateProvider(permission)
         }
     }
-    .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
-    .distinctUntilChanged()
 
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
