@@ -17,108 +17,76 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.android.prefs.PrefAction
 import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.util.e
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 
 @Given
 fun navBarManager(
     @Given appContext: AppContext,
-    @Given broadcastsFactory: BroadcastsFactory,
     @Given displayRotation: Flow<DisplayRotation>,
+    @Given forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
     @Given navBarFeatureSupported: NavBarFeatureSupported,
-    @Given navBarConfig: Flow<NavBarConfig>,
     @Given logger: Logger,
     @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-    @Given permissionState: Flow<NavBarPermissionState>,
-    @Given screenState: Flow<ScreenState>,
+    @Given permissionState: PermissionState<NavBarPermission>,
+    @Given prefs: Flow<NavBarPrefs>,
     @Given setOverscan: OverscanUpdater,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>,
     @Given wasNavBarHiddenUpdater: Collector<PrefAction<WasNavBarHidden>>
 ): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
-        .flatMapLatest {
-            if (it) {
-                broadcastsFactory(Intent.ACTION_SHUTDOWN)
-                    .map { true }
-                    .onStart { emit(false) }
-                    .flatMapLatest { currentSystemShutdown ->
-                        logger.d { "current system shut down $currentSystemShutdown" }
-                        // force show on shut downs
-                        if (currentSystemShutdown) {
-                            logger.d { "system shutdown force show nav bar" }
-                            flowOf(NavBarConfig(hidden = false))
-                        } else {
-                            navBarConfig
-                        }
+        .flatMapLatest { hasPermission ->
+            if (hasPermission) {
+                forceNavBarVisibleState
+                    .flatMapLatest { forceVisible ->
+                        if (!forceVisible) prefs
+                        else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
                     }
             } else {
                 infiniteEmptyFlow()
             }
         }
-        .flatMapLatest { currentConfig ->
-            logger.d { "current config $currentConfig" }
-            if (currentConfig.hidden) {
-                combine(
-                    displayRotation,
-                    screenState
-                ) { currentDisplayRotation, currentScreenState ->
-                    NavBarState(
-                        config = currentConfig,
-                        rotation = currentDisplayRotation,
-                        screenState = currentScreenState
-                    )
-                }.onEach { currentState ->
-                    wasNavBarHiddenUpdater.update { currentState.hidden }
-                }
+        .flatMapLatest { currentPrefs ->
+            logger.d { "current prefs $currentPrefs" }
+            if (currentPrefs.hideNavBar) {
+                displayRotation
+                    .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
+                    .onEach { wasNavBarHiddenUpdater.update { true } }
             } else {
-                if (!wasNavBarHidden.first()) {
-                    infiniteEmptyFlow()
-                } else {
-                    flowOf(
-                        NavBarState(
-                            config = currentConfig,
-                            screenState = ScreenState.OFF,
-                            rotation = DisplayRotation.PORTRAIT_UP
-                        )
-                    )
-                }
+                flowOf(NavBarState.Visible)
+                    .filter { wasNavBarHidden.first() }
+                    .onEach { wasNavBarHiddenUpdater.update { false } }
             }
         }
         .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
 }
 
-private data class NavBarState(
-    val config: NavBarConfig,
-    val screenState: ScreenState,
-    val rotation: DisplayRotation
-) {
-    val hidden: Boolean
-        get() = config.hidden && (!config.showWhileScreenOff || screenState == ScreenState.UNLOCKED)
+private sealed class NavBarState {
+    data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) : NavBarState()
+    object Visible : NavBarState()
 }
 
 private suspend fun NavBarState.apply(
@@ -134,10 +102,15 @@ private suspend fun NavBarState.apply(
             disableNonSdkInterfaceDetection()
         }.onFailure { it.printStackTrace() }
 
-        val navBarHeight = getNavigationBarHeight(context, rotation)
-        val rect = getOverscanRect(if (hidden) -navBarHeight else 0, config.rotationMode, rotation)
+        val rect = when (this) {
+            is NavBarState.Hidden -> getOverscanRect(
+                -getNavigationBarHeight(context, rotation), rotationMode, rotation)
+            NavBarState.Visible -> Rect(0, 0, 0, 0)
+        }
         setOverscan(rect)
-    }.onFailure { it.printStackTrace() }
+    }.onFailure {
+        logger.e(it) { "Failed to apply nav bar state $this" }
+    }
 }
 
 private fun getNavigationBarHeight(
@@ -178,4 +151,3 @@ private fun getOverscanRect(
         }
     }
 }
-

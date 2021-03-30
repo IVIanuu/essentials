@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.hidenavbar.unsupported.NavBarUnsupportedKey
+import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedKey
 import com.ivianuu.injekt.Given
 
 @Given

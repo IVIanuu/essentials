@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 
 @Given

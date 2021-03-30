@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.hidenavbar.unsupported
+package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.hidenavbar.unsupported.NavBarUnsupportedAction.Close
-import com.ivianuu.essentials.hidenavbar.unsupported.NavBarUnsupportedAction.OpenMoreInfos
+import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.Close
+import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.OpenMoreInfos
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state

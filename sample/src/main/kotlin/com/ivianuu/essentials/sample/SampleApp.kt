@@ -30,7 +30,7 @@ import com.ivianuu.essentials.gestures.action.actions.*
 import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.hidenavbar.*
-import com.ivianuu.essentials.hidenavbar.unsupported.*
+import com.ivianuu.essentials.hidenavbar.ui.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.*

@@ -27,4 +27,7 @@
     <string name="es_nav_bar_unsupported_title">Unsupported</string>
     <string name="es_nav_bar_unsupported_content">Hiding the navigation bar is not supported on this android version because google removed the ability for apps to change the overscan settings</string>
     <string name="es_more_infos">More Info\'s</string>
+
+    <string name="es_permission_nav_bar">Write secure settings</string>
+    <string name="es_permission_nav_bar_desc">The write settings permission is required to hide the nav bar</string>
 </resources>
