@@ -16,10 +16,15 @@
 
 package com.ivianuu.essentials.android.prefs
 
+import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
@@ -58,8 +63,12 @@ class PrefModule<T : Any>(private val name: String) {
                         get() = initialFactory()
                     private val json by lazy(jsonFactory)
                     private val serializer by lazy(serializerFactory)
-                    override suspend fun readFrom(input: InputStream): T =
+                    override suspend fun readFrom(input: InputStream): T = runCatching {
                         json.decodeFromString(serializer, String(input.readBytes()))
+                    }.fold(
+                        success = { it },
+                        failure = { throw CorruptionException("Couldn't deserialize data", it) }
+                    )
                     override suspend fun writeTo(t: T, output: OutputStream) {
                         output.write(json.encodeToString(serializer, t).toByteArray())
                     }
