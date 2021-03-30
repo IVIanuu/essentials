@@ -115,7 +115,6 @@ fun navBarState(
     @Given initial: @Initial NavBarState = NavBarState(),
     @Given actions: Flow<NavBarAction>,
     @Given navigator: Collector<NavigationAction>,
-    @Given permissionState: PermissionState<NavBarPermission>,
     @Given permissionRequester: PermissionRequester,
     @Given prefs: Flow<NavBarPrefs>,
     @Given prefUpdater: Collector<PrefAction<NavBarPrefs>>,
@@ -124,13 +123,6 @@ fun navBarState(
     prefs
         .reduce { copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode) }
         .launchIn(this)
-
-    // disable hide nav bar if permissions not granted
-    launch {
-        if (!permissionState.first()) {
-            prefUpdater.update { copy(hideNavBar = false) }
-        }
-    }
 
     actions
         .filterIsInstance<UpdateHideNavBar>()

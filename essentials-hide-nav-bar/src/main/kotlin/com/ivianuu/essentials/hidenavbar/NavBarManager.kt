@@ -50,7 +50,7 @@ fun navBarManager(
     @Given navBarFeatureSupported: NavBarFeatureSupported,
     @Given logger: Logger,
     @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-    @Given permissionState: PermissionState<NavBarPermission>,
+    @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given prefs: Flow<NavBarPrefs>,
     @Given setOverscan: OverscanUpdater,
     @Given wasNavBarHidden: Flow<WasNavBarHidden>,

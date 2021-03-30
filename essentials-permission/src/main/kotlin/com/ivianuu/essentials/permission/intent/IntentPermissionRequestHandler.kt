@@ -24,6 +24,7 @@ import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 typealias PermissionIntentFactory<P> = (P) -> Intent
@@ -32,7 +33,7 @@ typealias PermissionIntentFactory<P> = (P) -> Intent
 fun <P : Permission> permissionIntentRequestHandler(
     @Given activityResultLauncher: ActivityResultLauncher,
     @Given intentFactory: PermissionIntentFactory<P>,
-    @Given state: PermissionState<P>
+    @Given state: Flow<PermissionState<P>>
 ): PermissionRequestHandler<P> = { permission ->
     raceOf(
         {

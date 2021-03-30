@@ -70,7 +70,7 @@ fun navBarUi(
     @Given navBarPrefsFlow: Flow<NavBarPrefs>,
     @Given navBarPrefsUpdater: Collector<PrefAction<NavBarPrefs>>,
     @Given navigator: Collector<NavigationAction>,
-    @Given permissionState: PermissionState<NavBarPermission>,
+    @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {
     Scaffold(

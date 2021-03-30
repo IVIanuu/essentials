@@ -196,7 +196,7 @@ fun uiNotificationState(
     @Given actions: Flow<NotificationsUiAction>,
     @Given dispatchServiceAction: Collector<NotificationsAction>,
     @Given notifications: Flow<UiNotifications>,
-    @Given permissionState: PermissionState<SampleNotificationsPermission>,
+    @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
 ): @Scoped<KeyUiGivenScope> StateFlow<NotificationsUiState> = scope.state(initial) {
     permissionState

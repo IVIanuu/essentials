@@ -68,8 +68,8 @@ class PermissionModule<T : P, @ForTypeKey P : Permission> {
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionState(
-        @Given state: PermissionState<P>
-    ): Pair<TypeKey<Permission>, PermissionState<Permission>> = typeKeyOf<P>() to state
+        @Given state: Flow<PermissionState<P>>
+    ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = typeKeyOf<P>() to state
 }
 
 @Qualifier
@@ -83,14 +83,14 @@ typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
 typealias PermissionRequestHandler<P> = suspend (P) -> Unit
 
-typealias PermissionState<P> = Flow<Boolean>
+typealias PermissionState<P> = Boolean
 
 @Given
 fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>
-): PermissionState<P> = permissionRefreshes
+): Flow<PermissionState<P>> = permissionRefreshes
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
@@ -100,11 +100,11 @@ fun <@ForTypeKey P : Permission> permissionState(
     }
     .distinctUntilChanged()
 
-typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> PermissionState<Boolean>
+typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
 @Given
 fun permissionStateFactory(
-    @Given permissionStates: Map<TypeKey<Permission>, PermissionState<Permission>>
+    @Given permissionStates: Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>
 ): PermissionStateFactory = { permissions ->
     combine(
         *permissions
