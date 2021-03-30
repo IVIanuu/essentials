@@ -22,16 +22,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.screenstate.DisplayRotation
+import com.ivianuu.essentials.screenstate.DisplayInfo
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.getValue
 
 @Given
 val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
@@ -42,22 +42,16 @@ class DisplayRotationKey : Key<Nothing>
 val displayRotationKeyModule = KeyModule<DisplayRotationKey>()
 
 @Given
-fun displayRotationUi(@Given rotation: Flow<DisplayRotation>): KeyUi<DisplayRotationKey> = {
+fun displayRotationUi(@Given displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.primary)
             .systemBarStyle(MaterialTheme.colors.primary),
         contentAlignment = Alignment.Center
     ) {
-        val currentRotation by rotation.collectAsState(null)
+        val currentDisplayInfo by displayInfo.collectAsState(null)
         Text(
-            text = when (currentRotation) {
-                DisplayRotation.PORTRAIT_UP -> "Portrait up"
-                DisplayRotation.LANDSCAPE_LEFT -> "Landscape left"
-                DisplayRotation.PORTRAIT_DOWN -> "Portrait down"
-                DisplayRotation.LANDSCAPE_RIGHT -> "Landscape right"
-                null -> "Unknown"
-            },
+            text = currentDisplayInfo.toString(),
             style = MaterialTheme.typography.h4
         )
     }

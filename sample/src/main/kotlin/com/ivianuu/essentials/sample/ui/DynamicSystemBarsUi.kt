@@ -49,7 +49,7 @@ fun dynamicSystemBarsUi(): KeyUi<DynamicSystemBarsKey> = {
     Box {
         val colors: List<Color> = rememberSaveable {
             ColorPickerPalette.values()
-                .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.White }
+                .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
                 .flatMap { it.colors }
                 .shuffled()
         }

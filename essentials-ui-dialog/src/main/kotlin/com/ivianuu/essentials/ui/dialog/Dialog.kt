@@ -45,7 +45,7 @@ fun Dialog(
     showTopDivider: Boolean = false,
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean = true,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     content: @Composable (() -> Unit)? = null,
@@ -71,8 +71,8 @@ fun Dialog(
 }
 
 enum class AlertDialogButtonLayout {
-    SideBySide,
-    Stacked
+    SIDE_BY_SIDE,
+    STACKED
 }
 
 @Composable
@@ -277,7 +277,7 @@ private fun DialogButtons(
     neutralButton: @Composable (() -> Unit)?
 ) {
     when (layout) {
-        AlertDialogButtonLayout.SideBySide -> {
+        AlertDialogButtonLayout.SIDE_BY_SIDE -> {
             Row(
                 modifier = Modifier
                     .height(52.dp)
@@ -292,7 +292,7 @@ private fun DialogButtons(
                 positiveButton?.invoke()
             }
         }
-        AlertDialogButtonLayout.Stacked -> {
+        AlertDialogButtonLayout.STACKED -> {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

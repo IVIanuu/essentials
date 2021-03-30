@@ -29,7 +29,7 @@ fun <T> MultiChoiceListDialog(
     selectedItems: Set<T>,
     onSelectionsChanged: (Set<T>) -> Unit,
     item: @Composable (T) -> Unit,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,

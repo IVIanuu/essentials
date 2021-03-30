@@ -165,7 +165,7 @@ fun dialogsUi(): KeyUi<DialogsKey> = {
                     Dialog(
                         title = { Text("Stacked buttons") },
                         content = { Text("Shows stacked buttons") },
-                        buttonLayout = AlertDialogButtonLayout.Stacked,
+                        buttonLayout = AlertDialogButtonLayout.STACKED,
                         positiveButton = {
                             DialogCloseButton(text = "OK")
                         },
@@ -182,7 +182,7 @@ fun dialogsUi(): KeyUi<DialogsKey> = {
                     Dialog(
                         title = { Text("Stacked buttons") },
                         content = { Text("Shows stacked buttons") },
-                        buttonLayout = AlertDialogButtonLayout.Stacked,
+                        buttonLayout = AlertDialogButtonLayout.STACKED,
                         positiveButton = {
                             DialogCloseButton(text = "Positive")
                         },

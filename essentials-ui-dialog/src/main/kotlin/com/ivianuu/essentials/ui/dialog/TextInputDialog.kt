@@ -33,7 +33,7 @@ fun TextInputDialog(
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SideBySide,
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
