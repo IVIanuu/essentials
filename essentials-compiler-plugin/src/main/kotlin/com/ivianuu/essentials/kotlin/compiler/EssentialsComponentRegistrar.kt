@@ -13,14 +13,17 @@ import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
+import org.jetbrains.kotlin.ir.types.IrSimpleType
+import org.jetbrains.kotlin.ir.types.IrType
+import org.jetbrains.kotlin.ir.types.classOrNull
 import org.jetbrains.kotlin.ir.types.classifierOrNull
-import org.jetbrains.kotlin.ir.util.companionObject
+import org.jetbrains.kotlin.ir.types.typeOrNull
 import org.jetbrains.kotlin.ir.util.constructors
-import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.ir.util.hasAnnotation
 import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {
@@ -48,7 +51,18 @@ private fun fixKotlinSerialization(project: MockProject) {
                             if (!declaration.hasAnnotation(SerializerAnnotation)) return result
                             declaration.constructors
                                 .flatMap { it.valueParameters }
-                                .mapNotNull { it.type.classifierOrNull?.owner }
+                                .flatMap { valueParameter ->
+                                    val allTypes = mutableSetOf<IrType>()
+                                    fun collectTypes(type: IrType) {
+                                        allTypes += type
+                                        (type as? IrSimpleType)?.arguments
+                                            ?.mapNotNull { it.typeOrNull }
+                                            ?.forEach { collectTypes(it) }
+                                    }
+                                    collectTypes(valueParameter.type)
+                                    allTypes
+                                        .mapNotNull { it.classOrNull?.owner }
+                                }
                                 .filterIsInstance<IrClass>()
                                 .filter { it.kind == ClassKind.ENUM_CLASS }
                                 .flatMap { it.declarations }
