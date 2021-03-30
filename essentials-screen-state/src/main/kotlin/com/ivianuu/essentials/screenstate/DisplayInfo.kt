@@ -37,10 +37,9 @@ fun displayInfo(
                 screenHeight = metrics.heightPixels
             )
         }
-    }
-        .distinctUntilChanged()
-        .let { emitAll(it) }
+    }.let { emitAll(it) }
 }
     .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+    .distinctUntilChanged()
 
 private val metrics = DisplayMetrics()

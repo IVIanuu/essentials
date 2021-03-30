@@ -25,6 +25,7 @@ import com.ivianuu.injekt.android.AppContext
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +45,7 @@ class BroadcastsTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = broadcastsFactory(appContext, Dispatchers.Main)
+        val collector = broadcastsFactory(appContext, coroutineContext[CoroutineDispatcher]!!)
             .invoke("action").testCollect(this)
 
         receiver.onReceive(appContext, Intent("action"))

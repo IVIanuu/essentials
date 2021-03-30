@@ -39,3 +39,4 @@ fun internalForegroundState(
         logger.d { "Internal foreground state changed $current" }
     }
     .shareIn(scope, SharingStarted.Lazily, 1)
+    .distinctUntilChanged()

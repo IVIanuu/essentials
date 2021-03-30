@@ -27,19 +27,24 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.GivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 interface Permission {
@@ -89,8 +94,9 @@ typealias PermissionState<P> = Boolean
 fun <@ForTypeKey P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given stateProvider: PermissionStateProvider<P>
-): Flow<PermissionState<P>> = permissionRefreshes
+): @Scoped<AppGivenScope> Flow<PermissionState<P>> = permissionRefreshes
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
@@ -98,6 +104,7 @@ fun <@ForTypeKey P : Permission> permissionState(
             stateProvider(permission)
         }
     }
+    .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
     .distinctUntilChanged()
 
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>

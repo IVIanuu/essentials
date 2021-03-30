@@ -24,6 +24,7 @@ import com.ivianuu.injekt.android.AppContext
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +43,7 @@ class ConfigChangesTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = configChanges(appContext, Dispatchers.Main)
+        val collector = configChanges(appContext, coroutineContext[CoroutineDispatcher]!!)
             .testCollect(this)
 
         callback.onConfigurationChanged(mockk())

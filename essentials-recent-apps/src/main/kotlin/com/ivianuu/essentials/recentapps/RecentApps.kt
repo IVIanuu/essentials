@@ -65,6 +65,7 @@ fun recentApps(
     .distinctUntilChanged()
     .onEach { logger.d { "recent apps changed $it" } }
     .shareIn(scope, SharingStarted.Eagerly, 1)
+    .distinctUntilChanged()
 
 @Given
 fun recentAppsAccessibilityConfig() = flow {

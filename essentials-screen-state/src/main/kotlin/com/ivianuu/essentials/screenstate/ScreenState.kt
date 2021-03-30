@@ -53,8 +53,8 @@ fun screenState(
     .map { Unit }
     .onStart { emit(Unit) }
     .map { screenStateProvider() }
-    .distinctUntilChanged()
     .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+    .distinctUntilChanged()
 
 typealias CurrentScreenStateProvider = suspend () -> ScreenState
 

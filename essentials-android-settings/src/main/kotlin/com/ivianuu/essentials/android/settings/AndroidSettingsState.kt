@@ -64,9 +64,9 @@ class AndroidSettingStateModule<T : S, S>(
                     adapter.get()
                 }
             }
-            .distinctUntilChanged()
             .let { emitAll(it) }
     }.shareIn(scope, SharingStarted.Lazily, 1)
+        .distinctUntilChanged()
 
     @Given
     val actions: @Scoped<AppGivenScope> MutableSharedFlow<AndroidSettingAction<T>>

@@ -81,9 +81,9 @@ fun displayRotation(
         }
         .onStart { emit(Unit) }
         .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
-        .distinctUntilChanged()
         .let { emitAll(it) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
+    .distinctUntilChanged()
 
 private suspend fun getCurrentDisplayRotation(
     ioDispatcher: IODispatcher,
