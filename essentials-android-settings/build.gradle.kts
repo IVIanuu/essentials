@@ -19,7 +19,6 @@ plugins {
     id("com.ivianuu.essentials")
     id("com.ivianuu.essentials.compose")
     kotlin("android")
-    kotlin("kapt")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")

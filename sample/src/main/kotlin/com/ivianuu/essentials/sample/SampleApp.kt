@@ -31,7 +31,6 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.unsupported.*
-import com.ivianuu.essentials.moshi.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.*
@@ -53,6 +52,7 @@ import com.ivianuu.essentials.sample.tile.*
 import com.ivianuu.essentials.sample.ui.*
 import com.ivianuu.essentials.sample.work.*
 import com.ivianuu.essentials.screenstate.*
+import com.ivianuu.essentials.serialization.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.shortcutpicker.*
 import com.ivianuu.essentials.store.*

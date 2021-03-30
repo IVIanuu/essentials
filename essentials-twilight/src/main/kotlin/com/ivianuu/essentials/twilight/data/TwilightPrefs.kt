@@ -18,13 +18,13 @@ package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.injekt.Given
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class TwilightPrefs(
-    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
-    @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
+    @SerialName("twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
+    @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 
 @Given

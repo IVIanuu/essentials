@@ -63,7 +63,7 @@ class PermissionModule<T : P, @ForTypeKey P : Permission> {
     fun requestHandler(
         @Given requestHandler: PermissionRequestHandler<P>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-        (typeKeyOf<P>() to requestHandler.intercept<P>()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+        (typeKeyOf<P>() to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @Given

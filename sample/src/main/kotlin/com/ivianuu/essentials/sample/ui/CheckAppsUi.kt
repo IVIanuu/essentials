@@ -28,10 +28,10 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Given
 val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
@@ -64,9 +64,10 @@ fun checkAppsUi(
     }.invoke()
 }
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class CheckAppsPrefs(
-    @Json(name = "checked_apps") val checkedApps: Set<String> = emptySet(),
+    @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
 )
 
-@Given val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
+@Given
+val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
