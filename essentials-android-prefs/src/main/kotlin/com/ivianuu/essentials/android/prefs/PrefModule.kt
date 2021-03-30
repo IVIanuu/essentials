@@ -65,7 +65,10 @@ class PrefModule<T : Any>(private val name: String) {
                     }
                 },
                 scope = scope.childCoroutineScope(dispatcher),
-                corruptionHandler = ReplaceFileCorruptionHandler { initialFactory() }
+                corruptionHandler = ReplaceFileCorruptionHandler {
+                    it.printStackTrace()
+                    initialFactory()
+                }
             )
         }
         return object : DataStore<T> {
