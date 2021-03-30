@@ -169,7 +169,7 @@ private fun getOverscanRect(
             else -> Rect(0, 0, 0, navBarHeight)
         }
     }
-    NavBarRotationMode.Tablet -> {
+    NavBarRotationMode.TABLET -> {
         when (rotation) {
             DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
             DisplayRotation.LANDSCAPE_LEFT -> Rect(navBarHeight, 0, 0, 0)
