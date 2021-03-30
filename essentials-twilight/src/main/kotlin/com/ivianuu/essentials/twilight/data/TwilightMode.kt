@@ -22,23 +22,23 @@ enum class TwilightMode(
     val titleRes: Int,
     val descRes: Int
 ) {
-    System(
+    SYSTEM(
         titleRes = R.string.es_twilight_mode_system,
         descRes = R.string.es_twilight_mode_system_desc
     ),
-    Light(
+    LIGHT(
         titleRes = R.string.es_twilight_mode_light,
         descRes = R.string.es_twilight_mode_light_desc
     ),
-    Dark(
+    DARK(
         titleRes = R.string.es_twilight_mode_dark,
         descRes = R.string.es_twilight_mode_dark_desc
     ),
-    Battery(
+    BATTERY(
         titleRes = R.string.es_twilight_mode_battery,
         descRes = R.string.es_twilight_mode_battery_desc
     ),
-    Time(
+    TIME(
         titleRes = R.string.es_twilight_mode_time,
         descRes = R.string.es_twilight_mode_time_desc
     )

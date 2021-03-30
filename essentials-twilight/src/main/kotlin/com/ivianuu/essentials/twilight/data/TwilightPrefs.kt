@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TwilightPrefs(
-    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.System,
+    @Json(name = "twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
     @Json(name = "use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 

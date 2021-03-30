@@ -57,11 +57,11 @@ fun twilightState(
     twilightPrefs()
         .flatMapLatest { (mode, useBlack) ->
             (when (mode) {
-                TwilightMode.System -> systemTwilightState()
-                TwilightMode.Light -> flowOf(false)
-                TwilightMode.Dark -> flowOf(true)
-                TwilightMode.Battery -> batteryTwilightState()
-                TwilightMode.Time -> timeTwilightState()
+                TwilightMode.SYSTEM -> systemTwilightState()
+                TwilightMode.LIGHT -> flowOf(false)
+                TwilightMode.DARK -> flowOf(true)
+                TwilightMode.BATTERY -> batteryTwilightState()
+                TwilightMode.TIME -> timeTwilightState()
             }).map { TwilightState(it, useBlack) }
     }
         .distinctUntilChanged()

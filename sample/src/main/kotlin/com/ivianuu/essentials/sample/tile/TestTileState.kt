@@ -48,8 +48,8 @@ fun testTileState(
     actions
         .filterIsInstance<TileAction>()
         .map {
-            if (twilightPrefs.first().twilightMode == TwilightMode.Light) TwilightMode.Dark
-            else TwilightMode.Light
+            if (twilightPrefs.first().twilightMode == TwilightMode.LIGHT) TwilightMode.DARK
+            else TwilightMode.LIGHT
         }
         .onEach { twilightMode ->
             twilightPrefUpdater.update {
@@ -61,6 +61,6 @@ fun testTileState(
 
 private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
     label = twilightMode.name,
-    status = if (twilightMode == TwilightMode.Light) TileState.Status.Active
+    status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.Active
     else TileState.Status.Inactive
 )
