@@ -20,6 +20,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
@@ -55,8 +56,6 @@ class ShortcutActionFactory(
         val tmp = id.split(DELIMITER)
         val label = tmp[1]
 
-        @Suppress("DEPRECATION")
-        val intent = Intent.getIntent(tmp[2])
         val iconBytes = Base64.decode(tmp[3], 0)
         val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
         return Action(
@@ -64,7 +63,7 @@ class ShortcutActionFactory(
             title = label,
             unlockScreen = true,
             enabled = true,
-            icon = singleActionIcon { Icon(icon, null) }
+            icon = singleActionIcon { Image(icon, null) }
         )
     }
 
