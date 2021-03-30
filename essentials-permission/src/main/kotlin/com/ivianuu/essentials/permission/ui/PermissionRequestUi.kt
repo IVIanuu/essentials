@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -132,7 +133,7 @@ fun permissionRequestState(
                 .all { permissionStateFactory(listOf(it)).first() }
         }
         .take(1)
-        .onEach { navigator(NavigationAction.Pop(key, true)) }
+        .onEach { navigator(Pop(key, true)) }
         .launchIn(this)
 
     suspend fun updatePermissions() {

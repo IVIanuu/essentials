@@ -131,7 +131,7 @@ fun <S : GivenScope> permissionRefreshesWorker(): ScopeWorker<S> = {
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
     return {
         this(it)
-        permissionRefreshes.emit(Unit)
+        permissionRefreshes.tryEmit(Unit)
     }
 }
 
@@ -146,14 +146,16 @@ fun permissionRequester(
     @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
     withContext(defaultDispatcher) {
-        logger.d { "request requestedPermissions $requestedPermissions" }
+        logger.d { "request permissions $requestedPermissions" }
 
         if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
             return@withContext true
 
         appUiStarter()
 
-        return@withContext navigator.pushForResult(
+        val result = navigator.pushForResult(
             PermissionRequestKey(requestedPermissions)) == true
+        logger.d { "request permissions result $requestedPermissions -> $result" }
+        return@withContext result
     }
 }
