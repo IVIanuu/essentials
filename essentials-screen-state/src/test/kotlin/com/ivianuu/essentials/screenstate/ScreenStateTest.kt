@@ -35,7 +35,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ScreenStateTest {
-
     @Test
     fun testScreenState() = runCancellingBlockingTest {
         val broadcasts = EventFlow<Intent>()
