@@ -53,12 +53,14 @@ buildConfig {
 }
 
 dependencies {
-    api(Deps.androidGradlePlugin)
     implementation(Deps.autoService)
     kapt(Deps.autoService)
 
     implementation(Deps.Kotlin.gradlePlugin)
     implementation(Deps.Kotlin.gradlePluginApi)
+
+    api(Deps.androidGradlePlugin)
+    api(Deps.KotlinSerialization.gradlePlugin)
     api(Deps.Injekt.gradlePlugin)
 }
 
