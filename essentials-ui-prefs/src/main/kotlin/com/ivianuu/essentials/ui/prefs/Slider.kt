@@ -37,12 +37,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.raceOf
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlin.time.Duration
 
 @Composable
@@ -276,17 +279,29 @@ fun <T : Comparable<T>> BaseSliderListItem(
 
             // workaround to reset the internal value if the value doesn't change
             val internalValueResetNotifier = remember { EventFlow<Unit>() }
+            val valueChanges = remember { EventFlow<Unit>() }
             LaunchedEffect(internalValueResetNotifier) {
                 internalValueResetNotifier
-                    .collect {
-                        delay(1000)
-                        internalValue = toFloat(value)
+                    .collectLatest {
+                        raceOf(
+                            {
+                                println("await snapback")
+                                delay(1000)
+                                internalValue = toFloat(value)
+                            },
+                            {
+                                valueChanges.first()
+                            }
+                        )
                     }
             }
 
             Slider(
                 value = internalValue,
-                onValueChange = { internalValue = it },
+                onValueChange = {
+                    internalValue = it
+                    valueChanges.tryEmit(Unit)
+                },
                 onValueChangeEnd = {
                     onValueChange(fromFloat(internalValue))
                     internalValueResetNotifier.tryEmit(Unit)
