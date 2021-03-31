@@ -14,55 +14,72 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.systemoverlay
+package com.ivianuu.essentials.systemoverlay.blacklist
 
+import android.view.inputmethod.InputMethodManager
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ScopeCoroutineScope
-import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transformLatest
 
-typealias IsOnSecureScreen = Boolean
+typealias KeyboardVisible = Boolean
 
 @Given
-fun isOnSecureScreen(
+fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
-    @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
-): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
-    .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-    .map { it.packageName to it.className }
-    .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
-    .map { (packageName, className) ->
-        var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
-        if (!isOnSecureScreen) {
-            isOnSecureScreen = packageName == "com.android.settings" &&
-                    className == "android.app.MaterialDialog"
+    @Given keyboardHeightProvider: KeyboardHeightProvider,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
+): @Scoped<AppGivenScope> Flow<KeyboardVisible> = accessibilityEvents
+    .filter {
+        it.isFullScreen &&
+                it.className == "android.inputmethodservice.SoftInputWindow"
+    }
+    .map { Unit }
+    .onStart { emit(Unit) }
+    .transformLatest {
+        emit(true)
+        while ((keyboardHeightProvider() ?: 0) > 0) {
+            delay(100)
         }
-
-        isOnSecureScreen
+        emit(false)
+        awaitCancellation()
     }
     .distinctUntilChanged()
-    .onEach { logger.d { "on secure screen changed: $it" } }
     .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
 @Given
-val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {
+val keyboardVisibilityAccessibilityConfig = flow {
     emit(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
     )
+}
+
+typealias KeyboardHeightProvider = () -> Int?
+
+@Given
+fun keyboardHeightProvider(
+    @Given inputMethodManager: InputMethodManager
+): KeyboardHeightProvider = {
+    runCatching {
+        val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
+        method.invoke(inputMethodManager) as Int
+    }.getOrElse { null }
 }
