@@ -279,7 +279,7 @@ fun <T : Comparable<T>> BaseSliderListItem(
             LaunchedEffect(internalValueResetNotifier) {
                 internalValueResetNotifier
                     .collect {
-                        delay(100)
+                        delay(1000)
                         internalValue = toFloat(value)
                     }
             }
