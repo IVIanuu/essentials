@@ -39,8 +39,7 @@ fun CheckboxListItem(
         trailing = {
             Checkbox(
                 checked = value,
-                onCheckedChange = onValueChange,
-                modifier = Modifier.absorbPointer()
+                onCheckedChange = null
             )
         },
         onClick = { onValueChange(!value) }

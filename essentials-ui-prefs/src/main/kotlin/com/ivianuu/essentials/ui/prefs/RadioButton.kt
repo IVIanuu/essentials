@@ -38,12 +38,10 @@ fun RadioButtonListItem(
         subtitle = subtitle,
         leading = leading,
         trailing = {
-            Box(modifier = Modifier.absorbPointer()) {
-                RadioButton(
-                    selected = value,
-                    onClick = { onValueChange(!value) }
-                )
-            }
+            RadioButton(
+                selected = value,
+                onClick = null
+            )
         },
         onClick = { onValueChange(!value) }
     )

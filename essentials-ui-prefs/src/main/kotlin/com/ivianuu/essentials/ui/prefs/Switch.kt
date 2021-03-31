@@ -38,12 +38,10 @@ fun SwitchListItem(
         subtitle = subtitle,
         leading = leading,
         trailing = {
-            Box(modifier = Modifier.absorbPointer()) {
-                Switch(
-                    checked = value,
-                    onCheckedChange = onValueChange
-                )
-            }
+            Switch(
+                checked = value,
+                onCheckedChange = null
+            )
         },
         onClick = { onValueChange(!value) }
     )
