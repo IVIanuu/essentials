@@ -6,7 +6,5 @@ import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
 
 @Given
-val initialTwilightPrefs: @Initial TwilightPrefs get() = TwilightPrefs(
-    TwilightMode.DARK,
-    true
-)
+val initialTwilightPrefs: @Initial TwilightPrefs
+    get() = TwilightPrefs(TwilightMode.DARK, true)
