@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.store
 
+import com.ivianuu.essentials.coroutines.commonActor
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.flow.*
 
 interface StateScope<S> : CoroutineScope {
@@ -113,7 +113,8 @@ private class StateScopeImpl<S>(
     private val getState: () -> S,
     private val setState: suspend (S) -> Unit
 ) : StateScope<S>, CoroutineScope by scope {
-    private val actor = actor<Reduce>(
+
+    private val actor = commonActor<Reduce>(
         start = CoroutineStart.LAZY,
         capacity = Channel.UNLIMITED
     ) {

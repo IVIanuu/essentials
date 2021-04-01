@@ -15,20 +15,39 @@
  */
 
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.ivianuu.injekt")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
-dependencies {
-    compile(Deps.Injekt.core)
-    compile(Deps.Injekt.common)
-    compile(Deps.Injekt.scope)
-    compile(Deps.KotlinSerialization.json)
-    compile(Deps.Kotlin.stdlib)
+kotlin {
+    jvm {
+        withJava()
+        compilations.forEach {
+            it.kotlinOptions {
+                useIR = true
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(Deps.Injekt.core)
+                api(Deps.Injekt.common)
+                api(Deps.Injekt.scope)
+                api(Deps.KotlinSerialization.json)
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

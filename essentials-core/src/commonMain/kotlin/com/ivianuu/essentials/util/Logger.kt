@@ -23,7 +23,6 @@ import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
 import com.ivianuu.essentials.util.Logger.Kind.WARN
 import com.ivianuu.essentials.util.Logger.Kind.WTF
 import com.ivianuu.injekt.Given
-import java.util.regex.Pattern
 
 interface Logger {
     val isEnabled: Boolean
@@ -133,24 +132,6 @@ class PrintingLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     }
 }
 
-val Logger.stackTraceTag: String
-    get() = Throwable().stackTrace
-        .first {
-            it.className != javaClass.canonicalName &&
-                    it.className != "com.ivianuu.essentials.util.LoggerKt" &&
-                    it.className != "com.ivianuu.essentials.util.Logger\$DefaultImpls"
-        }
-        .let { createStackElementTag(it) }
-
-private fun createStackElementTag(element: StackTraceElement): String {
-    var tag = element.className.substringAfterLast('.')
-    val m = ANONYMOUS_CLASS.matcher(tag)
-    if (m.find()) {
-        tag = m.replaceAll("")
-    }
-    return tag
-}
-
-private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
+expect val Logger.stackTraceTag: String
 
 typealias LoggingEnabled = Boolean

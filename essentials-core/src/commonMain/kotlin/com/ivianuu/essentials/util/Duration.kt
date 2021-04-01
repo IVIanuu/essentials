@@ -16,11 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Given
 import kotlin.time.Duration
-import kotlin.time.milliseconds
 
-typealias TimestampProvider = () -> Duration
+expect fun Double.toDuration(): Duration
 
-@Given
-val timestampProvider: TimestampProvider = { System.currentTimeMillis().milliseconds }
+expect fun Duration.toDouble(): Double

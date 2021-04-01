@@ -48,4 +48,4 @@ fun <T> Flow<T>.onCancel(
 
 private class CollectorCancellationException(
     override val cause: CancellationException
-) : CancellationException()
+) : CancellationException(null)

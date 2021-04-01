@@ -15,18 +15,36 @@
  */
 
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     id("com.ivianuu.injekt")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
-dependencies {
-    compile(project(":essentials-coroutines"))
-    testCompile(project(":essentials-test"))
-    compile(Deps.Injekt.common)
-    compile(Deps.Kotlin.stdlib)
+kotlin {
+    jvm {
+        withJava()
+        compilations.forEach {
+            it.kotlinOptions {
+                useIR = true
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":essentials-coroutines"))
+                api(Deps.Injekt.common)
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

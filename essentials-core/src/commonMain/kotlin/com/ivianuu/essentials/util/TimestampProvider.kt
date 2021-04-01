@@ -16,17 +16,10 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.injekt.Given
 import kotlin.time.Duration
 
-fun Double.toDuration(): Duration {
-    return Duration::class.java.getDeclaredConstructor(Double::class.java)
-        .also { it.isAccessible = true }
-        .newInstance(this)
-}
+typealias TimestampProvider = () -> Duration
 
-fun Duration.toDouble(): Double {
-    return javaClass.declaredFields
-        .first { it.type == Double::class.java }
-        .also { it.isAccessible = true }
-        .get(this)!! as Double
-}
+@Given
+expect val timestampProvider: TimestampProvider

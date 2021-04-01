@@ -15,15 +15,29 @@
  */
 
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
-dependencies {
-    testCompile(project(":essentials-test"))
-    compile(Deps.Kotlin.stdlib)
+kotlin {
+    jvm {
+        withJava()
+        compilations.forEach {
+            it.kotlinOptions {
+                useIR = true
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
+    sourceSets {
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

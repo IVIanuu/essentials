@@ -13,31 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     id("com.ivianuu.essentials")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
-dependencies {
-    compile(Deps.Coroutines.core)
+kotlin {
+    jvm {
+        withJava()
+        compilations.forEach {
+            it.kotlinOptions {
+                useIR = true
+                jvmTarget = "1.8"
+            }
+        }
+    }
 
-    compile(project(":essentials-coroutines"))
-    compile(project(":essentials-serialization"))
-    compile(project(":essentials-store"))
-    compile(project(":essentials-tuples"))
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":essentials-coroutines"))
+                api(project(":essentials-serialization"))
+                api(project(":essentials-store"))
+                api(project(":essentials-tuples"))
 
-    compile(Deps.Injekt.core)
-    compile(Deps.Injekt.scope)
+                api(Deps.Injekt.core)
+                api(Deps.Injekt.scope)
 
-    compile(Deps.Kotlin.stdlib)
-
-    compile(Deps.kotlinResult)
-
-    testCompile(project(":essentials-test"))
+                api(Deps.kotlinResult)
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
 }
 
 plugins.apply("com.vanniktech.maven.publish")
