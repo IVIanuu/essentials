@@ -75,7 +75,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     }
 
     private fun updateNotifications() {
-        _notifications.value =  runCatching { activeNotifications!!.toList() }
+        _notifications.value = runCatching { activeNotifications!!.toList() }
             .getOrElse { emptyList() }
     }
 
