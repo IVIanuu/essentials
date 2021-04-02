@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 data class DisplayInfo(
     val rotation: DisplayRotation = DisplayRotation.PORTRAIT_UP,
@@ -29,7 +31,7 @@ fun displayInfo(
     @Given windowManager: WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayInfo> = flow {
     combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->
-        synchronized(metrics) {
+        metricsMutex.withLock {
             windowManager.defaultDisplay.getRealMetrics(metrics)
             DisplayInfo(
                 rotation = rotation,
@@ -43,3 +45,4 @@ fun displayInfo(
     .distinctUntilChanged()
 
 private val metrics = DisplayMetrics()
+private val metricsMutex = Mutex()
