@@ -33,7 +33,6 @@ import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -50,6 +49,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -119,7 +119,7 @@ fun counterState(
     actions
         .filterIsInstance<Dec>()
         .onEach {
-            if (currentState().count > 0) reduce { copy(count = count.dec()) }
+            if (state.first().count > 0) reduce { copy(count = count.dec()) }
             else toaster.showToast("Value cannot be less than 0!")
         }
         .launchIn(this)

@@ -126,28 +126,7 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
     }
 }
 
-@Composable
-fun <T> Flow<T>.collectAsResource(): Resource<T> {
-    return remember(this) { flowAsResource() }
-        .collectAsState(Idle)
-        .value
-}
-
-@Composable
-fun <T> produceResource(
-    producer: suspend CoroutineScope.() -> T
-): Resource<T> = produceResource<T>(subjects = *emptyArray(), producer = producer)
-
-@Composable
-fun <T> produceResource(
-    vararg subjects: Any?,
-    producer: suspend CoroutineScope.() -> T
-): Resource<T> = produceState<Resource<T>>(Idle, *subjects) {
-    value = Loading
-    value = runCatching { producer() }.toResource()
-}.value
-
-inline fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
+fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
     success = { Success(it) },
     failure = { Error(it) }
 )

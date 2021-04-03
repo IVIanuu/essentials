@@ -38,7 +38,6 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAp
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -57,6 +56,7 @@ import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -196,10 +196,11 @@ fun checkableAppsState(
     reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
-        val newCheckedApps = currentState().checkableApps()
+        val currentState = state.first()
+        val newCheckedApps = currentState.checkableApps()
             ?.filter { it.isChecked }
             ?.mapTo(mutableSetOf()) { it.info.packageName }
-            ?.reducer(currentState())
+            ?.reducer(currentState)
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }

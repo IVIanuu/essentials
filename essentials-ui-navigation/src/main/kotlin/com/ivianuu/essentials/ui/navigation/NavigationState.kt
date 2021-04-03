@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.lens
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
@@ -35,6 +34,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -123,7 +123,7 @@ fun navigationState(
     actions
         .filterIsInstance<PopTop>()
         .onEach {
-            val topKey = currentState().backStack.last()
+            val topKey = state.first().backStack.last()
             logger.d { "pop top $topKey" }
             reduce {
                 @Suppress("UNCHECKED_CAST")

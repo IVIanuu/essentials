@@ -34,7 +34,6 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.currentState
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -183,7 +182,7 @@ fun writeSecureSettingsPcInstructionsState(
 
     actions
         .filterIsInstance<CopyAdbCommand>()
-        .onEach { clipboard(UpdateClipboard(currentState().secureSettingsAdbCommand)) }
+        .onEach { clipboard(UpdateClipboard(state.first().secureSettingsAdbCommand)) }
         .launchIn(this)
 
     actions

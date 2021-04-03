@@ -35,10 +35,6 @@ interface StateScope<S> : CoroutineScope {
         }
 }
 
-suspend inline fun <S> StateScope<S>.currentState(): S = state.first()
-
-suspend inline fun <S> FlowCollector<S.() -> S>.reduce(noinline reducer: S.() -> S) = emit(reducer)
-
 fun <T, S> Flow<T>.state(
     scope: CoroutineScope,
     initial: S,
@@ -113,7 +109,6 @@ private class StateScopeImpl<S>(
     private val getState: () -> S,
     private val setState: suspend (S) -> Unit
 ) : StateScope<S>, CoroutineScope by scope {
-
     private val actor = commonActor<Reduce>(
         start = CoroutineStart.LAZY,
         capacity = Channel.UNLIMITED
