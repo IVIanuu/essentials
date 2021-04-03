@@ -40,7 +40,7 @@ fun torchState(
 
 @Given
 val torchActions: @Scoped<AppGivenScope> MutableSharedFlow<TorchAction>
-    get() = EventFlowC()
+    get() = EventFlow()
 
 data class TorchState(val torchEnabled: Boolean = false)
 
