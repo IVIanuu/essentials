@@ -58,23 +58,6 @@ fun <S> CoroutineScope.state(
 ): StateFlow<S> = state(MutableStateFlow(initial), started, block)
 
 fun <S> CoroutineScope.state(
-    initial: S,
-    state: Flow<S>,
-    setState: suspend (S) -> Unit,
-    started: SharingStarted = SharingStarted.Lazily,
-    block: suspend StateScope<S>.() -> Unit
-): StateFlow<S> {
-    val _state = state.stateIn(this, started, initial)
-    return state(
-        _state,
-        { _state.value },
-        setState,
-        started,
-        block
-    )
-}
-
-fun <S> CoroutineScope.state(
     state: MutableStateFlow<S>,
     started: SharingStarted = SharingStarted.Lazily,
     block: suspend StateScope<S>.() -> Unit

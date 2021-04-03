@@ -27,8 +27,6 @@ fun <T> refOf(
 
 interface Ref<T> {
     var value: T
-    operator fun component1(): T
-    operator fun component2(): (T) -> Unit
 }
 
 fun <T> Ref<T>.component1(): T = value
@@ -54,7 +52,4 @@ private class RefImpl<T>(
                 synchronized(this) { field = value }
             }
         }
-
-    override fun component1(): T = value
-    override fun component2(): (T) -> Unit = { value = it }
 }

@@ -22,17 +22,15 @@ import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.core.isDark
 
 @Composable
-fun guessingContentColorFor(color: Color): Color {
-    return with(MaterialTheme.colors) {
-        when (color) {
-            primary -> onPrimary
-            primaryVariant -> onPrimary
-            secondary -> onSecondary
-            secondaryVariant -> onSecondary
-            background -> onBackground
-            surface -> onSurface
-            error -> onError
-            else -> if (color.isDark) Color.White else Color.Black
-        }
+fun guessingContentColorFor(color: Color): Color = with(MaterialTheme.colors) {
+    when (color) {
+        primary -> onPrimary
+        primaryVariant -> onPrimary
+        secondary -> onSecondary
+        secondaryVariant -> onSecondary
+        background -> onBackground
+        surface -> onSurface
+        error -> onError
+        else -> if (color.isDark) Color.White else Color.Black
     }
 }

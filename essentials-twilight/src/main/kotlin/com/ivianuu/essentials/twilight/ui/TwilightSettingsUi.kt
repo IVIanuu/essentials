@@ -90,8 +90,32 @@ private fun TwilightModeItem(
     isSelected: Boolean
 ) {
     ListItem(
-        title = { Text(stringResource(mode.titleRes)) },
-        subtitle = { Text(stringResource(mode.descRes)) },
+        title = {
+            Text(
+                stringResource(
+                    when (mode) {
+                        TwilightMode.SYSTEM -> R.string.es_twilight_mode_system
+                        TwilightMode.LIGHT -> R.string.es_twilight_mode_light
+                        TwilightMode.DARK -> R.string.es_twilight_mode_dark
+                        TwilightMode.BATTERY -> R.string.es_twilight_mode_battery
+                        TwilightMode.TIME -> R.string.es_twilight_mode_time
+                    }
+                )
+            )
+        },
+        subtitle = {
+            Text(
+                stringResource(
+                    when (mode) {
+                        TwilightMode.SYSTEM -> R.string.es_twilight_mode_system_desc
+                        TwilightMode.LIGHT -> R.string.es_twilight_mode_light_desc
+                        TwilightMode.DARK -> R.string.es_twilight_mode_dark_desc
+                        TwilightMode.BATTERY -> R.string.es_twilight_mode_battery_desc
+                        TwilightMode.TIME -> R.string.es_twilight_mode_time_desc
+                    }
+                )
+            )
+       },
         trailing = {
             RadioButton(
                 selected = isSelected,

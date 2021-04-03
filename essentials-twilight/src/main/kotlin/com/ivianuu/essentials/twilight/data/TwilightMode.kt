@@ -16,30 +16,4 @@
 
 package com.ivianuu.essentials.twilight.data
 
-import com.ivianuu.essentials.twilight.R
-
-enum class TwilightMode(
-    val titleRes: Int,
-    val descRes: Int
-) {
-    SYSTEM(
-        titleRes = R.string.es_twilight_mode_system,
-        descRes = R.string.es_twilight_mode_system_desc
-    ),
-    LIGHT(
-        titleRes = R.string.es_twilight_mode_light,
-        descRes = R.string.es_twilight_mode_light_desc
-    ),
-    DARK(
-        titleRes = R.string.es_twilight_mode_dark,
-        descRes = R.string.es_twilight_mode_dark_desc
-    ),
-    BATTERY(
-        titleRes = R.string.es_twilight_mode_battery,
-        descRes = R.string.es_twilight_mode_battery_desc
-    ),
-    TIME(
-        titleRes = R.string.es_twilight_mode_time,
-        descRes = R.string.es_twilight_mode_time_desc
-    )
-}
+enum class TwilightMode { SYSTEM, LIGHT, DARK, BATTERY, TIME }

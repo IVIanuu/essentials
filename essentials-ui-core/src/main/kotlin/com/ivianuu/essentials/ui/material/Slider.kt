@@ -24,6 +24,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import kotlin.time.Duration
 
+@Composable
+fun Slider(
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
+    onValueChangeEnd: () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    colors: SliderColors = SliderDefaults.colors()
+) {
+    androidx.compose.material.Slider(
+        value,
+        onValueChange,
+        modifier,
+        enabled,
+        valueRange,
+        remember(valueRange) { stepPolicy(valueRange) },
+        onValueChangeEnd,
+        interactionSource,
+        colors
+    )
+}
+
 typealias StepPolicy<T> = (ClosedRange<T>) -> Int
 
 val NoStepsStepPolicy: StepPolicy<*> = { 0 }
@@ -48,29 +73,4 @@ fun incrementingStepPolicy(incValue: Long): StepPolicy<Long> = { valueRange ->
 
 fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRange ->
     (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
-}
-
-@Composable
-fun Slider(
-    value: Float,
-    onValueChange: (Float) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
-    onValueChangeEnd: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    colors: SliderColors = SliderDefaults.colors()
-) {
-    androidx.compose.material.Slider(
-        value,
-        onValueChange,
-        modifier,
-        enabled,
-        valueRange,
-        remember(valueRange) { stepPolicy(valueRange) },
-        onValueChangeEnd,
-        interactionSource,
-        colors
-    )
 }

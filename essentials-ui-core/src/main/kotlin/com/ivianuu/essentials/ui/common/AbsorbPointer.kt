@@ -24,10 +24,7 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 
-@Composable
-fun Modifier.absorbPointer(
-    enabled: Boolean = true
-): Modifier = composed {
+fun Modifier.absorbPointer(enabled: Boolean = true): Modifier = composed {
     pointerInput(enabled) {
         if (enabled) {
             forEachGesture {
