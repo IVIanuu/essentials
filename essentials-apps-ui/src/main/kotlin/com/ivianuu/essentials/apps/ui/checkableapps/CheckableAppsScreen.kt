@@ -45,11 +45,12 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.resource.Idle
-import com.ivianuu.essentials.ui.resource.Resource
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.resource.reduceResource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.ui.resource.map
-import com.ivianuu.essentials.ui.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -197,7 +198,7 @@ fun checkableAppsState(
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()
-        val newCheckedApps = currentState.checkableApps()
+        val newCheckedApps = currentState.checkableApps.get()
             ?.filter { it.isChecked }
             ?.mapTo(mutableSetOf()) { it.info.packageName }
             ?.reducer(currentState)
@@ -216,7 +217,7 @@ fun checkableAppsState(
                     }
                 }
                 SelectAll -> pushNewCheckedApps { currentState ->
-                    currentState.allApps()!!.mapTo(mutableSetOf()) { it.packageName }
+                    currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
                 }
                 DeselectAll -> pushNewCheckedApps { emptySet() }
             }

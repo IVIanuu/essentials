@@ -47,9 +47,10 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
-import com.ivianuu.essentials.ui.resource.Idle
-import com.ivianuu.essentials.ui.resource.Resource
-import com.ivianuu.essentials.ui.resource.reduceResource
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -122,7 +123,7 @@ fun mediaActionSettingsUi(
                         Text(
                             stringResource(
                                 R.string.es_pref_media_app_summary,
-                                state.mediaApp()?.appName ?: stringResource(R.string.es_none)
+                                state.mediaApp.get()?.appName ?: stringResource(R.string.es_none)
                             )
                         )
                     },

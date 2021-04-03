@@ -15,25 +15,36 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
+    kotlin("multiplatform")
+    id("com.ivianuu.injekt")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
-dependencies {
-    api(project(":essentials-ui-animation"))
-    api(project(":essentials-ui-core"))
-    api(project(":essentials-ui-dialog"))
-    api(project(":essentials-ui-navigation"))
-    api(project(":essentials-ui-popup"))
-    api(project(":essentials-ui-prefs"))
-    api(project(":essentials-resource"))
+kotlin {
+    jvm {
+        withJava()
+        compilations.forEach {
+            it.kotlinOptions {
+                useIR = true
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":essentials-store"))
+                api(Deps.kotlinResult)
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
 }
 
 plugins.apply("com.vanniktech.maven.publish")
