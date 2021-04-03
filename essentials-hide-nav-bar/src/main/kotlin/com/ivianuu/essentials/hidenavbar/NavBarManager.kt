@@ -87,7 +87,7 @@ fun navBarManager(
 private sealed class NavBarState {
     data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) : NavBarState()
     object Visible : NavBarState()
-}C
+}
 
 private suspend fun NavBarState.apply(
     context: Context,
