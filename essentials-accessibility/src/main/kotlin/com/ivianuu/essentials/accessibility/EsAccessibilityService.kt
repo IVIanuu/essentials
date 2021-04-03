@@ -27,7 +27,6 @@ import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
 class EsAccessibilityService : AccessibilityService() {
-
     private val component by lazy {
         createServiceGivenScope()
             .element<EsAccessibilityServiceComponent>()
@@ -63,7 +62,6 @@ class EsAccessibilityService : AccessibilityService() {
         component.serviceGivenScope.dispose()
         return super.onUnbind(intent)
     }
-
 }
 
 @GivenScopeElementBinding<ServiceGivenScope>

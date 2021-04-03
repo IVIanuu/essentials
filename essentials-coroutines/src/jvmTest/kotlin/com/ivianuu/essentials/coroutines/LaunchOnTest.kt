@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.onEach
 import org.junit.Test
 
 class LaunchOnTest {
-
     @Test
     fun testLaunchOnStart() = runCancellingBlockingTest {
         var calls = 0
@@ -85,5 +84,4 @@ class LaunchOnTest {
             Event(3, Event.Type.END)
         )
     }
-
 }

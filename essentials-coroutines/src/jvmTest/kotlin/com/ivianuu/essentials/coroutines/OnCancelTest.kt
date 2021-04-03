@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import org.junit.Test
 
 class OnCancelTest {
-
     @Test
     fun testOnCancel() = runCancellingBlockingTest {
         val sender = EventFlow<String>()
@@ -59,5 +58,4 @@ class OnCancelTest {
 
         received.shouldContainExactly("a")
     }
-
 }

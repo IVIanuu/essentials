@@ -8,10 +8,10 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
+import com.ivianuu.injekt.scope.GivenScopeInitializer
 
 typealias ScopeInitializer<S> = () -> Unit
 
-// todo remove type parameter S once injekt is fixed
 @Given
 fun <@Given @ForTypeKey T : U, U : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
     @Given instance: () -> T,
@@ -40,7 +40,7 @@ fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
     @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
     @Given logger: Logger,
     @Given workerRunner: ScopeWorkerRunner<S>
-): com.ivianuu.injekt.scope.GivenScopeInitializer<S> = {
+): GivenScopeInitializer<S> = {
     initializers
         .sortedTopological(
             key = { it.key },

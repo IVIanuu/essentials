@@ -26,8 +26,10 @@ import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Eager
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
@@ -62,7 +64,8 @@ fun clipboardState(
 }
 
 @Given
-val clipboardActions = EventFlow<ClipboardAction>()
+val clipboardActions: @Scoped<AppGivenScope> MutableSharedFlow<ClipboardAction>
+    get() = EventFlow()
 
 private fun ClipboardManager.clipboardChanges() = callbackFlow {
     val listener = ClipboardManager.OnPrimaryClipChangedListener { offer(Unit) }

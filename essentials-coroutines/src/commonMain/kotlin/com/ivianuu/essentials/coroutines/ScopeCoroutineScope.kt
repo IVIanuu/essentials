@@ -1,6 +1,5 @@
-package com.ivianuu.essentials.util
+package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.scope.GivenScope

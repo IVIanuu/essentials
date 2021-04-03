@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
-
     private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
     internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
@@ -78,7 +77,6 @@ class EsNotificationListenerService : NotificationListenerService() {
         _notifications.value = runCatching { activeNotifications!!.toList() }
             .getOrElse { emptyList() }
     }
-
 }
 
 @GivenScopeElementBinding<ServiceGivenScope>

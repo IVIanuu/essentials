@@ -21,7 +21,6 @@ import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
 interface ActionRepository {
-
     suspend fun getAllActions(): List<Action>
 
     suspend fun getAction(key: String): Action
@@ -31,7 +30,6 @@ interface ActionRepository {
     suspend fun getActionSettingsKey(key: String): ActionSettingsKey?
 
     suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
-
 }
 
 @Given
@@ -43,7 +41,6 @@ class ActionRepositoryImpl(
     @Given private val actionPickerDelegates: Set<ActionPickerDelegate> = emptySet(),
     @Given private val actionSettings: Map<String, ActionSettingsKey> = emptyMap()
 ) : ActionRepository {
-
     override suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
         actions.values.map { it() }
     }
@@ -70,5 +67,4 @@ class ActionRepositoryImpl(
 
     override suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
         actionPickerDelegates.toList()
-
 }

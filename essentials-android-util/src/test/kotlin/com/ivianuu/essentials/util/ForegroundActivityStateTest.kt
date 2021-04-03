@@ -33,7 +33,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ForegroundActivityStateTest {
-
     @Test
     fun testForegroundActivityState() = runCancellingBlockingTest {
         val foregroundState = foregroundActivityState
@@ -62,5 +61,4 @@ class ForegroundActivityStateTest {
             null
         )
     }
-
 }

@@ -24,7 +24,6 @@ import kotlinx.coroutines.delay
 import org.junit.Test
 
 class RaceTest {
-
     @Test
     fun testFirstOneWins() = runCancellingBlockingTest {
         val result = race {
@@ -90,5 +89,4 @@ class RaceTest {
 
         blockCancelled shouldBe true
     }
-
 }
