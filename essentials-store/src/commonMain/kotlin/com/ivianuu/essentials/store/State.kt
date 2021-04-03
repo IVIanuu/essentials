@@ -55,27 +55,26 @@ fun <S> CoroutineScope.state(
     block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
     val state = MutableStateFlow(initial)
-    launch {
+    val stateScope = object : StateScope<S>, CoroutineScope by this {
+        override val state: Flow<S>
+            get() = state
+        override suspend fun update(reducer: S.() -> S): S = synchronized(state) {
+            val currentState = state.value
+            val newState = reducer(currentState)
+            if (currentState != newState) state.value = newState
+            newState
+        }
+    }
+    stateScope.launch {
         started.command(state.subscriptionCount)
             .distinctUntilChanged()
             .collectLatest { command ->
                 when (command) {
-                    SharingCommand.START -> {
-                        object : StateScope<S>, CoroutineScope by this {
-                            override val state: Flow<S>
-                                get() = state
-                            override suspend fun update(reducer: S.() -> S): S = synchronized(state) {
-                                val currentState = state.value
-                                val newState = reducer(currentState)
-                                if (currentState != newState) state.value = newState
-                                newState
-                            }
-                        }.block()
-                    }
+                    SharingCommand.START -> stateScope.block()
+                    SharingCommand.STOP_AND_RESET_REPLAY_CACHE -> state.resetReplayCache()
                     SharingCommand.STOP -> {
                         // nothing to do because collectLatest cancels the previous block
                     }
-                    SharingCommand.STOP_AND_RESET_REPLAY_CACHE -> state.resetReplayCache()
                 }
 
             }
