@@ -25,7 +25,6 @@ import kotlin.reflect.KClass
 interface IntentKey : Key<Nothing>
 
 class IntentKeyModule<K : IntentKey>(private val keyClass: KClass<K>) {
-
     @Given
     fun keyIntentFactory(
         @Given intentFactory: KeyIntentFactory<K>

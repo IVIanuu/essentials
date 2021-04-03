@@ -16,15 +16,4 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-
-typealias HomeKey = Key<Nothing>
-
-@Qualifier
-annotation class HomeKeyBinding
-
-@Given
-fun <@Given T : @HomeKeyBinding S, S : Key<Nothing>> homeKey(
-    @Given instance: T
-): HomeKey = instance
+typealias RootKey = Key<Nothing>

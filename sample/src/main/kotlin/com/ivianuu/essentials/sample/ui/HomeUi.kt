@@ -37,20 +37,19 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.HomeKeyBinding
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 
-@HomeKeyBinding
 @Given
-class HomeKey : Key<Nothing>
+class HomeKey : RootKey
 
 @Given
 val homeKeyModule = KeyModule<HomeKey>()

@@ -32,6 +32,7 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -41,8 +42,8 @@ import kotlinx.coroutines.flow.onEach
 data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
 @Given
-fun initialNavigationState(@Given homeKey: HomeKey? = null): @Initial NavigationState =
-    NavigationState(listOfNotNull(homeKey))
+fun initialNavigationState(@Given rootKey: RootKey? = null): @Initial NavigationState =
+    NavigationState(listOfNotNull(rootKey))
 
 sealed class NavigationAction {
     data class Push<R : Any>(
@@ -134,7 +135,8 @@ fun navigationState(
 }.lens { NavigationState(it.backStack) }
 
 @Given
-val navigationActions = EventFlow<NavigationAction>()
+val navigationActions: @Scoped<AppGivenScope> MutableSharedFlow<NavigationAction>
+    get() = EventFlow()
 
 private fun <R : Any> InternalNavigationState.popKey(
     key: Key<R>,

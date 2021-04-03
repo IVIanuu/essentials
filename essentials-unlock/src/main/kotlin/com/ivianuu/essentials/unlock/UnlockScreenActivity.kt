@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.take
  * Requests a screen unlock
  */
 class UnlockScreenActivity : ComponentActivity() {
-
     private var hasResult = false
     private var valid = true
     private lateinit var requestId: String
