@@ -31,7 +31,6 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Test
 
 class StateTest {
-
     @Test
     fun testReduce() = runCancellingBlockingTest {
         val state = state(0) {

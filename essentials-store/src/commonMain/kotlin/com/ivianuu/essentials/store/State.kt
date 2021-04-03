@@ -16,9 +16,7 @@
 
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.commonActor
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 interface StateScope<S> : CoroutineScope {
@@ -55,63 +53,32 @@ fun <S> CoroutineScope.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily,
     block: suspend StateScope<S>.() -> Unit
-): StateFlow<S> = state(MutableStateFlow(initial), started, block)
+): StateFlow<S> {
+    val state = MutableStateFlow(initial)
+    launch {
+        started.command(state.subscriptionCount)
+            .distinctUntilChanged()
+            .collectLatest { command ->
+                when (command) {
+                    SharingCommand.START -> {
+                        object : StateScope<S>, CoroutineScope by this {
+                            override val state: Flow<S>
+                                get() = state
+                            override suspend fun update(reducer: S.() -> S): S = synchronized(state) {
+                                val currentState = state.value
+                                val newState = reducer(currentState)
+                                if (currentState != newState) state.value = newState
+                                newState
+                            }
+                        }.block()
+                    }
+                    SharingCommand.STOP -> {
+                        // nothing to do because collectLatest cancels the previous block
+                    }
+                    SharingCommand.STOP_AND_RESET_REPLAY_CACHE -> state.resetReplayCache()
+                }
 
-fun <S> CoroutineScope.state(
-    state: MutableStateFlow<S>,
-    started: SharingStarted = SharingStarted.Lazily,
-    block: suspend StateScope<S>.() -> Unit
-): StateFlow<S> = state(
-    state,
-    { state.value },
-    { state.value = it },
-    started,
-    block
-)
-
-fun <S> CoroutineScope.state(
-    state: Flow<S>,
-    getState: () -> S,
-    setState: suspend (S) -> Unit,
-    started: SharingStarted = SharingStarted.Lazily,
-    block: suspend StateScope<S>.() -> Unit
-): StateFlow<S> = channelFlow {
-    coroutineScope {
-        launch {
-            state.collect { newState ->
-                send(newState)
             }
-        }
-        StateScopeImpl(this, state, getState, setState).block()
     }
-}.stateIn(this, started, getState())
-
-private class StateScopeImpl<S>(
-    scope: CoroutineScope,
-    override val state: Flow<S>,
-    private val getState: () -> S,
-    private val setState: suspend (S) -> Unit
-) : StateScope<S>, CoroutineScope by scope {
-    private val actor = commonActor<Reduce>(
-        start = CoroutineStart.LAZY,
-        capacity = Channel.UNLIMITED
-    ) {
-        for (reduce in this) {
-            val currentState = getState()
-            val newState = reduce.reducer(currentState)
-            if (currentState != newState) setState(newState)
-            reduce.acknowledged.complete(newState)
-        }
-    }
-
-    override suspend fun update(reducer: S.() -> S): S {
-        val acknowledged = CompletableDeferred<S>()
-        actor.offer(Reduce(reducer, acknowledged))
-        return acknowledged.await()
-    }
-
-    private inner class Reduce(
-        val reducer: S.() -> S,
-        val acknowledged: CompletableDeferred<S>
-    )
+    return state
 }
