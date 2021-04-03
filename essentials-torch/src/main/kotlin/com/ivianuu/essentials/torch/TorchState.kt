@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 
@@ -38,7 +39,8 @@ fun torchState(
     .state(scope, initial) { copy(torchEnabled = it.value) }
 
 @Given
-val torchActions = EventFlow<TorchAction>()
+val torchActions: @Scoped<AppGivenScope> MutableSharedFlow<TorchAction>
+    get() = EventFlowC()
 
 data class TorchState(val torchEnabled: Boolean = false)
 

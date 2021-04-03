@@ -39,11 +39,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-data class NavigationState(val backStack: List<Key<*>> = emptyList())
-
-@Given
-fun initialNavigationState(@Given rootKey: RootKey? = null): @Initial NavigationState =
-    NavigationState(listOfNotNull(rootKey))
+data class NavigationState(val backStack: List<Key<*>> = emptyList()) {
+    companion object {
+        @Given
+        fun initial(@Given rootKey: RootKey? = null): @Initial NavigationState =
+            NavigationState(listOfNotNull(rootKey))
+    }
+}
 
 sealed class NavigationAction {
     data class Push<R : Any>(

@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ReceiverGivenScope
@@ -35,10 +36,7 @@ class StartupReceiver : BroadcastReceiver() {
         val component = createReceiverGivenScope(context, intent)
             .element<StartupReceiverComponent>()
         component.logger.d { "on system boot" }
-        val scope = CoroutineScope(component.defaultDispatcher)
-        component.bootListeners.forEach {
-            scope.launch { it() }
-        }
+        component.bootListeners.forEach { it() }
         component.receiverGivenScope.dispose()
     }
 }
@@ -47,7 +45,6 @@ class StartupReceiver : BroadcastReceiver() {
 @Given
 class StartupReceiverComponent(
     @Given val bootListeners: Set<BootListener> = emptySet(),
-    @Given val defaultDispatcher: DefaultDispatcher,
     @Given val logger: Logger,
-    @Given val receiverGivenScope: ReceiverGivenScope
+    @Given val receiverGivenScope: ReceiverGivenScope,
 )

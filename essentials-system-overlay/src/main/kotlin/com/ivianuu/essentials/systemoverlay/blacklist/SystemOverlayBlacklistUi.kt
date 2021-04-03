@@ -121,14 +121,16 @@ data class SystemOverlayBlacklistUiState(
     val disableOnKeyboard: Boolean = false,
     val disableOnLockScreen: Boolean = false,
     val disableOnSecureScreens: Boolean = false
-)
-
-@Given
-fun initialSystemOverlayBlacklistUiState(
-    @Given key: SystemOverlayBlacklistKey
-): @Initial SystemOverlayBlacklistUiState = SystemOverlayBlacklistUiState(
-    systemOverlayName = key.systemOverlayName
-)
+) {
+    companion object {
+        @Given
+        fun initial(
+            @Given key: SystemOverlayBlacklistKey
+        ): @Initial SystemOverlayBlacklistUiState = SystemOverlayBlacklistUiState(
+            systemOverlayName = key.systemOverlayName
+        )
+    }
+}
 
 sealed class SystemOverlayBlacklistUiAction {
     object OpenAppBlacklistSettings : SystemOverlayBlacklistUiAction()

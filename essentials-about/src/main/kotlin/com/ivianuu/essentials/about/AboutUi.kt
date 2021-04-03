@@ -119,9 +119,14 @@ fun aboutUi(
     }
 }
 
-data class AboutState(
-    val privacyPolicyUrl: PrivacyPolicyUrl? = null
-)
+data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
+    companion object {
+        @Given
+        fun initial(
+            @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
+        ): @Initial AboutState = AboutState(privacyPolicyUrl = privacyPolicyUrl)
+    }
+}
 
 sealed class AboutAction {
     object Rate : AboutAction()
@@ -135,12 +140,11 @@ sealed class AboutAction {
 @Given
 fun aboutState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial AboutState = AboutState(),
+    @Given initial: @Initial AboutState,
     @Given actions: Flow<AboutAction>,
     @Given buildInfo: BuildInfo,
-    @Given navigator: Collector<NavigationAction>,
-    @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
-): @Scoped<KeyUiGivenScope> StateFlow<AboutState> = scope.state(initial.copy(privacyPolicyUrl = privacyPolicyUrl)) {
+    @Given navigator: Collector<NavigationAction>
+): @Scoped<KeyUiGivenScope> StateFlow<AboutState> = scope.state(initial) {
     actions
         .filterIsInstance<Rate>()
         .onEach {

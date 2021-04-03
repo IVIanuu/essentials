@@ -16,4 +16,4 @@
 
 package com.ivianuu.essentials.boot
 
-typealias BootListener = suspend () -> Unit
+typealias BootListener = () -> Unit

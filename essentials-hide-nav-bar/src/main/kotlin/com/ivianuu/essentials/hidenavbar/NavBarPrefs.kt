@@ -27,17 +27,19 @@ import kotlinx.serialization.Serializable
 data class NavBarPrefs(
     @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
     @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
-)
-
-@Given
-fun initialNavBarPrefs(@Given systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
-    hideNavBar = false,
-    navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
-        NavBarRotationMode.NOUGAT
-    } else {
-        NavBarRotationMode.MARSHMALLOW
+) {
+    companion object {
+        @Given
+        fun initial(@Given systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
+            hideNavBar = false,
+            navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
+                NavBarRotationMode.NOUGAT
+            } else {
+                NavBarRotationMode.MARSHMALLOW
+            }
+        )
     }
-)
+}
 
 @Given
 val navBarPrefsModule = PrefModule<NavBarPrefs>("nav_bar_prefs")

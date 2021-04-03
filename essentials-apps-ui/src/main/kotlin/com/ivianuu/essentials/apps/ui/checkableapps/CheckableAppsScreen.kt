@@ -163,13 +163,14 @@ data class CheckableAppsState(
                 )
             }
         }
+    companion object {
+        @Given
+        fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
+            appFilter = params.appFilter,
+            appBarTitle = params.appBarTitle
+        )
+    }
 }
-
-@Given
-fun initialCheckableAppsState(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
-    appFilter = params.appFilter,
-    appBarTitle = params.appBarTitle
-)
 
 data class CheckableApp(
     val info: AppInfo,

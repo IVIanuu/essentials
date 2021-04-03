@@ -116,13 +116,14 @@ data class AppPickerState(
 ) {
     val filteredApps = allApps
         .map { it.filter(appFilter) }
+    companion object {
+        @Given
+        fun initial(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
+            appFilter = key.appFilter,
+            title = key.title
+        )
+    }
 }
-
-@Given
-fun initialAppPickerState(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
-    appFilter = key.appFilter,
-    title = key.title
-)
 
 sealed class AppPickerAction {
     data class FilterApps(val appFilter: AppFilter) : AppPickerAction()

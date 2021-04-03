@@ -40,7 +40,7 @@ data class AccessibilityConfig(
 )
 
 @Given
-fun applyAccessibilityConfig(
+fun accessibilityConfigWorker(
     @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
     @Given serviceHolder: AccessibilityServiceHolder,
 ): ScopeWorker<AccessibilityGivenScope> = {
