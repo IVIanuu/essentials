@@ -24,8 +24,7 @@ import kotlinx.coroutines.sync.Semaphore
 suspend fun <T> par(
     vararg blocks: suspend () -> T,
     concurrency: Int = defaultConcurrency
-): List<T> =
-    blocks.asIterable().parMap(concurrency) { it() }
+): List<T> = blocks.asIterable().parMap(concurrency) { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
     concurrency: Int = defaultConcurrency,
@@ -56,6 +55,4 @@ suspend fun <T> Iterable<T>.parForEach(
     parMap(concurrency) { action(it) }
 }
 
-internal val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
-    Runtime.getRuntime().availableProcessors().coerceAtLeast(3)
-}
+internal expect val defaultConcurrency: Int
