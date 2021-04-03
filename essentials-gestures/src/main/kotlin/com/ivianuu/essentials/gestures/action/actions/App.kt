@@ -83,7 +83,7 @@ class AppActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.string(R.string.es_action_app)
-    U
+
     override val icon: @Composable () -> Unit = {
         Icon(painterResource(R.drawable.es_ic_apps), null)
     }
