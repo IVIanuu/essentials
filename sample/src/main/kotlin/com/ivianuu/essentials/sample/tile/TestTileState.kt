@@ -26,7 +26,7 @@ import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance

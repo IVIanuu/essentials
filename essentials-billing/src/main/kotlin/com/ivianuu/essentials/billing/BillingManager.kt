@@ -24,7 +24,7 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope

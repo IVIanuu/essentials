@@ -22,7 +22,7 @@ import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Eager

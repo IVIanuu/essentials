@@ -24,7 +24,7 @@ import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAl
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped

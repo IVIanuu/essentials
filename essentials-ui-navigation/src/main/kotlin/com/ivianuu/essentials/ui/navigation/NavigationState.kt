@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.lens
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope

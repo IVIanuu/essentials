@@ -49,13 +49,13 @@ class AppActionFactory(
     @Given private val resourceProvider: ResourceProvider
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+
     override suspend fun createAction(id: String): Action {
         val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             id = id,
-            title = runCatching {
-                appRepository.getAppInfo(packageName).appName
-            }.getOrElse { resourceProvider.string(R.string.es_unknown_action_name) },
+            title = appRepository.getAppInfo(packageName)?.appName
+                ?: resourceProvider.string(R.string.es_unknown_action_name),
             unlockScreen = true,
             enabled = true,
             icon = coilActionIcon(AppIcon(packageName))
@@ -83,6 +83,7 @@ class AppActionPickerDelegate(
 ) : ActionPickerDelegate {
     override val title: String
         get() = resourceProvider.string(R.string.es_action_app)
+    U
     override val icon: @Composable () -> Unit = {
         Icon(painterResource(R.drawable.es_ic_apps), null)
     }

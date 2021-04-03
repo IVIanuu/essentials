@@ -2,7 +2,7 @@ package com.ivianuu.essentials.screenstate
 
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped

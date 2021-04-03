@@ -24,12 +24,12 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.AppGivenScope

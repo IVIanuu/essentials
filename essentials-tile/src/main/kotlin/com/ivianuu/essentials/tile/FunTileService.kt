@@ -22,7 +22,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.ResourceProvider
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope

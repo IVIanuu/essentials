@@ -50,7 +50,7 @@ import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

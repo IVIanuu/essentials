@@ -23,7 +23,7 @@ import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.screenstate.ConfigChange
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
 import com.ivianuu.injekt.scope.AppGivenScope

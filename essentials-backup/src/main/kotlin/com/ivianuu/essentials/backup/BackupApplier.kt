@@ -26,7 +26,7 @@ import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope

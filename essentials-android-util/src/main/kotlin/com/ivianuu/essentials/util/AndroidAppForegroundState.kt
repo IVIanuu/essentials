@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util
 
 import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow

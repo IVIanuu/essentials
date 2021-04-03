@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.widget.Toast
 import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.AppGivenScope

@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.apps
 
 import android.content.pm.PackageManager
+import com.github.michaelbull.result.get
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.injekt.Given
@@ -25,7 +27,7 @@ import kotlinx.coroutines.withContext
 interface AppRepository {
     suspend fun getInstalledApps(): List<AppInfo>
 
-    suspend fun getAppInfo(packageName: String): AppInfo
+    suspend fun getAppInfo(packageName: String): AppInfo?
 }
 
 data class AppInfo(val packageName: String, val appName: String)
@@ -48,11 +50,10 @@ class AppRepositoryImpl(
             .toList()
     }
 
-    override suspend fun getAppInfo(packageName: String): AppInfo = withContext(ioDispatcher) {
-        AppInfo(
-            packageName,
-            packageManager.getApplicationInfo(packageName, 0).loadLabel(packageManager)
-                .toString()
-        )
+    override suspend fun getAppInfo(packageName: String): AppInfo? = withContext(ioDispatcher) {
+        val applicationInfo = runCatching {
+            packageManager.getApplicationInfo(packageName, 0)
+        }.get() ?: return@withContext null
+        AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
     }
 }
