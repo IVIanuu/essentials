@@ -40,7 +40,7 @@ fun <T, S> Flow<T>.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily,
     reducer: S.(T) -> S
-) = map<T, S.() -> S> { value -> { reducer(value) } }
+): StateFlow<S> = map<T, S.() -> S> { value -> { reducer(value) } }
     .state(scope, initial, started)
 
 fun <S> Flow<S.() -> S>.state(
