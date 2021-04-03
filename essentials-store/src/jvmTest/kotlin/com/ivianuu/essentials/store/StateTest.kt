@@ -35,7 +35,7 @@ class StateTest {
     @Test
     fun testReduce() = runCancellingBlockingTest {
         val state = state(0) {
-            reduce { inc() }
+            update { inc() }
         }
         state.testCollect(this)
             .values
@@ -55,7 +55,7 @@ class StateTest {
         val actions = EventFlow<Int>()
         val state = state(0) {
             actions
-                .reduce { it }
+                .update { it }
                 .launchIn(this)
         }
         val collector = state.testCollect(this)

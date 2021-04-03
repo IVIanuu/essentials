@@ -200,10 +200,10 @@ fun uiNotificationState(
     @Given permissionRequester: PermissionRequester
 ): @Scoped<KeyUiGivenScope> StateFlow<NotificationsUiState> = scope.state(initial) {
     permissionState
-        .reduce { copy(hasPermissions = it) }
+        .update { copy(hasPermissions = it) }
         .launchIn(this)
     notifications.flowAsResource()
-        .reduce { copy(notifications = it) }
+        .update { copy(notifications = it) }
         .launchIn(this)
     actions
         .onEach { action ->

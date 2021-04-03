@@ -6,13 +6,10 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.store.StateScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
 
 sealed class Resource<out T>
 
@@ -50,17 +47,6 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
 
 inline fun <T> resource(crossinline block: suspend () -> T): Flow<Resource<T>> =
     resourceFlow { emit(block()) }
-
-fun <S, T> StateScope<S>.reduceResource(
-    block: suspend () -> T,
-    reducer: S.(Resource<T>) -> S
-): Job = resource(block)
-    .reduce(reducer)
-    .launchIn(this)
-
-fun <T, S> Flow<T>.reduceResource(scope: StateScope<S>, reducer: S.(Resource<T>) -> S) = with(scope) {
-    flowAsResource().reduce { reducer(it) }
-}
 
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {

@@ -31,7 +31,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.reduceResource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.state
@@ -121,7 +121,9 @@ fun shortcutPickerState(
     @Given shortcutRepository: ShortcutRepository,
     @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerState> = scope.state(initial) {
-    reduceResource({ shortcutRepository.getAllShortcuts() }) { copy(shortcuts = it) }
+    resourceFlow { emit(shortcutRepository.getAllShortcuts()) }
+        .update { copy(shortcuts = it) }
+        .launchIn(this)
     actions
         .filterIsInstance<PickShortcut>()
         .onEach { action ->

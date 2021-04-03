@@ -33,7 +33,6 @@ class ShortcutRepository(
     @Given private val ioDispatcher: IODispatcher,
     @Given private val packageManager: PackageManager
 ) {
-
     suspend fun getAllShortcuts(): List<Shortcut> = withContext(ioDispatcher) {
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
@@ -81,5 +80,4 @@ class ShortcutRepository(
 
         Shortcut(intent, name, icon)
     }
-
 }

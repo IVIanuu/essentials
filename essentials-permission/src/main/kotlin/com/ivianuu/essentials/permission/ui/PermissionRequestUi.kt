@@ -140,7 +140,7 @@ fun permissionRequestState(
         val permissions = key.permissionsKeys
             .filterNot { permissionStateFactory(listOf(it)).first() }
             .map { UiPermission(it, permissions[it]!!) }
-        reduce { copy(permissions = permissions) }
+        update { copy(permissions = permissions) }
     }
 
     launch { updatePermissions() }

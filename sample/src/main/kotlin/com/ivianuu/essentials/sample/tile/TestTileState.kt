@@ -43,7 +43,7 @@ fun testTileState(
     @Given twilightPrefUpdater: Collector<PrefAction<TwilightPrefs>>,
 ) = scope.state(TwilightPrefs().toTileState()) {
     twilightPrefs
-        .reduce { it.toTileState() }
+        .update { it.toTileState() }
         .launchIn(this)
     actions
         .filterIsInstance<TileAction>()

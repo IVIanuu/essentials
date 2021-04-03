@@ -74,7 +74,7 @@ fun navigationState(
         .onEach { action ->
             logger.d { "push $action" }
             if (!intentKeyHandler(action.key)) {
-                reduce {
+                update {
                     copy(
                         backStack = backStack + action.key,
                         results = if (action.deferredResult != null) {
@@ -91,7 +91,7 @@ fun navigationState(
         .onEach { action ->
             logger.d { "replace top $action" }
             if (intentKeyHandler(action.key)) {
-                reduce {
+                update {
                     copy(
                         backStack = backStack.dropLast(1),
                         results = if (action.deferredResult != null) {
@@ -100,7 +100,7 @@ fun navigationState(
                     )
                 }
             } else {
-                reduce {
+                update {
                     copy(
                         backStack = backStack.dropLast(1) + action.key,
                         results = if (action.deferredResult != null) {
@@ -114,7 +114,7 @@ fun navigationState(
 
     actions
         .filterIsInstance<Pop<Any>>()
-        .reduce {
+        .update {
             logger.d { "pop $it" }
             popKey(it.key, it.result)
         }
@@ -125,7 +125,7 @@ fun navigationState(
         .onEach {
             val topKey = state.first().backStack.last()
             logger.d { "pop top $topKey" }
-            reduce {
+            update {
                 @Suppress("UNCHECKED_CAST")
                 popKey(topKey as Key<Any>, null)
             }

@@ -147,7 +147,7 @@ fun systemOverlayBlacklistUiState(
     @Given prefUpdater: Collector<PrefAction<SystemOverlayBlacklistPrefs>>
 ): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistUiState> = scope.state(initial) {
     prefs
-        .reduce {
+        .update {
             copy(
                 disableOnKeyboard = it.disableOnKeyboard,
                 disableOnLockScreen = it.disableOnLockScreen,

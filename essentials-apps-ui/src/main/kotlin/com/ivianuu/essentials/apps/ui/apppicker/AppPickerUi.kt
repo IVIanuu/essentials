@@ -37,7 +37,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.reduceResource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -138,10 +138,12 @@ fun appPickerState(
     @Given key: AppPickerKey,
     @Given navigator: Collector<NavigationAction>,
 ): @Scoped<KeyUiGivenScope> StateFlow<AppPickerState> = scope.state(initial) {
-    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
+    resourceFlow { emit(appRepository.getInstalledApps()) }
+        .update { copy(allApps = it) }
+        .launchIn(this)
     actions
         .filterIsInstance<FilterApps>()
-        .reduce { copy(appFilter = it.appFilter) }
+        .update { copy(appFilter = it.appFilter) }
         .launchIn(this)
     actions
         .filterIsInstance<PickApp>()

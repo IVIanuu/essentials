@@ -24,14 +24,14 @@ import kotlinx.coroutines.flow.*
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
 
-    suspend fun reduce(reducer: S.() -> S): S
+    suspend fun update(reducer: S.() -> S): S
 
-    fun Flow<S.() -> S>.reduce(): Flow<S.() -> S> =
-        onEach { this@StateScope.reduce(it) }
+    fun Flow<S.() -> S>.update(): Flow<S.() -> S> =
+        onEach { this@StateScope.update(it) }
 
-    fun <T> Flow<T>.reduce(reducer: S.(T) -> S): Flow<T> =
+    fun <T> Flow<T>.update(reducer: S.(T) -> S): Flow<T> =
         onEach { value ->
-            this@StateScope.reduce { reducer(value) }
+            this@StateScope.update { reducer(value) }
         }
 }
 
@@ -48,7 +48,7 @@ fun <S> Flow<S.() -> S>.state(
     initial: S,
     started: SharingStarted = SharingStarted.Lazily
 ): StateFlow<S> = scope.state(initial, started) {
-    this@state.reduce().collect()
+    this@state.update().collect()
 }
 
 fun <S> CoroutineScope.state(
@@ -121,7 +121,7 @@ private class StateScopeImpl<S>(
         }
     }
 
-    override suspend fun reduce(reducer: S.() -> S): S {
+    override suspend fun update(reducer: S.() -> S): S {
         val acknowledged = CompletableDeferred<S>()
         actor.offer(Reduce(reducer, acknowledged))
         return acknowledged.await()

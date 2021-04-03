@@ -57,12 +57,12 @@ fun notificationState(
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): @Scoped<AppGivenScope> StateFlow<NotificationsState> = scope.state(NotificationsState()) {
     serviceRef
-        .reduce { copy(isConnected = it != null) }
+        .update { copy(isConnected = it != null) }
         .launchIn(this)
 
     serviceRef
         .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
-        .reduce { copy(notifications = it) }
+        .update { copy(notifications = it) }
         .launchIn(this)
 
     actions

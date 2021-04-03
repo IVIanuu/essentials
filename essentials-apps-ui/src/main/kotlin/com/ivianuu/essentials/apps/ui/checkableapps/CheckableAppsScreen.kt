@@ -49,7 +49,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.reduceResource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
@@ -192,9 +192,11 @@ fun checkableAppsState(
     @Given onCheckedAppsChanged: OnCheckedAppsChanged
 ): @Scoped<KeyUiGivenScope> StateFlow<CheckableAppsState> = scope.state(initial) {
     checkedApps
-        .reduce { copy(checkedApps = it) }
+        .update { copy(checkedApps = it) }
         .launchIn(this)
-    reduceResource({ appRepository.getInstalledApps() }) { copy(allApps = it) }
+    resourceFlow { emit(appRepository.getInstalledApps()) }
+        .update { copy(allApps = it) }
+        .launchIn(this)
 
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()

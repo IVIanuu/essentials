@@ -56,7 +56,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.reduceResource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.ScopeCoroutineScope
@@ -138,15 +138,13 @@ fun actionPickerState(
     @Given permissionRequester: PermissionRequester,
     @Given resourceProvider: ResourceProvider
 ): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerState> = scope.state(initial) {
-    reduceResource({ getActionPickerItems(actionRepository, key, resourceProvider) }) {
-        copy(items = it)
-    }
+    resourceFlow { emit(getActionPickerItems(actionRepository, key, resourceProvider)) }
+        .update { copy(items = it) }
+        .launchIn(this)
 
     actions
         .filterIsInstance<OpenActionSettings>()
-        .onEach { action ->
-            navigator(Push(action.item.settingsKey!!))
-        }
+        .onEach { navigator(Push(it.item.settingsKey!!)) }
         .launchIn(this)
 
     actions

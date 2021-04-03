@@ -51,7 +51,7 @@ fun clipboardState(
 ): @Eager<AppGivenScope> StateFlow<ClipboardState> = scope.state(initial, SharingStarted.Eagerly) {
     clipboardManager.clipboardChanges()
         .map { clipboardManager.primaryClip?.getItemAt(0)?.text?.toString() }
-        .reduce { copy(text = it) }
+        .update { copy(text = it) }
         .launchIn(this)
 
     actions

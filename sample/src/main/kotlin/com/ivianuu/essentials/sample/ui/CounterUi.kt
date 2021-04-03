@@ -113,13 +113,13 @@ fun counterState(
 ): @Scoped<KeyUiGivenScope> StateFlow<CounterState> = scope.state(initial) {
     actions
         .filterIsInstance<Inc>()
-        .reduce { copy(count = count.inc()) }
+        .update { copy(count = count.inc()) }
         .launchIn(this)
 
     actions
         .filterIsInstance<Dec>()
         .onEach {
-            if (state.first().count > 0) reduce { copy(count = count.dec()) }
+            if (state.first().count > 0) update { copy(count = count.dec()) }
             else toaster.showToast("Value cannot be less than 0!")
         }
         .launchIn(this)

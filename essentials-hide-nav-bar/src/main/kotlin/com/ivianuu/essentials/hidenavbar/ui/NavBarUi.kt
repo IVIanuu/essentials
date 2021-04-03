@@ -31,7 +31,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -60,7 +59,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 class NavBarKey : Key<Nothing>
 
@@ -121,7 +119,7 @@ fun navBarState(
     @Given resourceProvider: ResourceProvider
 ): @Scoped<KeyUiGivenScope> StateFlow<NavBarState> = scope.state(initial) {
     prefs
-        .reduce { copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode) }
+        .update { copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode) }
         .launchIn(this)
 
     actions

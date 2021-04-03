@@ -49,8 +49,8 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.resource.reduceResource
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -154,7 +154,8 @@ fun mediaActionSettingsState(
     prefs
         .map { it.mediaApp }
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
-        .reduceResource(this) { copy(mediaApp = it) }
+        .flowAsResource()
+        .update { copy(mediaApp = it) }
         .launchIn(this)
 
     actions

@@ -67,7 +67,7 @@ fun timerState(
     @Given initial: @Initial TimerState = TimerState()
 ): @Scoped<KeyUiGivenScope> StateFlow<TimerState> = scope.state(initial) {
     while (coroutineContext.isActive) {
-        reduce { copy(value = value.inc()) }
+        update { copy(value = value.inc()) }
         delay(1000)
     }
 }
