@@ -18,6 +18,8 @@ package com.ivianuu.essentials.store
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
@@ -58,7 +60,8 @@ fun <S> CoroutineScope.state(
     val stateScope = object : StateScope<S>, CoroutineScope by this {
         override val state: Flow<S>
             get() = state
-        override suspend fun update(reducer: S.() -> S): S = synchronized(state) {
+        private val mutex = Mutex()
+        override suspend fun update(reducer: S.() -> S): S = mutex.withLock {
             val currentState = state.value
             val newState = reducer(currentState)
             if (currentState != newState) state.value = newState
