@@ -94,9 +94,7 @@ class AndroidSettingStateModule<T : S, S>(
     fun adapter(
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingsAdapter<S>,
         @Given initial: @Initial T
-    ): AndroidSettingsAdapter<T> =
-        adapterFactory(name, type, initial) as AndroidSettingsAdapter<T>
-
+    ): AndroidSettingsAdapter<T> = adapterFactory(name, type, initial) as AndroidSettingsAdapter<T>
 }
 
 enum class AndroidSettingsType {
