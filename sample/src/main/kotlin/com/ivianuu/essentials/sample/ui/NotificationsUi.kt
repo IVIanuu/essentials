@@ -54,6 +54,9 @@ import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
@@ -71,9 +74,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given

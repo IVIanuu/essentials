@@ -36,6 +36,11 @@ import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.Deselect
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -45,11 +50,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given

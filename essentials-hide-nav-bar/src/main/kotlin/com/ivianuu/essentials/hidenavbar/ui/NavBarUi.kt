@@ -29,7 +29,8 @@ import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
+import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateHideNavBar
+import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateNavBarRotationMode
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial

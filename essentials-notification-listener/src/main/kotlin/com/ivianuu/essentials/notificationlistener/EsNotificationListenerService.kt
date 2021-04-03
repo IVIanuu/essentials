@@ -86,4 +86,3 @@ class EsNotificationListenerServiceComponent(
     @Given val notificationGivenScopeFactory: () -> NotificationGivenScope,
     @Given val serviceGivenScope: ServiceGivenScope
 )
-

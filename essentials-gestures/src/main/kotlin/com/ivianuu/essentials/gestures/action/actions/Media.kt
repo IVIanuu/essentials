@@ -34,6 +34,10 @@ import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
+import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.state
@@ -47,10 +51,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
-import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext

@@ -19,16 +19,12 @@ package com.ivianuu.essentials.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ReceiverGivenScope
 import com.ivianuu.injekt.android.createReceiverGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class StartupReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

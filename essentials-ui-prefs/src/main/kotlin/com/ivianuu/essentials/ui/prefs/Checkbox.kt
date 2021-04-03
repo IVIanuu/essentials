@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.prefs
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.common.absorbPointer
 import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable
