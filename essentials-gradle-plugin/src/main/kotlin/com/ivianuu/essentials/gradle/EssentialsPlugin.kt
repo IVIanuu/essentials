@@ -20,10 +20,13 @@ import com.google.auto.service.AutoService
 import com.ivianuu.injekt.gradle.InjektPlugin
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
 
 @AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
@@ -36,8 +39,44 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
         }
     }
 
-    override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> =
-        kotlinCompilation.target.project.provider { emptyList() }
+    override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
+        kotlinCompilation.kotlinOptions.run {
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-Xuse-ir",
+                "-Xskip-runtime-version-check",
+                "-XXLanguage:+NewInference",
+                "-Xuse-experimental=kotlin.Experimental",
+                "-Xuse-experimental=kotlin.ExperimentalStdlibApi",
+                "-Xuse-experimental=kotlin.ExperimentalUnsignedTypes",
+                "-Xuse-experimental=kotlin.experimental.ExperimentalTypeInference",
+                "-Xuse-experimental=kotlin.contracts.ExperimentalContracts",
+                "-Xuse-experimental=kotlin.time.ExperimentalTime",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+                "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+                "-Xuse-experimental=kotlinx.serialization.UnstableDefault",
+                "-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer",
+                "-Xuse-experimental=androidx.compose.ExperimentalComposeApi",
+                "-Xuse-experimental=org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI",
+                "-Xuse-experimental=androidx.compose.runtime.ExperimentalComposeApi",
+                "-Xuse-experimental=androidx.compose.ui.focus.ExperimentalFocus",
+                "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi",
+                "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xuse-experimental=androidx.compose.runtime.InternalComposeApi",
+                "-Xskip-prerelease-check"
+            )
+            if (kotlinCompilation is KotlinJvmCompilation ||
+                    kotlinCompilation is KotlinJvmAndroidCompilation) {
+                (kotlinCompilation.kotlinOptions as KotlinJvmOptions).jvmTarget = "1.8"
+                freeCompilerArgs += listOf(
+                    "-Xallow-jvm-ir-dependencies",
+                    "-Xjvm-default=enable",
+                )
+            }
+        }
+        return kotlinCompilation.target.project.provider { emptyList() }
+    }
 
     override fun getCompilerPluginId(): String = "com.ivianuu.essentials"
 

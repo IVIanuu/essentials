@@ -16,7 +16,7 @@
 
 plugins {
     kotlin("multiplatform")
-    id("com.ivianuu.injekt")
+    id("com.ivianuu.essentials")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
@@ -24,12 +24,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 kotlin {
     jvm {
         withJava()
-        compilations.forEach {
-            it.kotlinOptions {
-                useIR = true
-                jvmTarget = "1.8"
-            }
-        }
     }
 
     sourceSets {

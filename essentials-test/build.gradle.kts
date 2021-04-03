@@ -16,10 +16,10 @@
 
 plugins {
     kotlin("jvm")
+    id("com.ivianuu.essentials")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 dependencies {
     compile(Deps.AndroidX.Test.core)

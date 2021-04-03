@@ -19,17 +19,9 @@ plugins {
     id("com.ivianuu.essentials")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-
 kotlin {
     jvm {
         withJava()
-        compilations.forEach {
-            it.kotlinOptions {
-                useIR = true
-                jvmTarget = "1.8"
-            }
-        }
     }
 
     sourceSets {

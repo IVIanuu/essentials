@@ -43,5 +43,4 @@ inline val immediateMainDispatcher: ImmediateMainDispatcher
 typealias IODispatcher = CoroutineDispatcher
 
 @Given
-inline val ioDispatcher: IODispatcher
-    get() = Dispatchers.IO
+expect val ioDispatcher: IODispatcher

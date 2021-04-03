@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import kotlin.experimental.ExperimentalTypeInference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.select
 
