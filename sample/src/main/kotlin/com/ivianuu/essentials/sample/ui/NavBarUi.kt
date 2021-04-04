@@ -46,8 +46,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -69,7 +68,7 @@ fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
     @Given navBarPrefsFlow: Flow<NavBarPrefs>,
     @Given navBarPrefsUpdater: Collector<PrefAction<NavBarPrefs>>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {
@@ -142,7 +141,7 @@ fun navBarUi(
 
             Button(
                 onClick = {
-                    navigator(Push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey()))
+                    navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
                 }
             ) { Text("Settings") }
         }

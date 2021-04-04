@@ -28,8 +28,7 @@ import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class TextInputKey(
@@ -48,7 +47,7 @@ typealias TextInputResult = String
 @Given
 fun textInputUi(
     @Given key: TextInputKey,
-    @Given navigator: Collector<NavigationAction>
+    @Given navigator: Navigator
 ): KeyUi<TextInputKey> = {
     DialogWrapper {
         var currentValue by remember { mutableStateOf(key.initial) }
@@ -61,11 +60,11 @@ fun textInputUi(
             positiveButton = {
                 TextButton(
                     enabled = key.allowEmpty || currentValue.isNotEmpty(),
-                    onClick = { navigator(Pop(key, currentValue)) }
+                    onClick = { navigator.pop(key, currentValue) }
                 ) { Text(stringResource(R.string.es_ok)) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator(Pop(key)) }) {
+                TextButton(onClick = { navigator.pop(key) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

@@ -39,10 +39,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
@@ -122,7 +121,7 @@ fun permissionRequestState(
     @Given actions: Flow<PermissionRequestAction>,
     @Given appUiStarter: AppUiStarter,
     @Given key: PermissionRequestKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
@@ -133,7 +132,7 @@ fun permissionRequestState(
                 .all { permissionStateFactory(listOf(it)).first() }
         }
         .take(1)
-        .onEach { navigator(Pop(key, true)) }
+        .onEach { navigator.pop(key, true) }
         .launchIn(this)
 
     suspend fun updatePermissions() {

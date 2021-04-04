@@ -39,8 +39,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -48,6 +46,7 @@ import kotlinx.coroutines.flow.StateFlow
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 
 class AppPickerKey(
@@ -103,7 +102,7 @@ data class AppPickerState(
 class AppPickerViewModel(
     @Given private val appRepository: AppRepository,
     @Given private val key: AppPickerKey,
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, AppPickerState>
 ): StateFlow<AppPickerState> by store {
     init {
@@ -112,6 +111,6 @@ class AppPickerViewModel(
     }
 
     fun pickApp(app: AppInfo) = store.effect {
-        navigator(Pop(key, app))
+        navigator.pop(key, app)
     }
 }

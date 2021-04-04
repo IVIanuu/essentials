@@ -43,14 +43,13 @@ import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -66,7 +65,7 @@ val prefsKeyModule = KeyModule<PrefsKey>()
 
 @Given
 fun prefsUi(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given prefsState: Flow<SamplePrefs>,
     @Given prefUpdater: Collector<PrefAction<SamplePrefs>>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>

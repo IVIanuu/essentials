@@ -11,8 +11,7 @@ import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class MultiChoiceListKey<T : Any>(
@@ -29,7 +28,7 @@ val multiChoiceListKeyModule = KeyModule<MultiChoiceListKey<Any>>()
 @Given
 fun multiChoiceListUi(
     @Given key: MultiChoiceListKey<Any>,
-    @Given navigator: Collector<NavigationAction>
+    @Given navigator: Navigator
 ): KeyUi<MultiChoiceListKey<Any>> = {
     DialogWrapper {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }
@@ -47,11 +46,11 @@ fun multiChoiceListUi(
             title = { Text(key.title) },
             positiveButton = {
                 TextButton(
-                    onClick = { navigator(Pop(key, selectedItems)) }
+                    onClick = { navigator.pop(key, selectedItems) }
                 ) { Text(stringResource(R.string.es_ok)) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator(Pop(key)) }) {
+                TextButton(onClick = { navigator.pop(key) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

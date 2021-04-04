@@ -42,12 +42,10 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
@@ -163,7 +161,7 @@ fun writeSecureSettingsPcInstructionsState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial WriteSecureSettingsPcInstructionsState,
     @Given actions: Flow<WriteSecureSettingsPcInstructionsAction>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given clipboard: Clipboard,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given permissionStateFactory: PermissionStateFactory
@@ -172,7 +170,7 @@ fun writeSecureSettingsPcInstructionsState(
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
             if (state.first()) {
-                navigator(Pop(key))
+                navigator.pop(key)
                 break
             }
             delay(200)
@@ -186,22 +184,14 @@ fun writeSecureSettingsPcInstructionsState(
 
     actions
         .filterIsInstance<OpenGadgetHacksTutorial>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey("https://youtu.be/CDuxcrrWLnY")
-                )
-            )
-        }
+        .onEach { navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY")) }
         .launchIn(this)
 
     actions
         .filterIsInstance<OpenLifeHackerTutorial>()
         .onEach {
-            navigator(
-                Push(
-                    UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-                )
+            navigator.push(
+                UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
             )
         }
         .launchIn(this)
@@ -209,10 +199,8 @@ fun writeSecureSettingsPcInstructionsState(
     actions
         .filterIsInstance<OpenXdaTutorial>()
         .onEach {
-            navigator(
-                Push(
-                    UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-                )
+            navigator.push(
+                UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
             )
         }
         .launchIn(this)

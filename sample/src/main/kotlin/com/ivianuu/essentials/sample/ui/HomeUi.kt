@@ -40,8 +40,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
@@ -56,7 +55,7 @@ val homeKeyModule = KeyModule<HomeKey>()
 
 @Given
 fun homeUi(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,
 ): KeyUi<HomeKey> = {
@@ -94,7 +93,7 @@ fun homeUi(
                 HomeItem(
                     item = item,
                     color = color,
-                    onClick = { navigator(Push(item.keyFactory(color))) }
+                    onClick = { navigator.push(item.keyFactory(color)) }
                 )
 
                 if (finalItems.indexOf(item) != finalItems.lastIndex) {

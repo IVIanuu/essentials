@@ -30,8 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
@@ -51,7 +50,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            dependencies.navigator(PopTop)
+                            dependencies.navigator.popTop()
                             item.onSelected()
                         },
                         content = item.content
@@ -65,7 +64,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
 @GivenScopeElementBinding<UiGivenScope>
 @Given
 class PopupMenuComponent(
-    @Given val navigator: Collector<NavigationAction>
+    @Given val navigator: Navigator
 )
 
 @Composable

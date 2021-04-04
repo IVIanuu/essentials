@@ -36,8 +36,7 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class PopupKey(
@@ -52,12 +51,12 @@ val popupKeyModule = KeyModule<PopupKey>()
 @Given
 fun popupUi(
     @Given key: PopupKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
 ): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator(Pop(key))
+        navigator.pop(key)
     }
 
     var dismissed by remember { refOf(false) }
@@ -65,7 +64,7 @@ fun popupUi(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            navigator(Pop(key))
+            navigator.pop(key)
             if (cancelled) key.onCancel?.invoke()
         }
     }

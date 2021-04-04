@@ -45,11 +45,10 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.Scoped
@@ -113,7 +112,7 @@ fun navBarState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial NavBarState = NavBarState(),
     @Given actions: Flow<NavBarAction>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given prefs: Flow<NavBarPrefs>,
     @Given prefUpdater: Collector<PrefAction<NavBarPrefs>>,

@@ -42,10 +42,10 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -125,14 +125,14 @@ val mediaActionSettingsUi: ViewModelKeyUi<MediaActionSettingsKey, MediaActionSet
     }
 }
 
-data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle)
+data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle) : State()
 
 @Scoped<KeyUiGivenScope>
 @Given
 class MediaActionSettingsViewModel(
     @Given private val appRepository: AppRepository,
     @Given private val intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val prefs: Flow<MediaActionPrefs>,
     @Given private val prefUpdater: Collector<PrefAction<MediaActionPrefs>>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, MediaActionSettingsState>

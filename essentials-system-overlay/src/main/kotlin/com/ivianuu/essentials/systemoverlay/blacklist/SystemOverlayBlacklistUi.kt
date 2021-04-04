@@ -24,9 +24,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -144,7 +144,7 @@ fun systemOverlayBlacklistUiState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial SystemOverlayBlacklistUiState,
     @Given actions: Flow<SystemOverlayBlacklistUiAction>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given prefs: Flow<SystemOverlayBlacklistPrefs>,
     @Given prefUpdater: Collector<PrefAction<SystemOverlayBlacklistPrefs>>
 ): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistUiState> = scope.state(initial) {
@@ -160,7 +160,7 @@ fun systemOverlayBlacklistUiState(
 
     actions
         .filterIsInstance<OpenAppBlacklistSettings>()
-        .onEach { navigator(NavigationAction.Push(SystemOverlayAppBlacklistKey())) }
+        .onEach { navigator.push(SystemOverlayAppBlacklistKey()) }
         .launchIn(this)
 
     actions

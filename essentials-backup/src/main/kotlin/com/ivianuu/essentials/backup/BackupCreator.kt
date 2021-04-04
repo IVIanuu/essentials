@@ -21,12 +21,10 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.DataDir
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -45,7 +43,7 @@ fun backupCreator(
     @Given dataDir: DataDir,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
     runCatching {
@@ -77,11 +75,7 @@ fun backupCreator(
 
             zipOutputStream.close()
 
-            navigator(
-                Push(
-                    ShareBackupFileKey(backupFile.absolutePath)
-                )
-            )
+            navigator.push(ShareBackupFileKey(backupFile.absolutePath))
         }
     }
 }

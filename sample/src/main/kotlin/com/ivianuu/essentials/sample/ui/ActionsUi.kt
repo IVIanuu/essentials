@@ -29,9 +29,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
@@ -46,7 +45,7 @@ val actionsKeyModule = KeyModule<ActionsKey>()
 @Given
 fun actionsUi(
     @Given executeAction: executeAction,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
     Scaffold(

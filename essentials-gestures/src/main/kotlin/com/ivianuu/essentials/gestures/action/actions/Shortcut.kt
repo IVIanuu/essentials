@@ -36,8 +36,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
@@ -78,7 +77,7 @@ class ShortcutActionFactory(
 @ActionPickerDelegateBinding
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String

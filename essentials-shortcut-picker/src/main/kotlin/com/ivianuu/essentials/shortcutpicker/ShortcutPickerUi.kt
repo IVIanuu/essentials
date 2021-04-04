@@ -34,14 +34,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ActivityResultLauncher
-import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -83,7 +81,7 @@ data class ShortcutPickerState(val shortcuts: Resource<List<Shortcut>> = Idle) :
 class ShortcutPickerViewModel(
     @Given private val activityResultLauncher: ActivityResultLauncher,
     @Given private val key: ShortcutPickerKey,
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val shortcutRepository: ShortcutRepository,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, ShortcutPickerState>,
     @Given private val toaster: Toaster
@@ -97,7 +95,7 @@ class ShortcutPickerViewModel(
             val shortcutRequestResult = activityResultLauncher.startActivityForResult(shortcut.intent)
                 .data ?: return@effect
             val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
-            navigator(Pop(key, finalShortcut))
+            navigator.pop(key, finalShortcut)
         }.onFailure {
             it.printStackTrace()
             toaster.showToast(R.string.es_failed_to_pick_shortcut)

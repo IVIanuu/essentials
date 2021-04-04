@@ -40,9 +40,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -111,7 +111,7 @@ fun writeSecureSettingsState(
     @Given actions: Flow<WriteSecureSettingsAction>,
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given shell: Shell,
     @Given toaster: Toaster
@@ -121,7 +121,7 @@ fun writeSecureSettingsState(
         while (coroutineContext.isActive) {
             if (state.first()) {
                 toaster.showToast(R.string.es_secure_settings_permission_granted)
-                navigator(NavigationAction.Pop(key, true))
+                navigator.pop(key, true)
                 break
             }
             delay(200)
@@ -130,9 +130,7 @@ fun writeSecureSettingsState(
     actions
         .onEach { action ->
             when (action) {
-                OpenPcInstructions -> navigator(
-                    NavigationAction.Push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
-                )
+                OpenPcInstructions -> navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
                 GrantPermissionsViaRoot -> runCatching {
                     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
                 }.onFailure {

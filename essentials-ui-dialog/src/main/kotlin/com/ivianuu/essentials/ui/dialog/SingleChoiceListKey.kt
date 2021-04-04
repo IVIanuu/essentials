@@ -8,8 +8,7 @@ import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class SingleChoiceListKey<T : Any>(
@@ -26,7 +25,7 @@ val singleChoiceListKeyModule = KeyModule<SingleChoiceListKey<Any>>()
 @Given
 fun singleChoiceListUi(
     @Given key: SingleChoiceListKey<Any>,
-    @Given navigator: Collector<NavigationAction>
+    @Given navigator: Navigator
 ): KeyUi<SingleChoiceListKey<Any>> = {
     DialogWrapper {
         SingleChoiceListDialog(
@@ -35,13 +34,13 @@ fun singleChoiceListUi(
                     .map { it.value }
             },
             selectedItem = key.selectedItem,
-            onSelectionChanged = { navigator(Pop(key, it)) },
+            onSelectionChanged = { navigator.pop(key, it) },
             item = { item ->
                 Text(key.items.single { it.value == item }.title)
             },
             title = { Text(key.title) },
             negativeButton = {
-                TextButton(onClick = { navigator(Pop(key)) }) {
+                TextButton(onClick = { navigator.pop(key) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

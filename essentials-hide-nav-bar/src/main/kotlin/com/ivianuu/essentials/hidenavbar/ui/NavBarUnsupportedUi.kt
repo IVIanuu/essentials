@@ -10,11 +10,10 @@ import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -50,23 +49,21 @@ val navBarUnsupportedUi: ViewModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedV
 @Given
 val navBarUnsupportedOptions = DialogKeyUiOptionsFactory<NavBarUnsupportedKey>()
 
-class NavBarUnsupportedState
+class NavBarUnsupportedState : State()
 
 @Scoped<KeyUiGivenScope>
 @Given
 class NavBarUnsupportedViewModel(
     @Given private val key: NavBarUnsupportedKey,
-    @Given private val navigator: Collector<NavigationAction>,
-    @GiWIven private val store: ScopeStateStore<KeyUiGivenScope, NavBarUnsupportedState>
+    @Given private val navigator: Navigator,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, NavBarUnsupportedState>
 ) : StateFlow<NavBarUnsupportedState> by store {
     fun openMoreInfos() = store.effect {
-        navigator(
-            Push(
-                UrlKey(
-                    "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
-                )
+        navigator.push(
+            UrlKey(
+                "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
             )
         )
     }
-    fun close() = store.effect { navigator(Pop(key)) }
+    fun close() = store.effect { navigator.pop(key) }
 }

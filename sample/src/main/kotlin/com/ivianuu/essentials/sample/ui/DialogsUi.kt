@@ -56,8 +56,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
@@ -360,16 +359,14 @@ private fun DialogLauncherButton(
     val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
     Button(
         onClick = {
-            component.navigator(
-                Push(
-                    DialogLauncherKey {
-                        dialog {
-                            if (dismissible) {
-                                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
-                            }
+            component.navigator.push(
+                DialogLauncherKey {
+                    dialog {
+                        if (dismissible) {
+                            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
                         }
                     }
-                )
+                }
             )
         }
     ) { Text(text) }
@@ -390,6 +387,4 @@ val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey
 
 @GivenScopeElementBinding<UiGivenScope>
 @Given
-class DialogLauncherComponent(
-    @Given val navigator: Collector<NavigationAction>
-)
+class DialogLauncherComponent(@Given val navigator: Navigator)

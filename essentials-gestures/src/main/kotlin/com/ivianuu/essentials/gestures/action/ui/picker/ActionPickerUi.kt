@@ -54,12 +54,10 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -134,7 +132,7 @@ fun actionPickerState(
     @Given actions: Flow<ActionPickerAction>,
     @Given actionRepository: ActionRepository,
     @Given key: ActionPickerKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given resourceProvider: ResourceProvider
 ): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerState> = scope.state(initial) {
@@ -144,7 +142,7 @@ fun actionPickerState(
 
     actions
         .filterIsInstance<OpenActionSettings>()
-        .onEach { navigator(Push(it.item.settingsKey!!)) }
+        .onEach { navigator.push(it.item.settingsKey!!) }
         .launchIn(this)
 
     actions
@@ -155,8 +153,7 @@ fun actionPickerState(
                 val pickedAction = actionRepository.getAction(result.actionKey)
                 if (!permissionRequester(pickedAction.permissions)) return@onEach
             }
-
-            navigator(Pop(key, result))
+            navigator.pop(key, result)
         }
         .launchIn(this)
 }

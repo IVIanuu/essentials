@@ -39,7 +39,6 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.LocalUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 
 @Composable
 fun PopupMenuButton(
@@ -77,15 +76,13 @@ fun Modifier.popupClickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = indication
         ) {
-            dependencies.navigator(
-                Push(
-                    PopupKey(
-                        position = coordinates!!.boundsInRoot(),
-                        onCancel = onCancel
-                    ) {
-                        PopupMenu(items = items)
-                    }
-                )
+            dependencies.navigator.push(
+                PopupKey(
+                    position = coordinates!!.boundsInRoot(),
+                    onCancel = onCancel
+                ) {
+                    PopupMenu(items = items)
+                }
             )
         }
 }

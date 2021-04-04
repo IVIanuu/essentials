@@ -27,12 +27,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -110,30 +109,28 @@ data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) : State() 
 @Given
 class AboutViewModel(
     @Given private val buildInfo: BuildInfo,
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, AboutState>
 ) : StateFlow<AboutState> by store {
     fun rate() = store.effect {
-        navigator(
-            Push(
-                UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
-            )
+        navigator.push(
+            UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
         )
     }
     fun openMoreApps() = store.effect {
-        navigator(Push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage")))
+        navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
     fun openRedditPage() = store.effect {
-        navigator(Push(UrlKey("https://www.reddit.com/r/manuelwrageapps")))
+        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     }
     fun openGithubPage() = store.effect {
-        navigator(Push(UrlKey("https://github.com/IVIanuu")))
+        navigator.push(UrlKey("https://github.com/IVIanuu"))
     }
     fun openTwitterPage() = store.effect {
-        navigator(Push(UrlKey("https://twitter.com/IVIanuu")))
+        navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
     fun openPrivacyPolicy() = store.effect {
-        navigator(Push(UrlKey(store.first().privacyPolicyUrl!!)))
+        navigator.push(UrlKey(store.first().privacyPolicyUrl!!))
     }
 }
 
