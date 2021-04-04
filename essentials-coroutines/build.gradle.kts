@@ -41,3 +41,6 @@ kotlin {
         }
     }
 }
+
+plugins.apply("com.vanniktech.maven.publish")
+
