@@ -2,8 +2,10 @@ package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.GivenScopeDisposable
+import com.ivianuu.injekt.scope.GivenScopeElement
 import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +27,14 @@ fun <@ForTypeKey S : GivenScope> scopeCoroutineScope(
         }
     }
 }
+
+@Given
+fun <S : GivenScope> scopeCoroutineScopeElement(
+    @Given scope: () -> ScopeCoroutineScope<S>
+): GivenScopeElement<S> = typeKeyOf<CoroutineScope>() to scope
+
+val <T : GivenScope> T.coroutineScope: ScopeCoroutineScope<T>
+    get() = element<CoroutineScope>()
 
 typealias ScopeCoroutineDispatcher<S> = CoroutineDispatcher
 
