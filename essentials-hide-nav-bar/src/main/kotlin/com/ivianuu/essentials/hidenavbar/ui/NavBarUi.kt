@@ -22,8 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.update
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -55,6 +54,7 @@ import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -114,21 +114,24 @@ fun navBarState(
     @Given actions: Flow<NavBarAction>,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
-    @Given prefs: Flow<NavBarPrefs>,
-    @Given prefUpdater: Collector<PrefAction<NavBarPrefs>>,
+    @Given pref: Pref<NavBarPrefs>,
     @Given resourceProvider: ResourceProvider
 ): @Scoped<KeyUiGivenScope> StateFlow<NavBarState> = scope.state(initial) {
-    prefs
-        .update { copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode) }
+    pref
+        .onEach {
+            update {
+                copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
+            }
+        }
         .launchIn(this)
 
     actions
         .filterIsInstance<UpdateHideNavBar>()
         .onEach { action ->
             if (!action.value) {
-                prefUpdater.update { copy(hideNavBar = false) }
+                pref.update { copy(hideNavBar = false) }
             } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-                prefUpdater.update { copy(hideNavBar = action.value) }
+                pref.update { copy(hideNavBar = action.value) }
             } else Unit
         }
         .launchIn(this)
@@ -149,9 +152,7 @@ fun navBarState(
                     title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
                 )
             )?.let { newRotationMode ->
-                prefUpdater.update {
-                    copy(navBarRotationMode = newRotationMode)
-                }
+                pref.update { copy(navBarRotationMode = newRotationMode) }
             }
         }
         .launchIn(this)

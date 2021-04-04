@@ -5,8 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.update
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
@@ -32,6 +31,7 @@ import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -145,16 +145,17 @@ fun systemOverlayBlacklistUiState(
     @Given initial: @Initial SystemOverlayBlacklistUiState,
     @Given actions: Flow<SystemOverlayBlacklistUiAction>,
     @Given navigator: Navigator,
-    @Given prefs: Flow<SystemOverlayBlacklistPrefs>,
-    @Given prefUpdater: Collector<PrefAction<SystemOverlayBlacklistPrefs>>
+    @Given pref: Pref<SystemOverlayBlacklistPrefs>
 ): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistUiState> = scope.state(initial) {
-    prefs
-        .update {
-            copy(
-                disableOnKeyboard = it.disableOnKeyboard,
-                disableOnLockScreen = it.disableOnLockScreen,
-                disableOnSecureScreens = it.disableOnSecureScreens
-            )
+    pref
+        .onEach {
+            update {
+                copy(
+                    disableOnKeyboard = it.disableOnKeyboard,
+                    disableOnLockScreen = it.disableOnLockScreen,
+                    disableOnSecureScreens = it.disableOnSecureScreens
+                )
+            }
         }
         .launchIn(this)
 
@@ -165,17 +166,17 @@ fun systemOverlayBlacklistUiState(
 
     actions
         .filterIsInstance<UpdateDisableOnKeyboard>()
-        .onEach { prefUpdater.update { copy(disableOnKeyboard = it.value) } }
+        .onEach { pref.update { copy(disableOnKeyboard = it.value) } }
         .launchIn(this)
 
     actions
         .filterIsInstance<UpdateDisableOnLockScreen>()
-        .onEach { prefUpdater.update { copy(disableOnLockScreen = it.value) } }
+        .onEach { pref.update { copy(disableOnLockScreen = it.value) } }
         .launchIn(this)
 
     actions
         .filterIsInstance<UpdateDisableOnSecureScreens>()
-        .onEach { prefUpdater.update { copy(disableOnSecureScreens = it.value) } }
+        .onEach { pref.update { copy(disableOnSecureScreens = it.value) } }
         .launchIn(this)
 }
 

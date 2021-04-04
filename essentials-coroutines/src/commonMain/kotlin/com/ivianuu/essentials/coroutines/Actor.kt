@@ -64,7 +64,6 @@ abstract class BaseActor<E>(
             for (message in mailbox)
                 onMessage(message)
         } catch (e: Throwable) {
-            mailbox.close()
             onClose()
         }
     }

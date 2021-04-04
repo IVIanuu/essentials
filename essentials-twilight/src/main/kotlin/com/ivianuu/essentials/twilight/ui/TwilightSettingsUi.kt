@@ -25,8 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.dispatchUpdate
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
@@ -49,11 +48,8 @@ class TwilightSettingsKey : Key<Nothing>
 val twilightSettingsKeyModule = KeyModule<TwilightSettingsKey>()
 
 @Given
-fun twilightSettingsUi(
-    @Given prefsFlow: Flow<TwilightPrefs>,
-    @Given prefUpdater: Collector<PrefAction<TwilightPrefs>>,
-): KeyUi<TwilightSettingsKey> = {
-    val prefs by prefsFlow.collectAsState(remember { TwilightPrefs() })
+fun twilightSettingsUi(@Given pref: Pref<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {
+    val prefs by pref.collectAsState(remember { TwilightPrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
@@ -62,9 +58,7 @@ fun twilightSettingsUi(
                 TwilightModeItem(
                     mode = mode,
                     isSelected = prefs.twilightMode == mode,
-                    onClick = {
-                        prefUpdater.dispatchUpdate { copy(twilightMode = mode) }
-                    }
+                    onClick = { pref.dispatchUpdate { copy(twilightMode = mode) } }
                 )
             }
             item {
@@ -73,9 +67,7 @@ fun twilightSettingsUi(
             item {
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
-                    onValueChange = {
-                        prefUpdater.dispatchUpdate { copy(useBlackInDarkMode = it) }
-                    },
+                    onValueChange = { pref.dispatchUpdate { copy(useBlackInDarkMode = it) } },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

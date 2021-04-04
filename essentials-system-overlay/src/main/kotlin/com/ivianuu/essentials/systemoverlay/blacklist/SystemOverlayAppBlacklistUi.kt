@@ -3,8 +3,7 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.update
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
@@ -67,15 +66,14 @@ fun systemOverlayAppBlacklistState(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given initial: @Initial SystemOverlayAppBlacklistState = SystemOverlayAppBlacklistState(),
     @Given actions: Flow<SystemOverlayAppBlacklistAction>,
-    @Given prefs: Flow<SystemOverlayBlacklistPrefs>,
-    @Given prefUpdater: Collector<PrefAction<SystemOverlayBlacklistPrefs>>
+    @Given pref: Pref<SystemOverlayBlacklistPrefs>
 ): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayAppBlacklistState> = scope.state(
-    initial.copy(appBlacklist = prefs.map { it.appBlacklist })
+    initial.copy(appBlacklist = pref.map { it.appBlacklist })
 ) {
     actions
         .filterIsInstance<UpdateAppBlacklist>()
         .onEach { action ->
-            prefUpdater.update {
+            pref.update {
                 copy(appBlacklist = action.appBlacklist)
             }
         }

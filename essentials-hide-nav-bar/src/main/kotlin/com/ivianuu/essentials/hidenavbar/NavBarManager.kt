@@ -20,13 +20,11 @@ import android.content.Context
 import android.graphics.Rect
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.update
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.e
@@ -53,8 +51,7 @@ fun navBarManager(
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given prefs: Flow<NavBarPrefs>,
     @Given setOverscan: OverscanUpdater,
-    @Given wasNavBarHidden: Flow<WasNavBarHidden>,
-    @Given wasNavBarHiddenUpdater: Collector<PrefAction<WasNavBarHidden>>
+    @Given wasNavBarHiddenPref: Pref<WasNavBarHidden>
 ): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
@@ -74,11 +71,11 @@ fun navBarManager(
             if (currentPrefs.hideNavBar) {
                 displayRotation
                     .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
-                    .onEach { wasNavBarHiddenUpdater.update { true } }
+                    .onEach { wasNavBarHiddenPref.update { true } }
             } else {
                 flowOf(NavBarState.Visible)
-                    .filter { wasNavBarHidden.first() }
-                    .onEach { wasNavBarHiddenUpdater.update { false } }
+                    .filter { wasNavBarHiddenPref.first() }
+                    .onEach { wasNavBarHiddenPref.update { false } }
             }
         }
         .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }

@@ -16,8 +16,7 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.update
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileGivenScope
@@ -33,18 +32,17 @@ import kotlinx.coroutines.flow.first
 
 @Given
 class TestTileState(
-    @Given private val twilightPrefs: Flow<TwilightPrefs>,
-    @Given private val twilightPrefUpdater: Collector<PrefAction<TwilightPrefs>>,
+    @Given private val twilightPref: Pref<TwilightPrefs>,
     @Given private val store: ScopeStateStore<TileGivenScope, TileState<FunTileService1>>
 ) : Flow<TileState<FunTileService1>> by store, TileActionCallback {
     init {
-        twilightPrefs
+        twilightPref
             .updateIn(store) { it.toTileState() }
     }
     override fun tileClicked() = store.effect {
-        val newTwilightMode = if (twilightPrefs.first().twilightMode == TwilightMode.LIGHT)
+        val newTwilightMode = if (twilightPref.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
-        twilightPrefUpdater.update { copy(twilightMode = newTwilightMode) }
+        twilightPref.update { copy(twilightMode = newTwilightMode) }
     }
 
     private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(

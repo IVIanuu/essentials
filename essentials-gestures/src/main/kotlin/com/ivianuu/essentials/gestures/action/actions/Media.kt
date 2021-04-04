@@ -22,9 +22,8 @@ import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.android.prefs.update
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
@@ -133,12 +132,11 @@ class MediaActionSettingsViewModel(
     @Given private val appRepository: AppRepository,
     @Given private val intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given private val navigator: Navigator,
-    @Given private val prefs: Flow<MediaActionPrefs>,
-    @Given private val prefUpdater: Collector<PrefAction<MediaActionPrefs>>,
+    @Given private val pref: Pref<MediaActionPrefs>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, MediaActionSettingsState>
 ) : StateFlow<MediaActionSettingsState> by store {
     init {
-        prefs
+        pref
             .map { it.mediaApp }
             .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
             .flowAsResource()
@@ -151,7 +149,7 @@ class MediaActionSettingsViewModel(
             )
         )
         if (newMediaApp != null) {
-            prefUpdater.update { copy(mediaApp = newMediaApp.packageName) }
+            pref.update { copy(mediaApp = newMediaApp.packageName) }
         }
     }
 }

@@ -17,9 +17,8 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.android.prefs.dispatchUpdate
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
@@ -45,15 +44,14 @@ val checkAppsKeyModule = KeyModule<CheckAppsKey>()
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
-    @Given prefs: Flow<CheckAppsPrefs>,
-    @Given prefsActionCollector: Collector<PrefAction<CheckAppsPrefs>>,
+    @Given pref: Pref<CheckAppsPrefs>
 ): KeyUi<CheckAppsKey> = {
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
-                prefs.map { it.checkedApps },
+                pref.map { it.checkedApps },
                 { checkedApps ->
-                    prefsActionCollector.dispatchUpdate {
+                    pref.dispatchUpdate {
                         copy(checkedApps = checkedApps)
                     }
                 },

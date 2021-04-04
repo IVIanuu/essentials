@@ -27,6 +27,7 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.InitialOrFallback
@@ -40,17 +41,23 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.coroutines.flow.FlowCollector
+
+interface Pref<T : Any> : Flow<T> {
+    suspend fun update(reducer: T.() -> T): T
+    fun dispatchUpdate(reducer: T.() -> T)
+}
 
 class PrefModule<T : Any>(private val name: String) {
     @Given
-    fun prefDataStore(
+    fun pref(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given jsonFactory: () -> Json,
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir
-    ): @Scoped<AppGivenScope> DataStore<T> {
+    ): @Scoped<AppGivenScope> Pref<T> {
         val deferredDataStore: DataStore<T> by lazy {
             DataStoreFactory.create(
                 produceFile = { prefsDir().resolve(name) },
@@ -76,48 +83,16 @@ class PrefModule<T : Any>(private val name: String) {
                 }
             )
         }
-        return object : DataStore<T> {
-            override val data: Flow<T>
-                get() = deferredDataStore.data
-
-            override suspend fun updateData(transform: suspend (t: T) -> T): T = scope.awaitAsync {
-                deferredDataStore.updateData(transform)
+        return object : Pref<T> {
+            override suspend fun update(reducer: T.() -> T): T = scope.awaitAsync {
+                deferredDataStore.updateData { reducer(it) }
+            }
+            override fun dispatchUpdate(reducer: T.() -> T) {
+                scope.launch { update(reducer) }
+            }
+            override suspend fun collect(collector: FlowCollector<T>) {
+                deferredDataStore.data.collect(collector)
             }
         }
     }
-
-    @Given
-    fun flow(@Given dataStore: DataStore<T>): Flow<T> = dataStore.data
-
-    @Given
-    fun prefActionCollector(
-        @Given dataStore: DataStore<T>,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>
-    ): @Scoped<AppGivenScope> Collector<PrefAction<T>> = { action ->
-        when (action) {
-            is PrefAction.Update -> {
-                scope.launch {
-                    val newValue = dataStore.updateData { action.reducer(it) }
-                    action.result?.complete(newValue)
-                }
-            }
-        }
-    }
-}
-
-sealed class PrefAction<T : Any> {
-    data class Update<T : Any>(
-        val result: CompletableDeferred<T>? = null,
-        val reducer: T.() -> T
-    ) : PrefAction<T>()
-}
-
-suspend fun <T : Any> Collector<PrefAction<T>>.update(reducer: T.() -> T): T {
-    val result = CompletableDeferred<T>()
-    this(PrefAction.Update(result, reducer))
-    return result.await()
-}
-
-fun <T : Any> Collector<PrefAction<T>>.dispatchUpdate(reducer: T.() -> T) {
-    this(PrefAction.Update(reducer = reducer))
 }

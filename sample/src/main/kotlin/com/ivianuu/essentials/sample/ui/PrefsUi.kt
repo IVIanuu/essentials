@@ -24,9 +24,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.android.prefs.PrefAction
+import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.android.prefs.dispatchUpdate
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
@@ -66,11 +65,10 @@ val prefsKeyModule = KeyModule<PrefsKey>()
 @Given
 fun prefsUi(
     @Given navigator: Navigator,
-    @Given prefsState: Flow<SamplePrefs>,
-    @Given prefUpdater: Collector<PrefAction<SamplePrefs>>,
+    @Given pref: Pref<SamplePrefs>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {
-    val prefs by prefsState.collectAsState(remember { SamplePrefs() })
+    val prefs by pref.collectAsState(remember { SamplePrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
@@ -79,7 +77,7 @@ fun prefsUi(
                 SwitchListItem(
                     value = prefs.switch,
                     onValueChange = {
-                        prefUpdater.dispatchUpdate { copy(switch = it) }
+                        pref.dispatchUpdate { copy(switch = it) }
                     },
                     title = { Text("Switch") }
                 )
@@ -91,7 +89,7 @@ fun prefsUi(
                 CheckboxListItem(
                     value = prefs.checkbox,
                     onValueChange = {
-                        prefUpdater.dispatchUpdate { copy(checkbox = it) }
+                        pref.dispatchUpdate { copy(checkbox = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Checkbox") },
@@ -103,7 +101,7 @@ fun prefsUi(
                 RadioButtonListItem(
                     value = prefs.radioButton,
                     onValueChange = {
-                        prefUpdater.dispatchUpdate { copy(radioButton = it) }
+                        pref.dispatchUpdate { copy(radioButton = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Radio Button") },
@@ -114,7 +112,7 @@ fun prefsUi(
                 IntSliderListItem(
                     value = prefs.slider,
                     onValueChange = {
-                        prefUpdater.dispatchUpdate { copy(slider = it) }
+                        pref.dispatchUpdate { copy(slider = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Slider") },
@@ -144,7 +142,7 @@ fun prefsUi(
                                     allowEmpty = false
                                 )
                             ) ?: return@launch
-                            prefUpdater.dispatchUpdate { copy(textInput = newTextInput) }
+                            pref.dispatchUpdate { copy(textInput = newTextInput) }
                         }
                     }
                 )
@@ -160,7 +158,7 @@ fun prefsUi(
                                     title = "Color"
                                 )
                             ) ?: return@launch
-                            prefUpdater.dispatchUpdate { copy(color = newColor.toArgb()) }
+                            pref.dispatchUpdate { copy(color = newColor.toArgb()) }
                         }
                     },
                     modifier = Modifier.interactive(prefs.switch),
@@ -186,7 +184,7 @@ fun prefsUi(
                                     title = "Multi select list"
                                 )
                             ) ?: return@launch
-                            prefUpdater.dispatchUpdate { copy(multiChoice = newItems) }
+                            pref.dispatchUpdate { copy(multiChoice = newItems) }
                         }
                     }
                 )
@@ -209,7 +207,7 @@ fun prefsUi(
                                     title = "Single item list"
                                 )
                             ) ?: return@launch
-                            prefUpdater.dispatchUpdate { copy(singleChoice = newItem) }
+                            pref.dispatchUpdate { copy(singleChoice = newItem) }
                         }
                     }
                 )

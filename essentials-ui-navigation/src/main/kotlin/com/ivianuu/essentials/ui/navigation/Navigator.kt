@@ -105,16 +105,15 @@ class Navigator(
     }
 }
 
-data class NavigationState(val backStack: List<Key<*>> = emptyList()) {
-    companion object {
-        @Given
-        fun initial(@Given rootKey: RootKey? = null): @Initial NavigationState =
-            NavigationState(listOfNotNull(rootKey))
-    }
-
-}
+data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
 data class InternalNavigationState(
-    val backStack: List<Key<*>>,
-    val results: Map<Key<*>, CompletableDeferred<out Any?>>,
-) : State()
+    val backStack: List<Key<*>> = emptyList(),
+    val results: Map<Key<*>, CompletableDeferred<out Any?>> = emptyMap(),
+) : State() {
+    companion object {
+        @Given
+        fun initial(@Given rootKey: RootKey? = null): @Initial InternalNavigationState =
+            InternalNavigationState(listOfNotNull(rootKey))
+    }
+}
