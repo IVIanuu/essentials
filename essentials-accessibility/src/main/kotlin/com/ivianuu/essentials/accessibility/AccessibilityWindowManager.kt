@@ -8,5 +8,5 @@ import com.ivianuu.injekt.Given
 typealias AccessibilityWindowManager = WindowManager
 
 @Given
-inline val @Given Service.accessibilityWindowManager: AccessibilityWindowManager
+inline val Service.accessibilityWindowManager: AccessibilityWindowManager
     get() = getSystemService()!!

@@ -38,5 +38,5 @@ internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityE
 fun mutableAccessibilityEvents(): @Scoped<AppGivenScope> MutableAccessibilityEvents = EventFlow()
 
 @Given
-inline val @Given MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
+inline val MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
     get() = this

@@ -53,5 +53,5 @@ fun contentChangesFactory(
 }
 
 @Given
-inline val @Given Application.bindContentResolver: ContentResolver
+inline val Application.bindContentResolver: ContentResolver
     get() = contentResolver

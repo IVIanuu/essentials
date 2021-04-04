@@ -35,7 +35,7 @@ fun mutableAccessibilityServiceHolder(): @Scoped<AppGivenScope> MutableAccessibi
 typealias AccessibilityServiceHolder = StateFlow<AccessibilityService?>
 
 @Given
-inline val @Given MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
+inline val MutableAccessibilityServiceHolder.accessibilityServiceHolder: AccessibilityServiceHolder
         get() = this
 
 @Given
