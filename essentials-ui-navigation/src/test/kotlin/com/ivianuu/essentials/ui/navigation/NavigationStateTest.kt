@@ -19,14 +19,11 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.store.collector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
 import com.ivianuu.essentials.ui.navigation.NavigationAction.ReplaceTop
 import com.ivianuu.essentials.util.NoopLogger
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.async
 import org.junit.Test
 

@@ -20,11 +20,11 @@ import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissAllNotifications
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.DismissNotification
 import com.ivianuu.essentials.notificationlistener.NotificationsAction.OpenNotification
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped

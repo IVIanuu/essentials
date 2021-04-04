@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.ForTypeKey

@@ -28,26 +28,25 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 
 class AppPickerKey(
     val appFilter: AppFilter = DefaultAppFilter,

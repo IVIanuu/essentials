@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.Clipboard
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -42,10 +43,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped

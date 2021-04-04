@@ -21,7 +21,6 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext

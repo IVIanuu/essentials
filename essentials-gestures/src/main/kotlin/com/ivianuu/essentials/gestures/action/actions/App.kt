@@ -20,8 +20,6 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
@@ -34,7 +32,6 @@ import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given

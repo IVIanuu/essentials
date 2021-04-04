@@ -22,10 +22,10 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import java.util.UUID
 import kotlin.coroutines.resume
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
 interface ActivityResultLauncher {
     suspend fun startActivityForResult(intent: Intent): ActivityResult

@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.android.prefs.Pref
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -40,7 +39,6 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
 
 class TwilightSettingsKey : Key<Nothing>
 

@@ -28,7 +28,6 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.onEach
 
 @Given
 fun androidForegroundWorkerStarter(

@@ -19,13 +19,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped

@@ -21,7 +21,6 @@ import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 
 @Given
 fun torchBroadcastWorker(

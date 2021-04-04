@@ -24,7 +24,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 
 @Given
 fun androidTorchWorker(

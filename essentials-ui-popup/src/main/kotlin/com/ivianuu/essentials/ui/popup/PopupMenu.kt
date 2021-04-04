@@ -27,7 +27,6 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator

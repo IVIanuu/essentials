@@ -27,7 +27,6 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 
 @Scoped<AppGivenScope>
 @Given

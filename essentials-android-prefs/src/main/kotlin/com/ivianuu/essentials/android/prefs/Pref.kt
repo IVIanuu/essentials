@@ -27,21 +27,18 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
-import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.InitialOrFallback
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.CompletableDeferred
+import java.io.InputStream
+import java.io.OutputStream
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import java.io.InputStream
-import java.io.OutputStream
-import kotlinx.coroutines.flow.FlowCollector
 
 interface Pref<T : Any> : Flow<T> {
     suspend fun update(reducer: T.() -> T): T

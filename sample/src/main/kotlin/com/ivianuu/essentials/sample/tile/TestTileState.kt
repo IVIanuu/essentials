@@ -17,15 +17,14 @@
 package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.android.prefs.Pref
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.coroutines.updateIn
+import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.tile.FunTileService1
+import com.ivianuu.essentials.tile.TileActionCallback
 import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.tile.TileActionCallback
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

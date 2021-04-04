@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.common
 
 import androidx.compose.foundation.gestures.forEachGesture
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.PointerEventPass

@@ -46,8 +46,10 @@ import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationsAction
+import com.ivianuu.essentials.notificationlistener.NotificationsState
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
@@ -57,6 +59,8 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -68,18 +72,14 @@ import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.notificationlistener.NotificationsState
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.Scoped
+import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlin.reflect.KClass
 
 @Given
 val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }

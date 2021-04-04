@@ -1,9 +1,9 @@
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 
 suspend fun <R> CoroutineScope.awaitAsync(
     context: CoroutineContext = EmptyCoroutineContext,

@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -42,15 +42,13 @@ import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 

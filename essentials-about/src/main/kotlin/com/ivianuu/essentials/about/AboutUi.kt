@@ -19,24 +19,22 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 
 class AboutKey : Key<Nothing>
 

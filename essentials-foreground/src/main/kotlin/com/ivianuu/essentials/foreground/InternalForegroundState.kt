@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
