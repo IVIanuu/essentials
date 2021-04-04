@@ -37,6 +37,5 @@ fun disableHideNavBarWhenPermissionRevokedWorker(
 ): ScopeWorker<AppGivenScope> = {
     permissionState
         .filter { !it }
-        .onEach { prefsUpdater.update { copy(hideNavBar = false) } }
-        .collect()
+        .collect { prefsUpdater.update { copy(hideNavBar = false) } }
 }

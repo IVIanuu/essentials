@@ -23,8 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.clipboard.ClipboardAction
-import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.clipboard.Clipboard
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
@@ -165,7 +164,7 @@ fun writeSecureSettingsPcInstructionsState(
     @Given initial: @Initial WriteSecureSettingsPcInstructionsState,
     @Given actions: Flow<WriteSecureSettingsPcInstructionsAction>,
     @Given navigator: Collector<NavigationAction>,
-    @Given clipboard: Collector<ClipboardAction>,
+    @Given clipboard: Clipboard,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given permissionStateFactory: PermissionStateFactory
 ): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsState> = scope.state(initial) {
@@ -182,7 +181,7 @@ fun writeSecureSettingsPcInstructionsState(
 
     actions
         .filterIsInstance<CopyAdbCommand>()
-        .onEach { clipboard(UpdateClipboard(state.first().secureSettingsAdbCommand)) }
+        .onEach { clipboard.updateClipboard(state.first().secureSettingsAdbCommand) }
         .launchIn(this)
 
     actions

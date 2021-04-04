@@ -43,7 +43,7 @@ fun androidForegroundWorkerStarter(
                 .await()
                 .none { it.state == WorkInfo.State.RUNNING }
         }
-        .onEach {
+        .collect {
             logger.d { "start foreground worker $it" }
             workManager.cancelAllWorkByTag(FOREGROUND_TAG)
             workManager.enqueue(
@@ -52,7 +52,6 @@ fun androidForegroundWorkerStarter(
                     .build()
             )
         }
-        .collect()
 }
 
 private const val FOREGROUND_TAG = "foreground_work"

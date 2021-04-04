@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
+import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.ForTypeKey
@@ -42,6 +43,10 @@ data class TileState<T : AbstractFunTileService>(
     }
 }
 
+interface TileActionCallback {
+    fun tileClicked()
+}
+
 fun Boolean.toTileStatus() = if (this) TileState.Status.ACTIVE else TileState.Status.INACTIVE
 
 sealed class TileAction {
@@ -52,6 +57,12 @@ sealed class TileAction {
 fun <@Given T : StateFlow<TileState<S>>, @ForTypeKey S : AbstractFunTileService> tileStateElement(
     @Given provider: () -> T,
 ): TileStateElement = typeKeyOf<S>() to provider
+
+@Given
+fun <@Given T, @ForTypeKey S : AbstractFunTileService> tileStateElement2(
+    @Given provider: () -> T,
+): TileStateElement where T : StateFlow<TileState<S>>, T : TileActionCallback =
+    typeKeyOf<S>() to provider
 
 typealias TileGivenScope = DefaultGivenScope
 

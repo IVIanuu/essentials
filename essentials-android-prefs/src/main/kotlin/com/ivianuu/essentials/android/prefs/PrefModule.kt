@@ -29,9 +29,8 @@ import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.InitialOrFallback
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
@@ -122,11 +121,3 @@ suspend fun <T : Any> Collector<PrefAction<T>>.update(reducer: T.() -> T): T {
 fun <T : Any> Collector<PrefAction<T>>.dispatchUpdate(reducer: T.() -> T) {
     this(PrefAction.Update(reducer = reducer))
 }
-
-@Qualifier
-internal annotation class InitialOrFallback
-
-@Given
-inline fun <reified T : Any> initialOrFallback(
-    @Given initial: @Initial T? = null
-): @InitialOrFallback T = initial ?: T::class.java.newInstance()

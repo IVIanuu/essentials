@@ -80,11 +80,10 @@ fun appTrackerUi(
     if (currentForegroundState is Foreground) {
         LaunchedEffect(true) {
             currentApp
-                .onEach {
+                .collect {
                     toaster.showToast("App changed $it")
                     foregroundState.value = Foreground(notificationFactory(it))
                 }
-                .collect()
         }
     }
 

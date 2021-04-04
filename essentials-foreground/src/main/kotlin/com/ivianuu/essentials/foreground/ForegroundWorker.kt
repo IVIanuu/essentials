@@ -31,13 +31,12 @@ class ForegroundWorker(
             block = {
                 internalForegroundState
                     .map { it.infos }
-                    .onEach { infos ->
+                    .collect { infos ->
                         if (infos.none { it.state is ForegroundState.Foreground }) {
                             throw CancellationException()
                         }
+                        applyState(infos)
                     }
-                    .onEach { applyState(it) }
-                    .collect()
             },
             cleanup = {
                 applyState(emptyList())

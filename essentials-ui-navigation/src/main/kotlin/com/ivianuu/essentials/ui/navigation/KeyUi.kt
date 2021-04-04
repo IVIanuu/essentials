@@ -17,7 +17,34 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.ivianuu.injekt.Given
+import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.StateFlow
 
 typealias KeyUi<K> = @Composable () -> Unit
 
 typealias KeyUiFactory<K> = (K, KeyUiGivenScope) -> KeyUi<K>
+
+typealias ViewModelKeyUi<K, VM, S> = @Composable (VM, S) -> Unit
+
+class ViewModelKeyUiModule<T : ViewModelKeyUi<K, VM, S>, K : Key<*>, VM : StateFlow<S>, S>(keyClass: KClass<K>) {
+    @Given
+    val keyModule = KeyModule(keyClass)
+
+    @Given
+    fun keyUi(
+        @Given uiFactory: () ->T,
+        @Given viewModel: VM
+    ): KeyUi<K> = {
+        val ui = remember(uiFactory) as @Composable (VM, S) -> Unit
+        ui(viewModel, viewModel.collectAsState().value)
+    }
+
+    companion object {
+        @Given
+        inline operator fun <@Given T : ViewModelKeyUi<K, VM, S>, reified K : Key<*>,
+                VM : StateFlow<S>, S> invoke() = ViewModelKeyUiModule<T, K, VM, S>(K::class)
+    }
+}

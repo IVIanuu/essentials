@@ -18,21 +18,17 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
@@ -43,11 +39,7 @@ val timerHomeItem = HomeItem("Timer") { TimerKey() }
 class TimerKey : Key<Nothing>
 
 @Given
-val timerKeyModule = KeyModule<TimerKey>()
-
-@Given
-fun timerUi(@Given stateFlow: StateFlow<TimerState>): KeyUi<TimerKey> = {
-    val state by stateFlow.collectAsState()
+val timerUi: ViewModelKeyUi<TimerKey, TimerViewModel, TimerState> = { _, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }
     ) {
@@ -61,13 +53,17 @@ fun timerUi(@Given stateFlow: StateFlow<TimerState>): KeyUi<TimerKey> = {
 
 data class TimerState(val value: Int = 0)
 
+@Scoped<KeyUiGivenScope>
 @Given
-fun timerState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial TimerState = TimerState()
-): @Scoped<KeyUiGivenScope> StateFlow<TimerState> = scope.state(initial) {
-    while (coroutineContext.isActive) {
-        update { copy(value = value.inc()) }
-        delay(1000)
+class TimerViewModel(
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, TimerState>
+) : StateFlow<TimerState> by store {
+    init {
+        store.effect {
+            while (coroutineContext.isActive) {
+                store.update { copy(value = value.inc()) }
+                delay(1000)
+            }
+        }
     }
 }

@@ -104,36 +104,25 @@ fun checkableAppsScreen(
         }
     ) {
         ResourceLazyColumnFor(state.checkableApps) { app ->
-            CheckableApp(
-                app = app,
-                onClick = { dispatch(UpdateAppCheckState(app, !app.isChecked)) }
+            ListItem(
+                title = { Text(app.info.appName) },
+                leading = {
+                    CoilImage(
+                        data = AppIcon(packageName = app.info.packageName),
+                        modifier = Modifier.size(40.dp),
+                        contentDescription = null
+                    )
+                },
+                trailing = {
+                    Checkbox(
+                        checked = app.isChecked,
+                        onCheckedChange = null
+                    )
+                },
+                onClick = { dispatch(UpdateAppCheckState(app, !app.isChecked))  }
             )
         }
     }
-}
-
-@Composable
-private fun CheckableApp(
-    onClick: () -> Unit,
-    app: CheckableApp
-) {
-    ListItem(
-        title = { Text(app.info.appName) },
-        leading = {
-            CoilImage(
-                data = AppIcon(packageName = app.info.packageName),
-                modifier = Modifier.size(40.dp),
-                contentDescription = null
-            )
-        },
-        trailing = {
-            Checkbox(
-                checked = app.isChecked,
-                onCheckedChange = { onClick() }
-            )
-        },
-        onClick = onClick
-    )
 }
 
 internal typealias CheckedApps = Set<String>

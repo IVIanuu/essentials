@@ -20,32 +20,27 @@ import android.hardware.camera2.CameraManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @Given
 fun androidTorchWorker(
     @Given cameraManager: CameraManager,
-    @Given dispatch: Collector<TorchAction>,
-    @Given state: Flow<TorchState>,
+    @Given torch: Torch,
     @Given toaster: Toaster
 ): ScopeWorker<AppGivenScope> = {
-    state
-        .onEach { currentState ->
+    torch
+        .collect { currentState ->
             runCatching {
                 val cameraId = cameraManager.cameraIdList[0]
                 cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
             }.onFailure {
                 it.printStackTrace()
                 toaster.showToast(R.string.es_failed_to_toggle_torch)
-                dispatch(UpdateTorchEnabled(false))
+                torch.updateTorchEnabled(false)
             }
         }
-        .collect()
 }

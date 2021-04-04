@@ -16,34 +16,22 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.dispatchUpdate
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 
+@Scoped<AppGivenScope>
 @Given
-fun torchState(
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
-    @Given initial: @Initial TorchState = TorchState(),
-    @Given actions: Flow<TorchAction>
-): @Scoped<AppGivenScope> StateFlow<TorchState> = actions
-    .filterIsInstance<UpdateTorchEnabled>()
-    .state(scope, initial) { copy(torchEnabled = it.value) }
-
-@Given
-val torchActions: @Scoped<AppGivenScope> MutableSharedFlow<TorchAction>
-    get() = EventFlow()
-
-data class TorchState(val torchEnabled: Boolean = false)
-
-sealed class TorchAction {
-    data class UpdateTorchEnabled(val value: Boolean) : TorchAction()
+class Torch(
+    @Given private val store: ScopeStateStore<AppGivenScope, TorchState>
+) : StateFlow<TorchState> by store {
+    fun updateTorchEnabled(value: Boolean) = store.dispatchUpdate {
+        copy(torchEnabled = value)
+    }
 }
+
+data class TorchState(val torchEnabled: Boolean = false) : State()

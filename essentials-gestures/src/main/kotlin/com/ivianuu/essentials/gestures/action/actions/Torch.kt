@@ -25,14 +25,11 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.torch.TorchAction
-import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
+import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @Given
@@ -50,10 +47,9 @@ fun torchAction(
 
 @Given
 fun torchActionExecutor(
-    @Given torchState: Flow<TorchState>,
-    @Given dispatchTorchAction: Collector<TorchAction>,
+    @Given torch: Torch
 ): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
-    dispatchTorchAction(UpdateTorchEnabled(!torchState.first().torchEnabled))
+    torch.updateTorchEnabled(!torch.value.torchEnabled)
 }
 
 private typealias TorchIcon = ActionIcon

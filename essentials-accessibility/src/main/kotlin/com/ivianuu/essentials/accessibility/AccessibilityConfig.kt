@@ -61,7 +61,7 @@ fun accessibilityConfigWorker(
                     infiniteEmptyFlow()
                 }
             }
-            .onEach { (service, configs) ->
+            .collect { (service, configs) ->
                 service.serviceInfo = service.serviceInfo?.apply {
                     eventTypes = configs
                         .map { it.eventTypes }
@@ -82,6 +82,5 @@ fun accessibilityConfigWorker(
                     packageNames = null
                 }
             }
-            .collect()
     }
 }

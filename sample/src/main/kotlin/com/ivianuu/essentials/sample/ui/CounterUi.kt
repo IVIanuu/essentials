@@ -28,12 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.sample.ui.CounterAction.Dec
-import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -41,17 +35,14 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.dispatchUpdate
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @Given
 val counterHomeItem = HomeItem("Counter") { CounterKey() }
@@ -62,11 +53,8 @@ class CounterKey : Key<Nothing>
 val counterKeyModule = KeyModule<CounterKey>()
 
 @Given
-fun counterUi(
-    @Given stateFlow: StateFlow<CounterState>,
-    @Given dispatch: Collector<CounterAction>,
-): KeyUi<CounterKey> = {
-    val state by stateFlow.collectAsState()
+fun counterUi(@Given viewModel: CounterViewModel): KeyUi<CounterKey> = {
+    val state by viewModel.collectAsState()
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -84,47 +72,30 @@ fun counterUi(
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { dispatch(Inc) }
+                onClick = { viewModel.inc() }
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { dispatch(Dec) }
+                onClick = { viewModel.dec() }
             )
         }
     }
 }
 
-data class CounterState(val count: Int = 0)
+data class CounterState(val count: Int = 0) : State()
 
-sealed class CounterAction {
-    object Inc : CounterAction()
-    object Dec : CounterAction()
-}
-
+@Scoped<KeyUiGivenScope>
 @Given
-fun counterState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial CounterState = CounterState(),
-    @Given actions: Flow<CounterAction>,
-    @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<CounterState> = scope.state(initial) {
-    actions
-        .filterIsInstance<Inc>()
-        .update { copy(count = count.inc()) }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<Dec>()
-        .onEach {
-            if (state.first().count > 0) update { copy(count = count.dec()) }
-            else toaster.showToast("Value cannot be less than 0!")
-        }
-        .launchIn(this)
+class CounterViewModel(
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, CounterState>,
+    @Given private val toaster: Toaster
+) : StateFlow<CounterState> by store {
+    fun inc() = store.dispatchUpdate { copy(count = count.inc()) }
+    fun dec() = store.effect {
+        if (first().count > 0) update { copy(count = count.dec()) }
+        else toaster.showToast("Value cannot be less than 0!")
+    }
 }
-
-@Given
-val counterActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<CounterAction>
-    get() = EventFlow()
