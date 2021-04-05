@@ -22,13 +22,13 @@ import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.Pref
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.updateIn
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -89,7 +89,7 @@ data class MediaActionPrefs(
 )
 
 @Given
-val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
+val mediaActionPrefsModule = PrefDataStoreModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey : Key<Nothing>
 
@@ -127,7 +127,7 @@ class MediaActionSettingsViewModel(
     @Given private val appRepository: AppRepository,
     @Given private val intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given private val navigator: Navigator,
-    @Given private val pref: Pref<MediaActionPrefs>,
+    @Given private val pref: DataStore<MediaActionPrefs>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, MediaActionSettingsState>
 ) : StateFlow<MediaActionSettingsState> by store {
     init {

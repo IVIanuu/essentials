@@ -21,6 +21,7 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Given
@@ -38,22 +39,17 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-interface AndroidSetting<T> : Flow<T> {
-    suspend fun update(reducer: T.() -> T): T
-    fun dispatchUpdate(reducer: T.() -> T)
-}
-
-class AndroidSettingModule<T : S, S>(
+class AndroidSettingDataStoreModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
 ) {
     @Given
-    fun setting(
+    fun dataStore(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given adapter: AndroidSettingAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given dispatcher: IODispatcher
-    ): @Scoped<AppGivenScope> AndroidSetting<T> {
+    ): @Scoped<AppGivenScope> DataStore<T> {
         val contentFlow = flow {
             contentChangesFactory(
                 when (type) {
@@ -70,17 +66,17 @@ class AndroidSettingModule<T : S, S>(
                 }
                 .let { emitAll(it) }
         }.shareIn(scope, SharingStarted.Lazily, 1).distinctUntilChanged()
-        return object : AndroidSetting<T>, Flow<T> by contentFlow {
+        return object : DataStore<T>, Flow<T> by contentFlow {
             private val updateActor = scope.actor(Channel.UNLIMITED)
-            override suspend fun update(reducer: T.() -> T): T = updateActor.actAndReply {
+            override suspend fun update(transform: T.() -> T): T = updateActor.actAndReply {
                 val currentValue = adapter.get()
-                val newValue = reducer(currentValue)
+                val newValue = transform(currentValue)
                 if (currentValue != newValue) adapter.set(newValue)
                 newValue
             }
 
-            override fun dispatchUpdate(reducer: T.() -> T) {
-                scope.launch { update(reducer) }
+            override fun dispatchUpdate(transform: T.() -> T) {
+                scope.launch { update(transform) }
             }
         }
     }

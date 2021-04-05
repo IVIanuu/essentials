@@ -20,9 +20,9 @@ import android.content.Context
 import android.graphics.Rect
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.util.Logger
@@ -51,7 +51,7 @@ fun navBarManager(
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given prefs: Flow<NavBarPrefs>,
     @Given setOverscan: OverscanUpdater,
-    @Given wasNavBarHiddenPref: Pref<WasNavBarHidden>
+    @Given wasNavBarHiddenStore: DataStore<WasNavBarHidden>
 ): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState
@@ -71,11 +71,11 @@ fun navBarManager(
             if (currentPrefs.hideNavBar) {
                 displayRotation
                     .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
-                    .onEach { wasNavBarHiddenPref.update { true } }
+                    .onEach { wasNavBarHiddenStore.update { true } }
             } else {
                 flowOf(NavBarState.Visible)
-                    .filter { wasNavBarHiddenPref.first() }
-                    .onEach { wasNavBarHiddenPref.update { false } }
+                    .filter { wasNavBarHiddenStore.first() }
+                    .onEach { wasNavBarHiddenStore.update { false } }
             }
         }
         .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }

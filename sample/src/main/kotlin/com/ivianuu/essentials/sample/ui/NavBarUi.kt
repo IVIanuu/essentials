@@ -32,7 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.android.prefs.Pref
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -60,7 +60,7 @@ class NavBarKey : Key<Nothing>
 @Given
 fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
-    @Given navBarPref: Pref<NavBarPrefs>,
+    @Given navBarPrefStore: DataStore<NavBarPrefs>,
     @Given navigator: Navigator,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
@@ -73,11 +73,11 @@ fun navBarUi(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val navBarPrefs by navBarPref.collectAsState(NavBarPrefs())
+            val navBarPrefs by navBarPrefStore.collectAsState(NavBarPrefs())
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {
                 onDispose {
-                    navBarPref.dispatchUpdate {
+                    navBarPrefStore.dispatchUpdate {
                         copy(hideNavBar = false)
                     }
                 }
@@ -111,7 +111,7 @@ fun navBarUi(
             Button(
                 onClick = {
                     if (hasPermission) {
-                        navBarPref.dispatchUpdate {
+                        navBarPrefStore.dispatchUpdate {
                             copy(hideNavBar = !hideNavBar)
                         }
                     } else {

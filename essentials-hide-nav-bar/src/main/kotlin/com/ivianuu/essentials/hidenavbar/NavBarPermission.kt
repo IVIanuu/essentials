@@ -3,8 +3,8 @@ package com.ivianuu.essentials.hidenavbar
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
@@ -30,9 +30,9 @@ class NavBarPermission(
 @Given
 fun disableHideNavBarWhenPermissionRevokedWorker(
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-    @Given pref: Pref<NavBarPrefs>
+    @Given prefStore: DataStore<NavBarPrefs>
 ): ScopeWorker<AppGivenScope> = {
     permissionState
         .filter { !it }
-        .collect { pref.update { copy(hideNavBar = false) } }
+        .collect { prefStore.update { copy(hideNavBar = false) } }
 }

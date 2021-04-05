@@ -3,8 +3,8 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.coroutines.updateIn
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
@@ -116,7 +116,7 @@ data class SystemOverlayBlacklistUiState(
 @Given
 class SystemOverlayBlacklistViewModel(
     @Given private val navigator: Navigator,
-    @Given private val pref: Pref<SystemOverlayBlacklistPrefs>,
+    @Given private val pref: DataStore<SystemOverlayBlacklistPrefs>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, SystemOverlayBlacklistUiState>
 ) : StateFlow<SystemOverlayBlacklistUiState> by store {
     init {

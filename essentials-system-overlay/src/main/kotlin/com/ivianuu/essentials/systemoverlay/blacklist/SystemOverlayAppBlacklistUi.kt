@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.systemoverlay.R
@@ -43,7 +43,7 @@ data class SystemOverlayAppBlacklistState(val appBlacklist: Flow<Set<String>> = 
 @Scoped<KeyUiGivenScope>
 @Given
 class SystemOverlayAppBlacklistViewModel(
-    @Given private val pref: Pref<SystemOverlayBlacklistPrefs>,
+    @Given private val pref: DataStore<SystemOverlayBlacklistPrefs>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, SystemOverlayAppBlacklistState>
 ) : StateFlow<SystemOverlayAppBlacklistState> by store {
     fun updateAppBlacklist(appBlacklist: Set<String>) = store.effect {

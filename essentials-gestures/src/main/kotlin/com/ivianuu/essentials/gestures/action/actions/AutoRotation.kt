@@ -19,9 +19,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.android.settings.AndroidSetting
-import com.ivianuu.essentials.android.settings.AndroidSettingModule
+import com.ivianuu.essentials.android.settings.AndroidSettingDataStoreModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
@@ -54,7 +54,7 @@ fun autoRotationAction(
 
 @Given
 fun autoRotationActionExecutor(
-    @Given rotationSetting: AndroidSetting<AutoRotation>,
+    @Given rotationSetting: DataStore<AutoRotation>,
 ): @ActionExecutorBinding<AutoRotationActionId> ActionExecutor = {
     rotationSetting.update { if (this != 1) 1 else 0 }
 }
@@ -73,7 +73,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
 internal typealias AutoRotation = Int
 
 @Given
-val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
+val autoRotationModule = AndroidSettingDataStoreModule<AutoRotation, Int>(
     Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
 
 @Given

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.android.prefs
 
 import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStore as AndroidDataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -26,6 +26,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.InitialOrFallback
 import com.ivianuu.injekt.Given
@@ -33,29 +34,23 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import java.io.InputStream
 import java.io.OutputStream
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
-interface Pref<T : Any> : Flow<T> {
-    suspend fun update(reducer: T.() -> T): T
-    fun dispatchUpdate(reducer: T.() -> T)
-}
-
-class PrefModule<T : Any>(private val name: String) {
+class PrefDataStoreModule<T : Any>(private val name: String) {
     @Given
-    fun pref(
+    fun dataStore(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given jsonFactory: () -> Json,
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir
-    ): @Scoped<AppGivenScope> Pref<T> {
-        val deferredDataStore: DataStore<T> by lazy {
+    ): @Scoped<AppGivenScope> DataStore<T> {
+        val deferredDataStore: AndroidDataStore<T> by lazy {
             DataStoreFactory.create(
                 produceFile = { prefsDir().resolve(name) },
                 serializer = object : Serializer<T> {
@@ -80,12 +75,12 @@ class PrefModule<T : Any>(private val name: String) {
                 }
             )
         }
-        return object : Pref<T> {
-            override suspend fun update(reducer: T.() -> T): T = withContext(scope.coroutineContext) {
-                deferredDataStore.updateData { reducer(it) }
+        return object : DataStore<T> {
+            override suspend fun update(transform: T.() -> T): T = withContext(scope.coroutineContext) {
+                deferredDataStore.updateData { transform(it) }
             }
-            override fun dispatchUpdate(reducer: T.() -> T) {
-                scope.launch { update(reducer) }
+            override fun dispatchUpdate(transform: T.() -> T) {
+                scope.launch { update(transform) }
             }
             override suspend fun collect(collector: FlowCollector<T>) {
                 deferredDataStore.data.collect(collector)

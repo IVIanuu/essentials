@@ -20,8 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.coroutines.updateIn
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
@@ -87,7 +87,7 @@ data class NavBarState(
 class NavBarViewModel(
     @Given private val navigator: Navigator,
     @Given private val permissionRequester: PermissionRequester,
-    @Given private val pref: Pref<NavBarPrefs>,
+    @Given private val pref: DataStore<NavBarPrefs>,
     @Given private val resourceProvider: ResourceProvider,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, NavBarState>
 ) : StateFlow<NavBarState> by store {

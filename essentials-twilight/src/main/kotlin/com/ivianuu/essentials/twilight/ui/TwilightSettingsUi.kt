@@ -25,7 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.Pref
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -42,7 +42,7 @@ import com.ivianuu.injekt.Given
 class TwilightSettingsKey : Key<Nothing>
 
 @Given
-fun twilightSettingsUi(@Given pref: Pref<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {
+fun twilightSettingsUi(@Given pref: DataStore<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {
     val prefs by pref.collectAsState(remember { TwilightPrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
