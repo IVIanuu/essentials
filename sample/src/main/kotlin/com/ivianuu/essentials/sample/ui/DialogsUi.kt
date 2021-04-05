@@ -53,7 +53,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
@@ -63,9 +63,6 @@ import com.ivianuu.injekt.scope.GivenScopeElementBinding
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
 class DialogsKey : Key<Nothing>
-
-@Given
-val dialogsKeyModule = KeyModule<DialogsKey>()
 
 @Given
 fun dialogsUi(): KeyUi<DialogsKey> = {
@@ -372,9 +369,6 @@ private fun DialogLauncherButton(
 }
 
 data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
-
-@Given
-val dialogLauncherKeyModule = KeyModule<DialogLauncherKey>()
 
 @Given
 fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {

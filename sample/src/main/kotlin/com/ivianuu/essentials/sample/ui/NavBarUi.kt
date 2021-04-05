@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
@@ -57,9 +57,6 @@ import kotlinx.coroutines.launch
 val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
 class NavBarKey : Key<Nothing>
-
-@Given
-val navBarKeyModule = KeyModule<NavBarKey>()
 
 @Given
 fun navBarUi(

@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
@@ -56,9 +56,6 @@ import kotlinx.serialization.Serializable
 val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 
 class PrefsKey : Key<Nothing>
-
-@Given
-val prefsKeyModule = KeyModule<PrefsKey>()
 
 @Given
 fun prefsUi(

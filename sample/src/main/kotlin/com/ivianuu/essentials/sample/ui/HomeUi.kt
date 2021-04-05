@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
@@ -48,9 +48,6 @@ import com.ivianuu.injekt.Given
 
 @Given
 class HomeKey : RootKey
-
-@Given
-val homeKeyModule = KeyModule<HomeKey>()
 
 @Given
 fun homeUi(

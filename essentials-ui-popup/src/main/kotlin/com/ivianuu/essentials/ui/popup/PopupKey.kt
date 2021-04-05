@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
@@ -43,9 +43,6 @@ class PopupKey(
     val onCancel: (() -> Unit)?,
     val content: @Composable() () -> Unit,
 ) : Key<Nothing>
-
-@Given
-val popupKeyModule = KeyModule<PopupKey>()
 
 @Given
 fun popupUi(
@@ -118,7 +115,7 @@ private fun PopupLayout(
         } else if (position.left < position.right) {
             x = (position.right - placeable.width).toInt()
         } else {
-            x = (position.right - placeable.width).toInt() // todo based on ltr/rtl
+            x = (position.right - placeable.width).toInt()
         }
 
         x = x.coerceIn(8.dp.roundToPx(), constraints.maxWidth - placeable.width - 8.dp.roundToPx())

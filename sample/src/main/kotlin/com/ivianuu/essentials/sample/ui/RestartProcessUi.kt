@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
@@ -34,9 +34,6 @@ import kotlinx.coroutines.launch
 val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
 
 class RestartProcessKey : Key<Nothing>
-
-@Given
-val restartProcessKeyModule = KeyModule<RestartProcessKey>()
 
 @Given
 fun restartProcessUi(@Given processRestarter: ProcessRestarter): KeyUi<RestartProcessKey> = {

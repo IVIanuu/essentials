@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
@@ -38,9 +38,6 @@ import kotlinx.coroutines.launch
 val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 
 class UnlockKey : Key<Nothing>
-
-@Given
-val unlockKeyModule = KeyModule<UnlockKey>()
 
 @Given
 fun unlockUi(

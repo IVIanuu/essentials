@@ -23,7 +23,7 @@ import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.map
@@ -34,9 +34,6 @@ import kotlinx.serialization.Serializable
 val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
 
 class CheckAppsKey : Key<Nothing>
-
-@Given
-val checkAppsKeyModule = KeyModule<CheckAppsKey>()
 
 @Given
 fun checkAppsUi(

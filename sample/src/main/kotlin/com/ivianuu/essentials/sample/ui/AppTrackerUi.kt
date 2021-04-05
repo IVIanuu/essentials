@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
@@ -62,9 +62,6 @@ import kotlinx.coroutines.launch
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
 class AppTrackerKey : Key<Nothing>
-
-@Given
-val appTrackerKeyModule = KeyModule<AppTrackerKey>()
 
 @Given
 fun appTrackerUi(

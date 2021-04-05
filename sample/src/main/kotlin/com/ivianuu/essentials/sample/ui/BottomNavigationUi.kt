@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
@@ -50,9 +50,6 @@ import com.ivianuu.injekt.Given
 val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
 
 class BottomNavigationKey : Key<Nothing>
-
-@Given
-val bottomNavigationKeyModule = KeyModule<BottomNavigationKey>()
 
 @Given
 fun bottomNavigationUi(): KeyUi<BottomNavigationKey> = {

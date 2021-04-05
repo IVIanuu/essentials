@@ -48,7 +48,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
@@ -63,9 +63,6 @@ import kotlinx.coroutines.isActive
 val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
 class ForegroundKey : Key<Nothing>
-
-@Given
-val foregroundKeyModule = KeyModule<ForegroundKey>()
 
 @SuppressLint("NewApi")
 @Given

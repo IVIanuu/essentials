@@ -18,46 +18,27 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreKeyModule = KeyModule<BackupAndRestoreKey>()
-
-@Given
-fun backupAndRestoreUi(
-    @Given stateFlow: StateFlow<BackupAndRestoreState>,
-    @Given dispatch: Collector<BackupAndRestoreAction>,
-): KeyUi<BackupAndRestoreKey> = {
-    val state by stateFlow.collectAsState()
+val backupAndRestoreUi: ViewModelKeyUi<BackupAndRestoreKey,
+        BackupAndRestoreViewModel, BackupAndRestoreState> = { viewModel, _ ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
@@ -66,58 +47,42 @@ fun backupAndRestoreUi(
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { dispatch(BackupData) }
+                    onClick = { viewModel.backupData() }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { dispatch(RestoreData) }
+                    onClick = { viewModel.restoreData() }
                 )
             }
         }
     }
 }
 
-object BackupAndRestoreState
+class BackupAndRestoreState : State()
 
-sealed class BackupAndRestoreAction {
-    object BackupData : BackupAndRestoreAction()
-    object RestoreData : BackupAndRestoreAction()
-}
-
+@Scoped<KeyUiGivenScope>
 @Given
-fun backupAndRestoreState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial BackupAndRestoreState = BackupAndRestoreState,
-    @Given actions: Flow<BackupAndRestoreAction>,
-    @Given backupCreator: BackupCreator,
-    @Given backupApplier: BackupApplier,
-    @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreState> = scope.state(initial) {
-    actions
-        .filterIsInstance<BackupData>()
-        .onEach {
-            backupCreator()
-                .onFailure {
-                    it.printStackTrace()
-                    toaster.showToast(R.string.es_backup_error)
-                }
-        }
-        .launchIn(this)
-    actions
-        .filterIsInstance<RestoreData>()
-        .onEach {
-            backupApplier()
-                .onFailure {
-                    it.printStackTrace()
-                    toaster.showToast(R.string.es_restore_error)
-                }
-        }
-        .launchIn(this)
+class BackupAndRestoreViewModel(
+    @Given private val backupCreator: BackupCreator,
+    @Given private val backupApplier: BackupApplier,
+    @Given private val toaster: Toaster,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, BackupAndRestoreState>
+) : StateFlow<BackupAndRestoreState> by store {
+    fun backupData() = store.effect {
+        backupCreator()
+            .onFailure {
+                it.printStackTrace()
+                toaster.showToast(R.string.es_backup_error)
+            }
+    }
+    fun restoreData() = store.effect {
+        backupApplier()
+            .onFailure {
+                it.printStackTrace()
+                toaster.showToast(R.string.es_restore_error)
+            }
+    }
 }
-
-@Given
-val backupAndRestoreActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<BackupAndRestoreAction>
-    get() = EventFlow()

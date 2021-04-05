@@ -35,15 +35,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 
 class TwilightSettingsKey : Key<Nothing>
-
-@Given
-val twilightSettingsKeyModule = KeyModule<TwilightSettingsKey>()
 
 @Given
 fun twilightSettingsUi(@Given pref: Pref<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {

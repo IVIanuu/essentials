@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
@@ -20,9 +20,6 @@ class MultiChoiceListKey<T : Any>(
 ) : Key<Set<T>> {
     data class Item<T>(val value: T, val title: String)
 }
-
-@Given
-val multiChoiceListKeyModule = KeyModule<MultiChoiceListKey<Any>>()
 
 @Given
 fun multiChoiceListUi(

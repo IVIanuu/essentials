@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
@@ -27,24 +28,33 @@ typealias KeyUi<K> = @Composable () -> Unit
 
 typealias KeyUiFactory<K> = (K, KeyUiGivenScope) -> KeyUi<K>
 
-typealias ViewModelKeyUi<K, VM, S> = @Composable (VM, S) -> Unit
-
-class ViewModelKeyUiModule<T : ViewModelKeyUi<K, VM, S>, K : Key<*>, VM : StateFlow<S>, S>(keyClass: KClass<K>) {
-    @Given
-    val keyModule = KeyModule(keyClass)
-
+class KeyUiModule<K : Key<*>>(private val keyClass: KClass<K>) {
     @Given
     fun keyUi(
-        @Given uiFactory: () ->T,
-        @Given viewModel: VM
-    ): KeyUi<K> = {
-        val ui = remember(uiFactory) as @Composable (VM, S) -> Unit
-        ui(viewModel, viewModel.collectAsState().value)
-    }
+        @Given keyUiFactory: (@Given K, @Given KeyUiGivenScope) -> KeyUi<K>
+    ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
+        (keyClass to keyUiFactory).cast()
+
+    @Given
+    fun keyUiOptionFactory(
+        @Given keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
+    ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
+        (keyClass to keyUiOptionsFactory).cast()
 
     companion object {
         @Given
-        inline operator fun <@Given T : ViewModelKeyUi<K, VM, S>, reified K : Key<*>,
-                VM : StateFlow<S>, S> invoke() = ViewModelKeyUiModule<T, K, VM, S>(K::class)
+        inline operator fun <@Given T : KeyUi<K>, reified K : Key<*>> invoke() = KeyUiModule(K::class)
     }
+}
+
+typealias ViewModelKeyUi<K, VM, S> = @Composable (VM, S) -> Unit
+
+@Given
+inline fun <@Given T : ViewModelKeyUi<K, VM, S>, reified K : Key<*>,
+        VM : StateFlow<S>, S> viewModelKeyUi(
+    @Given noinline uiFactory: () ->T,
+    @Given viewModel: VM
+): KeyUi<K> = {
+    val ui = remember(uiFactory) as @Composable (VM, S) -> Unit
+    ui(viewModel, viewModel.collectAsState().value)
 }

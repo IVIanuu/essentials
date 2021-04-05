@@ -5,7 +5,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
+import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
@@ -17,9 +17,6 @@ class SingleChoiceListKey<T : Any>(
 ) : Key<T> {
     data class Item<T : Any>(val value: T, val title: String)
 }
-
-@Given
-val singleChoiceListKeyModule = KeyModule<SingleChoiceListKey<Any>>()
 
 @Given
 fun singleChoiceListUi(
