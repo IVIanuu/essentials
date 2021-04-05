@@ -125,7 +125,7 @@ data class WriteSecureSettingsPcInstructionsState(val packageName: String) : Sta
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
     companion object {
         @Given
-        fun initialWriteSecureSettingsPcInstructionsState(@Given buildInfo: BuildInfo):
+        fun initialR(@Given buildInfo: BuildInfo):
                 @Initial WriteSecureSettingsPcInstructionsState =
             WriteSecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
     }
