@@ -28,25 +28,26 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.coroutines.updateIn
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.*
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.essentials.store.FeatureBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.actionsOf
+import com.ivianuu.essentials.store.collectIn
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 
 class AppPickerKey(
     val appFilter: AppFilter = DefaultAppFilter,
@@ -54,7 +55,7 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: StateKeyUi<AppPickerKey, AppPickerViewModel, AppPickerState> = { viewModel, state ->
+val appPickerUi: FeatureKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = { state, collector ->
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,7 +75,7 @@ val appPickerUi: StateKeyUi<AppPickerKey, AppPickerViewModel, AppPickerState> = 
                         contentDescription = null
                     )
                 },
-                onClick = { viewModel.pickApp(app) }
+                onClick = { collector.tryEmit(PickApp(app)) }
             )
         }
     }
@@ -96,20 +97,18 @@ data class AppPickerState(
     }
 }
 
-@Scoped<KeyUiGivenScope>
-@Given
-class AppPickerViewModel(
-    @Given private val appRepository: AppRepository,
-    @Given private val key: AppPickerKey,
-    @Given private val navigator: Navigator,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, AppPickerState>
-): StateFlow<AppPickerState> by store {
-    init {
-        resourceFlow { emit(appRepository.getInstalledApps()) }
-            .updateIn(store) { copy(allApps = it) }
-    }
+sealed class AppPickerAction {
+    data class PickApp(val app: AppInfo) : AppPickerAction()
+}
 
-    fun pickApp(app: AppInfo) = store.effect {
-        navigator.pop(key, app)
-    }
+@Given
+fun appPickerFeature(
+    @Given appRepository: AppRepository,
+    @Given key: AppPickerKey,
+    @Given navigator: Navigator,
+): FeatureBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
+    resourceFlow { emit(appRepository.getInstalledApps()) }
+        .updateIn(this) { copy(allApps = it) }
+    actionsOf<PickApp>()
+        .collectIn(this) { navigator.pop(key, it.app) }
 }

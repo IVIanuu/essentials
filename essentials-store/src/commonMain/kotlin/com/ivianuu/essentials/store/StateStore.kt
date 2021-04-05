@@ -8,6 +8,7 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.StateFlow
 
 @Qualifier
 annotation class InitialOrFallback

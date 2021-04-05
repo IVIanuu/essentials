@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Deprecated("Lol", level = DeprecationLevel.WARNING)
 class AndroidSettingDataStoreModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
@@ -87,8 +88,4 @@ class AndroidSettingDataStoreModule<T : S, S>(
         @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingAdapter<S>,
         @Given initial: @Initial T
     ): AndroidSettingAdapter<T> = adapterFactory(name, type, initial) as AndroidSettingAdapter<T>
-}
-
-enum class AndroidSettingsType {
-    GLOBAL, SECURE, SYSTEM
 }

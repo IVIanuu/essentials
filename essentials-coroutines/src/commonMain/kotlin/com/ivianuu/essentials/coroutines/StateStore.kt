@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@Deprecated("Lol", level = DeprecationLevel.WARNING)
 interface StateStore<T> : StateFlow<T> {
     suspend fun update(reducer: T.() -> T): T
     fun effect(block: suspend StateStore<T>.() -> Unit)

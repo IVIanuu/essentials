@@ -18,38 +18,35 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.store.FeatureBuilder
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.actionsOf
+import com.ivianuu.essentials.store.collectIn
+import com.ivianuu.essentials.store.cancellableUpdates
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
 
 data class ClipboardState(val text: String? = null) : State()
 
-@Scoped<AppGivenScope>
+sealed class ClipboardAction {
+    data class UpdateClipboard(val value: String) : ClipboardAction()
+}
+
 @Given
-class Clipboard(
-    @Given private val clipboardManager: ClipboardManager,
-    @Given private val store: ScopeStateStore<AppGivenScope, ClipboardState>
-) : StateFlow<ClipboardState> by store {
-    init {
-        clipboardManager.clipboardChanges()
-            .map { clipboardManager.primaryClip?.getItemAt(0)?.text?.toString() }
-            .updateIn(store) { copy(text = it) }
+fun clipboardFeature(
+    @Given clipboardManager: ClipboardManager
+): FeatureBuilder<AppGivenScope, ClipboardState, ClipboardAction> = {
+    cancellableUpdates { update ->
+        val listener = ClipboardManager.OnPrimaryClipChangedListener {
+            val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+            update { copy(text = current) }
+        }
+        onCancel { clipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
-    fun updateClipboard(value: String) = store.effect {
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
-    }
-
-    private fun ClipboardManager.clipboardChanges() = callbackFlow {
-        val listener = ClipboardManager.OnPrimaryClipChangedListener { offer(Unit) }
-        addPrimaryClipChangedListener(listener)
-        awaitClose { removePrimaryClipChangedListener(listener) }
-    }
+    actionsOf<UpdateClipboard>()
+        .collectIn(this) {
+            clipboardManager.setPrimaryClip(ClipData.newPlainText("", it.value))
+        }
 }

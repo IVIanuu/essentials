@@ -22,17 +22,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.torch.Torch
+import com.ivianuu.essentials.torch.TorchAction
+import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
+import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
 @Given
@@ -41,8 +41,7 @@ val torchHomeItem = HomeItem("Torch") { TorchKey() }
 class TorchKey : Key<Nothing>
 
 @Given
-fun torchUi(@Given torch: Torch): KeyUi<TorchKey> = {
-    val state by torch.collectAsState()
+val torchUi: FeatureKeyUi<TorchKey, TorchState, TorchAction> = { state, collector ->
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(
             modifier = Modifier.center(),
@@ -54,7 +53,7 @@ fun torchUi(@Given torch: Torch): KeyUi<TorchKey> = {
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { torch.updateTorchEnabled(!state.torchEnabled) }
+                onClick = { collector.tryEmit(UpdateTorchEnabled(!state.torchEnabled)) }
             ) {
                 Text("Toggle torch")
             }

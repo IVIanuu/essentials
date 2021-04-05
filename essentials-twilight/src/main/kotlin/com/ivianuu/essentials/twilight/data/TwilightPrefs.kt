@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefFeatureModule
 import com.ivianuu.injekt.Given
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -28,4 +29,4 @@ data class TwilightPrefs(
 )
 
 @Given
-val twilightPrefsModule = PrefDataStoreModule<TwilightPrefs>("twilight_prefs")
+val twilightPrefsModule = PrefFeatureModule<TwilightPrefs>("twilight_prefs")

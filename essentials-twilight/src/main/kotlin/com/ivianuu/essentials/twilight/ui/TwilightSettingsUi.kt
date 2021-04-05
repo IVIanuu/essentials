@@ -21,11 +21,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.StoreAction.*
+import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -34,16 +33,16 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 
 class TwilightSettingsKey : Key<Nothing>
 
 @Given
-fun twilightSettingsUi(@Given pref: DataStore<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {
-    val prefs by pref.collectAsState(remember { TwilightPrefs() })
+fun twilightSettingsUi(): FeatureKeyUi<TwilightSettingsKey, TwilightPrefs, StoreAction<TwilightPrefs>
+        > = { prefs, collector ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
@@ -52,7 +51,7 @@ fun twilightSettingsUi(@Given pref: DataStore<TwilightPrefs>): KeyUi<TwilightSet
                 TwilightModeItem(
                     mode = mode,
                     isSelected = prefs.twilightMode == mode,
-                    onClick = { pref.dispatchUpdate { copy(twilightMode = mode) } }
+                    onClick = { collector.tryUpdate { copy(twilightMode = mode) } }
                 )
             }
             item {
@@ -61,7 +60,7 @@ fun twilightSettingsUi(@Given pref: DataStore<TwilightPrefs>): KeyUi<TwilightSet
             item {
                 CheckboxListItem(
                     value = prefs.useBlackInDarkMode,
-                    onValueChange = { pref.dispatchUpdate { copy(useBlackInDarkMode = it) } },
+                    onValueChange = { collector.tryUpdate { copy(useBlackInDarkMode = it) } },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

@@ -19,35 +19,36 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.about.AboutAction.*
+import com.ivianuu.essentials.store.FeatureBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.actionsOf
+import com.ivianuu.essentials.store.collectIn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, state ->
+val aboutUi: FeatureKeyUi<AboutKey, AboutState, AboutAction> = { state, collector ->
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { viewModel.rate() }
+                    onClick = { collector.tryEmit(Rate) }
                 )
             }
 
@@ -55,7 +56,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, sta
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { viewModel.openMoreApps() }
+                    onClick = { collector.tryEmit(OpenMoreApps) }
                 )
             }
 
@@ -63,7 +64,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, sta
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { viewModel.openRedditPage() }
+                    onClick = { collector.tryEmit(OpenRedditPage) }
                 )
             }
 
@@ -71,7 +72,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, sta
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { viewModel.openGithubPage() }
+                    onClick = { collector.tryEmit(OpenGithubPage) }
                 )
             }
 
@@ -79,7 +80,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, sta
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { viewModel.openTwitterPage() }
+                    onClick = { collector.tryEmit(OpenTwitterPage) }
                 )
             }
 
@@ -87,7 +88,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, sta
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { viewModel.openPrivacyPolicy()  }
+                        onClick = { collector.tryEmit(OpenPrivacyPolicy) }
                     )
                 }
             }
@@ -104,33 +105,42 @@ data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) : State() 
     }
 }
 
-@Scoped<KeyUiGivenScope>
+sealed class AboutAction {
+    object Rate : AboutAction()
+    object OpenMoreApps : AboutAction()
+    object OpenRedditPage : AboutAction()
+    object OpenGithubPage : AboutAction()
+    object OpenTwitterPage : AboutAction()
+    object OpenPrivacyPolicy : AboutAction()
+}
+
 @Given
-class AboutViewModel(
-    @Given private val buildInfo: BuildInfo,
-    @Given private val navigator: Navigator,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, AboutState>
-) : StateFlow<AboutState> by store {
-    fun rate() = store.effect {
-        navigator.push(
-            UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
-        )
-    }
-    fun openMoreApps() = store.effect {
-        navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-    }
-    fun openRedditPage() = store.effect {
-        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-    }
-    fun openGithubPage() = store.effect {
-        navigator.push(UrlKey("https://github.com/IVIanuu"))
-    }
-    fun openTwitterPage() = store.effect {
-        navigator.push(UrlKey("https://twitter.com/IVIanuu"))
-    }
-    fun openPrivacyPolicy() = store.effect {
-        navigator.push(UrlKey(store.first().privacyPolicyUrl!!))
-    }
+fun aboutFeature(
+    @Given buildInfo: BuildInfo,
+    @Given navigator: Navigator
+): FeatureBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
+    actionsOf<Rate>()
+        .collectIn(this) {
+            navigator.push(
+                UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
+            )
+        }
+    actionsOf<OpenMoreApps>()
+        .collectIn(this) {
+            navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+        }
+    actionsOf<OpenRedditPage>()
+        .collectIn(this) {
+            navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+        }
+    actionsOf<OpenTwitterPage>()
+        .collectIn(this) {
+            navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+        }
+    actionsOf<OpenPrivacyPolicy>()
+        .collectIn(this) {
+            navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
+        }
 }
 
 typealias PrivacyPolicyUrl = String

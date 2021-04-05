@@ -21,9 +21,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.clipboard.Clipboard
+import com.ivianuu.essentials.clipboard.ClipboardAction
+import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.clipboard.ClipboardState
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Feature
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
@@ -135,7 +139,7 @@ data class WriteSecureSettingsPcInstructionsState(val packageName: String) : Sta
 @Given
 class WriteSecureSettingsPcInstructionsViewModel(
     @Given private val navigator: Navigator,
-    @Given private val clipboard: Clipboard,
+    @Given private val clipboard: Collector<ClipboardAction>,
     @Given private val key: WriteSecureSettingsPcInstructionsKey,
     @Given private val permissionStateFactory: PermissionStateFactory,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState>
@@ -153,7 +157,7 @@ class WriteSecureSettingsPcInstructionsViewModel(
         }
     }
     fun copyAdbCommand() = store.effect {
-        clipboard.updateClipboard(store.first().secureSettingsAdbCommand)
+        clipboard.emit(UpdateClipboard(store.first().secureSettingsAdbCommand))
     }
     fun openGadgetHacksTutorial() = store.effect {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))

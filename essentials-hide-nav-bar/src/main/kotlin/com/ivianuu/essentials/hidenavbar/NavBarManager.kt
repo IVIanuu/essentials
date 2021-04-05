@@ -23,8 +23,11 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
+import com.ivianuu.essentials.store.Feature
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.essentials.util.e
@@ -51,7 +54,7 @@ fun navBarManager(
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given prefs: Flow<NavBarPrefs>,
     @Given setOverscan: OverscanUpdater,
-    @Given wasNavBarHiddenStore: DataStore<WasNavBarHidden>
+    @Given wasNavBarHiddenStore: Feature<WasNavBarHidden, StoreAction<WasNavBarHidden>>
 ): ScopeWorker<AppGivenScope> = worker@ {
     if (!navBarFeatureSupported) return@worker
     permissionState

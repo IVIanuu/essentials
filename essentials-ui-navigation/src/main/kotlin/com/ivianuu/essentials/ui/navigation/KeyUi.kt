@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
@@ -57,4 +58,16 @@ inline fun <@Given U : StateKeyUi<K, T, S>, reified K : Key<*>,
 ): KeyUi<K> = {
     val ui = remember(uiFactory) as @Composable (T, S) -> Unit
     ui(state, state.collectAsState().value)
+}
+
+typealias FeatureKeyUi<K, S, A> = @Composable (S, Collector<A>) -> Unit
+
+@Given
+inline fun <@Given U : FeatureKeyUi<K, S, A>, reified K : Key<*>, S, A> featureKeyUi(
+    @Given noinline uiFactory: () -> U,
+    @Given state: StateFlow<S>,
+    @Given collector: Collector<A>
+): KeyUi<K> = {
+    val ui = remember(uiFactory) as @Composable (S, Collector<A>) -> Unit
+    ui(state.collectAsState().value, collector)
 }
