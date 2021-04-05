@@ -28,9 +28,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.image.toBitmap
@@ -42,7 +40,6 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
-@ActionFactoryBinding
 @Given
 class ShortcutActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
@@ -73,7 +70,6 @@ class ShortcutActionFactory(
     }
 }
 
-@ActionPickerDelegateBinding
 @Given
 class ShortcutActionPickerDelegate(
     @Given private val navigator: Navigator,

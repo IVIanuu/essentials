@@ -64,8 +64,8 @@ annotation class ActionExecutorBinding<I : ActionId>
 @Given
 fun <@Given T : @ActionExecutorBinding<I> S, S : ActionExecutor, I : ActionId> actionExecutorPair(
     @Given id: I,
-    @Given instance: T
-): Pair<String, ActionExecutor> = id.value to instance
+    @Given provider: () -> T
+): Pair<String, () -> ActionExecutor> = id.value to provider
 
 internal operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
@@ -83,15 +83,8 @@ typealias ActionSettingsKey = Key<Nothing>
 @Given
 fun <@Given T : @ActionSettingsKeyBinding<I> S, S : Key<Nothing>, I : ActionId> actionSettingsKeyPair(
     @Given id: I,
-    @Given instance: T,
-): Pair<String, ActionSettingsKey> = id.value to instance
-
-@Qualifier
-annotation class ActionFactoryBinding
-
-@Given
-fun <@Given T : @ActionFactoryBinding S, S : ActionFactory> actionFactoryBindingImpl(
-    @Given instance: T): ActionFactory = instance
+    @Given provider: () -> T,
+): Pair<String, () -> ActionSettingsKey> = id.value to provider
 
 interface ActionPickerDelegate {
     val title: String
@@ -99,10 +92,3 @@ interface ActionPickerDelegate {
     val settingsKey: Key<Nothing>? get() = null
     suspend fun getResult(): ActionPickerKey.Result?
 }
-
-@Qualifier
-annotation class ActionPickerDelegateBinding
-
-@Given
-fun <@Given T : @ActionPickerDelegateBinding S, S : ActionPickerDelegate> actionPickerDelegate(
-    @Given instance: T): ActionPickerDelegate = instance

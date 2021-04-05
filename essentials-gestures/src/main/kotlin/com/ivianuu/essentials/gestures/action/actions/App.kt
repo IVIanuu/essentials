@@ -28,15 +28,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 
-@ActionFactoryBinding
 @Given
 class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
@@ -70,7 +67,6 @@ class AppActionFactory(
     }
 }
 
-@ActionPickerDelegateBinding
 @Given
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,

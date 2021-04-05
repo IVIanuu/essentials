@@ -18,41 +18,49 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.scope.AppGivenScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.withContext
 
+@Scoped<AppGivenScope>
 @Given
 class ActionRepository(
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val actions: Map<String, () -> Action> = emptyMap(),
-    @Given private val actionFactories: () -> Set<ActionFactory> = { emptySet() },
-    @Given private val actionsExecutors: Map<String, ActionExecutor> = emptyMap(),
-    @Given private val actionPickerDelegates: Set<ActionPickerDelegate> = emptySet(),
-    @Given private val actionSettings: Map<String, ActionSettingsKey> = emptyMap()
+    @Given private val actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
+    @Given private val actionsExecutors: Map<String, () -> ActionExecutor> = emptyMap(),
+    @Given private val actionPickerDelegates: Set<() -> ActionPickerDelegate> = emptySet(),
+    @Given private val actionSettings: Map<String, () -> ActionSettingsKey> = emptyMap()
 ) {
     suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
         actions.values.map { it() }
     }
 
     suspend fun getAction(key: String): Action = withContext(defaultDispatcher) {
-        actions.toMap()[key]
+        actions[key]
             ?.invoke()
             ?: actionFactories()
+                .asSequence()
+                .map { it() }
                 .firstOrNull { it.handles(key) }
                 ?.createAction(key)
             ?: error("Unsupported action key $key")
     }
 
     suspend fun getActionExecutor(key: String): ActionExecutor = withContext(defaultDispatcher) {
-        actionsExecutors.toMap()[key]
+        actionsExecutors[key]
+            ?.invoke()
             ?: actionFactories()
+                .asSequence()
+                .map { it() }
                 .firstOrNull { it.handles(key) }
                 ?.createExecutor(key)
             ?: error("Unsupported action key $key")
     }
 
     suspend fun getActionSettingsKey(key: String): ActionSettingsKey? =
-        withContext(defaultDispatcher) { actionSettings[key] }
+        withContext(defaultDispatcher) { actionSettings[key]?.invoke() }
 
     suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
-        actionPickerDelegates.toList()
+        withContext(defaultDispatcher) { actionPickerDelegates.map { it() } }
 }
