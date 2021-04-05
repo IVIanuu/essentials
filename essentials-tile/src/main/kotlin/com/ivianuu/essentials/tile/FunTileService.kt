@@ -18,10 +18,7 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
@@ -29,8 +26,6 @@ import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -54,23 +49,23 @@ abstract class AbstractFunTileService(
     }
 
     private var tileStateComponent: TileStateComponent? = null
+    private var store: TileStateStore<*>? = null
 
     override fun onStartListening() {
         super.onStartListening()
         val tileStateComponent = component.tileGivenScopeFactory()
             .element<TileStateComponent>()
             .also { this.tileStateComponent = it }
+        val store = tileStateComponent.tileStores[key]?.invoke()
+            ?: error("No tile found for $key")
         tileStateComponent.scope.launch {
-            val state = (tileStateComponent.tileStores[key]
-                ?.invoke()
-                ?: error("No tile found for $key"))
-            state.collect { applyState(it) }
+            store.collect { applyState(it) }
         }
     }
 
     override fun onClick() {
         super.onClick()
-        tileStateComponent!!.tileActionCollector(TileClicked)
+        store!!.tileClicked()
     }
 
     override fun onStopListening() {
@@ -124,12 +119,7 @@ class FunTileServiceComponent(
 class TileStateComponent(
     @Given tileStateElements: Set<TileStateElement> = emptySet(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
-    @Given val tileActionCollector: Collector<TileAction>,
     @Given val tileGivenScope: TileGivenScope
 ) {
     val tileStores = tileStateElements.toMap()
 }
-
-@Given
-val tileActions: @Scoped<TileGivenScope> MutableSharedFlow<TileAction>
-    get() = EventFlow()

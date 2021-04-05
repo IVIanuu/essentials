@@ -8,15 +8,15 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 
-internal typealias NotificationServiceRef = MutableStateFlow<EsNotificationListenerService?>
+internal typealias NotificationListenerServiceRef = MutableStateFlow<EsNotificationListenerService?>
 
 @Given
-fun notificationServiceRef(): @Scoped<AppGivenScope> NotificationServiceRef =
+fun notificationListenerServiceRef(): @Scoped<AppGivenScope> NotificationListenerServiceRef =
     MutableStateFlow(null)
 
 @Given
-fun notificationServiceRefWorker(
-    @Given ref: NotificationServiceRef,
+fun notificationServiceListenerRefWorker(
+    @Given ref: NotificationListenerServiceRef,
     @Given service: Service
 ): ScopeWorker<NotificationGivenScope> = {
     ref.value = service as EsNotificationListenerService

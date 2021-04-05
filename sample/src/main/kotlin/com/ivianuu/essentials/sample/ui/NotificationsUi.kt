@@ -36,8 +36,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +47,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.NotificationsAction
-import com.ivianuu.essentials.notificationlistener.NotificationsState
+import com.ivianuu.essentials.notificationlistener.NotificationService
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
@@ -59,7 +56,6 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -69,8 +65,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -87,8 +83,8 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-fun notificationsUi(@Given viewModel: NotificationsUiViewModel): KeyUi<NotificationsKey> = {
-    val state by viewModel.collectAsState()
+val notificationsUi: ViewModelKeyUi<NotificationsKey, NotificationsViewModel, NotificationsUiState
+        > = { viewModel, state ->
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
@@ -170,16 +166,15 @@ private fun NotificationPermissions(
 
 @Scoped<KeyUiGivenScope>
 @Given
-class NotificationsUiViewModel(
+class NotificationsViewModel(
     @Given private val appContext: AppContext,
-    @Given private val dispatchServiceAction: Collector<NotificationsAction>,
     @Given private val permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given private val permissionRequester: PermissionRequester,
-    @Given private val serviceState: Flow<NotificationsState>,
+    @Given private val service: NotificationService,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, NotificationsUiState>
 ) : StateFlow<NotificationsUiState> by store {
     init {
-        serviceState
+        service
             .map { it.notifications }
             .map { notifications ->
                 notifications
@@ -194,14 +189,10 @@ class NotificationsUiViewModel(
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
     fun openNotification(notification: UiNotification) = store.effect {
-        dispatchServiceAction(
-            NotificationsAction.OpenNotification(notification.sbn.notification)
-        )
+        service.openNotification(notification.sbn.notification)
     }
     fun dismissNotification(notification: UiNotification) = store.effect {
-        dispatchServiceAction(
-            NotificationsAction.DismissNotification(notification.sbn.key)
-        )
+        service.dismissNotification(notification.sbn.key)
     }
 
     private fun StatusBarNotification.toUiNotification() = UiNotification(

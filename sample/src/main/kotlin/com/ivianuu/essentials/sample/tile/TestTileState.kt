@@ -20,20 +20,20 @@ import com.ivianuu.essentials.android.prefs.Pref
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.tile.FunTileService1
-import com.ivianuu.essentials.tile.TileActionCallback
 import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
+import com.ivianuu.essentials.tile.TileStateStore
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 @Given
 class TestTileState(
     @Given private val twilightPref: Pref<TwilightPrefs>,
     @Given private val store: ScopeStateStore<TileGivenScope, TileState<FunTileService1>>
-) : Flow<TileState<FunTileService1>> by store, TileActionCallback {
+) : TileStateStore<FunTileService1>, StateFlow<TileState<FunTileService1>> by store {
     init {
         twilightPref
             .updateIn(store) { it.toTileState() }
