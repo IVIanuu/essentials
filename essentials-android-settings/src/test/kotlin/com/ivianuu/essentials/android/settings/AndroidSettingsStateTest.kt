@@ -18,14 +18,14 @@ class AndroidSettingsStateTest {
     fun testAndroidSettingsState() = runCancellingBlockingTest {
         var value = 0
         val contentChanges = EventFlow<Unit>()
-        val adapter = object : AndroidSettingsAdapter<Int> {
+        val adapter = object : AndroidSettingAdapter<Int> {
             override fun get(): Int = value
             override fun set(_value: Int) {
                 value = _value
                 contentChanges.tryEmit(Unit)
             }
         }
-        val module = AndroidSettingStateModule<Int, Int>(
+        val module = AndroidSettingModule<Int, Int>(
             "name",
             AndroidSettingsType.GLOBAL
         )
@@ -34,7 +34,7 @@ class AndroidSettingsStateTest {
             adapter = adapter,
             dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!
         )
-        val state = module.settingsState(
+        val state = module.setting(
             scope = this,
             adapter = adapter,
             dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
