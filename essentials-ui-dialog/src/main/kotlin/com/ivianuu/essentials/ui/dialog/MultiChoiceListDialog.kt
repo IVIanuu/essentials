@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.common.absorbPointer
 
 @Composable
 fun <T> MultiChoiceListDialog(
