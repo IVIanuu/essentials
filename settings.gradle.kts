@@ -21,6 +21,7 @@ include(
     ":essentials-compiler-plugin",
     ":essentials-core",
     ":essentials-coroutines",
+    ":essentials-data",
     ":essentials-foreground",
     ":essentials-gestures",
     ":essentials-gradle-plugin",

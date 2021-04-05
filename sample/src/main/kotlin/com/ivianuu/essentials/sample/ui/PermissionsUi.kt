@@ -40,20 +40,16 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
+import kotlinx.coroutines.launch
 
 @Given
 val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 
 class PermissionsKey : Key<Nothing>
-
-@Given
-val permissionsKeyModule = KeyModule<PermissionsKey>()
 
 @Given
 fun permissionUi(@Given permissionRequester: PermissionRequester): KeyUi<PermissionsKey> = {

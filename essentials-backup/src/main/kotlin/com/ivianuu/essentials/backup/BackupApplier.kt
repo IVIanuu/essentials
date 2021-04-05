@@ -21,16 +21,16 @@ import android.content.Intent
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.awaitAsync
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import java.util.zip.ZipInputStream
+import kotlinx.coroutines.withContext
 
 typealias BackupApplier = suspend () -> Result<Unit, Throwable>
 
@@ -45,7 +45,7 @@ fun backupApplier(
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupApplier = {
     runCatching {
-        scope.awaitAsync(ioDispatcher) {
+        withContext(scope.coroutineContext + ioDispatcher) {
             val uri = activityResultLauncher.startActivityForResult(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -53,7 +53,7 @@ fun backupApplier(
                     },
                     ""
                 )
-            ).data?.data ?: return@awaitAsync
+            ).data?.data ?: return@withContext
 
             val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 

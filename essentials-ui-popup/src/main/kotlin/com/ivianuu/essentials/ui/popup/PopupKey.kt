@@ -26,18 +26,15 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class PopupKey(
@@ -47,17 +44,14 @@ class PopupKey(
 ) : Key<Nothing>
 
 @Given
-val popupKeyModule = KeyModule<PopupKey>()
-
-@Given
 fun popupUi(
     @Given key: PopupKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
 ): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator(Pop(key))
+        navigator.pop(key)
     }
 
     var dismissed by remember { refOf(false) }
@@ -65,7 +59,7 @@ fun popupUi(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            navigator(Pop(key))
+            navigator.pop(key)
             if (cancelled) key.onCancel?.invoke()
         }
     }
@@ -120,7 +114,7 @@ private fun PopupLayout(
         } else if (position.left < position.right) {
             x = (position.right - placeable.width).toInt()
         } else {
-            x = (position.right - placeable.width).toInt() // todo based on ltr/rtl
+            x = (position.right - placeable.width).toInt()
         }
 
         x = x.coerceIn(8.dp.roundToPx(), constraints.maxWidth - placeable.width - 8.dp.roundToPx())

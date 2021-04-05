@@ -19,8 +19,8 @@ package com.ivianuu.essentials.recentapps
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope

@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
@@ -52,20 +51,16 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
+import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 @Given
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
 class AppTrackerKey : Key<Nothing>
-
-@Given
-val appTrackerKeyModule = KeyModule<AppTrackerKey>()
 
 @Given
 fun appTrackerUi(
@@ -80,11 +75,10 @@ fun appTrackerUi(
     if (currentForegroundState is Foreground) {
         LaunchedEffect(true) {
             currentApp
-                .onEach {
+                .collect {
                     toaster.showToast("App changed $it")
                     foregroundState.value = Foreground(notificationFactory(it))
                 }
-                .collect()
         }
     }
 

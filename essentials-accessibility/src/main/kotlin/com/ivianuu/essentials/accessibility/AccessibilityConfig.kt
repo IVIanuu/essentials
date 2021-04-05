@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 
 data class AccessibilityConfig(
@@ -61,7 +60,7 @@ fun accessibilityConfigWorker(
                     infiniteEmptyFlow()
                 }
             }
-            .onEach { (service, configs) ->
+            .collect { (service, configs) ->
                 service.serviceInfo = service.serviceInfo?.apply {
                     eventTypes = configs
                         .map { it.eventTypes }
@@ -82,6 +81,5 @@ fun accessibilityConfigWorker(
                     packageNames = null
                 }
             }
-            .collect()
     }
 }

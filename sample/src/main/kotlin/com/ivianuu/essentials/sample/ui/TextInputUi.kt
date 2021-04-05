@@ -42,7 +42,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
@@ -50,9 +49,6 @@ import com.ivianuu.injekt.Given
 val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 
 class TextInputKey : Key<Nothing>
-
-@Given
-val textInputKeyModule = KeyModule<TextInputKey>()
 
 @Given
 fun textInputUi(): KeyUi<TextInputKey> = {

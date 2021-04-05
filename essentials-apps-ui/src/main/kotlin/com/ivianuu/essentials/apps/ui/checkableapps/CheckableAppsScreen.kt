@@ -32,18 +32,15 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckState
-import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -51,15 +48,11 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 typealias CheckableAppsScreen = @Composable () -> Unit
 
@@ -71,11 +64,8 @@ data class CheckableAppsParams(
 )
 
 @Given
-fun checkableAppsScreen(
-    @Given stateFlow: StateFlow<CheckableAppsState>,
-    @Given dispatch: Collector<CheckableAppsAction>,
-): CheckableAppsScreen = {
-    val state by stateFlow.collectAsState()
+fun checkableAppsScreen(@Given viewModel: CheckableAppsViewModel): CheckableAppsScreen = {
+    val state by viewModel.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,16 +74,12 @@ fun checkableAppsScreen(
                     PopupMenuButton(
                         items = listOf(
                             PopupMenu.Item(
-                                onSelected = {
-                                    dispatch(SelectAll)
-                                }
+                                onSelected = { viewModel.selectAll() }
                             ) {
                                 Text(stringResource(R.string.es_select_all))
                             },
                             PopupMenu.Item(
-                                onSelected = {
-                                    dispatch(DeselectAll)
-                                }
+                                onSelected = { viewModel.deselectAll() }
                             ) {
                                 Text(stringResource(R.string.es_deselect_all))
                             }
@@ -104,36 +90,25 @@ fun checkableAppsScreen(
         }
     ) {
         ResourceLazyColumnFor(state.checkableApps) { app ->
-            CheckableApp(
-                app = app,
-                onClick = { dispatch(UpdateAppCheckState(app, !app.isChecked)) }
+            ListItem(
+                title = { Text(app.info.appName) },
+                leading = {
+                    CoilImage(
+                        data = AppIcon(packageName = app.info.packageName),
+                        modifier = Modifier.size(40.dp),
+                        contentDescription = null
+                    )
+                },
+                trailing = {
+                    Checkbox(
+                        checked = app.isChecked,
+                        onCheckedChange = null
+                    )
+                },
+                onClick = { viewModel.updateAppCheckedState(app, !app.isChecked) }
             )
         }
     }
-}
-
-@Composable
-private fun CheckableApp(
-    onClick: () -> Unit,
-    app: CheckableApp
-) {
-    ListItem(
-        title = { Text(app.info.appName) },
-        leading = {
-            CoilImage(
-                data = AppIcon(packageName = app.info.packageName),
-                modifier = Modifier.size(40.dp),
-                contentDescription = null
-            )
-        },
-        trailing = {
-            Checkbox(
-                checked = app.isChecked,
-                onCheckedChange = { onClick() }
-            )
-        },
-        onClick = onClick
-    )
 }
 
 internal typealias CheckedApps = Set<String>
@@ -152,7 +127,7 @@ data class CheckableAppsState(
     val checkedApps: Set<String> = emptySet(),
     val appFilter: AppFilter = DefaultAppFilter,
     val appBarTitle: String
-) {
+) : State() {
     val checkableApps = allApps
         .map { it.filter(appFilter) }
         .map { apps ->
@@ -175,32 +150,45 @@ data class CheckableAppsState(
 data class CheckableApp(
     val info: AppInfo,
     val isChecked: Boolean
-)
+) : State()
 
-sealed class CheckableAppsAction {
-    object SelectAll : CheckableAppsAction()
-    object DeselectAll : CheckableAppsAction()
-    data class UpdateAppCheckState(val app: CheckableApp, val value: Boolean) : CheckableAppsAction()
-}
-
+@Scoped<KeyUiGivenScope>
 @Given
-fun checkableAppsState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial CheckableAppsState,
-    @Given actions: Flow<CheckableAppsAction>,
-    @Given appRepository: AppRepository,
-    @Given checkedApps: Flow<CheckedApps>,
-    @Given onCheckedAppsChanged: OnCheckedAppsChanged
-): @Scoped<KeyUiGivenScope> StateFlow<CheckableAppsState> = scope.state(initial) {
-    checkedApps
-        .update { copy(checkedApps = it) }
-        .launchIn(this)
-    resourceFlow { emit(appRepository.getInstalledApps()) }
-        .update { copy(allApps = it) }
-        .launchIn(this)
+class CheckableAppsViewModel(
+    @Given private val appRepository: AppRepository,
+    @Given private val checkedApps: Flow<CheckedApps>,
+    @Given private val onCheckedAppsChanged: OnCheckedAppsChanged,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, CheckableAppsState>
+) : StateFlow<CheckableAppsState> by store {
+    init {
+        checkedApps
+            .updateIn(store) { copy(checkedApps = it) }
+        resourceFlow { emit(appRepository.getInstalledApps()) }
+            .updateIn(store) { copy(allApps = it) }
+    }
 
-    suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
-        val currentState = state.first()
+    fun updateAppCheckedState(app: CheckableApp, value: Boolean) = store.effect {
+        pushNewCheckedApps {
+            if (!app.isChecked) {
+                this + app.info.packageName
+            } else {
+                this - app.info.packageName
+            }
+        }
+    }
+
+    fun selectAll() = store.effect {
+        pushNewCheckedApps { currentState ->
+            currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
+        }
+    }
+
+    fun deselectAll() = store.effect {
+        pushNewCheckedApps { emptySet() }
+    }
+
+    private suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
+        val currentState = store.first()
         val newCheckedApps = currentState.checkableApps.get()
             ?.filter { it.isChecked }
             ?.mapTo(mutableSetOf()) { it.info.packageName }
@@ -208,26 +196,4 @@ fun checkableAppsState(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-
-    actions
-        .onEach { action ->
-            when (action) {
-                is UpdateAppCheckState -> pushNewCheckedApps {
-                    if (!action.app.isChecked) {
-                        this + action.app.info.packageName
-                    } else {
-                        this - action.app.info.packageName
-                    }
-                }
-                SelectAll -> pushNewCheckedApps { currentState ->
-                    currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
-                }
-                DeselectAll -> pushNewCheckedApps { emptySet() }
-            }
-        }
-        .launchIn(this)
 }
-
-@Given
-val checkableAppsActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<CheckableAppsAction>
-    get() = EventFlow()

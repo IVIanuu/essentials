@@ -20,8 +20,6 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
@@ -30,17 +28,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 
-@ActionFactoryBinding
 @Given
 class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
@@ -74,11 +67,10 @@ class AppActionFactory(
     }
 }
 
-@ActionPickerDelegateBinding
 @Given
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String

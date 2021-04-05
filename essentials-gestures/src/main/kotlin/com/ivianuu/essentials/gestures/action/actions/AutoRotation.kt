@@ -19,10 +19,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.android.settings.AndroidSettingAction
-import com.ivianuu.essentials.android.settings.AndroidSettingStateModule
+import com.ivianuu.essentials.android.settings.AndroidSettingDataStoreModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.android.settings.update
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
@@ -31,7 +30,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -56,9 +54,9 @@ fun autoRotationAction(
 
 @Given
 fun autoRotationActionExecutor(
-    @Given rotationSettingActionCollector: Collector<AndroidSettingAction<AutoRotation>>,
+    @Given rotationSetting: DataStore<AutoRotation>,
 ): @ActionExecutorBinding<AutoRotationActionId> ActionExecutor = {
-    rotationSettingActionCollector.update { if (this != 1) 1 else 0 }
+    rotationSetting.update { if (this != 1) 1 else 0 }
 }
 
 internal typealias AutoRotationIcon = ActionIcon
@@ -75,7 +73,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
 internal typealias AutoRotation = Int
 
 @Given
-val autoRotationModule = AndroidSettingStateModule<AutoRotation, Int>(
+val autoRotationModule = AndroidSettingDataStoreModule<AutoRotation, Int>(
     Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
 
 @Given

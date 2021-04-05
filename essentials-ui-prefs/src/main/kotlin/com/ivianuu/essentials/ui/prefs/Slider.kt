@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.EventFlow
@@ -43,10 +41,10 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.util.toDouble
 import com.ivianuu.essentials.util.toDuration
+import kotlin.time.Duration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlin.time.Duration
 
 @Composable
 fun DoubleSliderListItem(
@@ -300,18 +298,4 @@ fun <T : Comparable<T>> BaseSliderListItem(
             }
         }
     }
-}
-
-@Composable
-fun <T> SimpleValueTextProvider(toString: (T) -> String = { it.toString() }): @Composable (T) -> Unit {
-    return { Text(toString(it)) }
-}
-
-@Composable
-fun <T> UnitValueTextProvider(
-    unit: UnitValueTextProvider.Unit,
-    toString: (T) -> String = { it.toString() }
-): @Composable (T) -> Unit {
-    val textProvider = UnitValueTextProvider(LocalContext.current, unit)
-    return { Text(textProvider(toString(it))) }
 }

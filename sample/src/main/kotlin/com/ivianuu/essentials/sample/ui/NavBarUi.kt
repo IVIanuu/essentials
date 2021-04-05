@@ -32,22 +32,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.dispatchUpdate
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -62,14 +58,10 @@ val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarKeyModule = KeyModule<NavBarKey>()
-
-@Given
 fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
-    @Given navBarPrefsFlow: Flow<NavBarPrefs>,
-    @Given navBarPrefsUpdater: Collector<PrefAction<NavBarPrefs>>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navBarPrefStore: DataStore<NavBarPrefs>,
+    @Given navigator: Navigator,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {
@@ -81,11 +73,11 @@ fun navBarUi(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val navBarPrefs by navBarPrefsFlow.collectAsState(NavBarPrefs())
+            val navBarPrefs by navBarPrefStore.collectAsState(NavBarPrefs())
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {
                 onDispose {
-                    navBarPrefsUpdater.dispatchUpdate {
+                    navBarPrefStore.dispatchUpdate {
                         copy(hideNavBar = false)
                     }
                 }
@@ -119,7 +111,7 @@ fun navBarUi(
             Button(
                 onClick = {
                     if (hasPermission) {
-                        navBarPrefsUpdater.dispatchUpdate {
+                        navBarPrefStore.dispatchUpdate {
                             copy(hideNavBar = !hideNavBar)
                         }
                     } else {
@@ -142,7 +134,7 @@ fun navBarUi(
 
             Button(
                 onClick = {
-                    navigator(Push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey()))
+                    navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
                 }
             ) { Text("Settings") }
         }

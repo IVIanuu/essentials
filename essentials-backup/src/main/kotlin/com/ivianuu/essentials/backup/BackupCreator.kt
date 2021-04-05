@@ -19,14 +19,11 @@ package com.ivianuu.essentials.backup
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.awaitAsync
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataDir
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -34,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlinx.coroutines.withContext
 
 typealias BackupCreator = suspend () -> Result<Unit, Throwable>
 
@@ -45,11 +43,11 @@ fun backupCreator(
     @Given dataDir: DataDir,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
     runCatching {
-        scope.awaitAsync(ioDispatcher) {
+        withContext(scope.coroutineContext + ioDispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =
                 "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -77,11 +75,7 @@ fun backupCreator(
 
             zipOutputStream.close()
 
-            navigator(
-                Push(
-                    ShareBackupFileKey(backupFile.absolutePath)
-                )
-            )
+            navigator.push(ShareBackupFileKey(backupFile.absolutePath))
         }
     }
 }

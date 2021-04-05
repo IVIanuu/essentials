@@ -22,26 +22,20 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.coroutines.MainDispatcher
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import java.util.UUID
 import kotlin.coroutines.resume
-
-interface ActivityResultLauncher {
-    suspend fun startActivityForResult(intent: Intent): ActivityResult
-
-    suspend fun <I, O> startActivityForResult(contract: ActivityResultContract<I, O>, input: I): O
-}
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
 @Given
-class ActivityResultLauncherImpl(
+class ActivityResultLauncher(
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val appUiStarter: AppUiStarter
-) : ActivityResultLauncher {
-    override suspend fun startActivityForResult(intent: Intent): ActivityResult =
+) {
+    suspend fun startActivityForResult(intent: Intent): ActivityResult =
         startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
-    override suspend fun <I, O> startActivityForResult(
+    suspend fun <I, O> startActivityForResult(
         contract: ActivityResultContract<I, O>,
         input: I
     ): O {

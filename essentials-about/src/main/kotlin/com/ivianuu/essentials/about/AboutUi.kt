@@ -18,60 +18,36 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.about.AboutAction.OpenGithubPage
-import com.ivianuu.essentials.about.AboutAction.OpenMoreApps
-import com.ivianuu.essentials.about.AboutAction.OpenPrivacyPolicy
-import com.ivianuu.essentials.about.AboutAction.OpenRedditPage
-import com.ivianuu.essentials.about.AboutAction.OpenTwitterPage
-import com.ivianuu.essentials.about.AboutAction.Rate
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutKeyModule = KeyModule<AboutKey>()
-
-@Given
-fun aboutUi(
-    @Given stateFlow: StateFlow<AboutState>,
-    @Given dispatch: Collector<AboutAction>
-): KeyUi<AboutKey> = {
+val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, state ->
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
-        val state by stateFlow.collectAsState()
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
-                    title = { Text(stringResource(R.string.about_rate,)) },
+                    title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { dispatch(Rate) }
+                    onClick = { viewModel.rate() }
                 )
             }
 
@@ -79,7 +55,7 @@ fun aboutUi(
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { dispatch(OpenMoreApps) }
+                    onClick = { viewModel.openMoreApps() }
                 )
             }
 
@@ -87,7 +63,7 @@ fun aboutUi(
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { dispatch(OpenRedditPage) }
+                    onClick = { viewModel.openRedditPage() }
                 )
             }
 
@@ -95,7 +71,7 @@ fun aboutUi(
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { dispatch(OpenGithubPage) }
+                    onClick = { viewModel.openGithubPage() }
                 )
             }
 
@@ -103,7 +79,7 @@ fun aboutUi(
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { dispatch(OpenTwitterPage) }
+                    onClick = { viewModel.openTwitterPage() }
                 )
             }
 
@@ -111,7 +87,7 @@ fun aboutUi(
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { dispatch(OpenPrivacyPolicy) }
+                        onClick = { viewModel.openPrivacyPolicy()  }
                     )
                 }
             }
@@ -119,7 +95,7 @@ fun aboutUi(
     }
 }
 
-data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
+data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) : State() {
     companion object {
         @Given
         fun initial(
@@ -128,104 +104,33 @@ data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
     }
 }
 
-sealed class AboutAction {
-    object Rate : AboutAction()
-    object OpenMoreApps : AboutAction()
-    object OpenRedditPage : AboutAction()
-    object OpenGithubPage : AboutAction()
-    object OpenTwitterPage : AboutAction()
-    object OpenPrivacyPolicy : AboutAction()
-}
-
+@Scoped<KeyUiGivenScope>
 @Given
-fun aboutState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial AboutState,
-    @Given actions: Flow<AboutAction>,
-    @Given buildInfo: BuildInfo,
-    @Given navigator: Collector<NavigationAction>
-): @Scoped<KeyUiGivenScope> StateFlow<AboutState> = scope.state(initial) {
-    actions
-        .filterIsInstance<Rate>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        "https://play.google.com/store/apps/details?id=${buildInfo.packageName}"
-                    )
-                )
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenMoreApps>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        "https://play.google.com/store/apps/developer?id=Manuel+Wrage"
-                    )
-                )
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenRedditPage>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        "https://www.reddit.com/r/manuelwrageapps"
-                    )
-                )
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenGithubPage>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        "https://github.com/IVIanuu"
-                    )
-                )
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenTwitterPage>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        "https://twitter.com/IVIanuu"
-                    )
-                )
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenPrivacyPolicy>()
-        .onEach {
-            navigator(
-                Push(
-                    UrlKey(
-                        state.first().privacyPolicyUrl!!
-                    )
-                )
-            )
-        }
-        .launchIn(this)
+class AboutViewModel(
+    @Given private val buildInfo: BuildInfo,
+    @Given private val navigator: Navigator,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, AboutState>
+) : StateFlow<AboutState> by store {
+    fun rate() = store.effect {
+        navigator.push(
+            UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
+        )
+    }
+    fun openMoreApps() = store.effect {
+        navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+    }
+    fun openRedditPage() = store.effect {
+        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    }
+    fun openGithubPage() = store.effect {
+        navigator.push(UrlKey("https://github.com/IVIanuu"))
+    }
+    fun openTwitterPage() = store.effect {
+        navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+    }
+    fun openPrivacyPolicy() = store.effect {
+        navigator.push(UrlKey(store.first().privacyPolicyUrl!!))
+    }
 }
-
-@Given
-val aboutActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<AboutAction>
-    get() = EventFlow()
 
 typealias PrivacyPolicyUrl = String

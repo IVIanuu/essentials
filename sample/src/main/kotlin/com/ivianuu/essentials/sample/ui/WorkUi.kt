@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
@@ -32,9 +31,6 @@ import com.ivianuu.injekt.Given
 val workHomeItem = HomeItem("Work") { WorkKey() }
 
 class WorkKey : Key<Nothing>
-
-@Given
-val workKeyModule = KeyModule<WorkKey>()
 
 @Given
 fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {

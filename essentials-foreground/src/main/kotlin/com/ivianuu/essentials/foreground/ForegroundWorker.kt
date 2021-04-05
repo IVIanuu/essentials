@@ -13,7 +13,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 @WorkerBinding
 @Given
@@ -31,13 +30,12 @@ class ForegroundWorker(
             block = {
                 internalForegroundState
                     .map { it.infos }
-                    .onEach { infos ->
+                    .collect { infos ->
                         if (infos.none { it.state is ForegroundState.Foreground }) {
                             throw CancellationException()
                         }
+                        applyState(infos)
                     }
-                    .onEach { applyState(it) }
-                    .collect()
             },
             cleanup = {
                 applyState(emptyList())

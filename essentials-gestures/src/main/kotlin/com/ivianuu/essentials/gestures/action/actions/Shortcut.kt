@@ -28,23 +28,18 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
 
-@ActionFactoryBinding
 @Given
 class ShortcutActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
@@ -75,10 +70,9 @@ class ShortcutActionFactory(
     }
 }
 
-@ActionPickerDelegateBinding
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String

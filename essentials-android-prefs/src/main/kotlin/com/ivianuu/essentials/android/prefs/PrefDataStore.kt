@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.android.prefs
 
 import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStore as AndroidDataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -25,26 +25,24 @@ import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.InitialOrFallback
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 
-class PrefModule<T : Any>(private val name: String) {
+class PrefDataStoreModule<T : Any>(private val name: String) {
     @Given
-    fun prefDataStore(
+    fun dataStore(
         @Given scope: ScopeCoroutineScope<AppGivenScope>,
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
@@ -52,7 +50,7 @@ class PrefModule<T : Any>(private val name: String) {
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir
     ): @Scoped<AppGivenScope> DataStore<T> {
-        val deferredDataStore: DataStore<T> by lazy {
+        val deferredDataStore: AndroidDataStore<T> by lazy {
             DataStoreFactory.create(
                 produceFile = { prefsDir().resolve(name) },
                 serializer = object : Serializer<T> {
@@ -78,55 +76,15 @@ class PrefModule<T : Any>(private val name: String) {
             )
         }
         return object : DataStore<T> {
-            override val data: Flow<T>
-                get() = deferredDataStore.data
-
-            override suspend fun updateData(transform: suspend (t: T) -> T): T = scope.awaitAsync {
-                deferredDataStore.updateData(transform)
+            override suspend fun update(transform: T.() -> T): T = withContext(scope.coroutineContext) {
+                deferredDataStore.updateData { transform(it) }
             }
-        }
-    }
-
-    @Given
-    fun flow(@Given dataStore: DataStore<T>): Flow<T> = dataStore.data
-
-    @Given
-    fun prefActionCollector(
-        @Given dataStore: DataStore<T>,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>
-    ): @Scoped<AppGivenScope> Collector<PrefAction<T>> = { action ->
-        when (action) {
-            is PrefAction.Update -> {
-                scope.launch {
-                    val newValue = dataStore.updateData { action.reducer(it) }
-                    action.result?.complete(newValue)
-                }
+            override fun dispatchUpdate(transform: T.() -> T) {
+                scope.launch { update(transform) }
+            }
+            override suspend fun collect(collector: FlowCollector<T>) {
+                deferredDataStore.data.collect(collector)
             }
         }
     }
 }
-
-sealed class PrefAction<T : Any> {
-    data class Update<T : Any>(
-        val result: CompletableDeferred<T>? = null,
-        val reducer: T.() -> T
-    ) : PrefAction<T>()
-}
-
-suspend fun <T : Any> Collector<PrefAction<T>>.update(reducer: T.() -> T): T {
-    val result = CompletableDeferred<T>()
-    this(PrefAction.Update(result, reducer))
-    return result.await()
-}
-
-fun <T : Any> Collector<PrefAction<T>>.dispatchUpdate(reducer: T.() -> T) {
-    this(PrefAction.Update(reducer = reducer))
-}
-
-@Qualifier
-internal annotation class InitialOrFallback
-
-@Given
-inline fun <reified T : Any> initialOrFallback(
-    @Given initial: @Initial T? = null
-): @InitialOrFallback T = initial ?: T::class.java.newInstance()

@@ -34,7 +34,6 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 
@@ -42,9 +41,6 @@ import com.ivianuu.injekt.Given
 val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 
 class TabsKey : Key<Nothing>
-
-@Given
-val tabsKeyModule = KeyModule<TabsKey>()
 
 @Given
 fun tabsUi(): KeyUi<TabsKey> = {

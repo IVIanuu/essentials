@@ -21,8 +21,8 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope

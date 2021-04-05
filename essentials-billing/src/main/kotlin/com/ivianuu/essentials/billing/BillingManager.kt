@@ -21,40 +21,23 @@ import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.awaitAsync
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
-
-interface BillingManager {
-    suspend fun purchase(
-        sku: Sku,
-        acknowledge: Boolean = true,
-        consumeOldPurchaseIfUnspecified: Boolean = true,
-    ): Boolean
-
-    suspend fun consumePurchase(sku: Sku): Boolean
-
-    suspend fun acknowledgePurchase(sku: Sku): Boolean
-
-    fun isPurchased(sku: Sku): Flow<Boolean>
-
-    suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean
-}
 
 @Scoped<AppGivenScope>
 @Given
-class BillingManagerImpl(
+class BillingManager(
     @Given private val appForegroundState: Flow<AppForegroundState>,
     @Given private val appUiStarter: AppUiStarter,
     @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,
@@ -62,7 +45,7 @@ class BillingManagerImpl(
     @Given private val ioDispatcher: IODispatcher,
     @Given private val logger: Logger,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
-) : BillingManager {
+) {
     private val billingClient = billingClientFactory { _, _ ->
         refreshes.tryEmit(Unit)
     }
@@ -72,11 +55,11 @@ class BillingManagerImpl(
 
     private val refreshes = EventFlow<Unit>()
 
-    override suspend fun purchase(
+    suspend fun purchase(
         sku: Sku,
         acknowledge: Boolean,
         consumeOldPurchaseIfUnspecified: Boolean,
-    ): Boolean = scope.awaitAsync(ioDispatcher) {
+    ): Boolean = withContext(scope.coroutineContext + ioDispatcher) {
         logger.d {
             "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
         }
@@ -94,28 +77,28 @@ class BillingManagerImpl(
 
         ensureConnected()
 
-        val skuDetails = getSkuDetails(sku) ?: return@awaitAsync false
+        val skuDetails = getSkuDetails(sku) ?: return@withContext false
 
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetails)
             .build()
 
         val result = billingClient.launchBillingFlow(activity, billingFlowParams)
-        if (result.responseCode != BillingClient.BillingResponseCode.OK) return@awaitAsync false
+        if (result.responseCode != BillingClient.BillingResponseCode.OK) return@withContext false
 
         refreshes.first()
 
         val success = getIsPurchased(sku)
 
-        if (!acknowledge) return@awaitAsync success
+        if (!acknowledge) return@withContext success
 
-        return@awaitAsync if (success) acknowledgePurchase(sku) else return@awaitAsync false
+        return@withContext if (success) acknowledgePurchase(sku) else return@withContext false
     }
 
-    override suspend fun consumePurchase(sku: Sku): Boolean = scope.awaitAsync(defaultDispatcher) {
+    suspend fun consumePurchase(sku: Sku): Boolean = withContext(scope.coroutineContext + defaultDispatcher) {
         ensureConnected()
 
-        val purchase = getPurchase(sku) ?: return@awaitAsync false
+        val purchase = getPurchase(sku) ?: return@withContext false
 
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
@@ -129,14 +112,14 @@ class BillingManagerImpl(
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
-        return@awaitAsync success
+        return@withContext success
     }
 
-    override suspend fun acknowledgePurchase(sku: Sku): Boolean = scope.awaitAsync(defaultDispatcher) {
+    suspend fun acknowledgePurchase(sku: Sku): Boolean = withContext(scope.coroutineContext + defaultDispatcher) {
         ensureConnected()
-        val purchase = getPurchase(sku) ?: return@awaitAsync false
+        val purchase = getPurchase(sku) ?: return@withContext false
 
-        if (purchase.isAcknowledged) return@awaitAsync true
+        if (purchase.isAcknowledged) return@withContext true
 
         val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
@@ -150,22 +133,20 @@ class BillingManagerImpl(
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
         if (success) refreshes.emit(Unit)
-        return@awaitAsync success
+        return@withContext success
     }
 
-    override fun isPurchased(sku: Sku): Flow<Boolean> {
-        return merge(
-            appForegroundState
-                .filter { it == AppForegroundState.FOREGROUND },
-            refreshes
-        )
-            .onStart { emit(Unit) }
-            .map { getIsPurchased(sku) }
-            .distinctUntilChanged()
-            .onEach { logger.d { "is purchased flow for $sku -> $it" } }
-    }
+    fun isPurchased(sku: Sku): Flow<Boolean> = merge(
+        appForegroundState
+            .filter { it == AppForegroundState.FOREGROUND },
+        refreshes
+    )
+        .onStart { emit(Unit) }
+        .map { getIsPurchased(sku) }
+        .distinctUntilChanged()
+        .onEach { logger.d { "is purchased flow for $sku -> $it" } }
 
-    override suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
+    suspend fun isBillingFeatureSupported(feature: BillingFeature): Boolean =
         withContext(defaultDispatcher) {
             ensureConnected()
             val result = billingClient.isFeatureSupported(feature.value)

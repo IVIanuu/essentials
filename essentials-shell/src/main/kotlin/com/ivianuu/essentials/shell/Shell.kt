@@ -21,16 +21,10 @@ import com.ivianuu.injekt.Given
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-interface Shell {
-    suspend fun isAvailable(): Boolean
-
-    suspend fun run(vararg commands: String): List<String>
-}
-
 @Given
-class ShellImpl(@Given private val ioDispatcher: IODispatcher) : Shell {
-    override suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
+class Shell(@Given private val ioDispatcher: IODispatcher) {
+    suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
 
-    override suspend fun run(vararg commands: String): List<String> =
+    suspend fun run(vararg commands: String): List<String> =
         withContext(ioDispatcher) { SU.run(commands)!! }
 }

@@ -25,20 +25,15 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionFactoryBinding
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegateBinding
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.dialog.TextInputKey
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 
-@ActionFactoryBinding
 @Given
 class KeycodeActionFactory(
     @Given private val actionRootCommandRunner: ActionRootCommandRunner,
@@ -63,10 +58,9 @@ class KeycodeActionFactory(
     }
 }
 
-@ActionPickerDelegateBinding
 @Given
 class KeycodeActionPickerDelegate(
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String

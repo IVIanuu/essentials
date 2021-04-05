@@ -25,7 +25,7 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
-fun workerAppInitializer(
+fun workerInitializer(
     @Given appContext: AppContext,
     @Given workerFactory: WorkerFactory,
 ): ScopeInitializer<AppGivenScope> = {

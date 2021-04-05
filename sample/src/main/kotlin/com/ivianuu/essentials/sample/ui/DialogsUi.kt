@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -54,10 +53,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
@@ -65,9 +62,6 @@ import com.ivianuu.injekt.scope.GivenScopeElementBinding
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
 class DialogsKey : Key<Nothing>
-
-@Given
-val dialogsKeyModule = KeyModule<DialogsKey>()
 
 @Given
 fun dialogsUi(): KeyUi<DialogsKey> = {
@@ -360,25 +354,20 @@ private fun DialogLauncherButton(
     val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
     Button(
         onClick = {
-            component.navigator(
-                Push(
-                    DialogLauncherKey {
-                        dialog {
-                            if (dismissible) {
-                                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
-                            }
+            component.navigator.push(
+                DialogLauncherKey {
+                    dialog {
+                        if (dismissible) {
+                            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
                         }
                     }
-                )
+                }
             )
         }
     ) { Text(text) }
 }
 
 data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
-
-@Given
-val dialogLauncherKeyModule = KeyModule<DialogLauncherKey>()
 
 @Given
 fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
@@ -390,6 +379,4 @@ val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey
 
 @GivenScopeElementBinding<UiGivenScope>
 @Given
-class DialogLauncherComponent(
-    @Given val navigator: Collector<NavigationAction>
-)
+class DialogLauncherComponent(@Given val navigator: Navigator)

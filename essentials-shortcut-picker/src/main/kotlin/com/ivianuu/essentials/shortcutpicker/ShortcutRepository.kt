@@ -20,6 +20,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
@@ -47,7 +48,7 @@ class ShortcutRepository(
                             )
                         },
                         name = resolveInfo.loadLabel(packageManager).toString(),
-                        icon = resolveInfo.loadIcon(packageManager).toImageBitmap()
+                        icon = resolveInfo.loadIcon(packageManager).toBitmap().toImageBitmap()
                     )
                 }.getOrElse { null }
             }
@@ -73,7 +74,7 @@ class ShortcutRepository(
                     packageManager.getResourcesForApplication(iconResource.packageName)
                 val id =
                     resources.getIdentifier(iconResource.resourceName, null, null)
-                resources.getDrawable(id).toImageBitmap()
+                resources.getDrawable(id).toBitmap().toImageBitmap()
             }
             else -> error("no icon provided $shortcutRequestResult")
         }

@@ -17,18 +17,14 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefAction
-import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.android.prefs.dispatchUpdate
+import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -39,21 +35,17 @@ val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
 class CheckAppsKey : Key<Nothing>
 
 @Given
-val checkAppsKeyModule = KeyModule<CheckAppsKey>()
-
-@Given
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
-    @Given prefs: Flow<CheckAppsPrefs>,
-    @Given prefsActionCollector: Collector<PrefAction<CheckAppsPrefs>>,
+    @Given prefStore: DataStore<CheckAppsPrefs>
 ): KeyUi<CheckAppsKey> = {
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
-                prefs.map { it.checkedApps },
+                prefStore.map { it.checkedApps },
                 { checkedApps ->
-                    prefsActionCollector.dispatchUpdate {
+                    prefStore.dispatchUpdate {
                         copy(checkedApps = checkedApps)
                     }
                 },
@@ -70,4 +62,4 @@ data class CheckAppsPrefs(
 )
 
 @Given
-val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
+val checkAppsPrefsModule = PrefDataStoreModule<CheckAppsPrefs>("check_apps_prefs")

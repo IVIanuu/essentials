@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayInfo
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
@@ -37,9 +36,6 @@ import kotlinx.coroutines.flow.Flow
 val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
 
 class DisplayRotationKey : Key<Nothing>
-
-@Given
-val displayRotationKeyModule = KeyModule<DisplayRotationKey>()
 
 @Given
 fun displayRotationUi(@Given displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {

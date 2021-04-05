@@ -24,20 +24,14 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.launch
 
-interface Toaster {
-    fun showToast(message: String)
-
-    fun showToast(messageRes: Int, vararg arguments: Any?)
-}
-
 @Given
-class ToasterImpl(
+class Toaster(
     @Given private val appContext: AppContext,
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val resourceProvider: ResourceProvider,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
-) : Toaster {
-    override fun showToast(message: String) {
+) {
+    fun showToast(message: String) {
         scope.launch(mainDispatcher) {
             Toast.makeText(
                 appContext,
@@ -47,7 +41,7 @@ class ToasterImpl(
         }
     }
 
-    override fun showToast(messageRes: Int, vararg arguments: Any?) {
+    fun showToast(messageRes: Int, vararg arguments: Any?) {
         showToast(resourceProvider.string(messageRes, *arguments))
     }
 }

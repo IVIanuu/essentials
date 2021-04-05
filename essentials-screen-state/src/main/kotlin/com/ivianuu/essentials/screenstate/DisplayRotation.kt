@@ -23,8 +23,8 @@ import android.view.WindowManager
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext

@@ -17,12 +17,8 @@
 package com.ivianuu.essentials.ui.image
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.AndroidImageBitmapAccessor
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.core.graphics.drawable.toBitmap
-
-fun Drawable.toImageBitmap(): ImageBitmap = toBitmap().toImageBitmap()
 
 fun Bitmap.toImageBitmap(): ImageBitmap =
     AndroidImageBitmapAccessor.createAndroidImageBitmap(this)

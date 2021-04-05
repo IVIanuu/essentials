@@ -23,70 +23,45 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
-interface ResourceProvider {
-    fun bitmap(id: Int): ImageBitmap
-
-    fun boolean(id: Int): Boolean
-
-    fun color(id: Int): Color
-
-    fun dimension(id: Int): Dp
-
-    fun drawable(id: Int): ImageBitmap
-
-    fun float(id: Int): Float
-
-    fun font(id: Int): Font
-
-    fun int(id: Int): Int
-
-    fun intArray(id: Int): IntArray
-
-    fun string(id: Int): String
-
-    fun string(id: Int, vararg arguments: Any?): String
-
-    fun stringArray(id: Int): Array<String>
-}
-
 @Given
-class ResourceProviderImpl(@Given private val appContext: AppContext) : ResourceProvider {
+class ResourceProvider(@Given private val appContext: AppContext) {
     @SuppressLint("UseCompatLoadingForDrawables")
-    override fun bitmap(id: Int): ImageBitmap =
-        appContext.getDrawable(id)!!.toImageBitmap()
+    fun bitmap(id: Int): ImageBitmap =
+        appContext.getDrawable(id)!!.toBitmap().toImageBitmap()
 
-    override fun boolean(id: Int): Boolean =
+    fun boolean(id: Int): Boolean =
         appContext.resources.getBoolean(id)
 
-    override fun color(id: Int): Color =
+    fun color(id: Int): Color =
         Color(appContext.getColor(id))
 
-    override fun dimension(id: Int): Dp = with(Density(appContext)) {
+    fun dimension(id: Int): Dp = with(Density(appContext)) {
         appContext.resources.getDimension(id).toInt().toDp()
     }
 
-    override fun drawable(id: Int): ImageBitmap =
+    fun drawable(id: Int): ImageBitmap =
         bitmap(id)
 
-    override fun float(id: Int): Float =
+    fun float(id: Int): Float =
         ResourcesCompat.getFloat(appContext.resources, id)
 
-    override fun font(id: Int): Font = Font(id)
+    fun font(id: Int): Font = Font(id)
 
-    override fun int(id: Int): Int =
+    fun int(id: Int): Int =
         appContext.resources.getInteger(id)
 
-    override fun intArray(id: Int): IntArray = appContext.resources.getIntArray(id)
+    fun intArray(id: Int): IntArray = appContext.resources.getIntArray(id)
 
-    override fun string(id: Int): String =
+    fun string(id: Int): String =
         appContext.getString(id)
 
-    override fun string(id: Int, vararg arguments: Any?): String =
+    fun string(id: Int, vararg arguments: Any?): String =
         appContext.getString(id, *arguments)
 
-    override fun stringArray(id: Int): Array<String> = appContext.resources.getStringArray(id)
+    fun stringArray(id: Int): Array<String> = appContext.resources.getStringArray(id)
 }

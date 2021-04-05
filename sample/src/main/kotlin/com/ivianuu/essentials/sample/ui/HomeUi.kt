@@ -30,7 +30,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -38,10 +37,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.Push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
@@ -52,11 +49,8 @@ import com.ivianuu.injekt.Given
 class HomeKey : RootKey
 
 @Given
-val homeKeyModule = KeyModule<HomeKey>()
-
-@Given
 fun homeUi(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Navigator,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,
 ): KeyUi<HomeKey> = {
@@ -94,7 +88,7 @@ fun homeUi(
                 HomeItem(
                     item = item,
                     color = color,
-                    onClick = { navigator(Push(item.keyFactory(color))) }
+                    onClick = { navigator.push(item.keyFactory(color)) }
                 )
 
                 if (finalItems.indexOf(item) != finalItems.lastIndex) {
