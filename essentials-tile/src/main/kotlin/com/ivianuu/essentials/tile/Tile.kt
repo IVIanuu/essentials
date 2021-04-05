@@ -40,7 +40,7 @@ data class TileState<T : AbstractFunTileService>(
     val labelRes: Int? = null,
     val description: String? = null,
     val descriptionRes: Int? = null,
-    val status: Status = Status.ACTIVE
+    val status: Status = Status.UNAVAILABLE
 ) : State() {
     enum class Status {
         UNAVAILABLE, ACTIVE, INACTIVE
