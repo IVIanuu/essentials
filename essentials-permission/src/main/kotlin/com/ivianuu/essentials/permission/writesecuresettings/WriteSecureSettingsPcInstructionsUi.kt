@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -51,7 +51,7 @@ class WriteSecureSettingsPcInstructionsKey(
 ) : Key<Nothing>
 
 @Given
-val writeSecureSettingsPcInstructionsUi: ViewModelKeyUi<WriteSecureSettingsPcInstructionsKey,
+val writeSecureSettingsPcInstructionsUi: StateKeyUi<WriteSecureSettingsPcInstructionsKey,
         WriteSecureSettingsPcInstructionsViewModel,
         WriteSecureSettingsPcInstructionsState> = { viewModel, state ->
     Scaffold(

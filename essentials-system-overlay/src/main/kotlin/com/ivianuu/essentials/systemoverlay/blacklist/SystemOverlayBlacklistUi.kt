@@ -16,7 +16,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
 @Given
-val systemOverlayBlacklistUi: ViewModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistViewModel,
+val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistViewModel,
         SystemOverlayBlacklistUiState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }

@@ -48,7 +48,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -68,7 +68,7 @@ class ActionPickerKey(
 
 @Given
 fun actionPickerUi(
-): ViewModelKeyUi<ActionPickerKey, ActionPickerViewModel, ActionPickerState
+): StateKeyUi<ActionPickerKey, ActionPickerViewModel, ActionPickerState
         > = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
@@ -113,7 +113,7 @@ class ActionPickerViewModel(
         val result = item.getResult() ?: return@effect
         if (result is ActionPickerKey.Result.Action) {
             val pickedAction = actionRepository.getAction(result.actionKey)
-            if (permissionRequester(pickedAction.permissions)) return@effect
+            if (!permissionRequester(pickedAction.permissions)) return@effect
         }
         navigator.pop(key, result)
     }

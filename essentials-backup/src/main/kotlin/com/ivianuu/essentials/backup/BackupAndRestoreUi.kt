@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreUi: ViewModelKeyUi<BackupAndRestoreKey,
+val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey,
         BackupAndRestoreViewModel, BackupAndRestoreState> = { viewModel, _ ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }

@@ -13,7 +13,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
-val navBarUnsupportedUi: ViewModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedViewModel,
+val navBarUnsupportedUi: StateKeyUi<NavBarUnsupportedKey, NavBarUnsupportedViewModel,
         NavBarUnsupportedState> = { viewModel, _ ->
     DialogWrapper {
         Dialog(

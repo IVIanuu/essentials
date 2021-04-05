@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.first
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: ViewModelKeyUi<NavBarKey, NavBarViewModel, NavBarState> = { viewModel, state ->
+val navBarUi: StateKeyUi<NavBarKey, NavBarViewModel, NavBarState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {

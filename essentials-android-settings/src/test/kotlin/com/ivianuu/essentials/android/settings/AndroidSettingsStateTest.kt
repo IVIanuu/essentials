@@ -29,12 +29,7 @@ class AndroidSettingsStateTest {
             "name",
             AndroidSettingsType.GLOBAL
         )
-        val actionCollector = module.collector(
-            scope = this,
-            adapter = adapter,
-            dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!
-        )
-        val state = module.setting(
+        val setting = module.setting(
             scope = this,
             adapter = adapter,
             dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
@@ -43,7 +38,7 @@ class AndroidSettingsStateTest {
 
         value shouldBe 0
 
-        val stateCollector = state.testCollect(this)
+        val stateCollector = setting.testCollect(this)
         advanceUntilIdle()
 
         // initial state
@@ -61,14 +56,14 @@ class AndroidSettingsStateTest {
         stateCollector.values.shouldHaveSize(2)
 
         // dispatched updates
-        actionCollector.dispatchUpdate { value + 1 }
+        setting.dispatchUpdate { value + 1 }
         contentChanges.tryEmit(Unit)
         value shouldBe 2
         stateCollector.values.shouldHaveSize(3)
         stateCollector.values[2] shouldBe 2
 
         // updates with result
-        actionCollector.update { value - 1 } shouldBe 1
+        setting.update { value - 1 } shouldBe 1
         contentChanges.tryEmit(Unit)
         value shouldBe 1
         stateCollector.values.shouldHaveSize(4)

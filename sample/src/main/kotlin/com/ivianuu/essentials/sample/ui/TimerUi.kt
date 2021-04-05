@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.coroutines.coroutineContext
@@ -40,7 +40,7 @@ val timerHomeItem = HomeItem("Timer") { TimerKey() }
 class TimerKey : Key<Nothing>
 
 @Given
-val timerUi: ViewModelKeyUi<TimerKey, TimerViewModel, TimerState> = { _, state ->
+val timerUi: StateKeyUi<TimerKey, TimerViewModel, TimerState> = { _, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text("Timer") }) }
     ) {

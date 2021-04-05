@@ -10,7 +10,7 @@ import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -24,7 +24,7 @@ class SystemOverlayAppBlacklistKey : Key<Nothing>
 fun systemOverlayAppBlacklistUi(
     @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given resourceProvider: ResourceProvider
-): ViewModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistViewModel,
+): StateKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistViewModel,
         SystemOverlayAppBlacklistState> = { viewModel, state ->
     remember {
         checkableAppsPageFactory(

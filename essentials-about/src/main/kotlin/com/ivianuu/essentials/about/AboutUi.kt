@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.first
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: ViewModelKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, state ->
+val aboutUi: StateKeyUi<AboutKey, AboutViewModel, AboutState> = { viewModel, state ->
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {

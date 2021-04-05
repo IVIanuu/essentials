@@ -47,14 +47,14 @@ class KeyUiModule<K : Key<*>>(private val keyClass: KClass<K>) {
     }
 }
 
-typealias ViewModelKeyUi<K, VM, S> = @Composable (VM, S) -> Unit
+typealias StateKeyUi<K, T, S> = @Composable (T, S) -> Unit
 
 @Given
-inline fun <@Given T : ViewModelKeyUi<K, VM, S>, reified K : Key<*>,
-        VM : StateFlow<S>, S> viewModelKeyUi(
-    @Given noinline uiFactory: () ->T,
-    @Given viewModel: VM
+inline fun <@Given U : StateKeyUi<K, T, S>, reified K : Key<*>,
+        T : StateFlow<S>, S> stateKeyUi(
+    @Given noinline uiFactory: () ->U,
+    @Given state: T
 ): KeyUi<K> = {
-    val ui = remember(uiFactory) as @Composable (VM, S) -> Unit
-    ui(viewModel, viewModel.collectAsState().value)
+    val ui = remember(uiFactory) as @Composable (T, S) -> Unit
+    ui(state, state.collectAsState().value)
 }

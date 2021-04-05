@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.Scoped
@@ -94,7 +94,7 @@ val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 class MediaActionSettingsKey : Key<Nothing>
 
 @Given
-val mediaActionSettingsUi: ViewModelKeyUi<MediaActionSettingsKey, MediaActionSettingsViewModel,
+val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey, MediaActionSettingsViewModel,
         MediaActionSettingsState> = { viewModel, state ->
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })

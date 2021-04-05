@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -54,7 +54,7 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: ViewModelKeyUi<AppPickerKey, AppPickerViewModel, AppPickerState> = { viewModel, state ->
+val appPickerUi: StateKeyUi<AppPickerKey, AppPickerViewModel, AppPickerState> = { viewModel, state ->
     Scaffold(
         topBar = {
             TopAppBar(
