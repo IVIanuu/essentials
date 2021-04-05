@@ -23,7 +23,6 @@ import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.map

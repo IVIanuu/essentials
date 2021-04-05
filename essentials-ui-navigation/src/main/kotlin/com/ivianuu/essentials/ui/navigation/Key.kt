@@ -16,8 +16,4 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import kotlin.reflect.KClass
-
 interface Key<T>

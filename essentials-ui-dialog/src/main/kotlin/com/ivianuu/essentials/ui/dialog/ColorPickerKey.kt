@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.dialog
 import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given

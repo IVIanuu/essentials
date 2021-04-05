@@ -15,7 +15,6 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.UpdateAppBlacklist
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.util.ResourceProvider

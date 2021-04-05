@@ -2,10 +2,8 @@ package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
-import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.GivenScopeDisposable
-import com.ivianuu.injekt.scope.GivenScopeElement
 import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineDispatcher

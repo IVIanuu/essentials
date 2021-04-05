@@ -31,7 +31,6 @@ import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory

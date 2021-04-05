@@ -30,7 +30,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given

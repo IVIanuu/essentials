@@ -48,7 +48,6 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiModule
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
