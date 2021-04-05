@@ -67,8 +67,7 @@ class ActionPickerKey(
 }
 
 @Given
-fun actionPickerUi(
-): StateKeyUi<ActionPickerKey, ActionPickerViewModel, ActionPickerState
+val actionPickerUi: StateKeyUi<ActionPickerKey, ActionPickerViewModel, ActionPickerState
         > = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
