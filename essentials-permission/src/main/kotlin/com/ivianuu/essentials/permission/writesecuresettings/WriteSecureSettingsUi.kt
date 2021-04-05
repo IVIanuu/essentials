@@ -18,54 +18,39 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.Scoped
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
 @Given
-fun writeSecureSettingsUi(
-    @Given stateFlow: StateFlow<WriteSecureSettingsState>,
-    @Given dispatch: Collector<WriteSecureSettingsAction>,
-): KeyUi<WriteSecureSettingsKey> = {
-    val state by stateFlow.collectAsState()
+val writeSecureSettingsUi: ViewModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsViewModel,
+        WriteSecureSettingsState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
@@ -79,65 +64,54 @@ fun writeSecureSettingsUi(
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = { dispatch(OpenPcInstructions) }
+                    onClick = { viewModel.openPcInstructions() }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = { dispatch(GrantPermissionsViaRoot) }
+                    onClick = { viewModel.grantPermissionsViaRoot() }
                 )
             }
         }
     }
 }
 
-object WriteSecureSettingsState
-
-sealed class WriteSecureSettingsAction {
-    object GrantPermissionsViaRoot : WriteSecureSettingsAction()
-    object OpenPcInstructions : WriteSecureSettingsAction()
-}
+object WriteSecureSettingsState : State()
 
 @Given
-fun writeSecureSettingsState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial WriteSecureSettingsState = WriteSecureSettingsState,
-    @Given actions: Flow<WriteSecureSettingsAction>,
-    @Given buildInfo: BuildInfo,
-    @Given key: WriteSecureSettingsKey,
-    @Given navigator: Navigator,
-    @Given permissionStateFactory: PermissionStateFactory,
-    @Given shell: Shell,
-    @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsState> = scope.state(initial) {
-    launch {
-        val state = permissionStateFactory(listOf(key.permissionKey))
-        while (coroutineContext.isActive) {
-            if (state.first()) {
-                toaster.showToast(R.string.es_secure_settings_permission_granted)
-                navigator.pop(key, true)
-                break
+class WriteSecureSettingsViewModel(
+    @Given private val buildInfo: BuildInfo,
+    @Given private val key: WriteSecureSettingsKey,
+    @Given private val navigator: Navigator,
+    @Given private val permissionStateFactory: PermissionStateFactory,
+    @Given private val shell: Shell,
+    @Given private val toaster: Toaster,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, WriteSecureSettingsState>
+) : StateFlow<WriteSecureSettingsState> by store {
+    init {
+        store.effect {
+            val state = permissionStateFactory(listOf(key.permissionKey))
+            while (coroutineContext.isActive) {
+                if (state.first()) {
+                    toaster.showToast(R.string.es_secure_settings_permission_granted)
+                    navigator.pop(key, true)
+                    break
+                }
+                delay(200)
             }
-            delay(200)
         }
     }
-    actions
-        .onEach { action ->
-            when (action) {
-                OpenPcInstructions -> navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
-                GrantPermissionsViaRoot -> runCatching {
-                    shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-                }.onFailure {
-                    it.printStackTrace()
-                    toaster.showToast(R.string.es_secure_settings_no_root)
-                }
-            }
+    fun openPcInstructions() = store.effect {
+        navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
+    }
+    fun grantPermissionsViaRoot() = store.effect {
+        runCatching {
+            shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+        }.onFailure {
+            it.printStackTrace()
+            toaster.showToast(R.string.es_secure_settings_no_root)
         }
-        .launchIn(this)
+    }
 }
-
-@Given
-val writeSecureSettingsActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<WriteSecureSettingsAction>
-    get() = EventFlow()

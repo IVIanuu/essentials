@@ -19,56 +19,41 @@ package com.ivianuu.essentials.permission.writesecuresettings
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.Clipboard
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenGadgetHacksTutorial
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenLifeHackerTutorial
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
-import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scoped
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Nothing>
 
 @Given
-fun writeSecureSettingsPcInstructionsUi(
-    @Given stateFlow: StateFlow<WriteSecureSettingsPcInstructionsState>,
-    @Given dispatch: Collector<WriteSecureSettingsPcInstructionsAction>,
-): KeyUi<WriteSecureSettingsPcInstructionsKey> = {
-    val state by stateFlow.collectAsState()
+val writeSecureSettingsPcInstructionsUi: ViewModelKeyUi<WriteSecureSettingsPcInstructionsKey,
+        WriteSecureSettingsPcInstructionsViewModel,
+        WriteSecureSettingsPcInstructionsState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings_pc_instructions)) }) }
     ) {
@@ -100,21 +85,21 @@ fun writeSecureSettingsPcInstructionsUi(
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
-                    onClick = { dispatch(OpenGadgetHacksTutorial) }
+                    onClick = { viewModel.openGadgetHacksTutorial() }
                 )
             }
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
-                    onClick = { dispatch(OpenLifeHackerTutorial) }
+                    onClick = { viewModel.openLifehackerTutorial() }
                 )
             }
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
-                    onClick = { dispatch(OpenXdaTutorial) }
+                    onClick = { viewModel.openXdaTutorial() }
                 )
             }
             item {
@@ -128,81 +113,57 @@ fun writeSecureSettingsPcInstructionsUi(
                             )
                         )
                     },
-                    onClick = { dispatch(CopyAdbCommand) }
+                    onClick = { viewModel.copyAdbCommand() }
                 )
             }
         }
     }
 }
 
-data class WriteSecureSettingsPcInstructionsState(val packageName: String) {
+data class WriteSecureSettingsPcInstructionsState(val packageName: String) : State() {
     val secureSettingsAdbCommand =
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
+    companion object {
+        @Given
+        fun initialWriteSecureSettingsPcInstructionsState(@Given buildInfo: BuildInfo):
+                @Initial WriteSecureSettingsPcInstructionsState =
+            WriteSecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
+    }
 }
 
+@Scoped<KeyUiGivenScope>
 @Given
-fun initialWriteSecureSettingsPcInstructionsState(@Given buildInfo: BuildInfo):
-        @Initial WriteSecureSettingsPcInstructionsState =
-    WriteSecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
-
-sealed class WriteSecureSettingsPcInstructionsAction {
-    object CopyAdbCommand : WriteSecureSettingsPcInstructionsAction()
-    object OpenGadgetHacksTutorial : WriteSecureSettingsPcInstructionsAction()
-    object OpenLifeHackerTutorial : WriteSecureSettingsPcInstructionsAction()
-    object OpenXdaTutorial : WriteSecureSettingsPcInstructionsAction()
-}
-
-@Given
-fun writeSecureSettingsPcInstructionsState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial WriteSecureSettingsPcInstructionsState,
-    @Given actions: Flow<WriteSecureSettingsPcInstructionsAction>,
-    @Given navigator: Navigator,
-    @Given clipboard: Clipboard,
-    @Given key: WriteSecureSettingsPcInstructionsKey,
-    @Given permissionStateFactory: PermissionStateFactory
-): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsState> = scope.state(initial) {
-    launch {
-        val state = permissionStateFactory(listOf(key.permissionKey))
-        while (coroutineContext.isActive) {
-            if (state.first()) {
-                navigator.pop(key)
-                break
+class WriteSecureSettingsPcInstructionsViewModel(
+    @Given private val navigator: Navigator,
+    @Given private val clipboard: Clipboard,
+    @Given private val key: WriteSecureSettingsPcInstructionsKey,
+    @Given private val permissionStateFactory: PermissionStateFactory,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState>
+) : StateFlow<WriteSecureSettingsPcInstructionsState> by store {
+    init {
+        store.effect {
+            val state = permissionStateFactory(listOf(key.permissionKey))
+            while (coroutineContext.isActive) {
+                if (state.first()) {
+                    navigator.pop(key)
+                    break
+                }
+                delay(200)
             }
-            delay(200)
         }
     }
-
-    actions
-        .filterIsInstance<CopyAdbCommand>()
-        .onEach { clipboard.updateClipboard(state.first().secureSettingsAdbCommand) }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenGadgetHacksTutorial>()
-        .onEach { navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY")) }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenLifeHackerTutorial>()
-        .onEach {
-            navigator.push(
-                UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-            )
-        }
-        .launchIn(this)
-
-    actions
-        .filterIsInstance<OpenXdaTutorial>()
-        .onEach {
-            navigator.push(
-                UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-            )
-        }
-        .launchIn(this)
+    fun copyAdbCommand() = store.effect {
+        clipboard.updateClipboard(store.first().secureSettingsAdbCommand)
+    }
+    fun openGadgetHacksTutorial() = store.effect {
+        navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
+    }
+    fun openLifehackerTutorial() = store.effect {
+        navigator.push(
+            UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
+        )
+    }
+    fun openXdaTutorial() = store.effect {
+        UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+    }
 }
-
-@Given
-val writeSecureSettingsPcInstructionsActions:
-        @Scoped<KeyUiGivenScope> MutableSharedFlow<WriteSecureSettingsPcInstructionsAction>
-    get() = EventFlow()

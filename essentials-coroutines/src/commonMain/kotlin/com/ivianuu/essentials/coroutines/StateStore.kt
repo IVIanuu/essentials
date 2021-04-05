@@ -45,3 +45,8 @@ suspend fun <T, S> Flow<T>.update(store: StateStore<S>, reducer: S.(T) -> S) {
 fun <T, S> Flow<T>.updateIn(store: StateStore<S>, reducer: S.(T) -> S) = store.effect {
     this@updateIn.update(store, reducer)
 }
+
+fun <T, S> Flow<T>.collectAsEffectIn(
+    store: StateStore<S>,
+    collector: suspend (T) -> Unit = {}
+) = store.effect { collect(collector) }

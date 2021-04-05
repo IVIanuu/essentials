@@ -25,46 +25,35 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.OpenActionSettings
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.PickAction
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.ViewModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class ActionPickerKey(
     val showDefaultOption: Boolean = false,
@@ -79,119 +68,87 @@ class ActionPickerKey(
 
 @Given
 fun actionPickerUi(
-    @Given stateFlow: StateFlow<ActionPickerState>,
-    @Given dispatch: Collector<ActionPickerAction>,
-): KeyUi<ActionPickerKey> = {
-    val state by stateFlow.collectAsState()
+): ViewModelKeyUi<ActionPickerKey, ActionPickerViewModel, ActionPickerState
+        > = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
     ) {
         ResourceLazyColumnFor(state.items) { item ->
-            ActionPickerItem(
-                item = item,
-                onClick = { dispatch(PickAction(item)) },
-                onOpenSettingsClick = { dispatch(OpenActionSettings(item)) }
+            ListItem(
+                leading = { item.icon(Modifier.size(24.dp)) },
+                trailing = if (item.settingsKey != null) ({
+                    IconButton(onClick = { viewModel.openActionSettings(item) }) {
+                        Icon(painterResource(R.drawable.es_ic_settings), null)
+                    }
+                }) else null,
+                title = { Text(item.title) },
+                onClick = { viewModel.pickAction(item) }
             )
         }
     }
 }
 
-@Composable
-private fun ActionPickerItem(
-    onClick: () -> Unit,
-    onOpenSettingsClick: () -> Unit,
-    item: ActionPickerItem,
-) {
-    ListItem(
-        leading = { item.icon(Modifier.size(24.dp)) },
-        trailing = if (item.settingsKey != null) ({
-            IconButton(onClick = onOpenSettingsClick) {
-                Icon(painterResource(R.drawable.es_ic_settings), null)
-            }
-        }) else null,
-        title = { Text(item.title) },
-        onClick = onClick
-    )
-}
+data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle) : State()
 
-data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
-
-sealed class ActionPickerAction {
-    data class OpenActionSettings(val item: ActionPickerItem) : ActionPickerAction()
-    data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
-}
-
+@Scoped<KeyUiGivenScope>
 @Given
-fun actionPickerState(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
-    @Given initial: @Initial ActionPickerState = ActionPickerState(),
-    @Given actions: Flow<ActionPickerAction>,
-    @Given actionRepository: ActionRepository,
-    @Given key: ActionPickerKey,
-    @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester,
-    @Given resourceProvider: ResourceProvider
-): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerState> = scope.state(initial) {
-    resourceFlow { emit(getActionPickerItems(actionRepository, key, resourceProvider)) }
-        .update { copy(items = it) }
-        .launchIn(this)
+class ActionPickerViewModel(
+    @Given private val actionRepository: ActionRepository,
+    @Given private val key: ActionPickerKey,
+    @Given private val navigator: Navigator,
+    @Given private val permissionRequester: PermissionRequester,
+    @Given private val resourceProvider: ResourceProvider,
+    @Given private val store: ScopeStateStore<KeyUiGivenScope, ActionPickerState>
+) : StateFlow<ActionPickerState> by store {
+    init {
+        resourceFlow { emit(getActionPickerItems()) }
+            .updateIn(store) { copy(items = it) }
+    }
 
-    actions
-        .filterIsInstance<OpenActionSettings>()
-        .onEach { navigator.push(it.item.settingsKey!!) }
-        .launchIn(this)
+    fun openActionSettings(item: ActionPickerItem) = store.effect {
+        navigator.push(item.settingsKey!!)
+    }
 
-    actions
-        .filterIsInstance<PickAction>()
-        .onEach { action ->
-            val result = action.item.getResult() ?: return@onEach
-            if (result is ActionPickerKey.Result.Action) {
-                val pickedAction = actionRepository.getAction(result.actionKey)
-                if (!permissionRequester(pickedAction.permissions)) return@onEach
-            }
-            navigator.pop(key, result)
+    fun pickAction(item: ActionPickerItem) = store.effect {
+        val result = item.getResult() ?: return@effect
+        if (result is ActionPickerKey.Result.Action) {
+            val pickedAction = actionRepository.getAction(result.actionKey)
+            if (permissionRequester(pickedAction.permissions)) return@effect
         }
-        .launchIn(this)
-}
-
-@Given
-val actionPickerActions: @Scoped<KeyUiGivenScope> MutableSharedFlow<ActionPickerAction>
-    get() = EventFlow()
-
-private suspend fun getActionPickerItems(
-    actionRepository: ActionRepository,
-    key: ActionPickerKey,
-    resourceProvider: ResourceProvider
-): List<ActionPickerItem> = buildList<ActionPickerItem> {
-    val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
-
-    if (key.showDefaultOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = resourceProvider.string(R.string.es_default),
-            getResult = { ActionPickerKey.Result.Default }
-        )
+        navigator.pop(key, result)
     }
 
-    if (key.showNoneOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = resourceProvider.string(R.string.es_none),
-            getResult = { ActionPickerKey.Result.None }
-        )
-    }
+    private suspend fun getActionPickerItems(): List<ActionPickerItem> = buildList<ActionPickerItem> {
+        val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
-    val actionsAndDelegates = (
-            (actionRepository.getActionPickerDelegates()
-                .map { ActionPickerItem.PickerDelegate(it) }) + (actionRepository.getAllActions()
-                .map {
-                    ActionPickerItem.ActionItem(
-                        it,
-                        actionRepository.getActionSettingsKey(it.id)
-                    )
-                })
+        if (key.showDefaultOption) {
+            specialOptions += ActionPickerItem.SpecialOption(
+                title = resourceProvider.string(R.string.es_default),
+                getResult = { ActionPickerKey.Result.Default }
             )
-        .sortedBy { it.title }
+        }
 
-    return specialOptions + actionsAndDelegates
+        if (key.showNoneOption) {
+            specialOptions += ActionPickerItem.SpecialOption(
+                title = resourceProvider.string(R.string.es_none),
+                getResult = { ActionPickerKey.Result.None }
+            )
+        }
+
+        val actionsAndDelegates = (
+                (actionRepository.getActionPickerDelegates()
+                    .map { ActionPickerItem.PickerDelegate(it) }) + (actionRepository.getAllActions()
+                    .map {
+                        ActionPickerItem.ActionItem(
+                            it,
+                            actionRepository.getActionSettingsKey(it.id)
+                        )
+                    })
+                )
+            .sortedBy { it.title }
+
+        return specialOptions + actionsAndDelegates
+    }
 }
 
 sealed class ActionPickerItem {
