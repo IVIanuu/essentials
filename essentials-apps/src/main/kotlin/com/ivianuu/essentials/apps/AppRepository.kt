@@ -24,20 +24,12 @@ import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
-interface AppRepository {
-    suspend fun getInstalledApps(): List<AppInfo>
-
-    suspend fun getAppInfo(packageName: String): AppInfo?
-}
-
-data class AppInfo(val packageName: String, val appName: String)
-
 @Given
-class AppRepositoryImpl(
+class AppRepository(
     @Given private val ioDispatcher: IODispatcher,
     @Given private val packageManager: PackageManager
-) : AppRepository {
-    override suspend fun getInstalledApps(): List<AppInfo> = withContext(ioDispatcher) {
+) {
+    suspend fun getInstalledApps(): List<AppInfo> = withContext(ioDispatcher) {
         packageManager.getInstalledApplications(0)
             .parMap {
                 AppInfo(
@@ -50,10 +42,12 @@ class AppRepositoryImpl(
             .toList()
     }
 
-    override suspend fun getAppInfo(packageName: String): AppInfo? = withContext(ioDispatcher) {
+    suspend fun getAppInfo(packageName: String): AppInfo? = withContext(ioDispatcher) {
         val applicationInfo = runCatching {
             packageManager.getApplicationInfo(packageName, 0)
         }.get() ?: return@withContext null
         AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
     }
 }
+
+data class AppInfo(val packageName: String, val appName: String)

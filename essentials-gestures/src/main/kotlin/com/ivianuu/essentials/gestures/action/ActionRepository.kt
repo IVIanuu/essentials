@@ -20,32 +20,20 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
-interface ActionRepository {
-    suspend fun getAllActions(): List<Action>
-
-    suspend fun getAction(key: String): Action
-
-    suspend fun getActionExecutor(key: String): ActionExecutor
-
-    suspend fun getActionSettingsKey(key: String): ActionSettingsKey?
-
-    suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
-}
-
 @Given
-class ActionRepositoryImpl(
+class ActionRepository(
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val actions: Map<String, () -> Action> = emptyMap(),
     @Given private val actionFactories: () -> Set<ActionFactory> = { emptySet() },
     @Given private val actionsExecutors: Map<String, ActionExecutor> = emptyMap(),
     @Given private val actionPickerDelegates: Set<ActionPickerDelegate> = emptySet(),
     @Given private val actionSettings: Map<String, ActionSettingsKey> = emptyMap()
-) : ActionRepository {
-    override suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
+) {
+    suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
         actions.values.map { it() }
     }
 
-    override suspend fun getAction(key: String): Action = withContext(defaultDispatcher) {
+    suspend fun getAction(key: String): Action = withContext(defaultDispatcher) {
         actions.toMap()[key]
             ?.invoke()
             ?: actionFactories()
@@ -54,7 +42,7 @@ class ActionRepositoryImpl(
             ?: error("Unsupported action key $key")
     }
 
-    override suspend fun getActionExecutor(key: String): ActionExecutor = withContext(defaultDispatcher) {
+    suspend fun getActionExecutor(key: String): ActionExecutor = withContext(defaultDispatcher) {
         actionsExecutors.toMap()[key]
             ?: actionFactories()
                 .firstOrNull { it.handles(key) }
@@ -62,9 +50,9 @@ class ActionRepositoryImpl(
             ?: error("Unsupported action key $key")
     }
 
-    override suspend fun getActionSettingsKey(key: String): ActionSettingsKey? =
+    suspend fun getActionSettingsKey(key: String): ActionSettingsKey? =
         withContext(defaultDispatcher) { actionSettings[key] }
 
-    override suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
+    suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
         actionPickerDelegates.toList()
 }

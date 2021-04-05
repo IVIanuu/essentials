@@ -27,21 +27,15 @@ import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 
-interface ActivityResultLauncher {
-    suspend fun startActivityForResult(intent: Intent): ActivityResult
-
-    suspend fun <I, O> startActivityForResult(contract: ActivityResultContract<I, O>, input: I): O
-}
-
 @Given
-class ActivityResultLauncherImpl(
+class ActivityResultLauncher(
     @Given private val mainDispatcher: MainDispatcher,
     @Given private val appUiStarter: AppUiStarter
-) : ActivityResultLauncher {
-    override suspend fun startActivityForResult(intent: Intent): ActivityResult =
+) {
+    suspend fun startActivityForResult(intent: Intent): ActivityResult =
         startActivityForResult(ActivityResultContracts.StartActivityForResult(), intent)
 
-    override suspend fun <I, O> startActivityForResult(
+    suspend fun <I, O> startActivityForResult(
         contract: ActivityResultContract<I, O>,
         input: I
     ): O {

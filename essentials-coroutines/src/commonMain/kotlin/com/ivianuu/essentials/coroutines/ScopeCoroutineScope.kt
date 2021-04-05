@@ -28,14 +28,6 @@ fun <@ForTypeKey S : GivenScope> scopeCoroutineScope(
     }
 }
 
-@Given
-fun <S : GivenScope> scopeCoroutineScopeElement(
-    @Given scope: () -> ScopeCoroutineScope<S>
-): GivenScopeElement<S> = typeKeyOf<CoroutineScope>() to scope
-
-val <T : GivenScope> T.coroutineScope: ScopeCoroutineScope<T>
-    get() = element<CoroutineScope>()
-
 typealias ScopeCoroutineDispatcher<S> = CoroutineDispatcher
 
 @Given

@@ -16,31 +16,35 @@
 
 package com.ivianuu.essentials.sample.work
 
-import androidx.work.ListenableWorker
+import androidx.work.CoroutineWorker
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
-import com.ivianuu.essentials.work.WorkScope
-import com.ivianuu.essentials.work.Worker
-import com.ivianuu.essentials.work.WorkerId
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.work.WorkerBinding
+import com.ivianuu.injekt.android.work.WorkerContext
 import kotlinx.coroutines.delay
 
+@WorkerBinding
 @Given
-object TestWorkerId : WorkerId("test")
-
-@Given
-fun testWorker(@Given scope: WorkScope, @Given logger: Logger): Worker<TestWorkerId> = {
-    logger.d { "start work in scope: $scope" }
-    delay(5000)
-    logger.d { "finish work in scope: $scope" }
-    ListenableWorker.Result.success()
+class TestWorker(
+    @Given appContext: WorkerContext,
+    @Given params: WorkerParameters,
+    @Given private val logger: Logger
+) : CoroutineWorker(appContext, params) {
+    override suspend fun doWork(): Result {
+        logger.d { "start work" }
+        delay(5000)
+        logger.d { "finish work" }
+        return Result.success()
+    }
 }
 
 typealias TestWorkScheduler = () -> Unit
 
 @Given
 fun testWorkScheduler(@Given workManager: WorkManager): TestWorkScheduler = {
-    workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
+    workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
 }

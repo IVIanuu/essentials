@@ -25,7 +25,6 @@ import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.store.InitialOrFallback
@@ -37,6 +36,7 @@ import java.io.OutputStream
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
@@ -81,7 +81,7 @@ class PrefModule<T : Any>(private val name: String) {
             )
         }
         return object : Pref<T> {
-            override suspend fun update(reducer: T.() -> T): T = scope.awaitAsync {
+            override suspend fun update(reducer: T.() -> T): T = withContext(scope.coroutineContext) {
                 deferredDataStore.updateData { reducer(it) }
             }
             override fun dispatchUpdate(reducer: T.() -> T) {

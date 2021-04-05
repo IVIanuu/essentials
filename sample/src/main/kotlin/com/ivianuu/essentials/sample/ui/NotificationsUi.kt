@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
@@ -215,6 +216,7 @@ class NotificationsUiViewModel(
         icon = runCatching {
             notification.smallIcon
                 .loadDrawable(appContext)
+                .toBitmap()
                 .toImageBitmap()
 
         }.fold(

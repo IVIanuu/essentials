@@ -20,7 +20,6 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.awaitAsync
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.BuildInfo
@@ -32,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlinx.coroutines.withContext
 
 typealias BackupCreator = suspend () -> Result<Unit, Throwable>
 
@@ -47,7 +47,7 @@ fun backupCreator(
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
     runCatching {
-        scope.awaitAsync(ioDispatcher) {
+        withContext(scope.coroutineContext + ioDispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =
                 "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"

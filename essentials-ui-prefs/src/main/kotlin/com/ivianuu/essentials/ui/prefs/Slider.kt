@@ -301,17 +301,3 @@ fun <T : Comparable<T>> BaseSliderListItem(
         }
     }
 }
-
-@Composable
-fun <T> SimpleValueTextProvider(toString: (T) -> String = { it.toString() }): @Composable (T) -> Unit {
-    return { Text(toString(it)) }
-}
-
-@Composable
-fun <T> UnitValueTextProvider(
-    unit: UnitValueTextProvider.Unit,
-    toString: (T) -> String = { it.toString() }
-): @Composable (T) -> Unit {
-    val textProvider = UnitValueTextProvider(LocalContext.current, unit)
-    return { Text(textProvider(toString(it))) }
-}
