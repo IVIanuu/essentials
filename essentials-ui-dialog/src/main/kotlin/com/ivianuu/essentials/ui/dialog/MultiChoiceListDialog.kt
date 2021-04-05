@@ -78,9 +78,8 @@ private fun MultiChoiceDialogListItem(
     SimpleDialogListItem(
         leading = {
             Checkbox(
-                modifier = Modifier.absorbPointer(),
                 checked = checked,
-                onCheckedChange = {}
+                onCheckedChange = null
             )
         },
         title = title,
