@@ -56,8 +56,9 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.*
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -66,15 +67,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 
 @Given
@@ -83,18 +82,17 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-val notificationsUi: TmpStateKeyUi<NotificationsKey, NotificationsViewModel, NotificationsUiState
-        > = { viewModel, state ->
+val notificationsUi: StoreKeyUi<NotificationsKey, NotificationsUiState, NotificationsUiAction> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
                     notifications = state.notifications,
-                    onNotificationClick = { viewModel.openNotification(it) },
-                    onDismissNotificationClick = { viewModel.dismissNotification(it) }
+                    onNotificationClick = { tryEmit(OpenNotification(it)) },
+                    onDismissNotificationClick = { tryEmit(DismissNotification(it)) }
                 )
             } else {
-                NotificationPermissions { viewModel.requestPermissions() }
+                NotificationPermissions { tryEmit(RequestPermissions) }
             }
         }
     }
@@ -164,67 +162,82 @@ private fun NotificationPermissions(
     }
 }
 
-@Scoped<KeyUiGivenScope>
+data class NotificationsUiState(
+    val hasPermissions: Boolean = false,
+    val notifications: Resource<List<UiNotification>> = Idle,
+)
+
+data class UiNotification(
+    val title: String,
+    val text: String,
+    val icon: @Composable () -> Unit,
+    val color: Color,
+    val isClearable: Boolean,
+    val sbn: StatusBarNotification
+)
+
+sealed class NotificationsUiAction {
+    object RequestPermissions : NotificationsUiAction()
+    data class OpenNotification(val notification: UiNotification) : NotificationsUiAction()
+    data class DismissNotification(val notification: UiNotification) : NotificationsUiAction()
+}
+
 @Given
-class NotificationsViewModel(
-    @Given private val appContext: AppContext,
-    @Given private val permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
-    @Given private val permissionRequester: PermissionRequester,
-    @Given private val service: NotificationService,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, NotificationsUiState>
-) : StateFlow<NotificationsUiState> by store {
-    init {
-        service
-            .map { it.notifications }
-            .map { notifications ->
-                notifications
-                    .parMap { it.toUiNotification() }
-            }
-            .flowAsResource()
-            .updateIn(store) { copy(notifications = it) }
-        permissionState
-            .updateIn(store) { copy(hasPermissions = it) }
-    }
-    fun requestPermissions() = store.effect {
+fun notificationsUiStore(
+    @Given appContext: AppContext,
+    @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
+    @Given permissionRequester: PermissionRequester,
+    @Given service: NotificationService
+): StoreBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
+    service
+        .map { it.notifications }
+        .map { notifications ->
+            notifications
+                .parMap { it.toUiNotification(appContext) }
+        }
+        .flowAsResource()
+        .update { copy(notifications = it) }
+    permissionState.update { copy(hasPermissions = it) }
+    effectOn<RequestPermissions> {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    fun openNotification(notification: UiNotification) = store.effect {
-        service.openNotification(notification.sbn.notification)
+    effectOn<OpenNotification> {
+        service.openNotification(it.notification.sbn.notification)
     }
-    fun dismissNotification(notification: UiNotification) = store.effect {
-        service.dismissNotification(notification.sbn.key)
+    effectOn<DismissNotification> {
+        service.dismissNotification(it.notification.sbn.key)
     }
-
-    private fun StatusBarNotification.toUiNotification() = UiNotification(
-        title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
-            ?.toString() ?: "",
-        text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
-            ?.toString() ?: "",
-        icon = runCatching {
-            notification.smallIcon
-                .loadDrawable(appContext)
-                .toBitmap()
-                .toImageBitmap()
-
-        }.fold(
-            success = { bitmap ->
-                {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        bitmap = bitmap,
-                        contentDescription = null
-                    )
-                }
-            },
-            failure = {
-                { Icon(painterResource(R.drawable.es_ic_error), null) }
-            }
-        ),
-        color = Color(notification.color),
-        isClearable = isClearable,
-        sbn = this
-    )
 }
+
+private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiNotification(
+    title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
+        ?.toString() ?: "",
+    text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
+        ?.toString() ?: "",
+    icon = runCatching {
+        notification.smallIcon
+            .loadDrawable(appContext)
+            .toBitmap()
+            .toImageBitmap()
+
+    }.fold(
+        success = { bitmap ->
+            {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    bitmap = bitmap,
+                    contentDescription = null
+                )
+            }
+        },
+        failure = {
+            { Icon(painterResource(R.drawable.es_ic_error), null) }
+        }
+    ),
+    color = Color(notification.color),
+    isClearable = isClearable,
+    sbn = this
+)
 
 @PermissionBinding
 @Given
@@ -235,17 +248,3 @@ object SampleNotificationsPermission : NotificationListenerPermission {
     override val icon: @Composable (() -> Unit)?
         get() = null
 }
-
-data class NotificationsUiState(
-    val hasPermissions: Boolean = false,
-    val notifications: Resource<List<UiNotification>> = Idle,
-) : State()
-
-data class UiNotification(
-    val title: String,
-    val text: String,
-    val icon: @Composable () -> Unit,
-    val color: Color,
-    val isClearable: Boolean,
-    val sbn: StatusBarNotification
-)

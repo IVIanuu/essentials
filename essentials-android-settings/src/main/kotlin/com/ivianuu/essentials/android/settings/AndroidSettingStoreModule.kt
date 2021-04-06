@@ -6,9 +6,7 @@ import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.ValueAction.*
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -39,14 +37,13 @@ class AndroidSettingStoreModule<T : S, S>(
                     adapter.get()
                 }
             }
-            .updateIn(this) { it }
-        actionsOf<Update<T>>()
-            .collectIn(this) { action ->
-                val currentValue = adapter.get()
-                val newValue = action.transform(currentValue)
-                if (currentValue != newValue) adapter.set(newValue)
-                action.complete(newValue)
-            }
+            .update { it }
+        effectOn<Update<T>> { action ->
+            val currentValue = adapter.get()
+            val newValue = action.transform(currentValue)
+            if (currentValue != newValue) adapter.set(newValue)
+            action.complete(newValue)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

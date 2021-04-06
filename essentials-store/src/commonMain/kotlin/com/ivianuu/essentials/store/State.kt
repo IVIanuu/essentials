@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.update
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
@@ -33,14 +33,21 @@ fun <S> CoroutineScope.state(
 
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
+
     suspend fun update(reducer: S.() -> S): S
+
+    fun effect(block: suspend () -> Unit): Job = launch { block() }
+
+    fun Flow<S.() -> S>.update(): Job = effect {
+        collect { update(it) }
+    }
+
+    fun <T> Flow<T>.update(reducer: S.(T) -> S): Job =
+        map<T, S.() -> S> { { reducer(it) } }.update()
+
+    fun <T> Flow<T>.effect(block: suspend (T) -> Unit): Job =
+        onEach(block).launchIn(this@StateScope)
 }
-
-fun <T> Flow<T>.collectIn(scope: CoroutineScope, action: suspend (T) -> Unit): Job =
-    onEach(action).launchIn(scope)
-
-fun <T, S> Flow<T>.updateIn(scope: StateScope<S>, reducer: S.(T) -> S): Job =
-    onEach { scope.update { reducer(it) } }.launchIn(scope)
 
 object CancellableUpdatesScope {
     fun onCancel(block: () -> Unit) = block

@@ -5,11 +5,11 @@ import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.ValueAction.Update
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.*
 import com.ivianuu.essentials.ui.navigation.Key
@@ -51,10 +51,11 @@ fun systemOverlayAppBlacklistStore(
     @Given prefStore: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
     update { copy(appBlacklist = prefStore.map { it.appBlacklist }) }
-    actionsOf<UpdateAppBlacklist>()
-        .collectIn(this) { action ->
-            prefStore.update {
+    effectOn<UpdateAppBlacklist> { action ->
+        prefStore.emit(
+            Update {
                 copy(appBlacklist = action.appBlacklist)
             }
-        }
+        )
+    }
 }

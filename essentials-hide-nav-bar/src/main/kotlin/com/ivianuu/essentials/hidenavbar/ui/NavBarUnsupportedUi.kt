@@ -6,9 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.*
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
@@ -49,7 +47,7 @@ val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
 @Given
 val navBarUnsupportedOptions = DialogKeyUiOptionsFactory<NavBarUnsupportedKey>()
 
-class NavBarUnsupportedState : State()
+class NavBarUnsupportedState
 
 sealed class NavBarUnsupportedAction {
     object OpenMoreInfos : NavBarUnsupportedAction()
@@ -61,14 +59,12 @@ fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
-    actionsOf<OpenMoreInfos>()
-        .collectIn(this) {
-            navigator.push(
-                UrlKey(
-                    "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
-                )
+    effectOn<OpenMoreInfos> {
+        navigator.push(
+            UrlKey(
+                "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
             )
-        }
-    actionsOf<Close>()
-        .collectIn(this) { navigator.pop(key) }
+        )
+    }
+    effectOn<Close> { navigator.pop(key) }
 }

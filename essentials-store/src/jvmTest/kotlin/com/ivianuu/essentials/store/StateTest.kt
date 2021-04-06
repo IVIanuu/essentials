@@ -21,8 +21,6 @@ import com.ivianuu.essentials.coroutines.childJob
 import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +32,7 @@ class StateTest {
     @Test
     fun testReduce() = runCancellingBlockingTest {
         val state = state(0) {
-            update { inc() }
+            updateOn { inc() }
         }
         state.testCollect(this)
             .values
@@ -54,7 +52,7 @@ class StateTest {
         val actions = EventFlow<Int>()
         val state = state(0) {
             actions
-                .update { it }
+                .updateOn { it }
                 .launchIn(this)
         }
         val collector = state.testCollect(this)

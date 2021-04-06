@@ -16,14 +16,11 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.coroutines.withLatestFrom
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileAction.*
@@ -32,24 +29,18 @@ import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 
 @Given
 fun testTile(
     @Given twilightPrefStore: Store<TwilightPrefs, ValueAction<TwilightPrefs>>
 ): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction> = {
-    twilightPrefStore
-        .updateIn(this) { it.toTileState() }
-
-    actionsOf<TileClicked>()
-        .withLatestFrom(twilightPrefStore)
-        .map { (_, state) ->
-            if (state.twilightMode == TwilightMode.LIGHT)
-                TwilightMode.DARK else TwilightMode.LIGHT
-        }
-        .collectIn(this) {
-            twilightPrefStore.update { copy(twilightMode = it) }
-        }
+    twilightPrefStore.update { it.toTileState() }
+    effectOn<TileClicked> {
+        val newTwilightMode = if (twilightPrefStore.first().twilightMode == TwilightMode.LIGHT)
+            TwilightMode.DARK else TwilightMode.LIGHT
+        twilightPrefStore.tryUpdate { copy(twilightMode = newTwilightMode) }
+    }
 }
 
 private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(

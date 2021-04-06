@@ -64,6 +64,16 @@ inline fun <@Given U : TmpStateKeyUi<K, T, S>, reified K : Key<*>,
 
 typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
 
+@Composable
+operator fun <S> StateKeyUi<*, S>.invoke(state: S) {
+    invoke(
+        object : StateKeyUiScope<Nothing, S> {
+            override val state: S
+                get() = state
+        }
+    )
+}
+
 interface StateKeyUiScope<K, S> {
     val state: S
 }
@@ -86,6 +96,19 @@ inline fun <@Given U : StateKeyUi<K, S>, reified K : Key<*>, S> storeKeyUi(
 
 
 typealias StoreKeyUi<K, S, A> = @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+
+@Composable
+operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
+    state: S,
+    collector: Collector<A>
+) {
+    invoke(
+        object : StoreKeyUiScope<Nothing, S, A>, Collector<A> by collector {
+            override val state: S
+                get() = state
+        }
+    )
+}
 
 interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Collector<A>
 

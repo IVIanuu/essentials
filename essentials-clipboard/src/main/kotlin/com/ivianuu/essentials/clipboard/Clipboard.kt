@@ -20,14 +20,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
 import com.ivianuu.essentials.store.cancellableUpdates
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 
-data class ClipboardState(val text: String? = null) : State()
+data class ClipboardState(val text: String? = null)
 
 sealed class ClipboardAction {
     data class UpdateClipboard(val value: String) : ClipboardAction()
@@ -45,8 +43,7 @@ fun clipboardStore(
         onCancel { clipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
-    actionsOf<UpdateClipboard>()
-        .collectIn(this) {
-            clipboardManager.setPrimaryClip(ClipData.newPlainText("", it.value))
-        }
+    effectOn<UpdateClipboard> {
+        clipboardManager.setPrimaryClip(ClipData.newPlainText("", it.value))
+    }
 }

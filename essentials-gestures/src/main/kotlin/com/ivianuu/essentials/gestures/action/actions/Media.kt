@@ -28,7 +28,8 @@ import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.ValueAction.Update
+import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.resource.Idle
@@ -37,10 +38,7 @@ import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -122,7 +120,7 @@ val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSetting
     }
 }
 
-data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle) : State()
+data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle)
 
 sealed class MediaActionSettingsAction {
     object UpdateMediaApp : MediaActionSettingsAction()
@@ -139,16 +137,15 @@ fun mediaActionSettingsStore(
         .map { it.mediaApp }
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
         .flowAsResource()
-        .updateIn(this) { copy(mediaApp = it) }
-    actionsOf<UpdateMediaApp>()
-        .collectIn(this) {
-            val newMediaApp = navigator.pushForResult(
-                AppPickerKey(
-                    intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
-                )
+        .update { copy(mediaApp = it) }
+    effectOn<UpdateMediaApp> {
+        val newMediaApp = navigator.pushForResult(
+            AppPickerKey(
+                intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )
-            if (newMediaApp != null) {
-                pref.update { copy(mediaApp = newMediaApp.packageName) }
-            }
+        )
+        if (newMediaApp != null) {
+            pref.tryUpdate { copy(mediaApp = newMediaApp.packageName) }
         }
+    }
 }

@@ -29,8 +29,9 @@ fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given torch: Store<TorchState, TorchAction>
 ): ScopeWorker<AppGivenScope> = {
-    broadcastsFactory(ACTION_DISABLE_TORCH)
-        .collect { torch.emit(UpdateTorchEnabled(false)) }
+    broadcastsFactory(ACTION_DISABLE_TORCH).collect {
+        torch.emit(UpdateTorchEnabled(false))
+    }
 }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"

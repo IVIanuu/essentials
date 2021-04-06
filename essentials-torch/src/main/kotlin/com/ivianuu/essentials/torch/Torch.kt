@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.updateOn
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 
-data class TorchState(val torchEnabled: Boolean = false) : State()
+data class TorchState(val torchEnabled: Boolean = false)
 
 sealed class TorchAction {
     data class UpdateTorchEnabled(val value: Boolean) : TorchAction()
@@ -32,6 +30,5 @@ sealed class TorchAction {
 
 @Given
 val torchStore: StoreBuilder<AppGivenScope, TorchState, TorchAction> = {
-    actionsOf<UpdateTorchEnabled>()
-        .updateIn(this) { copy(torchEnabled = it.value) }
+    updateOn(UpdateTorchEnabled::class) { copy(torchEnabled = it.value) }
 }

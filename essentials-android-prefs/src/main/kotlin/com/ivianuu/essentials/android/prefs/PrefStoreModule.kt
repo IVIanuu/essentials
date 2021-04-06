@@ -13,9 +13,7 @@ import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.ValueAction.Update
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.InitialOrFallback
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import java.io.InputStream
@@ -55,11 +53,9 @@ class PrefStoreModule<T : Any>(private val name: String) {
                 initialFactory()
             }
         )
-        dataStore.data
-            .updateIn(this) { it }
-        actionsOf<Update<T>>()
-            .collectIn(this) { update ->
-                update.complete(dataStore.updateData { update.transform(it) })
-            }
+        dataStore.data.update { it }
+        effectOn<Update<T>> { action ->
+            action.complete(dataStore.updateData { action.transform(it) })
+        }
     }
 }

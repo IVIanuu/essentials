@@ -33,15 +33,14 @@ fun androidTorchWorker(
     @Given torch: Store<TorchState, TorchAction>,
     @Given toaster: Toaster
 ): ScopeWorker<AppGivenScope> = {
-    torch
-        .collect { currentState ->
-            runCatching {
-                val cameraId = cameraManager.cameraIdList[0]
-                cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
-            }.onFailure {
-                it.printStackTrace()
-                toaster.showToast(R.string.es_failed_to_toggle_torch)
-                torch.emit(UpdateTorchEnabled(false))
-            }
+    torch.collect { currentState ->
+        runCatching {
+            val cameraId = cameraManager.cameraIdList[0]
+            cameraManager.setTorchMode(cameraId, currentState.torchEnabled)
+        }.onFailure {
+            it.printStackTrace()
+            toaster.showToast(R.string.es_failed_to_toggle_torch)
+            torch.emit(UpdateTorchEnabled(false))
         }
+    }
 }

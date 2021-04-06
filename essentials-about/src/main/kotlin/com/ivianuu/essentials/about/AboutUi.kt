@@ -22,9 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.about.AboutAction.*
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -96,7 +94,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
     }
 }
 
-data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) : State() {
+data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
     companion object {
         @Given
         fun initial(
@@ -119,28 +117,23 @@ fun aboutStore(
     @Given buildInfo: BuildInfo,
     @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
-    actionsOf<Rate>()
-        .collectIn(this) {
-            navigator.push(
-                UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
-            )
-        }
-    actionsOf<OpenMoreApps>()
-        .collectIn(this) {
-            navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-        }
-    actionsOf<OpenRedditPage>()
-        .collectIn(this) {
-            navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-        }
-    actionsOf<OpenTwitterPage>()
-        .collectIn(this) {
-            navigator.push(UrlKey("https://twitter.com/IVIanuu"))
-        }
-    actionsOf<OpenPrivacyPolicy>()
-        .collectIn(this) {
-            navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
-        }
+    effectOn<Rate> {
+        navigator.push(
+            UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
+        )
+    }
+    effectOn<OpenMoreApps> {
+        navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+    }
+    effectOn<OpenRedditPage> {
+        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    }
+    effectOn<OpenTwitterPage> {
+        navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+    }
+    effectOn<OpenPrivacyPolicy> {
+        navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
+    }
 }
 
 typealias PrivacyPolicyUrl = String

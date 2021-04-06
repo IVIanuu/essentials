@@ -42,9 +42,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -107,20 +105,19 @@ fun actionPickerStore(
     @Given resourceProvider: ResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
     resourceFlow { emit(getActionPickerItems(actionRepository, key, resourceProvider)) }
-        .updateIn(this) { copy(items = it) }
+        .update { copy(items = it) }
 
-    actionsOf<OpenActionSettings>()
-        .collectIn(this) {
-            navigator.push(it.item.settingsKey!!)
+    effectOn<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
+
+    effectOn<PickAction> {
+        val result = it.item.getResult() ?: return@effectOn
+        if (result is ActionPickerKey.Result.Action) {
+            val action = actionRepository.getAction(result.actionId)
+            if (!permissionRequester(action.permissions))
+                return@effectOn
         }
-
-    actionsOf<PickAction>()
-        .mapNotNull { it.item.getResult() }
-        .filterIsInstance<ActionPickerKey.Result.Action>()
-        .map { actionRepository.getAction(it.actionId) }
-        .filter { permissionRequester(it.permissions) }
-        .map { ActionPickerKey.Result.Action(it.id) }
-        .collectIn(this) { navigator.pop(key, it) }
+        navigator.pop(key, result)
+    }
 }
 
 sealed class ActionPickerItem {

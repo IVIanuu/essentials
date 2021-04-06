@@ -21,6 +21,8 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.ValueAction.Update
+import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -30,10 +32,7 @@ import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -80,7 +79,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
 data class NavBarState(
     val hideNavBar: Boolean = false,
     val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
-) : State() {
+) {
     val canChangeNavBarRotationMode: Boolean
         get() = hideNavBar
 }
@@ -97,34 +96,31 @@ fun navBarStore(
     @Given pref: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
     @Given resourceProvider: ResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
-    pref
-        .updateIn(this) {
-            copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
+    pref.update {
+        copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
+    }
+    effectOn<UpdateHideNavBar> { action ->
+        if (!action.value) {
+            pref.tryUpdate { copy(hideNavBar = false) }
+        } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
+            pref.tryUpdate { copy(hideNavBar = action.value) }
+        } else Unit
+    }
+    effectOn<UpdateNavBarRotationMode> {
+        navigator.pushForResult(
+            SingleChoiceListKey(
+                items = NavBarRotationMode.values()
+                    .map { mode ->
+                        SingleChoiceListKey.Item(
+                            title = resourceProvider.string(mode.titleRes),
+                            value = mode
+                        )
+                    },
+                selectedItem = state.first().navBarRotationMode,
+                title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
+            )
+        )?.let { newRotationMode ->
+            pref.tryUpdate { copy(navBarRotationMode = newRotationMode) }
         }
-    actionsOf<UpdateHideNavBar>()
-        .collectIn(this) { action ->
-            if (!action.value) {
-                pref.update { copy(hideNavBar = false) }
-            } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-                pref.update { copy(hideNavBar = action.value) }
-            } else Unit
-        }
-    actionsOf<UpdateNavBarRotationMode>()
-        .collectIn(this) {
-            navigator.pushForResult(
-                SingleChoiceListKey(
-                    items = NavBarRotationMode.values()
-                        .map { mode ->
-                            SingleChoiceListKey.Item(
-                                title = resourceProvider.string(mode.titleRes),
-                                value = mode
-                            )
-                        },
-                    selectedItem = state.first().navBarRotationMode,
-                    title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
-                )
-            )?.let { newRotationMode ->
-                pref.update { copy(navBarRotationMode = newRotationMode) }
-            }
-        }
+    }
 }

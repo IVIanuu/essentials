@@ -35,10 +35,7 @@ import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.State
-import com.ivianuu.essentials.store.actionsOf
-import com.ivianuu.essentials.store.collectIn
-import com.ivianuu.essentials.store.updateIn
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -85,7 +82,7 @@ data class AppPickerState(
     private val allApps: Resource<List<AppInfo>> = Idle,
     val appFilter: AppFilter = DefaultAppFilter,
     val title: String? = null
-) : State() {
+) {
     val filteredApps = allApps
         .map { it.filter(appFilter) }
     companion object {
@@ -107,8 +104,6 @@ fun appPickerStore(
     @Given key: AppPickerKey,
     @Given navigator: Navigator,
 ): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
-    resourceFlow { emit(appRepository.getInstalledApps()) }
-        .updateIn(this) { copy(allApps = it) }
-    actionsOf<PickApp>()
-        .collectIn(this) { navigator.pop(key, it.app) }
+    resourceFlow { emit(appRepository.getInstalledApps()) }.update { copy(allApps = it) }
+    effectOn<PickApp> { navigator.pop(key, it.app) }
 }
