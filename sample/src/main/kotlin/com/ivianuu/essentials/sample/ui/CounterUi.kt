@@ -48,7 +48,7 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey : Key<Nothing>
 
 @Given
-val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = { state, collector ->
+val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -66,14 +66,14 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = { state, co
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { collector.tryEmit(Inc) }
+                onClick = { tryEmit(Inc) }
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { collector.tryEmit(Dec) }
+                onClick = { tryEmit(Dec) }
             )
         }
     }

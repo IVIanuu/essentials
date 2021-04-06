@@ -41,14 +41,14 @@ import kotlinx.coroutines.flow.first
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector ->
+val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { collector.tryEmit(Rate) }
+                    onClick = { tryEmit(Rate) }
                 )
             }
 
@@ -56,7 +56,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector 
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { collector.tryEmit(OpenMoreApps) }
+                    onClick = { tryEmit(OpenMoreApps) }
                 )
             }
 
@@ -64,7 +64,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector 
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { collector.tryEmit(OpenRedditPage) }
+                    onClick = { tryEmit(OpenRedditPage) }
                 )
             }
 
@@ -72,7 +72,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector 
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { collector.tryEmit(OpenGithubPage) }
+                    onClick = { tryEmit(OpenGithubPage) }
                 )
             }
 
@@ -80,7 +80,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector 
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { collector.tryEmit(OpenTwitterPage) }
+                    onClick = { tryEmit(OpenTwitterPage) }
                 )
             }
 
@@ -88,7 +88,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector 
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { collector.tryEmit(OpenPrivacyPolicy) }
+                        onClick = { tryEmit(OpenPrivacyPolicy) }
                     )
                 }
             }

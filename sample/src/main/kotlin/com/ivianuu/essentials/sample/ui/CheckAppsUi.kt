@@ -18,10 +18,14 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
@@ -38,14 +42,14 @@ class CheckAppsKey : Key<Nothing>
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
-    @Given prefStore: DataStore<CheckAppsPrefs>
+    @Given prefStore: Store<CheckAppsPrefs, ValueAction<CheckAppsPrefs>>
 ): KeyUi<CheckAppsKey> = {
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
                 prefStore.map { it.checkedApps },
                 { checkedApps ->
-                    prefStore.dispatchUpdate {
+                    prefStore.tryUpdate {
                         copy(checkedApps = checkedApps)
                     }
                 },
@@ -62,4 +66,4 @@ data class CheckAppsPrefs(
 )
 
 @Given
-val checkAppsPrefsModule = PrefDataStoreModule<CheckAppsPrefs>("check_apps_prefs")
+val checkAppsPrefsModule = PrefStoreModule<CheckAppsPrefs>("check_apps_prefs")

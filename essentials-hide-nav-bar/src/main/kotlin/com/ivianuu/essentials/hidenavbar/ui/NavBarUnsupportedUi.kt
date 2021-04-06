@@ -23,7 +23,7 @@ class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
 val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState,
-        NavBarUnsupportedAction> = { _, collector ->
+        NavBarUnsupportedAction> = {
     DialogWrapper {
         Dialog(
             title = {
@@ -33,12 +33,12 @@ val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
                 Text(stringResource(R.string.es_nav_bar_unsupported_content))
             },
             neutralButton = {
-                TextButton(onClick = { collector.tryEmit(OpenMoreInfos) }) {
+                TextButton(onClick = { tryEmit(OpenMoreInfos) }) {
                     Text(stringResource(R.string.es_more_infos))
                 }
             },
             positiveButton = {
-                TextButton(onClick = { collector.tryEmit(Close) }) {
+                TextButton(onClick = { tryEmit(Close) }) {
                     Text(stringResource(R.string.es_close))
                 }
             }

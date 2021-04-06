@@ -53,7 +53,7 @@ import kotlinx.coroutines.flow.first
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = { state, collector ->
+val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {
@@ -61,7 +61,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = { state, collec
             item {
                 SwitchListItem(
                     value = state.hideNavBar,
-                    onValueChange = { collector.tryEmit(UpdateHideNavBar(it)) },
+                    onValueChange = { tryEmit(UpdateHideNavBar(it)) },
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -70,7 +70,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = { state, collec
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
                     modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = { collector.tryEmit(UpdateNavBarRotationMode) }
+                    onClick = { tryEmit(UpdateNavBarRotationMode) }
                 )
             }
         }

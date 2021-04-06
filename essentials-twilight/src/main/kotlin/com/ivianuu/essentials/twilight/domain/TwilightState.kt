@@ -52,21 +52,19 @@ fun twilightState(
     @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,
-    @Given twilightPrefs: () -> Flow<TwilightPrefs>,
-): @Eager<AppGivenScope> StateFlow<TwilightState> = flow {
-    twilightPrefs()
-        .flatMapLatest { (mode, useBlack) ->
-            (when (mode) {
-                TwilightMode.SYSTEM -> systemTwilightState()
-                TwilightMode.LIGHT -> flowOf(false)
-                TwilightMode.DARK -> flowOf(true)
-                TwilightMode.BATTERY -> batteryTwilightState()
-                TwilightMode.TIME -> timeTwilightState()
-            }).map { TwilightState(it, useBlack) }
+    @Given twilightPrefs: Flow<TwilightPrefs>,
+): @Eager<AppGivenScope> StateFlow<TwilightState> = twilightPrefs
+    .flatMapLatest { (mode, useBlack) ->
+        (when (mode) {
+            TwilightMode.SYSTEM -> systemTwilightState()
+            TwilightMode.LIGHT -> flowOf(false)
+            TwilightMode.DARK -> flowOf(true)
+            TwilightMode.BATTERY -> batteryTwilightState()
+            TwilightMode.TIME -> timeTwilightState()
+        }).map { TwilightState(it, useBlack) }
     }
-        .distinctUntilChanged()
-        .let { emitAll(it) }
-}.stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
+    .distinctUntilChanged()
+    .stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
 
 typealias BatteryTwilightState = Boolean
 

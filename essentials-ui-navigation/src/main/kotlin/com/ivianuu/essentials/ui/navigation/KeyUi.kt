@@ -24,6 +24,7 @@ import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.getValue
 
 typealias KeyUi<K> = @Composable () -> Unit
 
@@ -48,10 +49,11 @@ class KeyUiModule<K : Key<*>>(private val keyClass: KClass<K>) {
     }
 }
 
-typealias StateKeyUi<K, T, S> = @Composable (T, S) -> Unit
+@Deprecated("Lol")
+typealias TmpStateKeyUi<K, T, S> = @Composable (T, S) -> Unit
 
 @Given
-inline fun <@Given U : StateKeyUi<K, T, S>, reified K : Key<*>,
+inline fun <@Given U : TmpStateKeyUi<K, T, S>, reified K : Key<*>,
         T : StateFlow<S>, S> stateKeyUi(
     @Given noinline uiFactory: () ->U,
     @Given state: T
@@ -60,7 +62,32 @@ inline fun <@Given U : StateKeyUi<K, T, S>, reified K : Key<*>,
     ui(state, state.collectAsState().value)
 }
 
-typealias StoreKeyUi<K, S, A> = @Composable (S, Collector<A>) -> Unit
+typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
+
+interface StateKeyUiScope<K, S> {
+    val state: S
+}
+
+@Given
+inline fun <@Given U : StateKeyUi<K, S>, reified K : Key<*>, S> storeKeyUi(
+    @Given noinline uiFactory: () -> U,
+    @Given state: StateFlow<S>
+): KeyUi<K> = {
+    val currentState by state.collectAsState()
+    val scope = remember {
+        object : StateKeyUiScope<K, S> {
+            override val state: S
+                get() = currentState
+        }
+    }
+    val ui = remember(uiFactory) as @Composable StateKeyUiScope<K, S>.() -> Unit
+    scope.ui()
+}
+
+
+typealias StoreKeyUi<K, S, A> = @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+
+interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Collector<A>
 
 @Given
 inline fun <@Given U : StoreKeyUi<K, S, A>, reified K : Key<*>, S, A> storeKeyUi(
@@ -68,6 +95,13 @@ inline fun <@Given U : StoreKeyUi<K, S, A>, reified K : Key<*>, S, A> storeKeyUi
     @Given state: StateFlow<S>,
     @Given collector: Collector<A>
 ): KeyUi<K> = {
-    val ui = remember(uiFactory) as @Composable (S, Collector<A>) -> Unit
-    ui(state.collectAsState().value, collector)
+    val currentState by state.collectAsState()
+    val scope = remember(collector) {
+        object : StoreKeyUiScope<K, S, A>, Collector<A> by collector {
+            override val state: S
+                get() = currentState
+        }
+    }
+    val ui = remember(uiFactory) as @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+    scope.ui()
 }

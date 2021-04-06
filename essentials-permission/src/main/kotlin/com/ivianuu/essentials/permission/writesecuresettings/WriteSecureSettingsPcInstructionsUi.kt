@@ -23,11 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.ClipboardAction
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
-import com.ivianuu.essentials.clipboard.ClipboardState
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
@@ -39,7 +37,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -55,7 +53,7 @@ class WriteSecureSettingsPcInstructionsKey(
 ) : Key<Nothing>
 
 @Given
-val writeSecureSettingsPcInstructionsUi: StateKeyUi<WriteSecureSettingsPcInstructionsKey,
+val writeSecureSettingsPcInstructionsUi: TmpStateKeyUi<WriteSecureSettingsPcInstructionsKey,
         WriteSecureSettingsPcInstructionsViewModel,
         WriteSecureSettingsPcInstructionsState> = { viewModel, state ->
     Scaffold(

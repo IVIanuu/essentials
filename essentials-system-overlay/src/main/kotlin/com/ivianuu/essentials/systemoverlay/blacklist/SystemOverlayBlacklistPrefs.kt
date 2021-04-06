@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.injekt.Given
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -15,4 +16,4 @@ data class SystemOverlayBlacklistPrefs(
 
 @Given
 val systemOverlayBlacklistPrefsModule =
-    PrefDataStoreModule<SystemOverlayBlacklistPrefs>("system_overlay_blacklist_prefs")
+    PrefStoreModule<SystemOverlayBlacklistPrefs>("system_overlay_blacklist_prefs")

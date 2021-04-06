@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Toaster
@@ -48,7 +48,7 @@ import kotlinx.coroutines.flow.StateFlow
 class ShortcutPickerKey : Key<Shortcut>
 
 @Given
-val shortcutPickerUi: StateKeyUi<ShortcutPickerKey, ShortcutPickerViewModel,
+val shortcutPickerUi: TmpStateKeyUi<ShortcutPickerKey, ShortcutPickerViewModel,
         ShortcutPickerState> = { viewModel, state ->
         Scaffold(
             topBar = {

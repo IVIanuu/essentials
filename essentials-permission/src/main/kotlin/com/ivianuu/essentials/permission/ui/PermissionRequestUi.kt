@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.take
 class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
 @Given
-val permissionRequestUi: StateKeyUi<PermissionRequestKey, PermissionRequestViewModel,
+val permissionRequestUi: TmpStateKeyUi<PermissionRequestKey, PermissionRequestViewModel,
         PermissionRequestState> = { viewModel, state ->
     Scaffold(
         topBar = {

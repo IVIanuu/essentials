@@ -55,7 +55,7 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = { state, collector ->
+val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,7 +75,7 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = { s
                         contentDescription = null
                     )
                 },
-                onClick = { collector.tryEmit(PickApp(app)) }
+                onClick = { tryEmit(PickApp(app)) }
             )
         }
     }

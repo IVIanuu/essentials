@@ -41,7 +41,7 @@ val torchHomeItem = HomeItem("Torch") { TorchKey() }
 class TorchKey : Key<Nothing>
 
 @Given
-val torchUi: StoreKeyUi<TorchKey, TorchState, TorchAction> = { state, collector ->
+val torchUi: StoreKeyUi<TorchKey, TorchState, TorchAction> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(
             modifier = Modifier.center(),
@@ -53,7 +53,7 @@ val torchUi: StoreKeyUi<TorchKey, TorchState, TorchAction> = { state, collector 
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { collector.tryEmit(UpdateTorchEnabled(!state.torchEnabled)) }
+                onClick = { tryEmit(UpdateTorchEnabled(!state.torchEnabled)) }
             ) {
                 Text("Toggle torch")
             }

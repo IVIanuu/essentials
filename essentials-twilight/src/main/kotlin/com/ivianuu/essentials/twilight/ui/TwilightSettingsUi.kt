@@ -40,8 +40,7 @@ import com.ivianuu.injekt.Given
 class TwilightSettingsKey : Key<Nothing>
 
 @Given
-fun twilightSettingsUi(): StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAction<TwilightPrefs>
-        > = { prefs, collector ->
+val twilightSettingsUi: StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAction<TwilightPrefs>> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
@@ -49,8 +48,8 @@ fun twilightSettingsUi(): StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAc
             items(TwilightMode.values()) { mode ->
                 TwilightModeItem(
                     mode = mode,
-                    isSelected = prefs.twilightMode == mode,
-                    onClick = { collector.tryUpdate { copy(twilightMode = mode) } }
+                    isSelected = state.twilightMode == mode,
+                    onClick = { tryUpdate { copy(twilightMode = mode) } }
                 )
             }
             item {
@@ -58,8 +57,8 @@ fun twilightSettingsUi(): StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAc
             }
             item {
                 CheckboxListItem(
-                    value = prefs.useBlackInDarkMode,
-                    onValueChange = { collector.tryUpdate { copy(useBlackInDarkMode = it) } },
+                    value = state.useBlackInDarkMode,
+                    onValueChange = { tryUpdate { copy(useBlackInDarkMode = it) } },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

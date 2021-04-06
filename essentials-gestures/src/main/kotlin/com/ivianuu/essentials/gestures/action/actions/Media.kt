@@ -98,7 +98,7 @@ class MediaActionSettingsKey : Key<Nothing>
 
 @Given
 val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSettingsState,
-        MediaActionSettingsAction> = { state, collector ->
+        MediaActionSettingsAction> = {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
     }) {
@@ -115,7 +115,7 @@ val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSetting
                             )
                         )
                     },
-                    onClick = { collector.tryEmit(UpdateMediaApp) }
+                    onClick = { tryEmit(UpdateMediaApp) }
                 )
             }
         }

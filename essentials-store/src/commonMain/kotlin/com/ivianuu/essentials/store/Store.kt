@@ -46,7 +46,7 @@ class StoreBuilderModule<@Given T : StoreBuilder<GS, S, A>, GS : GivenScope, S, 
         @Given initial: @InitialOrFallback S,
         @Given actions: MutableSharedFlow<A>,
         @Given scope: ScopeCoroutineScope<GS>
-    ): @Scoped<GS> Store<S, A> = builder.toStore(scope, initial, actions)
+    ): @Scoped<GS> Store<S, A> = scope.store(initial, actions, builder)
 
     @Given
     val actions: @Scoped<GS> MutableSharedFlow<A>

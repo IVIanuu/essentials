@@ -4,19 +4,22 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.actionsOf
+import com.ivianuu.essentials.store.collectIn
 import com.ivianuu.essentials.systemoverlay.R
+import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.*
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 
 class SystemOverlayAppBlacklistKey : Key<Nothing>
 
@@ -24,13 +27,12 @@ class SystemOverlayAppBlacklistKey : Key<Nothing>
 fun systemOverlayAppBlacklistUi(
     @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given resourceProvider: ResourceProvider
-): StateKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistViewModel,
-        SystemOverlayAppBlacklistState> = { viewModel, state ->
+): StoreKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
     remember {
         checkableAppsPageFactory(
             CheckableAppsParams(
                 checkedApps = state.appBlacklist,
-                onCheckedAppsChanged = { viewModel.updateAppBlacklist(it) },
+                onCheckedAppsChanged = { tryEmit(UpdateAppBlacklist(it)) },
                 appFilter = DefaultAppFilter,
                 appBarTitle = resourceProvider.string(R.string.es_system_overlay_blacklist_title)
             )
@@ -38,17 +40,21 @@ fun systemOverlayAppBlacklistUi(
     }.invoke()
 }
 
-data class SystemOverlayAppBlacklistState(val appBlacklist: Flow<Set<String>> = emptyFlow()) : State()
+data class SystemOverlayAppBlacklistState(val appBlacklist: Flow<Set<String>> = emptyFlow())
 
-@Scoped<KeyUiGivenScope>
+sealed class SystemOverlayAppBlacklistAction {
+    data class UpdateAppBlacklist(val appBlacklist: Set<String>) : SystemOverlayAppBlacklistAction()
+}
+
 @Given
-class SystemOverlayAppBlacklistViewModel(
-    @Given private val pref: DataStore<SystemOverlayBlacklistPrefs>,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, SystemOverlayAppBlacklistState>
-) : StateFlow<SystemOverlayAppBlacklistState> by store {
-    fun updateAppBlacklist(appBlacklist: Set<String>) = store.effect {
-        pref.update {
-            copy(appBlacklist = appBlacklist)
+fun systemOverlayAppBlacklistStore(
+    @Given prefStore: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>
+): StoreBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
+    update { copy(appBlacklist = prefStore.map { it.appBlacklist }) }
+    actionsOf<UpdateAppBlacklist>()
+        .collectIn(this) { action ->
+            prefStore.update {
+                copy(appBlacklist = action.appBlacklist)
+            }
         }
-    }
 }

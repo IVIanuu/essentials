@@ -5,9 +5,12 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -16,7 +19,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.Scoped
@@ -25,7 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
 @Given
-val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistViewModel,
+val systemOverlayBlacklistUi: TmpStateKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistViewModel,
         SystemOverlayBlacklistUiState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }
@@ -116,7 +119,7 @@ data class SystemOverlayBlacklistUiState(
 @Given
 class SystemOverlayBlacklistViewModel(
     @Given private val navigator: Navigator,
-    @Given private val pref: DataStore<SystemOverlayBlacklistPrefs>,
+    @Given private val pref: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>,
     @Given private val store: ScopeStateStore<KeyUiGivenScope, SystemOverlayBlacklistUiState>
 ) : StateFlow<SystemOverlayBlacklistUiState> by store {
     init {

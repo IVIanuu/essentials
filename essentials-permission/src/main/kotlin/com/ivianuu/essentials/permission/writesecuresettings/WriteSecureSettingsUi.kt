@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -49,7 +49,7 @@ class WriteSecureSettingsKey(
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSettingsViewModel,
+val writeSecureSettingsUi: TmpStateKeyUi<WriteSecureSettingsKey, WriteSecureSettingsViewModel,
         WriteSecureSettingsState> = { viewModel, state ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }

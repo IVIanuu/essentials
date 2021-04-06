@@ -72,8 +72,7 @@ class ActionPickerKey(
 }
 
 @Given
-val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerAction
-        > = { state, collector ->
+val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
     ) {
@@ -81,12 +80,12 @@ val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerA
             ListItem(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { collector.tryEmit(OpenActionSettings(item)) }) {
+                    IconButton(onClick = { tryEmit(OpenActionSettings(item)) }) {
                         Icon(painterResource(R.drawable.es_ic_settings), null)
                     }
                 }) else null,
                 title = { Text(item.title) },
-                onClick = { collector.tryEmit(PickAction(item)) }
+                onClick = { tryEmit(PickAction(item)) }
             )
         }
     }

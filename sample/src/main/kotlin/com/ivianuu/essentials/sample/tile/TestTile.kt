@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.coroutines.par
+import com.ivianuu.essentials.coroutines.withLatestFrom
 import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.store.Store
@@ -29,36 +29,10 @@ import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileAction.*
 import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.tupleOf
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-
-private object NULL
-
-@Suppress("UNCHECKED_CAST")
-fun <A, B> Flow<A>.withLatestFrom(other: Flow<B>): Flow<Tuple2<A, B>> = channelFlow {
-    val otherState = MutableStateFlow<Any?>(NULL)
-    par(
-        {
-            other.collect(otherState)
-        },
-        {
-            this@withLatestFrom
-                .collect { a ->
-                    val b = otherState.first { it !== NULL } as B
-                    offer(tupleOf(a, b))
-                }
-        }
-    )
-}
 
 @Given
 fun testTile(

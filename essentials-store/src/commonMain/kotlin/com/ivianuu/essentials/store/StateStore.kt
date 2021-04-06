@@ -8,7 +8,6 @@ import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
-import kotlinx.coroutines.flow.StateFlow
 
 @Qualifier
 annotation class InitialOrFallback
@@ -20,6 +19,7 @@ inline fun <reified T : Any> initialOrFallback(
 
 typealias ScopeStateStore<S, T> = StateStore<T>
 
+@Deprecated("Lol")
 typealias State = Any
 
 @Given
@@ -29,3 +29,4 @@ fun <S : GivenScope, T : State> scopeStateStore(
 ): @Scoped<S> ScopeStateStore<S, T> = scope.stateStore(initial)
 
 expect fun <T : Any> KClass<T>.newInstance(): T
+
