@@ -22,8 +22,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.StoreAction
-import com.ivianuu.essentials.data.StoreAction.*
+import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
@@ -33,7 +32,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
@@ -41,7 +40,7 @@ import com.ivianuu.injekt.Given
 class TwilightSettingsKey : Key<Nothing>
 
 @Given
-fun twilightSettingsUi(): FeatureKeyUi<TwilightSettingsKey, TwilightPrefs, StoreAction<TwilightPrefs>
+fun twilightSettingsUi(): StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAction<TwilightPrefs>
         > = { prefs, collector ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }

@@ -60,10 +60,10 @@ inline fun <@Given U : StateKeyUi<K, T, S>, reified K : Key<*>,
     ui(state, state.collectAsState().value)
 }
 
-typealias FeatureKeyUi<K, S, A> = @Composable (S, Collector<A>) -> Unit
+typealias StoreKeyUi<K, S, A> = @Composable (S, Collector<A>) -> Unit
 
 @Given
-inline fun <@Given U : FeatureKeyUi<K, S, A>, reified K : Key<*>, S, A> featureKeyUi(
+inline fun <@Given U : StoreKeyUi<K, S, A>, reified K : Key<*>, S, A> storeKeyUi(
     @Given noinline uiFactory: () -> U,
     @Given state: StateFlow<S>,
     @Given collector: Collector<A>

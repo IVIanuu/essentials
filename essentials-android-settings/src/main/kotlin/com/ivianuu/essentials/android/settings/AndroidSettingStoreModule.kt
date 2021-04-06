@@ -2,9 +2,9 @@ package com.ivianuu.essentials.android.settings
 
 import android.provider.Settings
 import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.data.StoreAction
-import com.ivianuu.essentials.data.StoreAction.*
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.ValueAction.*
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -16,16 +16,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-class AndroidSettingFeatureModule<T : S, S>(
+class AndroidSettingStoreModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
 ) {
     @Given
-    fun feature(
+    fun store(
         @Given adapter: AndroidSettingAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given dispatcher: IODispatcher
-    ): FeatureBuilder<AppGivenScope, T, StoreAction<T>> = {
+    ): StoreBuilder<AppGivenScope, T, ValueAction<T>> = {
         contentChangesFactory(
             when (type) {
                 AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)

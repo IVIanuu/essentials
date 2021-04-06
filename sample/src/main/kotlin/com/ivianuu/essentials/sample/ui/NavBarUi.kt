@@ -32,15 +32,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.tryUpdate
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -63,7 +62,7 @@ class NavBarKey : Key<Nothing>
 @Given
 fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
-    @Given navBarPrefStore: Feature<NavBarPrefs, StoreAction<NavBarPrefs>>,
+    @Given navBarPrefStore: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
     @Given navigator: Navigator,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester

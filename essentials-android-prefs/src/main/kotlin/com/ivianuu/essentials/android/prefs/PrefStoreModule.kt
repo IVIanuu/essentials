@@ -9,9 +9,9 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.data.StoreAction
-import com.ivianuu.essentials.data.StoreAction.Update
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.ValueAction.Update
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.InitialOrFallback
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -23,15 +23,15 @@ import java.io.OutputStream
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
-class PrefFeatureModule<T : Any>(private val name: String) {
+class PrefStoreModule<T : Any>(private val name: String) {
     @Given
-    fun feature(
+    fun store(
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given jsonFactory: () -> Json,
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir
-    ): FeatureBuilder<AppGivenScope, T, StoreAction<T>> = {
+    ): StoreBuilder<AppGivenScope, T, ValueAction<T>> = {
         val dataStore =  DataStoreFactory.create(
             produceFile = { prefsDir().resolve(name) },
             serializer = object : Serializer<T> {

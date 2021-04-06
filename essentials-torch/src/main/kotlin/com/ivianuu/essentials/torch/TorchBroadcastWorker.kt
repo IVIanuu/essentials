@@ -18,7 +18,7 @@ package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.collect
 @Given
 fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given torch: Feature<TorchState, TorchAction>
+    @Given torch: Store<TorchState, TorchAction>
 ): ScopeWorker<AppGivenScope> = {
     broadcastsFactory(ACTION_DISABLE_TORCH)
         .collect { torch.emit(UpdateTorchEnabled(false)) }

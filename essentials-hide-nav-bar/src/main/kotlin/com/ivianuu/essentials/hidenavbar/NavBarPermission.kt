@@ -4,13 +4,12 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -33,7 +32,7 @@ class NavBarPermission(
 @Given
 fun disableHideNavBarWhenPermissionRevokedWorker(
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-    @Given prefStore: Feature<NavBarPrefs, StoreAction<NavBarPrefs>>
+    @Given prefStore: Store<NavBarPrefs, ValueAction<NavBarPrefs>>
 ): ScopeWorker<AppGivenScope> = {
     permissionState
         .filter { !it }

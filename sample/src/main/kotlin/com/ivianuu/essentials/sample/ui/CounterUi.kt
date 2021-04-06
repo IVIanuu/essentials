@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.*
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -35,7 +35,7 @@ import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.util.Toaster
@@ -48,7 +48,7 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey : Key<Nothing>
 
 @Given
-val counterUi: FeatureKeyUi<CounterKey, CounterState, CounterAction> = { state, collector ->
+val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = { state, collector ->
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -87,9 +87,9 @@ sealed class CounterAction {
 }
 
 @Given
-fun counterFeature(
+fun counterStore(
     @Given toaster: Toaster
-): FeatureBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
+): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
     actionsOf<Inc>()
         .updateIn(this) { copy(count = count.inc()) }
     actionsOf<Dec>()

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.clipboard.ClipboardState
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.store.Collector
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State

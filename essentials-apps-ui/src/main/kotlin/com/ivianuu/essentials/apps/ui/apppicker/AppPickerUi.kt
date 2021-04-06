@@ -33,7 +33,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
@@ -42,7 +42,7 @@ import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -55,7 +55,7 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: FeatureKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = { state, collector ->
+val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = { state, collector ->
     Scaffold(
         topBar = {
             TopAppBar(
@@ -102,11 +102,11 @@ sealed class AppPickerAction {
 }
 
 @Given
-fun appPickerFeature(
+fun appPickerStore(
     @Given appRepository: AppRepository,
     @Given key: AppPickerKey,
     @Given navigator: Navigator,
-): FeatureBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
+): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
     resourceFlow { emit(appRepository.getInstalledApps()) }
         .updateIn(this) { copy(allApps = it) }
     actionsOf<PickApp>()

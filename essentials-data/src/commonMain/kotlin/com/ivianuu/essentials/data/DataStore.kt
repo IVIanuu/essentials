@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.data.StoreAction.*
+import com.ivianuu.essentials.data.ValueAction.*
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.emitAndAwait
 import kotlinx.coroutines.CompletableDeferred
@@ -12,12 +12,13 @@ interface DataStore<T> : Flow<T> {
     fun dispatchUpdate(transform: T.() -> T)
 }
 
-sealed class StoreAction<T> {
-    data class Update<T>(val transform: T.() -> T) : StoreAction<T>(),
+sealed class ValueAction<T> {
+    data class Update<T>(val transform: T.() -> T) : ValueAction<T>(),
         CompletableDeferred<T> by CompletableDeferred()
 }
 
-fun <T> Collector<StoreAction<T>>.tryUpdate(transform: T.() -> T) = tryEmit(Update(transform))
+fun <T> Collector<ValueAction<T>>.tryUpdate(transform: T.() -> T) = tryEmit(Update(transform))
 
 suspend fun <T> Collector<in Update<T>>.update(transform: T.() -> T): T =
     emitAndAwait(Update(transform))
+

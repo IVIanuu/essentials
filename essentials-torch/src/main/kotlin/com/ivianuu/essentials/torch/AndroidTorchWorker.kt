@@ -20,7 +20,7 @@ import android.hardware.camera2.CameraManager
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.collect
 @Given
 fun androidTorchWorker(
     @Given cameraManager: CameraManager,
-    @Given torch: Feature<TorchState, TorchAction>,
+    @Given torch: Store<TorchState, TorchAction>,
     @Given toaster: Toaster
 ): ScopeWorker<AppGivenScope> = {
     torch

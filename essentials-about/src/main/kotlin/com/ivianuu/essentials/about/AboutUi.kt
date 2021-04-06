@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.about.AboutAction.*
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.first
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: FeatureKeyUi<AboutKey, AboutState, AboutAction> = { state, collector ->
+val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = { state, collector ->
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
@@ -115,10 +115,10 @@ sealed class AboutAction {
 }
 
 @Given
-fun aboutFeature(
+fun aboutStore(
     @Given buildInfo: BuildInfo,
     @Given navigator: Navigator
-): FeatureBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
+): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
     actionsOf<Rate>()
         .collectIn(this) {
             navigator.push(

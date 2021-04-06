@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -28,8 +28,8 @@ import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.Feature
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -53,7 +53,7 @@ import kotlinx.coroutines.flow.first
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: FeatureKeyUi<NavBarKey, NavBarState, NavBarAction> = { state, collector ->
+val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = { state, collector ->
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {
@@ -91,12 +91,12 @@ sealed class NavBarAction {
 }
 
 @Given
-fun navBarFeature(
+fun navBarStore(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
-    @Given pref: Feature<NavBarPrefs, StoreAction<NavBarPrefs>>,
+    @Given pref: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
     @Given resourceProvider: ResourceProvider,
-): FeatureBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
+): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
     pref
         .updateIn(this) {
             copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)

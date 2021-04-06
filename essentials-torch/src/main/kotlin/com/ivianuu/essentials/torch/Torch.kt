@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.updateIn
@@ -31,7 +31,7 @@ sealed class TorchAction {
 }
 
 @Given
-val torchFeature: FeatureBuilder<AppGivenScope, TorchState, TorchAction> = {
+val torchStore: StoreBuilder<AppGivenScope, TorchState, TorchAction> = {
     actionsOf<UpdateTorchEnabled>()
         .updateIn(this) { copy(torchEnabled = it.value) }
 }

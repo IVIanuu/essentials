@@ -17,10 +17,9 @@
 package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.StoreAction
-import com.ivianuu.essentials.data.StoreAction.*
-import com.ivianuu.essentials.store.Feature
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.ValueAction.*
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileGivenScope
@@ -34,7 +33,7 @@ import kotlinx.coroutines.flow.first
 
 @Given
 class TestTileState(
-    @Given private val twilightPrefStore: Feature<TwilightPrefs, StoreAction<TwilightPrefs>>,
+    @Given private val twilightPrefStore: Store<TwilightPrefs, ValueAction<TwilightPrefs>>,
     @Given private val store: ScopeStateStore<TileGivenScope, TileState<FunTileService1>>
 ) : TileStateStore<FunTileService1>, StateFlow<TileState<FunTileService1>> by store {
     init {

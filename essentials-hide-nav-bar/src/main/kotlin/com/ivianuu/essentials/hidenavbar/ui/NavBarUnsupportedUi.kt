@@ -5,14 +5,14 @@ import androidx.compose.material.TextButton
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.*
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogWrapper
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Given
 class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
-val navBarUnsupportedUi: FeatureKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState,
+val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState,
         NavBarUnsupportedAction> = { _, collector ->
     DialogWrapper {
         Dialog(
@@ -57,10 +57,10 @@ sealed class NavBarUnsupportedAction {
 }
 
 @Given
-fun navBarUnsupportedFeature(
+fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
-): FeatureBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
+): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
     actionsOf<OpenMoreInfos>()
         .collectIn(this) {
             navigator.push(

@@ -16,8 +16,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
-import com.ivianuu.essentials.android.prefs.PrefFeatureModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
@@ -43,12 +42,12 @@ data class NavBarPrefs(
 }
 
 @Given
-val navBarPrefsModule = PrefFeatureModule<NavBarPrefs>("nav_bar_prefs")
+val navBarPrefsModule = PrefStoreModule<NavBarPrefs>("nav_bar_prefs")
 
 internal typealias WasNavBarHidden = Boolean
 
 @Given
-val wasNavBarHiddenModule = PrefFeatureModule<WasNavBarHidden>("was_nav_bar_hidden")
+val wasNavBarHiddenModule = PrefStoreModule<WasNavBarHidden>("was_nav_bar_hidden")
 
 @Given
 val defaultWasNavBarHidden: @Initial WasNavBarHidden = false

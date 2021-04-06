@@ -22,12 +22,12 @@ import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefFeatureModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.data.StoreAction
+import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
@@ -35,8 +35,8 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.store.Feature
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.FeatureKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -92,12 +92,12 @@ data class MediaActionPrefs(
 )
 
 @Given
-val mediaActionPrefsModule = PrefFeatureModule<MediaActionPrefs>("media_action_prefs")
+val mediaActionPrefsModule = PrefStoreModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey : Key<Nothing>
 
 @Given
-val mediaActionSettingsUi: FeatureKeyUi<MediaActionSettingsKey, MediaActionSettingsState,
+val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSettingsState,
         MediaActionSettingsAction> = { state, collector ->
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
@@ -129,12 +129,12 @@ sealed class MediaActionSettingsAction {
 }
 
 @Given
-fun mediaActionSettingsFeature(
+fun mediaActionSettingsStore(
     @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given navigator: Navigator,
-    @Given pref: Feature<MediaActionPrefs, StoreAction<MediaActionPrefs>>,
-): FeatureBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
+    @Given pref: Store<MediaActionPrefs, ValueAction<MediaActionPrefs>>,
+): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
     pref
         .map { it.mediaApp }
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }

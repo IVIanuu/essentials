@@ -52,7 +52,7 @@ fun actionsUi(
                 scope.launch {
                     val action = navigator.pushForResult(ActionPickerKey())
                         ?.let { it as? ActionPickerKey.Result.Action }
-                        ?.actionKey ?: return@launch
+                        ?.actionId ?: return@launch
 
                     executeAction(action)
                 }

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.clipboard
 import android.content.ClipData
 import android.content.ClipboardManager
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
-import com.ivianuu.essentials.store.FeatureBuilder
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.actionsOf
 import com.ivianuu.essentials.store.collectIn
@@ -34,9 +34,9 @@ sealed class ClipboardAction {
 }
 
 @Given
-fun clipboardFeature(
+fun clipboardStore(
     @Given clipboardManager: ClipboardManager
-): FeatureBuilder<AppGivenScope, ClipboardState, ClipboardAction> = {
+): StoreBuilder<AppGivenScope, ClipboardState, ClipboardAction> = {
     cancellableUpdates { update ->
         val listener = ClipboardManager.OnPrimaryClipChangedListener {
             val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
