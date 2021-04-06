@@ -25,9 +25,6 @@ import com.ivianuu.injekt.Given
 data class AppInfoKey(val packageName: String) : IntentKey
 
 @Given
-val appInfoKeyModule = IntentKeyModule<AppInfoKey>()
-
-@Given
 fun appInfoKeyIntentFactory(): KeyIntentFactory<AppInfoKey> = { key ->
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         this.data = "package:${key.packageName}".toUri()
@@ -37,9 +34,6 @@ fun appInfoKeyIntentFactory(): KeyIntentFactory<AppInfoKey> = { key ->
 data class AppKey(val packageName: String) : IntentKey
 
 @Given
-val appKeyModule = IntentKeyModule<AppKey>()
-
-@Given
 fun appKeyIntentFactory(
     @Given packageManager: PackageManager
 ): KeyIntentFactory<AppKey> = { key ->
@@ -47,9 +41,6 @@ fun appKeyIntentFactory(
 }
 
 data class ShareKey(val text: String) : IntentKey
-
-@Given
-val shareKeyModule = IntentKeyModule<ShareKey>()
 
 @Given
 fun shareKeyIntentFactory(): KeyIntentFactory<ShareKey> = { key ->
@@ -63,9 +54,6 @@ fun shareKeyIntentFactory(): KeyIntentFactory<ShareKey> = { key ->
 }
 
 data class UrlKey(val url: String) : IntentKey
-
-@Given
-val urlKeyModule = IntentKeyModule<UrlKey>()
 
 @Given
 fun urlKeyIntentFactory(): KeyIntentFactory<UrlKey> = { key ->

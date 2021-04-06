@@ -20,7 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.content.FileProvider
 import com.ivianuu.essentials.ui.navigation.IntentKey
-import com.ivianuu.essentials.ui.navigation.IntentKeyModule
 import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
@@ -28,9 +27,6 @@ import com.ivianuu.injekt.android.AppContext
 import java.io.File
 
 data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
-
-@Given
-val shareBackupFileKeyModule = IntentKeyModule<ShareBackupFileKey>()
 
 @Given
 fun shareBackupFileKeyIntentFactory(
