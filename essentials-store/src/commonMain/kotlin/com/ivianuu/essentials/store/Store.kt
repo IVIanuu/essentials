@@ -4,8 +4,11 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.map
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.Qualifier
+import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -53,6 +56,30 @@ fun <S, A> StoreBuilder<*, S, A>.toStore(
     initial: S,
     actions: MutableSharedFlow<A> = EventFlow()
 ): Store<S, A> = scope.store(initial, actions, this)
+
+@Given
+class StoreFactory<GS : GivenScope, S, A>(
+    @Given private val initialFactory: () -> @InitialOrFallback S,
+    @Given private val actionsFactory: () -> @ActionsOrFallback<GS> MutableSharedFlow<A>,
+    @Given private val scope: ScopeCoroutineScope<GS>
+) {
+    operator fun invoke(
+        initial: S = initialFactory(),
+        actions: MutableSharedFlow<A> = actionsFactory(),
+        builder: StoreBuilder<GS, S, A>
+    ): Store<S, A> = scope.store(initial, actions, builder)
+}
+
+@Qualifier
+annotation class ActionsOrFallback<S : GivenScope>
+
+@Given
+fun <S : GivenScope, @ForTypeKey A> actionsOrFallback(
+    @Given actions: MutableSharedFlow<A>? = null,
+    @Given scope: S
+): @ActionsOrFallback<S> MutableSharedFlow<A> = actions ?: scope.getOrCreateScopedValue {
+    EventFlow()
+}
 
 typealias StoreBuilder<GS, S, A> = suspend StoreScope<S, A>.() -> Unit
 

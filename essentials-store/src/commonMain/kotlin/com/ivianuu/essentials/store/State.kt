@@ -70,6 +70,17 @@ fun <S> StateBuilder<*, S>.toState(
     initial: S
 ): StateFlow<S> = scope.state(initial, this)
 
+@Given
+class StateFactory<GS : GivenScope, S>(
+    @Given private val initialFactory: () -> @InitialOrFallback S,
+    @Given private val scope: ScopeCoroutineScope<GS>
+) {
+    operator fun invoke(
+        initial: S = initialFactory(),
+        builder: StateBuilder<GS, S>
+    ): StateFlow<S> = scope.state(initial, builder)
+}
+
 typealias StateBuilder<GS, S> = suspend StateScope<S>.() -> Unit
 
 @Given
