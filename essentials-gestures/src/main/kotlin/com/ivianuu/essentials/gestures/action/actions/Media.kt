@@ -22,33 +22,35 @@ import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -89,13 +91,13 @@ data class MediaActionPrefs(
 )
 
 @Given
-val mediaActionPrefsModule = PrefDataStoreModule<MediaActionPrefs>("media_action_prefs")
+val mediaActionPrefsModule = PrefStoreModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey : Key<Nothing>
 
 @Given
-val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey, MediaActionSettingsViewModel,
-        MediaActionSettingsState> = { viewModel, state ->
+val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSettingsState,
+        MediaActionSettingsAction> = {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
     }) {
@@ -112,39 +114,39 @@ val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey, MediaActionSetting
                             )
                         )
                     },
-                    onClick = { viewModel.updateMediaApp() }
+                    onClick = { emit(UpdateMediaApp) }
                 )
             }
         }
     }
 }
 
-data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle) : State()
+data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle)
 
-@Scoped<KeyUiGivenScope>
+sealed class MediaActionSettingsAction {
+    object UpdateMediaApp : MediaActionSettingsAction()
+}
+
 @Given
-class MediaActionSettingsViewModel(
-    @Given private val appRepository: AppRepository,
-    @Given private val intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given private val navigator: Navigator,
-    @Given private val pref: DataStore<MediaActionPrefs>,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, MediaActionSettingsState>
-) : StateFlow<MediaActionSettingsState> by store {
-    init {
-        pref
-            .map { it.mediaApp }
-            .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
-            .flowAsResource()
-            .updateIn(store) { copy(mediaApp = it) }
-    }
-    fun updateMediaApp() = store.effect {
+fun mediaActionSettingsStore(
+    @Given appRepository: AppRepository,
+    @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
+    @Given navigator: Collector<NavigationAction>,
+    @Given pref: Store<MediaActionPrefs, ValueAction<MediaActionPrefs>>,
+): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
+    pref
+        .map { it.mediaApp }
+        .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
+        .flowAsResource()
+        .update { copy(mediaApp = it) }
+    effectOn<UpdateMediaApp> {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )
         )
         if (newMediaApp != null) {
-            pref.update { copy(mediaApp = newMediaApp.packageName) }
+            pref.updateAndAwait { copy(mediaApp = newMediaApp.packageName) }
         }
     }
 }

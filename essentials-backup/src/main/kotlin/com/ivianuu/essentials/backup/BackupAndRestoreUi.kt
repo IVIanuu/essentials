@@ -20,25 +20,24 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.backup.BackupAndRestoreAction.*
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey,
-        BackupAndRestoreViewModel, BackupAndRestoreState> = { viewModel, _ ->
+val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, BackupAndRestoreState,
+        BackupAndRestoreAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
@@ -47,38 +46,41 @@ val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { viewModel.backupData() }
+                    onClick = { emit(BackupData) }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { viewModel.restoreData() }
+                    onClick = { emit(RestoreData) }
                 )
             }
         }
     }
 }
 
-class BackupAndRestoreState : State()
+class BackupAndRestoreState
 
-@Scoped<KeyUiGivenScope>
+sealed class BackupAndRestoreAction {
+    object BackupData : BackupAndRestoreAction()
+    object RestoreData : BackupAndRestoreAction()
+}
+
 @Given
-class BackupAndRestoreViewModel(
-    @Given private val backupCreator: BackupCreator,
-    @Given private val backupApplier: BackupApplier,
-    @Given private val toaster: Toaster,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, BackupAndRestoreState>
-) : StateFlow<BackupAndRestoreState> by store {
-    fun backupData() = store.effect {
+fun backupAndRestoreStore(
+    @Given backupCreator: BackupCreator,
+    @Given backupApplier: BackupApplier,
+    @Given toaster: Toaster,
+): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
+    effectOn<BackupData> {
         backupCreator()
             .onFailure {
                 it.printStackTrace()
                 toaster.showToast(R.string.es_backup_error)
             }
     }
-    fun restoreData() = store.effect {
+    effectOn<RestoreData> {
         backupApplier()
             .onFailure {
                 it.printStackTrace()

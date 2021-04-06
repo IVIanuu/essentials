@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.domain.TwilightState
 import com.ivianuu.essentials.twilight.ui.TwilightTheme
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { content ->
-    TwilightTheme(twilightState = twilightState) {
+    TwilightTheme(twilightState = twilightState.collectAsState().value) {
         CompositionLocalProvider(
             LocalStackTransition provides remember { HorizontalStackTransition() },
             content = content

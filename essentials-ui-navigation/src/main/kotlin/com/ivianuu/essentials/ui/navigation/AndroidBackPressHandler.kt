@@ -21,7 +21,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.UiGivenScope
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -33,13 +35,14 @@ import kotlinx.coroutines.flow.map
 @Given
 fun androidBackPressHandler(
     @Given activity: ComponentActivity,
-    @Given navigator: Navigator
+    @Given navigator: Store<NavigationState, NavigationAction>
 ): ScopeWorker<UiGivenScope> = {
     navigator
         .map { it.backStack.size > 1 }
         .distinctUntilChanged()
         .flatMapLatest { if (it) activity.backPresses() else infiniteEmptyFlow() }
-        .collect { navigator.popTop() }
+        .map { PopTop }
+        .collect { navigator.emit(it) }
 }
 
 private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {

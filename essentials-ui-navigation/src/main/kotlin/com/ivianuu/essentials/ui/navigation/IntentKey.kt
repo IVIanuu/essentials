@@ -24,16 +24,10 @@ import kotlin.reflect.KClass
 
 interface IntentKey : Key<Nothing>
 
-class IntentKeyModule<K : IntentKey>(private val keyClass: KClass<K>) {
-    @Given
-    fun keyIntentFactory(
-        @Given intentFactory: KeyIntentFactory<K>
-    ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
-
-    companion object {
-        inline operator fun <reified K : IntentKey> invoke() = IntentKeyModule(K::class)
-    }
-}
+@Given
+inline fun <@Given T : KeyIntentFactory<K>, reified K : Key<*>> keyIntentFactoryElement(
+    @Given intentFactory: T
+): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (K::class to intentFactory).cast()
 
 
 typealias KeyIntentFactory<T> = (T) -> Intent

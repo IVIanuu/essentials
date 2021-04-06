@@ -16,37 +16,35 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.ScopeStateStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.tile.FunTileService1
+import com.ivianuu.essentials.tile.TileAction
+import com.ivianuu.essentials.tile.TileAction.*
 import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.tile.TileStateStore
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 @Given
-class TestTileState(
-    @Given private val twilightPrefStore: DataStore<TwilightPrefs>,
-    @Given private val store: ScopeStateStore<TileGivenScope, TileState<FunTileService1>>
-) : TileStateStore<FunTileService1>, StateFlow<TileState<FunTileService1>> by store {
-    init {
-        twilightPrefStore
-            .updateIn(store) { it.toTileState() }
-    }
-    override fun tileClicked() = store.effect {
+fun testTile(
+    @Given twilightPrefStore: Store<TwilightPrefs, ValueAction<TwilightPrefs>>
+): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction> = {
+    twilightPrefStore.update { it.toTileState() }
+    effectOn<TileClicked> {
         val newTwilightMode = if (twilightPrefStore.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
-        twilightPrefStore.update { copy(twilightMode = newTwilightMode) }
+        twilightPrefStore.updateAndAwait { copy(twilightMode = newTwilightMode) }
     }
-
-    private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
-        label = twilightMode.name,
-        status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.ACTIVE
-        else TileState.Status.INACTIVE
-    )
 }
+
+private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
+    label = twilightMode.name,
+    status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.ACTIVE
+    else TileState.Status.INACTIVE
+)

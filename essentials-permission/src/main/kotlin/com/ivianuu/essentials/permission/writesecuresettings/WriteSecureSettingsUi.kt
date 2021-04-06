@@ -23,24 +23,27 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.*
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 
@@ -49,8 +52,8 @@ class WriteSecureSettingsKey(
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSettingsViewModel,
-        WriteSecureSettingsState> = { viewModel, state ->
+val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, WriteSecureSettingsState,
+        WriteSecureSettingsAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
@@ -64,49 +67,51 @@ val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSetting
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = { viewModel.openPcInstructions() }
+                    onClick = { emit(OpenPcInstructions) }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = { viewModel.grantPermissionsViaRoot() }
+                    onClick = { emit(GrantPermissionsViaRoot) }
                 )
             }
         }
     }
 }
 
-object WriteSecureSettingsState : State()
+object WriteSecureSettingsState
+
+sealed class WriteSecureSettingsAction {
+    object OpenPcInstructions : WriteSecureSettingsAction()
+    object GrantPermissionsViaRoot : WriteSecureSettingsAction()
+}
 
 @Given
-class WriteSecureSettingsViewModel(
-    @Given private val buildInfo: BuildInfo,
-    @Given private val key: WriteSecureSettingsKey,
-    @Given private val navigator: Navigator,
-    @Given private val permissionStateFactory: PermissionStateFactory,
-    @Given private val shell: Shell,
-    @Given private val toaster: Toaster,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, WriteSecureSettingsState>
-) : StateFlow<WriteSecureSettingsState> by store {
-    init {
-        store.effect {
-            val state = permissionStateFactory(listOf(key.permissionKey))
-            while (coroutineContext.isActive) {
-                if (state.first()) {
-                    toaster.showToast(R.string.es_secure_settings_permission_granted)
-                    navigator.pop(key, true)
-                    break
-                }
-                delay(200)
+fun writeSecureSettingsStore(
+    @Given buildInfo: BuildInfo,
+    @Given key: WriteSecureSettingsKey,
+    @Given navigator: Collector<NavigationAction>,
+    @Given permissionStateFactory: PermissionStateFactory,
+    @Given shell: Shell,
+    @Given toaster: Toaster,
+): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsState, WriteSecureSettingsAction> = {
+    effect {
+        val state = permissionStateFactory(listOf(key.permissionKey))
+        while (coroutineContext.isActive) {
+            if (state.first()) {
+                toaster.showToast(R.string.es_secure_settings_permission_granted)
+                navigator.pop(key, true)
+                break
             }
+            delay(200)
         }
     }
-    fun openPcInstructions() = store.effect {
+    effectOn<OpenPcInstructions> {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    fun grantPermissionsViaRoot() = store.effect {
+    effectOn<GrantPermissionsViaRoot> {
         runCatching {
             shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         }.onFailure {

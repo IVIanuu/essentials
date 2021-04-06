@@ -26,8 +26,8 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun defaultAppUi(
-    @Given navigationStateFlow: StateFlow<NavigationState>,
+    @Given navigationState: StateFlow<NavigationState>,
     @Given navigationStateContent: NavigationStateContent,
 ): AppUi = {
-    navigationStateContent(navigationStateFlow.collectAsState().value, Modifier)
+    navigationStateContent(navigationState.collectAsState().value, Modifier)
 }

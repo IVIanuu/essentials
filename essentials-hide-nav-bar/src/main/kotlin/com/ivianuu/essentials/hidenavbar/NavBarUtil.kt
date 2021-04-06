@@ -20,9 +20,11 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
-import com.ivianuu.essentials.android.settings.AndroidSettingDataStoreModule
+import com.ivianuu.essentials.android.settings.AndroidSettingStoreModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
@@ -35,18 +37,18 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 fun nonSdkInterfaceDetectionDisabler(
     @Given logger: Logger,
     @Given systemBuildInfo: SystemBuildInfo,
-    @Given hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
-    @Given hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
-    @Given hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>,
+    @Given hiddenApiPolicyStore: Store<HiddenApiPolicy, ValueAction<HiddenApiPolicy>>,
+    @Given hiddenApiPolicyPrePieAppsStore: Store<HiddenApiPolicyPieApps, ValueAction<HiddenApiPolicyPieApps>>,
+    @Given hiddenApiPolicyPieAppsStore: Store<HiddenApiPolicyPieApps, ValueAction<HiddenApiPolicyPieApps>>,
 ): NonSdkInterfaceDetectionDisabler = {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
-        hiddenApiPolicyStore.update { 1 }
+        hiddenApiPolicyStore.updateAndAwait { 1 }
         logger.d { "disabled non sdk on 29" }
     } else if (systemBuildInfo.sdk >= 28) {
         logger.d { "disable non sdk on p" }
-        hiddenApiPolicyPrePieAppsStore.update { 1 }
-        hiddenApiPolicyPieAppsStore.update { 1 }
+        hiddenApiPolicyPrePieAppsStore.updateAndAwait { 1 }
+        hiddenApiPolicyPieAppsStore.updateAndAwait { 1 }
         logger.d { "disabled non sdk on p" }
     }
 }
@@ -55,7 +57,7 @@ internal typealias HiddenApiPolicy = Int
 
 @Given
 val hiddenApiPolicyModule =
-    AndroidSettingDataStoreModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
+    AndroidSettingStoreModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 
 @Given
 val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
@@ -64,7 +66,7 @@ internal typealias HiddenApiPolicyPrePieApps = Int
 
 @Given
 val hiddenApiPolicyPrePieAppsModule =
-    AndroidSettingDataStoreModule<HiddenApiPolicyPrePieApps, Int>("hidden_api_policy_pre_p_apps",
+    AndroidSettingStoreModule<HiddenApiPolicyPrePieApps, Int>("hidden_api_policy_pre_p_apps",
         AndroidSettingsType.GLOBAL)
 
 @Given
@@ -74,7 +76,7 @@ internal typealias HiddenApiPolicyPieApps = Int
 
 @Given
 val hiddenApiPolicyPieAppsBinding =
-    AndroidSettingDataStoreModule<HiddenApiPolicyPieApps, Int>("hidden_api_policy_p_apps",
+    AndroidSettingStoreModule<HiddenApiPolicyPieApps, Int>("hidden_api_policy_p_apps",
         AndroidSettingsType.GLOBAL)
 
 @Given

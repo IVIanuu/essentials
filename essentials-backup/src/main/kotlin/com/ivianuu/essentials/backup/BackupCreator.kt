@@ -21,7 +21,10 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataDir
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -43,7 +46,7 @@ fun backupCreator(
     @Given dataDir: DataDir,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): BackupCreator = {
     runCatching {

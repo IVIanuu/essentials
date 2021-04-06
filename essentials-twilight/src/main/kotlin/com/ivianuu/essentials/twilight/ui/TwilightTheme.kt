@@ -44,13 +44,12 @@ fun TwilightTheme(
     blackColors: Colors = blackColors(),
     typography: Typography = Typography(),
     shapes: Shapes = Shapes(),
-    twilightState: StateFlow<TwilightState>,
+    twilightState: TwilightState,
     content: @Composable () -> Unit
 ) {
-    val currentState by twilightState.collectAsState()
-    val targetColors = remember(currentState) {
-        if (currentState.isDark) {
-            if (currentState.useBlack) blackColors else darkColors
+    val targetColors = remember(twilightState) {
+        if (twilightState.isDark) {
+            if (twilightState.useBlack) blackColors else darkColors
         } else lightColors
     }
 

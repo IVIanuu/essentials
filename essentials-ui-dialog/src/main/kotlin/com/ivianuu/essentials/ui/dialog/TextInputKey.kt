@@ -24,9 +24,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Given
 
 class TextInputKey(
@@ -42,9 +45,9 @@ typealias TextInputResult = String
 @Given
 fun textInputUi(
     @Given key: TextInputKey,
-    @Given navigator: Navigator
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<TextInputKey> = {
-    DialogWrapper {
+    DialogScaffold {
         var currentValue by remember { mutableStateOf(key.initial) }
         TextInputDialog(
             value = currentValue,
@@ -59,7 +62,7 @@ fun textInputUi(
                 ) { Text(stringResource(R.string.es_ok)) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator.pop(key) }) {
+                TextButton(onClick = { navigator.pop(key, null) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

@@ -4,9 +4,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Given
 
 class SingleChoiceListKey<T : Any>(
@@ -20,9 +23,9 @@ class SingleChoiceListKey<T : Any>(
 @Given
 fun singleChoiceListUi(
     @Given key: SingleChoiceListKey<Any>,
-    @Given navigator: Navigator
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<SingleChoiceListKey<Any>> = {
-    DialogWrapper {
+    DialogScaffold {
         SingleChoiceListDialog(
             items = remember {
                 key.items
@@ -35,7 +38,7 @@ fun singleChoiceListUi(
             },
             title = { Text(key.title) },
             negativeButton = {
-                TextButton(onClick = { navigator.pop(key) }) {
+                TextButton(onClick = { navigator.pop(key, null) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

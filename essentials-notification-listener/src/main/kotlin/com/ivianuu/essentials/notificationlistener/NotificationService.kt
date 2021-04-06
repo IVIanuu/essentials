@@ -19,41 +19,41 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.*
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
 data class NotificationServiceState(
     val isConnected: Boolean = false,
     val notifications: List<StatusBarNotification> = emptyList()
-) : State()
+)
 
-@Scoped<AppGivenScope>
+sealed class NotificationServiceAction {
+    data class OpenNotification(val notification: Notification) : NotificationServiceAction()
+    data class DismissNotification(val notificationKey: String) : NotificationServiceAction()
+    object DismissAllNotifications : NotificationServiceAction()
+}
+
 @Given
-class NotificationService(
-    @Given private val listenerServiceRef: NotificationListenerServiceRef,
-    @Given private val store: ScopeStateStore<AppGivenScope, NotificationServiceState>
-) : StateFlow<NotificationServiceState> by store {
-    init {
-        listenerServiceRef
-            .updateIn(store) { copy(isConnected = it != null) }
-        listenerServiceRef
-            .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
-            .updateIn(store) { copy(notifications = it) }
+fun notificationServiceStore(
+    @Given listenerServiceRef: NotificationListenerServiceRef
+): StoreBuilder<AppGivenScope, NotificationServiceState, NotificationServiceAction> = {
+    listenerServiceRef
+        .update { copy(isConnected = it != null) }
+    listenerServiceRef
+        .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+        .update { copy(notifications = it) }
+    effectOn<OpenNotification> { action ->
+        runCatching { action.notification.contentIntent.send() }
     }
-    fun openNotification(notification: Notification) = store.effect {
-        runCatching { notification.contentIntent.send() }
+    effectOn<DismissNotification> { action ->
+        listenerServiceRef.value?.cancelNotification(action.notificationKey)
     }
-    fun dismissNotification(key: String) = store.effect {
-        listenerServiceRef.value?.cancelNotification(key)
-    }
-    fun dismissAllNotifications() = store.effect {
+    effectOn<DismissAllNotifications> {
         listenerServiceRef.value?.cancelAllNotifications()
     }
 }

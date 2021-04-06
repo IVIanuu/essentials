@@ -7,9 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Given
 
 class MultiChoiceListKey<T : Any>(
@@ -23,9 +26,9 @@ class MultiChoiceListKey<T : Any>(
 @Given
 fun multiChoiceListUi(
     @Given key: MultiChoiceListKey<Any>,
-    @Given navigator: Navigator
+    @Given navigator: Collector<NavigationAction>
 ): KeyUi<MultiChoiceListKey<Any>> = {
-    DialogWrapper {
+    DialogScaffold {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
         MultiChoiceListDialog(
@@ -45,7 +48,7 @@ fun multiChoiceListUi(
                 ) { Text(stringResource(R.string.es_ok)) }
             },
             negativeButton = {
-                TextButton(onClick = { navigator.pop(key) }) {
+                TextButton(onClick = { navigator.pop(key, null) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }

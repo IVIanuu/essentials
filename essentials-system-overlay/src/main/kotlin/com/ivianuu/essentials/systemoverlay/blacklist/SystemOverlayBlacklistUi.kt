@@ -3,30 +3,32 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.coroutines.updateIn
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.systemoverlay.R
+import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayBlacklistAction.*
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
 @Given
-val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistViewModel,
-        SystemOverlayBlacklistUiState> = { viewModel, state ->
+val systemOverlayBlacklistUi: StoreKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistUiState,
+        SystemOverlayBlacklistAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }
     ) {
@@ -41,14 +43,14 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
                             )
                         )
                     },
-                    onClick = { viewModel.openAppBlacklistSettings() }
+                    onClick = { emit(OpenAppBlacklistSettings) }
                 )
             }
 
             item {
                 CheckboxListItem(
                     value = state.disableOnKeyboard,
-                    onValueChange = { viewModel.updateDisableOnKeyboard(it) },
+                    onValueChange = { emit(UpdateDisableOnKeyboard(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_keyboard)) },
                     subtitle = {
                         Text(
@@ -64,7 +66,7 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
             item {
                 CheckboxListItem(
                     value = state.disableOnLockScreen,
-                    onValueChange = { viewModel.updateDisableOnLockScreen(it) },
+                    onValueChange = { emit(UpdateDisableOnLockScreen(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_lock_screen)) },
                     subtitle = {
                         Text(
@@ -80,7 +82,7 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
             item {
                 CheckboxListItem(
                     value = state.disableOnSecureScreens,
-                    onValueChange = { viewModel.updateDisableOnSecureScreens(it) },
+                    onValueChange = { emit(UpdateDisableOnSecureScreens(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_secure_screens)) },
                     subtitle = {
                         Text(
@@ -101,7 +103,7 @@ data class SystemOverlayBlacklistUiState(
     val disableOnKeyboard: Boolean = false,
     val disableOnLockScreen: Boolean = false,
     val disableOnSecureScreens: Boolean = false
-) : State() {
+) {
     companion object {
         @Given
         fun initial(
@@ -112,33 +114,35 @@ data class SystemOverlayBlacklistUiState(
     }
 }
 
-@Scoped<KeyUiGivenScope>
+sealed class SystemOverlayBlacklistAction {
+    object OpenAppBlacklistSettings : SystemOverlayBlacklistAction()
+    data class UpdateDisableOnKeyboard(val value: Boolean) : SystemOverlayBlacklistAction()
+    data class UpdateDisableOnLockScreen(val value: Boolean) : SystemOverlayBlacklistAction()
+    data class UpdateDisableOnSecureScreens(val value: Boolean) : SystemOverlayBlacklistAction()
+}
+
 @Given
-class SystemOverlayBlacklistViewModel(
-    @Given private val navigator: Navigator,
-    @Given private val pref: DataStore<SystemOverlayBlacklistPrefs>,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, SystemOverlayBlacklistUiState>
-) : StateFlow<SystemOverlayBlacklistUiState> by store {
-    init {
-        pref
-            .updateIn(store) {
-                copy(
-                    disableOnKeyboard = it.disableOnKeyboard,
-                    disableOnLockScreen = it.disableOnLockScreen,
-                    disableOnSecureScreens = it.disableOnSecureScreens
-                )
-            }
+fun systemOverlayBlacklistStore(
+    @Given navigator: Collector<NavigationAction>,
+    @Given pref: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>,
+): StoreBuilder<KeyUiGivenScope, SystemOverlayBlacklistUiState, SystemOverlayBlacklistAction> = {
+    pref.update {
+        copy(
+            disableOnKeyboard = it.disableOnKeyboard,
+            disableOnLockScreen = it.disableOnLockScreen,
+            disableOnSecureScreens = it.disableOnSecureScreens
+        )
     }
-    fun openAppBlacklistSettings() = store.effect {
+    effectOn<OpenAppBlacklistSettings> {
         navigator.push(SystemOverlayAppBlacklistKey())
     }
-    fun updateDisableOnKeyboard(value: Boolean) = store.effect {
-        pref.update { copy(disableOnKeyboard = value) }
+    effectOn<UpdateDisableOnKeyboard> {
+        pref.updateAndAwait { copy(disableOnKeyboard = it.value) }
     }
-    fun updateDisableOnLockScreen(value: Boolean) = store.effect {
-        pref.update { copy(disableOnLockScreen = value) }
+    effectOn<UpdateDisableOnLockScreen> {
+        pref.updateAndAwait { copy(disableOnLockScreen = it.value) }
     }
-    fun updateDisableOnSecureScreens(value: Boolean) = store.effect {
-        pref.update { copy(disableOnSecureScreens = value) }
+    effectOn<UpdateDisableOnSecureScreens> {
+        pref.updateAndAwait { copy(disableOnSecureScreens = it.value) }
     }
 }

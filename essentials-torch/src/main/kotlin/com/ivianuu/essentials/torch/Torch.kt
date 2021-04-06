@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.coroutines.dispatchUpdate
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.updateOn
+import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 
-@Scoped<AppGivenScope>
-@Given
-class Torch(
-    @Given private val store: ScopeStateStore<AppGivenScope, TorchState>
-) : StateFlow<TorchState> by store {
-    fun updateTorchEnabled(value: Boolean) = store.dispatchUpdate {
-        copy(torchEnabled = value)
-    }
+data class TorchState(val torchEnabled: Boolean = false)
+
+sealed class TorchAction {
+    data class UpdateTorchEnabled(val value: Boolean) : TorchAction()
 }
 
-data class TorchState(val torchEnabled: Boolean = false) : State()
+@Given
+val torchStore: StoreBuilder<AppGivenScope, TorchState, TorchAction> = {
+    updateOn(UpdateTorchEnabled::class) { copy(torchEnabled = it.value) }
+}

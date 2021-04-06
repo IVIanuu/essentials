@@ -25,74 +25,74 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.ScopeStateStore
-import com.ivianuu.essentials.store.State
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.StateFlow
 
 class ShortcutPickerKey : Key<Shortcut>
 
 @Given
-val shortcutPickerUi: StateKeyUi<ShortcutPickerKey, ShortcutPickerViewModel,
-        ShortcutPickerState> = { viewModel, state ->
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.es_title_shortcut_picker)) }
-                )
-            }
-        ) {
-            ResourceLazyColumnFor(state.shortcuts) { shortcut ->
-                ListItem(
-                    leading = {
-                        Image(
-                            modifier = Modifier.size(40.dp),
-                            painter = BitmapPainter(shortcut.icon),
-                            contentDescription = null
-                        )
-                    },
-                    title = { Text(shortcut.name) },
-                    onClick = { viewModel.pickShortcut(shortcut) }
-                )
-            }
+val shortcutPickerUi: StoreKeyUi<ShortcutPickerKey, ShortcutPickerState, ShortcutPickerAction> = {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.es_title_shortcut_picker)) }
+            )
+        }
+    ) {
+        ResourceLazyColumnFor(state.shortcuts) { shortcut ->
+            ListItem(
+                leading = {
+                    Image(
+                        modifier = Modifier.size(40.dp),
+                        painter = BitmapPainter(shortcut.icon),
+                        contentDescription = null
+                    )
+                },
+                title = { Text(shortcut.name) },
+                onClick = { emit(PickShortcut(shortcut)) }
+            )
         }
     }
+}
 
-data class ShortcutPickerState(val shortcuts: Resource<List<Shortcut>> = Idle) : State()
+data class ShortcutPickerState(val shortcuts: Resource<List<Shortcut>> = Idle)
 
-@Scoped<KeyUiGivenScope>
+sealed class ShortcutPickerAction {
+    data class PickShortcut(val shortcut: Shortcut) : ShortcutPickerAction()
+}
+
 @Given
-class ShortcutPickerViewModel(
-    @Given private val activityResultLauncher: ActivityResultLauncher,
-    @Given private val key: ShortcutPickerKey,
-    @Given private val navigator: Navigator,
-    @Given private val shortcutRepository: ShortcutRepository,
-    @Given private val store: ScopeStateStore<KeyUiGivenScope, ShortcutPickerState>,
-    @Given private val toaster: Toaster
-) : StateFlow<ShortcutPickerState> by store {
-    init {
-        resourceFlow { emit(shortcutRepository.getAllShortcuts()) }
-            .updateIn(store) { copy(shortcuts = it) }
-    }
-    fun pickShortcut(shortcut: Shortcut) = store.effect {
+fun shortcutPickerStore(
+    @Given activityResultLauncher: ActivityResultLauncher,
+    @Given key: ShortcutPickerKey,
+    @Given navigator: Collector<NavigationAction>,
+    @Given shortcutRepository: ShortcutRepository,
+    @Given toaster: Toaster
+): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {
+    resourceFlow { emit(shortcutRepository.getAllShortcuts()) }
+        .update { copy(shortcuts = it) }
+    effectOn<PickShortcut> { action ->
         runCatching {
-            val shortcutRequestResult = activityResultLauncher.startActivityForResult(shortcut.intent)
-                .data ?: return@effect
+            val shortcutRequestResult = activityResultLauncher.startActivityForResult(action.shortcut.intent)
+                .data ?: return@runCatching
             val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
             navigator.pop(key, finalShortcut)
         }.onFailure {
