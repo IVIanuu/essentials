@@ -16,44 +16,39 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.coroutines.lens
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.ResultAction
 import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.mapState
 import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.sendAndAwait
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.store.store
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.StateFlow
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
 data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
 sealed class NavigationAction {
-    data class Push<R>(
-        val key: Key<R>,
-        val result: CompletableDeferred<R?>? = null
-    ) : NavigationAction()
-    data class ReplaceTop<R>(
-        val key: Key<R>,
-        val result: CompletableDeferred<R?>? = null
-    ) : NavigationAction()
+    data class Push<R>(val key: Key<R>) : NavigationAction(), ResultAction<R?> by ResultAction()
+    data class ReplaceTop<R>(val key: Key<R>) : NavigationAction(), ResultAction<R?> by ResultAction()
     data class Pop<R>(val key: Key<R>, val result: R? = null) : NavigationAction()
     object PopTop : NavigationAction()
 }
 
 fun Sink<NavigationAction>.push(key: Key<*>) = send(Push(key))
 
-suspend fun <R : Any> Sink<NavigationAction>.pushForResult(key: Key<R>): R? {
-    val result = CompletableDeferred<R?>()
-    @Suppress("UNCHECKED_CAST")
-    send(Push(key, result))
-    return result.await()
-}
+suspend fun <R : Any> Sink<Push<R>>.pushAndAwait(key: Key<R>): R? = sendAndAwait(Push(key))
 
 fun Sink<NavigationAction>.replaceTop(key: Key<*>) = send(ReplaceTop(key))
 
@@ -65,16 +60,17 @@ fun Sink<NavigationAction>.popTop() = send(PopTop)
 fun navigationStore(
     @Given intentKeyHandler: IntentKeyHandler,
     @Given logger: Logger,
-): StoreBuilder<AppGivenScope, InternalNavigationState, NavigationAction> = {
+    @Given initial: @Initial InternalNavigationState,
+    @Given actions: MutableSharedFlow<NavigationAction>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
+): @Scoped<AppGivenScope> Store<NavigationState, NavigationAction> = scope.store(initial, actions) {
     onAction<Push<*>> { action ->
         logger.d { "push ${action.key}" }
         if (!intentKeyHandler(action.key)) {
             update {
                 copy(
                     backStack = backStack + action.key,
-                    results = if (action.result != null) {
-                        results + mapOf(action.key to action.result)
-                    } else results
+                    resultActions = resultActions + mapOf(action.key to action)
                 )
             }
         }
@@ -85,18 +81,14 @@ fun navigationStore(
             update {
                 copy(
                     backStack = backStack.dropLast(1),
-                    results = if (action.result != null) {
-                        results + mapOf(action.key to action.result)
-                    } else results
+                    resultActions = resultActions + mapOf(action.key to action)
                 )
             }
         } else {
             update {
                 copy(
                     backStack = backStack.dropLast(1) + action.key,
-                    results = if (action.result != null) {
-                        results + mapOf(action.key to action.result)
-                    } else results
+                    resultActions = resultActions + mapOf(action.key to action)
                 )
             }
         }
@@ -113,28 +105,25 @@ fun navigationStore(
             popKey(topKey as Key<Any>, null)
         }
     }
-}
+}.mapState { NavigationState(it.backStack) }
+
+@Given
+val navigationActions: @Scoped<AppGivenScope> MutableSharedFlow<NavigationAction>
+    get() = EventFlow()
 
 private fun <R : Any> InternalNavigationState.popKey(key: Key<R>, result: R?): InternalNavigationState {
     @Suppress("UNCHECKED_CAST")
-    val deferredResult = results[key] as? CompletableDeferred<R?>
-    deferredResult?.complete(result)
+    val resultAction = resultActions[key] as? ResultAction<R?>
+    resultAction?.set(result)
     return copy(
         backStack = backStack - key,
-        results = results - key
+        resultActions = resultActions - key
     )
 }
 
-@Given
-fun Store<InternalNavigationState, NavigationAction>.toNavigationState(
-) : Store<NavigationState, NavigationAction> = object : Store<NavigationState, NavigationAction>,
-    Sink<NavigationAction> by this,
-    StateFlow<NavigationState> by (lens { NavigationState(it.backStack) }) {
-    }
-
 data class InternalNavigationState(
     val backStack: List<Key<*>> = emptyList(),
-    val results: Map<Key<*>, CompletableDeferred<out Any?>> = emptyMap(),
+    val resultActions: Map<Key<*>, ResultAction<out Any?>> = emptyMap(),
 ) {
     companion object {
         @Given

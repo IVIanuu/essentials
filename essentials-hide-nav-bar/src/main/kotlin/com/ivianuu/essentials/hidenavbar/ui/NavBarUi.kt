@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -106,7 +106,7 @@ fun navBarStore(
         } else Unit
     }
     onAction<UpdateNavBarRotationMode> {
-        navigator.pushForResult(
+        navigator.pushAndAwait(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()
                     .map { mode ->

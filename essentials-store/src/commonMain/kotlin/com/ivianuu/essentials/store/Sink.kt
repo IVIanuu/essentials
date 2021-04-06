@@ -18,11 +18,25 @@ fun <T> FlowCollector<T>.asSink(scope: CoroutineScope) = Sink<T> {
     scope.launch { emit(it) }
 }
 
-interface HasResult<R> {
-    val result: CompletableDeferred<R>
+interface ResultAction<R> {
+    val hasResult: Boolean
+    suspend fun await(): R
+    fun set(value: R)
 }
 
-suspend fun <T : HasResult<R>, R> Sink<T>.sendAndAwait(action: T): R {
+fun <R> ResultAction(): ResultAction<R> = ResultActionImpl()
+
+private class ResultActionImpl<R> : ResultAction<R> {
+    private val completableDeferred = CompletableDeferred<R>()
+    override val hasResult: Boolean
+        get() = completableDeferred.isCompleted
+    override suspend fun await(): R = completableDeferred.await()
+    override fun set(value: R) {
+        completableDeferred.complete(value)
+    }
+}
+
+suspend fun <T : ResultAction<R>, R> Sink<T>.sendAndAwait(action: T): R {
     send(action)
-    return action.result.await()
+    return action.await()
 }

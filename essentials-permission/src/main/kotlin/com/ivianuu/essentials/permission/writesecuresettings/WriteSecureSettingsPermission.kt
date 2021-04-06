@@ -23,7 +23,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.ForTypeKey
@@ -43,5 +43,5 @@ fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvid
 fun <@ForTypeKey P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
     @Given navigator: Sink<NavigationAction>
 ): PermissionRequestHandler<P> = {
-    navigator.pushForResult(WriteSecureSettingsKey(typeKeyOf<P>()))
+    navigator.pushAndAwait(WriteSecureSettingsKey(typeKeyOf<P>()))
 }

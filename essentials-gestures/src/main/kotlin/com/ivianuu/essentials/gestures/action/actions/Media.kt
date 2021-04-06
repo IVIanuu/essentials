@@ -47,7 +47,7 @@ import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -140,7 +140,7 @@ fun mediaActionSettingsStore(
         .flowAsResource()
         .update { copy(mediaApp = it) }
     onAction<UpdateMediaApp> {
-        val newMediaApp = navigator.pushForResult(
+        val newMediaApp = navigator.pushAndAwait(
             AppPickerKey(
                 intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )

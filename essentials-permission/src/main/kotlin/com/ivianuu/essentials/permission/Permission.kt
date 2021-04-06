@@ -24,7 +24,7 @@ import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -144,7 +144,7 @@ fun permissionRequester(
 
         appUiStarter()
 
-        val result = navigator.pushForResult(
+        val result = navigator.pushAndAwait(
             PermissionRequestKey(requestedPermissions)) == true
         logger.d { "request permissions result $requestedPermissions -> $result" }
         return@withContext result

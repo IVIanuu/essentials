@@ -35,7 +35,7 @@ import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
@@ -84,7 +84,7 @@ class ShortcutActionPickerDelegate(
     }
 
     override suspend fun getResult(): ActionPickerKey.Result? {
-        val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
+        val shortcut = navigator.pushAndAwait(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
         val stream = ByteArrayOutputStream()

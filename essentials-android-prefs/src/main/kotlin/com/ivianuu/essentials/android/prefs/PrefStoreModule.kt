@@ -55,7 +55,7 @@ class PrefStoreModule<T : Any>(private val name: String) {
         )
         dataStore.data.update { it }
         onAction<Update<T>> { action ->
-            action.result.complete(dataStore.updateData { action.transform(it) })
+            action.set(dataStore.updateData { action.transform(it) })
         }
     }
 }

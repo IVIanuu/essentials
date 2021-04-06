@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
@@ -52,7 +52,7 @@ fun actionsUi(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    val action = navigator.pushForResult(ActionPickerKey())
+                    val action = navigator.pushAndAwait(ActionPickerKey())
                         ?.let { it as? ActionPickerKey.Result.Action }
                         ?.actionId ?: return@launch
 

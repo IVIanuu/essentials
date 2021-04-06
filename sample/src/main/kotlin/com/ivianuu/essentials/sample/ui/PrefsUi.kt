@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushForResult
+import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -132,7 +132,7 @@ fun prefsUi(
                     subtitle = { Text("This is a text input preference") },
                     onClick = {
                         scope.launch {
-                            val newTextInput = navigator.pushForResult(
+                            val newTextInput = navigator.pushAndAwait(
                                 TextInputKey(
                                     initial = prefs.textInput,
                                     label = "Input",
@@ -150,7 +150,7 @@ fun prefsUi(
                     value = Color(prefs.color),
                     onValueChangeRequest = {
                         scope.launch {
-                            val newColor = navigator.pushForResult(
+                            val newColor = navigator.pushAndAwait(
                                 ColorPickerKey(
                                     initialColor = Color(prefs.color),
                                     title = "Color"
@@ -171,7 +171,7 @@ fun prefsUi(
                     subtitle = { Text("This is a multi select list preference") },
                     onClick = {
                         scope.launch {
-                            val newItems = navigator.pushForResult(
+                            val newItems = navigator.pushAndAwait(
                                 MultiChoiceListKey(
                                     items = listOf(
                                         MultiChoiceListKey.Item("A", "A"),
@@ -194,7 +194,7 @@ fun prefsUi(
                     subtitle = { Text("This is a single item list preference") },
                     onClick = {
                         scope.launch {
-                            val newItem = navigator.pushForResult(
+                            val newItem = navigator.pushAndAwait(
                                 SingleChoiceListKey(
                                     items = listOf(
                                         SingleChoiceListKey.Item("A", "A"),

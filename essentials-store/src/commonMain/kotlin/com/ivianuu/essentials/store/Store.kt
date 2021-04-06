@@ -2,6 +2,7 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.map
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
@@ -39,6 +40,20 @@ interface StoreScope<S, A> : StateScope<S> {
 inline fun <reified T> StoreScope<*, in T>.onAction(noinline block: suspend (T) -> Unit): Job =
     actions.filterIsInstance<T>().effect(block)
 
+fun <S, A, R> Store<S, A>.mapState(transform: (S) -> R): Store<R, A> =
+    object : Store<R, A>, Sink<A> by this, StateFlow<R> by map(transform) {
+    }
+
+fun <S, A, R> Store<S, A>.mapSink(transform: (R) -> A): Store<S, R> =
+    object : Store<S, R>, Sink<R> by (Sink { send(transform(it)) }), StateFlow<S> by this {
+    }
+
+fun <S, A> StoreBuilder<*, S, A>.toStore(
+    scope: CoroutineScope,
+    initial: S,
+    actions: MutableSharedFlow<A> = EventFlow()
+): Store<S, A> = scope.store(initial, actions, this)
+
 typealias StoreBuilder<GS, S, A> = suspend StoreScope<S, A>.() -> Unit
 
 @Given
@@ -55,9 +70,3 @@ class StoreBuilderModule<@Given T : StoreBuilder<GS, S, A>, GS : GivenScope, S, 
     val actions: @Scoped<GS> MutableSharedFlow<A>
         get() = EventFlow()
 }
-
-fun <S, A> StoreBuilder<*, S, A>.toStore(
-    scope: CoroutineScope,
-    initial: S,
-    actions: MutableSharedFlow<A> = EventFlow()
-): Store<S, A> = scope.store(initial, actions, this)
