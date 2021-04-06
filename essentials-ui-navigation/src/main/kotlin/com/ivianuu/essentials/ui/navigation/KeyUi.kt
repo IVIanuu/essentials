@@ -19,13 +19,13 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
-import androidx.compose.runtime.getValue
+import kotlin.reflect.KClass
 
 typealias KeyUi<K> = @Composable () -> Unit
 

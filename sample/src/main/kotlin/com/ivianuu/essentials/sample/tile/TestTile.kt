@@ -23,7 +23,7 @@ import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
-import com.ivianuu.essentials.tile.TileAction.*
+import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.tile.TileGivenScope
 import com.ivianuu.essentials.tile.TileState
 import com.ivianuu.essentials.twilight.data.TwilightMode

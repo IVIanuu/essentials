@@ -20,7 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.*
+import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
+import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding

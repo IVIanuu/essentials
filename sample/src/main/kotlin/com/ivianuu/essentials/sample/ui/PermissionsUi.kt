@@ -43,8 +43,8 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlin.reflect.KClass
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Given
 val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }

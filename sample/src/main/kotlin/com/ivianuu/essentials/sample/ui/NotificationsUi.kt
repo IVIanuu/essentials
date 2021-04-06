@@ -56,7 +56,9 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.*
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
+import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
@@ -73,9 +75,9 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.reflect.KClass
 
 @Given
 val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }

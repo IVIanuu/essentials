@@ -32,7 +32,9 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.*
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckedState
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get

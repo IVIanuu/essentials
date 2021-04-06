@@ -24,8 +24,8 @@ import com.ivianuu.essentials.android.settings.AndroidSettingStoreModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.updateAndAwait
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d

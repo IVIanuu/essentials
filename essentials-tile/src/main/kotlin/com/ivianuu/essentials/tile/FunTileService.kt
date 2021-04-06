@@ -19,7 +19,7 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.tile.TileAction.*
+import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope

@@ -26,8 +26,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.twilight.domain.TwilightState
 import com.ivianuu.essentials.ui.common.getValue
@@ -35,7 +33,6 @@ import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun TwilightTheme(

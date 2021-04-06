@@ -29,8 +29,8 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import java.util.zip.ZipInputStream
 import kotlinx.coroutines.withContext
+import java.util.zip.ZipInputStream
 
 typealias BackupApplier = suspend () -> Result<Unit, Throwable>
 

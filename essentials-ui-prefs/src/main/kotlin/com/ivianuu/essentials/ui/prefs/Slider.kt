@@ -41,10 +41,10 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.essentials.util.toDouble
 import com.ivianuu.essentials.util.toDuration
-import kotlin.time.Duration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlin.time.Duration
 
 @Composable
 fun DoubleSliderListItem(

@@ -19,7 +19,9 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.Notification
 import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.*
+import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.DismissAllNotifications
+import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.DismissNotification
+import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.OpenNotification
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.injekt.Given

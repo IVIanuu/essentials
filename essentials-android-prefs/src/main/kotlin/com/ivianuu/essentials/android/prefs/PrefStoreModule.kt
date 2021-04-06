@@ -11,15 +11,15 @@ import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.ValueAction.Update
-import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.InitialOrFallback
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
-import java.io.InputStream
-import java.io.OutputStream
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import java.io.InputStream
+import java.io.OutputStream
 
 class PrefStoreModule<T : Any>(private val name: String) {
     @Given

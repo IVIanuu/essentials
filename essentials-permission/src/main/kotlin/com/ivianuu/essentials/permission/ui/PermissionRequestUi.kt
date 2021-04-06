@@ -23,7 +23,7 @@ import androidx.compose.material.Text
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
-import com.ivianuu.essentials.permission.ui.PermissionRequestAction.*
+import com.ivianuu.essentials.permission.ui.PermissionRequestAction.GrantPermission
 import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction

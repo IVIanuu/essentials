@@ -28,18 +28,16 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Eager
-import java.util.Calendar
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import java.util.Calendar
 
 data class TwilightState(
     val isDark: Boolean = false,

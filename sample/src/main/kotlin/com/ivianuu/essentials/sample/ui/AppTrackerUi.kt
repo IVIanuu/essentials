@@ -51,11 +51,11 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Given
 val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }

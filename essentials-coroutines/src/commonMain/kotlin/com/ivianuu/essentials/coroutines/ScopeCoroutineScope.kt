@@ -5,11 +5,11 @@ import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.GivenScopeDisposable
 import com.ivianuu.injekt.scope.getOrCreateScopedValue
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlin.coroutines.CoroutineContext
 
 typealias ScopeCoroutineScope<S> = CoroutineScope
 

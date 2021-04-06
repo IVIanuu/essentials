@@ -24,10 +24,8 @@ import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.scope.ChildGivenScopeModule0
 import com.ivianuu.injekt.scope.ChildGivenScopeModule1
 import com.ivianuu.injekt.scope.DefaultGivenScope
-import kotlinx.coroutines.flow.StateFlow
 
 typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction>>
 

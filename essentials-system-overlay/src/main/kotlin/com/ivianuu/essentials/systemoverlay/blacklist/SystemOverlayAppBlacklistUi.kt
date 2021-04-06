@@ -10,7 +10,7 @@ import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.*
+import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistAction.UpdateAppBlacklist
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi

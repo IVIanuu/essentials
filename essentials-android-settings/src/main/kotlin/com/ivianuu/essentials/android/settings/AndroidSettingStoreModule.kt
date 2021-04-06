@@ -3,9 +3,9 @@ package com.ivianuu.essentials.android.settings
 import android.provider.Settings
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.ValueAction.*
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.data.ValueAction.Update
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Given
