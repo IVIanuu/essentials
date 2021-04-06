@@ -23,7 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -49,7 +49,7 @@ val twilightSettingsUi: StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueActi
                 TwilightModeItem(
                     mode = mode,
                     isSelected = state.twilightMode == mode,
-                    onClick = { tryUpdate { copy(twilightMode = mode) } }
+                    onClick = { update { copy(twilightMode = mode) } }
                 )
             }
             item {
@@ -58,7 +58,7 @@ val twilightSettingsUi: StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueActi
             item {
                 CheckboxListItem(
                     value = state.useBlackInDarkMode,
-                    onValueChange = { tryUpdate { copy(useBlackInDarkMode = it) } },
+                    onValueChange = { update { copy(useBlackInDarkMode = it) } },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

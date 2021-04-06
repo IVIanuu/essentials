@@ -31,7 +31,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import com.ivianuu.essentials.ui.core.InsetsPadding
 
 @Composable
-fun DialogWrapper(
+fun DialogScaffold(
     dismissible: Boolean = true,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = defaultDismissRequestHandler,

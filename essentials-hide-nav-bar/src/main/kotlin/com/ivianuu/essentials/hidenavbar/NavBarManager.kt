@@ -23,7 +23,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.store.Store
@@ -73,11 +73,11 @@ fun navBarManager(
             if (currentPrefs.hideNavBar) {
                 displayRotation
                     .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
-                    .onEach { wasNavBarHiddenStore.update { true } }
+                    .onEach { wasNavBarHiddenStore.updateAndAwait { true } }
             } else {
                 flowOf(NavBarState.Visible)
                     .filter { wasNavBarHiddenStore.first() }
-                    .onEach { wasNavBarHiddenStore.update { false } }
+                    .onEach { wasNavBarHiddenStore.updateAndAwait { false } }
             }
         }
         .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }

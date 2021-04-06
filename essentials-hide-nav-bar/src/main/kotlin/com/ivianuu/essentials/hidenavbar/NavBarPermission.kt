@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
@@ -36,5 +36,5 @@ fun disableHideNavBarWhenPermissionRevokedWorker(
 ): ScopeWorker<AppGivenScope> = {
     permissionState
         .filter { !it }
-        .collect { prefStore.update { copy(hideNavBar = false) } }
+        .collect { prefStore.updateAndAwait { copy(hideNavBar = false) } }
 }

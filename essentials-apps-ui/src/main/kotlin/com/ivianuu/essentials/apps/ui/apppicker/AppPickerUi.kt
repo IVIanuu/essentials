@@ -33,6 +33,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.effectOn
@@ -42,7 +43,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 
@@ -72,7 +74,7 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
                         contentDescription = null
                     )
                 },
-                onClick = { tryEmit(PickApp(app)) }
+                onClick = { emit(PickApp(app)) }
             )
         }
     }
@@ -102,7 +104,7 @@ sealed class AppPickerAction {
 fun appPickerStore(
     @Given appRepository: AppRepository,
     @Given key: AppPickerKey,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
 ): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
     resourceFlow { emit(appRepository.getInstalledApps()) }.update { copy(allApps = it) }
     effectOn<PickApp> { navigator.pop(key, it.app) }

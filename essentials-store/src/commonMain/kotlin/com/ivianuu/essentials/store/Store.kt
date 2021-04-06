@@ -27,8 +27,9 @@ fun <S, A> CoroutineScope.store(
         }.block()
     }
     return object : Store<S, A>, StateFlow<S> by state, Collector<A> {
-        override suspend fun emit(value: A) = actions.emit(value)
-        override fun tryEmit(action: A): Boolean = actions.tryEmit(action)
+        override fun emit(value: A) {
+            actions.tryEmit(value)
+        }
     }
 }
 

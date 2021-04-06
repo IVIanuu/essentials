@@ -21,15 +21,13 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.ValueAction.Update
-import com.ivianuu.essentials.data.tryUpdate
-import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
@@ -42,7 +40,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -60,7 +59,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
             item {
                 SwitchListItem(
                     value = state.hideNavBar,
-                    onValueChange = { tryEmit(UpdateHideNavBar(it)) },
+                    onValueChange = { emit(UpdateHideNavBar(it)) },
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -69,7 +68,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
                     modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = { tryEmit(UpdateNavBarRotationMode) }
+                    onClick = { emit(UpdateNavBarRotationMode) }
                 )
             }
         }
@@ -91,7 +90,7 @@ sealed class NavBarAction {
 
 @Given
 fun navBarStore(
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given permissionRequester: PermissionRequester,
     @Given pref: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
     @Given resourceProvider: ResourceProvider,
@@ -101,9 +100,9 @@ fun navBarStore(
     }
     effectOn<UpdateHideNavBar> { action ->
         if (!action.value) {
-            pref.tryUpdate { copy(hideNavBar = false) }
+            pref.update { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-            pref.tryUpdate { copy(hideNavBar = action.value) }
+            pref.update { copy(hideNavBar = action.value) }
         } else Unit
     }
     effectOn<UpdateNavBarRotationMode> {
@@ -120,7 +119,7 @@ fun navBarStore(
                 title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
             )
         )?.let { newRotationMode ->
-            pref.tryUpdate { copy(navBarRotationMode = newRotationMode) }
+            pref.update { copy(navBarRotationMode = newRotationMode) }
         }
     }
 }

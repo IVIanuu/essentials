@@ -40,6 +40,7 @@ import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.effectOn
@@ -49,14 +50,12 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 
 class ActionPickerKey(
     val showDefaultOption: Boolean = false,
@@ -78,12 +77,12 @@ val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerA
             ListItem(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { tryEmit(OpenActionSettings(item)) }) {
+                    IconButton(onClick = { emit(OpenActionSettings(item)) }) {
                         Icon(painterResource(R.drawable.es_ic_settings), null)
                     }
                 }) else null,
                 title = { Text(item.title) },
-                onClick = { tryEmit(PickAction(item)) }
+                onClick = { emit(PickAction(item)) }
             )
         }
     }
@@ -100,7 +99,7 @@ sealed class ActionPickerAction {
 fun actionPickerStore(
     @Given actionRepository: ActionRepository,
     @Given key: ActionPickerKey,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given permissionRequester: PermissionRequester,
     @Given resourceProvider: ResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {

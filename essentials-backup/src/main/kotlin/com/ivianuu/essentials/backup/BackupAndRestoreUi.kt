@@ -46,14 +46,14 @@ val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, BackupAndRestoreState,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { tryEmit(BackupData) }
+                    onClick = { emit(BackupData) }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { tryEmit(RestoreData) }
+                    onClick = { emit(RestoreData) }
                 )
             }
         }

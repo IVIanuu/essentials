@@ -24,9 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -41,7 +44,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -58,8 +62,8 @@ class PrefsKey : Key<Nothing>
 
 @Given
 fun prefsUi(
-    @Given navigator: Navigator,
-    @Given prefStore: DataStore<SamplePrefs>,
+    @Given navigator: Collector<NavigationAction>,
+    @Given prefStore: Store<SamplePrefs, ValueAction<SamplePrefs>>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {
     val prefs by prefStore.collectAsState(remember { SamplePrefs() })
@@ -71,7 +75,7 @@ fun prefsUi(
                 SwitchListItem(
                     value = prefs.switch,
                     onValueChange = {
-                        prefStore.dispatchUpdate { copy(switch = it) }
+                        prefStore.update { copy(switch = it) }
                     },
                     title = { Text("Switch") }
                 )
@@ -83,7 +87,7 @@ fun prefsUi(
                 CheckboxListItem(
                     value = prefs.checkbox,
                     onValueChange = {
-                        prefStore.dispatchUpdate { copy(checkbox = it) }
+                        prefStore.update { copy(checkbox = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Checkbox") },
@@ -95,7 +99,7 @@ fun prefsUi(
                 RadioButtonListItem(
                     value = prefs.radioButton,
                     onValueChange = {
-                        prefStore.dispatchUpdate { copy(radioButton = it) }
+                        prefStore.update { copy(radioButton = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Radio Button") },
@@ -106,7 +110,7 @@ fun prefsUi(
                 IntSliderListItem(
                     value = prefs.slider,
                     onValueChange = {
-                        prefStore.dispatchUpdate { copy(slider = it) }
+                        prefStore.update { copy(slider = it) }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Slider") },
@@ -136,7 +140,7 @@ fun prefsUi(
                                     allowEmpty = false
                                 )
                             ) ?: return@launch
-                            prefStore.dispatchUpdate { copy(textInput = newTextInput) }
+                            prefStore.update { copy(textInput = newTextInput) }
                         }
                     }
                 )
@@ -152,7 +156,7 @@ fun prefsUi(
                                     title = "Color"
                                 )
                             ) ?: return@launch
-                            prefStore.dispatchUpdate { copy(color = newColor.toArgb()) }
+                            prefStore.update { copy(color = newColor.toArgb()) }
                         }
                     },
                     modifier = Modifier.interactive(prefs.switch),
@@ -178,7 +182,7 @@ fun prefsUi(
                                     title = "Multi select list"
                                 )
                             ) ?: return@launch
-                            prefStore.dispatchUpdate { copy(multiChoice = newItems) }
+                            prefStore.update { copy(multiChoice = newItems) }
                         }
                     }
                 )
@@ -201,7 +205,7 @@ fun prefsUi(
                                     title = "Single item list"
                                 )
                             ) ?: return@launch
-                            prefStore.dispatchUpdate { copy(singleChoice = newItem) }
+                            prefStore.update { copy(singleChoice = newItem) }
                         }
                     }
                 )
@@ -223,4 +227,4 @@ data class SamplePrefs(
 )
 
 @Given
-val samplePrefsModule = PrefDataStoreModule<SamplePrefs>("sample_prefs")
+val samplePrefsModule = PrefStoreModule<SamplePrefs>("sample_prefs")

@@ -29,6 +29,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.material.ListItem
@@ -36,8 +37,10 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.Toaster
@@ -64,7 +67,7 @@ val shortcutPickerUi: StoreKeyUi<ShortcutPickerKey, ShortcutPickerState, Shortcu
                     )
                 },
                 title = { Text(shortcut.name) },
-                onClick = { tryEmit(PickShortcut(shortcut)) }
+                onClick = { emit(PickShortcut(shortcut)) }
             )
         }
     }
@@ -80,7 +83,7 @@ sealed class ShortcutPickerAction {
 fun shortcutPickerStore(
     @Given activityResultLauncher: ActivityResultLauncher,
     @Given key: ShortcutPickerKey,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given shortcutRepository: ShortcutRepository,
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {

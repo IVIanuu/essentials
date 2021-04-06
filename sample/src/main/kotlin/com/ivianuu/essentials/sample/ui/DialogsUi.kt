@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -45,7 +46,7 @@ import com.ivianuu.essentials.ui.dialog.AlertDialogButtonLayout
 import com.ivianuu.essentials.ui.dialog.ColorPickerDialog
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
-import com.ivianuu.essentials.ui.dialog.DialogWrapper
+import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListDialog
 import com.ivianuu.essentials.ui.dialog.TextInputDialog
@@ -54,7 +55,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 
@@ -371,7 +373,7 @@ data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
 
 @Given
 fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
-    DialogWrapper { key.dialog() }
+    DialogScaffold { key.dialog() }
 }
 
 @Given
@@ -379,4 +381,4 @@ val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey
 
 @GivenScopeElementBinding<UiGivenScope>
 @Given
-class DialogLauncherComponent(@Given val navigator: Navigator)
+class DialogLauncherComponent(@Given val navigator: Collector<NavigationAction>)

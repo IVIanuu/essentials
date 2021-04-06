@@ -88,11 +88,11 @@ val notificationsUi: StoreKeyUi<NotificationsKey, NotificationsUiState, Notifica
             if (hasPermission) {
                 NotificationsList(
                     notifications = state.notifications,
-                    onNotificationClick = { tryEmit(OpenNotification(it)) },
-                    onDismissNotificationClick = { tryEmit(DismissNotification(it)) }
+                    onNotificationClick = { emit(OpenNotification(it)) },
+                    onDismissNotificationClick = { emit(DismissNotification(it)) }
                 )
             } else {
-                NotificationPermissions { tryEmit(RequestPermissions) }
+                NotificationPermissions { emit(RequestPermissions) }
             }
         }
     }

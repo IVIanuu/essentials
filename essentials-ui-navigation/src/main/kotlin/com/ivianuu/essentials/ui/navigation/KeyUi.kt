@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.store.Collector
@@ -74,6 +75,7 @@ operator fun <S> StateKeyUi<*, S>.invoke(state: S) {
     )
 }
 
+@Stable
 interface StateKeyUiScope<K, S> {
     val state: S
 }
@@ -110,6 +112,7 @@ operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
     )
 }
 
+@Stable
 interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Collector<A>
 
 @Given

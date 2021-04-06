@@ -17,14 +17,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
 import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -49,7 +47,7 @@ fun checkAppsUi(
             CheckableAppsParams(
                 prefStore.map { it.checkedApps },
                 { checkedApps ->
-                    prefStore.tryUpdate {
+                    prefStore.update {
                         copy(checkedApps = checkedApps)
                     }
                 },

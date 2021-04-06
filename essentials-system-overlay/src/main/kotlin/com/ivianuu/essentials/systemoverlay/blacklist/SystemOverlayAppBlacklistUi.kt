@@ -5,8 +5,7 @@ import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.ValueAction.Update
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
@@ -32,7 +31,7 @@ fun systemOverlayAppBlacklistUi(
         checkableAppsPageFactory(
             CheckableAppsParams(
                 checkedApps = state.appBlacklist,
-                onCheckedAppsChanged = { tryEmit(UpdateAppBlacklist(it)) },
+                onCheckedAppsChanged = { emit(UpdateAppBlacklist(it)) },
                 appFilter = DefaultAppFilter,
                 appBarTitle = resourceProvider.string(R.string.es_system_overlay_blacklist_title)
             )
@@ -52,10 +51,6 @@ fun systemOverlayAppBlacklistStore(
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
     update { copy(appBlacklist = prefStore.map { it.appBlacklist }) }
     effectOn<UpdateAppBlacklist> { action ->
-        prefStore.emit(
-            Update {
-                copy(appBlacklist = action.appBlacklist)
-            }
-        )
+        prefStore.updateAndAwait { copy(appBlacklist = action.appBlacklist) }
     }
 }

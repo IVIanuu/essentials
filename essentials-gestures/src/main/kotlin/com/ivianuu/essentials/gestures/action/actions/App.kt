@@ -30,7 +30,9 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -70,7 +72,7 @@ class AppActionFactory(
 @Given
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
-    @Given private val navigator: Navigator,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String

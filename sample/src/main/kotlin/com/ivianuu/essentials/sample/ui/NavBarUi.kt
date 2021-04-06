@@ -33,19 +33,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.data.update
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -63,7 +65,7 @@ class NavBarKey : Key<Nothing>
 fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
     @Given navBarPrefStore: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {
@@ -79,7 +81,7 @@ fun navBarUi(
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {
                 onDispose {
-                    navBarPrefStore.tryUpdate {
+                    navBarPrefStore.update {
                         copy(hideNavBar = false)
                     }
                 }
@@ -113,7 +115,7 @@ fun navBarUi(
             Button(
                 onClick = {
                     if (hasPermission) {
-                        navBarPrefStore.tryUpdate {
+                        navBarPrefStore.update {
                             copy(hideNavBar = !hideNavBar)
                         }
                     } else {

@@ -1,13 +1,28 @@
 package com.ivianuu.essentials.store
 
+import com.ivianuu.injekt.Given
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
-interface Collector<T> : FlowCollector<T> {
-    fun tryEmit(action: T): Boolean
+fun interface Collector<T> {
+    fun emit(value: T)
 }
 
-suspend fun <T : CompletableDeferred<S>, S> Collector<in T>.emitAndAwait(action: T): S {
+@Given
+fun <T> MutableSharedFlow<T>.asCollector() = Collector<T> { tryEmit(it) }
+
+fun <T> FlowCollector<T>.asCollector(scope: CoroutineScope) = Collector<T> {
+    scope.launch { emit(it) }
+}
+
+interface HasResult<R> {
+    val result: CompletableDeferred<R>
+}
+
+suspend fun <T : HasResult<R>, R> Collector<in T>.emitAndAwait(action: T): R {
     emit(action)
-    return action.await()
+    return action.result.await()
 }

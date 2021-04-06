@@ -23,7 +23,7 @@ import android.view.Display
 import com.ivianuu.essentials.android.settings.AndroidSettingStoreModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.util.Logger
@@ -43,12 +43,12 @@ fun nonSdkInterfaceDetectionDisabler(
 ): NonSdkInterfaceDetectionDisabler = {
     if (systemBuildInfo.sdk >= 29) {
         logger.d { "disable non sdk on 29" }
-        hiddenApiPolicyStore.update { 1 }
+        hiddenApiPolicyStore.updateAndAwait { 1 }
         logger.d { "disabled non sdk on 29" }
     } else if (systemBuildInfo.sdk >= 28) {
         logger.d { "disable non sdk on p" }
-        hiddenApiPolicyPrePieAppsStore.update { 1 }
-        hiddenApiPolicyPieAppsStore.update { 1 }
+        hiddenApiPolicyPrePieAppsStore.updateAndAwait { 1 }
+        hiddenApiPolicyPieAppsStore.updateAndAwait { 1 }
         logger.d { "disabled non sdk on p" }
     }
 }

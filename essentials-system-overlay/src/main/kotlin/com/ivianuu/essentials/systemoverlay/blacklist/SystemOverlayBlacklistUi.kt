@@ -4,9 +4,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.ValueAction.*
-import com.ivianuu.essentials.data.tryUpdate
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
@@ -19,8 +18,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 
@@ -43,14 +43,14 @@ val systemOverlayBlacklistUi: StoreKeyUi<SystemOverlayBlacklistKey, SystemOverla
                             )
                         )
                     },
-                    onClick = { tryEmit(OpenAppBlacklistSettings) }
+                    onClick = { emit(OpenAppBlacklistSettings) }
                 )
             }
 
             item {
                 CheckboxListItem(
                     value = state.disableOnKeyboard,
-                    onValueChange = { tryEmit(UpdateDisableOnKeyboard(it)) },
+                    onValueChange = { emit(UpdateDisableOnKeyboard(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_keyboard)) },
                     subtitle = {
                         Text(
@@ -66,7 +66,7 @@ val systemOverlayBlacklistUi: StoreKeyUi<SystemOverlayBlacklistKey, SystemOverla
             item {
                 CheckboxListItem(
                     value = state.disableOnLockScreen,
-                    onValueChange = { tryEmit(UpdateDisableOnLockScreen(it)) },
+                    onValueChange = { emit(UpdateDisableOnLockScreen(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_lock_screen)) },
                     subtitle = {
                         Text(
@@ -82,7 +82,7 @@ val systemOverlayBlacklistUi: StoreKeyUi<SystemOverlayBlacklistKey, SystemOverla
             item {
                 CheckboxListItem(
                     value = state.disableOnSecureScreens,
-                    onValueChange = { tryEmit(UpdateDisableOnSecureScreens(it)) },
+                    onValueChange = { emit(UpdateDisableOnSecureScreens(it)) },
                     title = { Text(stringResource(R.string.es_pref_disable_on_secure_screens)) },
                     subtitle = {
                         Text(
@@ -123,7 +123,7 @@ sealed class SystemOverlayBlacklistAction {
 
 @Given
 fun systemOverlayBlacklistStore(
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given pref: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>,
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayBlacklistUiState, SystemOverlayBlacklistAction> = {
     pref.update {
@@ -137,12 +137,12 @@ fun systemOverlayBlacklistStore(
         navigator.push(SystemOverlayAppBlacklistKey())
     }
     effectOn<UpdateDisableOnKeyboard> {
-        pref.tryUpdate { copy(disableOnKeyboard = it.value) }
+        pref.updateAndAwait { copy(disableOnKeyboard = it.value) }
     }
     effectOn<UpdateDisableOnLockScreen> {
-        pref.tryUpdate { copy(disableOnLockScreen = it.value) }
+        pref.updateAndAwait { copy(disableOnLockScreen = it.value) }
     }
     effectOn<UpdateDisableOnSecureScreens> {
-        pref.tryUpdate { copy(disableOnSecureScreens = it.value) }
+        pref.updateAndAwait { copy(disableOnSecureScreens = it.value) }
     }
 }

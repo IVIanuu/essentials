@@ -35,9 +35,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -136,7 +138,7 @@ data class WriteSecureSettingsPcInstructionsState(val packageName: String) : Sta
 @Scoped<KeyUiGivenScope>
 @Given
 class WriteSecureSettingsPcInstructionsViewModel(
-    @Given private val navigator: Navigator,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val clipboard: Collector<ClipboardAction>,
     @Given private val key: WriteSecureSettingsPcInstructionsKey,
     @Given private val permissionStateFactory: PermissionStateFactory,
@@ -166,6 +168,8 @@ class WriteSecureSettingsPcInstructionsViewModel(
         )
     }
     fun openXdaTutorial() = store.effect {
-        UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+        navigator.push(
+            UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
+        )
     }
 }

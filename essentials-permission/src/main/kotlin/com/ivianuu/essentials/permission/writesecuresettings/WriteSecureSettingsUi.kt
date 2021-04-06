@@ -24,6 +24,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.ScopeStateStore
 import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -32,8 +33,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.ui.navigation.TmpStateKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -84,7 +88,7 @@ object WriteSecureSettingsState : State()
 class WriteSecureSettingsViewModel(
     @Given private val buildInfo: BuildInfo,
     @Given private val key: WriteSecureSettingsKey,
-    @Given private val navigator: Navigator,
+    @Given private val navigator: Collector<NavigationAction>,
     @Given private val permissionStateFactory: PermissionStateFactory,
     @Given private val shell: Shell,
     @Given private val toaster: Toaster,

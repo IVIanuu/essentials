@@ -64,14 +64,14 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { tryEmit(Inc) }
+                onClick = { emit(Inc) }
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { tryEmit(Dec) }
+                onClick = { emit(Dec) }
             )
         }
     }

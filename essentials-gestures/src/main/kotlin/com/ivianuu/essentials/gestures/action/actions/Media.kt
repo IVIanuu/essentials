@@ -28,14 +28,14 @@ import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.ValueAction.Update
-import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
@@ -46,7 +46,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -113,7 +114,7 @@ val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSetting
                             )
                         )
                     },
-                    onClick = { tryEmit(UpdateMediaApp) }
+                    onClick = { emit(UpdateMediaApp) }
                 )
             }
         }
@@ -130,7 +131,7 @@ sealed class MediaActionSettingsAction {
 fun mediaActionSettingsStore(
     @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
     @Given pref: Store<MediaActionPrefs, ValueAction<MediaActionPrefs>>,
 ): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
     pref
@@ -145,7 +146,7 @@ fun mediaActionSettingsStore(
             )
         )
         if (newMediaApp != null) {
-            pref.tryUpdate { copy(mediaApp = newMediaApp.packageName) }
+            pref.updateAndAwait { copy(mediaApp = newMediaApp.packageName) }
         }
     }
 }

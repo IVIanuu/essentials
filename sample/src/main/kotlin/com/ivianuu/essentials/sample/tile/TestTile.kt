@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample.tile
 
 import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.tryUpdate
+import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
@@ -39,7 +39,7 @@ fun testTile(
     effectOn<TileClicked> {
         val newTwilightMode = if (twilightPrefStore.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
-        twilightPrefStore.tryUpdate { copy(twilightMode = newTwilightMode) }
+        twilightPrefStore.updateAndAwait { copy(twilightMode = newTwilightMode) }
     }
 }
 

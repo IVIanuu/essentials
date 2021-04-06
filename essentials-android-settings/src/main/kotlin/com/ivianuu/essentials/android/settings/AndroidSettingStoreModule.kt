@@ -42,7 +42,7 @@ class AndroidSettingStoreModule<T : S, S>(
             val currentValue = adapter.get()
             val newValue = action.transform(currentValue)
             if (currentValue != newValue) adapter.set(newValue)
-            action.complete(newValue)
+            action.result.complete(newValue)
         }
     }
 

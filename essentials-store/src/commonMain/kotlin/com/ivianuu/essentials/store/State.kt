@@ -38,7 +38,7 @@ interface StateScope<S> : CoroutineScope {
 
     fun effect(block: suspend () -> Unit): Job = launch { block() }
 
-    fun Flow<S.() -> S>.update(): Job = effect {
+    fun Flow<S.() -> S>.update(): Job = this@StateScope.effect {
         collect { update(it) }
     }
 

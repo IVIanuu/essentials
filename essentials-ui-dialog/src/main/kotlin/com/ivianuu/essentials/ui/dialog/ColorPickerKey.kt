@@ -18,9 +18,12 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.NavigationAction.*
+import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Given
 
 class ColorPickerKey(
@@ -34,13 +37,13 @@ class ColorPickerKey(
 @Given
 fun colorPickerUi(
     @Given key: ColorPickerKey,
-    @Given navigator: Navigator,
+    @Given navigator: Collector<NavigationAction>,
 ): KeyUi<ColorPickerKey> = {
-    DialogWrapper {
+    DialogScaffold {
         ColorPickerDialog(
             initialColor = key.initialColor,
             onColorSelected = { navigator.pop(key, it) },
-            onCancel = { navigator.pop(key) },
+            onCancel = { navigator.pop(key, null) },
             colorPalettes = key.colorPalettes,
             showAlphaSelector = key.showAlphaSelector,
             allowCustomArgb = key.allowCustomArgb,

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.about.AboutAction.*
+import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.effectOn
@@ -30,8 +31,9 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.first
@@ -46,7 +48,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { tryEmit(Rate) }
+                    onClick = { emit(Rate) }
                 )
             }
 
@@ -54,7 +56,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { tryEmit(OpenMoreApps) }
+                    onClick = { emit(OpenMoreApps) }
                 )
             }
 
@@ -62,7 +64,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { tryEmit(OpenRedditPage) }
+                    onClick = { emit(OpenRedditPage) }
                 )
             }
 
@@ -70,7 +72,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { tryEmit(OpenGithubPage) }
+                    onClick = { emit(OpenGithubPage) }
                 )
             }
 
@@ -78,7 +80,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { tryEmit(OpenTwitterPage) }
+                    onClick = { emit(OpenTwitterPage) }
                 )
             }
 
@@ -86,7 +88,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { tryEmit(OpenPrivacyPolicy) }
+                        onClick = { emit(OpenPrivacyPolicy) }
                     )
                 }
             }
@@ -115,7 +117,7 @@ sealed class AboutAction {
 @Given
 fun aboutStore(
     @Given buildInfo: BuildInfo,
-    @Given navigator: Navigator
+    @Given navigator: Collector<NavigationAction>
 ): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
     effectOn<Rate> {
         navigator.push(
