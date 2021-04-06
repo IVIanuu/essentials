@@ -7,12 +7,6 @@ import com.ivianuu.essentials.store.emitAndAwait
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 
-@Deprecated("Lol", level = DeprecationLevel.WARNING)
-interface DataStore<T> : Flow<T> {
-    suspend fun update(transform: T.() -> T): T
-    fun dispatchUpdate(transform: T.() -> T)
-}
-
 sealed class ValueAction<T> {
     data class Update<T>(
         val transform: T.() -> T,

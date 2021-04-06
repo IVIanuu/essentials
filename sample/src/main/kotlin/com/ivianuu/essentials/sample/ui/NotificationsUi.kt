@@ -45,9 +45,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.coroutines.updateIn
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.NotificationService
+import com.ivianuu.essentials.notificationlistener.NotificationServiceAction
+import com.ivianuu.essentials.notificationlistener.NotificationServiceState
 import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
@@ -57,6 +57,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.*
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -187,7 +188,7 @@ fun notificationsUiStore(
     @Given appContext: AppContext,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester,
-    @Given service: NotificationService
+    @Given service: Store<NotificationServiceState, NotificationServiceAction>
 ): StoreBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
     service
         .map { it.notifications }
@@ -202,10 +203,10 @@ fun notificationsUiStore(
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
     effectOn<OpenNotification> {
-        service.openNotification(it.notification.sbn.notification)
+        service.emit(NotificationServiceAction.OpenNotification(it.notification.sbn.notification))
     }
     effectOn<DismissNotification> {
-        service.dismissNotification(it.notification.sbn.key)
+        service.emit(NotificationServiceAction.DismissNotification(it.notification.sbn.key))
     }
 }
 

@@ -42,7 +42,6 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Collector
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.effectOn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -88,7 +87,7 @@ val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerA
     }
 }
 
-data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle) : State()
+data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
 
 sealed class ActionPickerAction {
     data class OpenActionSettings(val item: ActionPickerItem) : ActionPickerAction()

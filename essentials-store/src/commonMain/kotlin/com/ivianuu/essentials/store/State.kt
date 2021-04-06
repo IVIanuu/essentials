@@ -2,7 +2,6 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.essentials.coroutines.update
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped

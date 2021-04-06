@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.store.State
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
@@ -40,7 +39,7 @@ data class TileState<T : AbstractFunTileService>(
     val description: String? = null,
     val descriptionRes: Int? = null,
     val status: Status = Status.UNAVAILABLE
-) : State() {
+) {
     enum class Status {
         UNAVAILABLE, ACTIVE, INACTIVE
     }

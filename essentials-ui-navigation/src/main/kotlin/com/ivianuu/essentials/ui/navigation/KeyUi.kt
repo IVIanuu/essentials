@@ -50,19 +50,6 @@ class KeyUiModule<K : Key<*>>(private val keyClass: KClass<K>) {
     }
 }
 
-@Deprecated("Lol")
-typealias TmpStateKeyUi<K, T, S> = @Composable (T, S) -> Unit
-
-@Given
-inline fun <@Given U : TmpStateKeyUi<K, T, S>, reified K : Key<*>,
-        T : StateFlow<S>, S> stateKeyUi(
-    @Given noinline uiFactory: () ->U,
-    @Given state: T
-): KeyUi<K> = {
-    val ui = remember(uiFactory) as @Composable (T, S) -> Unit
-    ui(state, state.collectAsState().value)
-}
-
 typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
 
 @Composable

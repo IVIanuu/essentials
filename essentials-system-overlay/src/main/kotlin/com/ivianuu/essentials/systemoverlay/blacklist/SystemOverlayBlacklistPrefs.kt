@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import com.ivianuu.essentials.android.prefs.PrefDataStoreModule
 import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.injekt.Given
 import kotlinx.serialization.SerialName

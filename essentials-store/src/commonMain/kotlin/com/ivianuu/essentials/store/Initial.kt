@@ -16,7 +16,19 @@
 
 package com.ivianuu.essentials.store
 
+import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
+import kotlin.reflect.KClass
 
 @Qualifier
 annotation class Initial
+
+@Qualifier
+annotation class InitialOrFallback
+
+@Given
+inline fun <reified T : Any> initialOrFallback(
+    @Given initial: @Initial T? = null
+): @InitialOrFallback T = initial ?: T::class.newInstance()
+
+expect fun <T : Any> KClass<T>.newInstance(): T
