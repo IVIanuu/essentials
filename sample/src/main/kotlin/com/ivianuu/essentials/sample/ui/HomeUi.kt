@@ -30,7 +30,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -52,7 +52,7 @@ class HomeKey : RootKey
 
 @Given
 fun homeUi(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given itemsFactory: () -> Set<HomeItem>,
     @Given toaster: Toaster,
 ): KeyUi<HomeKey> = {

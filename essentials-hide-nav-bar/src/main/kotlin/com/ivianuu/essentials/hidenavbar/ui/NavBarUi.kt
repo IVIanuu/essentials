@@ -27,10 +27,10 @@ import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -59,7 +59,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
             item {
                 SwitchListItem(
                     value = state.hideNavBar,
-                    onValueChange = { emit(UpdateHideNavBar(it)) },
+                    onValueChange = { send(UpdateHideNavBar(it)) },
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -68,7 +68,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
                     modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = { emit(UpdateNavBarRotationMode) }
+                    onClick = { send(UpdateNavBarRotationMode) }
                 )
             }
         }
@@ -90,7 +90,7 @@ sealed class NavBarAction {
 
 @Given
 fun navBarStore(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissionRequester: PermissionRequester,
     @Given pref: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
     @Given resourceProvider: ResourceProvider,
@@ -98,14 +98,14 @@ fun navBarStore(
     pref.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
-    effectOn<UpdateHideNavBar> { action ->
+    onAction<UpdateHideNavBar> { action ->
         if (!action.value) {
             pref.update { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
             pref.update { copy(hideNavBar = action.value) }
         } else Unit
     }
-    effectOn<UpdateNavBarRotationMode> {
+    onAction<UpdateNavBarRotationMode> {
         navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()

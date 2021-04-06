@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.lens
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -46,27 +46,27 @@ sealed class NavigationAction {
     object PopTop : NavigationAction()
 }
 
-fun Collector<NavigationAction>.push(key: Key<*>) = emit(Push(key))
+fun Sink<NavigationAction>.push(key: Key<*>) = send(Push(key))
 
-suspend fun <R : Any> Collector<NavigationAction>.pushForResult(key: Key<R>): R? {
+suspend fun <R : Any> Sink<NavigationAction>.pushForResult(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     @Suppress("UNCHECKED_CAST")
-    emit(Push(key, result))
+    send(Push(key, result))
     return result.await()
 }
 
-fun Collector<NavigationAction>.replaceTop(key: Key<*>) = emit(ReplaceTop(key))
+fun Sink<NavigationAction>.replaceTop(key: Key<*>) = send(ReplaceTop(key))
 
-fun <R> Collector<NavigationAction>.pop(key: Key<R>, result: R? = null) = emit(Pop(key, result))
+fun <R> Sink<NavigationAction>.pop(key: Key<R>, result: R? = null) = send(Pop(key, result))
 
-fun Collector<NavigationAction>.popTop() = emit(PopTop)
+fun Sink<NavigationAction>.popTop() = send(PopTop)
 
 @Given
 fun navigationStore(
     @Given intentKeyHandler: IntentKeyHandler,
     @Given logger: Logger,
 ): StoreBuilder<AppGivenScope, InternalNavigationState, NavigationAction> = {
-    effectOn<Push<*>> { action ->
+    onAction<Push<*>> { action ->
         logger.d { "push ${action.key}" }
         if (!intentKeyHandler(action.key)) {
             update {
@@ -79,7 +79,7 @@ fun navigationStore(
             }
         }
     }
-    effectOn<ReplaceTop<*>> { action ->
+    onAction<ReplaceTop<*>> { action ->
         logger.d { "replace top ${action.key}" }
         if (intentKeyHandler(action.key)) {
             update {
@@ -101,11 +101,11 @@ fun navigationStore(
             }
         }
     }
-    effectOn<Pop<Any>> { action ->
+    onAction<Pop<Any>> { action ->
         logger.d { "pop $action.key" }
         update { popKey(action.key, action.result) }
     }
-    effectOn<PopTop> {
+    onAction<PopTop> {
         val topKey = state.first().backStack.last()
         logger.d { "pop top $topKey" }
         update {
@@ -128,7 +128,7 @@ private fun <R : Any> InternalNavigationState.popKey(key: Key<R>, result: R?): I
 @Given
 fun Store<InternalNavigationState, NavigationAction>.toNavigationState(
 ) : Store<NavigationState, NavigationAction> = object : Store<NavigationState, NavigationAction>,
-    Collector<NavigationAction> by this,
+    Sink<NavigationAction> by this,
     StateFlow<NavigationState> by (lens { NavigationState(it.backStack) }) {
     }
 

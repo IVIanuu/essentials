@@ -20,7 +20,7 @@ import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.updateAndAwait
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileAction.*
@@ -36,7 +36,7 @@ fun testTile(
     @Given twilightPrefStore: Store<TwilightPrefs, ValueAction<TwilightPrefs>>
 ): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction> = {
     twilightPrefStore.update { it.toTileState() }
-    effectOn<TileClicked> {
+    onAction<TileClicked> {
         val newTwilightMode = if (twilightPrefStore.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
         twilightPrefStore.updateAndAwait { copy(twilightMode = newTwilightMode) }

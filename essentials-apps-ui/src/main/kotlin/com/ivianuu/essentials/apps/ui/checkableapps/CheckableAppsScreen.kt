@@ -41,7 +41,7 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -73,12 +73,12 @@ fun checkableAppsScreen(@Given store: Store<CheckableAppsState, CheckableAppsAct
                     PopupMenuButton(
                         items = listOf(
                             PopupMenu.Item(
-                                onSelected = { store.emit(SelectAll) }
+                                onSelected = { store.send(SelectAll) }
                             ) {
                                 Text(stringResource(R.string.es_select_all))
                             },
                             PopupMenu.Item(
-                                onSelected = { store.emit(DeselectAll) }
+                                onSelected = { store.send(DeselectAll) }
                             ) {
                                 Text(stringResource(R.string.es_deselect_all))
                             }
@@ -104,7 +104,7 @@ fun checkableAppsScreen(@Given store: Store<CheckableAppsState, CheckableAppsAct
                         onCheckedChange = null
                     )
                 },
-                onClick = { store.emit(UpdateAppCheckedState(app, !app.isChecked)) }
+                onClick = { store.send(UpdateAppCheckedState(app, !app.isChecked)) }
             )
         }
     }
@@ -177,7 +177,7 @@ fun checkableAppsStore(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-    effectOn<UpdateAppCheckedState> { action ->
+    onAction<UpdateAppCheckedState> { action ->
         pushNewCheckedApps {
             if (!action.app.isChecked) {
                 this + action.app.info.packageName
@@ -186,12 +186,12 @@ fun checkableAppsStore(
             }
         }
     }
-    effectOn<SelectAll> {
+    onAction<SelectAll> {
         pushNewCheckedApps { currentState ->
             currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
         }
     }
-    effectOn<DeselectAll> {
+    onAction<DeselectAll> {
         pushNewCheckedApps { emptySet() }
     }
 }

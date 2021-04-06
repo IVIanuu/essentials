@@ -40,9 +40,9 @@ import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -76,12 +76,12 @@ val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerA
             ListItem(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { emit(OpenActionSettings(item)) }) {
+                    IconButton(onClick = { send(OpenActionSettings(item)) }) {
                         Icon(painterResource(R.drawable.es_ic_settings), null)
                     }
                 }) else null,
                 title = { Text(item.title) },
-                onClick = { emit(PickAction(item)) }
+                onClick = { send(PickAction(item)) }
             )
         }
     }
@@ -98,21 +98,21 @@ sealed class ActionPickerAction {
 fun actionPickerStore(
     @Given actionRepository: ActionRepository,
     @Given key: ActionPickerKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissionRequester: PermissionRequester,
     @Given resourceProvider: ResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
     resourceFlow { emit(getActionPickerItems(actionRepository, key, resourceProvider)) }
         .update { copy(items = it) }
 
-    effectOn<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
+    onAction<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
 
-    effectOn<PickAction> {
-        val result = it.item.getResult() ?: return@effectOn
+    onAction<PickAction> {
+        val result = it.item.getResult() ?: return@onAction
         if (result is ActionPickerKey.Result.Action) {
             val action = actionRepository.getAction(result.actionId)
             if (!permissionRequester(action.permissions))
-                return@effectOn
+                return@onAction
         }
         navigator.pop(key, result)
     }

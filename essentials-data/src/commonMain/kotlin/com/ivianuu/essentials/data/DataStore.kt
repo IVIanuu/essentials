@@ -1,11 +1,10 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.data.ValueAction.*
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.HasResult
-import com.ivianuu.essentials.store.emitAndAwait
+import com.ivianuu.essentials.store.sendAndAwait
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.Flow
 
 sealed class ValueAction<T> {
     data class Update<T>(
@@ -14,7 +13,7 @@ sealed class ValueAction<T> {
     ) : ValueAction<T>(), HasResult<T>
 }
 
-fun <T> Collector<ValueAction<T>>.update(transform: T.() -> T) = emit(Update(transform))
+fun <T> Sink<ValueAction<T>>.update(transform: T.() -> T) = send(Update(transform))
 
-suspend fun <T> Collector<in Update<T>>.updateAndAwait(transform: T.() -> T): T =
-    emitAndAwait(Update(transform))
+suspend fun <T> Sink<in Update<T>>.updateAndAwait(transform: T.() -> T): T =
+    sendAndAwait(Update(transform))

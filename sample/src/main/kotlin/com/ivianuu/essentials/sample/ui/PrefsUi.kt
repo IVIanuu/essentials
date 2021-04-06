@@ -28,7 +28,7 @@ import com.ivianuu.essentials.android.prefs.PrefStoreModule
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.update
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
@@ -62,7 +62,7 @@ class PrefsKey : Key<Nothing>
 
 @Given
 fun prefsUi(
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given prefStore: Store<SamplePrefs, ValueAction<SamplePrefs>>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {

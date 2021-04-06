@@ -52,7 +52,7 @@ fun torchAction(
 fun torchActionExecutor(
     @Given torch: Store<TorchState, TorchAction>
 ): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
-    torch.emit(UpdateTorchEnabled(!torch.first().torchEnabled))
+    torch.send(UpdateTorchEnabled(!torch.first().torchEnabled))
 }
 
 private typealias TorchIcon = ActionIcon

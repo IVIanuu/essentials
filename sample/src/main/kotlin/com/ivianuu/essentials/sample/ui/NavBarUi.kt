@@ -39,7 +39,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -65,7 +65,7 @@ class NavBarKey : Key<Nothing>
 fun navBarUi(
     @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
     @Given navBarPrefStore: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
     @Given permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {

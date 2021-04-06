@@ -6,7 +6,7 @@ import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.ValueAction.*
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -38,7 +38,7 @@ class AndroidSettingStoreModule<T : S, S>(
                 }
             }
             .update { it }
-        effectOn<Update<T>> { action ->
+        onAction<Update<T>> { action ->
             val currentValue = adapter.get()
             val newValue = action.transform(currentValue)
             if (currentValue != newValue) adapter.set(newValue)

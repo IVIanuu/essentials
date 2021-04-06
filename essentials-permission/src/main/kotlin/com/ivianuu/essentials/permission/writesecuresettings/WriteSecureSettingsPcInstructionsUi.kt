@@ -26,10 +26,10 @@ import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.*
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -87,21 +87,21 @@ val writeSecureSettingsPcInstructionsUi: StoreKeyUi<WriteSecureSettingsPcInstruc
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
-                    onClick = { emit(OpenGadgetHacksTutorial) }
+                    onClick = { send(OpenGadgetHacksTutorial) }
                 )
             }
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
-                    onClick = { emit(OpenLifehackerTutorial) }
+                    onClick = { send(OpenLifehackerTutorial) }
                 )
             }
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
                     title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
-                    onClick = { emit(OpenXdaTutorial) }
+                    onClick = { send(OpenXdaTutorial) }
                 )
             }
             item {
@@ -115,7 +115,7 @@ val writeSecureSettingsPcInstructionsUi: StoreKeyUi<WriteSecureSettingsPcInstruc
                             )
                         )
                     },
-                    onClick = { emit(CopyAdbCommand) }
+                    onClick = { send(CopyAdbCommand) }
                 )
             }
         }
@@ -142,8 +142,8 @@ sealed class WriteSecureSettingsPcInstructionsAction {
 
 @Given
 fun writeSecureSettingsPcInstructionsStore(
-    @Given navigator: Collector<NavigationAction>,
-    @Given clipboard: Collector<ClipboardAction>,
+    @Given navigator: Sink<NavigationAction>,
+    @Given clipboard: Sink<ClipboardAction>,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given permissionStateFactory: PermissionStateFactory
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState,
@@ -158,18 +158,18 @@ fun writeSecureSettingsPcInstructionsStore(
             delay(200)
         }
     }
-    effectOn<CopyAdbCommand> {
-        clipboard.emit(UpdateClipboard(state.first().secureSettingsAdbCommand))
+    onAction<CopyAdbCommand> {
+        clipboard.send(UpdateClipboard(state.first().secureSettingsAdbCommand))
     }
-    effectOn<OpenGadgetHacksTutorial> {
+    onAction<OpenGadgetHacksTutorial> {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
     }
-    effectOn<OpenLifehackerTutorial> {
+    onAction<OpenLifehackerTutorial> {
         navigator.push(
             UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
         )
     }
-    effectOn<OpenXdaTutorial> {
+    onAction<OpenXdaTutorial> {
         navigator.push(
             UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
         )

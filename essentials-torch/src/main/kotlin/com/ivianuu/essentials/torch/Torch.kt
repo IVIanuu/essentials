@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.updateOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -30,5 +30,7 @@ sealed class TorchAction {
 
 @Given
 val torchStore: StoreBuilder<AppGivenScope, TorchState, TorchAction> = {
-    updateOn(UpdateTorchEnabled::class) { copy(torchEnabled = it.value) }
+    onAction<UpdateTorchEnabled> {
+        update { copy(torchEnabled = it.value) }
+    }
 }

@@ -21,7 +21,7 @@ import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.notificationlistener.NotificationServiceAction.*
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.flatMapLatest
@@ -47,13 +47,13 @@ fun notificationServiceStore(
     listenerServiceRef
         .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
         .update { copy(notifications = it) }
-    effectOn<OpenNotification> { action ->
+    onAction<OpenNotification> { action ->
         runCatching { action.notification.contentIntent.send() }
     }
-    effectOn<DismissNotification> { action ->
+    onAction<DismissNotification> { action ->
         listenerServiceRef.value?.cancelNotification(action.notificationKey)
     }
-    effectOn<DismissAllNotifications> {
+    onAction<DismissAllNotifications> {
         listenerServiceRef.value?.cancelAllNotifications()
     }
 }

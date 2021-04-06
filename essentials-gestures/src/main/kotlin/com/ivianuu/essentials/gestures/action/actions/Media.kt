@@ -35,10 +35,10 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -114,7 +114,7 @@ val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSetting
                             )
                         )
                     },
-                    onClick = { emit(UpdateMediaApp) }
+                    onClick = { send(UpdateMediaApp) }
                 )
             }
         }
@@ -131,7 +131,7 @@ sealed class MediaActionSettingsAction {
 fun mediaActionSettingsStore(
     @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given pref: Store<MediaActionPrefs, ValueAction<MediaActionPrefs>>,
 ): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
     pref
@@ -139,7 +139,7 @@ fun mediaActionSettingsStore(
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
         .flowAsResource()
         .update { copy(mediaApp = it) }
-    effectOn<UpdateMediaApp> {
+    onAction<UpdateMediaApp> {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null

@@ -63,7 +63,7 @@ abstract class AbstractFunTileService(
 
     override fun onClick() {
         super.onClick()
-        tileStateComponent!!.tileStore.emit(TileClicked)
+        tileStateComponent!!.tileStore.send(TileClicked)
     }
 
     override fun onStopListening() {

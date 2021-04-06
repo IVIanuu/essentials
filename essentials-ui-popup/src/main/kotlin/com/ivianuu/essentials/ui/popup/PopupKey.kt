@@ -26,7 +26,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
@@ -48,12 +48,12 @@ class PopupKey(
 @Given
 fun popupUi(
     @Given key: PopupKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
 ): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
     if (configuration !== initialConfiguration) {
-        navigator.emit(Pop(key))
+        navigator.send(Pop(key))
     }
 
     var dismissed by remember { refOf(false) }
@@ -61,7 +61,7 @@ fun popupUi(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            navigator.emit(Pop(key))
+            navigator.send(Pop(key))
             if (cancelled) key.onCancel?.invoke()
         }
     }

@@ -22,7 +22,7 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.pushForResult
 import com.ivianuu.essentials.util.AppUiStarter
@@ -133,7 +133,7 @@ fun permissionRequester(
     @Given appUiStarter: AppUiStarter,
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
     withContext(defaultDispatcher) {

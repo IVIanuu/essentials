@@ -24,9 +24,9 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.ui.PermissionRequestAction.*
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -64,11 +64,11 @@ val permissionRequestUi: StoreKeyUi<PermissionRequestKey, PermissionRequestState
                     },
                     leading = permission.permission.icon,
                     trailing = {
-                        Button(onClick = { emit(GrantPermission(permission)) }) {
+                        Button(onClick = { send(GrantPermission(permission)) }) {
                             Text("GRANT") // todo res
                         }
                     },
-                    onClick = { emit(GrantPermission(permission)) }
+                    onClick = { send(GrantPermission(permission)) }
                 )
             }
         }
@@ -90,7 +90,7 @@ sealed class PermissionRequestAction {
 fun permissionRequestStore(
     @Given appUiStarter: AppUiStarter,
     @Given key: PermissionRequestKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
@@ -112,7 +112,7 @@ fun permissionRequestStore(
 
     effect { updatePermissions() }
 
-    effectOn<GrantPermission> {
+    onAction<GrantPermission> {
         requestHandlers[it.permission.permissionKey]!!(permissions[it.permission.permissionKey]!!)
         appUiStarter()
         updatePermissions()

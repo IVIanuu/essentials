@@ -25,9 +25,9 @@ import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.*
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.NavigationAction.*
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -67,14 +66,14 @@ val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, WriteSecureSetting
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = { emit(OpenPcInstructions) }
+                    onClick = { send(OpenPcInstructions) }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = { emit(GrantPermissionsViaRoot) }
+                    onClick = { send(GrantPermissionsViaRoot) }
                 )
             }
         }
@@ -92,7 +91,7 @@ sealed class WriteSecureSettingsAction {
 fun writeSecureSettingsStore(
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given shell: Shell,
     @Given toaster: Toaster,
@@ -108,10 +107,10 @@ fun writeSecureSettingsStore(
             delay(200)
         }
     }
-    effectOn<OpenPcInstructions> {
+    onAction<OpenPcInstructions> {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    effectOn<GrantPermissionsViaRoot> {
+    onAction<GrantPermissionsViaRoot> {
         runCatching {
             shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         }.onFailure {

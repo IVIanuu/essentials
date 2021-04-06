@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -42,7 +42,7 @@ class ActionsKey : Key<Nothing>
 @Given
 fun actionsUi(
     @Given executeAction: executeAction,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
     Scaffold(

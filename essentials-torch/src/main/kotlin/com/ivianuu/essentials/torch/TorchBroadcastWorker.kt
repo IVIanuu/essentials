@@ -30,7 +30,7 @@ fun torchBroadcastWorker(
     @Given torch: Store<TorchState, TorchAction>
 ): ScopeWorker<AppGivenScope> = {
     broadcastsFactory(ACTION_DISABLE_TORCH).collect {
-        torch.emit(UpdateTorchEnabled(false))
+        torch.send(UpdateTorchEnabled(false))
     }
 }
 

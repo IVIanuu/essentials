@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlin.reflect.KClass
 
-interface Store<S, A> : StateFlow<S>, Collector<A>
+interface Store<S, A> : StateFlow<S>, Sink<A>
 
 fun <S, A> CoroutineScope.store(
     initial: S,
@@ -26,8 +25,8 @@ fun <S, A> CoroutineScope.store(
                 get() = actions
         }.block()
     }
-    return object : Store<S, A>, StateFlow<S> by state, Collector<A> {
-        override fun emit(value: A) {
+    return object : Store<S, A>, StateFlow<S> by state, Sink<A> {
+        override fun send(value: A) {
             actions.tryEmit(value)
         }
     }
@@ -37,13 +36,8 @@ interface StoreScope<S, A> : StateScope<S> {
     val actions: Flow<A>
 }
 
-inline fun <reified T> StoreScope<*, in T>.effectOn(noinline block: suspend (T) -> Unit): Job =
+inline fun <reified T> StoreScope<*, in T>.onAction(noinline block: suspend (T) -> Unit): Job =
     actions.filterIsInstance<T>().effect(block)
-
-inline fun <S, reified T : Any> StoreScope<S, in T>.updateOn(
-    @Suppress("UNUSED_PARAMETER") clazz: KClass<T>,
-    noinline reducer: S.(T) -> S
-): Job = actions.filterIsInstance<T>().update(reducer)
 
 typealias StoreBuilder<GS, S, A> = suspend StoreScope<S, A>.() -> Unit
 

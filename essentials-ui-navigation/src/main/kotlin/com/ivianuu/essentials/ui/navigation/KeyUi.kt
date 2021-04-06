@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
@@ -89,10 +89,10 @@ typealias StoreKeyUi<K, S, A> = @Composable StoreKeyUiScope<K, S, A>.() -> Unit
 @Composable
 operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
     state: S,
-    collector: Collector<A>
+    sink: Sink<A>
 ) {
     invoke(
-        object : StoreKeyUiScope<Nothing, S, A>, Collector<A> by collector {
+        object : StoreKeyUiScope<Nothing, S, A>, Sink<A> by sink {
             override val state: S
                 get() = state
         }
@@ -100,17 +100,17 @@ operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
 }
 
 @Stable
-interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Collector<A>
+interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Sink<A>
 
 @Given
 inline fun <@Given U : StoreKeyUi<K, S, A>, reified K : Key<*>, S, A> storeKeyUi(
     @Given noinline uiFactory: () -> U,
     @Given state: StateFlow<S>,
-    @Given collector: Collector<A>
+    @Given sink: Sink<A>
 ): KeyUi<K> = {
     val currentState by state.collectAsState()
-    val scope = remember(collector) {
-        object : StoreKeyUiScope<K, S, A>, Collector<A> by collector {
+    val scope = remember(sink) {
+        object : StoreKeyUiScope<K, S, A>, Sink<A> by sink {
             override val state: S
                 get() = currentState
         }

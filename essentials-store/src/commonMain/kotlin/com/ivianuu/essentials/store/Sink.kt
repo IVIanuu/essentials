@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-fun interface Collector<T> {
-    fun emit(value: T)
+fun interface Sink<in T> {
+    fun send(value: T)
 }
 
 @Given
-fun <T> MutableSharedFlow<T>.asCollector() = Collector<T> { tryEmit(it) }
+fun <T> MutableSharedFlow<T>.asSink() = Sink<T> { tryEmit(it) }
 
-fun <T> FlowCollector<T>.asCollector(scope: CoroutineScope) = Collector<T> {
+fun <T> FlowCollector<T>.asSink(scope: CoroutineScope) = Sink<T> {
     scope.launch { emit(it) }
 }
 
@@ -22,7 +22,7 @@ interface HasResult<R> {
     val result: CompletableDeferred<R>
 }
 
-suspend fun <T : HasResult<R>, R> Collector<in T>.emitAndAwait(action: T): R {
-    emit(action)
+suspend fun <T : HasResult<R>, R> Sink<T>.sendAndAwait(action: T): R {
+    send(action)
     return action.result.await()
 }

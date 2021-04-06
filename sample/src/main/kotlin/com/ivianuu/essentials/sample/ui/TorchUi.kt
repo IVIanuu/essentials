@@ -53,7 +53,7 @@ val torchUi: StoreKeyUi<TorchKey, TorchState, TorchAction> = {
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { emit(UpdateTorchEnabled(!state.torchEnabled)) }
+                onClick = { send(UpdateTorchEnabled(!state.torchEnabled)) }
             ) {
                 Text("Toggle torch")
             }

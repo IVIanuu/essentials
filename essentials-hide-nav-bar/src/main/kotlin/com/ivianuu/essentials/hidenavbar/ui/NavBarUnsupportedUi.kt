@@ -5,9 +5,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.*
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -34,12 +34,12 @@ val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
                 Text(stringResource(R.string.es_nav_bar_unsupported_content))
             },
             neutralButton = {
-                TextButton(onClick = { emit(OpenMoreInfos) }) {
+                TextButton(onClick = { send(OpenMoreInfos) }) {
                     Text(stringResource(R.string.es_more_infos))
                 }
             },
             positiveButton = {
-                TextButton(onClick = { emit(Close) }) {
+                TextButton(onClick = { send(Close) }) {
                     Text(stringResource(R.string.es_close))
                 }
             }
@@ -60,14 +60,14 @@ sealed class NavBarUnsupportedAction {
 @Given
 fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
-    @Given navigator: Collector<NavigationAction>
+    @Given navigator: Sink<NavigationAction>
 ): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
-    effectOn<OpenMoreInfos> {
+    onAction<OpenMoreInfos> {
         navigator.push(
             UrlKey(
                 "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
             )
         )
     }
-    effectOn<Close> { navigator.pop(key) }
+    onAction<Close> { navigator.pop(key) }
 }

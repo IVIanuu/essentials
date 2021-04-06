@@ -21,7 +21,7 @@ import android.content.ClipboardManager
 import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.cancellableUpdates
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 
@@ -43,7 +43,7 @@ fun clipboardStore(
         onCancel { clipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
-    effectOn<UpdateClipboard> {
+    onAction<UpdateClipboard> {
         clipboardManager.setPrimaryClip(ClipData.newPlainText("", it.value))
     }
 }

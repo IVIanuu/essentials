@@ -20,10 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.about.AboutAction.*
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -48,7 +48,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { emit(Rate) }
+                    onClick = { send(Rate) }
                 )
             }
 
@@ -56,7 +56,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { emit(OpenMoreApps) }
+                    onClick = { send(OpenMoreApps) }
                 )
             }
 
@@ -64,7 +64,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { emit(OpenRedditPage) }
+                    onClick = { send(OpenRedditPage) }
                 )
             }
 
@@ -72,7 +72,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { emit(OpenGithubPage) }
+                    onClick = { send(OpenGithubPage) }
                 )
             }
 
@@ -80,7 +80,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { emit(OpenTwitterPage) }
+                    onClick = { send(OpenTwitterPage) }
                 )
             }
 
@@ -88,7 +88,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { emit(OpenPrivacyPolicy) }
+                        onClick = { send(OpenPrivacyPolicy) }
                     )
                 }
             }
@@ -117,23 +117,23 @@ sealed class AboutAction {
 @Given
 fun aboutStore(
     @Given buildInfo: BuildInfo,
-    @Given navigator: Collector<NavigationAction>
+    @Given navigator: Sink<NavigationAction>
 ): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
-    effectOn<Rate> {
+    onAction<Rate> {
         navigator.push(
             UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
         )
     }
-    effectOn<OpenMoreApps> {
+    onAction<OpenMoreApps> {
         navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
-    effectOn<OpenRedditPage> {
+    onAction<OpenRedditPage> {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     }
-    effectOn<OpenTwitterPage> {
+    onAction<OpenTwitterPage> {
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
-    effectOn<OpenPrivacyPolicy> {
+    onAction<OpenPrivacyPolicy> {
         navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
     }
 }

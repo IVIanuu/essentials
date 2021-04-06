@@ -42,7 +42,7 @@ fun androidBackPressHandler(
         .distinctUntilChanged()
         .flatMapLatest { if (it) activity.backPresses() else infiniteEmptyFlow() }
         .map { PopTop }
-        .collect { navigator.emit(it) }
+        .collect { navigator.send(it) }
 }
 
 private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {

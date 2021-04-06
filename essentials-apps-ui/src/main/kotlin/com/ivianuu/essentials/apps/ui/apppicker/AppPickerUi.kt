@@ -33,10 +33,10 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -74,7 +74,7 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
                         contentDescription = null
                     )
                 },
-                onClick = { emit(PickApp(app)) }
+                onClick = { send(PickApp(app)) }
             )
         }
     }
@@ -104,8 +104,8 @@ sealed class AppPickerAction {
 fun appPickerStore(
     @Given appRepository: AppRepository,
     @Given key: AppPickerKey,
-    @Given navigator: Collector<NavigationAction>,
+    @Given navigator: Sink<NavigationAction>,
 ): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
     resourceFlow { emit(appRepository.getInstalledApps()) }.update { copy(allApps = it) }
-    effectOn<PickApp> { navigator.pop(key, it.app) }
+    onAction<PickApp> { navigator.pop(key, it.app) }
 }

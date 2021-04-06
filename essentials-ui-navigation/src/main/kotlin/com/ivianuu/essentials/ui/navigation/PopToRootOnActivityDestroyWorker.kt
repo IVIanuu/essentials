@@ -18,6 +18,6 @@ fun popToRootOnActivityDestroyWorker(
             .backStack
             .drop(1)
             .filterIsInstance<Key<Any>>()
-            .forEach { navigator.emit(Pop(it)) }
+            .forEach { navigator.send(Pop(it)) }
     }
 }

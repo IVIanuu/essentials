@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.*
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -46,14 +46,14 @@ val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, BackupAndRestoreState,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { emit(BackupData) }
+                    onClick = { send(BackupData) }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { emit(RestoreData) }
+                    onClick = { send(RestoreData) }
                 )
             }
         }
@@ -73,14 +73,14 @@ fun backupAndRestoreStore(
     @Given backupApplier: BackupApplier,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
-    effectOn<BackupData> {
+    onAction<BackupData> {
         backupCreator()
             .onFailure {
                 it.printStackTrace()
                 toaster.showToast(R.string.es_backup_error)
             }
     }
-    effectOn<RestoreData> {
+    onAction<RestoreData> {
         backupApplier()
             .onFailure {
                 it.printStackTrace()

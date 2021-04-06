@@ -59,7 +59,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.*
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -89,11 +89,11 @@ val notificationsUi: StoreKeyUi<NotificationsKey, NotificationsUiState, Notifica
             if (hasPermission) {
                 NotificationsList(
                     notifications = state.notifications,
-                    onNotificationClick = { emit(OpenNotification(it)) },
-                    onDismissNotificationClick = { emit(DismissNotification(it)) }
+                    onNotificationClick = { send(OpenNotification(it)) },
+                    onDismissNotificationClick = { send(DismissNotification(it)) }
                 )
             } else {
-                NotificationPermissions { emit(RequestPermissions) }
+                NotificationPermissions { send(RequestPermissions) }
             }
         }
     }
@@ -199,14 +199,14 @@ fun notificationsUiStore(
         .flowAsResource()
         .update { copy(notifications = it) }
     permissionState.update { copy(hasPermissions = it) }
-    effectOn<RequestPermissions> {
+    onAction<RequestPermissions> {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    effectOn<OpenNotification> {
-        service.emit(NotificationServiceAction.OpenNotification(it.notification.sbn.notification))
+    onAction<OpenNotification> {
+        service.send(NotificationServiceAction.OpenNotification(it.notification.sbn.notification))
     }
-    effectOn<DismissNotification> {
-        service.emit(NotificationServiceAction.DismissNotification(it.notification.sbn.key))
+    onAction<DismissNotification> {
+        service.send(NotificationServiceAction.DismissNotification(it.notification.sbn.key))
     }
 }
 

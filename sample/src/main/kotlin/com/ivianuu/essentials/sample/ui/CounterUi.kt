@@ -28,8 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.*
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.effectOn
-import com.ivianuu.essentials.store.updateOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -64,14 +63,14 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { emit(Inc) }
+                onClick = { send(Inc) }
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { emit(Dec) }
+                onClick = { send(Dec) }
             )
         }
     }
@@ -88,9 +87,11 @@ sealed class CounterAction {
 fun counterStore(
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
-    updateOn(Inc::class) { copy(count = count.inc()) }
-    effectOn<Dec> {
-        if (state.first().count > 0) update { copy(count = count.dec()) }
-        else toaster.showToast("Value cannot be less than 0!")
+    onAction { action ->
+        when (action) {
+            Inc -> update { copy(count = count.inc()) }
+            Dec -> if (state.first().count > 0) update { copy(count = count.dec()) }
+            else toaster.showToast("Value cannot be less than 0!")
+        }
     }
 }

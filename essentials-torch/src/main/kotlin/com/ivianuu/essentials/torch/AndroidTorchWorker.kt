@@ -40,7 +40,7 @@ fun androidTorchWorker(
         }.onFailure {
             it.printStackTrace()
             toaster.showToast(R.string.es_failed_to_toggle_torch)
-            torch.emit(UpdateTorchEnabled(false))
+            torch.send(UpdateTorchEnabled(false))
         }
     }
 }

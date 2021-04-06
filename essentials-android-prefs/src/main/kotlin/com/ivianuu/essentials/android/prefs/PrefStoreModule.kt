@@ -13,7 +13,7 @@ import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.ValueAction.Update
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.InitialOrFallback
-import com.ivianuu.essentials.store.effectOn
+import com.ivianuu.essentials.store.onAction
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import java.io.InputStream
@@ -54,7 +54,7 @@ class PrefStoreModule<T : Any>(private val name: String) {
             }
         )
         dataStore.data.update { it }
-        effectOn<Update<T>> { action ->
+        onAction<Update<T>> { action ->
             action.result.complete(dataStore.updateData { action.transform(it) })
         }
     }

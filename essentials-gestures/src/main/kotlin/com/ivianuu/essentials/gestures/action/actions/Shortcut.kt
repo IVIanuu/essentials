@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.store.Collector
+import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.NavigationAction
@@ -74,7 +74,7 @@ class ShortcutActionFactory(
 
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val navigator: Collector<NavigationAction>,
+    @Given private val navigator: Sink<NavigationAction>,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
