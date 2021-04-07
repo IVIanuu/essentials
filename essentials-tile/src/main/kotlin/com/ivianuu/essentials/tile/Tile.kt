@@ -58,4 +58,4 @@ fun <@Given T : Store<TileState<S>, TileAction>, S : AbstractFunTileService> til
 typealias TileGivenScope = DefaultGivenScope
 
 @Given
-val tileGivenScopeModule = ChildGivenScopeModule1<ServiceGivenScope, TypeKey<*>, TileGivenScope>()
+val tileGivenScopeModule = ChildGivenScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()

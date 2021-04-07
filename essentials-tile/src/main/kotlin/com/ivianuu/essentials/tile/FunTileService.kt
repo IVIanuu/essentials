@@ -20,7 +20,9 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.tile.TileAction.TileClicked
+import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope
@@ -41,9 +43,7 @@ class FunTileService7 : AbstractFunTileService(typeKeyOf<FunTileService7>())
 class FunTileService8 : AbstractFunTileService(typeKeyOf<FunTileService8>())
 class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 
-abstract class AbstractFunTileService(
-    private val tileKey: TypeKey<AbstractFunTileService>
-) : TileService() {
+abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) : TileService() {
 
     private val component by lazy {
         createServiceGivenScope()
@@ -54,6 +54,7 @@ abstract class AbstractFunTileService(
 
     override fun onStartListening() {
         super.onStartListening()
+        component.logger.d { "$tileKey on start listening" }
         val tileStateComponent = component.tileGivenScopeFactory(tileKey)
             .element<TileStateComponent>()
             .also { this.tileStateComponent = it }
@@ -64,12 +65,14 @@ abstract class AbstractFunTileService(
 
     override fun onClick() {
         super.onClick()
+        component.logger.d { "$tileKey on click" }
         tileStateComponent!!.tileStore.send(TileClicked)
     }
 
     override fun onStopListening() {
         tileStateComponent?.tileGivenScope?.dispose()
         tileStateComponent = null
+        component.logger.d { "$tileKey on stop listening" }
         super.onStopListening()
     }
 
@@ -108,20 +111,21 @@ abstract class AbstractFunTileService(
 @GivenScopeElementBinding<ServiceGivenScope>
 @Given
 class FunTileServiceComponent(
+    @Given val logger: Logger,
     @Given val resourceProvider: ResourceProvider,
     @Given val serviceGivenScope: ServiceGivenScope,
-    @Given val tileGivenScopeFactory: (@Given TypeKey<*>) -> TileGivenScope
+    @Given val tileGivenScopeFactory: (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 
 @GivenScopeElementBinding<TileGivenScope>
 @Given
 class TileStateComponent(
-    @Given tileKey: TypeKey<*>,
+    @Given tileKey: TypeKey<AbstractFunTileService>,
     @Given tileStateElements: Set<TileStateElement> = emptySet(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
     val tileStore = tileStateElements.toMap()[tileKey]
         ?.invoke()
-        ?: error("No tile found for $tileKey")
+        ?: error("No tile found for $tileKey in ${tileStateElements.toMap()}")
 }
