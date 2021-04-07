@@ -28,6 +28,7 @@ import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.scope.ChildGivenScopeFactory
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.flow.launchIn
@@ -114,7 +115,7 @@ class FunTileServiceComponent(
     @Given val logger: Logger,
     @Given val resourceProvider: ResourceProvider,
     @Given val serviceGivenScope: ServiceGivenScope,
-    @Given val tileGivenScopeFactory: (TypeKey<AbstractFunTileService>) -> TileGivenScope
+    @Given val tileGivenScopeFactory: @ChildGivenScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 
 @GivenScopeElementBinding<TileGivenScope>
