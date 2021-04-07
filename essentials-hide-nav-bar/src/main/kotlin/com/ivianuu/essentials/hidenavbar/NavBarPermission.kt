@@ -6,7 +6,6 @@ import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.ValueAction
 import com.ivianuu.essentials.data.updateAndAwait
-import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.store.Store
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 
-@PermissionBinding
 @Given
 class NavBarPermission(
     @Given private val resourceProvider: ResourceProvider

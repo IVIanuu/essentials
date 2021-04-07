@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
@@ -80,7 +79,6 @@ fun permissionUi(@Given permissionRequester: PermissionRequester): KeyUi<Permiss
     }
 }
 
-@PermissionBinding
 @Given
 object SampleCameraPermission : RuntimePermission {
     override val permissionName: String
@@ -90,7 +88,6 @@ object SampleCameraPermission : RuntimePermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SamplePhonePermission : RuntimePermission {
     override val permissionName: String
@@ -100,7 +97,6 @@ object SamplePhonePermission : RuntimePermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SampleAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
@@ -110,7 +106,6 @@ object SampleAccessibilityPermission : AccessibilityServicePermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SampleNotificationListenerPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
@@ -120,7 +115,6 @@ object SampleNotificationListenerPermission : NotificationListenerPermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SampleSystemOverlayPermission : SystemOverlayPermission {
     override val title: String = "System overlay"
@@ -128,7 +122,6 @@ object SampleSystemOverlayPermission : SystemOverlayPermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
     override val title: String = "Write secure settings"
@@ -136,7 +129,6 @@ object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@PermissionBinding
 @Given
 object SampleWriteSettingsPermission : WriteSettingsPermission {
     override val title: String = "Write settings"

@@ -34,7 +34,6 @@ import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
@@ -133,7 +132,6 @@ fun appTrackerNotificationFactory(
         .build()
 }
 
-@PermissionBinding
 @Given
 object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>

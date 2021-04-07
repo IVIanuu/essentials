@@ -48,7 +48,6 @@ import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationServiceAction
 import com.ivianuu.essentials.notificationlistener.NotificationServiceState
-import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
@@ -242,7 +241,6 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
     sbn = this
 )
 
-@PermissionBinding
 @Given
 object SampleNotificationsPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>

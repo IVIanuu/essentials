@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.PermissionBinding
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
@@ -30,7 +29,6 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Given
 import kotlin.reflect.KClass
 
-@PermissionBinding
 @Given
 object ActionAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
@@ -42,7 +40,6 @@ object ActionAccessibilityPermission : AccessibilityServicePermission {
     }
 }
 
-@PermissionBinding
 @Given
 object ActionRootPermission : RootPermission {
     override val title = "Root" // todo res
@@ -51,7 +48,6 @@ object ActionRootPermission : RootPermission {
     }
 }
 
-@PermissionBinding
 @Given
 object ActionWriteSecureSettingsPermission : WriteSecureSettingsPermission {
     override val title: String = "Write secure settings" // todo res
@@ -61,7 +57,6 @@ object ActionWriteSecureSettingsPermission : WriteSecureSettingsPermission {
     }
 }
 
-@PermissionBinding
 @Given
 object ActionWriteSettingsPermission : WriteSettingsPermission {
     override val title: String = "Write Settings" // todo res

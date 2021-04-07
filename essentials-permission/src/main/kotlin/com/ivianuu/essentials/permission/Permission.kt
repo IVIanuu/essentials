@@ -48,35 +48,29 @@ interface Permission {
 }
 
 @Given
-class PermissionModule<@Given T : @PermissionBinding P, P : Permission> {
-    @Given
-    fun permission(@Given permission: T): P = permission
-
+class PermissionModule<@Given T : Permission> {
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionSetElement(
-        @Given permissionKey: TypeKey<P>,
+        @Given permissionKey: TypeKey<T>,
         @Given permission: T
     ): Pair<TypeKey<Permission>, Permission> = permissionKey to permission
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun requestHandler(
-        @Given permissionKey: TypeKey<P>,
-        @Given requestHandler: PermissionRequestHandler<P>
+        @Given permissionKey: TypeKey<T>,
+        @Given requestHandler: PermissionRequestHandler<T>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
         (permissionKey to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionState(
-        @Given permissionKey: TypeKey<P>,
-        @Given state: Flow<PermissionState<P>>
+        @Given permissionKey: TypeKey<T>,
+        @Given state: Flow<PermissionState<T>>
     ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 }
-
-@Qualifier
-annotation class PermissionBinding
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
