@@ -59,6 +59,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }

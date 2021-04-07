@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.injekt.scope.element
 
 @Composable
 fun PopupMenuButton(

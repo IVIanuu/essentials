@@ -47,36 +47,36 @@ interface Permission {
     val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-class PermissionModule<T : P, @ForTypeKey P : Permission> {
+@Given
+class PermissionModule<@Given T : @PermissionBinding P, P : Permission> {
     @Given
     fun permission(@Given permission: T): P = permission
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionSetElement(
+        @Given permissionKey: TypeKey<P>,
         @Given permission: T
-    ): Pair<TypeKey<Permission>, Permission> = typeKeyOf<P>() to permission
+    ): Pair<TypeKey<Permission>, Permission> = permissionKey to permission
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun requestHandler(
+        @Given permissionKey: TypeKey<P>,
         @Given requestHandler: PermissionRequestHandler<P>
     ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-        (typeKeyOf<P>() to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+        (permissionKey to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
     @Suppress("UNCHECKED_CAST")
     @Given
     fun permissionState(
+        @Given permissionKey: TypeKey<P>,
         @Given state: Flow<PermissionState<P>>
-    ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = typeKeyOf<P>() to state
+    ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 }
 
 @Qualifier
 annotation class PermissionBinding
-
-@Given
-fun <@Given T : @PermissionBinding P, @ForTypeKey P : Permission> permissionModule(
-): PermissionModule<T, P> = PermissionModule()
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
 
@@ -85,7 +85,7 @@ typealias PermissionRequestHandler<P> = suspend (P) -> Unit
 typealias PermissionState<P> = Boolean
 
 @Given
-fun <@ForTypeKey P : Permission> permissionState(
+fun <P : Permission> permissionState(
     @Given defaultDispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>

@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 
 class EsAccessibilityService : AccessibilityService() {
     private val component by lazy {

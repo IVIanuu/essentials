@@ -50,9 +50,10 @@ sealed class TileAction {
 }
 
 @Given
-fun <@Given T : Store<TileState<S>, TileAction>, @ForTypeKey S : AbstractFunTileService> tileStateElement(
+fun <@Given T : Store<TileState<S>, TileAction>, S : AbstractFunTileService> tileStateElement(
     @Given provider: () -> T,
-): TileStateElement = typeKeyOf<S>() to provider.cast()
+    @Given serviceKey: TypeKey<S>
+): TileStateElement = serviceKey to provider.cast()
 
 typealias TileGivenScope = DefaultGivenScope
 

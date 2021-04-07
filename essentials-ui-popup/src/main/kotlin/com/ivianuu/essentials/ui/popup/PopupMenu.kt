@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 
 object PopupMenu {
     data class Item(

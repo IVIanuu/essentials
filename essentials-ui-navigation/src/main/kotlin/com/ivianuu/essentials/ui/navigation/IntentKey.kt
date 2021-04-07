@@ -25,9 +25,10 @@ import kotlin.reflect.KClass
 interface IntentKey : Key<Nothing>
 
 @Given
-inline fun <@Given T : KeyIntentFactory<K>, reified K : Key<*>> keyIntentFactoryElement(
-    @Given intentFactory: T
-): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (K::class to intentFactory).cast()
+fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
+    @Given intentFactory: T,
+    @Given keyClass: KClass<K>
+): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
 
 typealias KeyIntentFactory<T> = (T) -> Intent

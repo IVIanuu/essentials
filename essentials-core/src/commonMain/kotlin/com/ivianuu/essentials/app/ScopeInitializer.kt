@@ -13,12 +13,11 @@ import com.ivianuu.injekt.scope.GivenScopeInitializer
 typealias ScopeInitializer<S> = () -> Unit
 
 @Given
-fun <@Given @ForTypeKey T : U, U : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
+fun <@Given T : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
     @Given instance: () -> T,
-    @Given config: ScopeInitializerConfig<U> = ScopeInitializerConfig.DEFAULT
-): ScopeInitializerElement<S> = ScopeInitializerElement(
-    typeKeyOf<T>(), instance, config
-)
+    @Given key: TypeKey<T>,
+    @Given config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT
+): ScopeInitializerElement<S> = ScopeInitializerElement(key, instance, config)
 
 data class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
     val dependencies: Set<TypeKey<() -> Unit>> = emptySet(),
@@ -30,15 +29,16 @@ data class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
 }
 
 data class ScopeInitializerElement<S>(
-    val key: TypeKey<*>,
+    val key: TypeKey<ScopeInitializer<S>>,
     val instance: () -> ScopeInitializer<S>,
     val config: ScopeInitializerConfig<ScopeInitializer<S>>
 )
 
 @Given
-fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
+fun <S : GivenScope> scopeInitializerRunner(
     @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
     @Given logger: Logger,
+    @Given scopeKey: TypeKey<S>,
     @Given workerRunner: ScopeWorkerRunner<S>
 ): GivenScopeInitializer<S> = {
     initializers
@@ -48,7 +48,7 @@ fun <@ForTypeKey S : GivenScope> scopeInitializerRunner(
             dependents = { it.config.dependents }
         )
         .forEach {
-            logger.d { "${typeKeyOf<S>()} initialize ${it.key}" }
+            logger.d { "$scopeKey initialize ${it.key}" }
             it.instance()()
         }
     workerRunner()

@@ -27,6 +27,7 @@ import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

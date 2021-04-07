@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.activityGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 

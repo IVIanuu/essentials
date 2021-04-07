@@ -31,23 +31,21 @@ typealias KeyUi<K> = @Composable () -> Unit
 
 typealias KeyUiFactory<K> = (K, KeyUiGivenScope) -> KeyUi<K>
 
-class KeyUiModule<K : Key<*>>(private val keyClass: KClass<K>) {
+@Given
+class KeyUiModule<@Given T : KeyUi<K>, K : Key<*>> {
     @Given
     fun keyUi(
+        @Given keyClass: KClass<K>,
         @Given keyUiFactory: (@Given K, @Given KeyUiGivenScope) -> KeyUi<K>
     ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
         (keyClass to keyUiFactory).cast()
 
     @Given
     fun keyUiOptionFactory(
+        @Given keyClass: KClass<K>,
         @Given keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
     ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
         (keyClass to keyUiOptionsFactory).cast()
-
-    companion object {
-        @Given
-        inline operator fun <@Given T : KeyUi<K>, reified K : Key<*>> invoke() = KeyUiModule(K::class)
-    }
 }
 
 typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
@@ -68,8 +66,8 @@ interface StateKeyUiScope<K, S> {
 }
 
 @Given
-inline fun <@Given U : StateKeyUi<K, S>, reified K : Key<*>, S> storeKeyUi(
-    @Given noinline uiFactory: () -> U,
+fun <@Given U : StateKeyUi<K, S>, K : Key<*>, S> storeKeyUi(
+    @Given uiFactory: () -> U,
     @Given state: StateFlow<S>
 ): KeyUi<K> = {
     val currentState by state.collectAsState()
@@ -103,8 +101,8 @@ operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
 interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Sink<A>
 
 @Given
-inline fun <@Given U : StoreKeyUi<K, S, A>, reified K : Key<*>, S, A> storeKeyUi(
-    @Given noinline uiFactory: () -> U,
+fun <@Given U : StoreKeyUi<K, S, A>, K : Key<*>, S, A> storeKeyUi(
+    @Given uiFactory: () -> U,
     @Given state: StateFlow<S>,
     @Given sink: Sink<A>
 ): KeyUi<K> = {

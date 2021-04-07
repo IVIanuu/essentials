@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.app.ScopeInitializerConfig
 import com.ivianuu.essentials.ui.core.SystemBarManagerProvider
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -29,12 +30,11 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 // todo remove type parameter S once injekt is fixed
 @Given
-fun <@Given @ForTypeKey T : S, S : UiDecorator> uiDecoratorElement(
+fun <@Given T : UiDecorator> uiDecoratorElement(
     @Given instance: T,
-    @Given config: UiDecoratorConfig<S> = UiDecoratorConfig.DEFAULT
-): UiDecoratorElement = UiDecoratorElement(
-    typeKeyOf<T>(), instance as UiDecorator, config
-)
+    @Given key: TypeKey<T>,
+    @Given config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
+): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator, config)
 
 data class UiDecoratorConfig<out T : UiDecorator>(
     val dependencies: Set<TypeKey<UiDecorator>> = emptySet(),
@@ -48,7 +48,7 @@ data class UiDecoratorConfig<out T : UiDecorator>(
 typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
 data class UiDecoratorElement(
-    val key: TypeKey<*>,
+    val key: TypeKey<UiDecorator>,
     val decorator: UiDecorator,
     val config: UiDecoratorConfig<*>
 )

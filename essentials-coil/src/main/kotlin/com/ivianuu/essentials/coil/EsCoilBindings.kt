@@ -51,9 +51,10 @@ fun imageLoader(
     .build()
 
 @Given
-inline fun <@Given reified F : Fetcher<T>, reified T : Any> fetcherPair(
-    @Given instance: F
-): FetcherPair<Any> = FetcherPair(instance, T::class) as FetcherPair<Any>
+fun <@Given F : Fetcher<T>, T : Any> fetcherPair(
+    @Given instance: F,
+    @Given typeClass: KClass<T>
+): FetcherPair<Any> = FetcherPair(instance, typeClass) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
     val fetcher: Fetcher<T>,
@@ -61,9 +62,10 @@ data class FetcherPair<T : Any>(
 )
 
 @Given
-inline fun <@Given reified M : Mapper<T, V>, reified T : Any, reified V : Any> mapperPair(
-    @Given instance: M
-): MapperPair<Any> = MapperPair(instance, T::class) as MapperPair<Any>
+fun <@Given M : Mapper<T, V>, T : Any, V : Any> mapperPair(
+    @Given instance: M,
+    @Given typeClass: KClass<T>
+): MapperPair<Any> = MapperPair(instance, typeClass) as MapperPair<Any>
 
 data class MapperPair<T : Any>(
     val mapper: Mapper<T, *>,

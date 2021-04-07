@@ -3,6 +3,7 @@
 package com.ivianuu.essentials.sample
 
 import android.app.Application
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.about.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.activity.*

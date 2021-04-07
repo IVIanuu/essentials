@@ -22,11 +22,15 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
 
 @Given
-fun <@ForTypeKey S : GivenScope> scopeLogger(@Given logger: Logger): ScopeWorker<S> = {
-    logger.d { "${typeKeyOf<S>()} created" }
-    runOnCancellation { logger.d { "${typeKeyOf<S>()} disposed" } }
+fun <S : GivenScope> scopeLogger(
+    @Given logger: Logger,
+    @Given scopeKey: TypeKey<S>
+): ScopeWorker<S> = {
+    logger.d { "$scopeKey created" }
+    runOnCancellation { logger.d { "$scopeKey disposed" } }
 }

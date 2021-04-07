@@ -27,8 +27,9 @@ annotation class Initial
 annotation class InitialOrFallback
 
 @Given
-inline fun <reified T : Any> initialOrFallback(
-    @Given initial: @Initial T? = null
-): @InitialOrFallback T = initial ?: T::class.newInstance()
+fun <T : Any> initialOrFallback(
+    @Given initial: @Initial T? = null,
+    @Given clazz: KClass<T>
+): @InitialOrFallback T = initial ?: clazz.newInstance()
 
 expect fun <T : Any> KClass<T>.newInstance(): T

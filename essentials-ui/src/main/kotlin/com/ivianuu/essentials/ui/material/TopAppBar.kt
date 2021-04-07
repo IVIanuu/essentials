@@ -44,6 +44,7 @@ import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {

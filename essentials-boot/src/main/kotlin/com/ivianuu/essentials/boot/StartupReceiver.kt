@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ReceiverGivenScope
 import com.ivianuu.injekt.android.createReceiverGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.element
 
 class StartupReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

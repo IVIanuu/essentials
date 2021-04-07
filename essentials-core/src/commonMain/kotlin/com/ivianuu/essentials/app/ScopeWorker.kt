@@ -21,6 +21,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.ForTypeKey
+import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.launch
@@ -30,12 +31,13 @@ typealias ScopeWorker<S> = suspend () -> Unit
 typealias ScopeWorkerRunner<S> = () -> Unit
 
 @Given
-fun <@ForTypeKey S : GivenScope> scopeWorkerRunner(
+fun <S : GivenScope> scopeWorkerRunner(
     @Given logger: Logger,
     @Given scope: ScopeCoroutineScope<S>,
+    @Given typeKey: TypeKey<S>,
     @Given workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {
-    logger.d { "${typeKeyOf<S>()} run scope workers" }
+    logger.d { "$typeKey run scope workers" }
     workers
         .forEach { worker ->
             scope.launch {
