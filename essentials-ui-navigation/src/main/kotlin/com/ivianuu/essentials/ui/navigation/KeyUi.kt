@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.store.Sink
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.StateFlow
@@ -103,12 +104,11 @@ interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Sink<A>
 @Given
 fun <@Given U : StoreKeyUi<K, S, A>, K : Key<*>, S, A> storeKeyUi(
     @Given uiFactory: () -> U,
-    @Given state: StateFlow<S>,
-    @Given sink: Sink<A>
+    @Given store: Store<S, A>
 ): KeyUi<K> = {
-    val currentState by state.collectAsState()
-    val scope = remember(sink) {
-        object : StoreKeyUiScope<K, S, A>, Sink<A> by sink {
+    val currentState by store.collectAsState()
+    val scope = remember(store) {
+        object : StoreKeyUiScope<K, S, A>, Sink<A> by store {
             override val state: S
                 get() = currentState
         }
