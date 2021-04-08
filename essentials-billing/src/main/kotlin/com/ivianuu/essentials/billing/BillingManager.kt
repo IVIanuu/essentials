@@ -58,7 +58,7 @@ class BillingManager(
     suspend fun purchase(
         sku: Sku,
         acknowledge: Boolean = true,
-        consumeOldPurchaseIfUnspecified: Boolean = true,A
+        consumeOldPurchaseIfUnspecified: Boolean = true,
     ): Boolean = withContext(scope.coroutineContext + ioDispatcher) {
         logger.d {
             "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"

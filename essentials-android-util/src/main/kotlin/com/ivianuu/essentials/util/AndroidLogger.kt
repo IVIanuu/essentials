@@ -28,7 +28,6 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 
-@Factory
 @Given
 class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
@@ -41,16 +40,15 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
             WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
         }
     }
-    companion object {
-        @Given
-        fun androidLogger(
-            @Given buildInfo: BuildInfo,
-            @Given androidLoggerFactory: () -> @Factory AndroidLogger,
-            @Given noopLoggerFactory: () -> @Factory NoopLogger
-        ): @Scoped<AppGivenScope> Logger =
-            if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
-    }
 }
+
+@Given
+fun androidLogger(
+    @Given buildInfo: BuildInfo,
+    @Given androidLoggerFactory: () -> AndroidLogger,
+    @Given noopLoggerFactory: () -> NoopLogger
+): @Scoped<AppGivenScope> Logger =
+    if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
 
 @Given
 fun defaultLoggingEnabled(@Given buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug
