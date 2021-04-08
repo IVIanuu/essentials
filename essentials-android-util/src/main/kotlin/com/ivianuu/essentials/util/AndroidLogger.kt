@@ -43,7 +43,7 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
 }
 
 @Given
-fun androidLogger(
+inline fun androidLogger(
     @Given buildInfo: BuildInfo,
     @Given androidLoggerFactory: () -> AndroidLogger,
     @Given noopLoggerFactory: () -> NoopLogger
