@@ -25,6 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 
 @Given
 object InputMethodActionId : ActionId("input_method")
@@ -40,7 +41,7 @@ fun inputMethodAction(
 
 @Given
 fun inputMethodActionExecutor(
-    @Given inputMethodManager: InputMethodManager
+    @Given inputMethodManager: @SystemService InputMethodManager
 ): @ActionExecutorBinding<InputMethodActionId> ActionExecutor = {
     inputMethodManager.showInputMethodPicker()
 }

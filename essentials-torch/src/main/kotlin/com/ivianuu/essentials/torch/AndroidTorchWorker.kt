@@ -24,12 +24,13 @@ import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.collect
 
 @Given
 fun androidTorchWorker(
-    @Given cameraManager: CameraManager,
+    @Given cameraManager: @SystemService CameraManager,
     @Given torch: Store<TorchState, TorchAction>,
     @Given toaster: Toaster
 ): ScopeWorker<AppGivenScope> = {

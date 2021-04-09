@@ -7,8 +7,9 @@ import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.work.WorkerBinding
-import com.ivianuu.injekt.android.work.WorkerContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -17,10 +18,10 @@ import kotlinx.coroutines.flow.map
 @WorkerBinding
 @Given
 class ForegroundWorker(
-    @Given appContext: WorkerContext,
+    @Given appContext: AppContext,
     @Given params: WorkerParameters,
     @Given private val internalForegroundState: Flow<InternalForegroundState>,
-    @Given private val notificationManager: NotificationManager,
+    @Given private val notificationManager: @SystemService NotificationManager,
     @Given private val logger: Logger
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {

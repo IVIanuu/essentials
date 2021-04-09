@@ -4,6 +4,7 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,7 @@ fun displayInfo(
     @Given configChanges: () -> Flow<ConfigChange>,
     @Given displayRotation: () -> Flow<DisplayRotation>,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
-    @Given windowManager: WindowManager
+    @Given windowManager: @SystemService WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayInfo> = flow {
     combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->
         metricsMutex.withLock {

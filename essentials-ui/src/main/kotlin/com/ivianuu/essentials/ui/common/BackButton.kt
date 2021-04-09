@@ -25,7 +25,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack, null) }) {
-    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
     IconButton(
         onClick = { onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed() },
         content = content

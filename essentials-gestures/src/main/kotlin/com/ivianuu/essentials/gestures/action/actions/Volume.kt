@@ -25,6 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 
 @Given
 object VolumeActionId : ActionId("volume")
@@ -40,7 +41,7 @@ fun volumeAction(
 
 @Given
 fun volumeActionExecutor(
-    @Given audioManager: AudioManager
+    @Given audioManager: @SystemService AudioManager
 ): @ActionExecutorBinding<VolumeActionId> ActionExecutor = {
     audioManager.adjustStreamVolume(
         AudioManager.STREAM_MUSIC,

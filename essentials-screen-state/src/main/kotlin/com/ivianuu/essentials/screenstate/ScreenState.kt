@@ -25,6 +25,7 @@ import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -61,8 +62,8 @@ typealias CurrentScreenStateProvider = suspend () -> ScreenState
 @Given
 fun currentScreenStateProvider(
     @Given defaultDispatcher: DefaultDispatcher,
-    @Given keyguardManager: KeyguardManager,
-    @Given powerManager: PowerManager,
+    @Given keyguardManager: @SystemService KeyguardManager,
+    @Given powerManager: @SystemService PowerManager,
 ): CurrentScreenStateProvider = {
     withContext(defaultDispatcher) {
         if (powerManager.isInteractive) {

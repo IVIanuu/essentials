@@ -26,6 +26,7 @@ import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppResources
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Eager
 import kotlinx.coroutines.flow.Flow
@@ -69,7 +70,7 @@ typealias BatteryTwilightState = Boolean
 @Given
 fun batteryTwilightState(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given powerManager: PowerManager,
+    @Given powerManager: @SystemService PowerManager,
 ): Flow<BatteryTwilightState> = broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
     .map { Unit }
     .onStart { emit(Unit) }

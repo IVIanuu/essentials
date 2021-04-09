@@ -22,6 +22,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -34,7 +35,7 @@ fun screenUnlocker(
     @Given appContext: AppContext,
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
-    @Given keyguardManager: KeyguardManager,
+    @Given keyguardManager: @SystemService KeyguardManager,
 ): ScreenUnlocker = {
     withContext(defaultDispatcher) {
         if (!keyguardManager.isKeyguardLocked) return@withContext true

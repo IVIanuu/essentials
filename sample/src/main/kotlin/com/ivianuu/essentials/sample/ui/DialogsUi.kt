@@ -333,7 +333,7 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
     TextButton(
         enabled = enabled,
         onClick = {
@@ -353,7 +353,7 @@ private fun DialogLauncherButton(
 ) {
     Spacer(Modifier.height(8.dp))
 
-    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
     val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
     Button(
         onClick = {

@@ -28,6 +28,7 @@ import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.channels.awaitClose
@@ -66,7 +67,7 @@ fun displayRotation(
     @Given rotationChanges: () -> Flow<RotationChange>,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
     @Given screenState: () -> Flow<ScreenState>,
-    @Given windowManager: WindowManager
+    @Given windowManager: @SystemService WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayRotation> = flow {
     screenState()
         .flatMapLatest { currentScreenState ->

@@ -47,6 +47,7 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
@@ -112,7 +113,7 @@ typealias AppTrackerNotificationFactory = (String?) -> Notification
 @Given
 fun appTrackerNotificationFactory(
     @Given appContext: AppContext,
-    @Given notificationManager: NotificationManager,
+    @Given notificationManager: @SystemService NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo
 ): AppTrackerNotificationFactory = { currentApp ->
     if (systemBuildInfo.sdk >= 26) {

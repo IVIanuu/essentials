@@ -23,14 +23,14 @@ import androidx.work.WorkerParameters
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.work.WorkerBinding
-import com.ivianuu.injekt.android.work.WorkerContext
 import kotlinx.coroutines.delay
 
 @WorkerBinding
 @Given
 class TestWorker(
-    @Given appContext: WorkerContext,
+    @Given appContext: AppContext,
     @Given params: WorkerParameters,
     @Given private val logger: Logger
 ) : CoroutineWorker(appContext, params) {

@@ -66,7 +66,7 @@ fun DialogScaffold(
 
 private val defaultDismissRequestHandler: () -> Unit
     @Composable get() {
-        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
         return {
             backPressedDispatcherOwner.onBackPressedDispatcher
                 .onBackPressed()

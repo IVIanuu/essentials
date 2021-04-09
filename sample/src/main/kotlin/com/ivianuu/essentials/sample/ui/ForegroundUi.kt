@@ -52,6 +52,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.delay
@@ -138,7 +139,7 @@ typealias ForegroundNotificationFactory = (Int, Color) -> Notification
 @Given
 fun foregroundNotificationFactory(
     @Given appContext: AppContext,
-    @Given notificationManager: NotificationManager,
+    @Given notificationManager: @SystemService NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo
 ): ForegroundNotificationFactory = { count, color ->
     if (systemBuildInfo.sdk >= 26) {

@@ -28,6 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -47,7 +48,7 @@ fun wifiAction(
 
 @Given
 fun wifiActionExecutor(
-    @Given wifiManager: WifiManager
+    @Given wifiManager: @SystemService WifiManager
 ): @ActionExecutorBinding<WifiActionId> ActionExecutor = {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
@@ -58,7 +59,7 @@ typealias WifiIcon = ActionIcon
 @Given
 fun wifiIcon(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given wifiManager: WifiManager,
+    @Given wifiManager: @SystemService WifiManager,
 ): Flow<WifiIcon> = broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
     .map {
         val state =

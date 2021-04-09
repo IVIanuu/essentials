@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -52,7 +53,7 @@ typealias TorchNotificationFactory = () -> Notification
 @Given
 fun torchNotificationFactory(
     @Given appContext: AppContext,
-    @Given notificationManager: NotificationManager,
+    @Given notificationManager: @SystemService NotificationManager,
     @Given resourceProvider: ResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
 ): TorchNotificationFactory = {

@@ -26,6 +26,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
+import com.ivianuu.injekt.android.SystemService
 import kotlin.reflect.KClass
 
 interface AccessibilityServicePermission : Permission {
@@ -34,7 +35,7 @@ interface AccessibilityServicePermission : Permission {
 
 @Given
 fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
-    @Given accessibilityManager: AccessibilityManager,
+    @Given accessibilityManager: @SystemService AccessibilityManager,
     @Given buildInfo: BuildInfo
 ): PermissionStateProvider<P> = { permission ->
     accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)

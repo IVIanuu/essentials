@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityGivenScope
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.activityGivenScope
 import com.ivianuu.injekt.scope.GivenScopeElementBinding
 import com.ivianuu.injekt.scope.element
@@ -129,7 +130,7 @@ class UnlockScreenActivity : ComponentActivity() {
 @Given
 class UnlockScreenComponent(
     @Given val broadcastsFactory: BroadcastsFactory,
-    @Given val keyguardManager: KeyguardManager,
+    @Given val keyguardManager: @SystemService KeyguardManager,
     @Given val logger: Logger,
     @Given val systemBuildInfo: SystemBuildInfo
 )
