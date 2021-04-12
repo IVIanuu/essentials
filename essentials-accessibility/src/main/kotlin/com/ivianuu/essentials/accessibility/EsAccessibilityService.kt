@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 
 class EsAccessibilityService : AccessibilityService() {
@@ -65,7 +65,7 @@ class EsAccessibilityService : AccessibilityService() {
     }
 }
 
-@GivenScopeElementBinding<ServiceGivenScope>
+@InstallElement<ServiceGivenScope>
 @Given
 class EsAccessibilityServiceComponent(
     @Given val accessibilityEvents: MutableAccessibilityEvents,

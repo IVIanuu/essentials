@@ -9,13 +9,13 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.work.WorkerBinding
+import com.ivianuu.injekt.android.work.InstallWorker
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
-@WorkerBinding
+@InstallWorker
 @Given
 class ForegroundWorker(
     @Given appContext: AppContext,

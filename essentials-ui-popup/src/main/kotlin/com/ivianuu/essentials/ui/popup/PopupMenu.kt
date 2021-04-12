@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.NavigationAction.PopTop
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 
 object PopupMenu {
@@ -63,7 +63,7 @@ fun PopupMenu(items: List<PopupMenu.Item>) {
     }
 }
 
-@GivenScopeElementBinding<UiGivenScope>
+@InstallElement<UiGivenScope>
 @Given
 class PopupMenuComponent(
     @Given val navigator: Sink<NavigationAction>

@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
 import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.ChildGivenScopeFactory
+import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.element
 import kotlin.reflect.KClass
 
@@ -50,7 +50,7 @@ fun navigationStateContent(
             optionFactories = optionFactories,
             uiFactories = uiFactories,
             backStack = state.backStack.cast(),
-            keyUiGivenScopeFactory = uiGivenScope.element<@ChildGivenScopeFactory () -> KeyUiGivenScope>()
+            keyUiGivenScopeFactory = uiGivenScope.element<@ChildScopeFactory () -> KeyUiGivenScope>()
         )
     }
     SideEffect {

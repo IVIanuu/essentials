@@ -58,7 +58,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.NavigationAction
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 
 @Given
@@ -380,6 +380,6 @@ fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = 
 @Given
 val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey>()
 
-@GivenScopeElementBinding<UiGivenScope>
+@InstallElement<UiGivenScope>
 @Given
 class DialogLauncherComponent(@Given val navigator: Sink<NavigationAction>)

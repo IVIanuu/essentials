@@ -28,8 +28,8 @@ import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.android.createServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.scope.ChildGivenScopeFactory
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -109,16 +109,16 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
     }
 }
 
-@GivenScopeElementBinding<ServiceGivenScope>
+@InstallElement<ServiceGivenScope>
 @Given
 class FunTileServiceComponent(
     @Given val logger: Logger,
     @Given val resourceProvider: ResourceProvider,
     @Given val serviceGivenScope: ServiceGivenScope,
-    @Given val tileGivenScopeFactory: @ChildGivenScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
+    @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 
-@GivenScopeElementBinding<TileGivenScope>
+@InstallElement<TileGivenScope>
 @Given
 class TileStateComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,

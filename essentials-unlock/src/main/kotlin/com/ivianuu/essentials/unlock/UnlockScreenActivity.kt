@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ActivityGivenScope
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.activityGivenScope
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
@@ -126,7 +126,7 @@ class UnlockScreenActivity : ComponentActivity() {
     }
 }
 
-@GivenScopeElementBinding<ActivityGivenScope>
+@InstallElement<ActivityGivenScope>
 @Given
 class UnlockScreenComponent(
     @Given val broadcastsFactory: BroadcastsFactory,

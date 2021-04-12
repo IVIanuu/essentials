@@ -28,15 +28,15 @@ import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.activityGivenScope
-import com.ivianuu.injekt.scope.ChildGivenScopeFactory
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity() {
     private val uiGivenScope by lazy {
-        activityGivenScope.element<@ChildGivenScopeFactory () -> UiGivenScope>()()
+        activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class EsActivity : ComponentActivity() {
     }
 }
 
-@GivenScopeElementBinding<UiGivenScope>
+@InstallElement<UiGivenScope>
 @Given
 class EsActivityComponent(
     @Given val appUi: AppUi,

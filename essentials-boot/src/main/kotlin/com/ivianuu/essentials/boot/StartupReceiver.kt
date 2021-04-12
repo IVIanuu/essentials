@@ -24,7 +24,7 @@ import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ReceiverGivenScope
 import com.ivianuu.injekt.android.createReceiverGivenScope
-import com.ivianuu.injekt.scope.GivenScopeElementBinding
+import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
 
 class StartupReceiver : BroadcastReceiver() {
@@ -38,7 +38,7 @@ class StartupReceiver : BroadcastReceiver() {
     }
 }
 
-@GivenScopeElementBinding<ReceiverGivenScope>
+@InstallElement<ReceiverGivenScope>
 @Given
 class StartupReceiverComponent(
     @Given val bootListeners: Set<BootListener> = emptySet(),
