@@ -105,6 +105,7 @@ inline fun Logger.warn(
 }
 
 @Given
+@Factory
 object NoopLogger : Logger {
     override val isEnabled: Boolean
         get() = false
@@ -114,6 +115,7 @@ object NoopLogger : Logger {
 }
 
 @Given
+@Factory
 class PrintingLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
         println("[${kind.name}]${tag ?: stackTraceTag} ${render(message, throwable)}")

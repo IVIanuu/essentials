@@ -29,6 +29,7 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 
 @Given
+@Factory
 class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
         when (kind) {
@@ -45,8 +46,8 @@ class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
 @Given
 inline fun androidLogger(
     @Given buildInfo: BuildInfo,
-    @Given androidLoggerFactory: () -> AndroidLogger,
-    @Given noopLoggerFactory: () -> NoopLogger
+    @Given androidLoggerFactory: () -> @Factory AndroidLogger,
+    @Given noopLoggerFactory: () -> @Factory NoopLogger
 ): @Scoped<AppGivenScope> Logger =
     if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
 
