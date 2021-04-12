@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.first
 @Given
 fun testTile(
     @Given twilightPrefStore: Store<TwilightPrefs, ValueAction<TwilightPrefs>>
-): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction> = {
+): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction<FunTileService1>> = {
     twilightPrefStore.update { it.toTileState() }
     onAction<TileClicked> {
         val newTwilightMode = if (twilightPrefStore.first().twilightMode == TwilightMode.LIGHT)

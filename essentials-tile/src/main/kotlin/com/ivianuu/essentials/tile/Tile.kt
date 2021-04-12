@@ -21,15 +21,13 @@ import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
-import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.ChildGivenScopeModule1
 import com.ivianuu.injekt.scope.DefaultGivenScope
 
-typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction>>
+typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>>
 
-data class TileState<T : AbstractFunTileService>(
+data class TileState<out T : AbstractFunTileService>(
     val icon: Icon? = null,
     val iconRes: Int? = null,
     val label: String? = null,
@@ -45,12 +43,12 @@ data class TileState<T : AbstractFunTileService>(
 
 fun Boolean.toTileStatus() = if (this) TileState.Status.ACTIVE else TileState.Status.INACTIVE
 
-sealed class TileAction {
-    object TileClicked : TileAction()
+sealed class TileAction<out S : AbstractFunTileService> {
+    object TileClicked : TileAction<Nothing>()
 }
 
 @Given
-fun <@Given T : Store<TileState<S>, TileAction>, S : AbstractFunTileService> tileStateElement(
+fun <@Given T : Store<TileState<S>, TileAction<S>>, S : AbstractFunTileService> tileStateElement(
     @Given provider: () -> T,
     @Given serviceKey: TypeKey<S>
 ): TileStateElement = serviceKey to provider.cast()
