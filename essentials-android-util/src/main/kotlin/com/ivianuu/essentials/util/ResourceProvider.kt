@@ -29,39 +29,39 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
 @Given
-class ResourceProvider(@Given private val appContext: AppContext) {
+class ResourceProvider(@Given private val context: AppContext) {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun bitmap(id: Int): ImageBitmap =
-        appContext.getDrawable(id)!!.toBitmap().toImageBitmap()
+        context.getDrawable(id)!!.toBitmap().toImageBitmap()
 
     fun boolean(id: Int): Boolean =
-        appContext.resources.getBoolean(id)
+        context.resources.getBoolean(id)
 
     fun color(id: Int): Color =
-        Color(appContext.getColor(id))
+        Color(context.getColor(id))
 
-    fun dimension(id: Int): Dp = with(Density(appContext)) {
-        appContext.resources.getDimension(id).toInt().toDp()
+    fun dimension(id: Int): Dp = with(Density(context)) {
+        context.resources.getDimension(id).toInt().toDp()
     }
 
     fun drawable(id: Int): ImageBitmap =
         bitmap(id)
 
     fun float(id: Int): Float =
-        ResourcesCompat.getFloat(appContext.resources, id)
+        ResourcesCompat.getFloat(context.resources, id)
 
     fun font(id: Int): Font = Font(id)
 
     fun int(id: Int): Int =
-        appContext.resources.getInteger(id)
+        context.resources.getInteger(id)
 
-    fun intArray(id: Int): IntArray = appContext.resources.getIntArray(id)
+    fun intArray(id: Int): IntArray = context.resources.getIntArray(id)
 
     fun string(id: Int): String =
-        appContext.getString(id)
+        context.getString(id)
 
     fun string(id: Int, vararg arguments: Any?): String =
-        appContext.getString(id, *arguments)
+        context.getString(id, *arguments)
 
-    fun stringArray(id: Int): Array<String> = appContext.resources.getStringArray(id)
+    fun stringArray(id: Int): Array<String> = context.resources.getStringArray(id)
 }
