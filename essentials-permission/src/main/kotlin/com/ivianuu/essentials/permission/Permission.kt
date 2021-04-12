@@ -113,11 +113,9 @@ fun <S : GivenScope> permissionRefreshesWorker(): ScopeWorker<S> = {
     runOnCancellation { permissionRefreshes.tryEmit(Unit) }
 }
 
-private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> {
-    return {
-        this(it)
-        permissionRefreshes.tryEmit(Unit)
-    }
+private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> = {
+    this(it)
+    permissionRefreshes.tryEmit(Unit)
 }
 
 typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
