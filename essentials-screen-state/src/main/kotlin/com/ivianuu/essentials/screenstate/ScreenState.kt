@@ -38,6 +38,10 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
+enum class ScreenState(val isOn: Boolean) {
+    OFF(false), LOCKED(true), UNLOCKED(true)
+}
+
 @Given
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
@@ -57,7 +61,7 @@ fun screenState(
     .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
     .distinctUntilChanged()
 
-typealias CurrentScreenStateProvider = suspend () -> ScreenState
+internal typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
 @Given
 fun currentScreenStateProvider(
@@ -78,6 +82,3 @@ fun currentScreenStateProvider(
     }
 }
 
-enum class ScreenState(val isOn: Boolean) {
-    OFF(false), LOCKED(true), UNLOCKED(true)
-}
