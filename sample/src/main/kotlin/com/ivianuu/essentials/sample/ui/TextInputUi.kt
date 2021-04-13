@@ -51,7 +51,7 @@ val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 class TextInputKey : Key<Nothing>
 
 @Given
-fun textInputUi(): KeyUi<TextInputKey> = {
+val textInputUi: KeyUi<TextInputKey> = {
     val state = remember { TextInputState() }
 
     if (!state.searchVisible) {
@@ -92,7 +92,7 @@ fun textInputUi(): KeyUi<TextInputKey> = {
 
                         DisposableEffect(true) {
                             focusRequester.requestFocus()
-                            onDispose {  }
+                            onDispose { }
                         }
                     } else {
                         Text("Text input")

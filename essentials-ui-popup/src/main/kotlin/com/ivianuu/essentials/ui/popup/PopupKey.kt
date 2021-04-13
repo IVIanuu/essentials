@@ -85,7 +85,7 @@ fun popupUi(
 }
 
 @Given
-fun popupKeyOptionsFactory(): KeyUiOptionsFactory<PopupKey> = {
+val popupKeyOptionsFactory: KeyUiOptionsFactory<PopupKey> = {
     KeyUiOptions(
         opaque = true,
         enterTransition = FadeStackTransition(),

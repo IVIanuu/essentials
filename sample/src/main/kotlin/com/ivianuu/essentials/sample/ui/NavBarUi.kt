@@ -148,5 +148,5 @@ fun navBarUi(
 typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
 
 @Given
-fun sampleForceNavBarVisibleState(): @Scoped<AppGivenScope> SampleForceNavBarVisibleState =
-    MutableStateFlow(false)
+val sampleForceNavBarVisibleState: @Scoped<AppGivenScope> SampleForceNavBarVisibleState
+    get() = MutableStateFlow(false)

@@ -51,7 +51,7 @@ val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationK
 class BottomNavigationKey : Key<Nothing>
 
 @Given
-fun bottomNavigationUi(): KeyUi<BottomNavigationKey> = {
+val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
     var selectedItem by rememberSaveable { mutableStateOf(BottomNavItem.values().first()) }
 
     Scaffold(

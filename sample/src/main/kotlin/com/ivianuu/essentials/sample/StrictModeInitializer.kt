@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 
 @Given
-fun strictModeInitializer(): ScopeInitializer<AppGivenScope> = {
+val strictModeInitializer: ScopeInitializer<AppGivenScope> = {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
             .detectAll()

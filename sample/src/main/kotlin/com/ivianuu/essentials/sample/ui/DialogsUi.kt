@@ -67,7 +67,7 @@ val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 class DialogsKey : Key<Nothing>
 
 @Given
-fun dialogsUi(): KeyUi<DialogsKey> = {
+val dialogsUi: KeyUi<DialogsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Dialogs") }) }
     ) {

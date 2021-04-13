@@ -34,7 +34,7 @@ val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
 class DrawerKey : Key<Nothing>
 
 @Given
-fun drawerUi(): KeyUi<DrawerKey> = {
+val drawerUi: KeyUi<DrawerKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Drawer") }) },
         drawerContent = {

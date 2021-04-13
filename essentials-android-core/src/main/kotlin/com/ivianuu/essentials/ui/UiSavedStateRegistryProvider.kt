@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Given
 typealias SavableStateRegistryProvider = UiDecorator
 
 @Given
-fun savableStateRegistryProvider(): SavableStateRegistryProvider = { content ->
+val savableStateRegistryProvider: SavableStateRegistryProvider = { content ->
     val activity = LocalContext.current as? ComponentActivity
     if (activity != null) {
         CompositionLocalProvider(

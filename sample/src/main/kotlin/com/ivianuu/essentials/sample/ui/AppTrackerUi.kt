@@ -104,8 +104,8 @@ fun appTrackerUi(
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
 @Given
-fun appTrackerForegroundState(): @Scoped<AppGivenScope> AppTrackerForegroundState =
-    MutableStateFlow(Background)
+val appTrackerForegroundState: @Scoped<AppGivenScope> AppTrackerForegroundState
+    get() = MutableStateFlow(Background)
 
 typealias AppTrackerNotificationFactory = (String?) -> Notification
 

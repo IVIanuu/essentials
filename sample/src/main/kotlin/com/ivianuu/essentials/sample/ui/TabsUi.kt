@@ -43,7 +43,7 @@ val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 class TabsKey : Key<Nothing>
 
 @Given
-fun tabsUi(): KeyUi<TabsKey> = {
+val tabsUi: KeyUi<TabsKey> = {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     Scaffold(
         topBar = {

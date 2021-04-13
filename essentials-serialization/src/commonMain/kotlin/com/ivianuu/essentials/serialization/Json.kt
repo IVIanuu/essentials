@@ -25,10 +25,11 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 
 @Given
-fun json(): @Scoped<AppGivenScope> Json = Json {
-    serializersModule = SerializersModule {
+val json: @Scoped<AppGivenScope> Json
+    get() = Json {
+        serializersModule = SerializersModule {
+        }
     }
-}
 
 @Given
 inline fun <reified T> kSerializer(@Given json: Json): KSerializer<T> =

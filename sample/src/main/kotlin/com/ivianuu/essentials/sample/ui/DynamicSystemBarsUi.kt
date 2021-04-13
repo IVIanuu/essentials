@@ -41,7 +41,7 @@ val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemB
 class DynamicSystemBarsKey : Key<Nothing>
 
 @Given
-fun dynamicSystemBarsUi(): KeyUi<DynamicSystemBarsKey> = {
+val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
     Box {
         val colors: List<Color> = rememberSaveable {
             ColorPickerPalette.values()
