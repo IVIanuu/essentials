@@ -36,7 +36,7 @@ fun <@Given T : UiDecorator> uiDecoratorElement(
     @Given config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator, config)
 
-data class UiDecoratorConfig<out T : UiDecorator>(
+class UiDecoratorConfig<out T : UiDecorator>(
     val dependencies: Set<TypeKey<UiDecorator>> = emptySet(),
     val dependents: Set<TypeKey<UiDecorator>> = emptySet(),
 ) {
@@ -47,7 +47,7 @@ data class UiDecoratorConfig<out T : UiDecorator>(
 
 typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
-data class UiDecoratorElement(
+class UiDecoratorElement(
     val key: TypeKey<UiDecorator>,
     val decorator: UiDecorator,
     val config: UiDecoratorConfig<*>

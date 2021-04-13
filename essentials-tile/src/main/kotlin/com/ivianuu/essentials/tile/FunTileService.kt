@@ -19,6 +19,7 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
@@ -122,11 +123,11 @@ class FunTileServiceComponent(
 @Given
 class TileStateComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,
-    @Given tileStateElements: Set<TileStateElement> = emptySet(),
+    @Given tileStateElements: Map<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>> = emptyMap(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileStore = tileStateElements.toMap()[tileKey]
+    val tileStore = tileStateElements[tileKey]
         ?.invoke()
         ?: error("No tile found for $tileKey in ${tileStateElements.toMap()}")
 }

@@ -25,8 +25,6 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.ChildGivenScopeModule1
 import com.ivianuu.injekt.scope.DefaultGivenScope
 
-typealias TileStateElement = Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>>
-
 data class TileState<out T : AbstractFunTileService>(
     val icon: Icon? = null,
     val iconRes: Int? = null,
@@ -49,9 +47,10 @@ sealed class TileAction<out S : AbstractFunTileService> {
 
 @Given
 fun <@Given T : Store<TileState<S>, TileAction<S>>, S : AbstractFunTileService> tileStateElement(
-    @Given provider: () -> T,
-    @Given serviceKey: TypeKey<S>
-): TileStateElement = serviceKey to provider.cast()
+    @Given serviceKey: TypeKey<S>,
+    @Given provider: () -> T
+): Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>> =
+    serviceKey to provider.cast()
 
 typealias TileGivenScope = DefaultGivenScope
 

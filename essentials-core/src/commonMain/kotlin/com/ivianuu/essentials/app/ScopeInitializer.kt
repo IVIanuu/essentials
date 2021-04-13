@@ -19,7 +19,7 @@ fun <@Given T : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
     @Given config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT
 ): ScopeInitializerElement<S> = ScopeInitializerElement(key, instance, config)
 
-data class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
+class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
     val dependencies: Set<TypeKey<() -> Unit>> = emptySet(),
     val dependents: Set<TypeKey<() -> Unit>> = emptySet(),
 ) {
@@ -28,7 +28,7 @@ data class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
     }
 }
 
-data class ScopeInitializerElement<S>(
+class ScopeInitializerElement<S>(
     val key: TypeKey<ScopeInitializer<S>>,
     val instance: () -> ScopeInitializer<S>,
     val config: ScopeInitializerConfig<ScopeInitializer<S>>
