@@ -25,14 +25,10 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.torch.TorchAction
-import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
-import com.ivianuu.essentials.torch.TorchState
+import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @Given
@@ -49,18 +45,17 @@ fun torchAction(
 )
 
 @Given
-fun torchActionExecutor(
-    @Given torch: Store<TorchState, TorchAction>
-): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
-    torch.send(UpdateTorchEnabled(!torch.first().torchEnabled))
+fun torchActionExecutor(@Given torch: Torch): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
+    torch.updateState(!torch.state.value)
 }
 
 private typealias TorchIcon = ActionIcon
 
 @Given
-fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
+fun torchIcon(@Given torch: Torch): Flow<TorchIcon> = torch
+    .state
     .map {
-        if (it.torchEnabled) R.drawable.es_ic_flash_on
+        if (it) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off
     }
     .map {

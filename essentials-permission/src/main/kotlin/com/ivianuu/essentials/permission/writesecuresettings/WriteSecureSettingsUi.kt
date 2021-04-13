@@ -26,7 +26,6 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -35,10 +34,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -92,7 +89,7 @@ sealed class WriteSecureSettingsAction {
 fun writeSecureSettingsStore(
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
-    @Given navigator: Sink<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given shell: Shell,
     @Given toaster: Toaster,

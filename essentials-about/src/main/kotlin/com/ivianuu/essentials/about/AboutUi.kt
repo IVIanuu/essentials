@@ -26,7 +26,6 @@ import com.ivianuu.essentials.about.AboutAction.OpenRedditPage
 import com.ivianuu.essentials.about.AboutAction.OpenTwitterPage
 import com.ivianuu.essentials.about.AboutAction.Rate
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -35,10 +34,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.first
@@ -122,7 +120,7 @@ sealed class AboutAction {
 @Given
 fun aboutStore(
     @Given buildInfo: BuildInfo,
-    @Given navigator: Sink<NavigationAction>
+    @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
     onAction<Rate> {
         navigator.push(

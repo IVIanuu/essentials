@@ -28,10 +28,8 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.dialog.TextInputKey
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -62,7 +60,7 @@ class KeycodeActionFactory(
 
 @Given
 class KeycodeActionPickerDelegate(
-    @Given private val navigator: Sink<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -71,7 +69,7 @@ class KeycodeActionPickerDelegate(
         { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
     override suspend fun getResult(): ActionPickerKey.Result? {
-        val keycode = navigator.pushAndAwait(
+        val keycode = navigator.pushForResult(
             TextInputKey(
                 title = resourceProvider.string(R.string.es_keycode_picker_title),
                 label = resourceProvider.string(R.string.es_keycode_input_hint),

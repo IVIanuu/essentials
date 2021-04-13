@@ -24,7 +24,6 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.ui.PermissionRequestAction.GrantPermission
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -33,9 +32,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -90,7 +88,7 @@ sealed class PermissionRequestAction {
 fun permissionRequestStore(
     @Given appUiStarter: AppUiStarter,
     @Given key: PermissionRequestKey,
-    @Given navigator: Sink<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>

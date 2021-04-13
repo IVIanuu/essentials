@@ -30,9 +30,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -72,7 +70,7 @@ class AppActionFactory(
 @Given
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
-    @Given private val navigator: Sink<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -83,7 +81,7 @@ class AppActionPickerDelegate(
     }
 
     override suspend fun getResult(): ActionPickerKey.Result? {
-        val app = navigator.pushAndAwait(AppPickerKey(launchableAppFilter)) ?: return null
+        val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null
         return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

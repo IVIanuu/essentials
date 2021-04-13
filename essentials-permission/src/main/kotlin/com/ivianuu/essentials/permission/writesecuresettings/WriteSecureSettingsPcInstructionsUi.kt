@@ -21,8 +21,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.clipboard.ClipboardAction
-import com.ivianuu.essentials.clipboard.ClipboardAction.UpdateClipboard
+import com.ivianuu.essentials.clipboard.Clipboard
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -30,7 +29,6 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenLifehackerTutorial
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -39,11 +37,9 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -145,9 +141,9 @@ sealed class WriteSecureSettingsPcInstructionsAction {
 
 @Given
 fun writeSecureSettingsPcInstructionsStore(
-    @Given navigator: Sink<NavigationAction>,
-    @Given clipboard: Sink<ClipboardAction>,
+    @Given clipboard: Clipboard,
     @Given key: WriteSecureSettingsPcInstructionsKey,
+    @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState,
         WriteSecureSettingsPcInstructionsAction> = {
@@ -162,7 +158,7 @@ fun writeSecureSettingsPcInstructionsStore(
         }
     }
     onAction<CopyAdbCommand> {
-        clipboard.send(UpdateClipboard(state.first().secureSettingsAdbCommand))
+        clipboard.updateClipboardText(state.first().secureSettingsAdbCommand)
     }
     onAction<OpenGadgetHacksTutorial> {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))

@@ -55,8 +55,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
@@ -382,4 +381,4 @@ val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey
 
 @InstallElement<UiGivenScope>
 @Given
-class DialogLauncherComponent(@Given val navigator: Sink<NavigationAction>)
+class DialogLauncherComponent(@Given val navigator: Navigator)

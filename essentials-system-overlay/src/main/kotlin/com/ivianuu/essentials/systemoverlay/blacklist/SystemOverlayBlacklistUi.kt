@@ -3,11 +3,8 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.systemoverlay.R
@@ -21,9 +18,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 
@@ -126,10 +122,10 @@ sealed class SystemOverlayBlacklistAction {
 
 @Given
 fun systemOverlayBlacklistStore(
-    @Given navigator: Sink<NavigationAction>,
-    @Given pref: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>,
+    @Given navigator: Navigator,
+    @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayBlacklistUiState, SystemOverlayBlacklistAction> = {
-    pref.update {
+    pref.data.update {
         copy(
             disableOnKeyboard = it.disableOnKeyboard,
             disableOnLockScreen = it.disableOnLockScreen,
@@ -140,12 +136,12 @@ fun systemOverlayBlacklistStore(
         navigator.push(SystemOverlayAppBlacklistKey())
     }
     onAction<UpdateDisableOnKeyboard> {
-        pref.updateAndAwait { copy(disableOnKeyboard = it.value) }
+        pref.updateData { copy(disableOnKeyboard = it.value) }
     }
     onAction<UpdateDisableOnLockScreen> {
-        pref.updateAndAwait { copy(disableOnLockScreen = it.value) }
+        pref.updateData { copy(disableOnLockScreen = it.value) }
     }
     onAction<UpdateDisableOnSecureScreens> {
-        pref.updateAndAwait { copy(disableOnSecureScreens = it.value) }
+        pref.updateData { copy(disableOnSecureScreens = it.value) }
     }
 }

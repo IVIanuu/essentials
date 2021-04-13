@@ -41,11 +41,10 @@ import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isDark
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.essentials.ui.navigation.NavigationState
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
-import kotlinx.coroutines.flow.StateFlow
 
 enum class TopAppBarStyle {
     PRIMARY, SURFACE
@@ -148,7 +147,7 @@ private val DefaultAppBarElevation = 4.dp
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     val component = LocalUiGivenScope.current.element<AutoTopAppBarComponent>()
     val canGoBack = remember {
-        component.navigationState.value.backStack.size > 1
+        component.navigator.state.value.backStack.size > 1
     }
     return when {
         canGoBack -> {
@@ -160,6 +159,4 @@ private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
 
 @InstallElement<UiGivenScope>
 @Given
-class AutoTopAppBarComponent(
-    @Given val navigationState: StateFlow<NavigationState>
-)
+class AutoTopAppBarComponent(@Given val navigator: Navigator)

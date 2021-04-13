@@ -22,8 +22,8 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.withContext
 
-@Scoped<AppGivenScope>
 @Given
+@Scoped<AppGivenScope>
 class ActionRepository(
     @Given private val defaultDispatcher: DefaultDispatcher,
     @Given private val actions: Map<String, () -> Action> = emptyMap(),

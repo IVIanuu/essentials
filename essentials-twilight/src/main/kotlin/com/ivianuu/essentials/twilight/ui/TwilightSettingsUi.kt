@@ -21,9 +21,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
@@ -33,23 +35,30 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.launch
 
 class TwilightSettingsKey : Key<Nothing>
 
 @Given
-val twilightSettingsUi: StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueAction<TwilightPrefs>> = {
+fun twilightSettingsUi(@Given pref: DataStore<TwilightPrefs>): KeyUi<TwilightSettingsKey> = {
+    val prefs by pref.data.collectAsState(TwilightPrefs())
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
+        val scope = rememberCoroutineScope()
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(TwilightMode.values()) { mode ->
                 TwilightModeItem(
                     mode = mode,
-                    isSelected = state.twilightMode == mode,
-                    onClick = { update { copy(twilightMode = mode) } }
+                    isSelected = prefs.twilightMode == mode,
+                    onClick = {
+                        scope.launch {
+                            pref.updateData { copy(twilightMode = mode) }
+                        }
+                    }
                 )
             }
             item {
@@ -57,8 +66,12 @@ val twilightSettingsUi: StoreKeyUi<TwilightSettingsKey, TwilightPrefs, ValueActi
             }
             item {
                 CheckboxListItem(
-                    value = state.useBlackInDarkMode,
-                    onValueChange = { update { copy(useBlackInDarkMode = it) } },
+                    value = prefs.useBlackInDarkMode,
+                    onValueChange = {
+                        scope.launch {
+                            pref.updateData { copy(useBlackInDarkMode = it) }
+                        }
+                    },
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }

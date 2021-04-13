@@ -21,15 +21,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.android.prefs.PrefStoreModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -44,8 +43,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -62,20 +60,23 @@ class PrefsKey : Key<Nothing>
 
 @Given
 fun prefsUi(
-    @Given navigator: Sink<NavigationAction>,
-    @Given prefStore: Store<SamplePrefs, ValueAction<SamplePrefs>>,
+    @Given navigator: Navigator,
+    @Given prefStore: DataStore<SamplePrefs>,
     @Given scope: ScopeCoroutineScope<UiGivenScope>
 ): KeyUi<PrefsKey> = {
-    val prefs by prefStore.collectAsState(remember { SamplePrefs() })
+    val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
+        val scope = rememberCoroutineScope()
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SwitchListItem(
                     value = prefs.switch,
                     onValueChange = {
-                        prefStore.update { copy(switch = it) }
+                        scope.launch {
+                            prefStore.updateData { copy(switch = it) }
+                        }
                     },
                     title = { Text("Switch") }
                 )
@@ -87,7 +88,9 @@ fun prefsUi(
                 CheckboxListItem(
                     value = prefs.checkbox,
                     onValueChange = {
-                        prefStore.update { copy(checkbox = it) }
+                        scope.launch {
+                            prefStore.updateData { copy(checkbox = it) }
+                        }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Checkbox") },
@@ -99,7 +102,9 @@ fun prefsUi(
                 RadioButtonListItem(
                     value = prefs.radioButton,
                     onValueChange = {
-                        prefStore.update { copy(radioButton = it) }
+                        scope.launch {
+                            prefStore.updateData { copy(radioButton = it) }
+                        }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Radio Button") },
@@ -110,7 +115,9 @@ fun prefsUi(
                 IntSliderListItem(
                     value = prefs.slider,
                     onValueChange = {
-                        prefStore.update { copy(slider = it) }
+                        scope.launch {
+                            prefStore.updateData { copy(slider = it) }
+                        }
                     },
                     modifier = Modifier.interactive(prefs.switch),
                     title = { Text("Slider") },
@@ -132,7 +139,7 @@ fun prefsUi(
                     subtitle = { Text("This is a text input preference") },
                     onClick = {
                         scope.launch {
-                            val newTextInput = navigator.pushAndAwait(
+                            val newTextInput = navigator.pushForResult(
                                 TextInputKey(
                                     initial = prefs.textInput,
                                     label = "Input",
@@ -140,7 +147,9 @@ fun prefsUi(
                                     allowEmpty = false
                                 )
                             ) ?: return@launch
-                            prefStore.update { copy(textInput = newTextInput) }
+                            scope.launch {
+                                prefStore.updateData { copy(textInput = newTextInput) }
+                            }
                         }
                     }
                 )
@@ -150,13 +159,15 @@ fun prefsUi(
                     value = Color(prefs.color),
                     onValueChangeRequest = {
                         scope.launch {
-                            val newColor = navigator.pushAndAwait(
+                            val newColor = navigator.pushForResult(
                                 ColorPickerKey(
                                     initialColor = Color(prefs.color),
                                     title = "Color"
                                 )
                             ) ?: return@launch
-                            prefStore.update { copy(color = newColor.toArgb()) }
+                            scope.launch {
+                                prefStore.updateData { copy(color = newColor.toArgb()) }
+                            }
                         }
                     },
                     modifier = Modifier.interactive(prefs.switch),
@@ -171,7 +182,7 @@ fun prefsUi(
                     subtitle = { Text("This is a multi select list preference") },
                     onClick = {
                         scope.launch {
-                            val newItems = navigator.pushAndAwait(
+                            val newItems = navigator.pushForResult(
                                 MultiChoiceListKey(
                                     items = listOf(
                                         MultiChoiceListKey.Item("A", "A"),
@@ -182,7 +193,9 @@ fun prefsUi(
                                     title = "Multi select list"
                                 )
                             ) ?: return@launch
-                            prefStore.update { copy(multiChoice = newItems) }
+                            scope.launch {
+                                prefStore.updateData { copy(multiChoice = newItems) }
+                            }
                         }
                     }
                 )
@@ -194,7 +207,7 @@ fun prefsUi(
                     subtitle = { Text("This is a single item list preference") },
                     onClick = {
                         scope.launch {
-                            val newItem = navigator.pushAndAwait(
+                            val newItem = navigator.pushForResult(
                                 SingleChoiceListKey(
                                     items = listOf(
                                         SingleChoiceListKey.Item("A", "A"),
@@ -205,7 +218,9 @@ fun prefsUi(
                                     title = "Single item list"
                                 )
                             ) ?: return@launch
-                            prefStore.update { copy(singleChoice = newItem) }
+                            scope.launch {
+                                prefStore.updateData { copy(singleChoice = newItem) }
+                            }
                         }
                     }
                 )
@@ -227,4 +242,4 @@ data class SamplePrefs(
 )
 
 @Given
-val samplePrefsModule = PrefStoreModule<SamplePrefs>("sample_prefs")
+val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")

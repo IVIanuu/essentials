@@ -24,11 +24,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class TextInputKey(
@@ -44,7 +42,7 @@ typealias TextInputResult = String
 @Given
 fun textInputUi(
     @Given key: TextInputKey,
-    @Given navigator: Sink<NavigationAction>
+    @Given navigator: Navigator
 ): KeyUi<TextInputKey> = {
     DialogScaffold {
         var currentValue by remember { mutableStateOf(key.initial) }

@@ -22,18 +22,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.torch.TorchAction
-import com.ivianuu.essentials.torch.TorchAction.UpdateTorchEnabled
-import com.ivianuu.essentials.torch.TorchState
+import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
+import androidx.compose.runtime.getValue
 
 @Given
 val torchHomeItem = HomeItem("Torch") { TorchKey() }
@@ -41,19 +41,22 @@ val torchHomeItem = HomeItem("Torch") { TorchKey() }
 class TorchKey : Key<Nothing>
 
 @Given
-val torchUi: StoreKeyUi<TorchKey, TorchState, TorchAction> = {
+fun torchUi(
+    @Given torch: Torch
+): KeyUi<TorchKey> = {
+    val torchEnabled by torch.state.collectAsState()
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(
             modifier = Modifier.center(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Torch is ${if (state.torchEnabled) "enabled" else "disabled"}",
+                "Torch is ${if (torchEnabled) "enabled" else "disabled"}",
                 style = MaterialTheme.typography.h4
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { send(UpdateTorchEnabled(!state.torchEnabled)) }
+                onClick = { torch.updateState(!torchEnabled) }
             ) {
                 Text("Toggle torch")
             }

@@ -29,8 +29,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.launch
 
@@ -42,7 +41,7 @@ class ActionsKey : Key<Nothing>
 @Given
 fun actionsUi(
     @Given executeAction: executeAction,
-    @Given navigator: Sink<NavigationAction>,
+    @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
     Scaffold(
@@ -52,7 +51,7 @@ fun actionsUi(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    val action = navigator.pushAndAwait(ActionPickerKey())
+                    val action = navigator.pushForResult(ActionPickerKey())
                         ?.let { it as? ActionPickerKey.Result.Action }
                         ?.actionId ?: return@launch
 

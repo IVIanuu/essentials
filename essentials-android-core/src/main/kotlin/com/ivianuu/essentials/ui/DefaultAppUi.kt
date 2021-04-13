@@ -21,13 +21,14 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.navigation.NavigationState
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.StateFlow
 
 @Given
 fun defaultAppUi(
-    @Given navigationState: StateFlow<NavigationState>,
+    @Given navigator: Navigator,
     @Given navigationStateContent: NavigationStateContent,
 ): AppUi = {
-    navigationStateContent(navigationState.collectAsState().value, Modifier)
+    navigationStateContent(navigator.state.collectAsState().value, Modifier)
 }

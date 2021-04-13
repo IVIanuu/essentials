@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.ValueAction
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
@@ -28,8 +28,6 @@ import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateHideNavBar
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateNavBarRotationMode
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.common.interactive
@@ -40,9 +38,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
@@ -91,23 +88,23 @@ sealed class NavBarAction {
 
 @Given
 fun navBarStore(
-    @Given navigator: Sink<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
-    @Given pref: Store<NavBarPrefs, ValueAction<NavBarPrefs>>,
+    @Given pref: DataStore<NavBarPrefs>,
     @Given resourceProvider: ResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
-    pref.update {
+    pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
     onAction<UpdateHideNavBar> { action ->
         if (!action.value) {
-            pref.update { copy(hideNavBar = false) }
+            pref.updateData { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-            pref.update { copy(hideNavBar = action.value) }
+            pref.updateData { copy(hideNavBar = action.value) }
         } else Unit
     }
     onAction<UpdateNavBarRotationMode> {
-        navigator.pushAndAwait(
+        navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()
                     .map { mode ->
@@ -120,7 +117,7 @@ fun navBarStore(
                 title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
             )
         )?.let { newRotationMode ->
-            pref.update { copy(navBarRotationMode = newRotationMode) }
+            pref.updateData { copy(navBarRotationMode = newRotationMode) }
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.GivenScopeDisposable

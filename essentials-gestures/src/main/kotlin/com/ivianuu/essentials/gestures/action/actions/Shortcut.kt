@@ -31,11 +31,9 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
@@ -74,7 +72,7 @@ class ShortcutActionFactory(
 
 @Given
 class ShortcutActionPickerDelegate(
-    @Given private val navigator: Sink<NavigationAction>,
+    @Given private val navigator: Navigator,
     @Given private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
@@ -84,7 +82,7 @@ class ShortcutActionPickerDelegate(
     }
 
     override suspend fun getResult(): ActionPickerKey.Result? {
-        val shortcut = navigator.pushAndAwait(ShortcutPickerKey()) ?: return null
+        val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
         val stream = ByteArrayOutputStream()

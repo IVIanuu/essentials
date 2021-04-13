@@ -6,7 +6,6 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.Close
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.OpenMoreInfos
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -14,11 +13,9 @@ import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Given
 
 class NavBarUnsupportedKey : Key<Nothing>
@@ -61,7 +58,7 @@ sealed class NavBarUnsupportedAction {
 @Given
 fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
-    @Given navigator: Sink<NavigationAction>
+    @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
     onAction<OpenMoreInfos> {
         navigator.push(

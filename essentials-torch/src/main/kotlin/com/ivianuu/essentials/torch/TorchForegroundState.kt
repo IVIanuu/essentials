@@ -32,16 +32,13 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @Given
 fun torchForegroundState(
-    @Given state: Flow<TorchState>,
+    @Given state: Torch,
     @Given torchNotificationFactory: TorchNotificationFactory
-): Flow<ForegroundState> = state
-    .map { it.torchEnabled }
-    .distinctUntilChanged()
+): Flow<ForegroundState> = state.state
     .map { torchEnabled ->
         if (torchEnabled) Foreground(torchNotificationFactory())
         else Background

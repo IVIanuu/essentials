@@ -19,10 +19,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.Settings
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.android.settings.AndroidSettingStoreModule
+import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
@@ -32,7 +31,6 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -56,9 +54,9 @@ fun autoRotationAction(
 
 @Given
 fun autoRotationActionExecutor(
-    @Given rotationSetting: Store<AutoRotation, ValueAction<AutoRotation>>,
+    @Given rotationSetting: DataStore<AutoRotation>,
 ): @ActionExecutorBinding<AutoRotationActionId> ActionExecutor = {
-    rotationSetting.update { if (this != 1) 1 else 0 }
+    rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 
 internal typealias AutoRotationIcon = ActionIcon
@@ -75,7 +73,7 @@ fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotation
 internal typealias AutoRotation = Int
 
 @Given
-val autoRotationModule = AndroidSettingStoreModule<AutoRotation, Int>(
+val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
     Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM)
 
 @Given

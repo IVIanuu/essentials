@@ -22,17 +22,12 @@ import com.ivianuu.essentials.coroutines.DefaultDispatcher
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.ForTypeKey
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.GivenScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -125,7 +120,7 @@ fun permissionRequester(
     @Given appUiStarter: AppUiStarter,
     @Given defaultDispatcher: DefaultDispatcher,
     @Given logger: Logger,
-    @Given navigator: Sink<NavigationAction>,
+    @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
     withContext(defaultDispatcher) {
@@ -136,7 +131,7 @@ fun permissionRequester(
 
         appUiStarter()
 
-        val result = navigator.pushAndAwait(
+        val result = navigator.pushForResult(
             PermissionRequestKey(requestedPermissions)) == true
         logger.d { "request permissions result $requestedPermissions -> $result" }
         return@withContext result

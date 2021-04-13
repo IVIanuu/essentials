@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
@@ -46,23 +45,6 @@ interface StateScope<S> : CoroutineScope {
 
     fun <T> Flow<T>.effect(block: suspend (T) -> Unit): Job =
         onEach(block).launchIn(this@StateScope)
-}
-
-object CancellableUpdatesScope {
-    fun onCancel(block: () -> Unit) = block
-}
-
-fun <S> StateScope<S>.cancellableUpdates(
-    block: CancellableUpdatesScope.((S.() -> S) -> Unit) -> () -> Unit
-): Job = launch {
-    val cleanUp = with(CancellableUpdatesScope) {
-        block { reducer ->
-            launch {
-                update(reducer)
-            }
-        }
-    }
-    runOnCancellation { cleanUp() }
 }
 
 fun <S> StateBuilder<*, S>.toState(

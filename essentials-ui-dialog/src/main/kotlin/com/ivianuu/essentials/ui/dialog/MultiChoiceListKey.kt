@@ -7,11 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.NavigationAction
-import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 
 class MultiChoiceListKey<T : Any>(
@@ -25,7 +23,7 @@ class MultiChoiceListKey<T : Any>(
 @Given
 fun multiChoiceListUi(
     @Given key: MultiChoiceListKey<Any>,
-    @Given navigator: Sink<NavigationAction>
+    @Given navigator: Navigator
 ): KeyUi<MultiChoiceListKey<Any>> = {
     DialogScaffold {
         var selectedItems by remember { mutableStateOf(key.selectedItems) }

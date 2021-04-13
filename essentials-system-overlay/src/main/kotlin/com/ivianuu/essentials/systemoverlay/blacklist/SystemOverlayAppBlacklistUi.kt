@@ -4,9 +4,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.updateAndAwait
-import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.systemoverlay.R
@@ -47,10 +45,10 @@ sealed class SystemOverlayAppBlacklistAction {
 
 @Given
 fun systemOverlayAppBlacklistStore(
-    @Given prefStore: Store<SystemOverlayBlacklistPrefs, ValueAction<SystemOverlayBlacklistPrefs>>
+    @Given pref: DataStore<SystemOverlayBlacklistPrefs>
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
-    update { copy(appBlacklist = prefStore.map { it.appBlacklist }) }
+    update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
     onAction<UpdateAppBlacklist> { action ->
-        prefStore.updateAndAwait { copy(appBlacklist = action.appBlacklist) }
+        pref.updateData { copy(appBlacklist = action.appBlacklist) }
     }
 }

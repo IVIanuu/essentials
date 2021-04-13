@@ -22,21 +22,18 @@ import android.view.KeyEvent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.android.prefs.PrefStoreModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.updateAndAwait
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -45,9 +42,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.NavigationAction
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.pushAndAwait
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -91,7 +87,7 @@ data class MediaActionPrefs(
 )
 
 @Given
-val mediaActionPrefsModule = PrefStoreModule<MediaActionPrefs>("media_action_prefs")
+val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 
 class MediaActionSettingsKey : Key<Nothing>
 
@@ -131,22 +127,22 @@ sealed class MediaActionSettingsAction {
 fun mediaActionSettingsStore(
     @Given appRepository: AppRepository,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
-    @Given navigator: Sink<NavigationAction>,
-    @Given pref: Store<MediaActionPrefs, ValueAction<MediaActionPrefs>>,
+    @Given navigator: Navigator,
+    @Given pref: DataStore<MediaActionPrefs>,
 ): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
-    pref
+    pref.data
         .map { it.mediaApp }
         .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
         .flowAsResource()
         .update { copy(mediaApp = it) }
     onAction<UpdateMediaApp> {
-        val newMediaApp = navigator.pushAndAwait(
+        val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )
         )
         if (newMediaApp != null) {
-            pref.updateAndAwait { copy(mediaApp = newMediaApp.packageName) }
+            pref.updateData { copy(mediaApp = newMediaApp.packageName) }
         }
     }
 }

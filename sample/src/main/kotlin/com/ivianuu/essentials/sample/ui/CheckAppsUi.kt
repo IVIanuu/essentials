@@ -17,17 +17,17 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefStoreModule
+import androidx.compose.runtime.rememberCoroutineScope
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.ValueAction
-import com.ivianuu.essentials.data.update
-import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -40,15 +40,18 @@ class CheckAppsKey : Key<Nothing>
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
-    @Given prefStore: Store<CheckAppsPrefs, ValueAction<CheckAppsPrefs>>
+    @Given pref: DataStore<CheckAppsPrefs>
 ): KeyUi<CheckAppsKey> = {
+    val scope = rememberCoroutineScope()
     remember {
         checkableAppsScreen(
             CheckableAppsParams(
-                prefStore.map { it.checkedApps },
+                pref.data.map { it.checkedApps },
                 { checkedApps ->
-                    prefStore.update {
-                        copy(checkedApps = checkedApps)
+                    scope.launch {
+                        pref.updateData {
+                            copy(checkedApps = checkedApps)
+                        }
                     }
                 },
                 launchableAppFilter,
@@ -64,4 +67,4 @@ data class CheckAppsPrefs(
 )
 
 @Given
-val checkAppsPrefsModule = PrefStoreModule<CheckAppsPrefs>("check_apps_prefs")
+val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
