@@ -19,11 +19,8 @@ package com.ivianuu.essentials.billing
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.SkuDetailsParams
 
-data class Sku(
-    val skuString: String,
-    val type: Type
-) {
-    internal fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
+data class Sku(val skuString: String, val type: Type) {
+    fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
         .setType(type.value)
         .setSkusList(listOf(skuString))
         .build()
