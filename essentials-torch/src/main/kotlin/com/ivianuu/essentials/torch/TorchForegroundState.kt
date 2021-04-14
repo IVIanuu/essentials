@@ -23,6 +23,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
@@ -36,15 +37,15 @@ import kotlinx.coroutines.flow.map
 
 @Given
 fun torchForegroundState(
-    @Given state: Torch,
+    @Given state: Flow<TorchState>,
     @Given torchNotificationFactory: TorchNotificationFactory
-): Flow<ForegroundState> = state.state
+): Flow<ForegroundState> = state
     .map { torchEnabled ->
         if (torchEnabled) Foreground(torchNotificationFactory())
         else Background
     }
 
-typealias TorchNotificationFactory = () -> Notification
+private typealias TorchNotificationFactory = () -> Notification
 
 @SuppressLint("NewApi")
 @Given

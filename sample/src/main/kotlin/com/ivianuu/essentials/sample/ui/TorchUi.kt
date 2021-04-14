@@ -26,7 +26,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -34,6 +33,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Given
 import androidx.compose.runtime.getValue
+import com.ivianuu.essentials.coroutines.StateStore
+import com.ivianuu.essentials.coroutines.dispatchUpdate
+import com.ivianuu.essentials.torch.TorchState
 
 @Given
 val torchHomeItem = HomeItem("Torch") { TorchKey() }
@@ -41,10 +43,8 @@ val torchHomeItem = HomeItem("Torch") { TorchKey() }
 class TorchKey : Key<Nothing>
 
 @Given
-fun torchUi(
-    @Given torch: Torch
-): KeyUi<TorchKey> = {
-    val torchEnabled by torch.state.collectAsState()
+fun torchUi(@Given torch: StateStore<TorchState>): KeyUi<TorchKey> = {
+    val torchEnabled by torch.collectAsState()
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(
             modifier = Modifier.center(),
@@ -56,7 +56,7 @@ fun torchUi(
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { torch.updateState(!torchEnabled) }
+                onClick = { torch.dispatchUpdate { !torchEnabled } }
             ) {
                 Text("Toggle torch")
             }

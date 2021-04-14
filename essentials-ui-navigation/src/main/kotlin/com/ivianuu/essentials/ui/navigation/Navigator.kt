@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.map
+import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -51,7 +51,7 @@ class NavigatorImpl(
 ) : Navigator {
     private val store = scope.stateStore(State(listOfNotNull(rootKey)))
     override val state: StateFlow<NavigationState>
-        get() = store.state.map { NavigationState(it.backStack) }
+        get() = store.mapState { NavigationState(it.backStack) }
 
     override fun push(key: Key<*>) {
         scope.launch { pushForResult(key) }

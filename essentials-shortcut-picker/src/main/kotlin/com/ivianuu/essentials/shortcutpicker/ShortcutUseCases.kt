@@ -29,12 +29,14 @@ import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
+typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
+
 @Given
-class ShortcutRepository(
-    @Given private val ioDispatcher: IODispatcher,
-    @Given private val packageManager: PackageManager
-) {
-    suspend fun getAllShortcuts(): List<Shortcut> = withContext(ioDispatcher) {
+fun getAllShortcutsUseCase(
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager
+): GetAllShortcutsUseCase = {
+    withContext(ioDispatcher) {
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
@@ -55,30 +57,33 @@ class ShortcutRepository(
             .filterNotNull()
             .sortedBy { it.name }
     }
+}
 
-    suspend fun extractShortcut(
-        shortcutRequestResult: Intent,
-    ): Shortcut = withContext(ioDispatcher) {
-        val intent =
-            shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
-        val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
-        val bitmapIcon =
-            shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
-        val iconResource =
-            shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
+typealias ExtractShortcutUseCase = (Intent) -> Shortcut
 
-        @Suppress("DEPRECATION") val icon = when {
-            bitmapIcon != null -> bitmapIcon.toImageBitmap()
-            iconResource != null -> {
-                val resources =
-                    packageManager.getResourcesForApplication(iconResource.packageName)
-                val id =
-                    resources.getIdentifier(iconResource.resourceName, null, null)
-                resources.getDrawable(id).toBitmap().toImageBitmap()
-            }
-            else -> error("no icon provided $shortcutRequestResult")
+@Given
+fun extractShortcutUseCase(
+    @Given packageManager: PackageManager
+): ExtractShortcutUseCase = { shortcutRequestResult ->
+    val intent =
+        shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
+    val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
+    val bitmapIcon =
+        shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
+    val iconResource =
+        shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
+
+    @Suppress("DEPRECATION") val icon = when {
+        bitmapIcon != null -> bitmapIcon.toImageBitmap()
+        iconResource != null -> {
+            val resources =
+                packageManager.getResourcesForApplication(iconResource.packageName)
+            val id =
+                resources.getIdentifier(iconResource.resourceName, null, null)
+            resources.getDrawable(id).toBitmap().toImageBitmap()
         }
-
-        Shortcut(intent, name, icon)
+        else -> error("no icon provided $shortcutRequestResult")
     }
+
+    Shortcut(intent, name, icon)
 }

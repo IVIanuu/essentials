@@ -18,6 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
+import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionBinding
@@ -25,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.torch.Torch
+import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
@@ -45,15 +46,16 @@ fun torchAction(
 )
 
 @Given
-fun torchActionExecutor(@Given torch: Torch): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
-    torch.updateState(!torch.state.value)
+fun torchActionExecutor(
+    @Given torch: StateStore<TorchState>
+): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
+    torch.update { not() }
 }
 
 private typealias TorchIcon = ActionIcon
 
 @Given
-fun torchIcon(@Given torch: Torch): Flow<TorchIcon> = torch
-    .state
+fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
     .map {
         if (it) R.drawable.es_ic_flash_on
         else R.drawable.es_ic_flash_off

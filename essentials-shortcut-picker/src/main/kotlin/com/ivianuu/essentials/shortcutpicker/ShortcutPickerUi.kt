@@ -79,18 +79,19 @@ sealed class ShortcutPickerAction {
 @Given
 fun shortcutPickerStore(
     @Given activityResultLauncher: ActivityResultLauncher,
+    @Given extractShortcut: ExtractShortcutUseCase,
+    @Given getAllShortcuts: GetAllShortcutsUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
-    @Given shortcutRepository: ShortcutRepository,
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {
-    resourceFlow { emit(shortcutRepository.getAllShortcuts()) }
+    resourceFlow { emit(getAllShortcuts()) }
         .update { copy(shortcuts = it) }
     onAction<PickShortcut> { action ->
         runCatching {
             val shortcutRequestResult = activityResultLauncher.startActivityForResult(action.shortcut.intent)
                 .data ?: return@runCatching
-            val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
+            val finalShortcut = extractShortcut(shortcutRequestResult)
             navigator.pop(key, finalShortcut)
         }.onFailure {
             it.printStackTrace()

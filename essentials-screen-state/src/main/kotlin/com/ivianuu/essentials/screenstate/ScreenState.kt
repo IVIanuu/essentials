@@ -61,7 +61,7 @@ fun screenState(
     .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
     .distinctUntilChanged()
 
-internal typealias CurrentScreenStateProvider = suspend () -> ScreenState
+private typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
 @Given
 fun currentScreenStateProvider(

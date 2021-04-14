@@ -21,52 +21,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 
-fun <T, R> StateFlow<T>.map(transform: (T) -> R): StateFlow<R> = object : StateFlow<R> {
+fun <T, R> StateFlow<T>.mapState(transform: (T) -> R): StateFlow<R> = object : StateFlow<R> {
     override val replayCache: List<R>
-        get() = this@map.replayCache.map(transform)
+        get() = this@mapState.replayCache.map(transform)
     override val value: R
-        get() = transform(this@map.value)
+        get() = transform(this@mapState.value)
 
     override suspend fun collect(collector: FlowCollector<R>) {
-        this@map.collect {
+        this@mapState.collect {
             collector.emit(transform(it))
         }
     }
-}
-
-fun <T, R> MutableStateFlow<T>.lens(
-    get: (T) -> R,
-    set: (T, R) -> T,
-): MutableStateFlow<R> = object : MutableStateFlow<R> {
-    override val replayCache: List<R>
-        get() = this@lens.replayCache.map(get)
-    override var value: R
-        get() = get(this@lens.value)
-        set(value) {
-            set(this@lens.value, value)
-        }
-
-    override suspend fun collect(collector: FlowCollector<R>) {
-        this@lens.collect {
-            collector.emit(get(it))
-        }
-    }
-
-    override val subscriptionCount: StateFlow<Int>
-        get() = this@lens.subscriptionCount
-
-    override fun compareAndSet(expect: R, update: R): Boolean = this@lens.compareAndSet(
-        set(this@lens.value, expect),
-        set(this@lens.value, update)
-    )
-
-    override suspend fun emit(value: R) {
-        this@lens.emit(set(this@lens.value, value))
-    }
-
-    override fun resetReplayCache() {
-        this@lens.resetReplayCache()
-    }
-
-    override fun tryEmit(value: R): Boolean = this@lens.tryEmit(set(this@lens.value, value))
 }

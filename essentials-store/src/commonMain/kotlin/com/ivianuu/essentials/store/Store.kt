@@ -2,7 +2,7 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.map
+import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.Qualifier
 import com.ivianuu.injekt.common.TypeKey
@@ -10,11 +10,17 @@ import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.getOrCreateScopedValue
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 interface Store<S, A> : StateFlow<S>, Sink<A>
 
@@ -23,28 +29,45 @@ fun <S, A> CoroutineScope.store(
     actions: MutableSharedFlow<A> = EventFlow(),
     block: suspend StoreScope<S, A>.() -> Unit
 ): Store<S, A> {
-    val state = state(initial) {
-        object : StoreScope<S, A>, StateScope<S> by this {
-            override val actions: Flow<A>
-                get() = actions
-        }.block()
-    }
-    return object : Store<S, A>, StateFlow<S> by state, Sink<A> {
+    val state = stateStore(initial)
+    val store = object : Store<S, A>, StoreScope<S, A>, StateFlow<S> by state, CoroutineScope by this {
+        override val actions: Flow<A>
+            get() = actions
+        override val state: Flow<S>
+            get() = state
+        override suspend fun update(reducer: S.() -> S): S = state.update(reducer)
         override fun send(value: A) {
             actions.tryEmit(value)
         }
     }
+    store.launch(start = CoroutineStart.UNDISPATCHED) { store.block() }
+    return store
 }
 
-interface StoreScope<S, A> : StateScope<S> {
+interface StoreScope<S, A> : CoroutineScope {
+    val state: Flow<S>
     val actions: Flow<A>
+
+    suspend fun update(reducer: S.() -> S): S
+
+    fun effect(block: suspend () -> Unit): Job = launch { block() }
+
+    fun Flow<S.() -> S>.update(): Job = this@StoreScope.effect {
+        collect { update(it) }
+    }
+
+    fun <T> Flow<T>.update(reducer: S.(T) -> S): Job =
+        map<T, S.() -> S> { { reducer(it) } }.update()
+
+    fun <T> Flow<T>.effect(block: suspend (T) -> Unit): Job =
+        onEach(block).launchIn(this@StoreScope)
 }
 
 inline fun <reified T> StoreScope<*, in T>.onAction(noinline block: suspend (T) -> Unit): Job =
     actions.filterIsInstance<T>().effect(block)
 
 fun <S, A, R> Store<S, A>.mapState(transform: (S) -> R): Store<R, A> =
-    object : Store<R, A>, Sink<A> by this, StateFlow<R> by map(transform) {
+    object : Store<R, A>, Sink<A> by this, StateFlow<R> by mapState(transform) {
     }
 
 fun <S, A, R> Store<S, A>.mapSink(transform: (R) -> A): Store<S, R> =

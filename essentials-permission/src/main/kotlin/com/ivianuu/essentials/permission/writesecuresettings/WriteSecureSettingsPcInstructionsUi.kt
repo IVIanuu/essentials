@@ -21,7 +21,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.clipboard.Clipboard
+import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -141,10 +141,10 @@ sealed class WriteSecureSettingsPcInstructionsAction {
 
 @Given
 fun writeSecureSettingsPcInstructionsStore(
-    @Given clipboard: Clipboard,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given navigator: Navigator,
-    @Given permissionStateFactory: PermissionStateFactory
+    @Given permissionStateFactory: PermissionStateFactory,
+    @Given updateClipboardText: UpdateClipboardTextUseCase
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState,
         WriteSecureSettingsPcInstructionsAction> = {
     effect {
@@ -158,7 +158,7 @@ fun writeSecureSettingsPcInstructionsStore(
         }
     }
     onAction<CopyAdbCommand> {
-        clipboard.updateClipboardText(state.first().secureSettingsAdbCommand)
+        updateClipboardText(state.first().secureSettingsAdbCommand)
     }
     onAction<OpenGadgetHacksTutorial> {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))

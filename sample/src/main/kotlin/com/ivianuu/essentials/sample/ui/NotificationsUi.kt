@@ -45,8 +45,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.NotificationService
+import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
@@ -185,12 +186,13 @@ sealed class NotificationsUiAction {
 @Given
 fun notificationsUiStore(
     @Given appContext: AppContext,
+    @Given dismissNotification: DismissNotificationUseCase,
+    @Given notifications: Flow<List<StatusBarNotification>>,
+    @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
-    @Given permissionRequester: PermissionRequester,
-    @Given service: NotificationService
+    @Given permissionRequester: PermissionRequester
 ): StoreBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
-    service.state
-        .map { it.notifications }
+    notifications
         .map { notifications ->
             notifications
                 .parMap { it.toUiNotification(appContext) }
@@ -202,10 +204,10 @@ fun notificationsUiStore(
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
     onAction<OpenNotification> {
-        service.openNotification(it.notification.sbn.notification)
+        openNotification(it.notification.sbn.notification)
     }
     onAction<DismissNotification> {
-        service.dismissNotification(it.notification.sbn.key)
+        dismissNotification(it.notification.sbn.key)
     }
 }
 

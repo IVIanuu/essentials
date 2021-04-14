@@ -49,40 +49,6 @@ class KeyUiModule<@Given T : KeyUi<K>, K : Key<*>> {
         (keyClass to keyUiOptionsFactory).cast()
 }
 
-typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
-
-@Composable
-operator fun <S> StateKeyUi<*, S>.invoke(state: S) {
-    invoke(
-        object : StateKeyUiScope<Nothing, S> {
-            override val state: S
-                get() = state
-        }
-    )
-}
-
-@Stable
-interface StateKeyUiScope<K, S> {
-    val state: S
-}
-
-@Given
-fun <@Given U : StateKeyUi<K, S>, K : Key<*>, S> storeKeyUi(
-    @Given uiFactory: () -> U,
-    @Given state: StateFlow<S>
-): KeyUi<K> = {
-    val currentState by state.collectAsState()
-    val scope = remember {
-        object : StateKeyUiScope<K, S> {
-            override val state: S
-                get() = currentState
-        }
-    }
-    val ui = remember(uiFactory) as @Composable StateKeyUiScope<K, S>.() -> Unit
-    scope.ui()
-}
-
-
 typealias StoreKeyUi<K, S, A> = @Composable StoreKeyUiScope<K, S, A>.() -> Unit
 
 @Composable
@@ -99,7 +65,9 @@ operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
 }
 
 @Stable
-interface StoreKeyUiScope<K, S, A> : StateKeyUiScope<K, S>, Sink<A>
+interface StoreKeyUiScope<K, S, A> : Sink<A> {
+    val state: S
+}
 
 @Given
 fun <@Given U : StoreKeyUi<K, S, A>, K : Key<*>, S, A> storeKeyUi(

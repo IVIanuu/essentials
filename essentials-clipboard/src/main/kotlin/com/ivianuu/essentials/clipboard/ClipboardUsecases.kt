@@ -27,20 +27,25 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
 
-@Given
-class Clipboard(
-    @Given private val scope: ScopeCoroutineScope<AppGivenScope>,
-    @Given private val clipboardManager: @SystemService ClipboardManager
-) {
-    val clipboardText = callbackFlow {
-        val listener = ClipboardManager.OnPrimaryClipChangedListener {
-            val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
-            offer(current)
-        }
-        awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
-    }.shareIn(scope, SharingStarted.Lazily, 1)
+typealias ClipboardText = String?
 
-    fun updateClipboardText(value: String) {
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
+@Given
+fun clipboardText(
+    @Given clipboardManager: @SystemService ClipboardManager,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
+) = callbackFlow<ClipboardText> {
+    val listener = ClipboardManager.OnPrimaryClipChangedListener {
+        val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+        offer(current)
     }
+    awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
+}.shareIn(scope, SharingStarted.Lazily, 1)
+
+typealias UpdateClipboardTextUseCase = suspend (String) -> Unit
+
+@Given
+fun updateClipboardTextUseCase(
+    @Given clipboardManager: @SystemService ClipboardManager
+): UpdateClipboardTextUseCase = { value ->
+    clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
 }

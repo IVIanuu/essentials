@@ -1,16 +1,16 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-interface StateStore<T> {
-    val state: StateFlow<T>
-    suspend fun update(reducer: T.() -> T): T
+interface StateStore<T> : StateFlow<T> {
+    suspend fun update(transform: T.() -> T): T
     fun effect(block: suspend StateStore<T>.() -> Unit)
 }
 
@@ -20,12 +20,12 @@ fun <T> CoroutineScope.stateStore(initial: T): StateStore<T> =
 private class StateStoreImpl<T>(
     private val scope: CoroutineScope,
     initial: T,
-    override val state: MutableStateFlow<T> = MutableStateFlow(initial)
-) : StateStore<T> {
-    private val actor = scope.actor(capacity = Channel.UNLIMITED)
-    override suspend fun update(reducer: T.() -> T): T = actor.actAndReply {
+    private val state: MutableStateFlow<T> = MutableStateFlow(initial)
+) : StateStore<T>, StateFlow<T> by state {
+    private val mutex = Mutex()
+    override suspend fun update(transform: T.() -> T): T = mutex.withLock {
         val currentState = state.value
-        val newState = reducer(currentState)
+        val newState = transform(currentState)
         state.value = newState
         newState
     }
