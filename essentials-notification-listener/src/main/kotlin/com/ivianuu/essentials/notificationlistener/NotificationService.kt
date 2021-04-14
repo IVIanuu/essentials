@@ -22,18 +22,20 @@ import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
+import com.ivianuu.essentials.coroutines.dispatchUpdate
 import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.onEach
 
 interface NotificationService {
     val state: Flow<NotificationServiceState>
@@ -43,37 +45,45 @@ interface NotificationService {
 }
 
 data class NotificationServiceState(
-    val isConnected: Boolean = false,
+    val androidService: EsNotificationListenerService? = null,
     val notifications: List<StatusBarNotification> = emptyList()
-)
+) {
+    val isConnected: Boolean
+        get() = androidService != null
+}
 
 @Given
 @Scoped<AppGivenScope>
 class NotificationServiceImpl(
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : NotificationService {
-    private val ref = MutableStateFlow<EsNotificationListenerService?>(null)
-    override val state: Flow<NotificationServiceState> = ref
-        .flatMapLatest { service ->
-            service?.notifications?.map { NotificationServiceState(true, it) }
-                ?: flowOf(NotificationServiceState())
-        }
-        .shareIn(scope, SharingStarted.Lazily, 1)
+    private val store = scope.stateStore(NotificationServiceState(null, emptyList()))
+    override val state: Flow<NotificationServiceState>
+        get() = store.state
+
+    init {
+        store.state
+            .map { it.androidService }
+            .distinctUntilChanged()
+            .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+            .onEach { store.update { copy(notifications = it) } }
+            .launchIn(scope)
+    }
 
     override suspend fun openNotification(notification: Notification) {
         runCatching { notification.contentIntent.send() }
     }
 
     override suspend fun dismissNotification(notificationKey: String) {
-        ref.value?.cancelNotification(notificationKey)
+        store.state.value.androidService?.cancelNotification(notificationKey)
     }
 
     override suspend fun dismissAllNotifications() {
-        ref.value?.cancelAllNotifications()
+        store.state.value.androidService?.cancelAllNotifications()
     }
 
-    internal fun updateRef(service: EsNotificationListenerService?) {
-        ref.value = service
+    internal fun updateRef(ref: EsNotificationListenerService?) {
+        store.dispatchUpdate { copy(androidService = ref) }
     }
 }
 
