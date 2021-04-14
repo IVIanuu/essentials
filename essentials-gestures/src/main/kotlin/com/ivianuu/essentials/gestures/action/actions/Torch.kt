@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.torch.TorchState
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,11 +37,11 @@ object TorchActionId : ActionId("torch")
 
 @Given
 fun torchAction(
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given torchIcon: Flow<TorchIcon>,
 ): @ActionBinding<TorchActionId> Action = Action(
     id = TorchActionId,
-    title = resourceProvider.string(R.string.es_action_torch),
+    title = stringResource(R.string.es_action_torch, emptyList()),
     icon = torchIcon
 )
 

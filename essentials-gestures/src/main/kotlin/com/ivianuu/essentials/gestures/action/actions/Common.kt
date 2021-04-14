@@ -27,7 +27,8 @@ import com.github.michaelbull.result.runCatching
 import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.shell.RunShellCommandUseCase
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -46,13 +47,14 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
 
 @Given
 fun actionRootCommandRunner(
-    @Given shell: Shell,
+    @Given runShellCommand: RunShellCommandUseCase,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->
-    runCatching { shell.run(command) }
+    runCatching { runShellCommand(listOf(command)) }
         .onFailure {
             it.printStackTrace()
-            toaster.showToast(R.string.es_no_root)
+            toaster(stringResource(R.string.es_no_root, emptyList()))
         }
 }
 
@@ -61,6 +63,7 @@ typealias ActionIntentSender = (Intent) -> Unit
 @Given
 fun actionIntentSender(
     @Given appContext: AppContext,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given toaster: Toaster
 ): ActionIntentSender = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -70,6 +73,6 @@ fun actionIntentSender(
         ).send()
     }.onFailure {
         it.printStackTrace()
-        toaster.showToast(R.string.es_activity_not_found)
+        toaster(stringResource(R.string.es_activity_not_found, emptyList()))
     }
 }

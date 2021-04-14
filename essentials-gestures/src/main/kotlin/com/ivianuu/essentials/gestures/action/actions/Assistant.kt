@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.SystemService
 
@@ -34,10 +34,10 @@ object AssistantActionId : ActionId("assistant")
 
 @Given
 fun assistantAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<AssistantActionId> Action = Action(
     id = AssistantActionId,
-    title = resourceProvider.string(R.string.es_action_assistant),
+    title = stringResource(R.string.es_action_assistant, emptyList()),
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_google)
 )

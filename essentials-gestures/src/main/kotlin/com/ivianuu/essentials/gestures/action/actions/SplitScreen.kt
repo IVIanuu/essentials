@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,10 +32,10 @@ object SplitScreenActionId : ActionId("split_screen")
 
 @Given
 fun splitScreenAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<SplitScreenActionId> Action = Action(
     id = SplitScreenActionId,
-    title = resourceProvider.string(R.string.es_action_split_screen),
+    title = stringResource(R.string.es_action_split_screen, emptyList()),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_view_agenda)
 )

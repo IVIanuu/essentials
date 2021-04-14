@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -39,7 +39,7 @@ class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
     @Given private val getAppInfo: GetAppInfoUseCase,
     @Given private val packageManager: PackageManager,
-    @Given private val resourceProvider: ResourceProvider
+    @Given private val stringResource: LoadStringResourceUseCase
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
@@ -48,7 +48,7 @@ class AppActionFactory(
         return Action(
             id = id,
             title = getAppInfo(packageName)?.appName
-                ?: resourceProvider.string(R.string.es_unknown_action_name),
+                ?: stringResource(R.string.es_unknown_action_name, emptyList()),
             unlockScreen = true,
             enabled = true,
             icon = coilActionIcon(AppIcon(packageName))
@@ -71,10 +71,10 @@ class AppActionFactory(
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
     @Given private val navigator: Navigator,
-    @Given private val resourceProvider: ResourceProvider,
+    @Given private val stringResource: LoadStringResourceUseCase,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = resourceProvider.string(R.string.es_action_app)
+        get() = stringResource(R.string.es_action_app, emptyList())
 
     override val icon: @Composable () -> Unit = {
         Icon(painterResource(R.drawable.es_ic_apps), null)

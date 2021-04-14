@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -37,11 +37,11 @@ object LockScreenActionId : ActionId("lock_screen")
 
 @Given
 fun lockScreenAction(
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given systemBuildInfo: SystemBuildInfo,
 ): @ActionBinding<LockScreenActionId> Action = Action(
     id = LockScreenActionId,
-    title = resourceProvider.string(R.string.es_action_lock_screen),
+    title = stringResource(R.string.es_action_lock_screen, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_power_settings),
     permissions = listOf(
         if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()

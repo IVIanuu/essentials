@@ -24,24 +24,19 @@ import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.launch
 
-@Given
-class Toaster(
-    @Given private val appContext: AppContext,
-    @Given private val mainDispatcher: MainDispatcher,
-    @Given private val resourceProvider: ResourceProvider,
-    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
-) {
-    fun showToast(message: String) {
-        scope.launch(mainDispatcher) {
-            Toast.makeText(
-                appContext,
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
+typealias Toaster = (String) -> Unit
 
-    fun showToast(messageRes: Int, vararg arguments: Any?) {
-        showToast(resourceProvider.string(messageRes, *arguments))
+@Given
+fun toaster(
+    @Given appContext: AppContext,
+    @Given mainDispatcher: MainDispatcher,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
+): Toaster = { message ->
+    scope.launch(mainDispatcher) {
+        Toast.makeText(
+            appContext,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

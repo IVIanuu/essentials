@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.ActivityResultLauncher
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 
@@ -83,6 +84,7 @@ fun shortcutPickerStore(
     @Given getAllShortcuts: GetAllShortcutsUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {
     resourceFlow { emit(getAllShortcuts()) }
@@ -95,7 +97,7 @@ fun shortcutPickerStore(
             navigator.pop(key, finalShortcut)
         }.onFailure {
             it.printStackTrace()
-            toaster.showToast(R.string.es_failed_to_pick_shortcut)
+            toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
         }
     }
 }

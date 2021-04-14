@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
@@ -35,10 +35,10 @@ object HomeActionId : ActionId("home")
 
 @Given
 fun homeAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<HomeActionId> Action = Action(
     id = HomeActionId,
-    title = resourceProvider.string(R.string.es_action_home),
+    title = stringResource(R.string.es_action_home, emptyList()),
     permissions = if (needsHomeIntentWorkaround) emptyList()
     else accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_action_home)

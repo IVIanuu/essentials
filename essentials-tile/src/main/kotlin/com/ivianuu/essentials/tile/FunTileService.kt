@@ -21,8 +21,8 @@ import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.tile.TileAction.TileClicked
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
@@ -98,12 +98,12 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
         }
         qsTile.label = when {
             state.label != null -> state.label
-            state.labelRes != null -> component.resourceProvider.string(state.labelRes)
+            state.labelRes != null -> component.stringResource(state.labelRes, emptyList())
             else -> null
         }
         qsTile.contentDescription = when {
             state.description != null -> state.description
-            state.descriptionRes != null -> component.resourceProvider.string(state.descriptionRes)
+            state.descriptionRes != null -> component.stringResource(state.descriptionRes, emptyList())
             else -> null
         }
         qsTile.updateTile()
@@ -114,8 +114,8 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
 @Given
 class FunTileServiceComponent(
     @Given val logger: Logger,
-    @Given val resourceProvider: ResourceProvider,
     @Given val serviceGivenScope: ServiceGivenScope,
+    @Given val stringResource: LoadStringResourceUseCase,
     @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 

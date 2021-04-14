@@ -92,7 +92,7 @@ fun counterStore(
         when (action) {
             Inc -> update { copy(count = count.inc()) }
             Dec -> if (state.first().count > 0) update { copy(count = count.dec()) }
-            else toaster.showToast("Value cannot be less than 0!")
+            else toaster("Value cannot be less than 0!")
         }
     }
 }

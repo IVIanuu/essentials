@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.SystemService
 
@@ -32,10 +32,10 @@ object InputMethodActionId : ActionId("input_method")
 
 @Given
 fun inputMethodAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<InputMethodActionId> Action = Action(
     id = "input_method",
-    title = resourceProvider.string(R.string.es_action_input_method),
+    title = stringResource(R.string.es_action_input_method, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
 )
 

@@ -16,19 +16,26 @@
 
 package com.ivianuu.essentials.shell
 
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.injekt.Given
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-interface Shell {
-    suspend fun isAvailable(): Boolean
-    suspend fun run(vararg commands: String): List<String>
-}
+typealias IsShellAvailableUseCase = suspend () -> Boolean
 
 @Given
-class ShellImpl(@Given private val ioDispatcher: IODispatcher) : Shell {
-    override suspend fun isAvailable(): Boolean = withContext(ioDispatcher) { SU.available() }
-    override suspend fun run(vararg commands: String): List<String> =
-        withContext(ioDispatcher) { SU.run(commands)!! }
+fun isShellAvailableUseCase(@Given dispatcher: IODispatcher): IsShellAvailableUseCase = {
+    withContext(dispatcher) {
+        runCatching { SU.available() }.getOrElse { false }
+    }
+}
+
+typealias RunShellCommandUseCase = suspend (List<String>) -> Result<List<String>, Throwable>
+
+@Given
+fun runShellCommandUseCase(@Given dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
+    withContext(dispatcher) { runCatching { SU.run(commands)!! } }
 }

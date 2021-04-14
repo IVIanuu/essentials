@@ -30,21 +30,21 @@ import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Given
 class KeycodeActionFactory(
     @Given private val actionRootCommandRunner: ActionRootCommandRunner,
-    @Given private val resourceProvider: ResourceProvider,
+    @Given private val stringResource: LoadStringResourceUseCase,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
         val keycode = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             id = id,
-            title = resourceProvider.string(R.string.es_action_keycode_suffix, listOf(keycode)),
+            title = stringResource(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
             permissions = listOf(typeKeyOf<ActionRootPermission>()),
             unlockScreen = false,
@@ -61,18 +61,18 @@ class KeycodeActionFactory(
 @Given
 class KeycodeActionPickerDelegate(
     @Given private val navigator: Navigator,
-    @Given private val resourceProvider: ResourceProvider,
+    @Given private val stringResource: LoadStringResourceUseCase,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = resourceProvider.string(R.string.es_action_keycode)
+        get() = stringResource(R.string.es_action_keycode, emptyList())
     override val icon: @Composable () -> Unit =
         { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
     override suspend fun getResult(): ActionPickerKey.Result? {
         val keycode = navigator.pushForResult(
             TextInputKey(
-                title = resourceProvider.string(R.string.es_keycode_picker_title),
-                label = resourceProvider.string(R.string.es_keycode_input_hint),
+                title = stringResource(R.string.es_keycode_picker_title, emptyList()),
+                label = stringResource(R.string.es_keycode_input_hint, emptyList()),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 allowEmpty = false
             )

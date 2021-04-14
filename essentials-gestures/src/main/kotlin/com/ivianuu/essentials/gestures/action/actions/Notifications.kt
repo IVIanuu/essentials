@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -34,10 +34,10 @@ object NotificationsActionId : ActionId("notifications")
 
 @Given
 fun notificationsAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<NotificationsActionId> Action = Action(
     id = NotificationsActionId,
-    title = resourceProvider.string(R.string.es_action_notifications),
+    title = stringResource(R.string.es_action_notifications, emptyList()),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(Icons.Default.Notifications)
 )

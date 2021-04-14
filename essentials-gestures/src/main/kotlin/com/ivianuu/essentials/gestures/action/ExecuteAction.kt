@@ -63,7 +63,7 @@ fun executeAction(
             return@runCatching true
         }.onFailure {
             it.printStackTrace()
-            toaster.showToast("Failed to execute '$key'") // todo res
+            toaster("Failed to execute '$key'") // todo res
         }
     }
 }

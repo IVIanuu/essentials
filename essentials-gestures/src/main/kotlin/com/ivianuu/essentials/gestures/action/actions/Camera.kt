@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,10 +32,10 @@ object CameraActionId : ActionId("camera")
 
 @Given
 fun cameraAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<CameraActionId> Action = Action(
     id = CameraActionId,
-    title = resourceProvider.string(R.string.es_action_camera),
+    title = stringResource(R.string.es_action_camera, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),
     unlockScreen = true
 )

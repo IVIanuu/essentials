@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,10 +32,10 @@ object RecentAppsActionId : ActionId("recent_apps")
 
 @Given
 fun recentAppsAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<RecentAppsActionId> Action = Action(
     id = RecentAppsActionId,
-    title = resourceProvider.string(R.string.es_action_recent_apps),
+    title = stringResource(R.string.es_action_recent_apps, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 

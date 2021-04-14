@@ -27,8 +27,8 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.shell.RunShellCommandUseCase
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -39,11 +39,11 @@ object ScreenshotActionId : ActionId("screenshot")
 
 @Given
 fun screenshotAction(
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given systemBuildInfo: SystemBuildInfo,
 ): @ActionBinding<ScreenshotActionId> Action = Action(
     id = "screenshot",
-    title = resourceProvider.string(R.string.es_action_screenshot),
+    title = stringResource(R.string.es_action_screenshot, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
     permissions = listOf(
         if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
@@ -55,13 +55,13 @@ fun screenshotAction(
 @Given
 fun screenshotActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor,
-    @Given shell: Shell,
+    @Given runShellCommand: RunShellCommandUseCase,
     @Given systemBuildInfo: SystemBuildInfo,
 ): @ActionExecutorBinding<ScreenshotActionId> ActionExecutor = {
     delay(500)
     if (systemBuildInfo.sdk >= 28) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
     } else {
-        shell.run("input keyevent 26")
+        runShellCommand(listOf("input keyevent 26"))
     }
 }

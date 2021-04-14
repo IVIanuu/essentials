@@ -25,7 +25,7 @@ import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
-import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.onAction
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -37,6 +37,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.util.BuildInfo
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -91,14 +92,15 @@ fun writeSecureSettingsStore(
     @Given key: WriteSecureSettingsKey,
     @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
-    @Given shell: Shell,
+    @Given runShellCommand: RunShellCommandUseCase,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsState, WriteSecureSettingsAction> = {
     effect {
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
             if (state.first()) {
-                toaster.showToast(R.string.es_secure_settings_permission_granted)
+                toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
                 navigator.pop(key, true)
                 break
             }
@@ -109,11 +111,10 @@ fun writeSecureSettingsStore(
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
     onAction<GrantPermissionsViaRoot> {
-        runCatching {
-            shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-        }.onFailure {
-            it.printStackTrace()
-            toaster.showToast(R.string.es_secure_settings_no_root)
-        }
+        runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
+            .onFailure {
+                it.printStackTrace()
+                toaster(stringResource(R.string.es_secure_settings_no_root, emptyList()))
+            }
     }
 }

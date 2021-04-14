@@ -21,6 +21,7 @@ import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.StateStore
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.SystemService
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.collect
 @Given
 fun androidTorchWorker(
     @Given cameraManager: @SystemService CameraManager,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given torchStore: StateStore<TorchState>,
     @Given toaster: Toaster
 ): ScopeWorker<AppGivenScope> = {
@@ -39,7 +41,7 @@ fun androidTorchWorker(
             cameraManager.setTorchMode(cameraId, torchState)
         }.onFailure {
             it.printStackTrace()
-            toaster.showToast(R.string.es_failed_to_toggle_torch)
+            toaster(stringResource(R.string.es_failed_to_toggle_torch, emptyList()))
             torchStore.update { false }
         }
     }

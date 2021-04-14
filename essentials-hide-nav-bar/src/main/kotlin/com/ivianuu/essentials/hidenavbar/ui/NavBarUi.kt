@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
@@ -91,7 +91,7 @@ fun navBarStore(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
 ): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
     pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
@@ -109,12 +109,12 @@ fun navBarStore(
                 items = NavBarRotationMode.values()
                     .map { mode ->
                         SingleChoiceListKey.Item(
-                            title = resourceProvider.string(mode.titleRes),
+                            title = stringResource(mode.titleRes, emptyList()),
                             value = mode
                         )
                     },
                 selectedItem = state.first().navBarRotationMode,
-                title = resourceProvider.string(R.string.es_pref_nav_bar_rotation_mode)
+                title = stringResource(R.string.es_pref_nav_bar_rotation_mode, emptyList())
             )
         )?.let { newRotationMode ->
             pref.updateData { copy(navBarRotationMode = newRotationMode) }

@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -34,10 +34,10 @@ object QuickSettingsActionId : ActionId("quick_settings")
 
 @Given
 fun quickSettingsAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<QuickSettingsActionId> Action = Action(
     id = QuickSettingsActionId,
-    title = resourceProvider.string(R.string.es_action_quick_settings),
+    title = stringResource(R.string.es_action_quick_settings, emptyList()),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(Icons.Default.Settings)
 )

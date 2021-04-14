@@ -26,7 +26,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -51,14 +51,14 @@ private typealias TorchNotificationFactory = () -> Notification
 fun torchNotificationFactory(
     @Given appContext: AppContext,
     @Given notificationManager: @SystemService NotificationManager,
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
     @Given systemBuildInfo: SystemBuildInfo,
 ): TorchNotificationFactory = {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                resourceProvider.string(R.string.es_notif_channel_torch),
+                stringResource(R.string.es_notif_channel_torch, emptyList()),
                 NotificationManager.IMPORTANCE_LOW
             )
         )
@@ -68,8 +68,8 @@ fun torchNotificationFactory(
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)
-            setContentTitle(resourceProvider.string(R.string.es_notif_title_torch))
-            setContentText(resourceProvider.string(R.string.es_notif_text_torch))
+            setContentTitle(stringResource(R.string.es_notif_title_torch, emptyList()))
+            setContentText(stringResource(R.string.es_notif_text_torch, emptyList()))
             setContentIntent(
                 PendingIntent.getBroadcast(
                     appContext,

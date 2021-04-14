@@ -66,7 +66,7 @@ fun homeUi(
                             "Option 2",
                             "Option 3"
                         ).map { title ->
-                            PopupMenu.Item(onSelected = { toaster.showToast("Selected $title") }) {
+                            PopupMenu.Item(onSelected = { toaster("Selected $title") }) {
                                 Text(title)
                             }
                         }

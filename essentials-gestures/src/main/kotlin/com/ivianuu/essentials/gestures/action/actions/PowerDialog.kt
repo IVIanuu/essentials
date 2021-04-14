@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,10 +32,10 @@ object PowerDialogActionId : ActionId("power_dialog")
 
 @Given
 fun powerDialogAction(
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): @ActionBinding<PowerDialogActionId> Action = Action(
     id = PowerDialogActionId,
-    title = resourceProvider.string(R.string.es_action_power_dialog),
+    title = stringResource(R.string.es_action_power_dialog, emptyList()),
     permissions = accessibilityActionPermissions,
     icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
 )

@@ -50,7 +50,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 
 class ActionPickerKey(
@@ -97,9 +97,9 @@ fun actionPickerStore(
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
-    @Given resourceProvider: ResourceProvider,
+    @Given stringResource: LoadStringResourceUseCase,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
-    resourceFlow { emit(getActionPickerItems(actionRepository, key, resourceProvider)) }
+    resourceFlow { emit(getActionPickerItems(actionRepository, key, stringResource)) }
         .update { copy(items = it) }
 
     onAction<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
@@ -176,20 +176,20 @@ sealed class ActionPickerItem {
 private suspend fun getActionPickerItems(
     actionRepository: ActionRepository,
     key: ActionPickerKey,
-    resourceProvider: ResourceProvider
+    stringResource: LoadStringResourceUseCase
 ): List<ActionPickerItem> = buildList<ActionPickerItem> {
     val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
     if (key.showDefaultOption) {
         specialOptions += ActionPickerItem.SpecialOption(
-            title = resourceProvider.string(R.string.es_default),
+            title = stringResource(R.string.es_default, emptyList()),
             getResult = { ActionPickerKey.Result.Default }
         )
     }
 
     if (key.showNoneOption) {
         specialOptions += ActionPickerItem.SpecialOption(
-            title = resourceProvider.string(R.string.es_none),
+            title = stringResource(R.string.es_none, emptyList()),
             getResult = { ActionPickerKey.Result.None }
         )
     }

@@ -34,8 +34,8 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.image.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.ResourceProvider
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import java.io.ByteArrayOutputStream
@@ -73,10 +73,10 @@ class ShortcutActionFactory(
 @Given
 class ShortcutActionPickerDelegate(
     @Given private val navigator: Navigator,
-    @Given private val resourceProvider: ResourceProvider,
+    @Given private val stringResource: LoadStringResourceUseCase,
 ) : ActionPickerDelegate {
     override val title: String
-        get() = resourceProvider.string(R.string.es_action_shortcut)
+        get() = stringResource(R.string.es_action_shortcut, emptyList())
     override val icon: @Composable () -> Unit = {
         Icon(painterResource(R.drawable.es_ic_content_cut), null)
     }

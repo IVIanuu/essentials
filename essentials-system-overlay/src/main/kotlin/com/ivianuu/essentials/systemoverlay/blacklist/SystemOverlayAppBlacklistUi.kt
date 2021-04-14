@@ -12,7 +12,7 @@ import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayAppBlacklistA
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.util.ResourceProvider
+import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -23,7 +23,7 @@ class SystemOverlayAppBlacklistKey : Key<Nothing>
 @Given
 fun systemOverlayAppBlacklistUi(
     @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-    @Given resourceProvider: ResourceProvider
+    @Given stringResource: LoadStringResourceUseCase
 ): StoreKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistState, SystemOverlayAppBlacklistAction> = {
     remember {
         checkableAppsPageFactory(
@@ -31,7 +31,7 @@ fun systemOverlayAppBlacklistUi(
                 checkedApps = state.appBlacklist,
                 onCheckedAppsChanged = { send(UpdateAppBlacklist(it)) },
                 appFilter = DefaultAppFilter,
-                appBarTitle = resourceProvider.string(R.string.es_system_overlay_blacklist_title)
+                appBarTitle = stringResource(R.string.es_system_overlay_blacklist_title, emptyList())
             )
         )
     }.invoke()
