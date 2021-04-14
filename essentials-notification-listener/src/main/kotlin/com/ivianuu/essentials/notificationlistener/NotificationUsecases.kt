@@ -17,25 +17,14 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
-import android.app.Service
 import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.dispatchUpdate
-import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.essentials.coroutines.stateStore
-import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 typealias Notifications = Flow<List<StatusBarNotification>>
 

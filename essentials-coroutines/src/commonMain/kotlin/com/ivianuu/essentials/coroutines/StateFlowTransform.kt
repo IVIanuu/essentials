@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 

@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.LocalUiGivenScope
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding

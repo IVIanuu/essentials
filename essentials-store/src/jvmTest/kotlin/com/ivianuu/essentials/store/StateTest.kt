@@ -20,7 +20,6 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childJob
 import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn

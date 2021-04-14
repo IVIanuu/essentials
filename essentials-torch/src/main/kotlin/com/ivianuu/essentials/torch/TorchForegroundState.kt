@@ -23,7 +23,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground

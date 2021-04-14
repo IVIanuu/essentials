@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.gestures.action.executeAction
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.ui.UiGivenScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold

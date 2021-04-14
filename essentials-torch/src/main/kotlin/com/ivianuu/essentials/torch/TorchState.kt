@@ -22,8 +22,6 @@ import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 typealias TorchState = Boolean
 

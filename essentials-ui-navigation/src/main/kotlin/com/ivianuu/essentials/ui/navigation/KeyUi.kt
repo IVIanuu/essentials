@@ -25,7 +25,6 @@ import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
 typealias KeyUi<K> = @Composable () -> Unit
