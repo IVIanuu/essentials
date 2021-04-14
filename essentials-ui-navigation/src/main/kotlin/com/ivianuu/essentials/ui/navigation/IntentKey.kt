@@ -17,12 +17,23 @@
 package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.ivianuu.essentials.coroutines.MainDispatcher
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
+import com.ivianuu.injekt.scope.AppGivenScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import java.util.UUID
+import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentKey : Key<Nothing>
+interface IntentKey : Key<ActivityResult>
 
 @Given
 fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
@@ -30,23 +41,42 @@ fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
     @Given keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
-
 typealias KeyIntentFactory<T> = (T) -> Intent
 
-typealias IntentKeyHandler = (Key<*>) -> Boolean
+typealias IntentAppUiStarter = suspend () -> ComponentActivity
+
+typealias IntentKeyHandler = (Key<*>, ((ActivityResult) -> Unit)?) -> Boolean
 
 @Given
 fun intentKeyHandler(
     @Given appContext: AppContext,
-    @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
-): IntentKeyHandler = handler@ { key ->
+    @Given appUiStarter: IntentAppUiStarter,
+    @Given dispatcher: MainDispatcher,
+    @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
+    @Given scope: ScopeCoroutineScope<AppGivenScope>
+): IntentKeyHandler = handler@ { key, onResult ->
     if (key !is IntentKey) return@handler false
     val intentFactory = intentFactories[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
-        appContext.startActivity(
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        )
+        if (onResult != null) {
+            scope.launch {
+                val activity = appUiStarter()
+                withContext(dispatcher) {
+                    val result = suspendCancellableCoroutine<ActivityResult> { continuation ->
+                        val launcher = activity.activityResultRegistry.register(
+                            UUID.randomUUID().toString(),
+                            ActivityResultContracts.StartActivityForResult()
+                        ) { continuation.resume(it) }
+                        launcher.launch(intent)
+                        continuation.invokeOnCancellation { launcher.unregister() }
+                    }
+                    onResult(result)
+                }
+            }
+        } else {
+            appContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
     }
     intentFactory != null
 }

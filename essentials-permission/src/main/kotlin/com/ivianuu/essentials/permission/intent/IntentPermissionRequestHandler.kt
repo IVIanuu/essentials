@@ -21,7 +21,8 @@ import com.ivianuu.essentials.coroutines.raceOf
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.util.ActivityResultLauncher
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -31,20 +32,18 @@ typealias PermissionIntentFactory<P> = (P) -> Intent
 
 @Given
 fun <P : Permission> permissionIntentRequestHandler(
-    @Given activityResultLauncher: ActivityResultLauncher,
     @Given intentFactory: PermissionIntentFactory<P>,
+    @Given navigator: Navigator,
     @Given state: Flow<PermissionState<P>>
 ): PermissionRequestHandler<P> = { permission ->
     raceOf(
         {
             // wait until user navigates back from the permission screen
-            activityResultLauncher.startActivityForResult(intentFactory(permission))
+            navigator.pushForResult(intentFactory(permission).toIntentKey())
         },
         {
             // wait until user granted permission
-            while (!state.first()) {
-                delay(100)
-            }
+            while (!state.first()) delay(100)
         }
     )
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.sync.withLock
 
 interface StateStore<T> : StateFlow<T> {
     suspend fun update(transform: T.() -> T): T
-    fun effect(block: suspend StateStore<T>.() -> Unit)
+    fun dispatchUpdate(transform: T.() -> T)
 }
 
 fun <T> CoroutineScope.stateStore(initial: T): StateStore<T> =
@@ -29,25 +29,7 @@ private class StateStoreImpl<T>(
         state.value = newState
         newState
     }
-
-    override fun effect(block: suspend StateStore<T>.() -> Unit) {
-        scope.launch { block() }
+    override fun dispatchUpdate(transform: T.() -> T) {
+        scope.launch { update(transform) }
     }
 }
-
-fun <T> StateStore<T>.dispatchUpdate(reducer: T.() -> T) = effect {
-    update(reducer)
-}
-
-suspend fun <T, S> Flow<T>.update(store: StateStore<S>, reducer: S.(T) -> S) {
-    collect { store.update { reducer(it) } }
-}
-
-fun <T, S> Flow<T>.updateIn(store: StateStore<S>, reducer: S.(T) -> S) = store.effect {
-    this@updateIn.update(store, reducer)
-}
-
-fun <T, S> Flow<T>.collectAsEffectIn(
-    store: StateStore<S>,
-    collector: suspend (T) -> Unit = {}
-) = store.effect { collect(collector) }

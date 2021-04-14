@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
+import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
-typealias AppUiStarter = suspend () -> ComponentActivity
+typealias AppUiStarter = IntentAppUiStarter
 
 @Given
 fun appUiStarter(

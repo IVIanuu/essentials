@@ -38,8 +38,8 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.ActivityResultLauncher
 import com.ivianuu.essentials.util.LoadStringResourceUseCase
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -79,7 +79,6 @@ sealed class ShortcutPickerAction {
 
 @Given
 fun shortcutPickerStore(
-    @Given activityResultLauncher: ActivityResultLauncher,
     @Given extractShortcut: ExtractShortcutUseCase,
     @Given getAllShortcuts: GetAllShortcutsUseCase,
     @Given key: ShortcutPickerKey,
@@ -91,8 +90,8 @@ fun shortcutPickerStore(
         .update { copy(shortcuts = it) }
     onAction<PickShortcut> { action ->
         runCatching {
-            val shortcutRequestResult = activityResultLauncher.startActivityForResult(action.shortcut.intent)
-                .data ?: return@runCatching
+            val shortcutRequestResult = navigator.pushForResult(action.shortcut.intent.toIntentKey())
+                ?.data ?: return@runCatching
             val finalShortcut = extractShortcut(shortcutRequestResult)
             navigator.pop(key, finalShortcut)
         }.onFailure {

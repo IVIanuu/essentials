@@ -22,6 +22,13 @@ import android.provider.Settings
 import androidx.core.net.toUri
 import com.ivianuu.injekt.Given
 
+class DefaultIntentKey(val intent: Intent) : IntentKey
+
+fun Intent.toIntentKey() = DefaultIntentKey(this)
+
+@Given
+val defaultIntentKeyIntentFactory: KeyIntentFactory<DefaultIntentKey> = { it.intent }
+
 data class AppInfoKey(val packageName: String) : IntentKey
 
 @Given

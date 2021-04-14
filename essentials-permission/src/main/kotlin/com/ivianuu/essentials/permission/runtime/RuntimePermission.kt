@@ -21,7 +21,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.util.ActivityResultLauncher
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
@@ -38,10 +39,9 @@ fun <P : RuntimePermission> runtimePermissionStateProvider(
 
 @Given
 fun <P : RuntimePermission> runtimePermissionRequestHandler(
-    @Given activityResultLauncher: ActivityResultLauncher
+    @Given context: AppContext,
+    @Given navigator: Navigator
 ): PermissionRequestHandler<P> = { permission ->
-    activityResultLauncher.startActivityForResult(
-        ActivityResultContracts.RequestPermission(),
-        permission.permissionName
-    )
+    val contract = ActivityResultContracts.RequestPermission()
+    navigator.pushForResult(contract.createIntent(context, permission.permissionName).toIntentKey())
 }

@@ -8,8 +8,10 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.ui.navigation.IntentKey
+import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.ActivityResultLauncher
+import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -73,24 +75,24 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
 
 @Given
 fun restoreBackupUseCase(
-    @Given activityResultLauncher: ActivityResultLauncher,
     @Given contentResolver: ContentResolver,
     @Given dataDir: DataDir,
     @Given ioDispatcher: IODispatcher,
     @Given logger: Logger,
+    @Given navigator: Navigator,
     @Given processRestarter: ProcessRestarter,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): RestoreBackupUseCase = {
     runCatching {
         withContext(scope.coroutineContext + ioDispatcher) {
-            val uri = activityResultLauncher.startActivityForResult(
+            val uri = navigator.pushForResult(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
                         type = "application/zip"
                     },
                     ""
-                )
-            ).data?.data ?: return@withContext
+                ).toIntentKey()
+            )?.data?.data ?: return@withContext
 
             val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 

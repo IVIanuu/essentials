@@ -23,8 +23,8 @@ import java.io.File
 typealias DataDir = File
 
 @Given
-fun dataDir(@Given AppContext: AppContext): DataDir =
-    File(AppContext.applicationInfo.dataDir)
+fun dataDir(@Given context: AppContext): DataDir =
+    File(context.applicationInfo.dataDir)
 
 typealias PrefsDir = File
 
@@ -32,5 +32,4 @@ typealias PrefsDir = File
 fun prefsDir(@Given dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
 @Given
-fun packageManager(@Given AppContext: AppContext) =
-    AppContext.packageManager!!
+inline fun packageManager(@Given context: AppContext) = context.packageManager!!

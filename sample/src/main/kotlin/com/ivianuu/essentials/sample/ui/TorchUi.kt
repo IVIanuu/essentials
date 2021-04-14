@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.coroutines.StateStore
-import com.ivianuu.essentials.coroutines.dispatchUpdate
 import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold

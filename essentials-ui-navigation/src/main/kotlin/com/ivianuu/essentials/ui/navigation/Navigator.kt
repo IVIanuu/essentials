@@ -20,6 +20,7 @@ import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.essentials.util.Logger
+import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
@@ -60,7 +61,7 @@ class NavigatorImpl(
     override suspend fun <R> pushForResult(key: Key<R>): R? {
         logger.d { "push $key" }
         val result = CompletableDeferred<R?>()
-        if (!intentKeyHandler(key)) {
+        if (!intentKeyHandler(key) { result.complete(it as R) }) {
             store.update {
                 copy(
                     backStack = backStack + key,
@@ -78,7 +79,7 @@ class NavigatorImpl(
     override suspend fun <R> replaceTopForResult(key: Key<R>): R? {
         val result = CompletableDeferred<R?>()
         logger.d { "replace top $key" }
-        if (intentKeyHandler(key)) {
+        if (intentKeyHandler(key) { result.complete(it as R?) }) {
             store.update {
                 copy(
                     backStack = backStack.dropLast(1),
