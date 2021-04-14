@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -39,7 +39,7 @@ object BluetoothActionId : ActionId("bluetooth")
 @Given
 fun bluetoothAction(
     @Given bluetoothIcon: Flow<BluetoothIcon>,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): @ActionBinding<BluetoothActionId> Action = Action(
     id = BluetoothActionId,
     title = stringResource(R.string.es_action_bluetooth, emptyList()),

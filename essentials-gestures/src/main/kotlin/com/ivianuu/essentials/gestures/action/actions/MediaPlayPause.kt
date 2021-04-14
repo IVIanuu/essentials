@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 @Given
@@ -34,7 +34,7 @@ object PlayPauseActionId : ActionId("media_play_pause")
 
 @Given
 fun playPauseMediaAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<PlayPauseActionId> Action = Action(
     id = PlayPauseActionId,
     title = stringResource(R.string.es_action_media_play_pause, emptyList()),

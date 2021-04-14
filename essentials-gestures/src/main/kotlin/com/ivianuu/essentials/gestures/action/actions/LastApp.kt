@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.delay
 
@@ -33,7 +33,7 @@ object LastAppActionId : ActionId("last_app")
 
 @Given
 fun lastAppAction(
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): @ActionBinding<LastAppActionId> Action = Action(
     id = "last_app",
     title = stringResource(R.string.es_action_last_app, emptyList()),

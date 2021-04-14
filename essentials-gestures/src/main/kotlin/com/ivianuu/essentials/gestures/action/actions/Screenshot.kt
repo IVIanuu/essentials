@@ -28,7 +28,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -39,7 +39,7 @@ object ScreenshotActionId : ActionId("screenshot")
 
 @Given
 fun screenshotAction(
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
 ): @ActionBinding<ScreenshotActionId> Action = Action(
     id = "screenshot",

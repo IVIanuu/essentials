@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.plus
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +42,7 @@ object KillCurrentAppActionId : ActionId("kill_current_app")
 
 @Given
 fun killCurrentAppAction(
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): @ActionBinding<KillCurrentAppActionId> Action = Action(
     id = KillCurrentAppActionId,
     title = stringResource(R.string.es_action_kill_current_app, emptyList()),

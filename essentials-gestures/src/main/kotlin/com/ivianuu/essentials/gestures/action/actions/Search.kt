@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 @Given
@@ -34,7 +34,7 @@ object SearchActionId : ActionId("search")
 
 @Given
 fun searchAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<SearchActionId> Action = Action(
     id = "search",
     title = stringResource(R.string.es_action_search, emptyList()),

@@ -30,14 +30,14 @@ import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Given
 class KeycodeActionFactory(
     @Given private val actionRootCommandRunner: ActionRootCommandRunner,
-    @Given private val stringResource: LoadStringResourceUseCase,
+    @Given private val stringResource: StringResourceProvider,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
     override suspend fun createAction(id: String): Action {
@@ -61,7 +61,7 @@ class KeycodeActionFactory(
 @Given
 class KeycodeActionPickerDelegate(
     @Given private val navigator: Navigator,
-    @Given private val stringResource: LoadStringResourceUseCase,
+    @Given private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_keycode, emptyList())

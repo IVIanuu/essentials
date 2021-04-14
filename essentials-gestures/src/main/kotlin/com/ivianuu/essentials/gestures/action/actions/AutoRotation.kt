@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +43,7 @@ object AutoRotationActionId : ActionId("auto_rotation")
 @Given
 fun autoRotationAction(
     @Given autoRotationIcon: Flow<AutoRotationIcon>,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): @ActionBinding<AutoRotationActionId> Action = Action(
     id = AutoRotationActionId,
     title = stringResource(R.string.es_action_auto_rotation, emptyList()),

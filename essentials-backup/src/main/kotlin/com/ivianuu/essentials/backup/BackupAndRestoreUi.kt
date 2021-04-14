@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 
@@ -73,7 +73,7 @@ sealed class BackupAndRestoreAction {
 fun backupAndRestoreStore(
     @Given createBackupUseCase: CreateBackupUseCase,
     @Given restoreBackupUseCase: RestoreBackupUseCase,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
     onAction<BackupData> {

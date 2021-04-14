@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 @Given
@@ -39,7 +39,7 @@ class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
     @Given private val getAppInfo: GetAppInfoUseCase,
     @Given private val packageManager: PackageManager,
-    @Given private val stringResource: LoadStringResourceUseCase
+    @Given private val stringResource: StringResourceProvider
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
@@ -71,7 +71,7 @@ class AppActionFactory(
 class AppActionPickerDelegate(
     @Given private val launchableAppFilter: LaunchableAppFilter,
     @Given private val navigator: Navigator,
-    @Given private val stringResource: LoadStringResourceUseCase,
+    @Given private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
     override val title: String
         get() = stringResource(R.string.es_action_app, emptyList())

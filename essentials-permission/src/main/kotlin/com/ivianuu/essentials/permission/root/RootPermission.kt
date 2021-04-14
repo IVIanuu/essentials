@@ -21,7 +21,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.IsShellAvailableUseCase
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 
@@ -35,7 +35,7 @@ fun <P : RootPermission> rootPermissionStateProvider(
 @Given
 fun <P : RootPermission> rootPermissionRequestHandler(
     @Given isShellAvailable: IsShellAvailableUseCase,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): PermissionRequestHandler<P> = {
     val isOk = isShellAvailable()

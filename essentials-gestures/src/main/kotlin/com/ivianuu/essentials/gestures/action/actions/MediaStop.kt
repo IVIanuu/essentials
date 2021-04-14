@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,7 +32,7 @@ object StopActionId : ActionId("media_stop")
 
 @Given
 fun stopMediaAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<StopActionId> Action = Action(
     id = StopActionId,
     title = stringResource(R.string.es_action_media_stop, emptyList()),

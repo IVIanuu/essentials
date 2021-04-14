@@ -26,7 +26,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -51,7 +51,7 @@ private typealias TorchNotificationFactory = () -> Notification
 fun torchNotificationFactory(
     @Given appContext: AppContext,
     @Given notificationManager: @SystemService NotificationManager,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
 ): TorchNotificationFactory = {
     if (systemBuildInfo.sdk >= 26) {

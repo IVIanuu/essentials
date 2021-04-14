@@ -24,7 +24,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 @Given
@@ -32,7 +32,7 @@ object SkipPreviousActionId : ActionId("media_skip_previous")
 
 @Given
 fun skipPreviousMediaAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<SkipPreviousActionId> Action = Action(
     id = SkipPreviousActionId,
     title = stringResource(R.string.es_action_media_skip_previous, emptyList()),

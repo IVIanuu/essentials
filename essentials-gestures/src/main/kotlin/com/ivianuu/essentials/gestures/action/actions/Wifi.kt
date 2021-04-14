@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +38,7 @@ object WifiActionId : ActionId("wifi")
 
 @Given
 fun wifiAction(
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given wifiIcon: Flow<WifiIcon>,
 ): @ActionBinding<WifiActionId> Action = Action(
     id = WifiActionId,

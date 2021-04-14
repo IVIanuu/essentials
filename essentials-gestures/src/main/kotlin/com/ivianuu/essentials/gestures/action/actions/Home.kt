@@ -26,7 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 
@@ -35,7 +35,7 @@ object HomeActionId : ActionId("home")
 
 @Given
 fun homeAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<HomeActionId> Action = Action(
     id = HomeActionId,
     title = stringResource(R.string.es_action_home, emptyList()),

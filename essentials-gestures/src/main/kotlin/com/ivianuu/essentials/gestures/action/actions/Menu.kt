@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 
@@ -34,7 +34,7 @@ object MenuActionId : ActionId("menu")
 
 @Given
 fun menuAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<MenuActionId> Action = Action(
     id = "menu",
     title = stringResource(R.string.es_action_menu, emptyList()),

@@ -50,7 +50,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
 class ActionPickerKey(
@@ -97,7 +97,7 @@ fun actionPickerStore(
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
     resourceFlow { emit(getActionPickerItems(actionRepository, key, stringResource)) }
         .update { copy(items = it) }
@@ -176,7 +176,7 @@ sealed class ActionPickerItem {
 private suspend fun getActionPickerItems(
     actionRepository: ActionRepository,
     key: ActionPickerKey,
-    stringResource: LoadStringResourceUseCase
+    stringResource: StringResourceProvider
 ): List<ActionPickerItem> = buildList<ActionPickerItem> {
     val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

@@ -21,7 +21,7 @@ import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.tile.TileAction.TileClicked
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
@@ -115,7 +115,7 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
 class FunTileServiceComponent(
     @Given val logger: Logger,
     @Given val serviceGivenScope: ServiceGivenScope,
-    @Given val stringResource: LoadStringResourceUseCase,
+    @Given val stringResource: StringResourceProvider,
     @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 

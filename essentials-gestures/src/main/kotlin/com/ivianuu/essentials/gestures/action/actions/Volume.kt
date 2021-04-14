@@ -23,7 +23,7 @@ import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.SystemService
 
@@ -32,7 +32,7 @@ object VolumeActionId : ActionId("volume")
 
 @Given
 fun volumeAction(
-    @Given stringResource: LoadStringResourceUseCase
+    @Given stringResource: StringResourceProvider
 ): @ActionBinding<VolumeActionId> Action = Action(
     id = VolumeActionId,
     title = stringResource(R.string.es_action_volume, emptyList()),

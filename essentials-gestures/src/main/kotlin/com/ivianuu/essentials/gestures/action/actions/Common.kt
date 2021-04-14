@@ -28,7 +28,7 @@ import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -48,7 +48,7 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
 @Given
 fun actionRootCommandRunner(
     @Given runShellCommand: RunShellCommandUseCase,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->
     runCatching { runShellCommand(listOf(command)) }
@@ -63,7 +63,7 @@ typealias ActionIntentSender = (Intent) -> Unit
 @Given
 fun actionIntentSender(
     @Given appContext: AppContext,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): ActionIntentSender = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

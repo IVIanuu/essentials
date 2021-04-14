@@ -27,7 +27,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -37,7 +37,7 @@ object LockScreenActionId : ActionId("lock_screen")
 
 @Given
 fun lockScreenAction(
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
 ): @ActionBinding<LockScreenActionId> Action = Action(
     id = LockScreenActionId,

@@ -7,7 +7,7 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.filter
 
 @Given
 class NavBarPermission(
-    @Given private val stringResource: LoadStringResourceUseCase
+    @Given private val stringResource: StringResourceProvider
 ) : WriteSecureSettingsPermission {
     override val title: String = stringResource(R.string.es_permission_nav_bar, emptyList())
     override val desc: String = stringResource(R.string.es_permission_nav_bar_desc, emptyList())

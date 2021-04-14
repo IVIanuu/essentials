@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.util.LoadStringResourceUseCase
+import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
@@ -91,7 +91,7 @@ fun navBarStore(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
-    @Given stringResource: LoadStringResourceUseCase,
+    @Given stringResource: StringResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
     pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
