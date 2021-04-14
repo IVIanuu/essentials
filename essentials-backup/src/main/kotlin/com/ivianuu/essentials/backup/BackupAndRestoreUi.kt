@@ -70,18 +70,19 @@ sealed class BackupAndRestoreAction {
 
 @Given
 fun backupAndRestoreStore(
-    @Given backupManager: BackupManager,
+    @Given createBackupUseCase: CreateBackupUseCase,
+    @Given restoreBackupUseCase: RestoreBackupUseCase,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
     onAction<BackupData> {
-        backupManager.createBackup()
+        createBackupUseCase()
             .onFailure {
                 it.printStackTrace()
                 toaster.showToast(R.string.es_backup_error)
             }
     }
     onAction<RestoreData> {
-        backupManager.restoreBackup()
+        restoreBackupUseCase()
             .onFailure {
                 it.printStackTrace()
                 toaster.showToast(R.string.es_restore_error)
