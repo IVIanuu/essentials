@@ -17,12 +17,12 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 typealias GlobalActionExecutor = suspend (Int) -> Boolean
 
 @Given
 fun globalActionExecutor(
-    @Given holder: AccessibilityServiceHolder,
-): GlobalActionExecutor = { action ->
-    holder.value?.performGlobalAction(action) ?: false
-}
+    @Given ref: Flow<EsAccessibilityService?>,
+): GlobalActionExecutor = { action -> ref.first()?.performGlobalAction(action) ?: false }

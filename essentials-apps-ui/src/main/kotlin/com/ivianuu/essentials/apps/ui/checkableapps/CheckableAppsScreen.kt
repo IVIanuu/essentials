@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
@@ -164,12 +164,12 @@ sealed class CheckableAppsAction {
 
 @Given
 fun checkableAppsStore(
-    @Given appRepository: AppRepository,
     @Given checkedApps: Flow<CheckedApps>,
+    @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged,
 ): StoreBuilder<KeyUiGivenScope, CheckableAppsState, CheckableAppsAction> = {
     checkedApps.update { copy(checkedApps = it) }
-    resourceFlow { emit(appRepository.getInstalledApps()) }.update { copy(allApps = it) }
+    resourceFlow { emit(getInstalledApps()) }.update { copy(allApps = it) }
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()

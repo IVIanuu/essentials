@@ -24,12 +24,14 @@ import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.withContext
 
+typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
+
 @Given
-class AppRepository(
-    @Given private val ioDispatcher: IODispatcher,
-    @Given private val packageManager: PackageManager
-) {
-    suspend fun getInstalledApps(): List<AppInfo> = withContext(ioDispatcher) {
+fun getInstalledAppsUseCase(
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager
+): GetInstalledAppsUseCase = {
+    withContext(ioDispatcher) {
         packageManager.getInstalledApplications(0)
             .parMap {
                 AppInfo(
@@ -41,8 +43,16 @@ class AppRepository(
             .sortedBy { it.appName.toLowerCase() }
             .toList()
     }
+}
 
-    suspend fun getAppInfo(packageName: String): AppInfo? = withContext(ioDispatcher) {
+typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
+
+@Given
+fun getAppInfoUseCase(
+    @Given ioDispatcher: IODispatcher,
+    @Given packageManager: PackageManager
+): GetAppInfoUseCase = { packageName ->
+    withContext(ioDispatcher) {
         val applicationInfo = runCatching {
             packageManager.getApplicationInfo(packageName, 0)
         }.get() ?: return@withContext null

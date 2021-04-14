@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
@@ -100,10 +100,10 @@ sealed class AppPickerAction {
 
 @Given
 fun appPickerStore(
-    @Given appRepository: AppRepository,
     @Given key: AppPickerKey,
+    @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
 ): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
-    resourceFlow { emit(appRepository.getInstalledApps()) }.update { copy(allApps = it) }
+    resourceFlow { emit(getInstalledApps()) }.update { copy(allApps = it) }
     onAction<PickApp> { navigator.pop(key, it.app) }
 }

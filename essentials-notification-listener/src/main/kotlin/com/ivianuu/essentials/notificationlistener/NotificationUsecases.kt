@@ -31,6 +31,7 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -39,7 +40,7 @@ import kotlinx.coroutines.flow.onEach
 typealias Notifications = Flow<List<StatusBarNotification>>
 
 @Given
-fun notifications(@Given ref: NotificationServiceRef): Notifications = ref
+fun notifications(@Given ref: Flow<EsNotificationListenerService?>): Notifications = ref
     .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
 typealias OpenNotificationUseCase = suspend (Notification) -> Result<Unit, Throwable>
@@ -53,16 +54,16 @@ typealias DismissNotificationUseCase = suspend (String) -> Result<Unit, Throwabl
 
 @Given
 fun dismissNotificationUseCase(
-    @Given ref: NotificationServiceRef
+    @Given ref: Flow<EsNotificationListenerService?>
 ): DismissNotificationUseCase = { key ->
-    runCatching { ref.value!!.cancelNotification(key) }
+    runCatching { ref.first()!!.cancelNotification(key) }
 }
 
 typealias DismissAllNotificationsUseCase = suspend () -> Unit
 
 @Given
 fun dismissAllNotificationsUseCase(
-    @Given ref: NotificationServiceRef
+    @Given ref: Flow<EsNotificationListenerService?>
 ): DismissAllNotificationsUseCase = {
-    runCatching { ref.value!!.cancelAllNotifications() }
+    runCatching { ref.first()!!.cancelAllNotifications() }
 }

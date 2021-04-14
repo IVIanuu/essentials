@@ -24,7 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.data.DataStore
@@ -125,14 +125,14 @@ sealed class MediaActionSettingsAction {
 
 @Given
 fun mediaActionSettingsStore(
-    @Given appRepository: AppRepository,
+    @Given getAppInfo: GetAppInfoUseCase,
     @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
 ): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
     pref.data
         .map { it.mediaApp }
-        .mapNotNull { if (it != null) appRepository.getAppInfo(it) else null }
+        .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
         .update { copy(mediaApp = it) }
     onAction<UpdateMediaApp> {

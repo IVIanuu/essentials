@@ -41,10 +41,10 @@ data class AccessibilityConfig(
 @Given
 fun accessibilityConfigWorker(
     @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
-    @Given serviceHolder: AccessibilityServiceHolder,
+    @Given ref: Flow<EsAccessibilityService?>,
 ): ScopeWorker<AccessibilityGivenScope> = {
     coroutineScope {
-        serviceHolder
+        ref
             .flatMapLatest { service ->
                 if (service != null) {
                     combine(

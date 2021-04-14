@@ -20,7 +20,7 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Given
 @Given
 class AppActionFactory(
     @Given private val actionIntentSender: ActionIntentSender,
-    @Given private val appRepository: AppRepository,
+    @Given private val getAppInfo: GetAppInfoUseCase,
     @Given private val packageManager: PackageManager,
     @Given private val resourceProvider: ResourceProvider
 ) : ActionFactory {
@@ -47,7 +47,7 @@ class AppActionFactory(
         val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return Action(
             id = id,
-            title = appRepository.getAppInfo(packageName)?.appName
+            title = getAppInfo(packageName)?.appName
                 ?: resourceProvider.string(R.string.es_unknown_action_name),
             unlockScreen = true,
             enabled = true,
