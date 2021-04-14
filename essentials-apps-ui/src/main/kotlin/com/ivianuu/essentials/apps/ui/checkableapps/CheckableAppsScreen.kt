@@ -35,6 +35,7 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckedState
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
@@ -43,7 +44,8 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -168,8 +170,10 @@ fun checkableAppsStore(
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged,
 ): StoreBuilder<KeyUiGivenScope, CheckableAppsState, CheckableAppsAction> = {
-    checkedApps.update { copy(checkedApps = it) }
-    resourceFlow { emit(getInstalledApps()) }.update { copy(allApps = it) }
+    checkedApps
+        .updateIn(this) { copy(checkedApps = it) }
+    resourceFlow { emit(getInstalledApps()) }
+        .updateIn(this) { copy(allApps = it) }
     suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()
@@ -179,21 +183,24 @@ fun checkableAppsStore(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-    onAction<UpdateAppCheckedState> { action ->
-        pushNewCheckedApps {
-            if (!action.app.isChecked) {
-                this + action.app.info.packageName
-            } else {
-                this - action.app.info.packageName
+    actions<UpdateAppCheckedState>()
+        .collectIn(this) { action ->
+            pushNewCheckedApps {
+                if (!action.app.isChecked) {
+                    this + action.app.info.packageName
+                } else {
+                    this - action.app.info.packageName
+                }
             }
         }
-    }
-    onAction<SelectAll> {
-        pushNewCheckedApps { currentState ->
-            currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
+    actions<SelectAll>()
+        .collectIn(this) {
+            pushNewCheckedApps { currentState ->
+                currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
+            }
         }
-    }
-    onAction<DeselectAll> {
-        pushNewCheckedApps { emptySet() }
-    }
+    actions<DeselectAll>()
+        .collectIn(this) {
+            pushNewCheckedApps { emptySet() }
+        }
 }

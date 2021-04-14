@@ -72,7 +72,7 @@ val keyboardVisibilityAccessibilityConfig = flow {
     )
 }
 
-typealias KeyboardHeightProvider = () -> Int?
+private typealias KeyboardHeightProvider = () -> Int?
 
 @Given
 fun keyboardHeightProvider(

@@ -27,6 +27,7 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionId
@@ -37,7 +38,8 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -136,8 +138,8 @@ fun mediaActionSettingsStore(
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
-        .update { copy(mediaApp = it) }
-    onAction<UpdateMediaApp> {
+        .updateIn(this) { copy(mediaApp = it) }
+    actions<UpdateMediaApp>().collectIn(this) {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null

@@ -16,9 +16,11 @@
 
 package com.ivianuu.essentials.sample.tile
 
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.tile.FunTileService1
 import com.ivianuu.essentials.tile.TileAction
 import com.ivianuu.essentials.tile.TileAction.TileClicked
@@ -33,8 +35,8 @@ import kotlinx.coroutines.flow.first
 fun testTile(
     @Given twilightPref: DataStore<TwilightPrefs>
 ): StoreBuilder<TileGivenScope, TileState<FunTileService1>, TileAction<FunTileService1>> = {
-    twilightPref.data.update { it.toTileState() }
-    onAction<TileClicked> {
+    twilightPref.data.updateIn(this) { it.toTileState() }
+    actions<TileClicked>().collectIn(this) {
         val newTwilightMode = if (twilightPref.data.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
         twilightPref.updateData { copy(twilightMode = newTwilightMode) }

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 
 @Given
@@ -88,7 +89,7 @@ sealed class CounterAction {
 fun counterStore(
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
-    onAction { action ->
+    actions.collect { action ->
         when (action) {
             Inc -> update { copy(count = count.inc()) }
             Dec -> if (state.first().count > 0) update { copy(count = count.dec()) }

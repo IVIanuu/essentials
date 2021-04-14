@@ -20,13 +20,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -43,6 +44,7 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -95,7 +97,7 @@ fun writeSecureSettingsStore(
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsState, WriteSecureSettingsAction> = {
-    effect {
+    launch {
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
             if (state.first()) {
@@ -106,10 +108,10 @@ fun writeSecureSettingsStore(
             delay(200)
         }
     }
-    onAction<OpenPcInstructions> {
+    actions<OpenPcInstructions>().collectIn(this) {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    onAction<GrantPermissionsViaRoot> {
+    actions<GrantPermissionsViaRoot>().collectIn(this) {
         runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
             .onFailure {
                 it.printStackTrace()

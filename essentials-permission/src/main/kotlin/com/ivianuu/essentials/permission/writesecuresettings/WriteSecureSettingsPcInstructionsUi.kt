@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -30,7 +31,7 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -46,6 +47,7 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -147,7 +149,7 @@ fun writeSecureSettingsPcInstructionsStore(
     @Given updateClipboardText: UpdateClipboardTextUseCase
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState,
         WriteSecureSettingsPcInstructionsAction> = {
-    effect {
+    launch {
         val state = permissionStateFactory(listOf(key.permissionKey))
         while (coroutineContext.isActive) {
             if (state.first()) {
@@ -157,18 +159,18 @@ fun writeSecureSettingsPcInstructionsStore(
             delay(200)
         }
     }
-    onAction<CopyAdbCommand> {
+    actions<CopyAdbCommand>().collectIn(this) {
         updateClipboardText(state.first().secureSettingsAdbCommand)
     }
-    onAction<OpenGadgetHacksTutorial> {
+    actions<OpenGadgetHacksTutorial>().collectIn(this) {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
     }
-    onAction<OpenLifehackerTutorial> {
+    actions<OpenLifehackerTutorial>().collectIn(this) {
         navigator.push(
             UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
         )
     }
-    onAction<OpenXdaTutorial> {
+    actions<OpenXdaTutorial>().collectIn(this) {
         navigator.push(
             UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
         )

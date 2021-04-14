@@ -3,10 +3,12 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayBlacklistAction.OpenAppBlacklistSettings
 import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayBlacklistAction.UpdateDisableOnKeyboard
@@ -125,23 +127,23 @@ fun systemOverlayBlacklistStore(
     @Given navigator: Navigator,
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
 ): StoreBuilder<KeyUiGivenScope, SystemOverlayBlacklistUiState, SystemOverlayBlacklistAction> = {
-    pref.data.update {
+    pref.data.updateIn(this) {
         copy(
             disableOnKeyboard = it.disableOnKeyboard,
             disableOnLockScreen = it.disableOnLockScreen,
             disableOnSecureScreens = it.disableOnSecureScreens
         )
     }
-    onAction<OpenAppBlacklistSettings> {
+    actions<OpenAppBlacklistSettings>().collectIn(this) {
         navigator.push(SystemOverlayAppBlacklistKey())
     }
-    onAction<UpdateDisableOnKeyboard> {
+    actions<UpdateDisableOnKeyboard>().collectIn(this) {
         pref.updateData { copy(disableOnKeyboard = it.value) }
     }
-    onAction<UpdateDisableOnLockScreen> {
+    actions<UpdateDisableOnLockScreen>().collectIn(this) {
         pref.updateData { copy(disableOnLockScreen = it.value) }
     }
-    onAction<UpdateDisableOnSecureScreens> {
+    actions<UpdateDisableOnSecureScreens>().collectIn(this) {
         pref.updateData { copy(disableOnSecureScreens = it.value) }
     }
 }

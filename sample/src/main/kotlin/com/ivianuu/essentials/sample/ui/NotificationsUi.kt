@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.runCatching
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
@@ -59,7 +60,8 @@ import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotificatio
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -198,15 +200,15 @@ fun notificationsUiStore(
                 .parMap { it.toUiNotification(appContext) }
         }
         .flowAsResource()
-        .update { copy(notifications = it) }
-    permissionState.update { copy(hasPermissions = it) }
-    onAction<RequestPermissions> {
+        .updateIn(this) { copy(notifications = it) }
+    permissionState.updateIn(this) { copy(hasPermissions = it) }
+    actions<RequestPermissions>().collectIn(this) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    onAction<OpenNotification> {
+    actions<OpenNotification>().collectIn(this) {
         openNotification(it.notification.sbn.notification)
     }
-    onAction<DismissNotification> {
+    actions<DismissNotification>().collectIn(this) {
         dismissNotification(it.notification.sbn.key)
     }
 }

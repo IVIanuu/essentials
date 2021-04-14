@@ -22,8 +22,9 @@ import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
 import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -76,18 +77,20 @@ fun backupAndRestoreStore(
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
 ): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
-    onAction<BackupData> {
-        createBackupUseCase()
-            .onFailure {
-                it.printStackTrace()
-                toaster(stringResource(R.string.es_backup_error, emptyList()))
-            }
-    }
-    onAction<RestoreData> {
-        restoreBackupUseCase()
-            .onFailure {
-                it.printStackTrace()
-                toaster(stringResource(R.string.es_restore_error, emptyList()))
-            }
-    }
+    actions<BackupData>()
+        .collectIn(this) {
+            createBackupUseCase()
+                .onFailure {
+                    it.printStackTrace()
+                    toaster(stringResource(R.string.es_backup_error, emptyList()))
+                }
+        }
+    actions<RestoreData>()
+        .collectIn(this) {
+            restoreBackupUseCase()
+                .onFailure {
+                    it.printStackTrace()
+                    toaster(stringResource(R.string.es_restore_error, emptyList()))
+                }
+        }
 }

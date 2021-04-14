@@ -25,12 +25,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -87,16 +89,17 @@ fun shortcutPickerStore(
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {
     resourceFlow { emit(getAllShortcuts()) }
-        .update { copy(shortcuts = it) }
-    onAction<PickShortcut> { action ->
-        runCatching {
-            val shortcutRequestResult = navigator.pushForResult(action.shortcut.intent.toIntentKey())
-                ?.data ?: return@runCatching
-            val finalShortcut = extractShortcut(shortcutRequestResult)
-            navigator.pop(key, finalShortcut)
-        }.onFailure {
-            it.printStackTrace()
-            toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
+        .updateIn(this) { copy(shortcuts = it) }
+    actions<PickShortcut>()
+        .collectIn(this) { action ->
+            runCatching {
+                val shortcutRequestResult = navigator.pushForResult(action.shortcut.intent.toIntentKey())
+                    ?.data ?: return@runCatching
+                val finalShortcut = extractShortcut(shortcutRequestResult)
+                navigator.pop(key, finalShortcut)
+            }.onFailure {
+                it.printStackTrace()
+                toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
+            }
         }
-    }
 }

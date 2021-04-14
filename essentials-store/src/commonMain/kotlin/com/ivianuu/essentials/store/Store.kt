@@ -44,32 +44,17 @@ fun <S, A> CoroutineScope.store(
 interface StoreScope<S, A> : CoroutineScope {
     val state: Flow<S>
     val actions: Flow<A>
-
     suspend fun update(reducer: S.() -> S): S
-
-    fun effect(block: suspend () -> Unit): Job = launch { block() }
-
-    fun Flow<S.() -> S>.update(): Job = this@StoreScope.effect {
-        collect { update(it) }
-    }
-
-    fun <T> Flow<T>.update(reducer: S.(T) -> S): Job =
-        map<T, S.() -> S> { { reducer(it) } }.update()
-
-    fun <T> Flow<T>.effect(block: suspend (T) -> Unit): Job =
-        onEach(block).launchIn(this@StoreScope)
 }
 
-inline fun <reified T> StoreScope<*, in T>.onAction(noinline block: suspend (T) -> Unit): Job =
-    actions.filterIsInstance<T>().effect(block)
+inline fun <reified T> StoreScope<*, in T>.actions(): Flow<T> = actions.filterIsInstance()
 
-fun <S, A, R> Store<S, A>.mapState(transform: (S) -> R): Store<R, A> =
-    object : Store<R, A>, Sink<A> by this, StateFlow<R> by mapState(transform) {
-    }
+fun <S> Flow<S.() -> S>.updateIn(scope: StoreScope<S, *>): Job = scope.launch {
+    collect { scope.update(it) }
+}
 
-fun <S, A, R> Store<S, A>.mapSink(transform: (R) -> A): Store<S, R> =
-    object : Store<S, R>, Sink<R> by (Sink { send(transform(it)) }), StateFlow<S> by this {
-    }
+fun <T, S> Flow<T>.updateIn(scope: StoreScope<S, *>, reducer: S.(T) -> S): Job =
+    map<T, S.() -> S> { { reducer(it) } }.updateIn(scope)
 
 fun <S, A> StoreBuilder<*, S, A>.toStore(
     scope: CoroutineScope,

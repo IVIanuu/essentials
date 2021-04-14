@@ -29,13 +29,15 @@ import com.ivianuu.essentials.apps.ui.AppFilter
 import com.ivianuu.essentials.apps.ui.DefaultAppFilter
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
+import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.onAction
+import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -104,6 +106,8 @@ fun appPickerStore(
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
 ): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
-    resourceFlow { emit(getInstalledApps()) }.update { copy(allApps = it) }
-    onAction<PickApp> { navigator.pop(key, it.app) }
+    resourceFlow { emit(getInstalledApps()) }
+        .updateIn(this) { copy(allApps = it) }
+    actions<PickApp>()
+        .collectIn(this) { navigator.pop(key, it.app) }
 }
