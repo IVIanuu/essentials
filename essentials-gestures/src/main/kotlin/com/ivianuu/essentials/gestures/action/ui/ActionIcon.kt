@@ -25,7 +25,7 @@ import com.ivianuu.essentials.gestures.action.Action
 
 @Composable
 fun ActionIcon(
-    action: Action,
+    action: Action<*>,
     modifier: Modifier = Modifier,
 ) {
     Box(

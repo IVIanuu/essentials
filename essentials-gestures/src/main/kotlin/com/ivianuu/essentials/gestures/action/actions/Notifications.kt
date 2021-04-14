@@ -22,9 +22,7 @@ import androidx.compose.material.icons.filled.Notifications
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -35,7 +33,7 @@ object NotificationsActionId : ActionId("notifications")
 @Given
 fun notificationsAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<NotificationsActionId> Action = Action(
+) = Action<NotificationsActionId>(
     id = NotificationsActionId,
     title = stringResource(R.string.es_action_notifications, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -45,6 +43,6 @@ fun notificationsAction(
 @Given
 fun notificationsActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<NotificationsActionId> ActionExecutor = {
+): ActionExecutor<NotificationsActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

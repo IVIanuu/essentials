@@ -23,9 +23,7 @@ import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.plus
@@ -43,7 +41,7 @@ object KillCurrentAppActionId : ActionId("kill_current_app")
 @Given
 fun killCurrentAppAction(
     @Given stringResource: StringResourceProvider,
-): @ActionBinding<KillCurrentAppActionId> Action = Action(
+) = Action<KillCurrentAppActionId>(
     id = KillCurrentAppActionId,
     title = stringResource(R.string.es_action_kill_current_app, emptyList()),
     icon = singleActionIcon(Icons.Default.Clear),
@@ -56,7 +54,7 @@ fun killCurrentAppActionExecutor(
     @Given buildInfo: BuildInfo,
     @Given currentAppFlow: Flow<CurrentApp>,
     @Given packageManager: PackageManager
-): @ActionExecutorBinding<KillCurrentAppActionId> ActionExecutor = {
+): ActionExecutor<KillCurrentAppActionId> = {
     val currentApp = currentAppFlow.first()
     if (currentApp != "android" &&
         currentApp != "com.android.systemui" &&

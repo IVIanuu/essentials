@@ -22,9 +22,7 @@ import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
@@ -41,7 +39,7 @@ object ScreenshotActionId : ActionId("screenshot")
 fun screenshotAction(
     @Given stringResource: StringResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
-): @ActionBinding<ScreenshotActionId> Action = Action(
+) = Action<ScreenshotActionId>(
     id = "screenshot",
     title = stringResource(R.string.es_action_screenshot, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_photo_album),
@@ -57,7 +55,7 @@ fun screenshotActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor,
     @Given runShellCommand: RunShellCommandUseCase,
     @Given systemBuildInfo: SystemBuildInfo,
-): @ActionExecutorBinding<ScreenshotActionId> ActionExecutor = {
+): ActionExecutor<ScreenshotActionId> = {
     delay(500)
     if (systemBuildInfo.sdk >= 28) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)

@@ -24,9 +24,7 @@ import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
@@ -44,7 +42,7 @@ object AutoRotationActionId : ActionId("auto_rotation")
 fun autoRotationAction(
     @Given autoRotationIcon: Flow<AutoRotationIcon>,
     @Given stringResource: StringResourceProvider,
-): @ActionBinding<AutoRotationActionId> Action = Action(
+) = Action<AutoRotationActionId>(
     id = AutoRotationActionId,
     title = stringResource(R.string.es_action_auto_rotation, emptyList()),
     permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
@@ -55,7 +53,7 @@ fun autoRotationAction(
 @Given
 fun autoRotationActionExecutor(
     @Given rotationSetting: DataStore<AutoRotation>,
-): @ActionExecutorBinding<AutoRotationActionId> ActionExecutor = {
+): ActionExecutor<AutoRotationActionId> = {
     rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 

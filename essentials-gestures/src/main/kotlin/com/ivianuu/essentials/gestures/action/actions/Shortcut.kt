@@ -28,6 +28,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
@@ -46,14 +47,14 @@ class ShortcutActionFactory(
     @Given private val logger: Logger
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(id: String): Action {
+    override suspend fun createAction(id: String): Action<*> {
         logger.d { "create action from $id" }
         val tmp = id.split(DELIMITER)
         val label = tmp[1]
 
         val iconBytes = Base64.decode(tmp[3], 0)
         val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
-        return Action(
+        return Action<ActionId>(
             id = id,
             title = label,
             unlockScreen = true,
@@ -63,7 +64,7 @@ class ShortcutActionFactory(
     }
 
     @Suppress("DEPRECATION")
-    override suspend fun createExecutor(id: String): ActionExecutor {
+    override suspend fun createExecutor(id: String): ActionExecutor<*> {
         val tmp = id.split(DELIMITER)
         val intent = Intent.getIntent(tmp[2])
         return { actionIntentSender(intent) }
@@ -81,7 +82,7 @@ class ShortcutActionPickerDelegate(
         Icon(painterResource(R.drawable.es_ic_content_cut), null)
     }
 
-    override suspend fun getResult(): ActionPickerKey.Result? {
+    override suspend fun pickAction(): ActionPickerKey.Result? {
         val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()

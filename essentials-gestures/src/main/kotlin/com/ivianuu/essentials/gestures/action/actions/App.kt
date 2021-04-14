@@ -28,6 +28,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -43,9 +44,9 @@ class AppActionFactory(
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
-    override suspend fun createAction(id: String): Action {
+    override suspend fun createAction(id: String): Action<*> {
         val packageName = id.removePrefix(ACTION_KEY_PREFIX)
-        return Action(
+        return Action<ActionId>(
             id = id,
             title = getAppInfo(packageName)?.appName
                 ?: stringResource(R.string.es_unknown_action_name, emptyList()),
@@ -55,7 +56,7 @@ class AppActionFactory(
         )
     }
 
-    override suspend fun createExecutor(id: String): ActionExecutor {
+    override suspend fun createExecutor(id: String): ActionExecutor<*> {
         val packageName = id.removePrefix(ACTION_KEY_PREFIX)
         return {
             actionIntentSender(
@@ -80,7 +81,7 @@ class AppActionPickerDelegate(
         Icon(painterResource(R.drawable.es_ic_apps), null)
     }
 
-    override suspend fun getResult(): ActionPickerKey.Result? {
+    override suspend fun pickAction(): ActionPickerKey.Result? {
         val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null
         return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }

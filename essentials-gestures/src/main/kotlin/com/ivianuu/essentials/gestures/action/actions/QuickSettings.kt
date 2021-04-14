@@ -22,9 +22,7 @@ import androidx.compose.material.icons.filled.Settings
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -35,7 +33,7 @@ object QuickSettingsActionId : ActionId("quick_settings")
 @Given
 fun quickSettingsAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<QuickSettingsActionId> Action = Action(
+) = Action<QuickSettingsActionId>(
     id = QuickSettingsActionId,
     title = stringResource(R.string.es_action_quick_settings, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -45,6 +43,6 @@ fun quickSettingsAction(
 @Given
 fun quickSettingsActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<QuickSettingsActionId> ActionExecutor = {
+): ActionExecutor<QuickSettingsActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
 }

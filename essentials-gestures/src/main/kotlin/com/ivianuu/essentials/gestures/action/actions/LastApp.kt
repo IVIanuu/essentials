@@ -20,9 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -34,7 +32,7 @@ object LastAppActionId : ActionId("last_app")
 @Given
 fun lastAppAction(
     @Given stringResource: StringResourceProvider,
-): @ActionBinding<LastAppActionId> Action = Action(
+) = Action<LastAppActionId>(
     id = "last_app",
     title = stringResource(R.string.es_action_last_app, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -45,7 +43,7 @@ fun lastAppAction(
 @Given
 fun lastAppActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<LastAppActionId> ActionExecutor = {
+): ActionExecutor<LastAppActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
     delay(250)
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)

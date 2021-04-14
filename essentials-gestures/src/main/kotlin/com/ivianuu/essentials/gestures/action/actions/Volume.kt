@@ -19,9 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.media.AudioManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object VolumeActionId : ActionId("volume")
 @Given
 fun volumeAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<VolumeActionId> Action = Action(
+) = Action<VolumeActionId>(
     id = VolumeActionId,
     title = stringResource(R.string.es_action_volume, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_volume_up)
@@ -42,7 +40,7 @@ fun volumeAction(
 @Given
 fun volumeActionExecutor(
     @Given audioManager: @SystemService AudioManager
-): @ActionExecutorBinding<VolumeActionId> ActionExecutor = {
+): ActionExecutor<VolumeActionId> = {
     audioManager.adjustStreamVolume(
         AudioManager.STREAM_MUSIC,
         AudioManager.ADJUST_SAME,

@@ -21,9 +21,7 @@ import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.coroutines.StateStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.torch.TorchState
@@ -39,7 +37,7 @@ object TorchActionId : ActionId("torch")
 fun torchAction(
     @Given stringResource: StringResourceProvider,
     @Given torchIcon: Flow<TorchIcon>,
-): @ActionBinding<TorchActionId> Action = Action(
+) = Action<TorchActionId>(
     id = TorchActionId,
     title = stringResource(R.string.es_action_torch, emptyList()),
     icon = torchIcon
@@ -48,7 +46,7 @@ fun torchAction(
 @Given
 fun torchActionExecutor(
     @Given torch: StateStore<TorchState>
-): @ActionExecutorBinding<TorchActionId> ActionExecutor = {
+): ActionExecutor<TorchActionId> = {
     torch.update { not() }
 }
 

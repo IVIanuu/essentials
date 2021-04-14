@@ -20,9 +20,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object CameraActionId : ActionId("camera")
 @Given
 fun cameraAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<CameraActionId> Action = Action(
+) = Action<CameraActionId>(
     id = CameraActionId,
     title = stringResource(R.string.es_action_camera, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_photo_camera),
@@ -43,6 +41,6 @@ fun cameraAction(
 @Given
 fun cameraActionExecutor(
     @Given actionIntentSender: ActionIntentSender
-): @ActionExecutorBinding<CameraActionId> ActionExecutor = {
+): ActionExecutor<CameraActionId> = {
     actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
 }

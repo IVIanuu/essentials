@@ -24,7 +24,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,7 +32,10 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionRepository
+import com.ivianuu.essentials.gestures.action.GetActionPickerDelegatesUseCase
+import com.ivianuu.essentials.gestures.action.GetActionSettingsKeyUseCase
+import com.ivianuu.essentials.gestures.action.GetActionUseCase
+import com.ivianuu.essentials.gestures.action.GetAllActionsUseCase
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.*
 import com.ivianuu.essentials.permission.PermissionRequester
@@ -93,13 +95,21 @@ sealed class ActionPickerAction {
 
 @Given
 fun actionPickerStore(
-    @Given actionRepository: ActionRepository,
+    @Given getAction: GetActionUseCase,
+    @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+    @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
+    @Given getAllActions: GetAllActionsUseCase,
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given stringResource: StringResourceProvider,
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
-    resourceFlow { emit(getActionPickerItems(actionRepository, key, stringResource)) }
+    resourceFlow {
+        emit(
+            getActionPickerItems(getActionPickerDelegates,
+                getAllActions, getActionSettingsKey, key, stringResource)
+        )
+    }
         .update { copy(items = it) }
 
     onAction<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
@@ -107,7 +117,7 @@ fun actionPickerStore(
     onAction<PickAction> {
         val result = it.item.getResult() ?: return@onAction
         if (result is ActionPickerKey.Result.Action) {
-            val action = actionRepository.getAction(result.actionId)
+            val action = getAction(result.actionId)!!
             if (!permissionRequester(action.permissions))
                 return@onAction
         }
@@ -117,7 +127,7 @@ fun actionPickerStore(
 
 sealed class ActionPickerItem {
     data class ActionItem(
-        val action: Action,
+        val action: Action<*>,
         override val settingsKey: Key<Nothing>?,
     ) : ActionPickerItem() {
         override val title: String
@@ -131,7 +141,6 @@ sealed class ActionPickerItem {
         override suspend fun getResult() = ActionPickerKey.Result.Action(action.id)
     }
 
-    @Immutable
     data class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem() {
         override val title: String
             get() = delegate.title
@@ -146,7 +155,7 @@ sealed class ActionPickerItem {
             }
         }
 
-        override suspend fun getResult() = delegate.getResult()
+        override suspend fun getResult() = delegate.pickAction()
     }
 
     data class SpecialOption(
@@ -174,7 +183,9 @@ sealed class ActionPickerItem {
 }
 
 private suspend fun getActionPickerItems(
-    actionRepository: ActionRepository,
+    getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+    getAllActions: GetAllActionsUseCase,
+    getActionSettingsKey: GetActionSettingsKeyUseCase,
     key: ActionPickerKey,
     stringResource: StringResourceProvider
 ): List<ActionPickerItem> = buildList<ActionPickerItem> {
@@ -195,12 +206,12 @@ private suspend fun getActionPickerItems(
     }
 
     val actionsAndDelegates = (
-            (actionRepository.getActionPickerDelegates()
-                .map { ActionPickerItem.PickerDelegate(it) }) + (actionRepository.getAllActions()
+            (getActionPickerDelegates()
+                .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
                 .map {
                     ActionPickerItem.ActionItem(
                         it,
-                        actionRepository.getActionSettingsKey(it.id)
+                        getActionSettingsKey(it.id)
                     )
                 })
             )

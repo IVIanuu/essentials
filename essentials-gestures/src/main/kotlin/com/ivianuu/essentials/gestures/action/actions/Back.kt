@@ -20,9 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object BackActionId : ActionId("back")
 @Given
 fun backAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<BackActionId> Action = Action(
+) = Action<BackActionId>(
     id = BackActionId,
     title = stringResource(R.string.es_action_back, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -43,6 +41,6 @@ fun backAction(
 @Given
 fun backActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<BackActionId> ActionExecutor = {
+): ActionExecutor<BackActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
 }

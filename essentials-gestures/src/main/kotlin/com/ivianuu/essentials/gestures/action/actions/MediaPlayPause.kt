@@ -21,11 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -35,7 +32,7 @@ object PlayPauseActionId : ActionId("media_play_pause")
 @Given
 fun playPauseMediaAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<PlayPauseActionId> Action = Action(
+) = Action<PlayPauseActionId>(
     id = PlayPauseActionId,
     title = stringResource(R.string.es_action_media_play_pause, emptyList()),
     icon = singleActionIcon(Icons.Default.PlayArrow)
@@ -44,11 +41,10 @@ fun playPauseMediaAction(
 @Given
 fun playPauseMediaActionExecutor(
     @Given mediaActionSender: MediaActionSender
-): @ActionExecutorBinding<PlayPauseActionId> ActionExecutor = {
+): ActionExecutor<PlayPauseActionId> = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
 @Given
-inline val playPauseMediaActionSettingsKey:
-        @ActionSettingsKeyBinding<PlayPauseActionId> MediaActionSettingsKey
+inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey<PlayPauseActionId>
     get() = MediaActionSettingsKey()

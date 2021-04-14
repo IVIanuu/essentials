@@ -19,11 +19,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -33,7 +30,7 @@ object SkipNextActionId : ActionId("media_skip_next")
 @Given
 fun skipNextMediaAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<SkipNextActionId> Action = Action(
+) = Action<SkipNextActionId>(
     id = SkipNextActionId,
     title = stringResource(R.string.es_action_media_skip_next, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_skip_next)
@@ -42,11 +39,10 @@ fun skipNextMediaAction(
 @Given
 fun skipNextMediaActionExecutor(
     @Given mediaActionSender: MediaActionSender
-): @ActionExecutorBinding<SkipNextActionId> ActionExecutor = {
+): ActionExecutor<SkipNextActionId> = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
 }
 
 @Given
-inline val skipNextMediaActionSettingsKey:
-        @ActionSettingsKeyBinding<SkipNextActionId> MediaActionSettingsKey
+inline val skipNextMediaActionSettingsKey: MediaActionSettingsKey<SkipNextActionId>
     get() = MediaActionSettingsKey()

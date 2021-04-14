@@ -21,9 +21,7 @@ import android.app.SearchManager
 import android.os.Bundle
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -35,7 +33,7 @@ object AssistantActionId : ActionId("assistant")
 @Given
 fun assistantAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<AssistantActionId> Action = Action(
+) = Action<AssistantActionId>(
     id = AssistantActionId,
     title = stringResource(R.string.es_action_assistant, emptyList()),
     unlockScreen = true,
@@ -46,7 +44,7 @@ fun assistantAction(
 @Given
 fun assistantActionExecutor(
     @Given searchManager: @SystemService SearchManager
-): @ActionExecutorBinding<AssistantActionId> ActionExecutor = {
+): ActionExecutor<AssistantActionId> = {
     val launchAssist = searchManager.javaClass
         .getDeclaredMethod("launchAssist", Bundle::class.java)
     launchAssist.invoke(searchManager, Bundle())

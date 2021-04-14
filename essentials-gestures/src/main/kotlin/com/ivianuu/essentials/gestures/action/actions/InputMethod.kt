@@ -19,9 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object InputMethodActionId : ActionId("input_method")
 @Given
 fun inputMethodAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<InputMethodActionId> Action = Action(
+) = Action<InputMethodActionId>(
     id = "input_method",
     title = stringResource(R.string.es_action_input_method, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
@@ -42,6 +40,6 @@ fun inputMethodAction(
 @Given
 fun inputMethodActionExecutor(
     @Given inputMethodManager: @SystemService InputMethodManager
-): @ActionExecutorBinding<InputMethodActionId> ActionExecutor = {
+): ActionExecutor<InputMethodActionId> = {
     inputMethodManager.showInputMethodPicker()
 }

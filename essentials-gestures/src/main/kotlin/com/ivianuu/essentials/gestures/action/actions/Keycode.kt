@@ -25,6 +25,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
@@ -40,9 +41,9 @@ class KeycodeActionFactory(
     @Given private val stringResource: StringResourceProvider,
 ) : ActionFactory {
     override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(id: String): Action {
+    override suspend fun createAction(id: String): Action<*> {
         val keycode = id.removePrefix(ACTION_KEY_PREFIX)
-        return Action(
+        return Action<ActionId>(
             id = id,
             title = stringResource(R.string.es_action_keycode_suffix, listOf(keycode)),
             icon = singleActionIcon(R.drawable.es_ic_keyboard),
@@ -52,7 +53,7 @@ class KeycodeActionFactory(
         )
     }
 
-    override suspend fun createExecutor(id: String): ActionExecutor {
+    override suspend fun createExecutor(id: String): ActionExecutor<*> {
         val keycode = id.removePrefix(ACTION_KEY_PREFIX)
         return { actionRootCommandRunner("input keyevent $keycode") }
     }
@@ -68,7 +69,7 @@ class KeycodeActionPickerDelegate(
     override val icon: @Composable () -> Unit =
         { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
-    override suspend fun getResult(): ActionPickerKey.Result? {
+    override suspend fun pickAction(): ActionPickerKey.Result? {
         val keycode = navigator.pushForResult(
             TextInputKey(
                 title = stringResource(R.string.es_keycode_picker_title, emptyList()),

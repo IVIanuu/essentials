@@ -22,9 +22,7 @@ import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
@@ -40,7 +38,7 @@ object BluetoothActionId : ActionId("bluetooth")
 fun bluetoothAction(
     @Given bluetoothIcon: Flow<BluetoothIcon>,
     @Given stringResource: StringResourceProvider,
-): @ActionBinding<BluetoothActionId> Action = Action(
+) = Action<BluetoothActionId>(
     id = BluetoothActionId,
     title = stringResource(R.string.es_action_bluetooth, emptyList()),
     icon = bluetoothIcon,
@@ -48,7 +46,7 @@ fun bluetoothAction(
 )
 
 @Given
-fun bluetoothActionExecutor(): @ActionExecutorBinding<BluetoothActionId> ActionExecutor = {
+fun bluetoothActionExecutor(): ActionExecutor<BluetoothActionId> = {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
             it.disable()

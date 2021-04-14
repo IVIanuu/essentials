@@ -19,11 +19,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -33,7 +30,7 @@ object SkipPreviousActionId : ActionId("media_skip_previous")
 @Given
 fun skipPreviousMediaAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<SkipPreviousActionId> Action = Action(
+) = Action<SkipPreviousActionId>(
     id = SkipPreviousActionId,
     title = stringResource(R.string.es_action_media_skip_previous, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_skip_previous)
@@ -42,11 +39,10 @@ fun skipPreviousMediaAction(
 @Given
 fun skipPreviousMediaActionExecutor(
     @Given mediaActionSender: MediaActionSender
-): @ActionExecutorBinding<SkipPreviousActionId> ActionExecutor = {
+): ActionExecutor<SkipPreviousActionId> = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
 }
 
 @Given
-inline val skipPreviousMediaActionSettingsKey:
-        @ActionSettingsKeyBinding<SkipPreviousActionId> MediaActionSettingsKey
+inline val skipPreviousMediaActionSettingsKey: MediaActionSettingsKey<SkipPreviousActionId>
     get() = MediaActionSettingsKey()

@@ -29,6 +29,8 @@ import com.ivianuu.essentials.apps.ui.IntentAppFilter
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSettingsKey
 import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -89,10 +91,10 @@ data class MediaActionPrefs(
 @Given
 val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 
-class MediaActionSettingsKey : Key<Nothing>
+class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
 @Given
-val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey, MediaActionSettingsState,
+val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsState,
         MediaActionSettingsAction> = {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })

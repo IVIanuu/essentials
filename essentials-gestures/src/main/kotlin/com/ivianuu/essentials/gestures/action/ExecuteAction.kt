@@ -32,17 +32,18 @@ typealias executeAction = suspend (String) -> Result<Boolean, Throwable>
 
 @Given
 fun executeAction(
-    @Given actionRepository: ActionRepository,
-    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatcher: DefaultDispatcher,
+    @Given getAction: GetActionUseCase,
+    @Given getActionExecutor: GetActionExecutorUseCase,
     @Given logger: Logger,
     @Given permissionRequester: PermissionRequester,
     @Given screenUnlocker: ScreenUnlocker,
     @Given toaster: Toaster
 ): executeAction = { key ->
-    withContext(defaultDispatcher) {
+    withContext(dispatcher) {
         runCatching {
             logger.d { "execute $key" }
-            val action = actionRepository.getAction(key)
+            val action = getAction(key)!!
 
             // check permissions
             if (!permissionRequester(action.permissions)) {
@@ -59,7 +60,7 @@ fun executeAction(
             logger.d { "fire $key" }
 
             // fire
-            actionRepository.getActionExecutor(key)()
+            getActionExecutor(key)!!()
             return@runCatching true
         }.onFailure {
             it.printStackTrace()

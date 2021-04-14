@@ -17,26 +17,31 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.coroutines.DefaultDispatcher
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.withContext
 
-@Given
-@Scoped<AppGivenScope>
-class ActionRepository(
-    @Given private val defaultDispatcher: DefaultDispatcher,
-    @Given private val actions: Map<String, () -> Action> = emptyMap(),
-    @Given private val actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
-    @Given private val actionsExecutors: Map<String, () -> ActionExecutor> = emptyMap(),
-    @Given private val actionPickerDelegates: Set<() -> ActionPickerDelegate> = emptySet(),
-    @Given private val actionSettings: Map<String, () -> ActionSettingsKey> = emptyMap()
-) {
-    suspend fun getAllActions(): List<Action> = withContext(defaultDispatcher) {
-        actions.values.map { it() }
-    }
+typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 
-    suspend fun getAction(key: String): Action = withContext(defaultDispatcher) {
+@Given
+fun getAllActionsUseCase(
+    @Given actions: Map<String, () -> Action<*>>,
+    @Given dispatcher: DefaultDispatcher
+): GetAllActionsUseCase = {
+    withContext(dispatcher) { actions.values.map { it() } }
+}
+
+typealias GetActionUseCase = suspend (String) -> Action<*>?
+
+@Given
+fun getActionUseCase(
+    @Given actions: Map<String, () -> Action<*>>,
+    @Given actionFactories: () -> Set<() -> ActionFactory>,
+    @Given dispatcher: DefaultDispatcher
+): GetActionUseCase = { key ->
+    withContext(dispatcher) {
         actions[key]
             ?.invoke()
             ?: actionFactories()
@@ -44,10 +49,18 @@ class ActionRepository(
                 .map { it() }
                 .firstOrNull { it.handles(key) }
                 ?.createAction(key)
-            ?: error("Unsupported action key $key")
     }
+}
 
-    suspend fun getActionExecutor(key: String): ActionExecutor = withContext(defaultDispatcher) {
+typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
+
+@Given
+fun getActionExecutorUseCase(
+    @Given actionsExecutors: Map<String, () -> ActionExecutor<*>>,
+    @Given actionFactories: () -> Set<() -> ActionFactory>,
+    @Given dispatcher: DefaultDispatcher
+): GetActionExecutorUseCase = { key ->
+    withContext(dispatcher) {
         actionsExecutors[key]
             ?.invoke()
             ?: actionFactories()
@@ -57,10 +70,24 @@ class ActionRepository(
                 ?.createExecutor(key)
             ?: error("Unsupported action key $key")
     }
+}
 
-    suspend fun getActionSettingsKey(key: String): ActionSettingsKey? =
-        withContext(defaultDispatcher) { actionSettings[key]?.invoke() }
+typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
 
-    suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
-        withContext(defaultDispatcher) { actionPickerDelegates.map { it() } }
+@Given
+fun getActionSettingsKeyUseCase(
+    @Given actionSettings: Map<String, () -> ActionSettingsKey<*>>,
+    @Given dispatcher: DefaultDispatcher
+): GetActionSettingsKeyUseCase = { key ->
+    withContext(dispatcher) { actionSettings[key]?.invoke() }
+}
+
+typealias GetActionPickerDelegatesUseCase = suspend () -> List<ActionPickerDelegate>
+
+@Given
+fun getActionPickerDelegatesUseCase(
+    @Given actionPickerDelegates: Set<() -> ActionPickerDelegate>,
+    @Given dispatcher: DefaultDispatcher
+): GetActionPickerDelegatesUseCase = {
+    withContext(dispatcher) { actionPickerDelegates.map { it() } }
 }

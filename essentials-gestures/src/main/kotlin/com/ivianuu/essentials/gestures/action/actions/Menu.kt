@@ -20,9 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.util.StringResourceProvider
@@ -35,7 +33,7 @@ object MenuActionId : ActionId("menu")
 @Given
 fun menuAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<MenuActionId> Action = Action(
+) = Action<MenuActionId>(
     id = "menu",
     title = stringResource(R.string.es_action_menu, emptyList()),
     icon = singleActionIcon(Icons.Default.MoreVert),
@@ -45,6 +43,6 @@ fun menuAction(
 @Given
 fun menuActionExecutor(
     @Given actionRootCommandRunner: ActionRootCommandRunner
-): @ActionExecutorBinding<MenuActionId> ActionExecutor = {
+): ActionExecutor<MenuActionId> = {
     actionRootCommandRunner("input keyevent 82")
 }

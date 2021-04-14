@@ -22,9 +22,7 @@ import android.os.Build
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -36,7 +34,7 @@ object HomeActionId : ActionId("home")
 @Given
 fun homeAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<HomeActionId> Action = Action(
+) = Action<HomeActionId>(
     id = HomeActionId,
     title = stringResource(R.string.es_action_home, emptyList()),
     permissions = if (needsHomeIntentWorkaround) emptyList()
@@ -49,7 +47,7 @@ fun homeActionExecutor(
     @Given actionIntentSender: ActionIntentSender,
     @Given appContext: AppContext,
     @Given globalActionExecutor: GlobalActionExecutor,
-): @ActionExecutorBinding<HomeActionId> ActionExecutor = {
+): ActionExecutor<HomeActionId> = {
     if (!needsHomeIntentWorkaround) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {

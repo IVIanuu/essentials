@@ -20,9 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object SplitScreenActionId : ActionId("split_screen")
 @Given
 fun splitScreenAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<SplitScreenActionId> Action = Action(
+) = Action<SplitScreenActionId>(
     id = SplitScreenActionId,
     title = stringResource(R.string.es_action_split_screen, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -43,6 +41,6 @@ fun splitScreenAction(
 @Given
 fun splitScreenActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<SplitScreenActionId> ActionExecutor = {
+): ActionExecutor<SplitScreenActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

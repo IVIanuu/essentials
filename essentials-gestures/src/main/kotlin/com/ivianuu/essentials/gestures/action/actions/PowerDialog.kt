@@ -20,9 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -33,7 +31,7 @@ object PowerDialogActionId : ActionId("power_dialog")
 @Given
 fun powerDialogAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<PowerDialogActionId> Action = Action(
+) = Action<PowerDialogActionId>(
     id = PowerDialogActionId,
     title = stringResource(R.string.es_action_power_dialog, emptyList()),
     permissions = accessibilityActionPermissions,
@@ -43,6 +41,6 @@ fun powerDialogAction(
 @Given
 fun powerDialogActionExecutor(
     @Given globalActionExecutor: GlobalActionExecutor
-): @ActionExecutorBinding<PowerDialogActionId> ActionExecutor = {
+): ActionExecutor<PowerDialogActionId> = {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

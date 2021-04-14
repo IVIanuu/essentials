@@ -21,9 +21,7 @@ import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
@@ -40,7 +38,7 @@ object WifiActionId : ActionId("wifi")
 fun wifiAction(
     @Given stringResource: StringResourceProvider,
     @Given wifiIcon: Flow<WifiIcon>,
-): @ActionBinding<WifiActionId> Action = Action(
+) = Action<WifiActionId>(
     id = WifiActionId,
     title = stringResource(R.string.es_action_wifi, emptyList()),
     icon = wifiIcon
@@ -49,7 +47,7 @@ fun wifiAction(
 @Given
 fun wifiActionExecutor(
     @Given wifiManager: @SystemService WifiManager
-): @ActionExecutorBinding<WifiActionId> ActionExecutor = {
+): ActionExecutor<WifiActionId> = {
     @Suppress("DEPRECATION")
     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }

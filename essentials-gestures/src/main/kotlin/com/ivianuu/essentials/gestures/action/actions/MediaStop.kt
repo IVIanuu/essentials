@@ -19,11 +19,8 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.KeyEvent
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKeyBinding
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 
@@ -33,7 +30,7 @@ object StopActionId : ActionId("media_stop")
 @Given
 fun stopMediaAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<StopActionId> Action = Action(
+) = Action<StopActionId>(
     id = StopActionId,
     title = stringResource(R.string.es_action_media_stop, emptyList()),
     icon = singleActionIcon(R.drawable.es_ic_stop)
@@ -42,11 +39,10 @@ fun stopMediaAction(
 @Given
 fun stopMediaActionExecutor(
     @Given mediaActionSender: MediaActionSender
-): @ActionExecutorBinding<StopActionId> ActionExecutor = {
+): ActionExecutor<StopActionId> = {
     mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
 @Given
-inline val stopMediaActionSettingsKey:
-        @ActionSettingsKeyBinding<StopActionId> MediaActionSettingsKey
+inline val stopMediaActionSettingsKey: MediaActionSettingsKey<StopActionId>
     get() = MediaActionSettingsKey()

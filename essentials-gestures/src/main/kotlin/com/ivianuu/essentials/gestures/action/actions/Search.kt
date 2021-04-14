@@ -22,9 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionBinding
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionExecutorBinding
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -35,7 +33,7 @@ object SearchActionId : ActionId("search")
 @Given
 fun searchAction(
     @Given stringResource: StringResourceProvider
-): @ActionBinding<SearchActionId> Action = Action(
+) = Action<ScreenshotActionId>(
     id = "search",
     title = stringResource(R.string.es_action_search, emptyList()),
     icon = singleActionIcon(Icons.Default.Search)
@@ -44,7 +42,7 @@ fun searchAction(
 @Given
 fun searchActionExecutor(
     @Given intentSender: ActionIntentSender
-): @ActionExecutorBinding<SearchActionId> ActionExecutor = {
+): ActionExecutor<ScreenshotActionId> = {
     intentSender(
         Intent(Intent.ACTION_MAIN).apply {
             component = ComponentName(
