@@ -3,34 +3,24 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
-interface ActorTraits {
-    val job: Job
-    fun close()
-    fun cancel()
-    suspend fun join()
+interface Actor<T> {
+    suspend fun act(message: T)
+    fun tryAct(message: T): Boolean
 }
 
-interface Actor : ActorTraits {
-    suspend fun act(block: suspend () -> Unit)
-    fun tryAct(block: suspend () -> Unit): Boolean
+fun CoroutineScope.actor(capacity: Int = 0): Actor<suspend () -> Unit> = actor(capacity) {
+    it()
 }
 
-interface TypedActor<E> : ActorTraits {
-    suspend fun send(message: E)
-    fun offer(message: E): Boolean
-}
-
-fun CoroutineScope.actor(
+fun <T> CoroutineScope.actor(
     capacity: Int = 0,
-    start: CoroutineStart = CoroutineStart.LAZY
-): Actor = object : AbstractActor(this, capacity, start) {
-}
+    onMessage: suspend (T) -> Unit
+): Actor<T> = ActorImpl(this, capacity, onMessage)
 
-suspend fun <T> Actor.actAndReply(block: suspend () -> T): T {
+suspend fun <T> Actor<suspend () -> Unit>.actAndReply(block: suspend () -> T): T {
     val reply = CompletableDeferred<T>()
     act {
         try {
@@ -42,79 +32,24 @@ suspend fun <T> Actor.actAndReply(block: suspend () -> T): T {
     return reply.await()
 }
 
-fun <E> CoroutineScope.typedActor(
-    capacity: Int = 0,
-    start: CoroutineStart = CoroutineStart.LAZY,
-    onMessage: suspend (E) -> Unit
-): TypedActor<E> = object : AbstractTypedActor<E>(this, capacity, start) {
-    override suspend fun onMessage(message: E) {
-        onMessage(message)
-    }
-}
-
-abstract class BaseActor<E>(
+private class ActorImpl<T>(
     scope: CoroutineScope,
-    capacity: Int = 0,
-    start: CoroutineStart = CoroutineStart.LAZY
-) : ActorTraits {
-    private val mailbox = Channel<E>(capacity = capacity)
-    override val job = scope.launch(start = start) {
-        try {
-            onStart()
-            for (message in mailbox)
-                onMessage(message)
-        } catch (e: Throwable) {
-            onClose()
-        }
+    capacity: Int,
+    onMessage: suspend (T) -> Unit
+) : Actor<T> {
+    private val mailbox = Channel<T>(capacity = capacity)
+    private val job = scope.launch(start = CoroutineStart.LAZY) {
+        for (message in mailbox)
+            onMessage(message)
     }
 
-    override fun close() {
-        mailbox.close()
-    }
-
-    override fun cancel() {
-        job.cancel()
-        mailbox.cancel()
-    }
-
-    override suspend fun join() = job.join()
-
-    protected open suspend fun onStart() {
-    }
-
-    protected open fun onClose() {
-    }
-
-    protected abstract suspend fun onMessage(message: E)
-
-    protected suspend fun sendMessage(message: E) {
+    override suspend fun act(message: T) {
         job.start()
         mailbox.send(message)
     }
 
-    protected fun offerMessage(message: E): Boolean {
+    override fun tryAct(message: T): Boolean {
         job.start()
         return mailbox.offer(message)
     }
-}
-
-abstract class AbstractActor(
-    scope: CoroutineScope,
-    capacity: Int = 0,
-    start: CoroutineStart = CoroutineStart.LAZY
-) : BaseActor<suspend () -> Unit>(scope, capacity, start), Actor {
-    override suspend fun act(block: suspend () -> Unit) = sendMessage(block)
-    override fun tryAct(block: suspend () -> Unit): Boolean = offerMessage(block)
-    override suspend fun onMessage(message: suspend () -> Unit) {
-        message()
-    }
-}
-
-abstract class AbstractTypedActor<E>(
-    scope: CoroutineScope,
-    capacity: Int = 0,
-    start: CoroutineStart = CoroutineStart.LAZY
-) : BaseActor<E>(scope, capacity, start), TypedActor<E> {
-    override suspend fun send(message: E) = sendMessage(message)
-    override fun offer(message: E): Boolean = offerMessage(message)
 }
