@@ -85,20 +85,20 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 @Given
 fun consumePurchaseUseCase(@Given context: BillingContext): ConsumePurchaseUseCase = { sku ->
     context.withConnection {
-        val purchase = this.getPurchase(sku) ?: return@withConnection false
+        val purchase = getPurchase(sku) ?: return@withConnection false
 
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        val result = this.billingClient.consumePurchase(consumeParams)
+        val result = billingClient.consumePurchase(consumeParams)
 
-        this.logger.d {
+        logger.d {
             "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
         }
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) this.refreshes.emit(Unit)
+        if (success) refreshes.emit(Unit)
         return@withConnection success
     }
 }
@@ -108,7 +108,7 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 @Given
 fun acknowledgePurchaseUseCase(@Given context: BillingContext): AcknowledgePurchaseUseCase = { sku ->
     context.withConnection {
-        val purchase = this.getPurchase(sku) ?: return@withConnection false
+        val purchase = getPurchase(sku) ?: return@withConnection false
 
         if (purchase.isAcknowledged) return@withConnection true
 
@@ -116,14 +116,14 @@ fun acknowledgePurchaseUseCase(@Given context: BillingContext): AcknowledgePurch
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        val result = this.billingClient.acknowledgePurchase(acknowledgeParams)
+        val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-        this.logger.d {
+        logger.d {
             "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
         }
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) this.refreshes.emit(Unit)
+        if (success) refreshes.emit(Unit)
         return@withConnection success
     }
 }
