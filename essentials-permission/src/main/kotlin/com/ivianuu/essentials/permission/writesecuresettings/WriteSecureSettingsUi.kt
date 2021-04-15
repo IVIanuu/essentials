@@ -20,14 +20,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -108,10 +107,10 @@ fun writeSecureSettingsStore(
             delay(200)
         }
     }
-    actions<OpenPcInstructions>().collectIn(this) {
+    action<OpenPcInstructions> {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    actions<GrantPermissionsViaRoot>().collectIn(this) {
+    action<GrantPermissionsViaRoot> {
         runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
             .onFailure {
                 it.printStackTrace()

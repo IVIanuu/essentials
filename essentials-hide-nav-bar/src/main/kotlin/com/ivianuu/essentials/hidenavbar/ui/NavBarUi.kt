@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -30,7 +29,7 @@ import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateHideNavBar
 import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateNavBarRotationMode
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -98,14 +97,14 @@ fun navBarStore(
     pref.data.updateIn(this) {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
-    actions<UpdateHideNavBar>().collectIn(this) { action ->
+    action<UpdateHideNavBar> { action ->
         if (!action.value) {
             pref.updateData { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
             pref.updateData { copy(hideNavBar = action.value) }
         } else Unit
     }
-    actions<UpdateNavBarRotationMode>().collectIn(this) {
+    action<UpdateNavBarRotationMode> {
         navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()

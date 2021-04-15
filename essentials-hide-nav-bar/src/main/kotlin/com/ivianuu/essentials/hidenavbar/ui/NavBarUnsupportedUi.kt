@@ -3,12 +3,11 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.Close
 import com.ivianuu.essentials.hidenavbar.ui.NavBarUnsupportedAction.OpenMoreInfos
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -61,12 +60,12 @@ fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
-    actions<OpenMoreInfos>().collectIn(this) {
+    action<OpenMoreInfos> {
         navigator.push(
             UrlKey(
                 "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
             )
         )
     }
-    actions<Close>().collectIn(this) { navigator.pop(key) }
+    action<Close> { navigator.pop(key) }
 }

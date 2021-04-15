@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -44,7 +43,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -111,17 +110,16 @@ fun actionPickerStore(
             getActionPickerItems(getActionPickerDelegates,
                 getAllActions, getActionSettingsKey, key, stringResource)
         )
-    }
-        .updateIn(this) { copy(items = it) }
+    }.updateIn(this) { copy(items = it) }
 
-    actions<OpenActionSettings>().collectIn(this) { navigator.push(it.item.settingsKey!!) }
+    action<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
 
-    actions<PickAction>().collectIn(this) {
-        val result = it.item.getResult() ?: return@collectIn
+    action<PickAction> {
+        val result = it.item.getResult() ?: return@action
         if (result is ActionPickerKey.Result.Action) {
             val action = getAction(result.actionId)!!
             if (!permissionRequester(action.permissions))
-                return@collectIn
+                return@action
         }
         navigator.pop(key, result)
     }

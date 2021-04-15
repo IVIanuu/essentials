@@ -35,7 +35,6 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckedState
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
@@ -44,7 +43,7 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -183,24 +182,21 @@ fun checkableAppsStore(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-    actions<UpdateAppCheckedState>()
-        .collectIn(this) { action ->
-            pushNewCheckedApps {
-                if (!action.app.isChecked) {
-                    this + action.app.info.packageName
-                } else {
-                    this - action.app.info.packageName
-                }
+    action<UpdateAppCheckedState> { action ->
+        pushNewCheckedApps {
+            if (!action.app.isChecked) {
+                this + action.app.info.packageName
+            } else {
+                this - action.app.info.packageName
             }
         }
-    actions<SelectAll>()
-        .collectIn(this) {
-            pushNewCheckedApps { currentState ->
-                currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
-            }
+    }
+    action<SelectAll> {
+        pushNewCheckedApps { currentState ->
+            currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
         }
-    actions<DeselectAll>()
-        .collectIn(this) {
-            pushNewCheckedApps { emptySet() }
-        }
+    }
+    action<DeselectAll> {
+        pushNewCheckedApps { emptySet() }
+    }
 }

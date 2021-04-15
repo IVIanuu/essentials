@@ -25,10 +25,9 @@ import com.ivianuu.essentials.about.AboutAction.OpenPrivacyPolicy
 import com.ivianuu.essentials.about.AboutAction.OpenRedditPage
 import com.ivianuu.essentials.about.AboutAction.OpenTwitterPage
 import com.ivianuu.essentials.about.AboutAction.Rate
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -123,24 +122,24 @@ fun aboutStore(
     @Given buildInfo: BuildInfo,
     @Given navigator: Navigator
 ): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
-    actions<Rate>().collectIn(this) {
+    action<Rate> {
         navigator.push(
             UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
         )
     }
-    actions<OpenMoreApps>().collectIn(this) {
+    action<OpenMoreApps> {
         navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
-    actions<OpenRedditPage>().collectIn(this) {
+    action<OpenRedditPage> {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     }
-    actions<OpenGithubPage>().collectIn(this) {
+    action<OpenGithubPage> {
         navigator.push(UrlKey("https://github.com/IVIanuu"))
     }
-    actions<OpenTwitterPage>().collectIn(this) {
+    action<OpenTwitterPage> {
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
-    actions<OpenPrivacyPolicy>().collectIn(this) {
+    action<OpenPrivacyPolicy> {
         navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
     }
 }

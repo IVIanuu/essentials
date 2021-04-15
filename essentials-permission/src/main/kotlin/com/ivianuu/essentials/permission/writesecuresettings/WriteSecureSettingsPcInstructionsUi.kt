@@ -22,7 +22,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -31,7 +30,7 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.OpenXdaTutorial
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -159,18 +158,18 @@ fun writeSecureSettingsPcInstructionsStore(
             delay(200)
         }
     }
-    actions<CopyAdbCommand>().collectIn(this) {
+    action<CopyAdbCommand> {
         updateClipboardText(state.first().secureSettingsAdbCommand)
     }
-    actions<OpenGadgetHacksTutorial>().collectIn(this) {
+    action<OpenGadgetHacksTutorial> {
         navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
     }
-    actions<OpenLifehackerTutorial>().collectIn(this) {
+    action<OpenLifehackerTutorial> {
         navigator.push(
             UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
         )
     }
-    actions<OpenXdaTutorial>().collectIn(this) {
+    action<OpenXdaTutorial> {
         navigator.push(
             UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
         )

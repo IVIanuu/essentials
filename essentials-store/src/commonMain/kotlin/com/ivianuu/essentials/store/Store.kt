@@ -47,7 +47,11 @@ interface StoreScope<S, A> : CoroutineScope {
     suspend fun update(reducer: S.() -> S): S
 }
 
-inline fun <reified T> StoreScope<*, in T>.actions(): Flow<T> = actions.filterIsInstance()
+inline fun <reified A> StoreScope<*, in A>.action(noinline action: suspend (A) -> Unit): Job =
+    actions
+        .filterIsInstance<A>()
+        .onEach(action)
+        .launchIn(this)
 
 fun <S> Flow<S.() -> S>.updateIn(scope: StoreScope<S, *>): Job = scope.launch {
     collect { scope.update(it) }

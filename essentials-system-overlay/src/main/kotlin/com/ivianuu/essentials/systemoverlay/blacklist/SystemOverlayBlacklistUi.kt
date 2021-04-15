@@ -3,11 +3,10 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.systemoverlay.blacklist.SystemOverlayBlacklistAction.OpenAppBlacklistSettings
@@ -134,16 +133,16 @@ fun systemOverlayBlacklistStore(
             disableOnSecureScreens = it.disableOnSecureScreens
         )
     }
-    actions<OpenAppBlacklistSettings>().collectIn(this) {
+    action<OpenAppBlacklistSettings> {
         navigator.push(SystemOverlayAppBlacklistKey())
     }
-    actions<UpdateDisableOnKeyboard>().collectIn(this) {
+    action<UpdateDisableOnKeyboard> {
         pref.updateData { copy(disableOnKeyboard = it.value) }
     }
-    actions<UpdateDisableOnLockScreen>().collectIn(this) {
+    action<UpdateDisableOnLockScreen> {
         pref.updateData { copy(disableOnLockScreen = it.value) }
     }
-    actions<UpdateDisableOnSecureScreens>().collectIn(this) {
+    action<UpdateDisableOnSecureScreens> {
         pref.updateData { copy(disableOnSecureScreens = it.value) }
     }
 }

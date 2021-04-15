@@ -26,11 +26,10 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.sample.ui.CounterAction.Dec
 import com.ivianuu.essentials.sample.ui.CounterAction.Inc
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -90,11 +89,9 @@ sealed class CounterAction {
 fun counterStore(
     @Given toaster: Toaster
 ): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
-    actions<Inc>()
-        .updateIn(this) { copy(count = count.inc()) }
-    actions<Dec>()
-        .collectIn(this) {
-            if (state.first().count > 0) update { copy(count = count.dec()) }
-            else toaster("Value cannot be less than 0!")
-        }
+    action<Inc> { update { copy(count = count.inc()) } }
+    action<Dec> {
+        if (state.first().count > 0) update { copy(count = count.dec()) }
+        else toaster("Value cannot be less than 0!")
+    }
 }

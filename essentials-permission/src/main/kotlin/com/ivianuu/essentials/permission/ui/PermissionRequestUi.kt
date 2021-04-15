@@ -20,13 +20,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.ui.PermissionRequestAction.GrantPermission
 import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.actions
+import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -40,6 +39,8 @@ import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
@@ -101,7 +102,8 @@ fun permissionRequestStore(
                 .all { permissionStateFactory(listOf(it)).first() }
         }
         .take(1)
-        .collectIn(this) { navigator.pop(key, true) }
+        .onEach { navigator.pop(key, true) }
+        .launchIn(this)
 
     suspend fun updatePermissions() {
         val notGrantedPermissions = key.permissionsKeys
@@ -112,7 +114,7 @@ fun permissionRequestStore(
 
     launch { updatePermissions() }
 
-    actions<GrantPermission>().collectIn(this) {
+    action<GrantPermission> {
         requestHandlers[it.permission.permissionKey]!!(permissions[it.permission.permissionKey]!!)
         appUiStarter()
         updatePermissions()
