@@ -29,7 +29,6 @@ import com.ivianuu.essentials.coroutines.collectIn
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StoreBuilder
 import com.ivianuu.essentials.store.actions
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -134,6 +133,9 @@ fun aboutStore(
     }
     actions<OpenRedditPage>().collectIn(this) {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    }
+    actions<OpenGithubPage>().collectIn(this) {
+        navigator.push(UrlKey("https://github.com/IVIanuu"))
     }
     actions<OpenTwitterPage>().collectIn(this) {
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
