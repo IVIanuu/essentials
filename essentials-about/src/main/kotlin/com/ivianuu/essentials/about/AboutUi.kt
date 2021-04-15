@@ -19,14 +19,9 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.about.AboutAction.OpenGithubPage
-import com.ivianuu.essentials.about.AboutAction.OpenMoreApps
-import com.ivianuu.essentials.about.AboutAction.OpenPrivacyPolicy
-import com.ivianuu.essentials.about.AboutAction.OpenRedditPage
-import com.ivianuu.essentials.about.AboutAction.OpenTwitterPage
-import com.ivianuu.essentials.about.AboutAction.Rate
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -35,7 +30,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
@@ -44,14 +39,14 @@ import kotlinx.coroutines.flow.first
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
+val aboutUi: StateKeyUi<AboutKey, AboutState> = {
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = { send(Rate) }
+                    onClick = state.rate
                 )
             }
 
@@ -59,7 +54,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = { send(OpenMoreApps) }
+                    onClick = state.openMoreApps
                 )
             }
 
@@ -67,7 +62,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = { send(OpenRedditPage) }
+                    onClick = state.openRedditPage
                 )
             }
 
@@ -75,7 +70,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = { send(OpenGithubPage) }
+                    onClick = state.openGithubPage
                 )
             }
 
@@ -83,7 +78,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = { send(OpenTwitterPage) }
+                    onClick = state.openTwitterPage
                 )
             }
 
@@ -91,7 +86,7 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = { send(OpenPrivacyPolicy) }
+                        onClick = state.openPrivacyPolicy
                     )
                 }
             }
@@ -99,7 +94,16 @@ val aboutUi: StoreKeyUi<AboutKey, AboutState, AboutAction> = {
     }
 }
 
-data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
+@Optics
+data class AboutState(
+    val privacyPolicyUrl: PrivacyPolicyUrl? = null,
+    val rate: () -> Unit = {},
+    val openMoreApps: () -> Unit = {},
+    val openRedditPage: () -> Unit = {},
+    val openGithubPage: () -> Unit = {},
+    val openTwitterPage: () -> Unit = {},
+    val openPrivacyPolicy: () -> Unit = {}
+) {
     companion object {
         @Given
         fun initial(
@@ -108,38 +112,29 @@ data class AboutState(val privacyPolicyUrl: PrivacyPolicyUrl? = null) {
     }
 }
 
-sealed class AboutAction {
-    object Rate : AboutAction()
-    object OpenMoreApps : AboutAction()
-    object OpenRedditPage : AboutAction()
-    object OpenGithubPage : AboutAction()
-    object OpenTwitterPage : AboutAction()
-    object OpenPrivacyPolicy : AboutAction()
-}
-
 @Given
-fun aboutStore(
+fun aboutState(
     @Given buildInfo: BuildInfo,
     @Given navigator: Navigator
-): StoreBuilder<KeyUiGivenScope, AboutState, AboutAction> = {
-    action<Rate> {
+): StateBuilder<KeyUiGivenScope, AboutState> = {
+    action(AboutState.rate()) {
         navigator.push(
             UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
         )
     }
-    action<OpenMoreApps> {
+    action(AboutState.openMoreApps()) {
         navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
-    action<OpenRedditPage> {
+    action(AboutState.openRedditPage()) {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     }
-    action<OpenGithubPage> {
+    action(AboutState.openGithubPage()) {
         navigator.push(UrlKey("https://github.com/IVIanuu"))
     }
-    action<OpenTwitterPage> {
+    action(AboutState.openTwitterPage()) {
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
-    action<OpenPrivacyPolicy> {
+    action(AboutState.openPrivacyPolicy()) {
         navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
     }
 }

@@ -25,6 +25,7 @@ import com.ivianuu.essentials.store.Sink
 import com.ivianuu.essentials.store.Store
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
 typealias KeyUi<K> = @Composable () -> Unit
@@ -81,5 +82,38 @@ fun <@Given U : StoreKeyUi<K, S, A>, K : Key<*>, S, A> storeKeyUi(
         }
     }
     val ui = remember(uiFactory) as @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+    scope.ui()
+}
+
+typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
+
+@Composable
+operator fun <S> StateKeyUi<*, S>.invoke(state: S) {
+    invoke(
+        object : StateKeyUiScope<Nothing, S> {
+            override val state: S
+                get() = state
+        }
+    )
+}
+
+@Stable
+interface StateKeyUiScope<K, S> {
+    val state: S
+}
+
+@Given
+fun <@Given U : StateKeyUi<K, S>, K : Key<*>, S> stateKeyUi(
+    @Given uiFactory: () -> U,
+    @Given store: StateFlow<S>
+): KeyUi<K> = {
+    val currentState by store.collectAsState()
+    val scope = remember(store) {
+        object : StateKeyUiScope<K, S> {
+            override val state: S
+                get() = currentState
+        }
+    }
+    val ui = remember(uiFactory) as @Composable StateKeyUiScope<K, S>.() -> Unit
     scope.ui()
 }

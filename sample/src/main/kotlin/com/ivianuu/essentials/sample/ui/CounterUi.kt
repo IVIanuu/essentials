@@ -26,17 +26,15 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.sample.ui.CounterAction.Dec
-import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.first
@@ -47,7 +45,7 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey : Key<Nothing>
 
 @Given
-val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
+val counterUi: StateKeyUi<CounterKey, CounterState> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -65,32 +63,32 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { send(Inc) }
+                onClick = state.inc
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { send(Dec) }
+                onClick = state.dec
             )
         }
     }
 }
 
-data class CounterState(val count: Int = 0)
-
-sealed class CounterAction {
-    object Inc : CounterAction()
-    object Dec : CounterAction()
-}
+@Optics
+data class CounterState(
+    val count: Int = 0,
+    val inc: () -> Unit = {},
+    val dec: () -> Unit = {}
+)
 
 @Given
-fun counterStore(
+fun counterState(
     @Given toaster: Toaster
-): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
-    action<Inc> { update { copy(count = count.inc()) } }
-    action<Dec> {
+): StateBuilder<KeyUiGivenScope, CounterState> = {
+    action(CounterState.inc()) { update { copy(count = count.inc()) } }
+    action(CounterState.dec()) {
         if (state.first().count > 0) update { copy(count = count.dec()) }
         else toaster("Value cannot be less than 0!")
     }
