@@ -34,14 +34,11 @@ fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
     @Given appOpsManager: AppOpsManager,
     @Given buildInfo: BuildInfo,
 ): PermissionStateProvider<P> = {
-
-    val mode = appOpsManager.checkOpNoThrow(
+    appOpsManager.checkOpNoThrow(
         AppOpsManager.OPSTR_GET_USAGE_STATS,
         Process.myUid(),
         buildInfo.packageName
-    )
-
-    mode == AppOpsManager.MODE_ALLOWED
+    ) == AppOpsManager.MODE_ALLOWED
 }
 
 @Given

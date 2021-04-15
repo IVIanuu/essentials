@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
+import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPcInstructionsAction.CopyAdbCommand
@@ -44,9 +45,16 @@ import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.time.milliseconds
 
 class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -127,8 +135,7 @@ data class WriteSecureSettingsPcInstructionsState(val packageName: String) {
         "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
     companion object {
         @Given
-        fun initialR(@Given buildInfo: BuildInfo):
-                @Initial WriteSecureSettingsPcInstructionsState =
+        fun initial(@Given buildInfo: BuildInfo): @Initial WriteSecureSettingsPcInstructionsState =
             WriteSecureSettingsPcInstructionsState(packageName = buildInfo.packageName)
     }
 }
@@ -148,16 +155,12 @@ fun writeSecureSettingsPcInstructionsStore(
     @Given updateClipboardText: UpdateClipboardTextUseCase
 ): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsState,
         WriteSecureSettingsPcInstructionsAction> = {
-    launch {
-        val state = permissionStateFactory(listOf(key.permissionKey))
-        while (coroutineContext.isActive) {
-            if (state.first()) {
-                navigator.pop(key)
-                break
-            }
-            delay(200)
-        }
-    }
+    timer(200.milliseconds)
+        .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
+        .filter { it }
+        .take(1)
+        .onEach { navigator.pop(key) }
+        .launchIn(this)
     action<CopyAdbCommand> {
         updateClipboardText(state.first().secureSettingsAdbCommand)
     }

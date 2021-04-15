@@ -21,7 +21,7 @@ import com.ivianuu.injekt.Given
 class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
-val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, Nothing,
+val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, Unit,
         NavBarUnsupportedAction> = {
     DialogScaffold {
         Dialog(
@@ -57,7 +57,7 @@ sealed class NavBarUnsupportedAction {
 fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
-): StoreBuilder<KeyUiGivenScope, Nothing, NavBarUnsupportedAction> = {
+): StoreBuilder<KeyUiGivenScope, Unit, NavBarUnsupportedAction> = {
     action<OpenMoreInfos> {
         navigator.push(
             UrlKey(
