@@ -109,6 +109,8 @@ object Deps {
 
     const val kotestAssertions = "io.kotest:kotest-assertions-core:4.4.3"
 
+    const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
+
     object Kotlin {
         const val version = "1.4.32"
         const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
@@ -136,6 +138,8 @@ object Deps {
     const val playBilling = "com.android.billingclient:billing-ktx:3.0.3"
 
     const val roboelectric = "org.robolectric:robolectric:4.4"
+
+    const val shadowGradlePlugin = "com.github.jengelman.gradle.plugins:shadow:6.1.0"
 
     const val superUser = "eu.chainfire:libsuperuser:1.0.0.201704021214"
 

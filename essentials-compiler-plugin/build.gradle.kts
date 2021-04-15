@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -17,10 +19,29 @@
 plugins {
     kotlin("jvm")
     kotlin("kapt")
+    id("com.github.johnrengelman.shadow")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
+
+val shadowJar = tasks.getByName<ShadowJar>("shadowJar") {
+    configurations = listOf(project.configurations.getByName("compileOnly"))
+    relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
+    dependencies {
+        exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+        exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib-common"))
+        exclude(dependency("org.jetbrains:annotations"))
+
+        exclude(dependency("com.intellij:openapi"))
+        exclude(dependency("com.intellij:extensions"))
+        exclude(dependency("com.intellij:annotations"))
+    }
+}
+
+artifacts {
+    archives(shadowJar)
+}
 
 dependencies {
     compileOnly(Deps.Kotlin.compilerEmbeddable)

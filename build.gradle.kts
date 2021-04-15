@@ -34,6 +34,7 @@ buildscript {
         classpath(Deps.Kotlin.gradlePlugin)
         classpath(Deps.KotlinSerialization.gradlePlugin)
         classpath(Deps.mavenPublishGradlePlugin)
+        classpath(Deps.shadowGradlePlugin)
     }
 }
 

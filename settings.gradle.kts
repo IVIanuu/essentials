@@ -26,6 +26,7 @@ include(
     ":essentials-gestures",
     ":essentials-gradle-plugin",
     ":essentials-hide-nav-bar",
+    ":essentials-ide-plugin",
     ":essentials-notification-listener",
     ":essentials-permission",
     ":essentials-process-restart",
