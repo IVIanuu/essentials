@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.GetAppInfoUseCase
-import com.ivianuu.essentials.apps.ui.IntentAppFilter
+import com.ivianuu.essentials.apps.ui.IntentAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.StoreKeyUi
@@ -129,7 +128,7 @@ sealed class MediaActionSettingsAction {
 @Given
 fun mediaActionSettingsStore(
     @Given getAppInfo: GetAppInfoUseCase,
-    @Given intentAppFilterFactory: (@Given Intent) -> IntentAppFilter,
+    @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
 ): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
@@ -141,7 +140,7 @@ fun mediaActionSettingsStore(
     action<UpdateMediaApp> {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
-                intentAppFilterFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+                intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )
         )
         if (newMediaApp != null) {

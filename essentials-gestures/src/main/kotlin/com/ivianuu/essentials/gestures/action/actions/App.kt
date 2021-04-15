@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
+import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -70,7 +70,7 @@ class AppActionFactory(
 
 @Given
 class AppActionPickerDelegate(
-    @Given private val launchableAppFilter: LaunchableAppFilter,
+    @Given private val launchableAppPredicate: LaunchableAppPredicate,
     @Given private val navigator: Navigator,
     @Given private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
@@ -82,7 +82,7 @@ class AppActionPickerDelegate(
     }
 
     override suspend fun pickAction(): ActionPickerKey.Result? {
-        val app = navigator.pushForResult(AppPickerKey(launchableAppFilter)) ?: return null
+        val app = navigator.pushForResult(AppPickerKey(launchableAppPredicate)) ?: return null
         return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.data.DataStore
@@ -30,7 +30,7 @@ fun systemOverlayAppBlacklistUi(
             CheckableAppsParams(
                 checkedApps = state.appBlacklist,
                 onCheckedAppsChanged = { send(UpdateAppBlacklist(it)) },
-                appFilter = DefaultAppFilter,
+                appPredicate = DefaultAppPredicate,
                 appBarTitle = stringResource(R.string.es_system_overlay_blacklist_title, emptyList())
             )
         )

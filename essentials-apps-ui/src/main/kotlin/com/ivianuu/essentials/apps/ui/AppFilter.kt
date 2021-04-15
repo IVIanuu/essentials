@@ -21,16 +21,16 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Given
 
-typealias AppFilter = (AppInfo) -> Boolean
+typealias AppPredicate = (AppInfo) -> Boolean
 
-val DefaultAppFilter: AppFilter = { true }
+val DefaultAppPredicate: AppPredicate = { true }
 
-typealias LaunchableAppFilter = AppFilter
+typealias LaunchableAppPredicate = AppPredicate
 
 @Given
-fun LaunchableAppFilter(
+fun launchableAppPredicate(
     @Given packageManager: PackageManager
-): LaunchableAppFilter {
+): LaunchableAppPredicate {
     val cache = mutableMapOf<String, Boolean>()
     return { app: AppInfo ->
         cache.getOrPut(app.packageName) {
@@ -39,13 +39,13 @@ fun LaunchableAppFilter(
     }
 }
 
-typealias IntentAppFilter = AppFilter
+typealias IntentAppPredicate = AppPredicate
 
 @Given
-fun IntentAppFilter(
+fun intentAppPredicate(
     @Given packageManager: PackageManager,
     @Given intent: Intent
-): IntentAppFilter {
+): IntentAppPredicate {
     val apps by lazy {
         packageManager.queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo.packageName }

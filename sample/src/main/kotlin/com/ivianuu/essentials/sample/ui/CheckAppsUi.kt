@@ -17,9 +17,8 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
+import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
@@ -41,7 +40,7 @@ class CheckAppsKey : Key<Nothing>
 @Given
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-    @Given launchableAppFilter: LaunchableAppFilter,
+    @Given launchableAppPredicate: LaunchableAppPredicate,
     @Given pref: DataStore<CheckAppsPrefs>,
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
 ): KeyUi<CheckAppsKey> = {
@@ -56,7 +55,7 @@ fun checkAppsUi(
                         }
                     }
                 },
-                launchableAppFilter,
+                launchableAppPredicate,
                 "Send check apps"
             )
         )

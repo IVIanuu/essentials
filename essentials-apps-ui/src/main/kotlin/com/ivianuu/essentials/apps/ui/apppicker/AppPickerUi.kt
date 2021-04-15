@@ -25,8 +25,8 @@ import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppFilter
-import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.apps.ui.AppPredicate
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
 import com.ivianuu.essentials.resource.Idle
@@ -48,7 +48,7 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 
 class AppPickerKey(
-    val appFilter: AppFilter = DefaultAppFilter,
+    val appPredicate: AppPredicate = DefaultAppPredicate,
     val title: String? = null,
 ) : Key<AppInfo>
 
@@ -81,15 +81,15 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
 
 data class AppPickerState(
     private val allApps: Resource<List<AppInfo>> = Idle,
-    val appFilter: AppFilter = DefaultAppFilter,
+    val appPredicate: AppPredicate = DefaultAppPredicate,
     val title: String? = null
 ) {
     val filteredApps = allApps
-        .map { it.filter(appFilter) }
+        .map { it.filter(appPredicate) }
     companion object {
         @Given
         fun initial(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
-            appFilter = key.appFilter,
+            appPredicate = key.appPredicate,
             title = key.title
         )
     }

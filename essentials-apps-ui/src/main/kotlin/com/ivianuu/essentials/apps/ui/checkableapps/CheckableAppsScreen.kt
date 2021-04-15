@@ -29,8 +29,8 @@ import com.google.accompanist.coil.CoilImage
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppFilter
-import com.ivianuu.essentials.apps.ui.DefaultAppFilter
+import com.ivianuu.essentials.apps.ui.AppPredicate
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
@@ -61,7 +61,7 @@ typealias CheckableAppsScreen = @Composable () -> Unit
 data class CheckableAppsParams(
     val checkedApps: Flow<Set<String>>,
     val onCheckedAppsChanged: (Set<String>) -> Unit,
-    val appFilter: AppFilter,
+    val appPredicate: AppPredicate,
     val appBarTitle: String
 )
 
@@ -127,11 +127,11 @@ fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChang
 data class CheckableAppsState(
     val allApps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
-    val appFilter: AppFilter = DefaultAppFilter,
+    val appPredicate: AppPredicate = DefaultAppPredicate,
     val appBarTitle: String
 ) {
     val checkableApps = allApps
-        .map { it.filter(appFilter) }
+        .map { it.filter(appPredicate) }
         .map { apps ->
             apps.map { app ->
                 CheckableApp(
@@ -143,7 +143,7 @@ data class CheckableAppsState(
     companion object {
         @Given
         fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
-            appFilter = params.appFilter,
+            appPredicate = params.appPredicate,
             appBarTitle = params.appBarTitle
         )
     }
