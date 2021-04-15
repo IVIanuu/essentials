@@ -47,6 +47,7 @@ import com.github.michaelbull.result.runCatching
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
+import com.ivianuu.essentials.notificationlistener.Notifications
 import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
@@ -188,7 +189,7 @@ sealed class NotificationsUiAction {
 fun notificationsUiStore(
     @Given appContext: AppContext,
     @Given dismissNotification: DismissNotificationUseCase,
-    @Given notifications: Flow<List<StatusBarNotification>>,
+    @Given notifications: Flow<Notifications>,
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
