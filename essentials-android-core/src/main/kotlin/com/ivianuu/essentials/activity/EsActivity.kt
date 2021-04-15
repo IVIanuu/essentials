@@ -58,15 +58,6 @@ class EsActivity : ComponentActivity() {
             }
         }
     }
-
-    // todo tmp fix for https://issuetracker.google.com/issues/139738913
-    override fun onBackPressed() {
-        if (onBackPressedDispatcher.hasEnabledCallbacks()) {
-            super.onBackPressed()
-        } else {
-            finishAfterTransition()
-        }
-    }
 }
 
 @InstallElement<UiGivenScope>
