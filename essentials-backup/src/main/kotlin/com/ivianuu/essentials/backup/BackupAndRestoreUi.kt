@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Given
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, BackupAndRestoreState,
+val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, Nothing,
         BackupAndRestoreAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
@@ -62,8 +62,6 @@ val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, BackupAndRestoreState,
     }
 }
 
-class BackupAndRestoreState
-
 sealed class BackupAndRestoreAction {
     object BackupData : BackupAndRestoreAction()
     object RestoreData : BackupAndRestoreAction()
@@ -75,7 +73,7 @@ fun backupAndRestoreStore(
     @Given restoreBackupUseCase: RestoreBackupUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StoreBuilder<KeyUiGivenScope, BackupAndRestoreState, BackupAndRestoreAction> = {
+): StoreBuilder<KeyUiGivenScope, Nothing, BackupAndRestoreAction> = {
     action<BackupData> {
         createBackupUseCase()
             .onFailure {

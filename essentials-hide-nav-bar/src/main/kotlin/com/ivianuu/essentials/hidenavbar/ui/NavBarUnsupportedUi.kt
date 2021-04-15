@@ -21,7 +21,7 @@ import com.ivianuu.injekt.Given
 class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
-val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState,
+val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, Nothing,
         NavBarUnsupportedAction> = {
     DialogScaffold {
         Dialog(
@@ -48,8 +48,6 @@ val navBarUnsupportedUi: StoreKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
 @Given
 val navBarUnsupportedOptions = DialogKeyUiOptionsFactory<NavBarUnsupportedKey>()
 
-class NavBarUnsupportedState
-
 sealed class NavBarUnsupportedAction {
     object OpenMoreInfos : NavBarUnsupportedAction()
     object Close : NavBarUnsupportedAction()
@@ -59,7 +57,7 @@ sealed class NavBarUnsupportedAction {
 fun navBarUnsupportedStore(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
-): StoreBuilder<KeyUiGivenScope, NavBarUnsupportedState, NavBarUnsupportedAction> = {
+): StoreBuilder<KeyUiGivenScope, Nothing, NavBarUnsupportedAction> = {
     action<OpenMoreInfos> {
         navigator.push(
             UrlKey(

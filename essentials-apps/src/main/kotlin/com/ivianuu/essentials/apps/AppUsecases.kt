@@ -28,10 +28,10 @@ typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 
 @Given
 fun getInstalledAppsUseCase(
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given packageManager: PackageManager
 ): GetInstalledAppsUseCase = {
-    withContext(ioDispatcher) {
+    withContext(dispatcher) {
         packageManager.getInstalledApplications(0)
             .parMap {
                 AppInfo(
@@ -49,10 +49,10 @@ typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
 
 @Given
 fun getAppInfoUseCase(
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given packageManager: PackageManager
 ): GetAppInfoUseCase = { packageName ->
-    withContext(ioDispatcher) {
+    withContext(dispatcher) {
         val applicationInfo = runCatching {
             packageManager.getApplicationInfo(packageName, 0)
         }.get() ?: return@withContext null
