@@ -35,9 +35,7 @@ import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 import org.jetbrains.kotlin.ir.declarations.impl.IrFactoryImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrInstanceInitializerCallImpl
 import org.jetbrains.kotlin.ir.util.constructors
-import org.jetbrains.kotlin.ir.util.deepCopyWithSymbols
 import org.jetbrains.kotlin.ir.util.defaultType
-import org.jetbrains.kotlin.ir.util.dumpKotlinLike
 import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.hasAnnotation
 import org.jetbrains.kotlin.ir.util.primaryConstructor
@@ -148,7 +146,7 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                     )
                     field.initializer = DeclarationIrBuilder(pluginContext, field.symbol).run {
                         val expr = irBlock {
-                            val clazz = IrFactoryImpl.buildClass {
+                            val lensImpl = IrFactoryImpl.buildClass {
                                 name = field.name
                                 visibility = DescriptorVisibilities.LOCAL
                             }.apply clazz@{
@@ -215,8 +213,8 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                                 }
                             }
 
-                            +clazz
-                            +irCall(clazz.constructors.single())
+                            +lensImpl
+                            +irCall(lensImpl.constructors.single())
                         }
 
                         irExprBody(expr)
@@ -232,7 +230,6 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                 return super.visitClass(declaration)
             }
         })
-        println(moduleFragment.dumpKotlinLike())
     }
 }
 
