@@ -1,54 +1,31 @@
 package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
+import androidx.work.ListenableWorker
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.work.Worker
+import com.ivianuu.essentials.work.WorkerId
 import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.work.InstallWorker
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
-@InstallWorker
 @Given
-class ForegroundWorker(
-    @Given appContext: AppContext,
-    @Given params: WorkerParameters,
-    @Given private val internalForegroundState: Flow<InternalForegroundState>,
-    @Given private val notificationManager: @SystemService NotificationManager,
-    @Given private val logger: Logger
-) : CoroutineWorker(appContext, params) {
-    override suspend fun doWork(): Result {
-        logger.d { "start foreground worker" }
+object ForegroundWorkerId : WorkerId("foreground")
 
-        runWithCleanup(
-            block = {
-                internalForegroundState
-                    .map { it.infos }
-                    .collect { infos ->
-                        if (infos.none { it.state is ForegroundState.Foreground }) {
-                            throw CancellationException()
-                        }
-                        applyState(infos)
-                    }
-            },
-            cleanup = {
-                applyState(emptyList())
-            }
-        )
+@Given
+fun foregroundWorker(
+    @Given internalForegroundState: Flow<InternalForegroundState>,
+    @Given notificationManager: @SystemService NotificationManager,
+    @Given logger: Logger
+): Worker<ForegroundWorkerId> = {
+    logger.d { "start foreground worker" }
 
-        logger.d { "stop foreground worker" }
-
-        return Result.success()
-    }
-
-    private suspend fun applyState(infos: List<ForegroundInfo>) {
+    suspend fun applyState(infos: List<ForegroundInfo>) {
         logger.d { "apply infos: $infos" }
 
         infos
@@ -76,4 +53,24 @@ class ForegroundWorker(
                 }
         }
     }
+
+    runWithCleanup(
+        block = {
+            internalForegroundState
+                .map { it.infos }
+                .collect { infos ->
+                    if (infos.none { it.state is ForegroundState.Foreground }) {
+                        throw CancellationException()
+                    }
+                    applyState(infos)
+                }
+        },
+        cleanup = {
+            applyState(emptyList())
+        }
+    )
+
+    logger.d { "stop foreground worker" }
+
+    ListenableWorker.Result.success()
 }

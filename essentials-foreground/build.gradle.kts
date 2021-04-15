@@ -27,7 +27,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
     api(project(":essentials-android-core"))
-    api(Deps.Injekt.androidWork)
+    api(project(":essentials-work"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

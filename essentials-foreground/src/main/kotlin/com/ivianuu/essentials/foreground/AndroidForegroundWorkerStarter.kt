@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.foreground
 
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.await
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
+import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
+import com.ivianuu.essentials.work.toFunctionalWorkerTag
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import kotlinx.coroutines.flow.Flow
@@ -38,19 +39,16 @@ fun androidForegroundWorkerStarter(
     state
         .filter { it.isForeground }
         .filter {
-            workManager.getWorkInfosByTag(FOREGROUND_TAG)
+            workManager.getWorkInfosByTag(ForegroundWorkerId.toFunctionalWorkerTag())
                 .await()
                 .none { it.state == WorkInfo.State.RUNNING }
         }
         .collect {
             logger.d { "start foreground worker $it" }
-            workManager.cancelAllWorkByTag(FOREGROUND_TAG)
+            workManager.cancelAllWorkByTag(ForegroundWorkerId.toFunctionalWorkerTag())
             workManager.enqueue(
-                OneTimeWorkRequestBuilder<ForegroundWorker>()
-                    .addTag(FOREGROUND_TAG)
+                OneTimeWorkRequestBuilder(ForegroundWorkerId)
                     .build()
             )
         }
 }
-
-private const val FOREGROUND_TAG = "foreground_work"
