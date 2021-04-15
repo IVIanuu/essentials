@@ -51,6 +51,8 @@ dependencies {
     testImplementation(Deps.compileTesting)
     testImplementation(Deps.junit)
     testImplementation(Deps.Kotlin.compilerEmbeddable)
+    testImplementation(Deps.kotestAssertions)
+    testImplementation(project(":essentials-optics"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

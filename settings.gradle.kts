@@ -28,6 +28,7 @@ include(
     ":essentials-hide-nav-bar",
     ":essentials-ide-plugin",
     ":essentials-notification-listener",
+    ":essentials-optics",
     ":essentials-permission",
     ":essentials-process-restart",
     ":essentials-recent-apps",
