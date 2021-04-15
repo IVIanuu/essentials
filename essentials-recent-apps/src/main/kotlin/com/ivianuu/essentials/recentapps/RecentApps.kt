@@ -60,6 +60,7 @@ fun recentApps(
         while (newRecentApps.size > 10) {
             newRecentApps.removeAt(newRecentApps.lastIndex)
         }
+
         newRecentApps
     }
     .distinctUntilChanged()
