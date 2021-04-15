@@ -8,8 +8,6 @@ import com.ivianuu.essentials.coroutines.IODispatcher
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.navigation.IntentKey
-import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.util.BuildInfo
@@ -32,13 +30,13 @@ fun createBackupUseCase(
     @Given backupFiles: Set<BackupFile>,
     @Given buildInfo: BuildInfo,
     @Given dataDir: DataDir,
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given logger: Logger,
     @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): CreateBackupUseCase = {
     runCatching {
-        withContext(scope.coroutineContext + ioDispatcher) {
+        withContext(scope.coroutineContext + dispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =
                 "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -77,14 +75,14 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
 fun restoreBackupUseCase(
     @Given contentResolver: ContentResolver,
     @Given dataDir: DataDir,
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given logger: Logger,
     @Given navigator: Navigator,
     @Given processRestarter: ProcessRestarter,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): RestoreBackupUseCase = {
     runCatching {
-        withContext(scope.coroutineContext + ioDispatcher) {
+        withContext(scope.coroutineContext + dispatcher) {
             val uri = navigator.pushForResult(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {

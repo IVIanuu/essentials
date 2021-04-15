@@ -33,11 +33,11 @@ typealias ScreenUnlocker = suspend () -> Boolean
 @Given
 fun screenUnlocker(
     @Given appContext: AppContext,
-    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatcher: DefaultDispatcher,
     @Given logger: Logger,
     @Given keyguardManager: @SystemService KeyguardManager,
 ): ScreenUnlocker = {
-    withContext(defaultDispatcher) {
+    withContext(dispatcher) {
         if (!keyguardManager.isKeyguardLocked) return@withContext true
 
         val result = CompletableDeferred<Boolean>()

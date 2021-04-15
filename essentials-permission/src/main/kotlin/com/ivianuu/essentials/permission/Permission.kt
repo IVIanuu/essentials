@@ -75,14 +75,14 @@ typealias PermissionState<P> = Boolean
 
 @Given
 fun <P : Permission> permissionState(
-    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatcher: DefaultDispatcher,
     @Given permission: P,
     @Given stateProvider: PermissionStateProvider<P>
 ): Flow<PermissionState<P>> = permissionRefreshes
     .map { Unit }
     .onStart { emit(Unit) }
     .map {
-        withContext(defaultDispatcher) {
+        withContext(dispatcher) {
             stateProvider(permission)
         }
     }
@@ -118,12 +118,12 @@ typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
 @Given
 fun permissionRequester(
     @Given appUiStarter: AppUiStarter,
-    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatcher: DefaultDispatcher,
     @Given logger: Logger,
     @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
-    withContext(defaultDispatcher) {
+    withContext(dispatcher) {
         logger.d { "request permissions $requestedPermissions" }
 
         if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })

@@ -65,11 +65,11 @@ private typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
 @Given
 fun currentScreenStateProvider(
-    @Given defaultDispatcher: DefaultDispatcher,
+    @Given dispatcher: DefaultDispatcher,
     @Given keyguardManager: @SystemService KeyguardManager,
     @Given powerManager: @SystemService PowerManager,
 ): CurrentScreenStateProvider = {
-    withContext(defaultDispatcher) {
+    withContext(dispatcher) {
         if (powerManager.isInteractive) {
             if (keyguardManager.isDeviceLocked) {
                 ScreenState.LOCKED

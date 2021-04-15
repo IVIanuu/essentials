@@ -62,7 +62,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 @Given
 fun displayRotation(
     @Given configChanges: () -> Flow<ConfigChange>,
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given logger: Logger,
     @Given rotationChanges: () -> Flow<RotationChange>,
     @Given scope: ScopeCoroutineScope<AppGivenScope>,
@@ -81,16 +81,16 @@ fun displayRotation(
             }
         }
         .onStart { emit(Unit) }
-        .map { getCurrentDisplayRotation(ioDispatcher, windowManager) }
+        .map { getCurrentDisplayRotation(dispatcher, windowManager) }
         .distinctUntilChanged()
         .let { emitAll(it) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
     .distinctUntilChanged()
 
 private suspend fun getCurrentDisplayRotation(
-    ioDispatcher: IODispatcher,
+    dispatcher: IODispatcher,
     windowManager: WindowManager,
-) = withContext(ioDispatcher) {
+) = withContext(dispatcher) {
     when (windowManager.defaultDisplay.rotation) {
         Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
         Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT

@@ -33,10 +33,10 @@ typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
 
 @Given
 fun getAllShortcutsUseCase(
-    @Given ioDispatcher: IODispatcher,
+    @Given dispatcher: IODispatcher,
     @Given packageManager: PackageManager
 ): GetAllShortcutsUseCase = {
-    withContext(ioDispatcher) {
+    withContext(dispatcher) {
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
