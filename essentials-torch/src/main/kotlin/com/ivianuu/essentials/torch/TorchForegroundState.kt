@@ -36,24 +36,24 @@ import kotlinx.coroutines.flow.map
 
 @Given
 fun torchForegroundState(
-    @Given state: Flow<TorchState>,
-    @Given torchNotificationFactory: TorchNotificationFactory
+    @Given createTorchNotification: () -> TorchNotification,
+    @Given state: Flow<TorchState>
 ): Flow<ForegroundState> = state
     .map { torchEnabled ->
-        if (torchEnabled) Foreground(torchNotificationFactory())
+        if (torchEnabled) Foreground(createTorchNotification())
         else Background
     }
 
-private typealias TorchNotificationFactory = () -> Notification
+typealias TorchNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
-fun torchNotificationFactory(
+fun torchNotification(
     @Given appContext: AppContext,
     @Given notificationManager: @SystemService NotificationManager,
     @Given stringResource: StringResourceProvider,
     @Given systemBuildInfo: SystemBuildInfo,
-): TorchNotificationFactory = {
+): TorchNotification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -64,7 +64,7 @@ fun torchNotificationFactory(
         )
     }
 
-    NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
+    return NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
         .apply {
             setAutoCancel(true)
             setSmallIcon(R.drawable.es_ic_flash_on)

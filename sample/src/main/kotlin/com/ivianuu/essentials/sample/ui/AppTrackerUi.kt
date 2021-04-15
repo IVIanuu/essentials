@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
@@ -66,7 +67,7 @@ class AppTrackerKey : Key<Nothing>
 fun appTrackerUi(
     @Given currentApp: Flow<CurrentApp>,
     @Given foregroundState: AppTrackerForegroundState,
-    @Given notificationFactory: AppTrackerNotificationFactory,
+    @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
     @Given permissionRequester: PermissionRequester,
     @Given toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
@@ -74,10 +75,17 @@ fun appTrackerUi(
 
     if (currentForegroundState is Foreground) {
         LaunchedEffect(true) {
-            currentApp.collect {
-                toaster("App changed $it")
-                foregroundState.value = Foreground(notificationFactory(it))
-            }
+            runWithCleanup(
+                block = {
+                    currentApp.collect {
+                        toaster("App changed $it")
+                        foregroundState.value = Foreground(createNotification(it))
+                    }
+                },
+                cleanup = {
+                    foregroundState.value = Background
+                }
+            )
         }
     }
 
@@ -91,7 +99,7 @@ fun appTrackerUi(
                 scope.launch {
                     if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
                         foregroundState.value = if (currentForegroundState is Foreground) Background
-                        else Foreground(notificationFactory(null))
+                        else Foreground(createNotification(null))
                     }
                 }
             }
@@ -107,15 +115,16 @@ typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 val appTrackerForegroundState: @Scoped<AppGivenScope> AppTrackerForegroundState
     get() = MutableStateFlow(Background)
 
-typealias AppTrackerNotificationFactory = (String?) -> Notification
+typealias AppTrackerNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
-fun appTrackerNotificationFactory(
+fun appTrackerNotification(
     @Given appContext: AppContext,
+    @Given currentApp: CurrentApp,
     @Given notificationManager: @SystemService NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo
-): AppTrackerNotificationFactory = { currentApp ->
+): AppTrackerNotification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -125,7 +134,7 @@ fun appTrackerNotificationFactory(
             )
         )
     }
-    NotificationCompat.Builder(appContext, "app_tracker")
+    return NotificationCompat.Builder(appContext, "app_tracker")
         .apply {
             setSmallIcon(R.mipmap.ic_launcher)
             setContentTitle("Current app: $currentApp")

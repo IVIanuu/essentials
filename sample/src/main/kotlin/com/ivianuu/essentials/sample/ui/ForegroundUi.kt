@@ -67,8 +67,8 @@ class ForegroundKey : Key<Nothing>
 @SuppressLint("NewApi")
 @Given
 fun foregroundUi(
-    @Given foregroundState: ForegroundScreenState,
-    @Given notificationFactory: ForegroundNotificationFactory
+    @Given createNotification: (@Given Int, @Given Color) -> ForegroundNotification,
+    @Given foregroundState: ForegroundScreenState
 ): KeyUi<ForegroundKey> = {
     val currentForegroundState by foregroundState.collectAsState()
 
@@ -90,7 +90,7 @@ fun foregroundUi(
                 while (isActive) {
                     count++
                     foregroundState.value = Foreground(
-                        notificationFactory(count, primaryColor)
+                        createNotification(count, primaryColor)
                     )
                     delay(1000)
                 }
@@ -112,7 +112,7 @@ fun foregroundUi(
             Button(
                 onClick = {
                     foregroundState.value = (if (currentForegroundState is Foreground) Background
-                    else Foreground(notificationFactory(count, primaryColor)))
+                    else Foreground(createNotification(count, primaryColor)))
                 }
             ) {
                 Text(
@@ -133,15 +133,17 @@ typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 val foregroundScreenState: @Scoped<AppGivenScope> ForegroundScreenState
     get() = MutableStateFlow(Background)
 
-typealias ForegroundNotificationFactory = (Int, Color) -> Notification
+typealias ForegroundNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
-fun foregroundNotificationFactory(
+fun foregroundNotification(
     @Given appContext: AppContext,
+    @Given count: Int,
+    @Given color: Color,
     @Given notificationManager: @SystemService NotificationManager,
     @Given systemBuildInfo: SystemBuildInfo
-): ForegroundNotificationFactory = { count, color ->
+): ForegroundNotification {
     if (systemBuildInfo.sdk >= 26) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -150,7 +152,7 @@ fun foregroundNotificationFactory(
             )
         )
     }
-    NotificationCompat.Builder(appContext, "foreground")
+    return NotificationCompat.Builder(appContext, "foreground")
         .setSmallIcon(R.drawable.ic_home)
         .setContentTitle("Foreground")
         .setContentText("Current progress $count")
