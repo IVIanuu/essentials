@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
@@ -40,17 +41,19 @@ import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlin.time.milliseconds
 
 class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, WriteSecureSettingsState,
+val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, Unit,
         WriteSecureSettingsAction> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
@@ -79,8 +82,6 @@ val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, WriteSecureSetting
     }
 }
 
-object WriteSecureSettingsState
-
 sealed class WriteSecureSettingsAction {
     object OpenPcInstructions : WriteSecureSettingsAction()
     object GrantPermissionsViaRoot : WriteSecureSettingsAction()
@@ -95,18 +96,16 @@ fun writeSecureSettingsStore(
     @Given runShellCommand: RunShellCommandUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StoreBuilder<KeyUiGivenScope, WriteSecureSettingsState, WriteSecureSettingsAction> = {
-    launch {
-        val state = permissionStateFactory(listOf(key.permissionKey))
-        while (coroutineContext.isActive) {
-            if (state.first()) {
-                toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
-                navigator.pop(key, true)
-                break
-            }
-            delay(200)
+): StoreBuilder<KeyUiGivenScope, Unit, WriteSecureSettingsAction> = {
+    timer(200.milliseconds)
+        .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
+        .filter { it }
+        .take(1)
+        .onEach {
+            toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
+            navigator.pop(key, true)
         }
-    }
+        .launchIn(this)
     action<OpenPcInstructions> {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
