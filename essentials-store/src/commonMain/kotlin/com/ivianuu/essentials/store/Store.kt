@@ -2,7 +2,7 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.stateStore
+import com.ivianuu.essentials.coroutines.updateValue
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.GivenScope
 import com.ivianuu.injekt.scope.Scoped
@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
@@ -26,13 +27,13 @@ fun <S, A> CoroutineScope.store(
     actions: MutableSharedFlow<A> = EventFlow(),
     block: suspend StoreScope<S, A>.() -> Unit
 ): Store<S, A> {
-    val state = stateStore(initial)
+    val state = MutableStateFlow(initial)
     val store = object : Store<S, A>, StoreScope<S, A>, StateFlow<S> by state, CoroutineScope by this {
         override val actions: Flow<A>
             get() = actions
         override val state: Flow<S>
             get() = state
-        override suspend fun update(reducer: S.() -> S): S = state.update(reducer)
+        override suspend fun update(transform: S.() -> S): S = state.updateValue(transform)
         override fun send(value: A) {
             actions.tryEmit(value)
         }
@@ -44,7 +45,7 @@ fun <S, A> CoroutineScope.store(
 interface StoreScope<S, A> : CoroutineScope {
     val state: Flow<S>
     val actions: Flow<A>
-    suspend fun update(reducer: S.() -> S): S
+    suspend fun update(transform: S.() -> S): S
 }
 
 inline fun <reified A> StoreScope<*, in A>.action(noinline action: suspend (A) -> Unit): Job =
@@ -57,8 +58,8 @@ fun <S> Flow<S.() -> S>.updateIn(scope: StoreScope<S, *>): Job = scope.launch {
     collect { scope.update(it) }
 }
 
-fun <T, S> Flow<T>.updateIn(scope: StoreScope<S, *>, reducer: S.(T) -> S): Job =
-    map<T, S.() -> S> { { reducer(it) } }.updateIn(scope)
+fun <T, S> Flow<T>.updateIn(scope: StoreScope<S, *>, transform: S.(T) -> S): Job =
+    map<T, S.() -> S> { { transform(it) } }.updateIn(scope)
 
 fun <S, A> StoreBuilder<*, S, A>.toStore(
     scope: CoroutineScope,

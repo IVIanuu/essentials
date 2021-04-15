@@ -173,12 +173,12 @@ fun checkableAppsStore(
         .updateIn(this) { copy(checkedApps = it) }
     resourceFlow { emit(getInstalledApps()) }
         .updateIn(this) { copy(allApps = it) }
-    suspend fun pushNewCheckedApps(reducer: Set<String>.(CheckableAppsState) -> Set<String>) {
+    suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()
             ?.filter { it.isChecked }
             ?.mapTo(mutableSetOf()) { it.info.packageName }
-            ?.reducer(currentState)
+            ?.transform(currentState)
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }

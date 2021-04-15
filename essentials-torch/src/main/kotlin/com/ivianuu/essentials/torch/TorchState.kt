@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.StateStore
-import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.MutableStateFlow
 
 typealias TorchState = Boolean
 
 @Given
-fun torchState(
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
-): @Scoped<AppGivenScope> StateStore<TorchState> = scope.stateStore(false)
+val torchState: @Scoped<AppGivenScope> MutableStateFlow<TorchState>
+    get() = MutableStateFlow(false)

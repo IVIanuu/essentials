@@ -18,14 +18,14 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.mapState
-import com.ivianuu.essentials.coroutines.stateStore
+import com.ivianuu.essentials.coroutines.updateValue
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.cast
 import com.ivianuu.essentials.util.d
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -50,9 +50,9 @@ class NavigatorImpl(
     @Given rootKey: RootKey? = null,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) : Navigator {
-    private val store = scope.stateStore(State(listOfNotNull(rootKey)))
+    private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
     override val state: StateFlow<NavigationState>
-        get() = store.mapState { NavigationState(it.backStack) }
+        get() = _state.mapState { NavigationState(it.backStack) }
 
     override fun push(key: Key<*>) {
         scope.launch { pushForResult(key) }
@@ -62,7 +62,7 @@ class NavigatorImpl(
         logger.d { "push $key" }
         val result = CompletableDeferred<R?>()
         if (!intentKeyHandler(key) { result.complete(it as R) }) {
-            store.update {
+            _state.updateValue {
                 copy(
                     backStack = backStack + key,
                     results = results + mapOf(key to result)
@@ -80,14 +80,14 @@ class NavigatorImpl(
         val result = CompletableDeferred<R?>()
         logger.d { "replace top $key" }
         if (intentKeyHandler(key) { result.complete(it as R?) }) {
-            store.update {
+            _state.updateValue {
                 copy(
                     backStack = backStack.dropLast(1),
                     results = results + mapOf(key to result)
                 )
             }
         } else {
-            store.update {
+            _state.updateValue {
                 copy(
                     backStack = backStack.dropLast(1) + key,
                     results = results + mapOf(key to result)
@@ -100,7 +100,7 @@ class NavigatorImpl(
     override fun <R> pop(key: Key<R>, result: R?) {
         scope.launch {
             logger.d { "pop $key" }
-            store.update { popKey(key, result) }
+            _state.updateValue { popKey(key, result) }
         }
     }
 
@@ -108,7 +108,7 @@ class NavigatorImpl(
         scope.launch {
             val topKey = state.first().backStack.last()
             logger.d { "pop top $topKey" }
-            store.update {
+            _state.updateValue {
                 @Suppress("UNCHECKED_CAST")
                 popKey(topKey as Key<Any>, null)
             }

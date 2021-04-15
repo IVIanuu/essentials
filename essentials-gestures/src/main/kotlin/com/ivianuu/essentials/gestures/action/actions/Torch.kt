@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
 import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.coroutines.StateStore
+import com.ivianuu.essentials.coroutines.updateValue
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -28,6 +28,7 @@ import com.ivianuu.essentials.torch.TorchState
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 @Given
@@ -45,10 +46,8 @@ fun torchAction(
 
 @Given
 fun torchActionExecutor(
-    @Given torch: StateStore<TorchState>
-): ActionExecutor<TorchActionId> = {
-    torch.update { not() }
-}
+    @Given torch: MutableStateFlow<TorchState>
+): ActionExecutor<TorchActionId> = { torch.updateValue { not() } }
 
 private typealias TorchIcon = ActionIcon
 

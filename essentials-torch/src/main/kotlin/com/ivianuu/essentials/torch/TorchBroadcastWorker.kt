@@ -18,17 +18,18 @@ package com.ivianuu.essentials.torch
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.StateStore
+import com.ivianuu.essentials.coroutines.updateValue
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.scope.AppGivenScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 
 @Given
 fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,
-    @Given torchStore: StateStore<TorchState>
+    @Given torchStore: MutableStateFlow<TorchState>
 ): ScopeWorker<AppGivenScope> = {
-    broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.update { false } }
+    broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.updateValue { false } }
 }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
