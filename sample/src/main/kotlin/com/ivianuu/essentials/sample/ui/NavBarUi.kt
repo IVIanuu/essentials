@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
@@ -43,6 +44,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
@@ -63,7 +65,8 @@ fun navBarUi(
     @Given navBarPref: DataStore<NavBarPrefs>,
     @Given navigator: Navigator,
     @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-    @Given permissionRequester: PermissionRequester
+    @Given permissionRequester: PermissionRequester,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
 ): KeyUi<NavBarKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -74,7 +77,6 @@ fun navBarUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val navBarPrefs by navBarPref.data.collectAsState(NavBarPrefs())
-            val scope = rememberCoroutineScope()
             // reshow nav bar when leaving the screen
             DisposableEffect(true) {
                 onDispose {

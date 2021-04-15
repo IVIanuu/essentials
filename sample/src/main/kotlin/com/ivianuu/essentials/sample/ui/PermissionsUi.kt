@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -40,6 +41,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
@@ -51,11 +53,13 @@ val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 class PermissionsKey : Key<Nothing>
 
 @Given
-fun permissionUi(@Given permissionRequester: PermissionRequester): KeyUi<PermissionsKey> = {
+fun permissionUi(
+    @Given permissionRequester: PermissionRequester,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): KeyUi<PermissionsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Permissions") }) }
     ) {
-        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {

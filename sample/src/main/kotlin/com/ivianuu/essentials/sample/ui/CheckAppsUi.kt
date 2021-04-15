@@ -22,9 +22,11 @@ import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.ui.LaunchableAppFilter
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -40,9 +42,9 @@ class CheckAppsKey : Key<Nothing>
 fun checkAppsUi(
     @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given launchableAppFilter: LaunchableAppFilter,
-    @Given pref: DataStore<CheckAppsPrefs>
+    @Given pref: DataStore<CheckAppsPrefs>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
 ): KeyUi<CheckAppsKey> = {
-    val scope = rememberCoroutineScope()
     remember {
         checkableAppsScreen(
             CheckableAppsParams(

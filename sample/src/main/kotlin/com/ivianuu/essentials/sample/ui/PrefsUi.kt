@@ -42,6 +42,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
@@ -61,13 +62,12 @@ class PrefsKey : Key<Nothing>
 fun prefsUi(
     @Given navigator: Navigator,
     @Given prefStore: DataStore<SamplePrefs>,
-    @Given scope: ScopeCoroutineScope<UiGivenScope>
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
 ): KeyUi<PrefsKey> = {
     val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
     Scaffold(
         topBar = { TopAppBar(title = { Text("Prefs") }) }
     ) {
-        val scope = rememberCoroutineScope()
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SwitchListItem(

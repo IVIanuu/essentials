@@ -20,12 +20,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -42,12 +44,12 @@ class UnlockKey : Key<Nothing>
 fun unlockUi(
     @Given screenState: Flow<ScreenState>,
     @Given screenUnlocker: ScreenUnlocker,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster,
 ): KeyUi<UnlockKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Unlock") }) }
     ) {
-        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {

@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
@@ -44,6 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.util.SystemBuildInfo
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -69,6 +71,7 @@ fun appTrackerUi(
     @Given foregroundState: AppTrackerForegroundState,
     @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
     @Given permissionRequester: PermissionRequester,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
     val currentForegroundState by foregroundState.collectAsState()
@@ -92,7 +95,6 @@ fun appTrackerUi(
     Scaffold(
         topBar = { TopAppBar(title = { Text("App tracker") }) }
     ) {
-        val scope = rememberCoroutineScope()
         Button(
             modifier = Modifier.center(),
             onClick = {
