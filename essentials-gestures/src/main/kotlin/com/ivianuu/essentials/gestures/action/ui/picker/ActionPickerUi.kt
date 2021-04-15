@@ -97,20 +97,13 @@ sealed class ActionPickerAction {
 @Given
 fun actionPickerStore(
     @Given getAction: GetActionUseCase,
-    @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-    @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
-    @Given getAllActions: GetAllActionsUseCase,
+    @Given getActionPickerItems: GetActionPickerItemsUseCase,
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester,
-    @Given stringResource: StringResourceProvider,
+    @Given permissionRequester: PermissionRequester
 ): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
-    resourceFlow {
-        emit(
-            getActionPickerItems(getActionPickerDelegates,
-                getAllActions, getActionSettingsKey, key, stringResource)
-        )
-    }.updateIn(this) { copy(items = it) }
+    resourceFlow { emit(getActionPickerItems()) }
+        .updateIn(this) { copy(items = it) }
 
     action<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
 
@@ -182,40 +175,45 @@ sealed class ActionPickerItem {
     abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-private suspend fun getActionPickerItems(
-    getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-    getAllActions: GetAllActionsUseCase,
-    getActionSettingsKey: GetActionSettingsKeyUseCase,
-    key: ActionPickerKey,
-    stringResource: StringResourceProvider
-): List<ActionPickerItem> = buildList<ActionPickerItem> {
-    val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
+private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerItem>
 
-    if (key.showDefaultOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = stringResource(R.string.es_default, emptyList()),
-            getResult = { ActionPickerKey.Result.Default }
-        )
-    }
+@Given
+fun getActionPickerItemsUseCase(
+    @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+    @Given getAllActions: GetAllActionsUseCase,
+    @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
+    @Given key: ActionPickerKey,
+    @Given stringResource: StringResourceProvider
+): GetActionPickerItemsUseCase = {
+    buildList<ActionPickerItem> {
+        val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
-    if (key.showNoneOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = stringResource(R.string.es_none, emptyList()),
-            getResult = { ActionPickerKey.Result.None }
-        )
-    }
-
-    val actionsAndDelegates = (
-            (getActionPickerDelegates()
-                .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
-                .map {
-                    ActionPickerItem.ActionItem(
-                        it,
-                        getActionSettingsKey(it.id)
-                    )
-                })
+        if (key.showDefaultOption) {
+            specialOptions += ActionPickerItem.SpecialOption(
+                title = stringResource(R.string.es_default, emptyList()),
+                getResult = { ActionPickerKey.Result.Default }
             )
-        .sortedBy { it.title }
+        }
 
-    return specialOptions + actionsAndDelegates
+        if (key.showNoneOption) {
+            specialOptions += ActionPickerItem.SpecialOption(
+                title = stringResource(R.string.es_none, emptyList()),
+                getResult = { ActionPickerKey.Result.None }
+            )
+        }
+
+        val actionsAndDelegates = (
+                (getActionPickerDelegates()
+                    .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+                    .map {
+                        ActionPickerItem.ActionItem(
+                            it,
+                            getActionSettingsKey(it.id)
+                        )
+                    })
+                )
+            .sortedBy { it.title }
+
+        specialOptions + actionsAndDelegates
+    }
 }
