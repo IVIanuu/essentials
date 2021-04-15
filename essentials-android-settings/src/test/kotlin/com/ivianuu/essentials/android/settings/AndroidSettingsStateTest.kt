@@ -3,6 +3,8 @@ package com.ivianuu.essentials.android.settings
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CoroutineDispatcher
 import org.junit.Test
@@ -23,11 +25,11 @@ class AndroidSettingsStateTest {
                 contentChanges.tryEmit(Unit)
             }
         }
-        val module = AndroidSettingDataStoreModule<Int, Int>(
+        val module = AndroidSettingModule<Int, Int>(
             "name",
             AndroidSettingsType.GLOBAL
         )
-        val setting = module.setting(
+        val setting = module.store(
             scope = this,
             adapter = adapter,
             dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
@@ -36,7 +38,7 @@ class AndroidSettingsStateTest {
 
         value shouldBe 0
 
-        val stateCollector = setting.testCollect(this)
+        val stateCollector = setting.data.testCollect(this)
         advanceUntilIdle()
 
         // initial state
@@ -53,18 +55,11 @@ class AndroidSettingsStateTest {
         contentChanges.tryEmit(Unit)
         stateCollector.values.shouldHaveSize(2)
 
-        // dispatched updates
-        setting.dispatchUpdate { value + 1 }
+        // updates
+        setting.updateData { value + 1 }
         contentChanges.tryEmit(Unit)
         value shouldBe 2
         stateCollector.values.shouldHaveSize(3)
         stateCollector.values[2] shouldBe 2
-
-        // updates with result
-        setting.update { value - 1 } shouldBe 1
-        contentChanges.tryEmit(Unit)
-        value shouldBe 1
-        stateCollector.values.shouldHaveSize(4)
-        stateCollector.values[3] shouldBe 1
     }
 }

@@ -20,6 +20,9 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childJob
 import com.ivianuu.essentials.test.TestCollector
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
@@ -27,11 +30,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Test
 
-class StateTest {
+class StoreTest {
     @Test
     fun testReduce() = runCancellingBlockingTest {
-        val state = state(0) {
-            updateOn { inc() }
+        val state = store<Int, Nothing>(0) {
+            update { inc() }
         }
         state.testCollect(this)
             .values
@@ -40,7 +43,7 @@ class StateTest {
 
     @Test
     fun testEmitsInitialState() = runCancellingBlockingTest {
-        val state = state(0) {}
+        val state = store<Int, Nothing>(0) {}
         state.testCollect(this)
             .values
             .shouldContainExactly(0)
@@ -49,10 +52,9 @@ class StateTest {
     @Test
     fun testFlowReduce() = runCancellingBlockingTest {
         val actions = EventFlow<Int>()
-        val state = state(0) {
+        val state = store<Int, Nothing>(0) {
             actions
-                .updateOn { it }
-                .launchIn(this)
+                .updateIn(this) { it }
         }
         val collector = state.testCollect(this)
 
@@ -69,7 +71,7 @@ class StateTest {
         val actions = EventFlow<Unit>()
         val collector = TestCollector<Unit>()
         val stateScope = TestCoroutineScope(childJob())
-        stateScope.state(0, SharingStarted.Eagerly) {
+        stateScope.store<Int, Nothing>(0) {
             actions
                 .onEach { collector.emit(it) }
                 .launchIn(this)

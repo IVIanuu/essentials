@@ -16,27 +16,28 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.coroutines.stateStore
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.essentials.util.NoopLogger
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.async
 import org.junit.Test
 
 class NavigationStateTest {
-
     object KeyA : Key<Nothing>
     object KeyB : Key<Nothing>
     object KeyC : Key<Nothing>
 
     @Test
     fun testNavigationState() = runCancellingBlockingTest {
-        val navigator = Navigator(
-            intentKeyHandler = { false },
+        val navigator = NavigatorImpl(
+            intentKeyHandler = { _, _ -> false },
             logger = NoopLogger,
-            store = stateStore(InternalNavigationState())
+            scope = this
         )
 
-        val collector = navigator.testCollect(this)
+        val collector = navigator.state.testCollect(this)
 
         navigator.push(KeyA)
         navigator.pop(KeyA)
@@ -58,10 +59,10 @@ class NavigationStateTest {
 
     @Test
     fun testReturnsResultOnPop() = runCancellingBlockingTest {
-        val navigator = Navigator(
-            intentKeyHandler = { false },
+        val navigator = NavigatorImpl(
+            intentKeyHandler = { _, _ -> false },
             logger = NoopLogger,
-            store = stateStore(InternalNavigationState())
+            scope = this
         )
         val result = async { navigator.pushForResult(KeyWithResult) }
         navigator.pop(KeyWithResult, "b")
@@ -70,14 +71,13 @@ class NavigationStateTest {
 
     @Test
     fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-        val navigator = Navigator(
-            intentKeyHandler = { false },
+        val navigator = NavigatorImpl(
+            intentKeyHandler = { _, _ -> false },
             logger = NoopLogger,
-            store = stateStore(InternalNavigationState())
+            scope = this
         )
         val result = async { navigator.pushForResult(KeyWithResult) }
         navigator.popTop()
         result.await() shouldBe null
     }
-
 }

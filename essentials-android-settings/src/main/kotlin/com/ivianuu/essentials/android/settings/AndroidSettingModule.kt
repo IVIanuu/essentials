@@ -13,6 +13,7 @@ import com.ivianuu.injekt.scope.AppGivenScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
@@ -42,6 +43,7 @@ class AndroidSettingModule<T : S, S>(
                     adapter.get()
                 }
             }.shareIn(scope, SharingStarted.Lazily, 1)
+            .distinctUntilChanged()
         private val actor = scope.actor()
         override suspend fun updateData(transform: T.() -> T): T = actor.actAndReply {
             val currentValue = adapter.get()
