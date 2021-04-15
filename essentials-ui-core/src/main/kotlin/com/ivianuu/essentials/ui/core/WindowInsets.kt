@@ -71,10 +71,10 @@ fun ConsumeInsets(
     val currentInsets = LocalInsets.current
     ProvideInsets(
         currentInsets.copy(
-            if (left) 0.dp else currentInsets.left,
-            if (top) 0.dp else currentInsets.top,
-            if (right) 0.dp else currentInsets.right,
-            if (bottom) 0.dp else currentInsets.bottom
+            left = if (left) 0.dp else currentInsets.left,
+            top = if (top) 0.dp else currentInsets.top,
+            right = if (right) 0.dp else currentInsets.right,
+            bottom = if (bottom) 0.dp else currentInsets.bottom
         ),
         content = content
     )
