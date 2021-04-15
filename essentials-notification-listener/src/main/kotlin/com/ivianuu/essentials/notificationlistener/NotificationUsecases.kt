@@ -48,7 +48,7 @@ fun dismissNotificationUseCase(
     runCatching { ref.first()!!.cancelNotification(key) }
 }
 
-typealias DismissAllNotificationsUseCase = suspend () -> Unit
+typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
 
 @Given
 fun dismissAllNotificationsUseCase(
