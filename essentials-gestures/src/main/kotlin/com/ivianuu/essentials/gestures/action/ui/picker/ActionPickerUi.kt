@@ -185,35 +185,33 @@ fun getActionPickerItemsUseCase(
     @Given key: ActionPickerKey,
     @Given stringResource: StringResourceProvider
 ): GetActionPickerItemsUseCase = {
-    buildList<ActionPickerItem> {
-        val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
+    val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
-        if (key.showDefaultOption) {
-            specialOptions += ActionPickerItem.SpecialOption(
-                title = stringResource(R.string.es_default, emptyList()),
-                getResult = { ActionPickerKey.Result.Default }
-            )
-        }
-
-        if (key.showNoneOption) {
-            specialOptions += ActionPickerItem.SpecialOption(
-                title = stringResource(R.string.es_none, emptyList()),
-                getResult = { ActionPickerKey.Result.None }
-            )
-        }
-
-        val actionsAndDelegates = (
-                (getActionPickerDelegates()
-                    .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
-                    .map {
-                        ActionPickerItem.ActionItem(
-                            it,
-                            getActionSettingsKey(it.id)
-                        )
-                    })
-                )
-            .sortedBy { it.title }
-
-        specialOptions + actionsAndDelegates
+    if (key.showDefaultOption) {
+        specialOptions += ActionPickerItem.SpecialOption(
+            title = stringResource(R.string.es_default, emptyList()),
+            getResult = { ActionPickerKey.Result.Default }
+        )
     }
+
+    if (key.showNoneOption) {
+        specialOptions += ActionPickerItem.SpecialOption(
+            title = stringResource(R.string.es_none, emptyList()),
+            getResult = { ActionPickerKey.Result.None }
+        )
+    }
+
+    val actionsAndDelegates = (
+            (getActionPickerDelegates()
+                .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+                .map {
+                    ActionPickerItem.ActionItem(
+                        it,
+                        getActionSettingsKey(it.id)
+                    )
+                })
+            )
+        .sortedBy { it.title }
+
+    specialOptions + actionsAndDelegates
 }
