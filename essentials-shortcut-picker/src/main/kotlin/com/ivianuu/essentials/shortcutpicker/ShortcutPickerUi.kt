@@ -28,8 +28,6 @@ import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
