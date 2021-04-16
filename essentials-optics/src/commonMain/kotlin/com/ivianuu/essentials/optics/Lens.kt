@@ -5,7 +5,10 @@ interface Lens<T, V> {
     fun set(t: T, v: V): T
 }
 
-fun <T, V> Lens(get: (T) -> V, set: (T, V) -> T): Lens<T, V> = object : Lens<T, V> {
+inline fun <T, V> Lens(
+    crossinline get: (T) -> V,
+    crossinline set: (T, V) -> T
+): Lens<T, V> = object : Lens<T, V> {
     override fun get(t: T): V = get.invoke(t)
     override fun set(t: T, v: V): T = set.invoke(t, v)
 }
