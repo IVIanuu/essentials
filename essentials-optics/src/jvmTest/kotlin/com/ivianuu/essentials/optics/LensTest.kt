@@ -27,7 +27,8 @@ class LensTest {
     @Test
     fun testPlus() {
         var bar = Bar(Foo(0))
-        bar = barLens.set(bar, Foo(1))
-        barLens.get(bar).value shouldBe 1
+        val barFooValueLens = barLens + fooLens
+        bar = barFooValueLens.set(bar, 1)
+        barFooValueLens.get(bar) shouldBe 1
     }
 }
