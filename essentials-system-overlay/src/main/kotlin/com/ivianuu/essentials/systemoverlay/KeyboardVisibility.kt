@@ -21,6 +21,7 @@ import com.github.michaelbull.result.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -63,7 +64,7 @@ private typealias KeyboardHeightProvider = () -> Int?
 
 @Given
 fun keyboardHeightProvider(
-    @Given inputMethodManager: InputMethodManager
+    @Given inputMethodManager: @SystemService InputMethodManager
 ): KeyboardHeightProvider = {
     runCatching {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
