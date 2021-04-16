@@ -49,6 +49,7 @@ import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.Notifications
 import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
@@ -56,9 +57,6 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
@@ -85,17 +83,17 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-val notificationsUi: StateKeyUi<NotificationsKey, NotificationsUiState, NotificationsUiAction> = {
+val notificationsUi: StateKeyUi<NotificationsKey, NotificationsUiState> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
                     notifications = state.notifications,
-                    onNotificationClick = { send(OpenNotification(it)) },
-                    onDismissNotificationClick = { send(DismissNotification(it)) }
+                    onNotificationClick = { state.openNotification(it) },
+                    onDismissNotificationClick = { state.dismissNotification(it) }
                 )
             } else {
-                NotificationPermissions { send(RequestPermissions) }
+                NotificationPermissions(state.requestPermissions)
             }
         }
     }
@@ -165,9 +163,13 @@ private fun NotificationPermissions(
     }
 }
 
+@Optics
 data class NotificationsUiState(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle,
+    val requestPermissions: () -> Unit = {},
+    val openNotification: (UiNotification) -> Unit = {},
+    val dismissNotification: (UiNotification) -> Unit = {}
 )
 
 data class UiNotification(
@@ -179,12 +181,6 @@ data class UiNotification(
     val sbn: StatusBarNotification
 )
 
-sealed class NotificationsUiAction {
-    object RequestPermissions : NotificationsUiAction()
-    data class OpenNotification(val notification: UiNotification) : NotificationsUiAction()
-    data class DismissNotification(val notification: UiNotification) : NotificationsUiAction()
-}
-
 @Given
 fun notificationsUiState(
     @Given appContext: AppContext,
@@ -193,7 +189,7 @@ fun notificationsUiState(
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
-): StateBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
+): StateBuilder<KeyUiGivenScope, NotificationsUiState> = {
     notifications
         .map { notifications ->
             notifications
@@ -202,14 +198,14 @@ fun notificationsUiState(
         .flowAsResource()
         .updateIn(this) { copy(notifications = it) }
     permissionState.updateIn(this) { copy(hasPermissions = it) }
-    action<RequestPermissions> {
+    action(NotificationsUiState.requestPermissions()) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    action<OpenNotification> {
-        openNotification(it.notification.sbn.notification)
+    action(NotificationsUiState.openNotification()) { notification ->
+        openNotification(notification.sbn.notification)
     }
-    action<DismissNotification> {
-        dismissNotification(it.notification.sbn.key)
+    action(NotificationsUiState.dismissNotification()) { notification ->
+        dismissNotification(notification.sbn.key)
     }
 }
 
