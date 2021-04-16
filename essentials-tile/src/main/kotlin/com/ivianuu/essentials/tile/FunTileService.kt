@@ -43,28 +43,28 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
             .element<FunTileServiceComponent>()
     }
 
-    private var tileStateComponent: TileStateComponent? = null
+    private var tileModelComponent: TileModelComponent? = null
 
     override fun onStartListening() {
         super.onStartListening()
         component.logger.d { "$tileKey on start listening" }
-        val tileStateComponent = component.tileGivenScopeFactory(tileKey)
-            .element<TileStateComponent>()
-            .also { this.tileStateComponent = it }
-        tileStateComponent.tileState
-            .onEach { applyState(it) }
-            .launchIn(tileStateComponent.scope)
+        val tileModelComponent = component.tileGivenScopeFactory(tileKey)
+            .element<TileModelComponent>()
+            .also { this.tileModelComponent = it }
+        tileModelComponent.tileModel
+            .onEach { applyModel(it) }
+            .launchIn(tileModelComponent.scope)
     }
 
     override fun onClick() {
         super.onClick()
         component.logger.d { "$tileKey on click" }
-        tileStateComponent!!.tileState.value.onTileClicked()
+        tileModelComponent!!.tileModel.value.onTileClicked()
     }
 
     override fun onStopListening() {
-        tileStateComponent?.tileGivenScope?.dispose()
-        tileStateComponent = null
+        tileModelComponent?.tileGivenScope?.dispose()
+        tileModelComponent = null
         component.logger.d { "$tileKey on stop listening" }
         super.onStopListening()
     }
@@ -74,27 +74,27 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
         super.onDestroy()
     }
 
-    private fun applyState(state: TileState<*>) {
+    private fun applyModel(model: TileModel<*>) {
         val qsTile = qsTile ?: return
 
-        qsTile.state = when (state.status) {
-            TileState.Status.ACTIVE -> android.service.quicksettings.Tile.STATE_ACTIVE
-            TileState.Status.INACTIVE -> android.service.quicksettings.Tile.STATE_INACTIVE
-            TileState.Status.UNAVAILABLE -> android.service.quicksettings.Tile.STATE_UNAVAILABLE
+        qsTile.state = when (model.status) {
+            TileModel.Status.ACTIVE -> Tile.STATE_ACTIVE
+            TileModel.Status.INACTIVE -> Tile.STATE_INACTIVE
+            TileModel.Status.UNAVAILABLE -> Tile.STATE_UNAVAILABLE
         }
         qsTile.icon = when {
-            state.icon != null -> state.icon
-            state.iconRes != null -> Icon.createWithResource(this, state.iconRes)
+            model.icon != null -> model.icon
+            model.iconRes != null -> Icon.createWithResource(this, model.iconRes)
             else -> null
         }
         qsTile.label = when {
-            state.label != null -> state.label
-            state.labelRes != null -> component.stringResource(state.labelRes, emptyList())
+            model.label != null -> model.label
+            model.labelRes != null -> component.stringResource(model.labelRes, emptyList())
             else -> null
         }
         qsTile.contentDescription = when {
-            state.description != null -> state.description
-            state.descriptionRes != null -> component.stringResource(state.descriptionRes, emptyList())
+            model.description != null -> model.description
+            model.descriptionRes != null -> component.stringResource(model.descriptionRes, emptyList())
             else -> null
         }
         qsTile.updateTile()
@@ -112,13 +112,13 @@ class FunTileServiceComponent(
 
 @InstallElement<TileGivenScope>
 @Given
-class TileStateComponent(
+class TileModelComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,
-    @Given tileStateElements: Map<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>> = emptyMap(),
+    @Given tileModelElements: Map<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> = emptyMap(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileState = tileStateElements[tileKey]
+    val tileModel = tileModelElements[tileKey]
         ?.invoke()
-        ?: error("No tile found for $tileKey in ${tileStateElements.toMap()}")
+        ?: error("No tile found for $tileKey in ${tileModelElements.toMap()}")
 }

@@ -24,19 +24,19 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Given
-fun testTile(
+fun testTileModel(
     @Given twilightPref: DataStore<TwilightPrefs>
-): StateBuilder<TileGivenScope, TileState<FunTileService1>> = {
-    twilightPref.data.update { it.toTileState() }
-    action(TileState.onTileClicked()) {
+): StateBuilder<TileGivenScope, TileModel<FunTileService1>> = {
+    twilightPref.data.update { it.toTileModel() }
+    action(TileModel.onTileClicked()) {
         val newTwilightMode = if (twilightPref.data.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
         twilightPref.updateData { copy(twilightMode = newTwilightMode) }
     }
 }
 
-private fun TwilightPrefs.toTileState() = TileState<FunTileService1>(
+private fun TwilightPrefs.toTileModel() = TileModel<FunTileService1>(
     label = twilightMode.name,
-    status = if (twilightMode == TwilightMode.LIGHT) TileState.Status.ACTIVE
-    else TileState.Status.INACTIVE
+    status = if (twilightMode == TwilightMode.LIGHT) TileModel.Status.ACTIVE
+    else TileModel.Status.INACTIVE
 )

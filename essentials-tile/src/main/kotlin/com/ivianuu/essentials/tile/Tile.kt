@@ -26,7 +26,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Optics
-data class TileState<out T : AbstractFunTileService>(
+data class TileModel<out T : AbstractFunTileService>(
     val icon: Icon? = null,
     val iconRes: Int? = null,
     val label: String? = null,
@@ -41,13 +41,13 @@ data class TileState<out T : AbstractFunTileService>(
     }
 }
 
-fun Boolean.toTileStatus() = if (this) TileState.Status.ACTIVE else TileState.Status.INACTIVE
+fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 @Given
-fun <@Given T : StateFlow<TileState<S>>, S : AbstractFunTileService> tileStateElement(
+fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
     @Given serviceKey: TypeKey<S>,
     @Given provider: () -> T
-): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>> =
+): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> =
     serviceKey to provider.cast()
 
 typealias TileGivenScope = DefaultGivenScope
