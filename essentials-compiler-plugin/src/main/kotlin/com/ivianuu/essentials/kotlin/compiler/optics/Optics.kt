@@ -100,7 +100,7 @@ class OpticsResolveExtension : SyntheticResolveExtension {
             Annotations.EMPTY,
             parameter.name,
             CallableMemberDescriptor.Kind.SYNTHESIZED,
-            clazz.source
+            parameter.source
         ).apply {
             val typeParameters = clazz.declaredTypeParameters.map { typeParameter ->
                 TypeParameterDescriptorImpl.createWithDefaultBound(
