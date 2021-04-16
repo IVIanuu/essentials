@@ -42,7 +42,7 @@ fun torchAction(
 @Given
 fun torchActionExecutor(
     @Given torch: MutableStateFlow<TorchState>
-): ActionExecutor<TorchActionId> = { torch.updateValue { not() } }
+): ActionExecutor<TorchActionId> = { torch.update { not() } }
 
 private typealias TorchIcon = ActionIcon
 

@@ -40,7 +40,7 @@ fun androidTorchWorker(
         }.onFailure {
             it.printStackTrace()
             toaster(stringResource(R.string.es_failed_to_toggle_torch, emptyList()))
-            torchStore.updateValue { false }
+            torchStore.update { false }
         }
     }
 }

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.flow.*
 
-inline fun <T> MutableStateFlow<T>.updateValue(transform: T.() -> T): T = synchronized(this) {
+inline fun <T> MutableStateFlow<T>.update(transform: T.() -> T): T = synchronized(this) {
     val currentValue = value
     val newValue = transform(currentValue)
     value = newValue

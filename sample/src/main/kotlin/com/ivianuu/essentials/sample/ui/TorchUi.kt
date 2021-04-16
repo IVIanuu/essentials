@@ -50,7 +50,7 @@ fun torchUi(@Given torch: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
                 style = MaterialTheme.typography.h4
             )
             Spacer(Modifier.height(8.dp))
-            Button(onClick = { torch.updateValue { !torchEnabled } }) {
+            Button(onClick = { torch.update { !torchEnabled } }) {
                 Text("Toggle torch")
             }
         }
