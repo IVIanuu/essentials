@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
+import android.content.pm.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
 
 data class BuildInfo(
     val isDebug: Boolean,

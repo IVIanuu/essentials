@@ -16,30 +16,22 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
+import android.content.*
+import android.graphics.*
+import android.util.*
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.ui.image.toBitmap
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import java.io.ByteArrayOutputStream
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.picker.*
+import com.ivianuu.essentials.shortcutpicker.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import java.io.*
 
 @Given
 class ShortcutActionFactory(

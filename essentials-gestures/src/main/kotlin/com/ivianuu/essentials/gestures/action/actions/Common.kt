@@ -16,24 +16,21 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.app.PendingIntent
-import android.content.Intent
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import com.google.accompanist.coil.CoilImage
+import android.app.*
+import android.content.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.vector.*
+import androidx.compose.ui.res.*
+import com.github.michaelbull.result.*
+import com.google.accompanist.coil.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.shell.RunShellCommandUseCase
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.shell.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlinx.coroutines.flow.*
 
 internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
     CoilImage(data = data, contentDescription = null)

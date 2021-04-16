@@ -16,15 +16,13 @@
 
 package com.ivianuu.essentials.sample.work
 
-import androidx.work.ListenableWorker
-import androidx.work.WorkManager
+import androidx.work.*
+import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
+import com.ivianuu.essentials.work.*
 import com.ivianuu.essentials.work.Worker
-import com.ivianuu.essentials.work.WorkerId
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.delay
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 object TestWorkerId : WorkerId("test")

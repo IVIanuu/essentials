@@ -16,16 +16,12 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.StateBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.tile.FunTileService1
-import com.ivianuu.essentials.tile.TileGivenScope
-import com.ivianuu.essentials.tile.TileState
-import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.tile.*
+import com.ivianuu.essentials.twilight.data.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun testTile(

@@ -1,21 +1,13 @@
 package com.ivianuu.essentials.hidenavbar.ui
 
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.ui.res.stringResource
+import androidx.compose.material.*
+import androidx.compose.ui.res.*
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.StateBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogKeyUiOptionsFactory
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class NavBarUnsupportedKey : Key<Nothing>
 

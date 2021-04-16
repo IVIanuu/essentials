@@ -15,21 +15,16 @@
  */
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.net.wifi.WifiManager
-import androidx.compose.material.Icon
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
+import android.net.wifi.*
+import androidx.compose.material.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.broadcast.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.SystemService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlinx.coroutines.flow.*
 
 @Given
 object WifiActionId : ActionId("wifi")

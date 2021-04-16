@@ -1,13 +1,10 @@
 package com.ivianuu.essentials.work
 
-import androidx.work.CoroutineWorker
-import androidx.work.Data
-import androidx.work.ForegroundInfo
-import androidx.work.WorkerParameters
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.android.work.InstallWorker
-import java.util.UUID
+import androidx.work.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.android.work.*
+import java.util.*
 
 @InstallWorker
 @Given

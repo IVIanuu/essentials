@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Given
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.ivianuu.essentials.android.prefs.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.serialization.*
 
 @Serializable
 data class NavBarPrefs(

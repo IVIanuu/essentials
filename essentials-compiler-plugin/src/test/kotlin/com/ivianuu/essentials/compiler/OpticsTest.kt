@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.compiler
 
-import io.kotest.matchers.shouldBe
-import org.junit.Test
+import io.kotest.matchers.*
+import org.junit.*
 
 class OpticsTest {
     @Test

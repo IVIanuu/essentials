@@ -16,24 +16,18 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.provider.Settings
-import androidx.compose.material.Icon
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.android.settings.AndroidSettingModule
-import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.data.DataStore
+import android.provider.*
+import androidx.compose.material.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.android.settings.*
+import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Given
 object AutoRotationActionId : ActionId("auto_rotation")

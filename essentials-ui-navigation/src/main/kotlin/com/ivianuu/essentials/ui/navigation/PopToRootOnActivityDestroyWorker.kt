@@ -1,10 +1,10 @@
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.essentials.ui.UiGivenScope
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun popToRootOnActivityDestroyWorker(

@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import com.ivianuu.essentials.twilight.domain.TwilightState
-import com.ivianuu.essentials.twilight.ui.TwilightTheme
-import com.ivianuu.essentials.ui.AppTheme
-import com.ivianuu.essentials.ui.animatedstack.LocalStackTransition
-import com.ivianuu.essentials.ui.animatedstack.animation.HorizontalStackTransition
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.twilight.domain.*
+import com.ivianuu.essentials.twilight.ui.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { content ->

@@ -16,22 +16,19 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.reflect.KClass
+import android.content.*
+import androidx.activity.*
+import androidx.activity.result.*
+import androidx.activity.result.contract.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
+import java.util.*
+import kotlin.coroutines.*
+import kotlin.reflect.*
 
 interface IntentKey : Key<ActivityResult>
 

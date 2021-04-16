@@ -1,12 +1,10 @@
 package com.ivianuu.essentials.ide
 
-import com.intellij.ide.ApplicationInitializedListener
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.project.ProjectManagerListener
-import com.ivianuu.essentials.kotlin.compiler.optics.OpticsResolveExtension
-import org.jetbrains.kotlin.resolve.extensions.SyntheticResolveExtension
+import com.intellij.ide.*
+import com.intellij.openapi.application.*
+import com.intellij.openapi.project.*
+import com.ivianuu.essentials.kotlin.compiler.optics.*
+import org.jetbrains.kotlin.resolve.extensions.*
 
 @Suppress("UnstableApiUsage")
 class AppInitializer : ApplicationInitializedListener {

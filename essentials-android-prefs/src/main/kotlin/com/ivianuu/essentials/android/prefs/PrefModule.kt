@@ -1,27 +1,18 @@
 package com.ivianuu.essentials.android.prefs
 
-import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStoreFactory
-import androidx.datastore.core.Serializer
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.coroutines.childCoroutineScope
+import androidx.datastore.core.*
+import androidx.datastore.core.handlers.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.store.InitialOrFallback
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.essentials.store.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
-import java.io.InputStream
-import java.io.OutputStream
+import kotlinx.serialization.json.*
+import java.io.*
 
 class PrefModule<T : Any>(private val name: String) {
     @Given

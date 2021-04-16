@@ -18,18 +18,15 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.processrestart.ProcessRestarter
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.ui.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.processrestart.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }

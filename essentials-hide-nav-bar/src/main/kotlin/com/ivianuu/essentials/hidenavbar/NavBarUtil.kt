@@ -16,18 +16,15 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.annotation.SuppressLint
-import android.graphics.Rect
-import android.os.IBinder
-import android.view.Display
-import com.ivianuu.essentials.android.settings.AndroidSettingModule
-import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
+import android.annotation.*
+import android.graphics.*
+import android.os.*
+import android.view.*
+import com.ivianuu.essentials.android.settings.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 

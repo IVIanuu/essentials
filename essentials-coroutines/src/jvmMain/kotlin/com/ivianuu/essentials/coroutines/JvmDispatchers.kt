@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.Dispatchers
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 actual inline val ioDispatcher: IODispatcher

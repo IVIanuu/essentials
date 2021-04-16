@@ -1,10 +1,7 @@
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 
 interface Actor<T> {
     suspend fun act(message: T)

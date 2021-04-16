@@ -1,12 +1,9 @@
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.sortedTopological
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.GivenScope
-import com.ivianuu.injekt.scope.GivenScopeInitializer
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
 
 typealias ScopeInitializer<S> = () -> Unit
 

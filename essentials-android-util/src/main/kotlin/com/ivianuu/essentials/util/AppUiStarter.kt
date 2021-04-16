@@ -16,16 +16,12 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.activity.ComponentActivity
-import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onStart
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlinx.coroutines.flow.*
 
 typealias AppUiStarter = IntentAppUiStarter
 

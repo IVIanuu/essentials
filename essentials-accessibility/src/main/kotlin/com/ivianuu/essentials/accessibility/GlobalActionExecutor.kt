@@ -16,9 +16,8 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 typealias GlobalActionExecutor = suspend (Int) -> Boolean
 

@@ -1,11 +1,9 @@
 package com.ivianuu.essentials.systemoverlay
 
-import android.annotation.SuppressLint
-import android.view.MotionEvent
-import android.view.View
-import android.widget.FrameLayout
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
+import android.annotation.*
+import android.view.*
+import android.widget.*
+import com.github.michaelbull.result.*
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

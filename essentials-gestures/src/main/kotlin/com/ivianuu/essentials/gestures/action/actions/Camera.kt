@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.provider.MediaStore
-import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
+import android.content.*
+import android.provider.*
+import com.ivianuu.essentials.gestures.*
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 @Given
 object CameraActionId : ActionId("camera")

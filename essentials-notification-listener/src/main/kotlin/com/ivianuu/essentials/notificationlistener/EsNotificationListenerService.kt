@@ -16,19 +16,13 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceGivenScope
-import com.ivianuu.injekt.android.createServiceGivenScope
-import com.ivianuu.injekt.scope.InstallElement
-import com.ivianuu.injekt.scope.element
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import android.service.notification.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class EsNotificationListenerService : NotificationListenerService() {
     private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())

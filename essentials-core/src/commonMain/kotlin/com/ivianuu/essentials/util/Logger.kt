@@ -16,13 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.util.Logger.Kind.DEBUG
-import com.ivianuu.essentials.util.Logger.Kind.ERROR
-import com.ivianuu.essentials.util.Logger.Kind.INFO
-import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
-import com.ivianuu.essentials.util.Logger.Kind.WARN
-import com.ivianuu.essentials.util.Logger.Kind.WTF
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.util.Logger.Kind.*
+import com.ivianuu.injekt.*
 
 interface Logger {
     val isEnabled: Boolean

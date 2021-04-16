@@ -16,15 +16,11 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.app.Notification
-import android.service.notification.StatusBarNotification
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import android.app.*
+import android.service.notification.*
+import com.github.michaelbull.result.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 typealias Notifications = List<StatusBarNotification>
 

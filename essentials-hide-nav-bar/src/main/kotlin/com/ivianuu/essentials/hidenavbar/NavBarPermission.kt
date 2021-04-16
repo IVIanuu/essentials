@@ -1,18 +1,16 @@
 package com.ivianuu.essentials.hidenavbar
 
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.writesecuresettings.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 @Given
 class NavBarPermission(

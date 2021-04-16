@@ -16,15 +16,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.StateFlow
-import kotlin.reflect.KClass
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 typealias KeyUi<K> = @Composable () -> Unit
 

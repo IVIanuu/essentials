@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.*
 
 fun <T> EventFlow(): MutableSharedFlow<T> = MutableSharedFlow(
     extraBufferCapacity = Int.MAX_VALUE

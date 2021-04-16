@@ -16,23 +16,15 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.Icon
-import android.service.quicksettings.TileService
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceGivenScope
-import com.ivianuu.injekt.android.createServiceGivenScope
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.InstallElement
-import com.ivianuu.injekt.scope.element
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import android.graphics.drawable.*
+import android.service.quicksettings.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class FunTileService1 : AbstractFunTileService(typeKeyOf<FunTileService1>())
 class FunTileService2 : AbstractFunTileService(typeKeyOf<FunTileService2>())

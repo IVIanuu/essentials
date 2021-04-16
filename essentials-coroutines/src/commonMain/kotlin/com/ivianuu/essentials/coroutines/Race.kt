@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.selects.*
 
 suspend fun <T> raceOf(vararg racers: suspend () -> T): T {
     require(racers.isNotEmpty()) { "A race needs racers." }

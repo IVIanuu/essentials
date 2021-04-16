@@ -16,11 +16,10 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityGivenScope
-import com.ivianuu.injekt.scope.ChildGivenScopeModule0
-import com.ivianuu.injekt.scope.DefaultGivenScope
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
 
 typealias UiGivenScope = DefaultGivenScope
 

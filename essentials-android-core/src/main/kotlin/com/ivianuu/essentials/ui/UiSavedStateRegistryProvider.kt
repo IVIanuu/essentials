@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.ui.platform.LocalContext
-import com.ivianuu.injekt.Given
+import androidx.activity.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
+import androidx.compose.ui.platform.*
+import com.ivianuu.injekt.*
 
 typealias SavableStateRegistryProvider = UiDecorator
 

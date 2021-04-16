@@ -16,19 +16,14 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
-import android.annotation.SuppressLint
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import android.accessibilityservice.*
+import android.annotation.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 @Given
 object LockScreenActionId : ActionId("lock_screen")

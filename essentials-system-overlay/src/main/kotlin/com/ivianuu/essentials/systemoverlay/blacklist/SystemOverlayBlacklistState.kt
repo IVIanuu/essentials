@@ -1,19 +1,11 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.systemoverlay.IsOnSecureScreen
-import com.ivianuu.essentials.systemoverlay.KeyboardVisible
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import com.ivianuu.essentials.recentapps.*
+import com.ivianuu.essentials.screenstate.*
+import com.ivianuu.essentials.systemoverlay.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun systemOverlayBlacklistState(

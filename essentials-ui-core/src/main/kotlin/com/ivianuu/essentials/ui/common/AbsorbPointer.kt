@@ -16,12 +16,9 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.foundation.gestures.forEachGesture
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.consumeAllChanges
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.*
+import androidx.compose.ui.*
+import androidx.compose.ui.input.pointer.*
 
 fun Modifier.absorbPointer(enabled: Boolean = true): Modifier = composed {
     pointerInput(enabled) {

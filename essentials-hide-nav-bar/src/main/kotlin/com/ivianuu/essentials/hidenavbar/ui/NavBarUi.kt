@@ -16,34 +16,28 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.hidenavbar.NavBarPermission
-import com.ivianuu.essentials.hidenavbar.NavBarPrefs
-import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.StateBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 class NavBarKey : Key<Nothing>
 

@@ -16,10 +16,9 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceGivenScope
-import com.ivianuu.injekt.scope.ChildGivenScopeModule0
-import com.ivianuu.injekt.scope.DefaultGivenScope
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
 
 typealias AccessibilityGivenScope = DefaultGivenScope
 

@@ -16,42 +16,29 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
-import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
-import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppPredicate
-import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import com.google.accompanist.coil.*
+import com.ivianuu.essentials.apps.*
+import com.ivianuu.essentials.apps.coil.*
+import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.StateBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.popup.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 typealias CheckableAppsScreen = @Composable () -> Unit
 

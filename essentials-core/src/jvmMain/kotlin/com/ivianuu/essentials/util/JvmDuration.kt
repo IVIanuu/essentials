@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.util
 
-import kotlin.time.Duration
+import kotlin.time.*
 
 actual fun Double.toDuration(): Duration {
     return Duration::class.java.getDeclaredConstructor(Double::class.java)

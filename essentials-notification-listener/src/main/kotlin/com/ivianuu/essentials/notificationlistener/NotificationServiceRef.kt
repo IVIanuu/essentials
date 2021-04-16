@@ -1,12 +1,11 @@
 package com.ivianuu.essentials.notificationlistener
 
-import android.app.Service
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.MutableStateFlow
+import android.app.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 @Given
 val notificationListenerRef: @Scoped<AppGivenScope> MutableStateFlow<EsNotificationListenerService?>

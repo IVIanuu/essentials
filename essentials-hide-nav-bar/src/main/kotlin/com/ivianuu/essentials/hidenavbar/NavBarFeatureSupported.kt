@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 typealias NavBarFeatureSupported = Boolean
 

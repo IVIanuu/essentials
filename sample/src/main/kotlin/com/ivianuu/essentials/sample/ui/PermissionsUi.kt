@@ -16,36 +16,33 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.accessibilityservice.AccessibilityService
-import android.service.notification.NotificationListenerService
+import android.accessibilityservice.*
+import android.service.notification.*
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
-import com.ivianuu.essentials.permission.runtime.RuntimePermission
-import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.accessibility.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.notificationlistener.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.accessibility.*
+import com.ivianuu.essentials.permission.notificationlistener.*
+import com.ivianuu.essentials.permission.runtime.*
+import com.ivianuu.essentials.permission.systemoverlay.*
+import com.ivianuu.essentials.permission.writesecuresettings.*
+import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlin.reflect.*
 
 @Given
 val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }

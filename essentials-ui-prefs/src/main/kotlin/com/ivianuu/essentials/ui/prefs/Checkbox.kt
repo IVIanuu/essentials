@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.Checkbox
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.ui.material.*
 
 @Composable
 fun CheckboxListItem(

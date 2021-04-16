@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.util
 
-import kotlin.time.Duration
+import kotlin.time.*
 
 expect fun Double.toDuration(): Duration
 

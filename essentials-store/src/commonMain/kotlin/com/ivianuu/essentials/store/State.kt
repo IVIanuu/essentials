@@ -1,21 +1,14 @@
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.optics.Lens
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.Tuple3
-import com.ivianuu.essentials.tuples.Tuple4
-import com.ivianuu.essentials.tuples.Tuple5
-import com.ivianuu.essentials.tuples.tupleOf
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.GivenScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.tuples.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.jvm.JvmName
+import kotlinx.coroutines.sync.*
+import kotlin.jvm.*
 
 fun <S> CoroutineScope.state(
     initial: S,

@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.annotation.SuppressLint
-import android.app.SearchManager
-import android.os.Bundle
+import android.annotation.*
+import android.app.*
+import android.os.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 @Given
 object AssistantActionId : ActionId("assistant")

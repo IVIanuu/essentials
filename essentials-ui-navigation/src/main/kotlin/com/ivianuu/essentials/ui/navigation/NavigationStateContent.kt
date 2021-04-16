@@ -16,26 +16,15 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.currentCompositeKeyHash
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.LocalUiGivenScope
-import com.ivianuu.essentials.ui.animatedstack.AnimatedStack
-import com.ivianuu.essentials.ui.animatedstack.AnimatedStackChild
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.element
-import kotlin.reflect.KClass
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlin.reflect.*
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
 

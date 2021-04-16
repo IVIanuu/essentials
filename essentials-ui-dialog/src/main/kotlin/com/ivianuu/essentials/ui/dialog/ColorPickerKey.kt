@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.material.Text
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Given
+import androidx.compose.material.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class ColorPickerKey(
     val initialColor: Color,

@@ -16,19 +16,16 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import com.ivianuu.essentials.activity.EsActivity
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityGivenScope
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.withContext
+import androidx.activity.*
+import androidx.lifecycle.*
+import com.ivianuu.essentials.activity.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 typealias ForegroundActivity = ComponentActivity?
 

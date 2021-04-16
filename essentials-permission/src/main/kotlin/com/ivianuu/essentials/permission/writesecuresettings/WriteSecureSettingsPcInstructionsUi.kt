@@ -16,38 +16,26 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
-import com.ivianuu.essentials.coroutines.timer
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.permission.PermissionStateFactory
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.clipboard.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.StateBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlin.time.milliseconds
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
+import kotlin.time.*
 
 class WriteSecureSettingsPcInstructionsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>

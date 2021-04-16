@@ -18,13 +18,10 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ui.core.SystemBarManagerProvider
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.essentials.util.sortedTopological
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 // todo remove type parameter S once injekt is fixed
 @Given

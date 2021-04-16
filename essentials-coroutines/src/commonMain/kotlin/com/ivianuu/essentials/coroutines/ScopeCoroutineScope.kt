@@ -1,15 +1,10 @@
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.GivenScope
-import com.ivianuu.injekt.scope.GivenScopeDisposable
-import com.ivianuu.injekt.scope.getOrCreateScopedValue
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlin.coroutines.CoroutineContext
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 
 typealias ScopeCoroutineScope<S> = CoroutineScope
 

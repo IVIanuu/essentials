@@ -16,17 +16,13 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.withContext
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.unlock.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 typealias executeAction = suspend (String) -> Result<Boolean, Throwable>
 

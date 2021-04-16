@@ -16,15 +16,14 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.Icon
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ServiceGivenScope
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.ChildGivenScopeModule1
-import com.ivianuu.injekt.scope.DefaultGivenScope
-import kotlinx.coroutines.flow.StateFlow
+import android.graphics.drawable.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 @Optics
 data class TileState<out T : AbstractFunTileService>(
