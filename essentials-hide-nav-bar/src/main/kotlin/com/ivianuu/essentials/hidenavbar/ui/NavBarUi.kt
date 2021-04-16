@@ -25,10 +25,9 @@ import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateHideNavBar
-import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateNavBarRotationMode
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.common.interactive
@@ -40,7 +39,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -50,7 +49,7 @@ import kotlinx.coroutines.flow.first
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
+val navBarUi: StateKeyUi<NavBarKey, NavBarState> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {
@@ -58,7 +57,7 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
             item {
                 SwitchListItem(
                     value = state.hideNavBar,
-                    onValueChange = { send(UpdateHideNavBar(it)) },
+                    onValueChange = state.updateHideNavBar,
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -67,44 +66,42 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
                     modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = { send(UpdateNavBarRotationMode) }
+                    onClick = state.updateNavBarRotationMode
                 )
             }
         }
     }
 }
 
+@Optics
 data class NavBarState(
     val hideNavBar: Boolean = false,
-    val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
+    val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
+    val updateHideNavBar: (Boolean) -> Unit = {},
+    val updateNavBarRotationMode: () -> Unit = {}
 ) {
     val canChangeNavBarRotationMode: Boolean
         get() = hideNavBar
 }
 
-sealed class NavBarAction {
-    data class UpdateHideNavBar(val value: Boolean) : NavBarAction()
-    object UpdateNavBarRotationMode : NavBarAction()
-}
-
 @Given
-fun navBarStore(
+fun navBarState(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
     @Given stringResource: StringResourceProvider,
-): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
+): StateBuilder<KeyUiGivenScope, NavBarState> = {
     pref.data.updateIn(this) {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
-    action<UpdateHideNavBar> { action ->
-        if (!action.value) {
+    action(NavBarState.updateHideNavBar()) { value ->
+        if (!value) {
             pref.updateData { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-            pref.updateData { copy(hideNavBar = action.value) }
-        } else Unit
+            pref.updateData { copy(hideNavBar = value) }
+        }
     }
-    action<UpdateNavBarRotationMode> {
+    action(NavBarState.updateNavBarRotationMode()) {
         navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()

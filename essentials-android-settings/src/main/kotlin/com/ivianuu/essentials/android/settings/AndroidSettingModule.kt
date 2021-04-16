@@ -24,7 +24,7 @@ class AndroidSettingModule<T : S, S>(
     private val type: AndroidSettingsType
 ) {
     @Given
-    fun store(
+    fun dataStore(
         @Given adapter: AndroidSettingAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given dispatcher: IODispatcher,

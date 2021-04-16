@@ -21,12 +21,11 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.coroutines.timer
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -35,7 +34,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
@@ -53,8 +52,7 @@ class WriteSecureSettingsKey(
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, Unit,
-        WriteSecureSettingsAction> = {
+val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSettingsState> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
@@ -68,27 +66,28 @@ val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, Unit,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = { send(OpenPcInstructions) }
+                    onClick = state.openPcInstructions
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = { send(GrantPermissionsViaRoot) }
+                    onClick = state.grantPermissionsViaRoot
                 )
             }
         }
     }
 }
 
-sealed class WriteSecureSettingsAction {
-    object OpenPcInstructions : WriteSecureSettingsAction()
-    object GrantPermissionsViaRoot : WriteSecureSettingsAction()
-}
+@Optics
+data class WriteSecureSettingsState(
+    val openPcInstructions: () -> Unit = {},
+    val grantPermissionsViaRoot: () -> Unit = {}
+)
 
 @Given
-fun writeSecureSettingsStore(
+fun writeSecureSettingsState(
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
     @Given navigator: Navigator,
@@ -96,7 +95,7 @@ fun writeSecureSettingsStore(
     @Given runShellCommand: RunShellCommandUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StoreBuilder<KeyUiGivenScope, Unit, WriteSecureSettingsAction> = {
+): StateBuilder<KeyUiGivenScope, WriteSecureSettingsState> = {
     timer(200.milliseconds)
         .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
         .filter { it }
@@ -106,10 +105,10 @@ fun writeSecureSettingsStore(
             navigator.pop(key, true)
         }
         .launchIn(this)
-    action<OpenPcInstructions> {
+    action(WriteSecureSettingsState.openPcInstructions()) {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    action<GrantPermissionsViaRoot> {
+    action(WriteSecureSettingsState.grantPermissionsViaRoot()) {
         runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
             .onFailure {
                 it.printStackTrace()

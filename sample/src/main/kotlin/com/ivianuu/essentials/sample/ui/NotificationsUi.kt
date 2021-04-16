@@ -59,7 +59,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
 import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
@@ -70,7 +70,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -85,7 +85,7 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-val notificationsUi: StoreKeyUi<NotificationsKey, NotificationsUiState, NotificationsUiAction> = {
+val notificationsUi: StateKeyUi<NotificationsKey, NotificationsUiState, NotificationsUiAction> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
         AnimatedBox(state.hasPermissions) { hasPermission ->
             if (hasPermission) {
@@ -186,14 +186,14 @@ sealed class NotificationsUiAction {
 }
 
 @Given
-fun notificationsUiStore(
+fun notificationsUiState(
     @Given appContext: AppContext,
     @Given dismissNotification: DismissNotificationUseCase,
     @Given notifications: Flow<Notifications>,
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
-): StoreBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
+): StateBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
     notifications
         .map { notifications ->
             notifications

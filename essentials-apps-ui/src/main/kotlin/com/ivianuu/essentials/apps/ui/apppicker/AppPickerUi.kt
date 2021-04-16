@@ -28,13 +28,13 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 
@@ -53,7 +53,7 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
+val appPickerUi: StateKeyUi<AppPickerKey, AppPickerState> = {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,16 +73,18 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
                         contentDescription = null
                     )
                 },
-                onClick = { send(PickApp(app)) }
+                onClick = { state.pickApp(app) }
             )
         }
     }
 }
 
+@Optics
 data class AppPickerState(
     private val allApps: Resource<List<AppInfo>> = Idle,
     val appPredicate: AppPredicate = DefaultAppPredicate,
-    val title: String? = null
+    val title: String? = null,
+    val pickApp: (AppInfo) -> Unit = {}
 ) {
     val filteredApps = allApps
         .map { it.filter(appPredicate) }
@@ -95,17 +97,13 @@ data class AppPickerState(
     }
 }
 
-sealed class AppPickerAction {
-    data class PickApp(val app: AppInfo) : AppPickerAction()
-}
-
 @Given
-fun appPickerStore(
+fun appPickerState(
     @Given key: AppPickerKey,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
-): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
+): StateBuilder<KeyUiGivenScope, AppPickerState> = {
     resourceFlow { emit(getInstalledApps()) }
         .updateIn(this) { copy(allApps = it) }
-    action<PickApp> { navigator.pop(key, it.app) }
+    action(AppPickerState.pickApp()) { navigator.pop(key, it) }
 }

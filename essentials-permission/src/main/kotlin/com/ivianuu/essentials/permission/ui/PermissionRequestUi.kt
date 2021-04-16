@@ -20,11 +20,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
-import com.ivianuu.essentials.permission.ui.PermissionRequestAction.GrantPermission
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -47,8 +47,7 @@ import kotlinx.coroutines.launch
 class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
 @Given
-val permissionRequestUi: StoreKeyUi<PermissionRequestKey, PermissionRequestState,
-        PermissionRequestAction> = {
+val permissionRequestUi: StateKeyUi<PermissionRequestKey, PermissionRequestState> = {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required permissions") }) // todo customizable and/or res
@@ -65,37 +64,37 @@ val permissionRequestUi: StoreKeyUi<PermissionRequestKey, PermissionRequestState
                     },
                     leading = permission.permission.icon,
                     trailing = {
-                        Button(onClick = { send(GrantPermission(permission)) }) {
+                        Button(onClick = { state.grantPermission(permission) }) {
                             Text("GRANT") // todo res
                         }
                     },
-                    onClick = { send(GrantPermission(permission)) }
+                    onClick = { state.grantPermission(permission) }
                 )
             }
         }
     }
 }
 
-data class PermissionRequestState(val permissions: List<UiPermission<*>> = emptyList())
+@Optics
+data class PermissionRequestState(
+    val permissions: List<UiPermission<*>> = emptyList(),
+    val grantPermission: (UiPermission<*>) -> Unit = {}
+)
 
 data class UiPermission<P : Permission>(
     val permissionKey: TypeKey<P>,
     val permission: P
 )
 
-sealed class PermissionRequestAction {
-    data class GrantPermission(val permission: UiPermission<*>) : PermissionRequestAction()
-}
-
 @Given
-fun permissionRequestStore(
+fun permissionRequestState(
     @Given appUiStarter: AppUiStarter,
     @Given key: PermissionRequestKey,
     @Given navigator: Navigator,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
-): StoreBuilder<KeyUiGivenScope, PermissionRequestState, PermissionRequestAction> = {
+): StateBuilder<KeyUiGivenScope, PermissionRequestState> = {
     state
         .filter {
             key.permissionsKeys
@@ -114,8 +113,8 @@ fun permissionRequestStore(
 
     launch { updatePermissions() }
 
-    action<GrantPermission> {
-        requestHandlers[it.permission.permissionKey]!!(permissions[it.permission.permissionKey]!!)
+    action(PermissionRequestState.grantPermission()) { permission ->
+        requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
         appUiStarter()
         updatePermissions()
     }

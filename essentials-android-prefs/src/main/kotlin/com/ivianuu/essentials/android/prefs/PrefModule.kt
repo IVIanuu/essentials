@@ -25,7 +25,7 @@ import java.io.OutputStream
 
 class PrefModule<T : Any>(private val name: String) {
     @Given
-    fun store(
+    fun dataStore(
         @Given dispatcher: IODispatcher,
         @Given initialFactory: () -> @InitialOrFallback T,
         @Given jsonFactory: () -> Json,

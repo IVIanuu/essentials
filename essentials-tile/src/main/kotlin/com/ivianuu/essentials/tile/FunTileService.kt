@@ -19,8 +19,6 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.tile.TileAction.TileClicked
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Logger
 import com.ivianuu.essentials.util.d
@@ -32,6 +30,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.InstallElement
 import com.ivianuu.injekt.scope.element
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -60,7 +59,7 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
         val tileStateComponent = component.tileGivenScopeFactory(tileKey)
             .element<TileStateComponent>()
             .also { this.tileStateComponent = it }
-        tileStateComponent.tileStore
+        tileStateComponent.tileState
             .onEach { applyState(it) }
             .launchIn(tileStateComponent.scope)
     }
@@ -68,7 +67,7 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
     override fun onClick() {
         super.onClick()
         component.logger.d { "$tileKey on click" }
-        tileStateComponent!!.tileStore.send(TileClicked)
+        tileStateComponent!!.tileState.value.onTileClicked()
     }
 
     override fun onStopListening() {
@@ -123,11 +122,11 @@ class FunTileServiceComponent(
 @Given
 class TileStateComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,
-    @Given tileStateElements: Map<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>> = emptyMap(),
+    @Given tileStateElements: Map<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>> = emptyMap(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileStore = tileStateElements[tileKey]
+    val tileState = tileStateElements[tileKey]
         ?.invoke()
         ?: error("No tile found for $tileKey in ${tileStateElements.toMap()}")
 }

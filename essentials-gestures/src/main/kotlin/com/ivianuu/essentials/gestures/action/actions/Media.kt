@@ -31,12 +31,12 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.gestures.action.actions.MediaActionSettingsAction.UpdateMediaApp
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
+import com.ivianuu.essentials.ui.navigation.StateKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -94,8 +94,7 @@ val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
 @Given
-val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsState,
-        MediaActionSettingsAction> = {
+val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsState> = {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
     }) {
@@ -112,32 +111,32 @@ val mediaActionSettingsUi: StoreKeyUi<MediaActionSettingsKey<*>, MediaActionSett
                             )
                         )
                     },
-                    onClick = { send(UpdateMediaApp) }
+                    onClick = state.updateMediaApp
                 )
             }
         }
     }
 }
 
-data class MediaActionSettingsState(val mediaApp: Resource<AppInfo> = Idle)
-
-sealed class MediaActionSettingsAction {
-    object UpdateMediaApp : MediaActionSettingsAction()
-}
+@Optics
+data class MediaActionSettingsState(
+    val mediaApp: Resource<AppInfo> = Idle,
+    val updateMediaApp: () -> Unit = {}
+)
 
 @Given
-fun mediaActionSettingsStore(
+fun mediaActionSettingsState(
     @Given getAppInfo: GetAppInfoUseCase,
     @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
-): StoreBuilder<KeyUiGivenScope, MediaActionSettingsState, MediaActionSettingsAction> = {
+): StateBuilder<KeyUiGivenScope, MediaActionSettingsState> = {
     pref.data
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
         .updateIn(this) { copy(mediaApp = it) }
-    action<UpdateMediaApp> {
+    action(MediaActionSettingsState.updateMediaApp()) {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null

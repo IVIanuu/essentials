@@ -32,17 +32,14 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.DeselectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.SelectAll
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsAction.UpdateAppCheckedState
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.store.StoreBuilder
+import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
@@ -54,6 +51,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 typealias CheckableAppsScreen = @Composable () -> Unit
@@ -66,8 +64,8 @@ data class CheckableAppsParams(
 )
 
 @Given
-fun checkableAppsScreen(@Given store: Store<CheckableAppsState, CheckableAppsAction>): CheckableAppsScreen = {
-    val state by store.collectAsState()
+fun checkableAppsScreen(@Given stateFlow: StateFlow<CheckableAppsState>): CheckableAppsScreen = {
+    val state by stateFlow.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,14 +73,10 @@ fun checkableAppsScreen(@Given store: Store<CheckableAppsState, CheckableAppsAct
                 actions = {
                     PopupMenuButton(
                         items = listOf(
-                            PopupMenu.Item(
-                                onSelected = { store.send(SelectAll) }
-                            ) {
+                            PopupMenu.Item(onSelected = state.selectAll) {
                                 Text(stringResource(R.string.es_select_all))
                             },
-                            PopupMenu.Item(
-                                onSelected = { store.send(DeselectAll) }
-                            ) {
+                            PopupMenu.Item(onSelected = state.deselectAll) {
                                 Text(stringResource(R.string.es_deselect_all))
                             }
                         )
@@ -107,7 +101,7 @@ fun checkableAppsScreen(@Given store: Store<CheckableAppsState, CheckableAppsAct
                         onCheckedChange = null
                     )
                 },
-                onClick = { store.send(UpdateAppCheckedState(app, !app.isChecked)) }
+                onClick = { state.updateAppCheckedState(app, !app.isChecked) }
             )
         }
     }
@@ -124,11 +118,15 @@ internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
 fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChanged =
     params.onCheckedAppsChanged
 
+@Optics
 data class CheckableAppsState(
     val allApps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
     val appPredicate: AppPredicate = DefaultAppPredicate,
-    val appBarTitle: String
+    val appBarTitle: String,
+    val updateAppCheckedState: (CheckableApp, Boolean) -> Unit = { _, _ -> },
+    val selectAll: () -> Unit = {},
+    val deselectAll: () -> Unit = {}
 ) {
     val checkableApps = allApps
         .map { it.filter(appPredicate) }
@@ -154,25 +152,14 @@ data class CheckableApp(
     val isChecked: Boolean
 )
 
-sealed class CheckableAppsAction {
-    data class UpdateAppCheckedState(
-        val app: CheckableApp,
-        val value: Boolean
-    ) : CheckableAppsAction()
-    object SelectAll : CheckableAppsAction()
-    object DeselectAll : CheckableAppsAction()
-}
-
 @Given
-fun checkableAppsStore(
+fun checkableAppsState(
     @Given checkedApps: Flow<CheckedApps>,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged,
-): StoreBuilder<KeyUiGivenScope, CheckableAppsState, CheckableAppsAction> = {
-    checkedApps
-        .updateIn(this) { copy(checkedApps = it) }
-    resourceFlow { emit(getInstalledApps()) }
-        .updateIn(this) { copy(allApps = it) }
+): StateBuilder<KeyUiGivenScope, CheckableAppsState> = {
+    checkedApps.updateIn(this) { copy(checkedApps = it) }
+    resourceFlow { emit(getInstalledApps()) }.updateIn(this) { copy(allApps = it) }
     suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsState) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()
@@ -182,21 +169,18 @@ fun checkableAppsStore(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-    action<UpdateAppCheckedState> { action ->
+    action(CheckableAppsState.updateAppCheckedState()) { app, isChecked ->
         pushNewCheckedApps {
-            if (!action.app.isChecked) {
-                this + action.app.info.packageName
-            } else {
-                this - action.app.info.packageName
-            }
+            if (!isChecked) this + app.info.packageName
+            else this - app.info.packageName
         }
     }
-    action<SelectAll> {
+    action(CheckableAppsState.selectAll()) {
         pushNewCheckedApps { currentState ->
             currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
         }
     }
-    action<DeselectAll> {
+    action(CheckableAppsState.deselectAll()) {
         pushNewCheckedApps { emptySet() }
     }
 }

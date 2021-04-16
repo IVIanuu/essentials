@@ -17,14 +17,16 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
-import com.ivianuu.essentials.store.Store
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.util.cast
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.ServiceGivenScope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.ChildGivenScopeModule1
 import com.ivianuu.injekt.scope.DefaultGivenScope
+import kotlinx.coroutines.flow.StateFlow
 
+@Optics
 data class TileState<out T : AbstractFunTileService>(
     val icon: Icon? = null,
     val iconRes: Int? = null,
@@ -32,7 +34,8 @@ data class TileState<out T : AbstractFunTileService>(
     val labelRes: Int? = null,
     val description: String? = null,
     val descriptionRes: Int? = null,
-    val status: Status = Status.UNAVAILABLE
+    val status: Status = Status.UNAVAILABLE,
+    val onTileClicked: () -> Unit = {}
 ) {
     enum class Status {
         UNAVAILABLE, ACTIVE, INACTIVE
@@ -41,15 +44,11 @@ data class TileState<out T : AbstractFunTileService>(
 
 fun Boolean.toTileStatus() = if (this) TileState.Status.ACTIVE else TileState.Status.INACTIVE
 
-sealed class TileAction<out S : AbstractFunTileService> {
-    object TileClicked : TileAction<Nothing>()
-}
-
 @Given
-fun <@Given T : Store<TileState<S>, TileAction<S>>, S : AbstractFunTileService> tileStateElement(
+fun <@Given T : StateFlow<TileState<S>>, S : AbstractFunTileService> tileStateElement(
     @Given serviceKey: TypeKey<S>,
     @Given provider: () -> T
-): Pair<TypeKey<AbstractFunTileService>, () -> Store<TileState<*>, TileAction<*>>> =
+): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileState<*>>> =
     serviceKey to provider.cast()
 
 typealias TileGivenScope = DefaultGivenScope
