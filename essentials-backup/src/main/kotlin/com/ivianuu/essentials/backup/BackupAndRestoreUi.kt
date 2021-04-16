@@ -16,30 +16,24 @@
 
 package com.ivianuu.essentials.backup
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.ui.res.stringResource
-import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.BackupData
-import com.ivianuu.essentials.backup.BackupAndRestoreAction.RestoreData
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.ui.res.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, Unit,
-        BackupAndRestoreAction> = {
+val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
@@ -48,40 +42,41 @@ val backupAndRestoreUi: StoreKeyUi<BackupAndRestoreKey, Unit,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { send(BackupData) }
+                    onClick = { model.backupData() }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { send(RestoreData) }
+                    onClick = { model.restoreData() }
                 )
             }
         }
     }
 }
 
-sealed class BackupAndRestoreAction {
-    object BackupData : BackupAndRestoreAction()
-    object RestoreData : BackupAndRestoreAction()
-}
+@Optics
+data class BackupAndRestoreModel(
+    val backupData: () -> Unit = {},
+    val restoreData: () -> Unit = {}
+)
 
 @Given
-fun backupAndRestoreStore(
+fun backupAndRestoreModel(
     @Given createBackupUseCase: CreateBackupUseCase,
     @Given restoreBackupUseCase: RestoreBackupUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StoreBuilder<KeyUiGivenScope, Unit, BackupAndRestoreAction> = {
-    action<BackupData> {
+): StateBuilder<KeyUiGivenScope, BackupAndRestoreModel> = {
+    action(BackupAndRestoreModel.backupData()) {
         createBackupUseCase()
             .onFailure {
                 it.printStackTrace()
                 toaster(stringResource(R.string.es_backup_error, emptyList()))
             }
     }
-    action<RestoreData> {
+    action(BackupAndRestoreModel.restoreData()) {
         restoreBackupUseCase()
             .onFailure {
                 it.printStackTrace()

@@ -16,39 +16,29 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.shortcutpicker.ShortcutPickerAction.PickShortcut
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 class ShortcutPickerKey : Key<Shortcut>
 
 @Given
-val shortcutPickerUi: StoreKeyUi<ShortcutPickerKey, ShortcutPickerState, ShortcutPickerAction> = {
+val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,7 +46,7 @@ val shortcutPickerUi: StoreKeyUi<ShortcutPickerKey, ShortcutPickerState, Shortcu
             )
         }
     ) {
-        ResourceLazyColumnFor(state.shortcuts) { shortcut ->
+        ResourceLazyColumnFor(model.shortcuts) { shortcut ->
             ListItem(
                 leading = {
                     Image(
@@ -66,32 +56,32 @@ val shortcutPickerUi: StoreKeyUi<ShortcutPickerKey, ShortcutPickerState, Shortcu
                     )
                 },
                 title = { Text(shortcut.name) },
-                onClick = { send(PickShortcut(shortcut)) }
+                onClick = { model.pickShortcut(shortcut) }
             )
         }
     }
 }
 
-data class ShortcutPickerState(val shortcuts: Resource<List<Shortcut>> = Idle)
-
-sealed class ShortcutPickerAction {
-    data class PickShortcut(val shortcut: Shortcut) : ShortcutPickerAction()
-}
+@Optics
+data class ShortcutPickerModel(
+    val shortcuts: Resource<List<Shortcut>> = Idle,
+    val pickShortcut: (Shortcut) -> Unit = {}
+)
 
 @Given
-fun shortcutPickerStore(
-    @Given extractShortcut: ExtractShortcutUseCase,
+fun shortcutPickerModel(
     @Given getAllShortcuts: GetAllShortcutsUseCase,
+    @Given extractShortcut: ExtractShortcutUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
-): StoreBuilder<KeyUiGivenScope, ShortcutPickerState, ShortcutPickerAction> = {
+): StateBuilder<KeyUiGivenScope, ShortcutPickerModel> = {
     resourceFlow { emit(getAllShortcuts()) }
-        .updateIn(this) { copy(shortcuts = it) }
-    action<PickShortcut> { action ->
+        .update(ShortcutPickerModel.shortcuts())
+    action(ShortcutPickerModel.pickShortcut()) { shortcut ->
         runCatching {
-            val shortcutRequestResult = navigator.pushForResult(action.shortcut.intent.toIntentKey())
+            val shortcutRequestResult = navigator.pushForResult(shortcut.intent.toIntentKey())
                 ?.data ?: return@runCatching
             val finalShortcut = extractShortcut(shortcutRequestResult)
             navigator.pop(key, finalShortcut)

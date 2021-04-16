@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.apps
 
-import android.content.pm.PackageManager
-import com.github.michaelbull.result.get
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.withContext
+import android.content.pm.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 

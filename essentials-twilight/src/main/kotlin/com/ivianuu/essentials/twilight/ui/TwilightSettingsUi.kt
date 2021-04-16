@@ -16,31 +16,23 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.data.DataStore
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.twilight.R
-import com.ivianuu.essentials.twilight.data.TwilightMode
-import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.twilight.data.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.prefs.CheckboxListItem
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 class TwilightSettingsKey : Key<Nothing>
 

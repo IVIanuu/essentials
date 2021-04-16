@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import io.kotest.matchers.collections.shouldContainInOrder
-import org.junit.Test
+import io.kotest.matchers.collections.*
+import org.junit.*
 
 class SortedTopologicalTest {
 

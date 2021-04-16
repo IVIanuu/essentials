@@ -16,9 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 suspend inline fun <R> runOnCancellation(crossinline block: suspend () -> R): R {
     try {

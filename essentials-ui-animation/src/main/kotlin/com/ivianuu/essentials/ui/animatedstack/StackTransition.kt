@@ -16,15 +16,10 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.Easing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.tween
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import kotlin.time.Duration
-import kotlin.time.milliseconds
+import androidx.compose.animation.core.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import kotlin.time.*
 
 interface StackTransition {
     fun createSpec(isPush: Boolean): AnimationSpec<Float>

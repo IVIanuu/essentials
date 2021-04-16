@@ -1,4 +1,4 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.tasks.*
 
 /*
  * Copyright 2020 Manuel Wrage
@@ -44,13 +44,15 @@ artifacts {
 }
 
 dependencies {
-    compileOnly(Deps.Kotlin.compilerEmbeddable)
+    api(Deps.Kotlin.compilerEmbeddable)
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.autoService)
     kapt(Deps.autoService)
     testImplementation(Deps.compileTesting)
     testImplementation(Deps.junit)
     testImplementation(Deps.Kotlin.compilerEmbeddable)
+    testImplementation(Deps.kotestAssertions)
+    testImplementation(project(":essentials-optics"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

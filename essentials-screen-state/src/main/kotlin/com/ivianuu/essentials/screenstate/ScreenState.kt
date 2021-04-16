@@ -16,27 +16,17 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.app.KeyguardManager
-import android.content.Intent
-import android.os.PowerManager
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.withContext
+import android.app.*
+import android.content.*
+import android.os.*
+import com.ivianuu.essentials.broadcast.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 enum class ScreenState(val isOn: Boolean) {
     OFF(false), LOCKED(true), UNLOCKED(true)

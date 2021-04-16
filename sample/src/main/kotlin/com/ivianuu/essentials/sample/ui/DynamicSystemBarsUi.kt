@@ -16,24 +16,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.core.isLight
-import com.ivianuu.essentials.ui.core.systemBarStyle
-import com.ivianuu.essentials.ui.dialog.ColorPickerPalette
+import androidx.compose.runtime.saveable.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Given
 val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey() }

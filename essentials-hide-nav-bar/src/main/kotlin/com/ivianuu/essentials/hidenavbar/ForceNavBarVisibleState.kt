@@ -16,14 +16,10 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.Intent
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import android.content.*
+import com.ivianuu.essentials.broadcast.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 typealias ForceNavBarVisibleState = Boolean
 

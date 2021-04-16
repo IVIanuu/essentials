@@ -16,14 +16,13 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.Qualifier
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.gestures.action.ui.picker.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 data class Action<i : ActionId>(
     val id: String,

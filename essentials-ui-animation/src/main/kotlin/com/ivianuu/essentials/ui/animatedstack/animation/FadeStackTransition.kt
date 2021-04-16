@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
-import kotlin.time.milliseconds
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import com.ivianuu.essentials.ui.animatedstack.*
+import kotlin.time.*
 
 class FadeStackTransition(
     private val spec: AnimationSpec<Float> = defaultAnimationSpec(duration = 180.milliseconds)

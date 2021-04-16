@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
 
 suspend fun <T> par(
     vararg blocks: suspend () -> T,

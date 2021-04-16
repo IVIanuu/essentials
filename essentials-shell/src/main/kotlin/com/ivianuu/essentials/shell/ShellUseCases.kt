@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.shell
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.injekt.Given
-import eu.chainfire.libsuperuser.Shell.SU
-import kotlinx.coroutines.withContext
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import eu.chainfire.libsuperuser.Shell.*
+import kotlinx.coroutines.*
 
 typealias IsShellAvailableUseCase = suspend () -> Boolean
 

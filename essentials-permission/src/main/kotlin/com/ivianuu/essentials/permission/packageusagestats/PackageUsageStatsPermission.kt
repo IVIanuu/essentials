@@ -16,15 +16,14 @@
 
 package com.ivianuu.essentials.permission.packageusagestats
 
-import android.app.AppOpsManager
-import android.content.Intent
-import android.os.Process
-import android.provider.Settings
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Given
+import android.app.*
+import android.content.*
+import android.os.*
+import android.provider.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 interface PackageUsageStatsPermission : Permission
 

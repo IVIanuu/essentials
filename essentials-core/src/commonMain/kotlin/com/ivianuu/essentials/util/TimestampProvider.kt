@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.injekt.Given
-import kotlin.time.Duration
+import com.ivianuu.injekt.*
+import kotlin.time.*
 
 typealias TimestampProvider = () -> Duration
 

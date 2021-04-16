@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.util
 
-import android.os.Build
-import com.ivianuu.injekt.Given
+import android.os.*
+import com.ivianuu.injekt.*
 
 data class SystemBuildInfo(val sdk: Int)
 

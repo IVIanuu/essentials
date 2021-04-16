@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.clipboard
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.shareIn
+import android.content.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 typealias ClipboardText = String?
 

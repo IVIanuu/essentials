@@ -16,18 +16,16 @@
 
 package com.ivianuu.essentials.ui.core
 
-import android.view.View
+import android.view.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.unit.*
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.injekt.Given
-import kotlin.math.max
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import kotlin.math.*
 
 @Composable
 fun InsetsPadding(

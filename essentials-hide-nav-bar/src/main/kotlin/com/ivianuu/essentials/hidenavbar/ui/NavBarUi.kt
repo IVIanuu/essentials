@@ -16,49 +16,41 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.hidenavbar.NavBarPermission
-import com.ivianuu.essentials.hidenavbar.NavBarPrefs
-import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateHideNavBar
-import com.ivianuu.essentials.hidenavbar.ui.NavBarAction.UpdateNavBarRotationMode
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.prefs.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
+val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SwitchListItem(
-                    value = state.hideNavBar,
-                    onValueChange = { send(UpdateHideNavBar(it)) },
+                    value = model.hideNavBar,
+                    onValueChange = model.updateHideNavBar,
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -66,45 +58,43 @@ val navBarUi: StoreKeyUi<NavBarKey, NavBarState, NavBarAction> = {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
-                    modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = { send(UpdateNavBarRotationMode) }
+                    modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
+                    onClick = model.updateNavBarRotationMode
                 )
             }
         }
     }
 }
 
-data class NavBarState(
+@Optics
+data class NavBarModel(
     val hideNavBar: Boolean = false,
-    val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
+    val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
+    val updateHideNavBar: (Boolean) -> Unit = {},
+    val updateNavBarRotationMode: () -> Unit = {}
 ) {
     val canChangeNavBarRotationMode: Boolean
         get() = hideNavBar
 }
 
-sealed class NavBarAction {
-    data class UpdateHideNavBar(val value: Boolean) : NavBarAction()
-    object UpdateNavBarRotationMode : NavBarAction()
-}
-
 @Given
-fun navBarStore(
+fun navBarModel(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
     @Given stringResource: StringResourceProvider,
-): StoreBuilder<KeyUiGivenScope, NavBarState, NavBarAction> = {
-    pref.data.updateIn(this) {
+): StateBuilder<KeyUiGivenScope, NavBarModel> = {
+    pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
-    action<UpdateHideNavBar> { action ->
-        if (!action.value) {
+    action(NavBarModel.updateHideNavBar()) { value ->
+        if (!value) {
             pref.updateData { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-            pref.updateData { copy(hideNavBar = action.value) }
-        } else Unit
+            pref.updateData { copy(hideNavBar = value) }
+        }
     }
-    action<UpdateNavBarRotationMode> {
+    action(NavBarModel.updateNavBarRotationMode()) {
         navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()

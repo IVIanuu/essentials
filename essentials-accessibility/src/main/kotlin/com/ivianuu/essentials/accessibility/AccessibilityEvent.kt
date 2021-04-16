@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 data class AccessibilityEvent(
     val type: Int,

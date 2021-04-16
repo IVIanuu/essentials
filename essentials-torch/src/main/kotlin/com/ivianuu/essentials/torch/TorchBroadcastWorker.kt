@@ -16,20 +16,19 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.updateValue
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.broadcast.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun torchBroadcastWorker(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given torchStore: MutableStateFlow<TorchState>
 ): ScopeWorker<AppGivenScope> = {
-    broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.updateValue { false } }
+    broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.update { false } }
 }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"

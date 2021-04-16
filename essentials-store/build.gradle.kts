@@ -28,6 +28,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":essentials-coroutines"))
+                api(project(":essentials-optics"))
                 api(Deps.Injekt.common)
             }
         }

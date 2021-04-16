@@ -16,36 +16,25 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
-import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
-import com.ivianuu.essentials.apps.coil.AppIcon
-import com.ivianuu.essentials.apps.ui.AppPredicate
-import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import com.google.accompanist.coil.*
+import com.ivianuu.essentials.apps.*
+import com.ivianuu.essentials.apps.coil.*
+import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerAction.PickApp
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.injekt.*
 
 class AppPickerKey(
     val appPredicate: AppPredicate = DefaultAppPredicate,
@@ -53,17 +42,17 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
+val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(state.title ?: stringResource(R.string.es_title_app_picker))
+                    Text(model.title ?: stringResource(R.string.es_title_app_picker))
                 }
             )
         }
     ) {
-        ResourceLazyColumnFor(state.filteredApps) { app ->
+        ResourceLazyColumnFor(model.filteredApps) { app ->
             ListItem(
                 title = { Text(app.appName) },
                 leading = {
@@ -73,39 +62,37 @@ val appPickerUi: StoreKeyUi<AppPickerKey, AppPickerState, AppPickerAction> = {
                         contentDescription = null
                     )
                 },
-                onClick = { send(PickApp(app)) }
+                onClick = { model.pickApp(app) }
             )
         }
     }
 }
 
-data class AppPickerState(
+@Optics
+data class AppPickerModel(
     private val allApps: Resource<List<AppInfo>> = Idle,
     val appPredicate: AppPredicate = DefaultAppPredicate,
-    val title: String? = null
+    val title: String? = null,
+    val pickApp: (AppInfo) -> Unit = {}
 ) {
     val filteredApps = allApps
         .map { it.filter(appPredicate) }
     companion object {
         @Given
-        fun initial(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
+        fun initial(@Given key: AppPickerKey): @Initial AppPickerModel = AppPickerModel(
             appPredicate = key.appPredicate,
             title = key.title
         )
     }
 }
 
-sealed class AppPickerAction {
-    data class PickApp(val app: AppInfo) : AppPickerAction()
-}
-
 @Given
-fun appPickerStore(
+fun appPickerModel(
     @Given key: AppPickerKey,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
-): StoreBuilder<KeyUiGivenScope, AppPickerState, AppPickerAction> = {
+): StateBuilder<KeyUiGivenScope, AppPickerModel> = {
     resourceFlow { emit(getInstalledApps()) }
-        .updateIn(this) { copy(allApps = it) }
-    action<PickApp> { navigator.pop(key, it.app) }
+        .update(AppPickerModel.allApps())
+    action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
 }

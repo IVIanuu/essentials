@@ -16,18 +16,13 @@
 
 package com.ivianuu.essentials.broadcast
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import android.content.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 typealias BroadcastsFactory = (String) -> Flow<Intent>
 

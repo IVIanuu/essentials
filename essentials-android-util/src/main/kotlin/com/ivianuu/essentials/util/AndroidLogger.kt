@@ -16,17 +16,11 @@
 
 package com.ivianuu.essentials.util
 
-import android.util.Log
-import com.ivianuu.essentials.util.Logger.Kind
-import com.ivianuu.essentials.util.Logger.Kind.DEBUG
-import com.ivianuu.essentials.util.Logger.Kind.ERROR
-import com.ivianuu.essentials.util.Logger.Kind.INFO
-import com.ivianuu.essentials.util.Logger.Kind.VERBOSE
-import com.ivianuu.essentials.util.Logger.Kind.WARN
-import com.ivianuu.essentials.util.Logger.Kind.WTF
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
+import android.util.*
+import com.ivianuu.essentials.util.Logger.*
+import com.ivianuu.essentials.util.Logger.Kind.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 
 @Given
 @Factory

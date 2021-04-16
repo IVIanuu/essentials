@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.collections.shouldContainExactly
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import org.junit.Test
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.collections.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.junit.*
 
 class OnCancelTest {
     @Test

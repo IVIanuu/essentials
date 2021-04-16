@@ -16,17 +16,13 @@
 
 package com.ivianuu.essentials.permission.intent
 
-import android.content.Intent
-import com.ivianuu.essentials.coroutines.raceOf
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import android.content.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 typealias PermissionIntentFactory<P> = (P) -> Intent
 

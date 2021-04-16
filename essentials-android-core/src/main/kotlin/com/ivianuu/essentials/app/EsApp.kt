@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.app
 
-import android.app.Application
-import com.ivianuu.injekt.android.AppGivenScopeOwner
-import com.ivianuu.injekt.scope.AppGivenScope
+import android.app.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
 
 abstract class EsApp : Application(), AppGivenScopeOwner {
     override lateinit var appGivenScope: AppGivenScope

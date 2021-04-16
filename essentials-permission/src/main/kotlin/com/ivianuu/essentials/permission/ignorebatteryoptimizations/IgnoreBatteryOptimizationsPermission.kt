@@ -16,16 +16,15 @@
 
 package com.ivianuu.essentials.permission.ignorebatteryoptimizations
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.PowerManager
-import android.provider.Settings
-import androidx.core.net.toUri
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.injekt.Given
+import android.annotation.*
+import android.content.*
+import android.os.*
+import android.provider.*
+import androidx.core.net.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 interface IgnoreBatteryOptimizationsPermission : Permission
 

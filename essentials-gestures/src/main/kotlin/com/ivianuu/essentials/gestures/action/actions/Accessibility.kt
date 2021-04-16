@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.common.*
 
 val accessibilityActionPermissions = listOf(typeKeyOf<ActionAccessibilityPermission>())

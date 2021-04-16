@@ -17,44 +17,26 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GetActionPickerDelegatesUseCase
-import com.ivianuu.essentials.gestures.action.GetActionSettingsKeyUseCase
-import com.ivianuu.essentials.gestures.action.GetActionUseCase
-import com.ivianuu.essentials.gestures.action.GetAllActionsUseCase
-import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerAction.*
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.resource.Idle
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 class ActionPickerKey(
     val showDefaultOption: Boolean = false,
@@ -68,47 +50,44 @@ class ActionPickerKey(
 }
 
 @Given
-val actionPickerUi: StoreKeyUi<ActionPickerKey, ActionPickerState, ActionPickerAction> = {
+val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
     ) {
-        ResourceLazyColumnFor(state.items) { item ->
+        ResourceLazyColumnFor(model.items) { item ->
             ListItem(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { send(OpenActionSettings(item)) }) {
+                    IconButton(onClick = { model.openActionSettings(item) }) {
                         Icon(painterResource(R.drawable.es_ic_settings), null)
                     }
                 }) else null,
                 title = { Text(item.title) },
-                onClick = { send(PickAction(item)) }
+                onClick = { model.pickAction(item) }
             )
         }
     }
 }
 
-data class ActionPickerState(val items: Resource<List<ActionPickerItem>> = Idle)
-
-sealed class ActionPickerAction {
-    data class OpenActionSettings(val item: ActionPickerItem) : ActionPickerAction()
-    data class PickAction(val item: ActionPickerItem) : ActionPickerAction()
-}
+@Optics
+data class ActionPickerModel(
+    val items: Resource<List<ActionPickerItem>> = Idle,
+    val openActionSettings: (ActionPickerItem) -> Unit = {},
+    val pickAction: (ActionPickerItem) -> Unit = {}
+)
 
 @Given
-fun actionPickerStore(
+fun actionPickerModel(
     @Given getAction: GetActionUseCase,
     @Given getActionPickerItems: GetActionPickerItemsUseCase,
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester
-): StoreBuilder<KeyUiGivenScope, ActionPickerState, ActionPickerAction> = {
-    resourceFlow { emit(getActionPickerItems()) }
-        .updateIn(this) { copy(items = it) }
-
-    action<OpenActionSettings> { navigator.push(it.item.settingsKey!!) }
-
-    action<PickAction> {
-        val result = it.item.getResult() ?: return@action
+): StateBuilder<KeyUiGivenScope, ActionPickerModel> = {
+    resourceFlow { emit(getActionPickerItems()) }.update(ActionPickerModel.items())
+    action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
+    action(ActionPickerModel.pickAction()) { item ->
+        val result = item.getResult() ?: return@action
         if (result is ActionPickerKey.Result.Action) {
             val action = getAction(result.actionId)!!
             if (!permissionRequester(action.permissions))

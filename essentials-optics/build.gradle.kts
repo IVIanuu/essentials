@@ -13,7 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    kotlin("multiplatform")
+    id("com.ivianuu.essentials")
+}
 
-package com.ivianuu.essentials.ui.navigation
+kotlin {
+    jvm {
+        withJava()
+    }
 
-typealias RootKey = Key<Nothing>
+    sourceSets {
+        commonMain {
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
+    }
+}
+
+plugins.apply("com.vanniktech.maven.publish")
+

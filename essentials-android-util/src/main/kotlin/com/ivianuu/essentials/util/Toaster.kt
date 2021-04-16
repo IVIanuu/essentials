@@ -16,13 +16,12 @@
 
 package com.ivianuu.essentials.util
 
-import android.widget.Toast
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.launch
+import android.widget.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
 
 typealias Toaster = (String) -> Unit
 

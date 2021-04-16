@@ -16,30 +16,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.sample.ui.CounterAction.Dec
-import com.ivianuu.essentials.sample.ui.CounterAction.Inc
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Given
 val counterHomeItem = HomeItem("Counter") { CounterKey() }
@@ -47,7 +38,7 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey : Key<Nothing>
 
 @Given
-val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
+val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -57,7 +48,7 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Count: ${state.count}",
+                text = "Count: ${model.count}",
                 style = MaterialTheme.typography.h3
             )
 
@@ -65,32 +56,32 @@ val counterUi: StoreKeyUi<CounterKey, CounterState, CounterAction> = {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = { send(Inc) }
+                onClick = model.inc
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = { send(Dec) }
+                onClick = model.dec
             )
         }
     }
 }
 
-data class CounterState(val count: Int = 0)
-
-sealed class CounterAction {
-    object Inc : CounterAction()
-    object Dec : CounterAction()
-}
+@Optics
+data class CounterModel(
+    val count: Int = 0,
+    val inc: () -> Unit = {},
+    val dec: () -> Unit = {}
+)
 
 @Given
-fun counterStore(
+fun counterModel(
     @Given toaster: Toaster
-): StoreBuilder<KeyUiGivenScope, CounterState, CounterAction> = {
-    action<Inc> { update { copy(count = count.inc()) } }
-    action<Dec> {
+): StateBuilder<KeyUiGivenScope, CounterModel> = {
+    action(CounterModel.inc()) { update { copy(count = count.inc()) } }
+    action(CounterModel.dec()) {
         if (state.first().count > 0) update { copy(count = count.dec()) }
         else toaster("Value cannot be less than 0!")
     }

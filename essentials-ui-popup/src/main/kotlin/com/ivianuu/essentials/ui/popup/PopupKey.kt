@@ -16,26 +16,19 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
-import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.refOf
-import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiOptions
-import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Given
+import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.geometry.*
+import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 class PopupKey(
     val position: Rect,

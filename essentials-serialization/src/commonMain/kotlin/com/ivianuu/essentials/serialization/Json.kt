@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.serialization
 
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
 
 @Given
 val json: @Scoped<AppGivenScope> Json

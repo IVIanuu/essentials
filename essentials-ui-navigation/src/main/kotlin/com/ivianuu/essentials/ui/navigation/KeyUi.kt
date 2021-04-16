@@ -16,16 +16,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import com.ivianuu.essentials.store.Sink
-import com.ivianuu.essentials.store.Store
-import com.ivianuu.essentials.util.cast
-import com.ivianuu.injekt.Given
-import kotlin.reflect.KClass
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 typealias KeyUi<K> = @Composable () -> Unit
 
@@ -48,38 +43,35 @@ class KeyUiModule<@Given T : KeyUi<K>, K : Key<*>> {
         (keyClass to keyUiOptionsFactory).cast()
 }
 
-typealias StoreKeyUi<K, S, A> = @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
 
 @Composable
-operator fun <S, A> StoreKeyUi<*, S, A>.invoke(
-    state: S,
-    sink: Sink<A>
-) {
+operator fun <S> ModelKeyUi<*, S>.invoke(model: S) {
     invoke(
-        object : StoreKeyUiScope<Nothing, S, A>, Sink<A> by sink {
-            override val state: S
-                get() = state
+        object : ModelKeyUiScope<Nothing, S> {
+            override val model: S
+                get() = model
         }
     )
 }
 
 @Stable
-interface StoreKeyUiScope<K, S, A> : Sink<A> {
-    val state: S
+interface ModelKeyUiScope<K, S> {
+    val model: S
 }
 
 @Given
-fun <@Given U : StoreKeyUi<K, S, A>, K : Key<*>, S, A> storeKeyUi(
+fun <@Given U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
     @Given uiFactory: () -> U,
-    @Given store: Store<S, A>
+    @Given model: StateFlow<S>
 ): KeyUi<K> = {
-    val currentState by store.collectAsState()
-    val scope = remember(store) {
-        object : StoreKeyUiScope<K, S, A>, Sink<A> by store {
-            override val state: S
-                get() = currentState
+    val currentModel by model.collectAsState()
+    val scope = remember {
+        object : ModelKeyUiScope<K, S> {
+            override val model: S
+                get() = currentModel
         }
     }
-    val ui = remember(uiFactory) as @Composable StoreKeyUiScope<K, S, A>.() -> Unit
+    val ui = remember(uiFactory) as @Composable ModelKeyUiScope<K, S>.() -> Unit
     scope.ui()
 }

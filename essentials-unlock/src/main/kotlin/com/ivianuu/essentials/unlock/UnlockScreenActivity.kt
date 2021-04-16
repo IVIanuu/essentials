@@ -16,28 +16,19 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.annotation.SuppressLint
-import android.app.KeyguardManager
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.view.WindowManager
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.SystemBuildInfo
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.ActivityGivenScope
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.activityGivenScope
-import com.ivianuu.injekt.scope.InstallElement
-import com.ivianuu.injekt.scope.element
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
+import android.annotation.*
+import android.app.*
+import android.content.*
+import android.os.*
+import android.view.*
+import androidx.activity.*
+import androidx.lifecycle.*
+import com.ivianuu.essentials.broadcast.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 /**
  * Requests a screen unlock

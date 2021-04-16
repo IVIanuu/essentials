@@ -16,24 +16,19 @@
 
 package com.ivianuu.essentials.store
 
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.childJob
-import com.ivianuu.essentials.test.TestCollector
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.test.TestCoroutineScope
-import org.junit.Test
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.*
+import io.kotest.matchers.collections.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.*
+import org.junit.*
 
-class StoreTest {
+class StateTest {
     @Test
-    fun testReduce() = runCancellingBlockingTest {
-        val state = store<Int, Nothing>(0) {
+    fun testUpdate() = runCancellingBlockingTest {
+        val state = state(0) {
             update { inc() }
         }
         state.testCollect(this)
@@ -43,18 +38,18 @@ class StoreTest {
 
     @Test
     fun testEmitsInitialState() = runCancellingBlockingTest {
-        val state = store<Int, Nothing>(0) {}
+        val state = state(0) {}
         state.testCollect(this)
             .values
             .shouldContainExactly(0)
     }
 
     @Test
-    fun testFlowReduce() = runCancellingBlockingTest {
+    fun testFlowUpdate() = runCancellingBlockingTest {
         val actions = EventFlow<Int>()
-        val state = store<Int, Nothing>(0) {
+        val state = state(0) {
             actions
-                .updateIn(this) { it }
+                .update { it }
         }
         val collector = state.testCollect(this)
 
@@ -71,7 +66,7 @@ class StoreTest {
         val actions = EventFlow<Unit>()
         val collector = TestCollector<Unit>()
         val stateScope = TestCoroutineScope(childJob())
-        stateScope.store<Int, Nothing>(0) {
+        stateScope.state(0) {
             actions
                 .onEach { collector.emit(it) }
                 .launchIn(this)

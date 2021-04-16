@@ -16,18 +16,15 @@
 
 package com.ivianuu.essentials.torch
 
-import android.hardware.camera2.CameraManager
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.updateValue
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.scope.AppGivenScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import android.hardware.camera2.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 @Given
 fun androidTorchWorker(
@@ -43,7 +40,7 @@ fun androidTorchWorker(
         }.onFailure {
             it.printStackTrace()
             toaster(stringResource(R.string.es_failed_to_toggle_torch, emptyList()))
-            torchStore.updateValue { false }
+            torchStore.update { false }
         }
     }
 }

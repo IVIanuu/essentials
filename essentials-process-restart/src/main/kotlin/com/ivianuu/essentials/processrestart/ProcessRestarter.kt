@@ -16,13 +16,11 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
+import android.content.Intent.*
+import android.content.pm.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 typealias ProcessRestarter = suspend () -> Unit
 

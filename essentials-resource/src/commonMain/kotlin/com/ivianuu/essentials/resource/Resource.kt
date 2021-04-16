@@ -2,14 +2,8 @@
 
 package com.ivianuu.essentials.resource
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.runCatching
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import com.github.michaelbull.result.*
+import kotlinx.coroutines.flow.*
 
 sealed class Resource<out T>
 

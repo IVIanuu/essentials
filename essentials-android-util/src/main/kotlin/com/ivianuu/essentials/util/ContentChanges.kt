@@ -16,20 +16,17 @@
 
 package com.ivianuu.essentials.util
 
-import android.app.Application
-import android.content.ContentResolver
-import android.database.ContentObserver
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.MainDispatcher
-import com.ivianuu.injekt.Given
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
+import android.app.*
+import android.content.*
+import android.database.*
+import android.net.*
+import android.os.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 typealias ContentChangesFactory = (Uri) -> Flow<Unit>
 
@@ -40,7 +37,7 @@ fun contentChangesFactory(
 ): ContentChangesFactory = { uri ->
     callbackFlow<Unit> {
         val observer = withContext(mainDispatcher) {
-            object : ContentObserver(Handler(Looper.getMainLooper())) {
+            object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
                     runCatching { offer(Unit) }

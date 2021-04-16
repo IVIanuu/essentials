@@ -16,14 +16,12 @@
 
 package com.ivianuu.essentials.ui.animatedstack
 
-import androidx.compose.animation.core.AnimationState
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.animateTo
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.key
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.animatedstack.animation.FadeStackTransition
+import androidx.compose.ui.*
+import com.ivianuu.essentials.ui.animatedstack.animation.*
 
 @Composable
 fun <T> AnimatedBox(

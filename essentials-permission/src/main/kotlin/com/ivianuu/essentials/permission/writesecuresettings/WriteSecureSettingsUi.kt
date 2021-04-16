@@ -16,45 +16,33 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
-import androidx.compose.ui.res.stringResource
-import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.coroutines.timer
-import com.ivianuu.essentials.permission.PermissionStateFactory
+import androidx.compose.ui.res.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.GrantPermissionsViaRoot
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsAction.OpenPcInstructions
-import com.ivianuu.essentials.shell.RunShellCommandUseCase
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.shell.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.util.BuildInfo
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlin.time.milliseconds
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
+import kotlin.time.*
 
 class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, Unit,
-        WriteSecureSettingsAction> = {
+val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
@@ -68,27 +56,28 @@ val writeSecureSettingsUi: StoreKeyUi<WriteSecureSettingsKey, Unit,
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = { send(OpenPcInstructions) }
+                    onClick = model.openPcInstructions
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = { send(GrantPermissionsViaRoot) }
+                    onClick = model.grantPermissionsViaRoot
                 )
             }
         }
     }
 }
 
-sealed class WriteSecureSettingsAction {
-    object OpenPcInstructions : WriteSecureSettingsAction()
-    object GrantPermissionsViaRoot : WriteSecureSettingsAction()
-}
+@Optics
+data class WriteSecureSettingsModel(
+    val openPcInstructions: () -> Unit = {},
+    val grantPermissionsViaRoot: () -> Unit = {}
+)
 
 @Given
-fun writeSecureSettingsStore(
+fun writeSecureSettingsModel(
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
     @Given navigator: Navigator,
@@ -96,7 +85,7 @@ fun writeSecureSettingsStore(
     @Given runShellCommand: RunShellCommandUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StoreBuilder<KeyUiGivenScope, Unit, WriteSecureSettingsAction> = {
+): StateBuilder<KeyUiGivenScope, WriteSecureSettingsModel> = {
     timer(200.milliseconds)
         .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
         .filter { it }
@@ -106,10 +95,10 @@ fun writeSecureSettingsStore(
             navigator.pop(key, true)
         }
         .launchIn(this)
-    action<OpenPcInstructions> {
+    action(WriteSecureSettingsModel.openPcInstructions()) {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    action<GrantPermissionsViaRoot> {
+    action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
         runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
             .onFailure {
                 it.printStackTrace()

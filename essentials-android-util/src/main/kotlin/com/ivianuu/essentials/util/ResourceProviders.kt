@@ -16,16 +16,14 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import androidx.core.content.res.*
+import androidx.core.graphics.drawable.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 typealias BitmapResourceProvider = (Int) -> ImageBitmap
 

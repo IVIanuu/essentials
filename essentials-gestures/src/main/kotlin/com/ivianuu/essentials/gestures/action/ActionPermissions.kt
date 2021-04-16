@@ -16,18 +16,18 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import android.accessibilityservice.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.root.RootPermission
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.Given
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.permission.accessibility.*
+import com.ivianuu.essentials.permission.root.*
+import com.ivianuu.essentials.permission.writesecuresettings.*
+import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Given
 object ActionAccessibilityPermission : AccessibilityServicePermission {

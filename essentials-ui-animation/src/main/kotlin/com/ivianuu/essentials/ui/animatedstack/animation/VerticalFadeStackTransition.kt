@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.ui.animatedstack.animation
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import com.ivianuu.essentials.ui.animatedstack.StackTransition
-import com.ivianuu.essentials.ui.animatedstack.defaultAnimationSpec
-import com.ivianuu.essentials.ui.animatedstack.fractionalTranslation
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import com.ivianuu.essentials.ui.animatedstack.*
 
 class VerticalFadeStackTransition(
     private val spec: AnimationSpec<Float> = defaultAnimationSpec()

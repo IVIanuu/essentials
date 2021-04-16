@@ -1,30 +1,21 @@
 package com.ivianuu.essentials.android.settings
 
-import android.provider.Settings
-import com.ivianuu.essentials.coroutines.IODispatcher
-import com.ivianuu.essentials.coroutines.ScopeCoroutineScope
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.util.ContentChangesFactory
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.withContext
+import android.provider.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class AndroidSettingModule<T : S, S>(
     private val name: String,
     private val type: AndroidSettingsType
 ) {
     @Given
-    fun store(
+    fun dataStore(
         @Given adapter: AndroidSettingAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given dispatcher: IODispatcher,

@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.ComponentName
-import android.content.Intent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import android.content.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.util.StringResourceProvider
-import com.ivianuu.injekt.Given
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 @Given
 object SearchActionId : ActionId("search")

@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample
 
-import android.os.StrictMode
-import com.ivianuu.essentials.app.ScopeInitializer
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.scope.AppGivenScope
+import android.os.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 
 @Given
 val strictModeInitializer: ScopeInitializer<AppGivenScope> = {

@@ -16,17 +16,14 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.app.KeyguardManager
-import com.ivianuu.essentials.coroutines.DefaultDispatcher
-import com.ivianuu.essentials.util.Logger
-import com.ivianuu.essentials.util.d
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.android.SystemService
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.withContext
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
+import android.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlinx.coroutines.*
+import java.util.*
+import java.util.concurrent.*
 
 typealias ScreenUnlocker = suspend () -> Boolean
 

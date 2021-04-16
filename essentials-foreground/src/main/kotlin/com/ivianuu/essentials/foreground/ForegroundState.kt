@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
+import android.app.*
 
 sealed class ForegroundState {
     data class Foreground(val notification: Notification) : ForegroundState()

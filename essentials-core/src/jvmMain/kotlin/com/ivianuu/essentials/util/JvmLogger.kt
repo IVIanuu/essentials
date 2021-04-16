@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.util
 
-import java.util.regex.Pattern
+import java.util.regex.*
 
 actual val Logger.stackTraceTag: String
     get() = Throwable().stackTrace

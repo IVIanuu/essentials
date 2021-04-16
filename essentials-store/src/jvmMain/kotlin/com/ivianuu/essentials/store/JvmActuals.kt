@@ -1,6 +1,6 @@
 package com.ivianuu.essentials.store
 
-import kotlin.reflect.KClass
+import kotlin.reflect.*
 
 actual fun <T : Any> KClass<T>.newInstance(): T = java
     .declaredConstructors

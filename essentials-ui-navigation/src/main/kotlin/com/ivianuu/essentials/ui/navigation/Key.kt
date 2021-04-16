@@ -17,3 +17,5 @@
 package com.ivianuu.essentials.ui.navigation
 
 interface Key<T>
+
+typealias RootKey = Key<Nothing>

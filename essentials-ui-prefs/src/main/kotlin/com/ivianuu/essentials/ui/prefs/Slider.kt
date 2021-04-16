@@ -16,35 +16,18 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.raceOf
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
-import com.ivianuu.essentials.ui.material.Slider
-import com.ivianuu.essentials.ui.material.StepPolicy
-import com.ivianuu.essentials.util.toDouble
-import com.ivianuu.essentials.util.toDuration
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlin.time.Duration
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.util.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.time.*
 
 @Composable
 fun DoubleSliderListItem(

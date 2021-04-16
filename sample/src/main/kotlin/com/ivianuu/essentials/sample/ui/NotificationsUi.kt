@@ -16,68 +16,49 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Notification
-import android.service.notification.NotificationListenerService
-import android.service.notification.StatusBarNotification
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import android.app.*
+import android.service.notification.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.runCatching
-import com.ivianuu.essentials.coroutines.parMap
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
+import androidx.core.graphics.drawable.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.Notifications
 import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.notificationlistener.*
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.DismissNotification
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.OpenNotification
-import com.ivianuu.essentials.sample.ui.NotificationsUiAction.RequestPermissions
-import com.ivianuu.essentials.store.StoreBuilder
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
-import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.store.*
+import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StoreKeyUi
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.injekt.Given
-import com.ivianuu.injekt.android.AppContext
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 @Given
 val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
@@ -85,17 +66,17 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-val notificationsUi: StoreKeyUi<NotificationsKey, NotificationsUiState, NotificationsUiAction> = {
+val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
-        AnimatedBox(state.hasPermissions) { hasPermission ->
+        AnimatedBox(model.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
-                    notifications = state.notifications,
-                    onNotificationClick = { send(OpenNotification(it)) },
-                    onDismissNotificationClick = { send(DismissNotification(it)) }
+                    notifications = model.notifications,
+                    onNotificationClick = { model.openNotification(it) },
+                    onDismissNotificationClick = { model.dismissNotification(it) }
                 )
             } else {
-                NotificationPermissions { send(RequestPermissions) }
+                NotificationPermissions(model.requestPermissions)
             }
         }
     }
@@ -165,9 +146,13 @@ private fun NotificationPermissions(
     }
 }
 
-data class NotificationsUiState(
+@Optics
+data class NotificationsModel(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle,
+    val requestPermissions: () -> Unit = {},
+    val openNotification: (UiNotification) -> Unit = {},
+    val dismissNotification: (UiNotification) -> Unit = {}
 )
 
 data class UiNotification(
@@ -179,37 +164,31 @@ data class UiNotification(
     val sbn: StatusBarNotification
 )
 
-sealed class NotificationsUiAction {
-    object RequestPermissions : NotificationsUiAction()
-    data class OpenNotification(val notification: UiNotification) : NotificationsUiAction()
-    data class DismissNotification(val notification: UiNotification) : NotificationsUiAction()
-}
-
 @Given
-fun notificationsUiStore(
+fun notificationsModel(
     @Given appContext: AppContext,
     @Given dismissNotification: DismissNotificationUseCase,
     @Given notifications: Flow<Notifications>,
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
-): StoreBuilder<KeyUiGivenScope, NotificationsUiState, NotificationsUiAction> = {
+): StateBuilder<KeyUiGivenScope, NotificationsModel> = {
     notifications
         .map { notifications ->
             notifications
                 .parMap { it.toUiNotification(appContext) }
         }
         .flowAsResource()
-        .updateIn(this) { copy(notifications = it) }
-    permissionState.updateIn(this) { copy(hasPermissions = it) }
-    action<RequestPermissions> {
+        .update { copy(notifications = it) }
+    permissionState.update { copy(hasPermissions = it) }
+    action(NotificationsModel.requestPermissions()) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    action<OpenNotification> {
-        openNotification(it.notification.sbn.notification)
+    action(NotificationsModel.openNotification()) { notification ->
+        openNotification(notification.sbn.notification)
     }
-    action<DismissNotification> {
-        dismissNotification(it.notification.sbn.key)
+    action(NotificationsModel.dismissNotification()) { notification ->
+        dismissNotification(notification.sbn.key)
     }
 }
 
