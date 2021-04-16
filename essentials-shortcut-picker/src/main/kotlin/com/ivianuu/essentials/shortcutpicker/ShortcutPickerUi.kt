@@ -70,8 +70,8 @@ data class ShortcutPickerModel(
 
 @Given
 fun shortcutPickerModel(
-    @Given extractShortcut: ExtractShortcutUseCase,
     @Given getAllShortcuts: GetAllShortcutsUseCase,
+    @Given extractShortcut: ExtractShortcutUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
     @Given stringResource: StringResourceProvider,
