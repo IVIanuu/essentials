@@ -44,7 +44,7 @@ artifacts {
 }
 
 dependencies {
-    compileOnly(Deps.Kotlin.compilerEmbeddable)
+    api(Deps.Kotlin.compilerEmbeddable)
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.autoService)
     kapt(Deps.autoService)
