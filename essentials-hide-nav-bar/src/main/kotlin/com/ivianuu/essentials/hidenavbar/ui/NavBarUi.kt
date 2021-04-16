@@ -29,7 +29,6 @@ import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -91,7 +90,7 @@ fun navBarModel(
     @Given pref: DataStore<NavBarPrefs>,
     @Given stringResource: StringResourceProvider,
 ): StateBuilder<KeyUiGivenScope, NavBarModel> = {
-    pref.data.updateIn(this) {
+    pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
     action(NavBarModel.updateHideNavBar()) { value ->

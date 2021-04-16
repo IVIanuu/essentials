@@ -26,9 +26,9 @@ fun <S> CoroutineScope.state(
         override val state: Flow<S>
             get() = state
         private val mutex = Mutex()
-        override suspend fun update(reducer: S.() -> S): S = mutex.withLock {
+        override suspend fun update(transform: S.() -> S): S = mutex.withLock {
             val currentState = state.value
-            val newState = reducer(currentState)
+            val newState = transform(currentState)
             if (currentState != newState) state.value = newState
             newState
         }
@@ -39,7 +39,11 @@ fun <S> CoroutineScope.state(
 
 interface StateScope<S> : CoroutineScope {
     val state: Flow<S>
-    suspend fun update(reducer: S.() -> S): S
+    suspend fun update(transform: S.() -> S): S
+    fun Flow<S.() -> S>.update(): Job = launch { collect { update(it) } }
+    fun <T> Flow<T>.update(transform: S.(T) -> S): Job =
+        map<T, S.() -> S> { { transform(it) } }.update()
+    fun <T> Flow<T>.update(lens: Lens<S, T>): Job = update { lens.set(this, it) }
 }
 
 suspend fun <S> StateScope<S>.action(
@@ -131,13 +135,6 @@ suspend fun <S, P1, P2, P3, P4, P5> StateScope<S>.actions(lens: Lens<S, (P1, P2,
     action(lens) { p1, p2, p3, p4, p5 -> events.emit(tupleOf(p1, p2, p3, p4, p5)) }
     return events
 }
-
-fun <S> Flow<S.() -> S>.updateIn(scope: StateScope<S>): Job = scope.launch {
-    collect { scope.update(it) }
-}
-
-fun <T, S> Flow<T>.updateIn(scope: StateScope<S>, transform: S.(T) -> S): Job =
-    map<T, S.() -> S> { { transform(it) } }.updateIn(scope)
 
 fun <S> StateBuilder<*, S>.toState(
     scope: CoroutineScope,

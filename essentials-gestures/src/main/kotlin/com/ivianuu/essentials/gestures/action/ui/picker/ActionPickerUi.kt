@@ -44,7 +44,6 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -102,11 +101,8 @@ fun actionPickerModel(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester
 ): StateBuilder<KeyUiGivenScope, ActionPickerModel> = {
-    resourceFlow { emit(getActionPickerItems()) }
-        .updateIn(this) { copy(items = it) }
-
+    resourceFlow { emit(getActionPickerItems()) }.update(ActionPickerModel.items())
     action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
-
     action(ActionPickerModel.pickAction()) { item ->
         val result = item.getResult() ?: return@action
         if (result is ActionPickerKey.Result.Action) {

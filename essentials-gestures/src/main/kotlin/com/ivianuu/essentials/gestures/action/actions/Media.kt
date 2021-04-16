@@ -38,7 +38,6 @@ import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -135,7 +134,7 @@ fun mediaActionSettingsModel(
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
-        .updateIn(this) { copy(mediaApp = it) }
+        .update(MediaActionSettingsModel.mediaApp())
     action(MediaActionSettingsModel.updateMediaApp()) {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(

@@ -31,7 +31,6 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -87,7 +86,8 @@ fun shortcutPickerModel(
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): StateBuilder<KeyUiGivenScope, ShortcutPickerModel> = {
-    resourceFlow { emit(getAllShortcuts()) }.updateIn(this) { copy(shortcuts = it) }
+    resourceFlow { emit(getAllShortcuts()) }
+        .update(ShortcutPickerModel.shortcuts())
     action(ShortcutPickerModel.pickShortcut()) { shortcut ->
         runCatching {
             val shortcutRequestResult = navigator.pushForResult(shortcut.intent.toIntentKey())

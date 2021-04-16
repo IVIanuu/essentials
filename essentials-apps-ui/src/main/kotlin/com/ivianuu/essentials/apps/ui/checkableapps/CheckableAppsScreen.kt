@@ -41,7 +41,6 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -64,8 +63,8 @@ data class CheckableAppsParams(
 )
 
 @Given
-fun checkableAppsScreen(@Given stateFlow: StateFlow<CheckableAppsState>): CheckableAppsScreen = {
-    val state by stateFlow.collectAsState()
+fun checkableAppsScreen(@Given modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
+    val state by modelFlow.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -119,7 +118,7 @@ fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChang
     params.onCheckedAppsChanged
 
 @Optics
-data class CheckableAppsState(
+data class CheckableAppsModel(
     val allApps: Resource<List<AppInfo>> = Idle,
     val checkedApps: Set<String> = emptySet(),
     val appPredicate: AppPredicate = DefaultAppPredicate,
@@ -140,7 +139,7 @@ data class CheckableAppsState(
         }
     companion object {
         @Given
-        fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsState = CheckableAppsState(
+        fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsModel = CheckableAppsModel(
             appPredicate = params.appPredicate,
             appBarTitle = params.appBarTitle
         )
@@ -153,14 +152,15 @@ data class CheckableApp(
 )
 
 @Given
-fun checkableAppsState(
+fun checkableAppsModel(
     @Given checkedApps: Flow<CheckedApps>,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged,
-): StateBuilder<KeyUiGivenScope, CheckableAppsState> = {
-    checkedApps.updateIn(this) { copy(checkedApps = it) }
-    resourceFlow { emit(getInstalledApps()) }.updateIn(this) { copy(allApps = it) }
-    suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsState) -> Set<String>) {
+): StateBuilder<KeyUiGivenScope, CheckableAppsModel> = {
+    checkedApps.update(CheckableAppsModel.checkedApps())
+    resourceFlow { emit(getInstalledApps()) }
+        .update(CheckableAppsModel.allApps())
+    suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()
             ?.filter { it.isChecked }
@@ -169,18 +169,18 @@ fun checkableAppsState(
             ?: return
         onCheckedAppsChanged(newCheckedApps)
     }
-    action(CheckableAppsState.updateAppCheckedState()) { app, isChecked ->
+    action(CheckableAppsModel.updateAppCheckedState()) { app, isChecked ->
         pushNewCheckedApps {
             if (!isChecked) this + app.info.packageName
             else this - app.info.packageName
         }
     }
-    action(CheckableAppsState.selectAll()) {
+    action(CheckableAppsModel.selectAll()) {
         pushNewCheckedApps { currentState ->
             currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
         }
     }
-    action(CheckableAppsState.deselectAll()) {
+    action(CheckableAppsModel.deselectAll()) {
         pushNewCheckedApps { emptySet() }
     }
 }

@@ -36,7 +36,6 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -104,6 +103,6 @@ fun appPickerModel(
     @Given navigator: Navigator,
 ): StateBuilder<KeyUiGivenScope, AppPickerModel> = {
     resourceFlow { emit(getInstalledApps()) }
-        .updateIn(this) { copy(allApps = it) }
+        .update(AppPickerModel.allApps())
     action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
 }

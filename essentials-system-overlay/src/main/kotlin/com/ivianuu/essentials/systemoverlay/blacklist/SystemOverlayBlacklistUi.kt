@@ -8,7 +8,6 @@ import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -120,7 +119,7 @@ fun systemOverlayBlacklistModel(
     @Given navigator: Navigator,
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
 ): StateBuilder<KeyUiGivenScope, SystemOverlayBlacklistModel> = {
-    pref.data.updateIn(this) {
+    pref.data.update {
         copy(
             disableOnKeyboard = it.disableOnKeyboard,
             disableOnLockScreen = it.disableOnLockScreen,

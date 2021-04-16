@@ -59,7 +59,6 @@ import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.StateBuilder
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.updateIn
 import com.ivianuu.essentials.ui.animatedstack.AnimatedBox
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
@@ -196,8 +195,8 @@ fun notificationsModel(
                 .parMap { it.toUiNotification(appContext) }
         }
         .flowAsResource()
-        .updateIn(this) { copy(notifications = it) }
-    permissionState.updateIn(this) { copy(hasPermissions = it) }
+        .update { copy(notifications = it) }
+    permissionState.update { copy(hasPermissions = it) }
     action(NotificationsModel.requestPermissions()) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
