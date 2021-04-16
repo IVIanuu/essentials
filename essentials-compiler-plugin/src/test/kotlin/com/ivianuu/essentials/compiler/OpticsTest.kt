@@ -19,4 +19,20 @@ class OpticsTest {
     ) {
         invokeSingleFile() shouldBe "hello world"
     }
+
+    @Test
+    fun testOpticsWithGenerics() = codegen(
+        """
+            import com.ivianuu.essentials.optics.*
+            @Optics data class MyClass<A>(val value: A)
+            fun invoke(): String {
+                val valueLens = MyClass.value<String>()
+                val initial = MyClass("hello")
+                val modified = valueLens.set(initial, valueLens.get(initial) + " world")
+                return valueLens.get(modified)
+            }
+        """
+    ) {
+        invokeSingleFile() shouldBe "hello world"
+    }
 }

@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.descriptors.SimpleFunctionDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
 import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
+import org.jetbrains.kotlin.descriptors.impl.TypeParameterDescriptorImpl
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.declarations.addConstructor
@@ -49,8 +50,12 @@ import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.extensions.SyntheticResolveExtension
+import org.jetbrains.kotlin.storage.LockBasedStorageManager
 import org.jetbrains.kotlin.types.KotlinTypeFactory
+import org.jetbrains.kotlin.types.TypeSubstitutor
+import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.asSimpleType
+import org.jetbrains.kotlin.types.replace
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
@@ -90,16 +95,6 @@ class OpticsResolveExtension : SyntheticResolveExtension {
         val primaryConstructor = clazz.unsubstitutedPrimaryConstructor ?: return
         val parameter = primaryConstructor.valueParameters
             .singleOrNull { it.name == name } ?: return
-        val lensType = KotlinTypeFactory.simpleNotNullType(
-            Annotations.EMPTY,
-            thisDescriptor.module.findClassAcrossModuleDependencies(
-                ClassId.topLevel(Lens)
-            )!!,
-            listOf(
-                clazz.defaultType.asSimpleType().asTypeProjection(),
-                parameter.type.asTypeProjection()
-            )
-        )
         result += SimpleFunctionDescriptorImpl.create(
             thisDescriptor,
             Annotations.EMPTY,
@@ -107,12 +102,38 @@ class OpticsResolveExtension : SyntheticResolveExtension {
             CallableMemberDescriptor.Kind.SYNTHESIZED,
             clazz.source
         ).apply {
+            val typeParameters = clazz.declaredTypeParameters.map { typeParameter ->
+                TypeParameterDescriptorImpl.createWithDefaultBound(
+                    this, Annotations.EMPTY, false, Variance.INVARIANT,
+                    typeParameter.name, typeParameter.index, LockBasedStorageManager.NO_LOCKS
+                )
+            }
             initialize(
                 null,
                 thisDescriptor.thisAsReceiverParameter,
-                emptyList(), // todo
+                typeParameters,
                 emptyList(),
-                lensType,
+                KotlinTypeFactory.simpleNotNullType(
+                    Annotations.EMPTY,
+                    thisDescriptor.module.findClassAcrossModuleDependencies(
+                        ClassId.topLevel(Lens)
+                    )!!,
+                    listOf(
+                        clazz.defaultType.asSimpleType()
+                            .replace(
+                                newArguments = typeParameters
+                                    .map { it.defaultType.asTypeProjection() }
+                            )
+                            .asTypeProjection(),
+                        TypeSubstitutor.create(
+                            clazz.declaredTypeParameters
+                                .map { it.typeConstructor }
+                                .zip(typeParameters.map { it.defaultType.asTypeProjection() })
+                                .toMap()
+                        ).substitute(parameter.type, Variance.INVARIANT)
+                        !!.asTypeProjection()
+                    )
+                ),
                 Modality.FINAL,
                 parameter.visibility,
                 null
