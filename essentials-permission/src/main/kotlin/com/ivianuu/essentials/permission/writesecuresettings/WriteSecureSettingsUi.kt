@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
@@ -52,7 +52,7 @@ class WriteSecureSettingsKey(
 ) : Key<Boolean>
 
 @Given
-val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSettingsState> = {
+val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
     ) {
@@ -66,14 +66,14 @@ val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSetting
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_pc)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = state.openPcInstructions
+                    onClick = model.openPcInstructions
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_use_root)) },
                     subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = state.grantPermissionsViaRoot
+                    onClick = model.grantPermissionsViaRoot
                 )
             }
         }
@@ -81,13 +81,13 @@ val writeSecureSettingsUi: StateKeyUi<WriteSecureSettingsKey, WriteSecureSetting
 }
 
 @Optics
-data class WriteSecureSettingsState(
+data class WriteSecureSettingsModel(
     val openPcInstructions: () -> Unit = {},
     val grantPermissionsViaRoot: () -> Unit = {}
 )
 
 @Given
-fun writeSecureSettingsState(
+fun writeSecureSettingsModel(
     @Given buildInfo: BuildInfo,
     @Given key: WriteSecureSettingsKey,
     @Given navigator: Navigator,
@@ -95,7 +95,7 @@ fun writeSecureSettingsState(
     @Given runShellCommand: RunShellCommandUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StateBuilder<KeyUiGivenScope, WriteSecureSettingsState> = {
+): StateBuilder<KeyUiGivenScope, WriteSecureSettingsModel> = {
     timer(200.milliseconds)
         .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
         .filter { it }
@@ -105,10 +105,10 @@ fun writeSecureSettingsState(
             navigator.pop(key, true)
         }
         .launchIn(this)
-    action(WriteSecureSettingsState.openPcInstructions()) {
+    action(WriteSecureSettingsModel.openPcInstructions()) {
         navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
     }
-    action(WriteSecureSettingsState.grantPermissionsViaRoot()) {
+    action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
         runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
             .onFailure {
                 it.printStackTrace()

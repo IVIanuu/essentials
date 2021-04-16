@@ -39,7 +39,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -49,15 +49,15 @@ import kotlinx.coroutines.flow.first
 class NavBarKey : Key<Nothing>
 
 @Given
-val navBarUi: StateKeyUi<NavBarKey, NavBarState> = {
+val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 SwitchListItem(
-                    value = state.hideNavBar,
-                    onValueChange = state.updateHideNavBar,
+                    value = model.hideNavBar,
+                    onValueChange = model.updateHideNavBar,
                     title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
                 )
             }
@@ -65,8 +65,8 @@ val navBarUi: StateKeyUi<NavBarKey, NavBarState> = {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
                     subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
-                    modifier = Modifier.interactive(state.canChangeNavBarRotationMode),
-                    onClick = state.updateNavBarRotationMode
+                    modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
+                    onClick = model.updateNavBarRotationMode
                 )
             }
         }
@@ -74,7 +74,7 @@ val navBarUi: StateKeyUi<NavBarKey, NavBarState> = {
 }
 
 @Optics
-data class NavBarState(
+data class NavBarModel(
     val hideNavBar: Boolean = false,
     val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
     val updateHideNavBar: (Boolean) -> Unit = {},
@@ -85,23 +85,23 @@ data class NavBarState(
 }
 
 @Given
-fun navBarState(
+fun navBarModel(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
     @Given stringResource: StringResourceProvider,
-): StateBuilder<KeyUiGivenScope, NavBarState> = {
+): StateBuilder<KeyUiGivenScope, NavBarModel> = {
     pref.data.updateIn(this) {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }
-    action(NavBarState.updateHideNavBar()) { value ->
+    action(NavBarModel.updateHideNavBar()) { value ->
         if (!value) {
             pref.updateData { copy(hideNavBar = false) }
         } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
             pref.updateData { copy(hideNavBar = value) }
         }
     }
-    action(NavBarState.updateNavBarRotationMode()) {
+    action(NavBarModel.updateNavBarRotationMode()) {
         navigator.pushForResult(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()

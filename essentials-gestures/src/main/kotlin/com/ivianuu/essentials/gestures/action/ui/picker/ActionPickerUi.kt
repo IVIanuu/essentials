@@ -51,7 +51,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.injekt.Given
@@ -68,46 +68,46 @@ class ActionPickerKey(
 }
 
 @Given
-val actionPickerUi: StateKeyUi<ActionPickerKey, ActionPickerState> = {
+val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
     ) {
-        ResourceLazyColumnFor(state.items) { item ->
+        ResourceLazyColumnFor(model.items) { item ->
             ListItem(
                 leading = { item.Icon(Modifier.size(24.dp)) },
                 trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { state.openActionSettings(item) }) {
+                    IconButton(onClick = { model.openActionSettings(item) }) {
                         Icon(painterResource(R.drawable.es_ic_settings), null)
                     }
                 }) else null,
                 title = { Text(item.title) },
-                onClick = { state.pickAction(item) }
+                onClick = { model.pickAction(item) }
             )
         }
     }
 }
 
 @Optics
-data class ActionPickerState(
+data class ActionPickerModel(
     val items: Resource<List<ActionPickerItem>> = Idle,
     val openActionSettings: (ActionPickerItem) -> Unit = {},
     val pickAction: (ActionPickerItem) -> Unit = {}
 )
 
 @Given
-fun actionPickerState(
+fun actionPickerModel(
     @Given getAction: GetActionUseCase,
     @Given getActionPickerItems: GetActionPickerItemsUseCase,
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester
-): StateBuilder<KeyUiGivenScope, ActionPickerState> = {
+): StateBuilder<KeyUiGivenScope, ActionPickerModel> = {
     resourceFlow { emit(getActionPickerItems()) }
         .updateIn(this) { copy(items = it) }
 
-    action(ActionPickerState.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
+    action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
 
-    action(ActionPickerState.pickAction()) { item ->
+    action(ActionPickerModel.pickAction()) { item ->
         val result = item.getResult() ?: return@action
         if (result is ActionPickerKey.Result.Action) {
             val action = getAction(result.actionId)!!

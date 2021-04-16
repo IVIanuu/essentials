@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
 import kotlinx.coroutines.flow.first
@@ -45,7 +45,7 @@ val counterHomeItem = HomeItem("Counter") { CounterKey() }
 class CounterKey : Key<Nothing>
 
 @Given
-val counterUi: StateKeyUi<CounterKey, CounterState> = {
+val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Counter") }) }
     ) {
@@ -55,7 +55,7 @@ val counterUi: StateKeyUi<CounterKey, CounterState> = {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Count: ${state.count}",
+                text = "Count: ${model.count}",
                 style = MaterialTheme.typography.h3
             )
 
@@ -63,32 +63,32 @@ val counterUi: StateKeyUi<CounterKey, CounterState> = {
 
             ExtendedFloatingActionButton(
                 text = { Text("Inc") },
-                onClick = state.inc
+                onClick = model.inc
             )
 
             Spacer(Modifier.height(8.dp))
 
             ExtendedFloatingActionButton(
                 text = { Text("dec") },
-                onClick = state.dec
+                onClick = model.dec
             )
         }
     }
 }
 
 @Optics
-data class CounterState(
+data class CounterModel(
     val count: Int = 0,
     val inc: () -> Unit = {},
     val dec: () -> Unit = {}
 )
 
 @Given
-fun counterState(
+fun counterModel(
     @Given toaster: Toaster
-): StateBuilder<KeyUiGivenScope, CounterState> = {
-    action(CounterState.inc()) { update { copy(count = count.inc()) } }
-    action(CounterState.dec()) {
+): StateBuilder<KeyUiGivenScope, CounterModel> = {
+    action(CounterModel.inc()) { update { copy(count = count.inc()) } }
+    action(CounterModel.dec()) {
         if (state.first().count > 0) update { copy(count = count.dec()) }
         else toaster("Value cannot be less than 0!")
     }

@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.essentials.util.StringResourceProvider
@@ -48,7 +48,7 @@ import com.ivianuu.injekt.Given
 class ShortcutPickerKey : Key<Shortcut>
 
 @Given
-val shortcutPickerUi: StateKeyUi<ShortcutPickerKey, ShortcutPickerState> = {
+val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,7 +56,7 @@ val shortcutPickerUi: StateKeyUi<ShortcutPickerKey, ShortcutPickerState> = {
             )
         }
     ) {
-        ResourceLazyColumnFor(state.shortcuts) { shortcut ->
+        ResourceLazyColumnFor(model.shortcuts) { shortcut ->
             ListItem(
                 leading = {
                     Image(
@@ -66,29 +66,29 @@ val shortcutPickerUi: StateKeyUi<ShortcutPickerKey, ShortcutPickerState> = {
                     )
                 },
                 title = { Text(shortcut.name) },
-                onClick = { state.pickShortcut(shortcut) }
+                onClick = { model.pickShortcut(shortcut) }
             )
         }
     }
 }
 
 @Optics
-data class ShortcutPickerState(
+data class ShortcutPickerModel(
     val shortcuts: Resource<List<Shortcut>> = Idle,
     val pickShortcut: (Shortcut) -> Unit = {}
 )
 
 @Given
-fun shortcutPickerState(
+fun shortcutPickerModel(
     @Given extractShortcut: ExtractShortcutUseCase,
     @Given getAllShortcuts: GetAllShortcutsUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
-): StateBuilder<KeyUiGivenScope, ShortcutPickerState> = {
+): StateBuilder<KeyUiGivenScope, ShortcutPickerModel> = {
     resourceFlow { emit(getAllShortcuts()) }.updateIn(this) { copy(shortcuts = it) }
-    action(ShortcutPickerState.pickShortcut()) { shortcut ->
+    action(ShortcutPickerModel.pickShortcut()) { shortcut ->
         runCatching {
             val shortcutRequestResult = navigator.pushForResult(shortcut.intent.toIntentKey())
                 ?.data ?: return@runCatching

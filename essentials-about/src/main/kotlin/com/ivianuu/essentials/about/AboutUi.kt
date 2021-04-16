@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.util.BuildInfo
 import com.ivianuu.injekt.Given
@@ -39,14 +39,14 @@ import kotlinx.coroutines.flow.first
 class AboutKey : Key<Nothing>
 
 @Given
-val aboutUi: StateKeyUi<AboutKey, AboutState> = {
+val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.about_rate, )) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
-                    onClick = state.rate
+                    onClick = model.rate
                 )
             }
 
@@ -54,7 +54,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutState> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
-                    onClick = state.openMoreApps
+                    onClick = model.openMoreApps
                 )
             }
 
@@ -62,7 +62,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutState> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
-                    onClick = state.openRedditPage
+                    onClick = model.openRedditPage
                 )
             }
 
@@ -70,7 +70,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutState> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
-                    onClick = state.openGithubPage
+                    onClick = model.openGithubPage
                 )
             }
 
@@ -78,15 +78,15 @@ val aboutUi: StateKeyUi<AboutKey, AboutState> = {
                 ListItem(
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
-                    onClick = state.openTwitterPage
+                    onClick = model.openTwitterPage
                 )
             }
 
-            if (state.privacyPolicyUrl != null) {
+            if (model.privacyPolicyUrl != null) {
                 item {
                     ListItem(
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
-                        onClick = state.openPrivacyPolicy
+                        onClick = model.openPrivacyPolicy
                     )
                 }
             }
@@ -95,7 +95,7 @@ val aboutUi: StateKeyUi<AboutKey, AboutState> = {
 }
 
 @Optics
-data class AboutState(
+data class AboutModel(
     val privacyPolicyUrl: PrivacyPolicyUrl? = null,
     val rate: () -> Unit = {},
     val openMoreApps: () -> Unit = {},
@@ -108,33 +108,33 @@ data class AboutState(
         @Given
         fun initial(
             @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
-        ): @Initial AboutState = AboutState(privacyPolicyUrl = privacyPolicyUrl)
+        ): @Initial AboutModel = AboutModel(privacyPolicyUrl = privacyPolicyUrl)
     }
 }
 
 @Given
-fun aboutState(
+fun aboutModel(
     @Given buildInfo: BuildInfo,
     @Given navigator: Navigator
-): StateBuilder<KeyUiGivenScope, AboutState> = {
-    action(AboutState.rate()) {
+): StateBuilder<KeyUiGivenScope, AboutModel> = {
+    action(AboutModel.rate()) {
         navigator.push(
             UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
         )
     }
-    action(AboutState.openMoreApps()) {
+    action(AboutModel.openMoreApps()) {
         navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
-    action(AboutState.openRedditPage()) {
+    action(AboutModel.openRedditPage()) {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     }
-    action(AboutState.openGithubPage()) {
+    action(AboutModel.openGithubPage()) {
         navigator.push(UrlKey("https://github.com/IVIanuu"))
     }
-    action(AboutState.openTwitterPage()) {
+    action(AboutModel.openTwitterPage()) {
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
-    action(AboutState.openPrivacyPolicy()) {
+    action(AboutModel.openPrivacyPolicy()) {
         navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
     }
 }

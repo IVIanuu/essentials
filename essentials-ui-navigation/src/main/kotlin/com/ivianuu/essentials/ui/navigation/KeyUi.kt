@@ -47,35 +47,35 @@ class KeyUiModule<@Given T : KeyUi<K>, K : Key<*>> {
         (keyClass to keyUiOptionsFactory).cast()
 }
 
-typealias StateKeyUi<K, S> = @Composable StateKeyUiScope<K, S>.() -> Unit
+typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
 
 @Composable
-operator fun <S> StateKeyUi<*, S>.invoke(state: S) {
+operator fun <S> ModelKeyUi<*, S>.invoke(model: S) {
     invoke(
-        object : StateKeyUiScope<Nothing, S> {
-            override val state: S
-                get() = state
+        object : ModelKeyUiScope<Nothing, S> {
+            override val model: S
+                get() = model
         }
     )
 }
 
 @Stable
-interface StateKeyUiScope<K, S> {
-    val state: S
+interface ModelKeyUiScope<K, S> {
+    val model: S
 }
 
 @Given
-fun <@Given U : StateKeyUi<K, S>, K : Key<*>, S> stateKeyUi(
+fun <@Given U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
     @Given uiFactory: () -> U,
-    @Given store: StateFlow<S>
+    @Given model: StateFlow<S>
 ): KeyUi<K> = {
-    val currentState by store.collectAsState()
-    val scope = remember(store) {
-        object : StateKeyUiScope<K, S> {
-            override val state: S
-                get() = currentState
+    val currentModel by model.collectAsState()
+    val scope = remember {
+        object : ModelKeyUiScope<K, S> {
+            override val model: S
+                get() = currentModel
         }
     }
-    val ui = remember(uiFactory) as @Composable StateKeyUiScope<K, S>.() -> Unit
+    val ui = remember(uiFactory) as @Composable ModelKeyUiScope<K, S>.() -> Unit
     scope.ui()
 }

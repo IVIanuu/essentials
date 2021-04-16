@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.StringResourceProvider
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Given
@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Given
 class BackupAndRestoreKey : Key<Nothing>
 
 @Given
-val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey, BackupAndRestoreState> = {
+val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
     ) {
@@ -46,14 +46,14 @@ val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey, BackupAndRestoreState> =
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { state.backupData() }
+                    onClick = { model.backupData() }
                 )
             }
             item {
                 ListItem(
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { state.restoreData() }
+                    onClick = { model.restoreData() }
                 )
             }
         }
@@ -61,26 +61,26 @@ val backupAndRestoreUi: StateKeyUi<BackupAndRestoreKey, BackupAndRestoreState> =
 }
 
 @Optics
-data class BackupAndRestoreState(
+data class BackupAndRestoreModel(
     val backupData: () -> Unit = {},
     val restoreData: () -> Unit = {}
 )
 
 @Given
-fun backupAndRestoreState(
+fun backupAndRestoreModel(
     @Given createBackupUseCase: CreateBackupUseCase,
     @Given restoreBackupUseCase: RestoreBackupUseCase,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StateBuilder<KeyUiGivenScope, BackupAndRestoreState> = {
-    action(BackupAndRestoreState.backupData()) {
+): StateBuilder<KeyUiGivenScope, BackupAndRestoreModel> = {
+    action(BackupAndRestoreModel.backupData()) {
         createBackupUseCase()
             .onFailure {
                 it.printStackTrace()
                 toaster(stringResource(R.string.es_backup_error, emptyList()))
             }
     }
-    action(BackupAndRestoreState.restoreData()) {
+    action(BackupAndRestoreModel.restoreData()) {
         restoreBackupUseCase()
             .onFailure {
                 it.printStackTrace()

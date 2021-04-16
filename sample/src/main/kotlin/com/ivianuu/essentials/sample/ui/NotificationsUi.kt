@@ -68,7 +68,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
@@ -83,17 +83,17 @@ val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 class NotificationsKey : Key<Nothing>
 
 @Given
-val notificationsUi: StateKeyUi<NotificationsKey, NotificationsUiState> = {
+val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
-        AnimatedBox(state.hasPermissions) { hasPermission ->
+        AnimatedBox(model.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
-                    notifications = state.notifications,
-                    onNotificationClick = { state.openNotification(it) },
-                    onDismissNotificationClick = { state.dismissNotification(it) }
+                    notifications = model.notifications,
+                    onNotificationClick = { model.openNotification(it) },
+                    onDismissNotificationClick = { model.dismissNotification(it) }
                 )
             } else {
-                NotificationPermissions(state.requestPermissions)
+                NotificationPermissions(model.requestPermissions)
             }
         }
     }
@@ -164,7 +164,7 @@ private fun NotificationPermissions(
 }
 
 @Optics
-data class NotificationsUiState(
+data class NotificationsModel(
     val hasPermissions: Boolean = false,
     val notifications: Resource<List<UiNotification>> = Idle,
     val requestPermissions: () -> Unit = {},
@@ -182,14 +182,14 @@ data class UiNotification(
 )
 
 @Given
-fun notificationsUiState(
+fun notificationsModel(
     @Given appContext: AppContext,
     @Given dismissNotification: DismissNotificationUseCase,
     @Given notifications: Flow<Notifications>,
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester
-): StateBuilder<KeyUiGivenScope, NotificationsUiState> = {
+): StateBuilder<KeyUiGivenScope, NotificationsModel> = {
     notifications
         .map { notifications ->
             notifications
@@ -198,13 +198,13 @@ fun notificationsUiState(
         .flowAsResource()
         .updateIn(this) { copy(notifications = it) }
     permissionState.updateIn(this) { copy(hasPermissions = it) }
-    action(NotificationsUiState.requestPermissions()) {
+    action(NotificationsModel.requestPermissions()) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
-    action(NotificationsUiState.openNotification()) { notification ->
+    action(NotificationsModel.openNotification()) { notification ->
         openNotification(notification.sbn.notification)
     }
-    action(NotificationsUiState.dismissNotification()) { notification ->
+    action(NotificationsModel.dismissNotification()) { notification ->
         dismissNotification(notification.sbn.key)
     }
 }

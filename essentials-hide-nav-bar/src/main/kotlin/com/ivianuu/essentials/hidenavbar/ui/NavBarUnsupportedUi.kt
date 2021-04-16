@@ -13,14 +13,14 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Given
 
 class NavBarUnsupportedKey : Key<Nothing>
 
 @Given
-val navBarUnsupportedUi: StateKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState> = {
+val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
     DialogScaffold {
         Dialog(
             title = {
@@ -30,12 +30,12 @@ val navBarUnsupportedUi: StateKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
                 Text(stringResource(R.string.es_nav_bar_unsupported_content))
             },
             neutralButton = {
-                TextButton(onClick = state.openMoreInfos) {
+                TextButton(onClick = model.openMoreInfos) {
                     Text(stringResource(R.string.es_more_infos))
                 }
             },
             positiveButton = {
-                TextButton(onClick = state.close) {
+                TextButton(onClick = model.close) {
                     Text(stringResource(R.string.es_close))
                 }
             }
@@ -47,22 +47,22 @@ val navBarUnsupportedUi: StateKeyUi<NavBarUnsupportedKey, NavBarUnsupportedState
 val navBarUnsupportedOptions = DialogKeyUiOptionsFactory<NavBarUnsupportedKey>()
 
 @Optics
-data class NavBarUnsupportedState(
+data class NavBarUnsupportedModel(
     val openMoreInfos: () -> Unit = {},
     val close: () -> Unit = {}
 )
 
 @Given
-fun navBarUnsupportedState(
+fun navBarUnsupportedModel(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator
-): StateBuilder<KeyUiGivenScope, NavBarUnsupportedState> = {
-    action(NavBarUnsupportedState.openMoreInfos()) {
+): StateBuilder<KeyUiGivenScope, NavBarUnsupportedModel> = {
+    action(NavBarUnsupportedModel.openMoreInfos()) {
         navigator.push(
             UrlKey(
                 "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
             )
         )
     }
-    action(NavBarUnsupportedState.close()) { navigator.pop(key) }
+    action(NavBarUnsupportedModel.close()) { navigator.pop(key) }
 }

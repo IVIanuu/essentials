@@ -45,7 +45,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.android.AppContext
 import kotlinx.coroutines.flow.Flow
@@ -94,7 +94,7 @@ val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
 @Given
-val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsState> = {
+val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
     Scaffold(topBar = {
         TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
     }) {
@@ -106,12 +106,12 @@ val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey<*>, MediaActionSett
                         Text(
                             stringResource(
                                 R.string.es_pref_media_app_summary,
-                                state.mediaApp.get()?.appName
+                                model.mediaApp.get()?.appName
                                     ?: stringResource(R.string.es_none)
                             )
                         )
                     },
-                    onClick = state.updateMediaApp
+                    onClick = model.updateMediaApp
                 )
             }
         }
@@ -119,24 +119,24 @@ val mediaActionSettingsUi: StateKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 }
 
 @Optics
-data class MediaActionSettingsState(
+data class MediaActionSettingsModel(
     val mediaApp: Resource<AppInfo> = Idle,
     val updateMediaApp: () -> Unit = {}
 )
 
 @Given
-fun mediaActionSettingsState(
+fun mediaActionSettingsModel(
     @Given getAppInfo: GetAppInfoUseCase,
     @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
-): StateBuilder<KeyUiGivenScope, MediaActionSettingsState> = {
+): StateBuilder<KeyUiGivenScope, MediaActionSettingsModel> = {
     pref.data
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
         .updateIn(this) { copy(mediaApp = it) }
-    action(MediaActionSettingsState.updateMediaApp()) {
+    action(MediaActionSettingsModel.updateMediaApp()) {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(
                 intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null

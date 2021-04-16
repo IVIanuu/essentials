@@ -17,14 +17,14 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Given
 
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
 @Given
-val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistUiState> = {
+val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }
     ) {
@@ -35,24 +35,24 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
                         Text(
                             stringResource(
                                 R.string.es_pref_system_overlay_app_blacklist,
-                                state.systemOverlayName
+                                model.systemOverlayName
                             )
                         )
                     },
-                    onClick = state.openAppBlacklistSettings
+                    onClick = model.openAppBlacklistSettings
                 )
             }
 
             item {
                 CheckboxListItem(
-                    value = state.disableOnKeyboard,
-                    onValueChange = state.updateDisableOnKeyboard,
+                    value = model.disableOnKeyboard,
+                    onValueChange = model.updateDisableOnKeyboard,
                     title = { Text(stringResource(R.string.es_pref_disable_on_keyboard)) },
                     subtitle = {
                         Text(
                             stringResource(
                                 R.string.es_pref_disable_on_keyboard_summary,
-                                state.systemOverlayName
+                                model.systemOverlayName
                             )
                         )
                     }
@@ -61,14 +61,14 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
 
             item {
                 CheckboxListItem(
-                    value = state.disableOnLockScreen,
-                    onValueChange = state.updateDisableOnLockScreen,
+                    value = model.disableOnLockScreen,
+                    onValueChange = model.updateDisableOnLockScreen,
                     title = { Text(stringResource(R.string.es_pref_disable_on_lock_screen)) },
                     subtitle = {
                         Text(
                             stringResource(
                                 R.string.es_pref_disable_on_lock_screen_summary,
-                                state.systemOverlayName
+                                model.systemOverlayName
                             )
                         )
                     }
@@ -77,14 +77,14 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
 
             item {
                 CheckboxListItem(
-                    value = state.disableOnSecureScreens,
-                    onValueChange = state.updateDisableOnSecureScreens,
+                    value = model.disableOnSecureScreens,
+                    onValueChange = model.updateDisableOnSecureScreens,
                     title = { Text(stringResource(R.string.es_pref_disable_on_secure_screens)) },
                     subtitle = {
                         Text(
                             stringResource(
                                 R.string.es_pref_disable_on_secure_screens_summary,
-                                state.systemOverlayName
+                                model.systemOverlayName
                             )
                         )
                     }
@@ -95,7 +95,7 @@ val systemOverlayBlacklistUi: StateKeyUi<SystemOverlayBlacklistKey, SystemOverla
 }
 
 @Optics
-data class SystemOverlayBlacklistUiState(
+data class SystemOverlayBlacklistModel(
     val systemOverlayName: String,
     val disableOnKeyboard: Boolean = false,
     val disableOnLockScreen: Boolean = false,
@@ -109,17 +109,17 @@ data class SystemOverlayBlacklistUiState(
         @Given
         fun initial(
             @Given key: SystemOverlayBlacklistKey
-        ): @Initial SystemOverlayBlacklistUiState = SystemOverlayBlacklistUiState(
+        ): @Initial SystemOverlayBlacklistModel = SystemOverlayBlacklistModel(
             systemOverlayName = key.systemOverlayName
         )
     }
 }
 
 @Given
-fun systemOverlayBlacklistState(
+fun systemOverlayBlacklistModel(
     @Given navigator: Navigator,
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-): StateBuilder<KeyUiGivenScope, SystemOverlayBlacklistUiState> = {
+): StateBuilder<KeyUiGivenScope, SystemOverlayBlacklistModel> = {
     pref.data.updateIn(this) {
         copy(
             disableOnKeyboard = it.disableOnKeyboard,
@@ -127,16 +127,16 @@ fun systemOverlayBlacklistState(
             disableOnSecureScreens = it.disableOnSecureScreens
         )
     }
-    action(SystemOverlayBlacklistUiState.openAppBlacklistSettings()) {
+    action(SystemOverlayBlacklistModel.openAppBlacklistSettings()) {
         navigator.push(SystemOverlayAppBlacklistKey())
     }
-    action(SystemOverlayBlacklistUiState.updateDisableOnKeyboard()) { value ->
+    action(SystemOverlayBlacklistModel.updateDisableOnKeyboard()) { value ->
         pref.updateData { copy(disableOnKeyboard = value) }
     }
-    action(SystemOverlayBlacklistUiState.updateDisableOnLockScreen()) { value ->
+    action(SystemOverlayBlacklistModel.updateDisableOnLockScreen()) { value ->
         pref.updateData { copy(disableOnLockScreen = value) }
     }
-    action(SystemOverlayBlacklistUiState.updateDisableOnSecureScreens()) { value ->
+    action(SystemOverlayBlacklistModel.updateDisableOnSecureScreens()) { value ->
         pref.updateData { copy(disableOnSecureScreens = value) }
     }
 }

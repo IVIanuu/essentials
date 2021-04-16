@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Given
 import com.ivianuu.injekt.common.TypeKey
@@ -47,14 +47,14 @@ import kotlinx.coroutines.launch
 class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
 @Given
-val permissionRequestUi: StateKeyUi<PermissionRequestKey, PermissionRequestState> = {
+val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Required permissions") }) // todo customizable and/or res
         }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            items(state.permissions) { permission ->
+            items(model.permissions) { permission ->
                 ListItem(
                     title = { Text(permission.permission.title) },
                     subtitle = permission.permission.desc?.let {
@@ -64,11 +64,11 @@ val permissionRequestUi: StateKeyUi<PermissionRequestKey, PermissionRequestState
                     },
                     leading = permission.permission.icon,
                     trailing = {
-                        Button(onClick = { state.grantPermission(permission) }) {
+                        Button(onClick = { model.grantPermission(permission) }) {
                             Text("GRANT") // todo res
                         }
                     },
-                    onClick = { state.grantPermission(permission) }
+                    onClick = { model.grantPermission(permission) }
                 )
             }
         }
@@ -76,7 +76,7 @@ val permissionRequestUi: StateKeyUi<PermissionRequestKey, PermissionRequestState
 }
 
 @Optics
-data class PermissionRequestState(
+data class PermissionRequestModel(
     val permissions: List<UiPermission<*>> = emptyList(),
     val grantPermission: (UiPermission<*>) -> Unit = {}
 )
@@ -87,14 +87,14 @@ data class UiPermission<P : Permission>(
 )
 
 @Given
-fun permissionRequestState(
+fun permissionRequestModel(
     @Given appUiStarter: AppUiStarter,
     @Given key: PermissionRequestKey,
     @Given navigator: Navigator,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
-): StateBuilder<KeyUiGivenScope, PermissionRequestState> = {
+): StateBuilder<KeyUiGivenScope, PermissionRequestModel> = {
     state
         .filter {
             key.permissionsKeys
@@ -113,7 +113,7 @@ fun permissionRequestState(
 
     launch { updatePermissions() }
 
-    action(PermissionRequestState.grantPermission()) { permission ->
+    action(PermissionRequestModel.grantPermission()) { permission ->
         requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
         appUiStarter()
         updatePermissions()

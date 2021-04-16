@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiGivenScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.StateKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Given
 
@@ -53,17 +53,17 @@ class AppPickerKey(
 ) : Key<AppInfo>
 
 @Given
-val appPickerUi: StateKeyUi<AppPickerKey, AppPickerState> = {
+val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(state.title ?: stringResource(R.string.es_title_app_picker))
+                    Text(model.title ?: stringResource(R.string.es_title_app_picker))
                 }
             )
         }
     ) {
-        ResourceLazyColumnFor(state.filteredApps) { app ->
+        ResourceLazyColumnFor(model.filteredApps) { app ->
             ListItem(
                 title = { Text(app.appName) },
                 leading = {
@@ -73,14 +73,14 @@ val appPickerUi: StateKeyUi<AppPickerKey, AppPickerState> = {
                         contentDescription = null
                     )
                 },
-                onClick = { state.pickApp(app) }
+                onClick = { model.pickApp(app) }
             )
         }
     }
 }
 
 @Optics
-data class AppPickerState(
+data class AppPickerModel(
     private val allApps: Resource<List<AppInfo>> = Idle,
     val appPredicate: AppPredicate = DefaultAppPredicate,
     val title: String? = null,
@@ -90,7 +90,7 @@ data class AppPickerState(
         .map { it.filter(appPredicate) }
     companion object {
         @Given
-        fun initial(@Given key: AppPickerKey): @Initial AppPickerState = AppPickerState(
+        fun initial(@Given key: AppPickerKey): @Initial AppPickerModel = AppPickerModel(
             appPredicate = key.appPredicate,
             title = key.title
         )
@@ -98,12 +98,12 @@ data class AppPickerState(
 }
 
 @Given
-fun appPickerState(
+fun appPickerModel(
     @Given key: AppPickerKey,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
-): StateBuilder<KeyUiGivenScope, AppPickerState> = {
+): StateBuilder<KeyUiGivenScope, AppPickerModel> = {
     resourceFlow { emit(getInstalledApps()) }
         .updateIn(this) { copy(allApps = it) }
-    action(AppPickerState.pickApp()) { navigator.pop(key, it) }
+    action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
 }
