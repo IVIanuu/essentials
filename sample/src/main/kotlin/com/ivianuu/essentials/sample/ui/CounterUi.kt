@@ -35,9 +35,9 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val counterHomeItem = HomeItem("Counter") { CounterKey() }
+val counterHomeItem = HomeItem("Counter") { CounterKey }
 
-class CounterKey : Key<Nothing>
+object CounterKey : Key<Nothing>
 
 @Given
 val counterUi: ModelKeyUi<CounterKey, CounterModel> = {

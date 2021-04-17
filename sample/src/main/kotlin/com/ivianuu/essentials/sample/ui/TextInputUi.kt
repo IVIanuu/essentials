@@ -37,9 +37,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
+val textInputHomeItem = HomeItem("Text input") { TextInputKey }
 
-class TextInputKey : Key<Nothing>
+object TextInputKey : Key<Nothing>
 
 @Given
 val textInputUi: KeyUi<TextInputKey> = {

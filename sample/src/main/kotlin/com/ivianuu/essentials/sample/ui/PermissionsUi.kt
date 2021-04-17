@@ -45,9 +45,9 @@ import kotlinx.coroutines.*
 import kotlin.reflect.*
 
 @Given
-val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
+val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
 
-class PermissionsKey : Key<Nothing>
+object PermissionsKey : Key<Nothing>
 
 @Given
 fun permissionUi(

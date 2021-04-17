@@ -39,9 +39,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
+val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
 
-class BottomNavigationKey : Key<Nothing>
+object BottomNavigationKey : Key<Nothing>
 
 @Given
 val bottomNavigationUi: KeyUi<BottomNavigationKey> = {

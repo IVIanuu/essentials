@@ -23,7 +23,7 @@ import androidx.compose.ui.res.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class TextInputKey(
+data class TextInputKey(
     val initial: String = "",
     val label: String,
     val keyboardOptions: KeyboardOptions = KeyboardOptions(),

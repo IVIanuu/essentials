@@ -29,9 +29,9 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 @Given
-val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }
+val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }
 
-class RestartProcessKey : Key<Nothing>
+object RestartProcessKey : Key<Nothing>
 
 @Given
 fun restartProcessUi(

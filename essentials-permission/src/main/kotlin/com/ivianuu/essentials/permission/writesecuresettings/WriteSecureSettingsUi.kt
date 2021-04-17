@@ -38,7 +38,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*
 
-class WriteSecureSettingsKey(
+data class WriteSecureSettingsKey(
     val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 

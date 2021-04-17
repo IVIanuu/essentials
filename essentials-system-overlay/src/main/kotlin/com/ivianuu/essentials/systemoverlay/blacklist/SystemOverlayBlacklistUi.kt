@@ -19,7 +19,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
+data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
 @Given
 val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
@@ -128,7 +128,7 @@ fun systemOverlayBlacklistModel(
         )
     }
     action(SystemOverlayBlacklistModel.openAppBlacklistSettings()) {
-        navigator.push(SystemOverlayAppBlacklistKey())
+        navigator.push(SystemOverlayAppBlacklistKey)
     }
     action(SystemOverlayBlacklistModel.updateDisableOnKeyboard()) { value ->
         pref.updateData { copy(disableOnKeyboard = value) }

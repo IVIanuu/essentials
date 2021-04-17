@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
 @Given
-val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
+val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 
-class CheckAppsKey : Key<Nothing>
+object CheckAppsKey : Key<Nothing>
 
 @Given
 fun checkAppsUi(

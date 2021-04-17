@@ -34,7 +34,7 @@ import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-class TwilightSettingsKey : Key<Nothing>
+object TwilightSettingsKey : Key<Nothing>
 
 @Given
 fun twilightSettingsUi(

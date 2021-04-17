@@ -32,9 +32,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
+val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
 
-class UnlockKey : Key<Nothing>
+object UnlockKey : Key<Nothing>
 
 @Given
 fun unlockUi(

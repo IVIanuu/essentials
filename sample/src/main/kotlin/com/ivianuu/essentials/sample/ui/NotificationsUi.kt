@@ -62,9 +62,9 @@ import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 @Given
-val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
+val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
-class NotificationsKey : Key<Nothing>
+object NotificationsKey : Key<Nothing>
 
 @Given
 val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {

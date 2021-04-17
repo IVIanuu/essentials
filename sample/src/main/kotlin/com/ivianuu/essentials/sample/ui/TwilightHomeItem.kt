@@ -20,4 +20,4 @@ import com.ivianuu.essentials.twilight.ui.*
 import com.ivianuu.injekt.*
 
 @Given
-val twilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey() }
+val twilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey }

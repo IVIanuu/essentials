@@ -20,4 +20,4 @@ import com.ivianuu.essentials.about.*
 import com.ivianuu.injekt.*
 
 @Given
-val aboutHomeItem = HomeItem("About") { AboutKey() }
+val aboutHomeItem = HomeItem("About") { AboutKey }

@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class PopupKey(
+data class PopupKey(
     val position: Rect,
     val onCancel: (() -> Unit)?,
     val content: @Composable () -> Unit,

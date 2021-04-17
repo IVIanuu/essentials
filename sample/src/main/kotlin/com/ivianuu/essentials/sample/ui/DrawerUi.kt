@@ -28,9 +28,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
+val drawerHomeItem = HomeItem("Drawer") { DrawerKey }
 
-class DrawerKey : Key<Nothing>
+object DrawerKey : Key<Nothing>
 
 @Given
 val drawerUi: KeyUi<DrawerKey> = {

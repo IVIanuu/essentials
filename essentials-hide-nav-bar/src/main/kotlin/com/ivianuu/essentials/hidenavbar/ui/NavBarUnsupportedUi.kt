@@ -12,7 +12,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class NavBarUnsupportedKey : Key<Nothing>
+object NavBarUnsupportedKey : Key<Nothing>
 
 @Given
 val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {

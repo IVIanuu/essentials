@@ -38,7 +38,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class ShortcutPickerKey : Key<Shortcut>
+object ShortcutPickerKey : Key<Shortcut>
 
 @Given
 val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {

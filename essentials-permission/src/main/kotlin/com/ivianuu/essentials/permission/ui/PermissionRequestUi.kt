@@ -35,7 +35,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
+data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
 @Given
 val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {

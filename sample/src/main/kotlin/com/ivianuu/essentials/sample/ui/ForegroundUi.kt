@@ -41,9 +41,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
+val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 
-class ForegroundKey : Key<Nothing>
+object ForegroundKey : Key<Nothing>
 
 @SuppressLint("NewApi")
 @Given

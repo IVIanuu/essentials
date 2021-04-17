@@ -40,9 +40,9 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
 @Given
-val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
+val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
 
-class DialogsKey : Key<Nothing>
+object DialogsKey : Key<Nothing>
 
 @Given
 val dialogsUi: KeyUi<DialogsKey> = {

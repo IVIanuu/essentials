@@ -33,9 +33,9 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val torchHomeItem = HomeItem("Torch") { TorchKey() }
+val torchHomeItem = HomeItem("Torch") { TorchKey }
 
-class TorchKey : Key<Nothing>
+object TorchKey : Key<Nothing>
 
 @Given
 fun torchUi(@Given torch: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {

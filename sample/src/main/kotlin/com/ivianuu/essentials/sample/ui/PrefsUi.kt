@@ -38,9 +38,9 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.*
 
 @Given
-val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
+val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
 
-class PrefsKey : Key<Nothing>
+object PrefsKey : Key<Nothing>
 
 @Given
 fun prefsUi(

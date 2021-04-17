@@ -41,7 +41,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class ActionPickerKey(
+data class ActionPickerKey(
     val showDefaultOption: Boolean = false,
     val showNoneOption: Boolean = false,
 ) : Key<ActionPickerKey.Result> {

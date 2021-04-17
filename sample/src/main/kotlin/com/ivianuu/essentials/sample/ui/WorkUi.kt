@@ -27,9 +27,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val workHomeItem = HomeItem("Work") { WorkKey() }
+val workHomeItem = HomeItem("Work") { WorkKey }
 
-class WorkKey : Key<Nothing>
+object WorkKey : Key<Nothing>
 
 @Given
 fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {

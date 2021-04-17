@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class ColorPickerKey(
+data class ColorPickerKey(
     val initialColor: Color,
     val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
     val title: String? = null,

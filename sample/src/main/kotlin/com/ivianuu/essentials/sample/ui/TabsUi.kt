@@ -35,9 +35,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
+val tabsHomeItem = HomeItem("Tabs") { TabsKey }
 
-class TabsKey : Key<Nothing>
+object TabsKey : Key<Nothing>
 
 @Given
 val tabsUi: KeyUi<TabsKey> = {

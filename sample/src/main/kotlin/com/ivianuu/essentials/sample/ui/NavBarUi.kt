@@ -38,9 +38,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
+val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 
-class NavBarKey : Key<Nothing>
+object NavBarKey : Key<Nothing>
 
 @Given
 fun navBarUi(
@@ -123,7 +123,7 @@ fun navBarUi(
 
             Button(
                 onClick = {
-                    navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
+                    navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
                 }
             ) { Text("Settings") }
         }

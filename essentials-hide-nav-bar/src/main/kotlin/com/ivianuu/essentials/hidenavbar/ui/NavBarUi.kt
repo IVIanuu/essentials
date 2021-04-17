@@ -41,7 +41,7 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class NavBarKey : Key<Nothing>
+object NavBarKey : Key<Nothing>
 
 @Given
 val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {

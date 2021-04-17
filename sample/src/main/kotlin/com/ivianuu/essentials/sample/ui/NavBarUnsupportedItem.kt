@@ -4,4 +4,4 @@ import com.ivianuu.essentials.hidenavbar.ui.*
 import com.ivianuu.injekt.*
 
 @Given
-val navBarUnsupportedHomeItem = HomeItem("Nav bar unsupported") { NavBarUnsupportedKey() }
+val navBarUnsupportedHomeItem = HomeItem("Nav bar unsupported") { NavBarUnsupportedKey }

@@ -46,9 +46,9 @@ import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
 @Given
-val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
+val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
-class AppTrackerKey : Key<Nothing>
+object AppTrackerKey : Key<Nothing>
 
 @Given
 fun appTrackerUi(

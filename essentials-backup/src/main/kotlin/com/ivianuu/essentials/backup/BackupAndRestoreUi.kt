@@ -33,7 +33,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class BackupAndRestoreKey : Key<Nothing>
+object BackupAndRestoreKey : Key<Nothing>
 
 @Given
 val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {

@@ -6,7 +6,7 @@ import androidx.compose.ui.res.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class SingleChoiceListKey<T : Any>(
+data class SingleChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItem: T,
     val title: String

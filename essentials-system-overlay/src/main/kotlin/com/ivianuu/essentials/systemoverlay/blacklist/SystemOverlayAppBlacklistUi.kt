@@ -15,7 +15,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class SystemOverlayAppBlacklistKey : Key<Nothing>
+object SystemOverlayAppBlacklistKey : Key<Nothing>
 
 @Given
 fun systemOverlayAppBlacklistUi(

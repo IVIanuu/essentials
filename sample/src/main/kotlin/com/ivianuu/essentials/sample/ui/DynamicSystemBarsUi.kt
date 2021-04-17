@@ -31,9 +31,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey() }
+val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }
 
-class DynamicSystemBarsKey : Key<Nothing>
+object DynamicSystemBarsKey : Key<Nothing>
 
 @Given
 val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {

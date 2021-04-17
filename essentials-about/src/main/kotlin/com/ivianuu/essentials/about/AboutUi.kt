@@ -32,7 +32,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class AboutKey : Key<Nothing>
+object AboutKey : Key<Nothing>
 
 @Given
 val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {

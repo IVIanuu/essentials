@@ -47,19 +47,27 @@ class NavigatorImpl(
     override val state: StateFlow<NavigationState>
         get() = _state.mapState { NavigationState(it.backStack) }
 
+    private val actor = scope.actor()
+
     override fun push(key: Key<*>) {
         scope.launch { pushForResult(key) }
     }
 
     override suspend fun <R> pushForResult(key: Key<R>): R? {
-        logger.d { "push $key" }
         val result = CompletableDeferred<R?>()
-        if (!intentKeyHandler(key) { result.complete(it as R) }) {
-            _state.update {
-                copy(
-                    backStack = backStack + key,
-                    results = results + mapOf(key to result)
-                )
+        actor.act {
+            logger.d { "push $key" }
+            _state.value.results[key]
+                ?.safeAs<CompletableDeferred<Any?>>()
+                ?.complete(null)
+            if (!intentKeyHandler(key) { result.complete(it as R) }) {
+                _state.update {
+                    copy(
+                        backStack = backStack
+                            .filter { it != key } + key,
+                        results = results + mapOf(key to result)
+                    )
+                }
             }
         }
         return result.await()
@@ -71,20 +79,27 @@ class NavigatorImpl(
 
     override suspend fun <R> replaceTopForResult(key: Key<R>): R? {
         val result = CompletableDeferred<R?>()
-        logger.d { "replace top $key" }
-        if (intentKeyHandler(key) { result.complete(it as R?) }) {
-            _state.update {
-                copy(
-                    backStack = backStack.dropLast(1),
-                    results = results + mapOf(key to result)
-                )
-            }
-        } else {
-            _state.update {
-                copy(
-                    backStack = backStack.dropLast(1) + key,
-                    results = results + mapOf(key to result)
-                )
+        actor.act {
+            logger.d { "replace top $key" }
+            _state.value.results[key]
+                ?.safeAs<CompletableDeferred<Any?>>()
+                ?.complete(null)
+            if (intentKeyHandler(key) { result.complete(it as R?) }) {
+                _state.update {
+                    copy(
+                        backStack = backStack.dropLast(1),
+                        results = results + mapOf(key to result)
+                    )
+                }
+            } else {
+                _state.update {
+                    copy(
+                        backStack = backStack
+                            .filter { it != key }
+                            .dropLast(1) + key,
+                        results = results + mapOf(key to result)
+                    )
+                }
             }
         }
         return result.await()
@@ -92,18 +107,22 @@ class NavigatorImpl(
 
     override fun <R> pop(key: Key<R>, result: R?) {
         scope.launch {
-            logger.d { "pop $key" }
-            _state.update { popKey(key, result) }
+            actor.act {
+                logger.d { "pop $key" }
+                _state.update { popKey(key, result) }
+            }
         }
     }
 
     override fun popTop() {
         scope.launch {
-            val topKey = state.first().backStack.last()
-            logger.d { "pop top $topKey" }
-            _state.update {
-                @Suppress("UNCHECKED_CAST")
-                popKey(topKey as Key<Any>, null)
+            actor.act {
+                val topKey = state.first().backStack.last()
+                logger.d { "pop top $topKey" }
+                _state.update {
+                    @Suppress("UNCHECKED_CAST")
+                    popKey(topKey as Key<Any>, null)
+                }
             }
         }
     }

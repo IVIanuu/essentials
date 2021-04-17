@@ -6,7 +6,7 @@ import androidx.compose.ui.res.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-class MultiChoiceListKey<T : Any>(
+data class MultiChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItems: Set<T>,
     val title: String

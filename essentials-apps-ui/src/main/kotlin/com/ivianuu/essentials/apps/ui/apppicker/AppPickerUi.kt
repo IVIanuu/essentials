@@ -39,7 +39,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class AppPickerKey(
+data class AppPickerKey(
     val appPredicate: AppPredicate = DefaultAppPredicate,
     val title: String? = null,
 ) : Key<AppInfo>

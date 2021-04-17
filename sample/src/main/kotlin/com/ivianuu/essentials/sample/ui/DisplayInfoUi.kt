@@ -28,9 +28,9 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Given
-val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
+val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }
 
-class DisplayRotationKey : Key<Nothing>
+object DisplayRotationKey : Key<Nothing>
 
 @Given
 fun displayRotationUi(@Given displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {

@@ -75,7 +75,7 @@ class ShortcutActionPickerDelegate(
     }
 
     override suspend fun pickAction(): ActionPickerKey.Result? {
-        val shortcut = navigator.pushForResult(ShortcutPickerKey()) ?: return null
+        val shortcut = navigator.pushForResult(ShortcutPickerKey) ?: return null
         val label = shortcut.name
         val icon = shortcut.icon.toBitmap()
         val stream = ByteArrayOutputStream()
