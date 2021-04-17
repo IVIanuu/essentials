@@ -127,17 +127,14 @@ fun isPurchased(
 @Given
 @Scoped<AppGivenScope>
 class BillingContext(
-    @Given billingClientFactory: (@Given PurchasesUpdatedListener) -> BillingClient,
+    @Given val billingClient: BillingClient,
     @Given private val dispatcher: IODispatcher,
     @Given val logger: Logger,
+    @Given val refreshes: MutableSharedFlow<BillingRefresh>,
     @Given private val scope: ScopeCoroutineScope<AppGivenScope>
 ) {
-    val billingClient = billingClientFactory { _, _ -> refreshes.tryEmit(Unit) }
-
     private var isConnected = false
     private val connectionMutex = Mutex()
-
-    val refreshes = EventFlow<Unit>()
 
     suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R =
         withContext(scope.coroutineContext + dispatcher) {
