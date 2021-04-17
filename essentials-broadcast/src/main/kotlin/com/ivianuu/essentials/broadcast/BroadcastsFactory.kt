@@ -37,12 +37,7 @@ fun broadcastsFactory(
                 runCatching { offer(intent) }
             }
         }
-        appContext.registerReceiver(
-            broadcastReceiver,
-            IntentFilter().apply {
-                addAction(action)
-            }
-        )
+        appContext.registerReceiver(broadcastReceiver, IntentFilter(action))
         awaitClose {
             runCatching {
                 appContext.unregisterReceiver(broadcastReceiver)
