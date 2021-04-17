@@ -27,7 +27,6 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hide-nav-bar",
     ":essentials-ide-plugin",
-    ":essentials-lint",
     ":essentials-notification-listener",
     ":essentials-optics",
     ":essentials-permission",
