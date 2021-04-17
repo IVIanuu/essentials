@@ -33,7 +33,7 @@ import com.ivianuu.injekt.*
 class PopupKey(
     val position: Rect,
     val onCancel: (() -> Unit)?,
-    val content: @Composable() () -> Unit,
+    val content: @Composable () -> Unit,
 ) : Key<Nothing>
 
 @Given
