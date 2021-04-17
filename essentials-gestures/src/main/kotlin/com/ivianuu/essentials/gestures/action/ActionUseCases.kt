@@ -16,10 +16,55 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.unlock.*
+import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
+
+typealias ExecuteActionUseCase = suspend (String) -> com.github.michaelbull.result.Result<Boolean, Throwable>
+
+@Given
+fun executeActionUseCase(
+    @Given dispatcher: DefaultDispatcher,
+    @Given getAction: GetActionUseCase,
+    @Given getActionExecutor: GetActionExecutorUseCase,
+    @Given logger: Logger,
+    @Given permissionRequester: PermissionRequester,
+    @Given screenUnlocker: ScreenUnlocker,
+    @Given toaster: Toaster
+): ExecuteActionUseCase = { key ->
+    withContext(dispatcher) {
+        runCatching {
+            logger.d { "execute $key" }
+            val action = getAction(key)!!
+
+            // check permissions
+            if (!permissionRequester(action.permissions)) {
+                logger.d { "couldn't get permissions for $key" }
+                return@runCatching false
+            }
+
+            // unlock screen
+            if (action.unlockScreen && !screenUnlocker()) {
+                logger.d { "couldn't unlock screen for $key" }
+                return@runCatching false
+            }
+
+            logger.d { "fire $key" }
+
+            // fire
+            getActionExecutor(key)!!()
+            return@runCatching true
+        }.onFailure {
+            it.printStackTrace()
+            toaster("Failed to execute '$key'") // todo res
+        }
+    }
+}
 
 typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 

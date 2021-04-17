@@ -37,7 +37,7 @@ class ActionsKey : Key<Nothing>
 
 @Given
 fun actionsUi(
-    @Given executeAction: executeAction,
+    @Given executeAction: ExecuteActionUseCase,
     @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {

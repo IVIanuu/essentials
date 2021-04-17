@@ -30,20 +30,17 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
 class EsActivity : ComponentActivity() {
-    private val uiGivenScope by lazy {
-        activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val component = uiGivenScope.element<EsActivityComponent>()
-
+        val uiGivenScope = activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
         lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
             runOnCancellation {
                 uiGivenScope.dispose()
             }
         }
+
+        val component = uiGivenScope.element<EsActivityComponent>()
 
         setContent {
             CompositionLocalProvider(LocalUiGivenScope provides uiGivenScope) {

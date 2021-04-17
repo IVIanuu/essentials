@@ -63,5 +63,5 @@ object ActionWriteSettingsPermission : WriteSettingsPermission {
     override val desc: String = "Required to change settings" // todo res
     override val icon: @Composable () -> Unit = {
         Icon(painterResource(R.drawable.es_ic_settings), null)
-    } // todo change icon
+    }
 }
