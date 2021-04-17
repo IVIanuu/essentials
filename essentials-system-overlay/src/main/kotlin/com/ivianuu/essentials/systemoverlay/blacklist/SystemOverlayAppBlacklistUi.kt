@@ -19,7 +19,7 @@ class SystemOverlayAppBlacklistKey : Key<Nothing>
 fun systemOverlayAppBlacklistUi(
     @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
     @Given stringResource: StringResourceProvider
-): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistState> = {
+): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
     remember {
         checkableAppsPageFactory(
             CheckableAppsParams(
@@ -33,17 +33,17 @@ fun systemOverlayAppBlacklistUi(
 }
 
 @Optics
-data class SystemOverlayAppBlacklistState(
+data class SystemOverlayAppBlacklistModel(
     val appBlacklist: Flow<Set<String>> = emptyFlow(),
     val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
 @Given
-fun systemOverlayAppBlacklistState(
+fun systemOverlayAppBlacklistModel(
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>
-): StateBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistState> = {
+): StateBuilder<KeyUiGivenScope, SystemOverlayAppBlacklistModel> = {
     update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
-    action(SystemOverlayAppBlacklistState.updateAppBlacklist()) { appBlacklist ->
+    action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
         pref.updateData { copy(appBlacklist = appBlacklist) }
     }
 }
