@@ -11,6 +11,8 @@ enum class SystemOverlayBlacklistState {
     DISABLED, ENABLED, HIDDEN
 }
 
+typealias SystemOverlayEnabled = Boolean
+
 @Given
 fun systemOverlayBlacklistState(
     @Given logger: Logger,
@@ -46,8 +48,6 @@ fun systemOverlayBlacklistState(
         it?.printStackTrace()
         logger.d { "lol $it" }
     }
-
-typealias SystemOverlayEnabled = Boolean
 
 private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
