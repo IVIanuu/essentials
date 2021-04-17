@@ -14,8 +14,8 @@ enum class SystemOverlayBlacklistState {
 @Given
 fun systemOverlayBlacklistState(
     @Given logger: Logger,
-    @Given keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
     @Given mainSwitchState: Flow<SystemOverlayEnabled>,
+    @Given keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
     @Given lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
     @Given secureScreenState: @Private Flow<SecureScreenSystemOverlayBlacklistState>,
     @Given userBlacklistState: @Private Flow<UserBlacklistSystemOverlayBlacklistState>,
