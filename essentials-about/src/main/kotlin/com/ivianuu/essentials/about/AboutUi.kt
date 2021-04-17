@@ -19,6 +19,7 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.core.*
@@ -28,6 +29,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 class AboutKey : Key<Nothing>
@@ -109,8 +111,10 @@ data class AboutModel(
 @Given
 fun aboutModel(
     @Given buildInfo: BuildInfo,
-    @Given navigator: Navigator
-): StateBuilder<KeyUiGivenScope, AboutModel> = {
+    @Given initial: @Initial AboutModel,
+    @Given navigator: Navigator,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<AboutModel> = scope.state(initial) {
     action(AboutModel.rate()) {
         navigator.push(
             UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")

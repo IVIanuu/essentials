@@ -3,8 +3,10 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.optics.update
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.core.*
@@ -14,6 +16,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
@@ -111,9 +115,11 @@ data class SystemOverlayBlacklistModel(
 
 @Given
 fun systemOverlayBlacklistModel(
+    @Given initial: @Initial SystemOverlayBlacklistModel,
     @Given navigator: Navigator,
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-): StateBuilder<KeyUiGivenScope, SystemOverlayBlacklistModel> = {
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
     pref.data.update {
         copy(
             disableOnKeyboard = it.disableOnKeyboard,

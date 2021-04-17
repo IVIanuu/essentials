@@ -32,7 +32,7 @@ fun launchableAppPredicate(
     @Given packageManager: PackageManager
 ): LaunchableAppPredicate {
     val cache = mutableMapOf<String, Boolean>()
-    return { app: AppInfo ->
+    return { app ->
         cache.getOrPut(app.packageName) {
             packageManager.getLaunchIntentForPackage(app.packageName) != null
         }

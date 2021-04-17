@@ -64,4 +64,4 @@ data class CheckAppsPrefs(
 )
 
 @Given
-val checkAppsPrefsModule = PrefModule<CheckAppsPrefs>("check_apps_prefs")
+val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }

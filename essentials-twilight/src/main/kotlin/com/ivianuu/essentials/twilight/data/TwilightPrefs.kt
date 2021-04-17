@@ -27,4 +27,4 @@ data class TwilightPrefs(
 )
 
 @Given
-val twilightPrefsModule = PrefModule<TwilightPrefs>("twilight_prefs")
+val twilightPrefsModule = PrefModule("twilight_prefs") { TwilightPrefs() }

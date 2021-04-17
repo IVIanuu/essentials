@@ -16,17 +16,21 @@
 
 package com.ivianuu.essentials.sample.tile
 
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.tile.*
 import com.ivianuu.essentials.twilight.data.*
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Given
 fun testTileModel(
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given twilightPref: DataStore<TwilightPrefs>
-): StateBuilder<TileGivenScope, TileModel<FunTileService1>> = {
+): @Scoped<TileGivenScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
     twilightPref.data.update { it.toTileModel() }
     action(TileModel.onTileClicked()) {
         val newTwilightMode = if (twilightPref.data.first().twilightMode == TwilightMode.LIGHT)

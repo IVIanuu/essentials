@@ -225,4 +225,4 @@ data class SamplePrefs(
 )
 
 @Given
-val samplePrefsModule = PrefModule<SamplePrefs>("sample_prefs")
+val samplePrefsModule = PrefModule("sample_prefs") { SamplePrefs() }

@@ -2,12 +2,15 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.material.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class NavBarUnsupportedKey : Key<Nothing>
 
@@ -47,8 +50,11 @@ data class NavBarUnsupportedModel(
 @Given
 fun navBarUnsupportedModel(
     @Given key: NavBarUnsupportedKey,
-    @Given navigator: Navigator
-): StateBuilder<KeyUiGivenScope, NavBarUnsupportedModel> = {
+    @Given navigator: Navigator,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<NavBarUnsupportedModel> = scope.state(
+    NavBarUnsupportedModel()
+) {
     action(NavBarUnsupportedModel.openMoreInfos()) {
         navigator.push(
             UrlKey(

@@ -13,5 +13,6 @@ data class SystemOverlayBlacklistPrefs(
 )
 
 @Given
-val systemOverlayBlacklistPrefsModule =
-    PrefModule<SystemOverlayBlacklistPrefs>("system_overlay_blacklist_prefs")
+val systemOverlayBlacklistPrefsModule = PrefModule("system_overlay_blacklist_prefs") {
+    SystemOverlayBlacklistPrefs()
+}

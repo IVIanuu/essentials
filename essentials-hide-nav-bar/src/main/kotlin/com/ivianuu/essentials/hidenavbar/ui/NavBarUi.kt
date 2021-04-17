@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.R
@@ -37,6 +38,7 @@ import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 class NavBarKey : Key<Nothing>
@@ -82,8 +84,9 @@ fun navBarModel(
     @Given navigator: Navigator,
     @Given permissionRequester: PermissionRequester,
     @Given pref: DataStore<NavBarPrefs>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
-): StateBuilder<KeyUiGivenScope, NavBarModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
     pref.data.update {
         copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
     }

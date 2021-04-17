@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*
 
@@ -129,11 +130,15 @@ data class WriteSecureSettingsPcInstructionsModel(
 
 @Given
 fun writeSecureSettingsPcInstructionsModel(
+    @Given initial: @Initial WriteSecureSettingsPcInstructionsModel,
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given updateClipboardText: UpdateClipboardTextUseCase
-): StateBuilder<KeyUiGivenScope, WriteSecureSettingsPcInstructionsModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
+    initial
+) {
     timer(200.milliseconds)
         .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
         .filter { it }

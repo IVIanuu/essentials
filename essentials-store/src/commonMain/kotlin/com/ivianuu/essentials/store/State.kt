@@ -3,8 +3,6 @@ package com.ivianuu.essentials.store
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.tuples.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
@@ -36,7 +34,6 @@ interface StateScope<S> : CoroutineScope {
     fun Flow<S.() -> S>.update(): Job = launch { collect { update(it) } }
     fun <T> Flow<T>.update(transform: S.(T) -> S): Job =
         map<T, S.() -> S> { { transform(it) } }.update()
-    fun <T> Flow<T>.update(lens: Lens<S, T>): Job = update { lens.set(this, it) }
 }
 
 suspend fun <S> StateScope<S>.action(
@@ -128,17 +125,3 @@ suspend fun <S, P1, P2, P3, P4, P5> StateScope<S>.actions(lens: Lens<S, (P1, P2,
     action(lens) { p1, p2, p3, p4, p5 -> events.emit(tupleOf(p1, p2, p3, p4, p5)) }
     return events
 }
-
-fun <S> StateBuilder<*, S>.toState(
-    scope: CoroutineScope,
-    initial: S
-): StateFlow<S> = scope.state(initial, this)
-
-typealias StateBuilder<GS, S> = suspend StateScope<S>.() -> Unit
-
-@Given
-fun <@Given T : StateBuilder<GS, S>, GS : GivenScope, S> state(
-    @Given builder: T,
-    @Given initial: @InitialOrFallback S,
-    @Given scope: ScopeCoroutineScope<GS>
-): @Scoped<GS> StateFlow<S> = scope.state(initial, builder)

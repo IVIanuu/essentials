@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.core.*
@@ -29,6 +30,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class BackupAndRestoreKey : Key<Nothing>
 
@@ -66,9 +69,10 @@ data class BackupAndRestoreModel(
 fun backupAndRestoreModel(
     @Given createBackupUseCase: CreateBackupUseCase,
     @Given restoreBackupUseCase: RestoreBackupUseCase,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StateBuilder<KeyUiGivenScope, BackupAndRestoreModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
         createBackupUseCase()
             .onFailure {

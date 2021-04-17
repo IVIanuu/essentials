@@ -33,7 +33,7 @@ class AndroidSettingModule<T : S, S>(
                 withContext(dispatcher) {
                     adapter.get()
                 }
-            }.shareIn(scope, SharingStarted.Lazily, 1)
+            }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
             .distinctUntilChanged()
         private val actor = scope.actor()
         override suspend fun updateData(transform: T.() -> T): T = actor.actAndReply {

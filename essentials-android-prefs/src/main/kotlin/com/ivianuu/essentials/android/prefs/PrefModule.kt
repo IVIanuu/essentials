@@ -14,11 +14,13 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.*
 import java.io.*
 
-class PrefModule<T : Any>(private val name: String) {
+class PrefModule<T : Any>(
+    private val name: String,
+    private val initial: () -> T
+) {
     @Given
     fun dataStore(
         @Given dispatcher: IODispatcher,
-        @Given initialFactory: () -> @InitialOrFallback T,
         @Given jsonFactory: () -> Json,
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir,
@@ -28,7 +30,7 @@ class PrefModule<T : Any>(private val name: String) {
             produceFile = { prefsDir().resolve(name) },
             serializer = object : Serializer<T> {
                 override val defaultValue: T
-                    get() = initialFactory()
+                    get() = initial()
                 private val json by lazy(jsonFactory)
                 private val serializer by lazy(serializerFactory)
                 override suspend fun readFrom(input: InputStream): T = runCatching {
@@ -44,7 +46,7 @@ class PrefModule<T : Any>(private val name: String) {
             scope = scope.childCoroutineScope(dispatcher),
             corruptionHandler = ReplaceFileCorruptionHandler {
                 it.printStackTrace()
-                initialFactory()
+                initial()
             }
         )
         val actor = scope.actor()

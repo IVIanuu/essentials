@@ -22,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.layout.*
@@ -30,6 +31,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Given
@@ -78,8 +80,9 @@ data class CounterModel(
 
 @Given
 fun counterModel(
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster
-): StateBuilder<KeyUiGivenScope, CounterModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
     action(CounterModel.inc()) { update { copy(count = count.inc()) } }
     action(CounterModel.dec()) {
         if (state.first().count > 0) update { copy(count = count.dec()) }

@@ -26,6 +26,7 @@ import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.store.*
@@ -35,6 +36,8 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class AppPickerKey(
     val appPredicate: AppPredicate = DefaultAppPredicate,
@@ -77,13 +80,6 @@ data class AppPickerModel(
 ) {
     val filteredApps = allApps
         .map { it.filter(appPredicate) }
-    companion object {
-        @Given
-        fun initial(@Given key: AppPickerKey): @Initial AppPickerModel = AppPickerModel(
-            appPredicate = key.appPredicate,
-            title = key.title
-        )
-    }
 }
 
 @Given
@@ -91,8 +87,12 @@ fun appPickerModel(
     @Given key: AppPickerKey,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
-): StateBuilder<KeyUiGivenScope, AppPickerModel> = {
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<AppPickerModel> = scope.state(AppPickerModel(
+    appPredicate = key.appPredicate,
+    title = key.title
+)) {
     resourceFlow { emit(getInstalledApps()) }
-        .update(AppPickerModel.allApps())
+        .update { copy(allApps = it) }
     action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
 }

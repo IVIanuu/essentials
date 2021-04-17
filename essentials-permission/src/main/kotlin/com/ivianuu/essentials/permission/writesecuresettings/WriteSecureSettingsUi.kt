@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*
 
@@ -83,9 +84,12 @@ fun writeSecureSettingsModel(
     @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
     @Given runShellCommand: RunShellCommandUseCase,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
-): StateBuilder<KeyUiGivenScope, WriteSecureSettingsModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsModel> = scope.state(
+    WriteSecureSettingsModel()
+) {
     timer(200.milliseconds)
         .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
         .filter { it }

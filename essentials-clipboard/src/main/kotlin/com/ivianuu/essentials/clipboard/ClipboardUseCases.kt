@@ -36,7 +36,7 @@ fun clipboardText(
         offer(current)
     }
     awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
-}.shareIn(scope, SharingStarted.Lazily, 1)
+}.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
 typealias UpdateClipboardTextUseCase = suspend (String) -> Unit
 

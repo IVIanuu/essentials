@@ -26,6 +26,7 @@ import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.apppicker.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -39,6 +40,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
@@ -76,7 +78,7 @@ data class MediaActionPrefs(
 )
 
 @Given
-val mediaActionPrefsModule = PrefModule<MediaActionPrefs>("media_action_prefs")
+val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
 
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
@@ -117,12 +119,15 @@ fun mediaActionSettingsModel(
     @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
-): StateBuilder<KeyUiGivenScope, MediaActionSettingsModel> = {
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<MediaActionSettingsModel> = scope.state(
+    MediaActionSettingsModel()
+) {
     pref.data
         .map { it.mediaApp }
         .mapNotNull { if (it != null) getAppInfo(it) else null }
         .flowAsResource()
-        .update(MediaActionSettingsModel.mediaApp())
+        .update { copy(mediaApp = it) }
     action(MediaActionSettingsModel.updateMediaApp()) {
         val newMediaApp = navigator.pushForResult(
             AppPickerKey(

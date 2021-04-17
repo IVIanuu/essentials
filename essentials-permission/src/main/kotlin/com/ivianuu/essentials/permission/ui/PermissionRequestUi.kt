@@ -19,6 +19,7 @@ package com.ivianuu.essentials.permission.ui
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.store.*
@@ -30,6 +31,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -82,8 +84,9 @@ fun permissionRequestModel(
     @Given navigator: Navigator,
     @Given permissions: Map<TypeKey<Permission>, Permission>,
     @Given permissionStateFactory: PermissionStateFactory,
-    @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
-): StateBuilder<KeyUiGivenScope, PermissionRequestModel> = {
+    @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<PermissionRequestModel> = scope.state(PermissionRequestModel()) {
     state
         .filter {
             key.permissionsKeys

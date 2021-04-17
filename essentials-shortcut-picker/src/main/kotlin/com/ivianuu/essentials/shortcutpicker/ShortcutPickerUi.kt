@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.painter.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.store.*
@@ -34,6 +35,8 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class ShortcutPickerKey : Key<Shortcut>
 
@@ -74,11 +77,12 @@ fun shortcutPickerModel(
     @Given extractShortcut: ExtractShortcutUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
-): StateBuilder<KeyUiGivenScope, ShortcutPickerModel> = {
+): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
     resourceFlow { emit(getAllShortcuts()) }
-        .update(ShortcutPickerModel.shortcuts())
+        .update { copy(shortcuts = it) }
     action(ShortcutPickerModel.pickShortcut()) { shortcut ->
         runCatching {
             val shortcutRequestResult = navigator.pushForResult(shortcut.intent.toIntentKey())

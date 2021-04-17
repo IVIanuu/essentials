@@ -21,14 +21,3 @@ import kotlin.reflect.*
 
 @Qualifier
 annotation class Initial
-
-@Qualifier
-annotation class InitialOrFallback
-
-@Given
-fun <T : Any> initialOrFallback(
-    @Given initial: @Initial T? = null,
-    @Given clazz: KClass<T>
-): @InitialOrFallback T = initial ?: clazz.newInstance()
-
-expect fun <T : Any> KClass<T>.newInstance(): T

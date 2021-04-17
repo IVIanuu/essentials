@@ -41,12 +41,11 @@ data class NavBarPrefs(
 }
 
 @Given
-val navBarPrefsModule = PrefModule<NavBarPrefs>("nav_bar_prefs")
+fun navBarPrefsModule(
+    @Given initialFactory: () -> @Initial NavBarPrefs
+) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
 
 internal typealias WasNavBarHidden = Boolean
 
 @Given
-val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden")
-
-@Given
-val defaultWasNavBarHidden: @Initial WasNavBarHidden = false
+val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }

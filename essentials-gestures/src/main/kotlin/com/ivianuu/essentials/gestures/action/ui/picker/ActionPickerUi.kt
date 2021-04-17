@@ -23,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.*
@@ -37,6 +38,8 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
 
 class ActionPickerKey(
     val showDefaultOption: Boolean = false,
@@ -82,9 +85,10 @@ fun actionPickerModel(
     @Given getActionPickerItems: GetActionPickerItemsUseCase,
     @Given key: ActionPickerKey,
     @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester
-): StateBuilder<KeyUiGivenScope, ActionPickerModel> = {
-    resourceFlow { emit(getActionPickerItems()) }.update(ActionPickerModel.items())
+    @Given permissionRequester: PermissionRequester,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
+    resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
     action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
     action(ActionPickerModel.pickAction()) { item ->
         val result = item.getResult() ?: return@action

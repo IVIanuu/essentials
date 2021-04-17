@@ -28,6 +28,7 @@ import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.R
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.store.*
@@ -38,6 +39,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 typealias CheckableAppsScreen = @Composable () -> Unit
@@ -141,12 +143,14 @@ data class CheckableApp(
 @Given
 fun checkableAppsModel(
     @Given checkedApps: Flow<CheckedApps>,
+    @Given initial: @Initial CheckableAppsModel,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given onCheckedAppsChanged: OnCheckedAppsChanged,
-): StateBuilder<KeyUiGivenScope, CheckableAppsModel> = {
-    checkedApps.update(CheckableAppsModel.checkedApps())
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<CheckableAppsModel> = scope.state(initial) {
+    checkedApps.update { copy(checkedApps = it) }
     resourceFlow { emit(getInstalledApps()) }
-        .update(CheckableAppsModel.allApps())
+        .update { copy(allApps = it) }
     suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
         val currentState = state.first()
         val newCheckedApps = currentState.checkableApps.get()
