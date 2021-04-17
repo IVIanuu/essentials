@@ -38,8 +38,8 @@ val torchHomeItem = HomeItem("Torch") { TorchKey }
 object TorchKey : Key<Nothing>
 
 @Given
-fun torchUi(@Given torch: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
-    val torchEnabled by torch.collectAsState()
+fun torchUi(@Given torchState: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
+    val torchEnabled by torchState.collectAsState()
     Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
         Column(
             modifier = Modifier.center(),
@@ -50,7 +50,7 @@ fun torchUi(@Given torch: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
                 style = MaterialTheme.typography.h4
             )
             Spacer(Modifier.height(8.dp))
-            Button(onClick = { torch.update { !torchEnabled } }) {
+            Button(onClick = { torchState.update { !torchEnabled } }) {
                 Text("Toggle torch")
             }
         }
