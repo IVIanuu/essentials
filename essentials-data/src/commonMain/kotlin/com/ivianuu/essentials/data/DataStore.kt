@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 
 interface DataStore<T> {
     val data: Flow<T>
-    suspend fun updateData(transform: T.() -> T)
+    suspend fun updateData(transform: T.() -> T): T
 }
 
 @Given
