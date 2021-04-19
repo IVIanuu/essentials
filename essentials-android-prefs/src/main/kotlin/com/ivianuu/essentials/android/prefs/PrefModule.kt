@@ -53,7 +53,7 @@ class PrefModule<T : Any>(
         return object : DataStore<T> {
             override val data: Flow<T>
                 get() = dataStore.data
-            override suspend fun updateData(transform: T.() -> T): T = actor.actAndReply {
+            override suspend fun updateData(transform: T.() -> T) = actor.act {
                 dataStore.updateData { transform(it) }
             }
         }

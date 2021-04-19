@@ -39,9 +39,6 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
     emitAll(this@flowAsResource)
 }
 
-inline fun <T> resource(crossinline block: suspend () -> T): Flow<Resource<T>> =
-    resourceFlow { emit(block()) }
-
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
     return flow<Resource<T>> {
         emit(Loading)

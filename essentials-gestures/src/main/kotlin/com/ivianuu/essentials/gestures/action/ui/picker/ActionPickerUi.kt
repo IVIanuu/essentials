@@ -79,28 +79,6 @@ data class ActionPickerModel(
     val pickAction: (ActionPickerItem) -> Unit = {}
 )
 
-@Given
-fun actionPickerModel(
-    @Given getAction: GetActionUseCase,
-    @Given getActionPickerItems: GetActionPickerItemsUseCase,
-    @Given key: ActionPickerKey,
-    @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
-    resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
-    action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
-    action(ActionPickerModel.pickAction()) { item ->
-        val result = item.getResult() ?: return@action
-        if (result is ActionPickerKey.Result.Action) {
-            val action = getAction(result.actionId)!!
-            if (!permissionRequester(action.permissions))
-                return@action
-        }
-        navigator.pop(key, result)
-    }
-}
-
 sealed class ActionPickerItem {
     data class ActionItem(
         val action: Action<*>,
@@ -156,6 +134,28 @@ sealed class ActionPickerItem {
     abstract fun Icon(modifier: Modifier = Modifier)
 
     abstract suspend fun getResult(): ActionPickerKey.Result?
+}
+
+@Given
+fun actionPickerModel(
+    @Given getAction: GetActionUseCase,
+    @Given getActionPickerItems: GetActionPickerItemsUseCase,
+    @Given key: ActionPickerKey,
+    @Given navigator: Navigator,
+    @Given permissionRequester: PermissionRequester,
+    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
+    resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
+    action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
+    action(ActionPickerModel.pickAction()) { item ->
+        val result = item.getResult() ?: return@action
+        if (result is ActionPickerKey.Result.Action) {
+            val action = getAction(result.actionId)!!
+            if (!permissionRequester(action.permissions))
+                return@action
+        }
+        navigator.pop(key, result)
+    }
 }
 
 private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerItem>
