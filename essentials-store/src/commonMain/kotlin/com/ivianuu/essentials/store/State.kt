@@ -16,13 +16,7 @@ fun <S> CoroutineScope.state(
     val stateScope = object : StateScope<S>, CoroutineScope by this {
         override val state: Flow<S>
             get() = state
-        private val mutex = Mutex()
-        override suspend fun update(transform: S.() -> S): S = mutex.withLock {
-            val currentState = state.value
-            val newState = transform(currentState)
-            if (currentState != newState) state.value = newState
-            newState
-        }
+        override suspend fun update(transform: S.() -> S): S = state.update(transform)
     }
     stateScope.launch(start = CoroutineStart.UNDISPATCHED) { stateScope.block() }
     return state
