@@ -62,3 +62,6 @@ fun TestCoroutineScope.runCancellingBlockingTest(
         // ok job got cancelled
     }
 }
+
+val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
+    get() = coroutineContext[CoroutineDispatcher]!! as TestCoroutineDispatcher

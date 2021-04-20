@@ -36,10 +36,7 @@ class ForegroundActivityStateTest {
             lifecycle = LifecycleRegistry(this)
             every { this@mockk.lifecycle } returns lifecycle
         }
-        launch {
-            foregroundActivityStateWorker(activity,
-                coroutineContext[CoroutineDispatcher]!!, foregroundState)()
-        }
+        launch { foregroundActivityStateWorker(activity, dispatcher, foregroundState)() }
         val collector = foregroundState.testCollect(this)
         advanceUntilIdle()
 

@@ -40,7 +40,7 @@ class ConfigChangesTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = configChanges(appContext, coroutineContext[CoroutineDispatcher]!!)
+        val collector = configChanges(appContext, dispatcher)
             .testCollect(this)
 
         callback.onConfigurationChanged(mockk())

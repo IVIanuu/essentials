@@ -40,7 +40,7 @@ class BroadcastsTest {
             }
             every { unregisterComponentCallbacks(any()) } returns Unit
         }
-        val collector = broadcastsFactory(appContext, coroutineContext[CoroutineDispatcher]!!)
+        val collector = broadcastsFactory(appContext, dispatcher)
             .invoke("action").testCollect(this)
 
         receiver.onReceive(appContext, Intent("action"))
