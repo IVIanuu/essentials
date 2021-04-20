@@ -31,16 +31,16 @@ fun testTileModel(
     @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
     @Given twilightPref: DataStore<TwilightPrefs>
 ): @Scoped<TileGivenScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
-    twilightPref.data.update { it.toTileModel() }
+    twilightPref.data.update {
+        copy(
+            label = it.twilightMode.name,
+            status = if (it.twilightMode == TwilightMode.LIGHT) TileModel.Status.ACTIVE
+            else TileModel.Status.INACTIVE
+        )
+    }
     action(TileModel.onTileClicked()) {
         val newTwilightMode = if (twilightPref.data.first().twilightMode == TwilightMode.LIGHT)
             TwilightMode.DARK else TwilightMode.LIGHT
         twilightPref.updateData { copy(twilightMode = newTwilightMode) }
     }
 }
-
-private fun TwilightPrefs.toTileModel() = TileModel<FunTileService1>(
-    label = twilightMode.name,
-    status = if (twilightMode == TwilightMode.LIGHT) TileModel.Status.ACTIVE
-    else TileModel.Status.INACTIVE
-)
