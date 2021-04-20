@@ -30,7 +30,7 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
-class EsActivity : ComponentActivity(), EsActivityMarker {
+class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

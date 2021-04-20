@@ -16,12 +16,11 @@
 
 package com.ivianuu.essentials.util
 
+import androidx.activity.*
 import androidx.lifecycle.*
 import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.collections.*
-import io.mockk.*
 import kotlinx.coroutines.*
 import org.junit.*
 import org.junit.runner.*
@@ -32,9 +31,15 @@ class ForegroundActivityStateTest {
     fun testForegroundActivityState() = runCancellingBlockingTest {
         val foregroundState = foregroundActivityState
         lateinit var lifecycle: LifecycleRegistry
-        val activity = mockk<EsActivity> {
-            lifecycle = LifecycleRegistry(this)
-            every { this@mockk.lifecycle } returns lifecycle
+        val activity = object : ComponentActivity(), ForegroundActivityMarker {
+            private var _lifecycle: Lifecycle? = null
+            override fun getLifecycle(): Lifecycle {
+                if (_lifecycle == null) {
+                    _lifecycle = LifecycleRegistry(this)
+                        .also { lifecycle = it }
+                }
+                return _lifecycle!!
+            }
         }
         launch { foregroundActivityStateWorker(activity, dispatcher, foregroundState)() }
         val collector = foregroundState.testCollect(this)

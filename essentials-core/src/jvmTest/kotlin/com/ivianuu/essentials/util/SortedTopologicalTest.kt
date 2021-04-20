@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.util
 
+import com.ivianuu.essentials.*
 import io.kotest.matchers.collections.*
 import org.junit.*
 
