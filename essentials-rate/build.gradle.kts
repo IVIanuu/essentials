@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,19 +16,20 @@
 plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
+    id("com.ivianuu.essentials.compose")
     kotlin("android")
+    kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(project(":essentials-android-core"))
-    api(project(":essentials-android-util"))
-    api(Deps.Play.billing)
-    testImplementation(project(":essentials-android-test"))
+    api(Deps.Play.core)
+    api(project(":essentials-android-prefs"))
+    api(project(":essentials-apps-coil"))
+    api(project(":essentials-ui"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
