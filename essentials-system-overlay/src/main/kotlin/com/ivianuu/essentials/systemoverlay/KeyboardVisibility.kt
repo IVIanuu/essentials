@@ -66,7 +66,7 @@ private typealias KeyboardHeightProvider = () -> Int?
 fun keyboardHeightProvider(
     @Given inputMethodManager: @SystemService InputMethodManager
 ): KeyboardHeightProvider = {
-    runCatching {
+    catch {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
     }.getOrElse { null }

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.gestures.action
 
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.unlock.*
@@ -38,27 +39,27 @@ fun executeActionUseCase(
     @Given toaster: Toaster
 ): ExecuteActionUseCase = { key ->
     withContext(dispatcher) {
-        runCatching {
+        catch {
             logger.d { "execute $key" }
             val action = getAction(key)!!
 
             // check permissions
             if (!permissionRequester(action.permissions)) {
                 logger.d { "couldn't get permissions for $key" }
-                return@runCatching false
+                return@catch false
             }
 
             // unlock screen
             if (action.unlockScreen && !screenUnlocker()) {
                 logger.d { "couldn't unlock screen for $key" }
-                return@runCatching false
+                return@catch false
             }
 
             logger.d { "fire $key" }
 
             // fire
             getActionExecutor(key)!!()
-            return@runCatching true
+            return@catch true
         }.onFailure {
             it.printStackTrace()
             toaster("Failed to execute '$key'") // todo res

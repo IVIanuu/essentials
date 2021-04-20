@@ -18,6 +18,7 @@ package com.ivianuu.essentials.shell
 
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import eu.chainfire.libsuperuser.Shell.*
 import kotlinx.coroutines.*
@@ -27,7 +28,7 @@ typealias IsShellAvailableUseCase = suspend () -> Boolean
 @Given
 fun isShellAvailableUseCase(@Given dispatcher: IODispatcher): IsShellAvailableUseCase = {
     withContext(dispatcher) {
-        runCatching { SU.available() }.getOrElse { false }
+        catch { SU.available() }.getOrElse { false }
     }
 }
 
@@ -35,5 +36,5 @@ typealias RunShellCommandUseCase = suspend (List<String>) -> Result<List<String>
 
 @Given
 fun runShellCommandUseCase(@Given dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
-    withContext(dispatcher) { runCatching { SU.run(commands)!! } }
+    withContext(dispatcher) { catch { SU.run(commands)!! } }
 }

@@ -20,6 +20,7 @@ import android.hardware.*
 import android.view.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
@@ -27,6 +28,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
 
 enum class DisplayRotation(val isPortrait: Boolean) {
     // 0 degrees
@@ -90,7 +92,7 @@ fun rotationChanges(
     val listener = object :
         OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
         override fun onOrientationChanged(orientation: Int) {
-            runCatching { offer(RotationChange) }
+            catch { offer(RotationChange) }
         }
     }
     listener.enable()

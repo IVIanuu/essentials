@@ -26,6 +26,7 @@ import com.github.michaelbull.result.*
 import com.google.accompanist.coil.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -54,7 +55,7 @@ fun actionRootCommandRunner(
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->
-    runCatching { runShellCommand(listOf(command)) }
+    catch { runShellCommand(listOf(command)) }
         .onFailure {
             it.printStackTrace()
             toaster(stringResource(R.string.es_no_root, emptyList()))
@@ -70,7 +71,7 @@ fun actionIntentSender(
     @Given toaster: Toaster
 ): ActionIntentSender = { intent ->
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    runCatching {
+    catch {
         PendingIntent.getActivity(
             appContext, 99, intent, 0, null
         ).send()

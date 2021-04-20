@@ -20,10 +20,12 @@ import android.content.*
 import android.content.res.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
 
 typealias ConfigChange = Unit
 
@@ -34,7 +36,7 @@ fun configChanges(
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
     val callbacks = object : ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
-            runCatching { offer(ConfigChange) }
+            catch { offer(ConfigChange) }
         }
 
         override fun onLowMemory() {

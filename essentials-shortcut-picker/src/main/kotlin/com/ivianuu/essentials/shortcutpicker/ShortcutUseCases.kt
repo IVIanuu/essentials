@@ -22,6 +22,7 @@ import android.graphics.*
 import androidx.core.graphics.drawable.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
@@ -37,7 +38,7 @@ fun getAllShortcutsUseCase(
         val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
         packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
-                runCatching {
+                catch {
                     Shortcut(
                         intent = Intent().apply {
                             action = Intent.ACTION_CREATE_SHORTCUT

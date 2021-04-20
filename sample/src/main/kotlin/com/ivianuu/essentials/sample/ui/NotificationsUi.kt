@@ -199,7 +199,7 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
         ?.toString() ?: "",
     text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
         ?.toString() ?: "",
-    icon = runCatching {
+    icon = catch {
         notification.smallIcon
             .loadDrawable(appContext)
             .toBitmap()

@@ -49,7 +49,7 @@ fun homeActionExecutor(
     if (!needsHomeIntentWorkaround) {
         globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
     } else {
-        runCatching {
+        catch {
             val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
             appContext.sendBroadcast(intent)
         }.onFailure { it.printStackTrace() }

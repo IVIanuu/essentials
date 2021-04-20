@@ -19,6 +19,7 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.*
 import android.service.notification.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
@@ -32,7 +33,7 @@ typealias OpenNotificationUseCase = suspend (Notification) -> Result<Unit, Throw
 
 @Given
 val openNotificationUseCase: OpenNotificationUseCase = { notification ->
-    runCatching { notification.contentIntent.send() }
+    catch { notification.contentIntent.send() }
 }
 
 typealias DismissNotificationUseCase = suspend (String) -> Result<Unit, Throwable>
@@ -41,7 +42,7 @@ typealias DismissNotificationUseCase = suspend (String) -> Result<Unit, Throwabl
 fun dismissNotificationUseCase(
     @Given ref: Flow<EsNotificationListenerService?>
 ): DismissNotificationUseCase = { key ->
-    runCatching { ref.first()!!.cancelNotification(key) }
+    catch { ref.first()!!.cancelNotification(key) }
 }
 
 typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
@@ -50,5 +51,5 @@ typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
 fun dismissAllNotificationsUseCase(
     @Given ref: Flow<EsNotificationListenerService?>
 ): DismissAllNotificationsUseCase = {
-    runCatching { ref.first()!!.cancelAllNotifications() }
+    catch { ref.first()!!.cancelAllNotifications() }
 }

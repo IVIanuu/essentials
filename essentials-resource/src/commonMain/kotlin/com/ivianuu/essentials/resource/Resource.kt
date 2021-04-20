@@ -3,7 +3,9 @@
 package com.ivianuu.essentials.resource
 
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.optics.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
 
 sealed class Resource<out T>
 
@@ -39,10 +41,10 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
     emitAll(this@flowAsResource)
 }
 
-fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> {
-    return flow<Resource<T>> {
+fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
+    flow<Resource<T>> {
         emit(Loading)
-        runCatching {
+        catch {
             block(object : FlowCollector<T> {
                 override suspend fun emit(value: T) {
                     this@flow.emit(Success(value))
@@ -50,7 +52,6 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
             })
         }.onFailure { emit(Error(it)) }
     }
-}
 
 fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
     success = { Success(it) },

@@ -28,6 +28,7 @@ dependencies {
     api(project(":essentials-android-core"))
     api(project(":essentials-android-util"))
     api(Deps.playBilling)
+    testImplementation(project(":essentials-android-test"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

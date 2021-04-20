@@ -83,8 +83,8 @@ private suspend fun NavBarState.apply(
     setOverscan: OverscanUpdater
 ) {
     logger.d { "apply nav bar state $this" }
-    runCatching {
-        runCatching {
+    catch {
+        catch {
             // ensure that we can access non sdk interfaces
             disableNonSdkInterfaceDetection()
         }.onFailure { it.printStackTrace() }

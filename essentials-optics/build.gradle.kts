@@ -25,6 +25,9 @@ kotlin {
 
     sourceSets {
         commonMain {
+            dependencies {
+                api(Deps.kotlinResult)
+            }
         }
         named("jvmTest") {
             dependencies {

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.broadcast
 import android.content.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.channels.*
@@ -34,12 +35,12 @@ fun broadcastsFactory(
     callbackFlow<Intent> {
         val broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                runCatching { offer(intent) }
+                catch { offer(intent) }
             }
         }
         appContext.registerReceiver(broadcastReceiver, IntentFilter(action))
         awaitClose {
-            runCatching {
+            catch {
                 appContext.unregisterReceiver(broadcastReceiver)
             }
         }

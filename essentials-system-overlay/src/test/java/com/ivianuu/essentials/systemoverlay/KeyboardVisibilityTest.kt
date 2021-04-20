@@ -23,7 +23,6 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class KeyboardVisibilityTest {
-
     @Test
     fun testKeyboardVisibility() = runCancellingBlockingTest {
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
@@ -50,5 +49,4 @@ class KeyboardVisibilityTest {
             false
         )
     }
-
 }

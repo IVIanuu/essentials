@@ -18,11 +18,13 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
 
 class EsNotificationListenerService : NotificationListenerService() {
     private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
@@ -69,7 +71,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     }
 
     private fun updateNotifications() {
-        _notifications.value = runCatching { activeNotifications!!.toList() }
+        _notifications.value = catch { activeNotifications!!.toList() }
             .getOrElse { emptyList() }
     }
 }

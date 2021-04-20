@@ -4,6 +4,7 @@ import android.content.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.processrestart.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
@@ -27,7 +28,7 @@ fun createBackupUseCase(
     @Given navigator: Navigator,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): CreateBackupUseCase = {
-    runCatching {
+    catch {
         withContext(scope.coroutineContext + dispatcher) {
             val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
             val backupFileName =
@@ -73,7 +74,7 @@ fun restoreBackupUseCase(
     @Given processRestarter: ProcessRestarter,
     @Given scope: ScopeCoroutineScope<AppGivenScope>
 ): RestoreBackupUseCase = {
-    runCatching {
+    catch {
         withContext(scope.coroutineContext + dispatcher) {
             val uri = navigator.pushForResult(
                 Intent.createChooser(

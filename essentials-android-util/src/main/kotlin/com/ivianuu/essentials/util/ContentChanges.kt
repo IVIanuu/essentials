@@ -23,6 +23,7 @@ import android.net.*
 import android.os.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
@@ -40,7 +41,7 @@ fun contentChangesFactory(
             object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
                 override fun onChange(selfChange: Boolean) {
                     super.onChange(selfChange)
-                    runCatching { offer(Unit) }
+                    catch { offer(Unit) }
                 }
             }
         }

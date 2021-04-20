@@ -17,7 +17,7 @@ fun billingClient(
     .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
     .build()
 
-internal typealias BillingRefresh = Unit
+typealias BillingRefresh = Unit
 
 @Given
 val billingRefreshes: @Scoped<AppGivenScope> MutableSharedFlow<BillingRefresh>

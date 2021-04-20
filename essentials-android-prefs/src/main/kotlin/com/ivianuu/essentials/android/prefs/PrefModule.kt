@@ -6,6 +6,7 @@ import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
@@ -33,7 +34,7 @@ class PrefModule<T : Any>(
                     get() = initial()
                 private val json by lazy(jsonFactory)
                 private val serializer by lazy(serializerFactory)
-                override suspend fun readFrom(input: InputStream): T = runCatching {
+                override suspend fun readFrom(input: InputStream): T = catch {
                     json.decodeFromString(serializer, String(input.readBytes()))
                 }.fold(
                     success = { it },
