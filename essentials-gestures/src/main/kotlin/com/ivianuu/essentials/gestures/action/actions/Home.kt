@@ -19,12 +19,15 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.*
 import android.content.*
 import android.os.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import kotlin.onFailure
 
 @Given
 object HomeActionId : ActionId("home")
