@@ -15,6 +15,20 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
 
+typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
+
+@Given
+fun getSkuDetailsUseCase(
+    @Given context: BillingContext
+): GetSkuDetailsUseCase = { sku ->
+    context.withConnection {
+        billingClient.querySkuDetails(sku.toSkuDetailsParams())
+            .skuDetailsList
+            ?.firstOrNull { it.sku == sku.skuString }
+            .also { logger.d { "got sku details $it for $sku" } }
+    }
+}
+
 typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
 
 @Given
@@ -22,14 +36,15 @@ fun purchaseUseCase(
     @Given acknowledgePurchase: AcknowledgePurchaseUseCase,
     @Given appUiStarter: AppUiStarter,
     @Given context: BillingContext,
-    @Given consumePurchase: ConsumePurchaseUseCase
+    @Given consumePurchase: ConsumePurchaseUseCase,
+    @Given getSkuDetails: GetSkuDetailsUseCase
 ): PurchaseUseCase = { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
     context.withConnection {
-        context.logger.d {
+        logger.d {
             "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
         }
         if (consumeOldPurchaseIfUnspecified) {
-            val oldPurchase = context.getPurchase(sku)
+            val oldPurchase = getPurchase(sku)
             if (oldPurchase != null) {
                 if (oldPurchase.purchaseState == Purchase.PurchaseState.UNSPECIFIED_STATE) {
                     consumePurchase(sku)
@@ -39,20 +54,20 @@ fun purchaseUseCase(
 
         val activity = appUiStarter()
 
-        val skuDetails = context.getSkuDetails(sku)
+        val skuDetails = getSkuDetails(sku)
             ?: return@withConnection false
 
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(skuDetails)
             .build()
 
-        val result = context.billingClient.launchBillingFlow(activity, billingFlowParams)
+        val result = billingClient.launchBillingFlow(activity, billingFlowParams)
         if (result.responseCode != BillingClient.BillingResponseCode.OK)
             return@withConnection false
 
-        context.refreshes.first()
+        refreshes.first()
 
-        val success = context.getIsPurchased(sku)
+        val success = getIsPurchased(sku)
 
         return@withConnection if (success && acknowledge) acknowledgePurchase(sku) else success
     }
@@ -63,20 +78,20 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 @Given
 fun consumePurchaseUseCase(@Given context: BillingContext): ConsumePurchaseUseCase = { sku ->
     context.withConnection {
-        val purchase = context.getPurchase(sku) ?: return@withConnection false
+        val purchase = getPurchase(sku) ?: return@withConnection false
 
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        val result = context.billingClient.consumePurchase(consumeParams)
+        val result = billingClient.consumePurchase(consumeParams)
 
-        context.logger.d {
+        logger.d {
             "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
         }
 
         val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) context.refreshes.emit(Unit)
+        if (success) refreshes.emit(Unit)
         return@withConnection success
     }
 }
@@ -86,7 +101,7 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 @Given
 fun acknowledgePurchaseUseCase(@Given context: BillingContext): AcknowledgePurchaseUseCase = { sku ->
     context.withConnection {
-        val purchase = context.getPurchase(sku)
+        val purchase = getPurchase(sku)
             ?: return@withConnection false
 
         if (purchase.isAcknowledged) return@withConnection true
@@ -95,14 +110,14 @@ fun acknowledgePurchaseUseCase(@Given context: BillingContext): AcknowledgePurch
             .setPurchaseToken(purchase.purchaseToken)
             .build()
 
-        val result = context.billingClient.acknowledgePurchase(acknowledgeParams)
+        val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-        context.logger.d {
+        logger.d {
             "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
         }
 
         val success = result.responseCode == BillingClient.BillingResponseCode.OK
-        if (success) context.refreshes.emit(Unit)
+        if (success) refreshes.emit(Unit)
         return@withConnection success
     }
 }
@@ -136,9 +151,3 @@ private fun BillingContext.getPurchase(sku: Sku): Purchase? =
         .purchasesList
         ?.firstOrNull { it.sku == sku.skuString }
         .also { logger.d { "got purchase $it for $sku" } }
-
-private suspend fun BillingContext.getSkuDetails(sku: Sku): SkuDetails? =
-    billingClient.querySkuDetails(sku.toSkuDetailsParams())
-        .skuDetailsList
-        ?.firstOrNull { it.sku == sku.skuString }
-        .also { logger.d { "got sku details $it for $sku" } }
