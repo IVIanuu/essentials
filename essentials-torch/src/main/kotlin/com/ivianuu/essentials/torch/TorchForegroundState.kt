@@ -20,9 +20,9 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import androidx.core.app.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.foreground.ForegroundState.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*

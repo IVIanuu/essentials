@@ -24,9 +24,9 @@ import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
 import com.google.accompanist.coil.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*

@@ -4,7 +4,7 @@ import android.annotation.*
 import android.view.*
 import android.widget.*
 import com.github.michaelbull.result.*
-import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.*
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

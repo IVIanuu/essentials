@@ -17,8 +17,8 @@
 package com.ivianuu.essentials.shell
 
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import eu.chainfire.libsuperuser.Shell.*
 import kotlinx.coroutines.*

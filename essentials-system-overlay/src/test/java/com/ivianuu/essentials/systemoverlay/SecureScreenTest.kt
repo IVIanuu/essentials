@@ -19,7 +19,6 @@ package com.ivianuu.essentials.systemoverlay
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.*
-import com.ivianuu.essentials.util.*
 import io.kotest.matchers.collections.*
 import org.junit.*
 
@@ -30,7 +29,7 @@ class SecureScreenTest {
         val accessibilityEvents = EventFlow<AccessibilityEvent>()
         val collector = isOnSecureScreen(
             accessibilityEvents,
-            NoopLogger,
+            com.ivianuu.essentials.logging.NoopLogger,
             this
         ).testCollect(this)
 

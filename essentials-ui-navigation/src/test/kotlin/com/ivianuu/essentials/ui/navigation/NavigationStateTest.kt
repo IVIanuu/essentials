@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.test.*
-import com.ivianuu.essentials.util.*
 import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
 import kotlinx.coroutines.*
@@ -32,7 +31,7 @@ class NavigationStateTest {
     fun testNavigationState() = runCancellingBlockingTest {
         val navigator = NavigatorImpl(
             intentKeyHandler = { _, _ -> false },
-            logger = NoopLogger,
+            logger = com.ivianuu.essentials.logging.NoopLogger,
             scope = this
         )
 
@@ -60,7 +59,7 @@ class NavigationStateTest {
     fun testReturnsResultOnPop() = runCancellingBlockingTest {
         val navigator = NavigatorImpl(
             intentKeyHandler = { _, _ -> false },
-            logger = NoopLogger,
+            logger = com.ivianuu.essentials.logging.NoopLogger,
             scope = this
         )
         val result = async { navigator.pushForResult(KeyWithResult) }
@@ -72,7 +71,7 @@ class NavigationStateTest {
     fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
         val navigator = NavigatorImpl(
             intentKeyHandler = { _, _ -> false },
-            logger = NoopLogger,
+            logger = com.ivianuu.essentials.logging.NoopLogger,
             scope = this
         )
         val result = async { navigator.pushForResult(KeyWithResult) }

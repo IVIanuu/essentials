@@ -20,6 +20,7 @@ import android.content.pm.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
@@ -28,7 +29,6 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 @Given

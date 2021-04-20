@@ -23,8 +23,9 @@ import android.os.*
 import android.view.*
 import androidx.activity.*
 import androidx.lifecycle.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.broadcast.*
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*

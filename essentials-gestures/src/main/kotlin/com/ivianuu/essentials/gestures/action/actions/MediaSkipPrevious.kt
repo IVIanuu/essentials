@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 @Given

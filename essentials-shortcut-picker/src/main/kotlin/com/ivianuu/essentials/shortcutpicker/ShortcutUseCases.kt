@@ -21,8 +21,8 @@ import android.content.pm.*
 import android.graphics.*
 import androidx.core.graphics.drawable.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*

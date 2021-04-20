@@ -21,12 +21,12 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.input.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 

@@ -21,9 +21,9 @@ import android.content.*
 import android.os.*
 import android.provider.*
 import androidx.core.net.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 interface IgnoreBatteryOptimizationsPermission : Permission

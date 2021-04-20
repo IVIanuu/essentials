@@ -26,14 +26,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":essentials-coroutines"))
-                api(project(":essentials-serialization"))
-                api(project(":essentials-store"))
-                api(project(":essentials-tuples"))
-
                 api(Deps.Injekt.core)
                 api(Deps.Injekt.scope)
-
                 api(Deps.kotlinResult)
             }
         }

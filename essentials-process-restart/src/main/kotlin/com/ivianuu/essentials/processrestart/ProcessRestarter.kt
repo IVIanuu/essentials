@@ -18,7 +18,8 @@ package com.ivianuu.essentials.processrestart
 
 import android.content.Intent.*
 import android.content.pm.*
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 

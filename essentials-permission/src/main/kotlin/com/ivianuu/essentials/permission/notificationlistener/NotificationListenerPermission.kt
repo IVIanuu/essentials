@@ -20,9 +20,9 @@ import android.content.*
 import android.provider.*
 import android.service.notification.*
 import androidx.core.app.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlin.reflect.*

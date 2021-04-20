@@ -17,7 +17,6 @@
 plugins {
     id("com.android.library")
     id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
     kotlin("android")
 }
 
@@ -29,8 +28,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
     api(Deps.Injekt.android)
     api(project(":essentials-android-core"))
-    api(project(":essentials-core"))
-    api(project(":essentials-ui"))
     testImplementation(project(":essentials-android-test"))
 }
 

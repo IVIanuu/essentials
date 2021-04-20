@@ -18,7 +18,7 @@ package com.ivianuu.essentials.util
 
 import androidx.lifecycle.*
 import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.activity.*
+import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.collections.*
 import io.mockk.*

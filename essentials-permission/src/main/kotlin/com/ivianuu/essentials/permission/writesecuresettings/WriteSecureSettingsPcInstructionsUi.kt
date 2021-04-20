@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.clipboard.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
@@ -31,7 +32,6 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*

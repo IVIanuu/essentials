@@ -35,7 +35,10 @@ dependencies {
     api(Deps.AndroidX.Compose.material)
     api(Deps.Injekt.android)
     api(project(":essentials-core"))
-    implementation(Deps.kotlinxImmutable)
+    api(project(":essentials-coroutines"))
+    api(project(":essentials-logging"))
+    api(project(":essentials-optics"))
+    api(project(":essentials-time"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.pm.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*

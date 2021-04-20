@@ -18,12 +18,12 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-// todo remove type parameter S once injekt is fixed
 @Given
 fun <@Given T : UiDecorator> uiDecoratorElement(
     @Given instance: T,
@@ -75,4 +75,6 @@ fun decorateUi(
 typealias AppTheme = UiDecorator
 
 @Given
-val appThemeConfig = UiDecoratorConfig<AppTheme>(dependencies = setOf(typeKeyOf<SystemBarManagerProvider>()))
+val appThemeConfig = UiDecoratorConfig<AppTheme>(
+    dependencies = setOf(typeKeyOf<SystemBarManagerProvider>())
+)

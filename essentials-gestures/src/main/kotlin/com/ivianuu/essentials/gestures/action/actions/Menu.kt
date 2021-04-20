@@ -18,9 +18,9 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 

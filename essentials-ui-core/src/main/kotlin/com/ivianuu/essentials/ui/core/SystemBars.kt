@@ -29,8 +29,8 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import androidx.core.view.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 

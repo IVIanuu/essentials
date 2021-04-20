@@ -3,11 +3,10 @@ package com.ivianuu.essentials.android.prefs
 import androidx.datastore.core.*
 import androidx.datastore.core.handlers.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*

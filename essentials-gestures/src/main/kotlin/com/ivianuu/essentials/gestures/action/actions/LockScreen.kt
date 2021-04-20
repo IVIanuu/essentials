@@ -18,10 +18,10 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.*
 import android.annotation.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 

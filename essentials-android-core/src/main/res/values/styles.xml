@@ -22,5 +22,4 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
-
 </resources>

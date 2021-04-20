@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 

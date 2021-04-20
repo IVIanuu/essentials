@@ -19,9 +19,9 @@ package com.ivianuu.essentials.permission.installunknownapps
 import android.annotation.*
 import android.content.*
 import android.content.pm.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 interface InstallUnknownAppsPermission : Permission

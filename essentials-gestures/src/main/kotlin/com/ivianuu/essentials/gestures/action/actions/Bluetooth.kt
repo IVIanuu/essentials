@@ -19,10 +19,10 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.bluetooth.*
 import androidx.compose.material.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.broadcast.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

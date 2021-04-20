@@ -20,7 +20,6 @@ import android.content.*
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.*
-import com.ivianuu.essentials.util.*
 import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
 import io.mockk.*
@@ -43,7 +42,7 @@ class ScreenStateTest {
             broadcastsFactory = { broadcasts },
             screenStateProvider = { currentScreenState },
             scope = globalScope,
-            logger = NoopLogger
+            logger = com.ivianuu.essentials.logging.NoopLogger
         ).testCollect(this)
 
         globalScopeDispatcher.runCurrent()

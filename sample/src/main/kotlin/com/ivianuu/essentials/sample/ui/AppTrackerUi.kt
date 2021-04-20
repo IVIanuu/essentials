@@ -24,6 +24,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.core.app.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*

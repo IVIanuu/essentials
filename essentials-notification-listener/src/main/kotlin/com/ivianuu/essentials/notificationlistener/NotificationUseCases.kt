@@ -19,7 +19,7 @@ package com.ivianuu.essentials.notificationlistener
 import android.app.*
 import android.service.notification.*
 import com.github.michaelbull.result.*
-import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

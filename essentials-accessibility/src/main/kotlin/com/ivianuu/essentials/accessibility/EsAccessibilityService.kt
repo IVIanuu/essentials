@@ -19,7 +19,7 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.*
 import android.content.*
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*

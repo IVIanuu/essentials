@@ -38,6 +38,7 @@ dependencies {
 
     api(project(":essentials-android-core"))
     api(project(":essentials-android-data"))
+    api(project(":essentials-logging-android"))
     api(project(":essentials-android-prefs"))
     api(project(":essentials-android-settings"))
     api(project(":essentials-android-util"))

@@ -18,6 +18,7 @@ package com.ivianuu.essentials.util
 
 import android.content.*
 import android.content.pm.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*

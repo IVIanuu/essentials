@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.boot.*
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
 @Given

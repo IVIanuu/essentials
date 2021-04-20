@@ -18,7 +18,6 @@ package com.ivianuu.essentials.util
 
 import androidx.activity.*
 import androidx.lifecycle.*
-import com.ivianuu.essentials.activity.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
@@ -28,6 +27,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 typealias ForegroundActivity = ComponentActivity?
+
+interface EsActivityMarker
 
 @Given
 val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundActivity>
@@ -39,7 +40,7 @@ fun foregroundActivityStateWorker(
     @Given dispatcher: MainDispatcher,
     @Given state: MutableStateFlow<ForegroundActivity>
 ): ScopeWorker<ActivityGivenScope> = worker@ {
-    if (activity !is EsActivity) return@worker
+    if (activity !is EsActivityMarker) return@worker
     val observer = LifecycleEventObserver { _, _ ->
         state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
             activity else null

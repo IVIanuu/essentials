@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.permission.root
 
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.*

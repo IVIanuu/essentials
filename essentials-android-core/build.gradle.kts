@@ -37,7 +37,7 @@ dependencies {
     api(Deps.Injekt.scope)
 
     api(project(":essentials-ui"))
-    api(project(":essentials-core"))
+    api(project(":essentials-common"))
     testImplementation(project(":essentials-android-test"))
 }
 

@@ -3,9 +3,9 @@
 package com.ivianuu.essentials.resource
 
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.optics.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.catch
 
 sealed class Resource<out T>
 

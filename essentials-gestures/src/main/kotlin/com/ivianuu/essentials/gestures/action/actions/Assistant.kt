@@ -19,9 +19,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.annotation.*
 import android.app.*
 import android.os.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 

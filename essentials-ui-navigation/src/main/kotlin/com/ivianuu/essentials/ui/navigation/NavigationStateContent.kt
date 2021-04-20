@@ -19,9 +19,9 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animatedstack.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*

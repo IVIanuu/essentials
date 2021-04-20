@@ -19,9 +19,11 @@ package com.ivianuu.essentials.hidenavbar
 import android.content.*
 import android.graphics.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.screenstate.*
@@ -30,7 +32,6 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.catch
 
 @Given
 fun navBarManager(

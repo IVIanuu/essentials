@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.core
 import androidx.compose.ui.graphics.*
 import androidx.core.graphics.*
 import com.github.michaelbull.result.*
-import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.*
 
 val Color.isDark: Boolean
     get() = ColorUtils.calculateLuminance(toArgb()) < 0.5

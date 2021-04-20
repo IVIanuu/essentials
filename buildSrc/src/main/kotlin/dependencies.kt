@@ -127,8 +127,6 @@ object Deps {
 
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
 
-    const val kotlinxImmutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3"
-
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
     const val mockk = "io.mockk:mockk:1.11.0"

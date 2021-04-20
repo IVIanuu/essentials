@@ -3,7 +3,6 @@ package com.ivianuu.essentials.billing
 import androidx.test.ext.junit.runners.*
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.test.*
-import com.ivianuu.essentials.util.*
 import io.kotest.matchers.booleans.*
 import io.mockk.*
 import kotlinx.coroutines.flow.*
@@ -28,7 +27,7 @@ class BillingContextTest {
                 }
             },
             dispatcher = dispatcher,
-            logger = NoopLogger,
+            logger = com.ivianuu.essentials.logging.NoopLogger,
             refreshes = MutableSharedFlow(),
             scope = this
         )

@@ -27,13 +27,13 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.core.app.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.foreground.ForegroundState.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*

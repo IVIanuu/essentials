@@ -17,7 +17,9 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*

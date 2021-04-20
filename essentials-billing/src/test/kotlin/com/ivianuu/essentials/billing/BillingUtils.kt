@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.json.*
@@ -19,7 +19,7 @@ class TestBillingContext(scope: CoroutineScope) : BillingContext {
         scope
     )
     override val refreshes: MutableSharedFlow<BillingRefresh> = EventFlow()
-    override val logger: Logger = PrintingLogger(true)
+    override val logger: Logger = com.ivianuu.essentials.logging.PrintingLogger(true)
     override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R = block()
 }
 

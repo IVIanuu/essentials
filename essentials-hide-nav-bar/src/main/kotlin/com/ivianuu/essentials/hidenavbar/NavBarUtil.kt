@@ -20,10 +20,11 @@ import android.annotation.*
 import android.graphics.*
 import android.os.*
 import android.view.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.settings.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit

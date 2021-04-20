@@ -3,11 +3,11 @@ package com.ivianuu.essentials.hidenavbar
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.writesecuresettings.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*

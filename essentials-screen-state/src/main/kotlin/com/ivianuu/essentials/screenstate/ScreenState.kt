@@ -21,7 +21,7 @@ import android.content.*
 import android.os.*
 import com.ivianuu.essentials.broadcast.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*

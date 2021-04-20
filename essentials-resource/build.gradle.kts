@@ -29,8 +29,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":essentials-store"))
-                api(Deps.kotlinResult)
+                api(project(":essentials-core"))
+                api(project(":essentials-coroutines"))
+                api(project(":essentials-optics"))
             }
         }
         named("jvmTest") {

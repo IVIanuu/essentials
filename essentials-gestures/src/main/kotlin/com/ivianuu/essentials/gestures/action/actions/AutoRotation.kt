@@ -19,12 +19,12 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.provider.*
 import androidx.compose.material.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.settings.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
