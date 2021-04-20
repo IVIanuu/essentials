@@ -113,17 +113,15 @@ object NoopLogger : Logger {
 @Factory
 class PrintingLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
     override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
-        println("[${kind.name}]${tag ?: stackTraceTag} ${render(message, throwable)}")
+        println("[${kind.name}] ${tag ?: stackTraceTag} ${render(message, throwable)}")
     }
 
-    private fun render(message: String?, throwable: Throwable?) {
-        buildString {
-            append(message.orEmpty())
-            if (throwable != null) {
-                append(" ")
-            }
-            append(throwable?.toString().orEmpty())
+    private fun render(message: String?, throwable: Throwable?) = buildString {
+        append(message.orEmpty())
+        if (throwable != null) {
+            append(" ")
         }
+        append(throwable?.toString().orEmpty())
     }
 }
 
