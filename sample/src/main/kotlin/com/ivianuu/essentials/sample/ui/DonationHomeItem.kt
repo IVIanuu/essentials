@@ -3,19 +3,33 @@ package com.ivianuu.essentials.sample.ui
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.donation.*
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import org.json.*
 
 @Given
-val donationHomeItem = HomeItem("Donation") { DonationKey(listOf(DonationSku)) }
+val donationHomeItem = HomeItem("Donation") {
+    DonationKey(
+        listOf(CrossaintDonation, CoffeeDonation, BurgerMenuDonation, MovieDonation)
+    )
+}
 
-val DonationSku = Sku("donate")
+val CrossaintDonation = Donation(Sku("crossaint"), R.drawable.es_ic_bakery_dining)
+val CoffeeDonation = Donation(Sku("coffee"), R.drawable.es_ic_free_breakfast)
+val BurgerMenuDonation = Donation(Sku("burger_menu"), R.drawable.es_ic_lunch_dining)
+val MovieDonation = Donation(Sku("movie"), R.drawable.es_ic_popcorn)
 
 @Given
 val sampleGetSkuDetailsUseCase: GetSkuDetailsUseCase = {
     delay(2000)
-    SkuDetails(it)
+    when (it.skuString) {
+        "crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
+        "coffee" -> SkuDetails(sku = it, title = "A cup of coffee", price = "2.49€")
+        "burger_menu" -> SkuDetails(sku = it, title = "Burger menu", price = "4.99€")
+        "movie" -> SkuDetails(sku = it, title = "Movie with popcorn", price = "9.99€")
+        else -> throw AssertionError()
+    }
 }
 
 @Given

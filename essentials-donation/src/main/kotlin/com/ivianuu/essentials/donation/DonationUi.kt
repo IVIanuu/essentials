@@ -23,7 +23,9 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-data class DonationKey(val skus: List<Sku>) : Key<Nothing>
+data class DonationKey(val donations: List<Donation>) : Key<Nothing>
+
+data class Donation(val sku: Sku, val iconRes: Int)
 
 @Given
 val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
@@ -61,26 +63,33 @@ val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
 val donationUiOptionsFactory = DialogKeyUiOptionsFactory<DonationKey>()
 
 @Composable
-private fun Donation(
-    donation: SkuDetails,
-    onClick: () -> Unit
-) {
+private fun Donation(donation: UiDonation, onClick: () -> Unit) {
     ListItem(
         modifier = Modifier
             .padding(horizontal = 8.dp),
-        title = { Text(donation.title) },
-        subtitle = { Text(donation.description) },
-        leading = { Icon(painterResource(R.drawable.es_cake), null) },
-        trailing = { Text(donation.price) },
+        title = { Text(donation.details.title) },
+        leading = { Icon(painterResource(donation.donation.iconRes), null) },
+        trailing = {
+            Text(
+                text = donation.details.price,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+            )
+        },
         onClick = onClick
     )
 }
 
 @Optics
 data class DonationModel(
-    val skus: Resource<List<SkuDetails>> = Idle,
+    val skus: Resource<List<UiDonation>> = Idle,
     val close: () -> Unit = {},
-    val purchase: (SkuDetails) -> Unit = {}
+    val purchase: (UiDonation) -> Unit = {}
+)
+
+data class UiDonation(
+    val donation: Donation,
+    val details: SkuDetails
 )
 
 @Given
@@ -94,13 +103,22 @@ fun donationModel(
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
-    resourceFlow { emit(key.skus.parMap { getSkuDetails(it)!! }) }
+    resourceFlow {
+        emit(
+            key.donations
+                .parMap {
+                    UiDonation(
+                        it,
+                        getSkuDetails(it.sku)!!
+                    )
+                }
+        )
+    }
         .update { copy(skus = it) }
     action(DonationModel.close()) { navigator.pop(key) }
     action(DonationModel.purchase()) { donation ->
-        val sku = key.skus.single { it.skuString == donation.sku }
-        purchase(sku, true, true)
-        consumePurchase(sku)
+        purchase(donation.donation.sku, true, true)
+        consumePurchase(donation.donation.sku)
         toaster(stringResource(R.string.es_donation_thanks, emptyList()))
     }
 }

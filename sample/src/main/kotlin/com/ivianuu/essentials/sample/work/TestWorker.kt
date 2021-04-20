@@ -20,6 +20,7 @@ import androidx.work.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.work.*
+import com.ivianuu.essentials.work.Worker
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
