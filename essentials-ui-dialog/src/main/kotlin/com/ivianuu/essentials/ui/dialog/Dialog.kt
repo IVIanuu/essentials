@@ -26,17 +26,17 @@ import com.ivianuu.essentials.ui.material.*
 
 @Composable
 fun Dialog(
+    modifier: Modifier = Modifier,
     showTopDivider: Boolean = false,
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean = true,
     buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
-    content: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    content: @Composable (() -> Unit)? = null,
 ) {
     BaseDialog(modifier = modifier) {
         DialogBody(

@@ -25,17 +25,17 @@ import com.ivianuu.essentials.ui.common.*
 
 @Composable
 fun <T> SingleChoiceListDialog(
+    modifier: Modifier = Modifier,
     items: List<T>,
     selectedItem: T,
     onSelectionChanged: (T) -> Unit,
     item: @Composable (T) -> Unit,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
 ) {
     Dialog(
         modifier = modifier,
@@ -43,21 +43,20 @@ fun <T> SingleChoiceListDialog(
         title = title,
         buttonLayout = buttonLayout,
         applyContentPadding = false,
-        content = {
-            LazyColumn {
-                items(items) { item ->
-                    SingleChoiceDialogListItem(
-                        title = { item(item) },
-                        selected = item == selectedItem,
-                        onSelect = { onSelectionChanged(item) }
-                    )
-                }
-            }
-        },
         positiveButton = positiveButton,
         negativeButton = negativeButton,
         neutralButton = neutralButton
-    )
+    ) {
+        LazyColumn {
+            items(items) { item ->
+                SingleChoiceDialogListItem(
+                    title = { item(item) },
+                    selected = item == selectedItem,
+                    onSelect = { onSelectionChanged(item) }
+                )
+            }
+        }
+    }
 }
 
 @Composable

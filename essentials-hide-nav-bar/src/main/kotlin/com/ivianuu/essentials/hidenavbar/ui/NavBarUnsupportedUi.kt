@@ -21,9 +21,6 @@ val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel
             title = {
                 Text(stringResource(R.string.es_nav_bar_unsupported_title))
             },
-            content = {
-                Text(stringResource(R.string.es_nav_bar_unsupported_content))
-            },
             neutralButton = {
                 TextButton(onClick = model.openMoreInfos) {
                     Text(stringResource(R.string.es_more_infos))
@@ -34,7 +31,9 @@ val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel
                     Text(stringResource(R.string.es_close))
                 }
             }
-        )
+        ) {
+            Text(stringResource(R.string.es_nav_bar_unsupported_content))
+        }
     }
 }
 

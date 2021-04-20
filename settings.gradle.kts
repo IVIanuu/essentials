@@ -24,6 +24,7 @@ include(
     ":essentials-core",
     ":essentials-coroutines",
     ":essentials-data",
+    ":essentials-donation",
     ":essentials-foreground",
     ":essentials-gestures",
     ":essentials-gradle-plugin",

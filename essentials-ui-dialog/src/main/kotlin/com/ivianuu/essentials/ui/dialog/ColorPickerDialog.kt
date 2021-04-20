@@ -41,15 +41,15 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
 @Composable
 fun ColorPickerDialog(
+    modifier: Modifier = Modifier,
     initialColor: Color,
     colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
     onColorSelected: (Color) -> Unit,
     onCancel: () -> Unit,
     allowCustomArgb: Boolean = true,
     showAlphaSelector: Boolean = false,
-    icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
 ) {
     var currentColor by remember { mutableStateOf(initialColor) }
     var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
@@ -91,35 +91,34 @@ fun ColorPickerDialog(
                     Text(otherScreen.title)
                 }
             }
-        },
-        content = {
-            AnimatedBox(
-                modifier = Modifier.height(300.dp)
-                    .padding(start = 24.dp, end = 24.dp),
-                current = currentScreen,
-                transition = FadeStackTransition()
-            ) { currentScreen ->
-                when (currentScreen) {
-                    ColorPickerTab.COLORS -> {
-                        ColorGrid(
-                            modifier = Modifier.fillMaxSize(),
-                            currentColor = currentColor,
-                            colors = colorPalettes,
-                            onColorSelected = { currentColor = it }
-                        )
-                    }
-                    ColorPickerTab.EDITOR -> {
-                        ColorEditor(
-                            modifier = Modifier.fillMaxSize(),
-                            color = currentColor,
-                            onColorChanged = { currentColor = it },
-                            showAlphaSelector = showAlphaSelector
-                        )
-                    }
+        }
+    ) {
+        AnimatedBox(
+            modifier = Modifier.height(300.dp)
+                .padding(start = 24.dp, end = 24.dp),
+            current = currentScreen,
+            transition = FadeStackTransition()
+        ) { currentScreen ->
+            when (currentScreen) {
+                ColorPickerTab.COLORS -> {
+                    ColorGrid(
+                        modifier = Modifier.fillMaxSize(),
+                        currentColor = currentColor,
+                        colors = colorPalettes,
+                        onColorSelected = { currentColor = it }
+                    )
+                }
+                ColorPickerTab.EDITOR -> {
+                    ColorEditor(
+                        modifier = Modifier.fillMaxSize(),
+                        color = currentColor,
+                        onColorChanged = { currentColor = it },
+                        showAlphaSelector = showAlphaSelector
+                    )
                 }
             }
         }
-    )
+    }
 }
 
 @Composable
