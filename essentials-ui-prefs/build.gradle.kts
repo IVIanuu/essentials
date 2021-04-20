@@ -29,6 +29,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
     api(project(":essentials-core"))
     api(project(":essentials-ui-core"))
+    api(project(":essentials-color-picker"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
