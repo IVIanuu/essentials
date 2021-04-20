@@ -12,7 +12,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-object NavBarUnsupportedKey : Key<Nothing>
+object NavBarUnsupportedKey : DialogKey<Nothing>
 
 @Given
 val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
@@ -36,9 +36,6 @@ val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel
         }
     }
 }
-
-@Given
-val navBarUnsupportedOptions = DialogKeyUiOptionsFactory<NavBarUnsupportedKey>()
 
 @Optics
 data class NavBarUnsupportedModel(

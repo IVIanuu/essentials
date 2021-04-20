@@ -10,7 +10,7 @@ data class SingleChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItem: T,
     val title: String
-) : Key<T> {
+) : DialogKey<T> {
     data class Item<T : Any>(val value: T, val title: String)
 }
 
@@ -39,7 +39,3 @@ fun singleChoiceListUi(
         )
     }
 }
-
-@Given
-val singleChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<SingleChoiceListKey<Any>>()
-

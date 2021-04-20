@@ -10,7 +10,7 @@ data class MultiChoiceListKey<T : Any>(
     val items: List<Item<T>>,
     val selectedItems: Set<T>,
     val title: String
-) : Key<Set<T>> {
+) : DialogKey<Set<T>> {
     data class Item<T>(val value: T, val title: String)
 }
 
@@ -46,6 +46,3 @@ fun multiChoiceListUi(
         )
     }
 }
-
-@Given
-val multiChoiceListUiOptionsFactory = DialogKeyUiOptionsFactory<MultiChoiceListKey<Any>>()

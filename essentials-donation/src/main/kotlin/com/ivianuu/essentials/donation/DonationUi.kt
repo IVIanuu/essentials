@@ -23,7 +23,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-data class DonationKey(val donations: List<Donation>) : Key<Nothing>
+data class DonationKey(val donations: List<Donation>) : DialogKey<Nothing>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
@@ -58,9 +58,6 @@ val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
         }
     }
 }
-
-@Given
-val donationUiOptionsFactory = DialogKeyUiOptionsFactory<DonationKey>()
 
 @Composable
 private fun Donation(donation: UiDonation, onClick: () -> Unit) {

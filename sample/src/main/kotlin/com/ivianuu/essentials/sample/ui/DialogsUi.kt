@@ -348,15 +348,12 @@ private fun DialogLauncherButton(
     ) { Text(text) }
 }
 
-data class DialogLauncherKey(val dialog: @Composable () -> Unit) : Key<Nothing>
+data class DialogLauncherKey(val dialog: @Composable () -> Unit) : DialogKey<Nothing>
 
 @Given
 fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
     DialogScaffold { key.dialog() }
 }
-
-@Given
-val dialogLauncherUiOptionsFactory = DialogKeyUiOptionsFactory<DialogLauncherKey>()
 
 @InstallElement<UiGivenScope>
 @Given

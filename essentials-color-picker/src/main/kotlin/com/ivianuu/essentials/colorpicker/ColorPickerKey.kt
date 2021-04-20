@@ -28,7 +28,7 @@ data class ColorPickerKey(
     val title: String? = null,
     val allowCustomArgb: Boolean = true,
     val showAlphaSelector: Boolean = false,
-) : Key<Color>
+) : DialogKey<Color>
 
 @Given
 fun colorPickerUi(
@@ -47,6 +47,3 @@ fun colorPickerUi(
         )
     }
 }
-
-@Given
-val colorPickerUiOptionsFactory = DialogKeyUiOptionsFactory<ColorPickerKey>()

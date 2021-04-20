@@ -29,9 +29,7 @@ data class TextInputKey(
     val keyboardOptions: KeyboardOptions = KeyboardOptions(),
     val title: String? = null,
     val allowEmpty: Boolean = true,
-) : Key<String>
-
-typealias TextInputResult = String
+) : DialogKey<String>
 
 @Given
 fun textInputUi(
@@ -60,6 +58,3 @@ fun textInputUi(
         )
     }
 }
-
-@Given
-val textInputUiOptionsFactory = DialogKeyUiOptionsFactory<TextInputKey>()
