@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.dialog
+package com.ivianuu.essentials.colorpicker
 
 import androidx.compose.ui.graphics.*
 

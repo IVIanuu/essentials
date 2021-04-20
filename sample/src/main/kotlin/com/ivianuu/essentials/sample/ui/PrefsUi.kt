@@ -143,7 +143,7 @@ fun prefsUi(
                     onValueChangeRequest = {
                         scope.launch {
                             val newColor = navigator.pushForResult(
-                                ColorPickerKey(
+                                com.ivianuu.essentials.colorpicker.ColorPickerKey(
                                     initialColor = Color(prefs.color),
                                     title = "Color"
                                 )

@@ -44,7 +44,7 @@ val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
                 loading = {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .height(200.dp)
+                            .height(100.dp)
                             .fillMaxWidth()
                             .center()
                     )

@@ -39,8 +39,8 @@ object DynamicSystemBarsKey : Key<Nothing>
 val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
     Box {
         val colors: List<Color> = rememberSaveable {
-            ColorPickerPalette.values()
-                .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+            com.ivianuu.essentials.colorpicker.ColorPickerPalette.values()
+                .filter { it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.BLACK && it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.WHITE }
                 .flatMap { it.colors }
                 .shuffled()
         }

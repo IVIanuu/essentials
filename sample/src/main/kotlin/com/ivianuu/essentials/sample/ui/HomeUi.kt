@@ -69,8 +69,8 @@ fun homeUi(
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(finalItems) { item ->
                 val color = rememberSaveable(item) {
-                    ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+                    com.ivianuu.essentials.colorpicker.ColorPickerPalette.values()
+                        .filter { it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.BLACK && it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.WHITE }
                         .shuffled()
                         .first()
                         .front

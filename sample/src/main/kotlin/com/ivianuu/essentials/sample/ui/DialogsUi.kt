@@ -267,7 +267,7 @@ val dialogsUi: KeyUi<DialogsKey> = {
                 val primaryColor = MaterialTheme.colors.primary
                 var currentColor by remember { mutableStateOf(primaryColor) }
                 DialogLauncherButton(text = "Color Picker") { dismiss ->
-                    ColorPickerDialog(
+                    com.ivianuu.essentials.colorpicker.ColorPickerDialog(
                         title = { Text("Color Picker") },
                         showAlphaSelector = true,
                         initialColor = currentColor,

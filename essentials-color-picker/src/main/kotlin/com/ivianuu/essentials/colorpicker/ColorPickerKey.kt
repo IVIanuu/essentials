@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.dialog
+package com.ivianuu.essentials.colorpicker
 
 import androidx.compose.material.*
 import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.dialog
+package com.ivianuu.essentials.colorpicker
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.*
@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.animatedstack.*
 import com.ivianuu.essentials.ui.animatedstack.animation.*
 import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.dialog.R
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
