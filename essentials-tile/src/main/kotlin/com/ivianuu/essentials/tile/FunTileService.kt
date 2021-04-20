@@ -114,11 +114,11 @@ class FunTileServiceComponent(
 @Given
 class TileModelComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,
-    @Given tileModelElements: Map<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> = emptyMap(),
+    @Given tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
     @Given val scope: ScopeCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileModel = tileModelElements[tileKey]
+    val tileModel = tileModelElements.toMap()[tileKey]
         ?.invoke()
         ?: error("No tile found for $tileKey in ${tileModelElements.toMap()}")
 }
