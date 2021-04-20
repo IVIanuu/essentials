@@ -23,17 +23,17 @@ import androidx.compose.ui.*
 
 @Composable
 fun <T> MultiChoiceListDialog(
+    modifier: Modifier = Modifier,
     items: List<T>,
     selectedItems: Set<T>,
     onSelectionsChanged: (Set<T>) -> Unit,
     item: @Composable (T) -> Unit,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
     positiveButton: @Composable (() -> Unit)? = null,
     negativeButton: @Composable (() -> Unit)? = null,
     neutralButton: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
 ) {
     Dialog(
         modifier = modifier,
@@ -41,30 +41,29 @@ fun <T> MultiChoiceListDialog(
         title = title,
         buttonLayout = buttonLayout,
         applyContentPadding = false,
-        content = {
-            LazyColumn {
-                items(items) { item ->
-                    MultiChoiceDialogListItem(
-                        title = { item(item) },
-                        checked = item in selectedItems,
-                        onCheckedChange = {
-                            val newSelectedItems = selectedItems.toMutableSet()
-                            if (it) {
-                                newSelectedItems += item
-                            } else {
-                                newSelectedItems -= item
-                            }
-
-                            onSelectionsChanged(newSelectedItems)
-                        }
-                    )
-                }
-            }
-        },
         positiveButton = positiveButton,
         negativeButton = negativeButton,
         neutralButton = neutralButton
-    )
+    ) {
+        LazyColumn {
+            items(items) { item ->
+                MultiChoiceDialogListItem(
+                    title = { item(item) },
+                    checked = item in selectedItems,
+                    onCheckedChange = {
+                        val newSelectedItems = selectedItems.toMutableSet()
+                        if (it) {
+                            newSelectedItems += item
+                        } else {
+                            newSelectedItems -= item
+                        }
+
+                        onSelectionsChanged(newSelectedItems)
+                    }
+                )
+            }
+        }
+    }
 }
 
 @Composable
