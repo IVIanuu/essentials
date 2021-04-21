@@ -23,7 +23,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-data class DonationKey(val donations: List<Donation>) : DialogKey<Nothing>
+object DonationKey : DialogKey<Nothing>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
@@ -92,6 +92,7 @@ data class UiDonation(
 @Given
 fun donationModel(
     @Given consumePurchase: ConsumePurchaseUseCase,
+    @Given donations: Set<Donation>,
     @Given getSkuDetails: GetSkuDetailsUseCase,
     @Given key: DonationKey,
     @Given navigator: Navigator,
@@ -102,7 +103,7 @@ fun donationModel(
 ): @Scoped<KeyUiGivenScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
     resourceFlow {
         emit(
-            key.donations
+            donations
                 .parMap {
                     UiDonation(
                         it,
@@ -110,8 +111,7 @@ fun donationModel(
                     )
                 }
         )
-    }
-        .update { copy(skus = it) }
+    }.update { copy(skus = it) }
     action(DonationModel.close()) { navigator.pop(key) }
     action(DonationModel.purchase()) { donation ->
         purchase(donation.donation.sku, true, true)
