@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
@@ -69,8 +70,8 @@ fun homeUi(
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             items(finalItems) { item ->
                 val color = rememberSaveable(item) {
-                    com.ivianuu.essentials.colorpicker.ColorPickerPalette.values()
-                        .filter { it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.BLACK && it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.WHITE }
+                    ColorPickerPalette.values()
+                        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
                         .shuffled()
                         .first()
                         .front
