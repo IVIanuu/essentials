@@ -8,7 +8,7 @@ import com.ivianuu.injekt.scope.*
 typealias KeyUiGivenScope = DefaultGivenScope
 
 @Given
-val keyUiGivenScopeModule = ChildGivenScopeModule0<UiGivenScope, KeyUiGivenScope>()
+val keyUiGivenScopeModule = ChildGivenScopeModule1<UiGivenScope, Key<*>, KeyUiGivenScope>()
 
 val LocalKeyUiGivenScope = staticCompositionLocalOf<KeyUiGivenScope> {
     error("No KeyUiGivenScope provided")

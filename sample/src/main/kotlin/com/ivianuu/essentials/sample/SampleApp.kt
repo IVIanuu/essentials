@@ -50,6 +50,9 @@ import com.ivianuu.essentials.permission.ui.*
 import com.ivianuu.essentials.permission.writesecuresettings.*
 import com.ivianuu.essentials.permission.writesettings.*
 import com.ivianuu.essentials.processrestart.*
+import com.ivianuu.essentials.rate.data.*
+import com.ivianuu.essentials.rate.domain.*
+import com.ivianuu.essentials.rate.ui.*
 import com.ivianuu.essentials.recentapps.*
 import com.ivianuu.essentials.sample.tile.*
 import com.ivianuu.essentials.sample.ui.*
@@ -62,6 +65,7 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.systemoverlay.blacklist.*
 import com.ivianuu.essentials.systemoverlay.*
 import com.ivianuu.essentials.tile.*
+import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.torch.*
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.essentials.twilight.domain.*

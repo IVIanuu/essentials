@@ -63,6 +63,7 @@ dependencies {
     implementation(project(":essentials-notification-listener"))
     implementation(project(":essentials-permission"))
     implementation(project(":essentials-process-restart"))
+    implementation(project(":essentials-rate"))
     implementation(project(":essentials-shell"))
     implementation(project(":essentials-shortcut-picker"))
     implementation(project(":essentials-tile"))
@@ -70,8 +71,6 @@ dependencies {
     implementation(project(":essentials-twilight"))
     implementation(project(":essentials-unlock"))
     implementation(project(":essentials-work"))
-
-    debugImplementation(Deps.leakCanary)
 
     testImplementation(project(":essentials-android-test"))
     testImplementation(project(":essentials-test"))

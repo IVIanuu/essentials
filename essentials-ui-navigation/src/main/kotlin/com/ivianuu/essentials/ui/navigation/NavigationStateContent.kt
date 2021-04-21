@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animatedstack.*
@@ -39,7 +40,8 @@ fun navigationStateContent(
             optionFactories = optionFactories,
             uiFactories = uiFactories,
             backStack = state.backStack.cast(),
-            keyUiGivenScopeFactory = uiGivenScope.element<@ChildScopeFactory () -> KeyUiGivenScope>()
+            keyUiGivenScopeFactory = uiGivenScope
+                .element<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
         )
     }
     SideEffect {
@@ -56,10 +58,9 @@ fun navigationStateContent(
 private class NavigationContentState(
     var optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> = emptyMap(),
     var uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> = emptyMap(),
-    var keyUiGivenScopeFactory: () -> KeyUiGivenScope,
+    var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope,
     backStack: List<Key<Any>>,
 ) {
-
     private var children by mutableStateOf(emptyList<Child>())
 
     val stackChildren: List<AnimatedStackChild<Key<Any>>>
@@ -80,7 +81,7 @@ private class NavigationContentState(
     @Suppress("UNCHECKED_CAST")
     private fun getOrCreateEntry(key: Key<Any>): Child {
         children.firstOrNull { it.key == key }?.let { return it }
-        val component = keyUiGivenScopeFactory()
+        val component = keyUiGivenScopeFactory(key)
         val content = uiFactories[key::class]?.invoke(key, component)
         checkNotNull(content) { "No factory found for $key" }
         val options = optionFactories[key::class]?.invoke(key)

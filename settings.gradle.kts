@@ -37,6 +37,7 @@ include(
     ":essentials-optics",
     ":essentials-permission",
     ":essentials-process-restart",
+    ":essentials-rate",
     ":essentials-recent-apps",
     ":essentials-resource",
     ":essentials-screen-state",

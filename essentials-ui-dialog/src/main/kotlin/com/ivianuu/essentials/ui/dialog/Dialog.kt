@@ -264,7 +264,6 @@ private fun DialogButtons(
         AlertDialogButtonLayout.SIDE_BY_SIDE -> {
             Row(
                 modifier = Modifier
-                    .height(52.dp)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,

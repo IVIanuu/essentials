@@ -128,9 +128,9 @@ private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val component = LocalUiGivenScope.current.element<AutoTopAppBarComponent>()
+    val component = LocalKeyUiGivenScope.current.element<AutoTopAppBarComponent>()
     val canGoBack = remember {
-        component.navigator.state.value.backStack.size > 1
+        component.navigator.state.value.backStack.indexOf(component.key) > 0
     }
     return when {
         canGoBack -> {
@@ -140,6 +140,9 @@ private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
     }
 }
 
-@InstallElement<UiGivenScope>
+@InstallElement<KeyUiGivenScope>
 @Given
-class AutoTopAppBarComponent(@Given val navigator: Navigator)
+class AutoTopAppBarComponent(
+    @Given val key: Key<*>,
+    @Given val navigator: Navigator
+)

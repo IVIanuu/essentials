@@ -9,15 +9,15 @@ import kotlinx.coroutines.*
 import org.json.*
 
 @Given
-val donationHomeItem = HomeItem("Donation") {
-    DonationKey(
-        listOf(CrossaintDonation, CoffeeDonation, BurgerMenuDonation, MovieDonation)
-    )
-}
+val donationHomeItem = HomeItem("Donation") { DonationKey }
 
+@Given
 val CrossaintDonation = Donation(Sku("crossaint"), R.drawable.es_ic_bakery_dining)
+@Given
 val CoffeeDonation = Donation(Sku("coffee"), R.drawable.es_ic_free_breakfast)
+@Given
 val BurgerMenuDonation = Donation(Sku("burger_menu"), R.drawable.es_ic_lunch_dining)
+@Given
 val MovieDonation = Donation(Sku("movie"), R.drawable.es_ic_popcorn)
 
 @Given
