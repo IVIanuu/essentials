@@ -6,6 +6,7 @@ import com.google.android.play.core.review.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.rate.data.*
+import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -64,8 +65,15 @@ internal typealias ShowLaterUseCase = suspend () -> Unit
 fun showLaterUseCase(
     @Given key: Key<*>,
     @Given navigator: Navigator,
-    @Given pref: DataStore<RatePrefs>
+    @Given pref: DataStore<RatePrefs>,
+    @Given timestampProvider: TimestampProvider
 ): ShowLaterUseCase = {
-    pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.LATER) }
+    pref.updateData {
+        copy(
+            launchTimes = 0,
+            installTime = timestampProvider().toLongMilliseconds(),
+            feedbackState = RatePrefs.FeedbackState.LATER
+        )
+    }
     navigator.pop(key)
 }

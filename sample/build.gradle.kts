@@ -72,8 +72,6 @@ dependencies {
     implementation(project(":essentials-unlock"))
     implementation(project(":essentials-work"))
 
-    debugImplementation(Deps.leakCanary)
-
     testImplementation(project(":essentials-android-test"))
     testImplementation(project(":essentials-test"))
 }

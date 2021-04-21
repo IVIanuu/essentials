@@ -65,6 +65,7 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.systemoverlay.blacklist.*
 import com.ivianuu.essentials.systemoverlay.*
 import com.ivianuu.essentials.tile.*
+import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.torch.*
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.essentials.twilight.domain.*

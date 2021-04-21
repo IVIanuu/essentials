@@ -7,15 +7,13 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Given
-fun popToRootOnActivityDestroyWorker(
-    @Given navigator: Navigator
-): ScopeWorker<UiGivenScope> = {
+fun popToRootOnActivityDestroyWorker(@Given navigator: Navigator): ScopeWorker<UiGivenScope> = {
     runOnCancellation {
         navigator.state
             .first()
             .backStack
             .drop(1)
             .filterIsInstance<Key<Any>>()
-            .forEach { navigator.popTop() }
+            .forEach { navigator.pop(it) }
     }
 }
