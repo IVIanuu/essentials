@@ -20,12 +20,15 @@ object FeedbackKey : DialogKey<Nothing>
 
 @Given
 val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
-    DialogScaffold {
+    DialogScaffold(dismissible = false) {
         Dialog(
             title = { Text(stringResource(R.string.es_feedback_title)) },
             content = { Text(stringResource(R.string.es_feedback_content)) },
             neutralButton = {
-                Column(horizontalAlignment = Alignment.Start) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
                     if (model.displayShowNever) {
                         TextButton(onClick = model.showNever) {
                             Text(stringResource(R.string.es_never))
@@ -37,7 +40,10 @@ val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
                 }
             },
             negativeButton = {
-                Column(horizontalAlignment = Alignment.End) {
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
                     TextButton(onClick = model.openReddit) {
                         Text(stringResource(R.string.es_open_reddit))
                     }

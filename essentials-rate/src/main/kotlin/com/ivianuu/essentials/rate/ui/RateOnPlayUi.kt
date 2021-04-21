@@ -19,7 +19,7 @@ object RateOnPlayKey : DialogKey<Nothing>
 
 @Given
 val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
-    DialogScaffold {
+    DialogScaffold(dismissible = false) {
         Dialog(
             title = { Text(stringResource(R.string.es_rate_on_play_title)) },
             content = { Text(stringResource(R.string.es_rate_on_play_content)) },

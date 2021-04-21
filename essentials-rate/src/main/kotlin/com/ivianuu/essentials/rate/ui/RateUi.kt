@@ -29,7 +29,7 @@ object RateKey : DialogKey<Nothing>
 
 @Given
 val rateUi: ModelKeyUi<RateKey, RateModel> = {
-    DialogScaffold {
+    DialogScaffold(dismissible = false) {
         Dialog(
             positiveButton = {
                 TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {

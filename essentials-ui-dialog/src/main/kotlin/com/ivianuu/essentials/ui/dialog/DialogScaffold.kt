@@ -28,8 +28,8 @@ import com.ivianuu.essentials.ui.core.*
 
 @Composable
 fun DialogScaffold(
-    dismissible: Boolean = true,
     modifier: Modifier = Modifier,
+    dismissible: Boolean = true,
     onDismissRequest: () -> Unit = defaultDismissRequestHandler,
     dialog: @Composable () -> Unit,
 ) {
