@@ -49,7 +49,6 @@ val navigationStateContent: NavigationStateContent = { state, modifier ->
     AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-
 @Given
 @InstallElement<KeyUiGivenScope>
 class KeyUiComponent(
