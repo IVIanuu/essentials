@@ -69,7 +69,7 @@ fun decorateUi(
                     element.decorator(acc)
                 }
             }
-    }()
+    }.invoke()
 }
 
 typealias AppTheme = UiDecorator

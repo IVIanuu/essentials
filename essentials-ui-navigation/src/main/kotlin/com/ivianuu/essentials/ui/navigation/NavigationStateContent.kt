@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animatedstack.*
@@ -30,15 +29,10 @@ import kotlin.reflect.*
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
 
 @Given
-fun navigationStateContent(
-    @Given optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
-    @Given uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>
-): NavigationStateContent = { state, modifier ->
+val navigationStateContent: NavigationStateContent = { state, modifier ->
     val uiGivenScope = LocalUiGivenScope.current
     val contentState = remember {
         NavigationContentState(
-            optionFactories = optionFactories,
-            uiFactories = uiFactories,
             backStack = state.backStack.cast(),
             keyUiGivenScopeFactory = uiGivenScope
                 .element<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
@@ -55,9 +49,16 @@ fun navigationStateContent(
     AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
+
+@Given
+@InstallElement<KeyUiGivenScope>
+class KeyUiComponent(
+    @Given val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
+    @Given val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
+    @Given val decorateUi: DecorateKeyUi,
+)
+
 private class NavigationContentState(
-    var optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> = emptyMap(),
-    var uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> = emptyMap(),
     var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope,
     backStack: List<Key<Any>>,
 ) {
@@ -81,11 +82,13 @@ private class NavigationContentState(
     @Suppress("UNCHECKED_CAST")
     private fun getOrCreateEntry(key: Key<Any>): Child {
         children.firstOrNull { it.key == key }?.let { return it }
-        val component = keyUiGivenScopeFactory(key)
-        val content = uiFactories[key::class]?.invoke(key, component)
+        val scope = keyUiGivenScopeFactory(key)
+        val component = scope.element<KeyUiComponent>()
+        val content = component.uiFactories[key::class]?.invoke(key, scope)
         checkNotNull(content) { "No factory found for $key" }
-        val options = optionFactories[key::class]?.invoke(key)
-        return Child(key, options, content, component)
+        val decoratedContent: @Composable () -> Unit = { component.decorateUi(content) }
+        val options = component.optionFactories[key::class]?.invoke(key)
+        return Child(key, options, decoratedContent, scope)
     }
 
     private class Child(
