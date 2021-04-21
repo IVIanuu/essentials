@@ -25,6 +25,7 @@ import kotlinx.serialization.modules.*
 @Given
 val json: @Scoped<AppGivenScope> Json
     get() = Json {
+        ignoreUnknownKeys = true
         serializersModule = SerializersModule {
         }
     }

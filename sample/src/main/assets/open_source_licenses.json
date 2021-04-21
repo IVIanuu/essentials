@@ -1006,23 +1006,6 @@
     "dependency": "androidx.compose.ui:ui-util:1.0.0-beta04"
   },
   {
-    "project": "Core",
-    "description": "Utilities for my apps",
-    "version": "0.0.1-dev841",
-    "developers": [
-      "Manuel Wrage"
-    ],
-    "url": "https://github.com/IVIanuu/essentials/",
-    "year": "2021",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "com.ivianuu.essentials:essentials-core:0.0.1-dev841"
-  },
-  {
     "project": "core",
     "description": null,
     "version": "1.8.2",
@@ -1055,7 +1038,7 @@
     "dependency": "androidx.core:core-ktx:1.5.0-alpha05"
   },
   {
-    "project": "Coroutines",
+    "project": "Essentials",
     "description": "Utilities for my apps",
     "version": "0.0.1-dev841",
     "developers": [
@@ -1069,7 +1052,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.ivianuu.essentials:essentials-coroutines:0.0.1-dev841"
+    "dependency": "com.ivianuu.essentials:essentials-resource:0.0.1-dev841"
   },
   {
     "project": "Essentials",
@@ -1089,7 +1072,7 @@
     "dependency": "com.ivianuu.essentials:essentials-data:0.0.1-dev841"
   },
   {
-    "project": "Essentials",
+    "project": "Essentials app library",
     "description": "Utilities for my apps",
     "version": "0.0.1-dev841",
     "developers": [
@@ -1103,7 +1086,160 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.ivianuu.essentials:essentials-resource:0.0.1-dev841"
+    "dependency": "com.ivianuu.essentials:essentials-app:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials common library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-common:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials core library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-core:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials data library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-coroutines:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials logging library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-logging:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials optics library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-optics:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials serialization library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-serialization:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials store library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-store:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials time library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-time:0.0.1-dev841"
+  },
+  {
+    "project": "Essentials tuples library",
+    "description": "Utilities for my apps",
+    "version": "0.0.1-dev841",
+    "developers": [
+      "Manuel Wrage"
+    ],
+    "url": "https://github.com/IVIanuu/essentials/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.ivianuu.essentials:essentials-tuples:0.0.1-dev841"
   },
   {
     "project": "Guava ListenableFuture only",
@@ -1452,23 +1588,6 @@
     "dependency": "com.squareup.okio:okio:2.10.0"
   },
   {
-    "project": "Optics",
-    "description": "Utilities for my apps",
-    "version": "0.0.1-dev841",
-    "developers": [
-      "Manuel Wrage"
-    ],
-    "url": "https://github.com/IVIanuu/essentials/",
-    "year": "2021",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "com.ivianuu.essentials:essentials-optics:0.0.1-dev841"
-  },
-  {
     "project": "Parcelize Runtime",
     "description": "Runtime library for the Parcelize compiler plugin",
     "version": "1.4.21",
@@ -1501,57 +1620,6 @@
       }
     ],
     "dependency": "androidx.savedstate:savedstate-ktx:1.1.0"
-  },
-  {
-    "project": "Serialization",
-    "description": "Utilities for my apps",
-    "version": "0.0.1-dev841",
-    "developers": [
-      "Manuel Wrage"
-    ],
-    "url": "https://github.com/IVIanuu/essentials/",
-    "year": "2021",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "com.ivianuu.essentials:essentials-serialization:0.0.1-dev841"
-  },
-  {
-    "project": "Store",
-    "description": "Utilities for my apps",
-    "version": "0.0.1-dev841",
-    "developers": [
-      "Manuel Wrage"
-    ],
-    "url": "https://github.com/IVIanuu/essentials/",
-    "year": "2021",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "com.ivianuu.essentials:essentials-store:0.0.1-dev841"
-  },
-  {
-    "project": "Tuples",
-    "description": "Utilities for my apps",
-    "version": "0.0.1-dev841",
-    "developers": [
-      "Manuel Wrage"
-    ],
-    "url": "https://github.com/IVIanuu/essentials/",
-    "year": "2021",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "com.ivianuu.essentials:essentials-tuples:0.0.1-dev841"
   },
   {
     "project": "VersionedParcelable",

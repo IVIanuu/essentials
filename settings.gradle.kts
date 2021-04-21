@@ -31,6 +31,7 @@ include(
     ":essentials-gradle-plugin",
     ":essentials-hide-nav-bar",
     ":essentials-ide-plugin",
+    ":essentials-license",
     ":essentials-logging",
     ":essentials-logging-android",
     ":essentials-notification-listener",
@@ -61,6 +62,7 @@ include(
     ":essentials-ui-popup",
     ":essentials-ui-prefs",
     ":essentials-unlock",
+    ":essentials-web-ui",
     ":essentials-work",
     ":sample"
 )

@@ -32,6 +32,9 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.ui.*
+import com.ivianuu.essentials.license.data.*
+import com.ivianuu.essentials.license.domain.*
+import com.ivianuu.essentials.license.ui.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.android.*
 import com.ivianuu.essentials.notificationlistener.*
@@ -78,6 +81,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
+import com.ivianuu.essentials.web.ui.*
 import com.ivianuu.essentials.work.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*

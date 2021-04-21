@@ -6,6 +6,7 @@ import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.optics.*
 import kotlinx.coroutines.flow.*
+import kotlin.jvm.*
 
 sealed class Resource<out T>
 
@@ -39,6 +40,13 @@ inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R
 
 fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
     emitAll(this@flowAsResource)
+}
+
+fun <T> Flow<Result<T, Throwable>>.flowResultAsResource(): Flow<Resource<T>> = flow {
+    emit(Loading)
+    this@flowResultAsResource
+        .map { it.toResource() }
+        .let { emitAll(it) }
 }
 
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =

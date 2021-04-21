@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":essentials-foreground"))
     implementation(project(":essentials-gestures"))
     implementation(project(":essentials-hide-nav-bar"))
+    implementation(project(":essentials-license"))
     implementation(project(":essentials-notification-listener"))
     implementation(project(":essentials-permission"))
     implementation(project(":essentials-process-restart"))
@@ -75,6 +76,7 @@ dependencies {
     implementation(project(":essentials-torch"))
     implementation(project(":essentials-twilight"))
     implementation(project(":essentials-unlock"))
+    implementation(project(":essentials-web-ui"))
     implementation(project(":essentials-work"))
 
     testImplementation(project(":essentials-android-test"))
