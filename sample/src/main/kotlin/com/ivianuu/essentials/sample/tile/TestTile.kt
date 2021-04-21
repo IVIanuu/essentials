@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.*
 
 @Given
 fun testTileModel(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: ScopeCoroutineScope<TileGivenScope>,
     @Given twilightPref: DataStore<TwilightPrefs>
 ): @Scoped<TileGivenScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
     twilightPref.data.update {
