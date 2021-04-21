@@ -68,25 +68,18 @@ fun <T> AnimatedStack(
     val state = remember { AnimatedStackState(children) }
     state.defaultTransition = LocalStackTransition.current
     state.setChildren(children)
-    state.runningTransactions.values.toList().forEach {
-        key(it) {
-            it.run()
-        }
+    state.runningTransactions.values.toList().forEach { transaction ->
+        key(transaction) { transaction.run() }
     }
     Box(modifier = modifier) {
-        state.visibleChildren.toList().forEach {
-            key(it.key) {
-                it.content()
-            }
+        state.visibleChildren.toList().forEach { child ->
+            key(child.key) { child.Content() }
         }
     }
 }
 
 @Stable
-internal class AnimatedStackState<T>(
-    initialChildren: List<AnimatedStackChild<T>>
-) {
-
+internal class AnimatedStackState<T>(initialChildren: List<AnimatedStackChild<T>>) {
     private var _children = initialChildren
     val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
 
@@ -215,14 +208,32 @@ class AnimatedStackChild<T>(
 ) {
     var isAnimating by mutableStateOf(false)
         internal set
+    var changeType: AnimatedStackChangeType? by mutableStateOf(null)
+        internal set
+    var animationProgress by mutableStateOf(0f)
+        internal set
     internal var transitionModifier: Modifier by mutableStateOf(Modifier)
 
     @Composable
-    internal fun content() {
+    internal fun Content() {
         Box(modifier = transitionModifier) {
-            content.invoke()
+            CompositionLocalProvider(
+                LocalAnimatedStackChild provides this@AnimatedStackChild,
+                content = content
+            )
         }
     }
+}
+
+val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
+    error("No stack child provided")
+}
+
+enum class AnimatedStackChangeType(val isPush: Boolean, val isEnter: Boolean) {
+    PUSH_ENTER(true, true),
+    PUSH_EXIT(true, false),
+    POP_ENTER(false, true),
+    POP_EXIT(false, false)
 }
 
 @Stable
@@ -233,7 +244,6 @@ internal class AnimatedStackTransaction<T>(
     private val transition: StackTransition,
     private val state: AnimatedStackState<T>
 ) {
-
     val transactionKey = when {
         to != null -> to.key
         from != null -> from.key
@@ -244,13 +254,21 @@ internal class AnimatedStackTransaction<T>(
 
     @Composable
     fun run() {
-        remember { from?.isAnimating = true }
+        remember {
+            from?.isAnimating = true
+            from?.changeType = if (isPush) AnimatedStackChangeType.PUSH_EXIT else
+                AnimatedStackChangeType.POP_EXIT
+            to?.changeType = if (isPush) AnimatedStackChangeType.PUSH_ENTER else
+                AnimatedStackChangeType.POP_ENTER
+        }
 
         val animationState: AnimationState<Float, AnimationVector1D> = remember {
             AnimationState(0f)
         }
         DisposableEffect(animationState.value) {
+            from?.animationProgress = animationState.value
             from?.transitionModifier = transition.createFromModifier(animationState.value, isPush)
+            to?.animationProgress = animationState.value
             to?.transitionModifier = transition.createToModifier(animationState.value, isPush)
             onDispose {  }
         }
@@ -279,6 +297,8 @@ internal class AnimatedStackTransaction<T>(
         to?.transitionModifier = Modifier
         from?.isAnimating = false
         from?.transitionModifier = Modifier
+        to?.changeType = null
+        from?.changeType = null
         state.runningTransactions -= transactionKey
     }
 

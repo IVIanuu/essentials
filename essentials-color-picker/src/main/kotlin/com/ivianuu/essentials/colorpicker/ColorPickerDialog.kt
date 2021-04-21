@@ -66,23 +66,37 @@ fun ColorPickerDialog(
 
     Dialog(
         modifier = modifier,
+        applyContentPadding = false,
         icon = icon,
         title = title,
-        applyContentPadding = false,
-        positiveButton = {
-            TextButton(
-                onClick = { onColorSelected(currentColor) },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = currentColor
-                )
-            ) {
-                Text("OK")
+        content = {
+            AnimatedBox(
+                modifier = Modifier.height(300.dp)
+                    .padding(start = 24.dp, end = 24.dp),
+                current = currentScreen,
+                transition = FadeStackTransition()
+            ) { currentScreen ->
+                when (currentScreen) {
+                    ColorPickerTab.COLORS -> {
+                        ColorGrid(
+                            modifier = Modifier.fillMaxSize(),
+                            currentColor = currentColor,
+                            colors = colorPalettes,
+                            onColorSelected = { currentColor = it }
+                        )
+                    }
+                    ColorPickerTab.EDITOR -> {
+                        ColorEditor(
+                            modifier = Modifier.fillMaxSize(),
+                            color = currentColor,
+                            onColorChanged = { currentColor = it },
+                            showAlphaSelector = showAlphaSelector
+                        )
+                    }
+                }
             }
         },
-        negativeButton = {
-            TextButton(onClick = onCancel) { Text(stringResource(R.string.es_cancel)) }
-        },
-        neutralButton = {
+        buttons = {
             if (allowCustomArgb) {
                 TextButton(
                     onClick = { currentScreen = otherScreen },
@@ -93,34 +107,19 @@ fun ColorPickerDialog(
                     Text(otherScreen.title)
                 }
             }
-        }
-    ) {
-        AnimatedBox(
-            modifier = Modifier.height(300.dp)
-                .padding(start = 24.dp, end = 24.dp),
-            current = currentScreen,
-            transition = FadeStackTransition()
-        ) { currentScreen ->
-            when (currentScreen) {
-                ColorPickerTab.COLORS -> {
-                    ColorGrid(
-                        modifier = Modifier.fillMaxSize(),
-                        currentColor = currentColor,
-                        colors = colorPalettes,
-                        onColorSelected = { currentColor = it }
-                    )
-                }
-                ColorPickerTab.EDITOR -> {
-                    ColorEditor(
-                        modifier = Modifier.fillMaxSize(),
-                        color = currentColor,
-                        onColorChanged = { currentColor = it },
-                        showAlphaSelector = showAlphaSelector
-                    )
-                }
+
+            TextButton(onClick = onCancel) { Text(stringResource(R.string.es_cancel)) }
+
+            TextButton(
+                onClick = { onColorSelected(currentColor) },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = currentColor
+                )
+            ) {
+                Text(stringResource(R.string.es_ok))
             }
         }
-    }
+    )
 }
 
 @Composable

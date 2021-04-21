@@ -23,19 +23,19 @@ val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
         Dialog(
             title = { Text(stringResource(R.string.es_rate_on_play_title)) },
             content = { Text(stringResource(R.string.es_rate_on_play_content)) },
-            positiveButton = {
-                TextButton(onClick = model.rate) {
-                    Text(stringResource(R.string.es_rate))
+            buttons = {
+                if (model.displayShowNever) {
+                    TextButton(onClick = model.showNever) {
+                        Text(stringResource(R.string.es_never))
+                    }
                 }
-            },
-            neutralButton = if (model.displayShowNever) ({
-                TextButton(onClick = model.showNever) {
-                    Text(stringResource(R.string.es_never))
-                }
-            }) else null,
-            negativeButton = {
+
                 TextButton(onClick = model.showLater) {
                     Text(stringResource(R.string.es_later))
+                }
+
+                TextButton(onClick = model.rate) {
+                    Text(stringResource(R.string.es_rate))
                 }
             }
         )

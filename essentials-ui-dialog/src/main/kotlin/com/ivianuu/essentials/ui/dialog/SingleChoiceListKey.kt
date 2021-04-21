@@ -31,7 +31,7 @@ fun singleChoiceListUi(
                 Text(key.items.single { it.value == item }.title)
             },
             title = { Text(key.title) },
-            negativeButton = {
+            buttons = {
                 TextButton(onClick = { navigator.pop(key, null) }) {
                     Text(stringResource(R.string.es_cancel))
                 }

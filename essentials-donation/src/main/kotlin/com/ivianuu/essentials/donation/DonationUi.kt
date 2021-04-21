@@ -33,29 +33,30 @@ val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
         Dialog(
             applyContentPadding = false,
             title = { Text(stringResource(R.string.es_donation_title)) },
-            negativeButton = {
+            content = {
+                ResourceLazyColumnFor(
+                    resource = model.skus,
+                    loading = {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .height(100.dp)
+                                .fillMaxWidth()
+                                .center()
+                        )
+                    }
+                ) { donation ->
+                    Donation(
+                        donation = donation,
+                        onClick = { model.purchase(donation) }
+                    )
+                }
+            },
+            buttons = {
                 TextButton(onClick = model.close) {
                     Text(stringResource(R.string.es_cancel))
                 }
             }
-        ) {
-            ResourceLazyColumnFor(
-                resource = model.skus,
-                loading = {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .height(100.dp)
-                            .fillMaxWidth()
-                            .center()
-                    )
-                }
-            ) { donation ->
-                Donation(
-                    donation = donation,
-                    onClick = { model.purchase(donation) }
-                )
-            }
-        }
+        )
     }
 }
 

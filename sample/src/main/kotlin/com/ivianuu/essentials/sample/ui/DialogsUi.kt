@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
@@ -56,15 +57,13 @@ val dialogsUi: KeyUi<DialogsKey> = {
             verticalArrangement = Arrangement.Center
         ) {
             item {
-                DialogLauncherButton(
-                    text = "Simple"
-                ) {
+                DialogLauncherButton(text = "Simple") {
                     Dialog(
                         title = { Text("Simple") },
                         content = { Text("This is a message") },
-                        positiveButton = { DialogCloseButton(text = "OK") },
-                        negativeButton = {
+                        buttons = {
                             DialogCloseButton(text = "Cancel")
+                            DialogCloseButton(text = "OK")
                         }
                     )
                 }
@@ -76,96 +75,43 @@ val dialogsUi: KeyUi<DialogsKey> = {
                     Dialog(
                         title = { Text("Simple") },
                         content = { Text("This is a message") },
-                        positiveButton = {
-                            DialogCloseButton(text = "Positive")
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Negative")
-                        },
-                        neutralButton = {
+                        buttons = {
                             DialogCloseButton(text = "Neutral")
+                            DialogCloseButton(text = "Negative")
+                            DialogCloseButton(text = "Positive")
                         }
                     )
                 }
             }
             item {
-                DialogLauncherButton(
-                    text = "Title only"
-                ) {
+                DialogLauncherButton(text = "Title only") {
                     Dialog(
                         title = { Text("Title only") }
                     )
                 }
             }
             item {
-                DialogLauncherButton(
-                    text = "With icon"
-                ) {
+                DialogLauncherButton(text = "With icon") {
                     Dialog(
                         title = { Text("With icon") },
                         icon = { Icon(Icons.Default.Settings, null) },
-                        positiveButton = {
+                        buttons = {
                             DialogCloseButton(text = "OK")
                         }
                     )
                 }
             }
             item {
-                DialogLauncherButton(
-                    text = "Message only"
-                ) {
-                    Dialog(
-                        content = { Text("Message only") }
-                    )
+                DialogLauncherButton(text = "Message only") {
+                    Dialog(content = { Text("Message only") })
                 }
             }
             item {
-                DialogLauncherButton(
-                    text = "Buttons only"
-                ) {
+                DialogLauncherButton(text = "Buttons only") {
                     Dialog(
-                        positiveButton = {
-                            DialogCloseButton(text = "OK")
-                        },
-                        negativeButton = {
+                        buttons = {
                             DialogCloseButton(text = "Cancel")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(
-                    text = "Stacked buttons"
-                ) {
-                    Dialog(
-                        title = { Text("Stacked buttons") },
-                        content = { Text("Shows stacked buttons") },
-                        buttonLayout = AlertDialogButtonLayout.STACKED,
-                        positiveButton = {
                             DialogCloseButton(text = "OK")
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Cancel")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(
-                    text = "Stacked buttons with neutral"
-                ) {
-                    Dialog(
-                        title = { Text("Stacked buttons") },
-                        content = { Text("Shows stacked buttons") },
-                        buttonLayout = AlertDialogButtonLayout.STACKED,
-                        positiveButton = {
-                            DialogCloseButton(text = "Positive")
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Negative")
-                        },
-                        neutralButton = {
-                            DialogCloseButton(text = "Neutral")
                         }
                     )
                 }
@@ -177,16 +123,14 @@ val dialogsUi: KeyUi<DialogsKey> = {
                 ) {
                     Dialog(
                         title = { Text("Not cancelable") },
-                        negativeButton = {
+                        buttons = {
                             DialogCloseButton(text = "Close")
                         }
                     )
                 }
             }
             item {
-                DialogLauncherButton(
-                    text = "List"
-                ) {
+                DialogLauncherButton(text = "List") {
                     Dialog(
                         title = { Text("List") },
                         content = {
@@ -204,7 +148,7 @@ val dialogsUi: KeyUi<DialogsKey> = {
                             }
                         },
                         applyContentPadding = false,
-                        negativeButton = {
+                        buttons = {
                             DialogCloseButton(text = "Close")
                         }
                     )
@@ -213,9 +157,7 @@ val dialogsUi: KeyUi<DialogsKey> = {
             item {
                 val singleChoiceItems = listOf(1, 2, 3, 4, 5)
                 var selectedSingleChoiceItem by remember { mutableStateOf(1) }
-                DialogLauncherButton(
-                    text = "Single choice list"
-                ) {
+                DialogLauncherButton(text = "Single choice list") {
                     var tmpSelectedItem by remember { mutableStateOf(selectedSingleChoiceItem) }
 
                     SingleChoiceListDialog(
@@ -225,14 +167,12 @@ val dialogsUi: KeyUi<DialogsKey> = {
                         onSelectionChanged = { tmpSelectedItem = it },
 
                         item = { Text("Item: $it") },
-                        positiveButton = {
+                        buttons = {
+                            DialogCloseButton(text = "Cancel")
                             DialogCloseButton(
                                 text = "OK",
                                 onClick = { selectedSingleChoiceItem = tmpSelectedItem }
                             )
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Cancel")
                         }
                     )
                 }
@@ -240,9 +180,7 @@ val dialogsUi: KeyUi<DialogsKey> = {
             item {
                 val multiChoiceItems = listOf("A", "B", "C")
                 var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems.toSet()) }
-                DialogLauncherButton(
-                    text = "Multi choice list"
-                ) {
+                DialogLauncherButton(text = "Multi choice list") {
                     var tmpSelectedItems by remember { mutableStateOf(selectedMultiChoiceItems) }
 
                     MultiChoiceListDialog(
@@ -251,14 +189,12 @@ val dialogsUi: KeyUi<DialogsKey> = {
                         selectedItems = tmpSelectedItems,
                         onSelectionsChanged = { tmpSelectedItems = it },
                         item = { Text(it) },
-                        positiveButton = {
+                        buttons = {
+                            DialogCloseButton(text = "Cancel")
                             DialogCloseButton(
                                 text = "OK",
                                 onClick = { selectedMultiChoiceItems = tmpSelectedItems }
                             )
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Cancel")
                         }
                     )
                 }
@@ -267,7 +203,7 @@ val dialogsUi: KeyUi<DialogsKey> = {
                 val primaryColor = MaterialTheme.colors.primary
                 var currentColor by remember { mutableStateOf(primaryColor) }
                 DialogLauncherButton(text = "Color Picker") { dismiss ->
-                    com.ivianuu.essentials.colorpicker.ColorPickerDialog(
+                    ColorPickerDialog(
                         title = { Text("Color Picker") },
                         showAlphaSelector = true,
                         initialColor = currentColor,
@@ -288,15 +224,13 @@ val dialogsUi: KeyUi<DialogsKey> = {
                         onValueChange = { tmpTextInputValue = it },
                         title = { Text("Text input") },
                         label = { Text("Hint..") },
-                        positiveButton = {
+                        buttons = {
+                            DialogCloseButton(text = "Cancel")
                             DialogCloseButton(
                                 text = "OK",
                                 onClick = { textInputValue = tmpTextInputValue },
                                 enabled = tmpTextInputValue.isNotEmpty()
                             )
-                        },
-                        negativeButton = {
-                            DialogCloseButton(text = "Cancel")
                         }
                     )
                 }
@@ -311,12 +245,12 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
+    val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
     TextButton(
         enabled = enabled,
         onClick = {
             onClick()
-            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+            component.navigator.popTop()
         }
     ) {
         Text(text)
@@ -336,7 +270,7 @@ private fun DialogLauncherButton(
     Button(
         onClick = {
             component.navigator.push(
-                DialogLauncherKey {
+                DialogLauncherKey(dismissible) {
                     dialog {
                         if (dismissible) {
                             onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
@@ -348,11 +282,14 @@ private fun DialogLauncherButton(
     ) { Text(text) }
 }
 
-data class DialogLauncherKey(val dialog: @Composable () -> Unit) : DialogKey<Nothing>
+data class DialogLauncherKey(
+    val dismissible: Boolean = true,
+    val dialog: @Composable () -> Unit
+) : DialogKey<Nothing>
 
 @Given
 fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
-    DialogScaffold { key.dialog() }
+    DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
 @InstallElement<UiGivenScope>

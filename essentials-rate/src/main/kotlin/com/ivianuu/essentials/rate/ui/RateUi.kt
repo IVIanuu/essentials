@@ -31,67 +31,68 @@ object RateKey : DialogKey<Nothing>
 val rateUi: ModelKeyUi<RateKey, RateModel> = {
     DialogScaffold(dismissible = false) {
         Dialog(
-            positiveButton = {
-                TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
-                    Text(stringResource(R.string.es_confirm))
+            content = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CoilImage(
+                        data = AppIcon(model.packageName),
+                        modifier = Modifier.size(96.dp),
+                        contentDescription = null
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    Text(
+                        text = stringResource(R.string.es_rate_title),
+                        style = MaterialTheme.typography.h6,
+                        color = MaterialTheme.colors.onSurface
+                            .copy(alpha = ContentAlpha.high)
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RATINGS.forEach { rating ->
+                            Icon(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberRipple(bounded = false)
+                                    ) { model.updateRating(rating) },
+                                painter = painterResource(R.drawable.es_ic_star),
+                                contentDescription = null,
+                                tint = if (rating <= model.rating) MaterialTheme.colors.secondary
+                                else MaterialTheme.colors.onSurface
+                                    .copy(alpha = 0.12f)
+                            )
+                        }
+                    }
                 }
             },
-            neutralButton = if (model.displayShowNever) ({
-                TextButton(onClick = model.showNever) {
-                    Text(stringResource(R.string.es_never))
+            buttons = {
+                if (model.displayShowNever) {
+                    TextButton(onClick = model.showNever) {
+                        Text(stringResource(R.string.es_never))
+                    }
                 }
-            }) else null,
-            negativeButton = {
+
                 TextButton(onClick = model.showLater) {
                     Text(stringResource(R.string.es_later))
                 }
-            }
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CoilImage(
-                    data = AppIcon(model.packageName),
-                    modifier = Modifier.size(96.dp),
-                    contentDescription = null
-                )
 
-                Spacer(Modifier.height(16.dp))
-
-                Text(
-                    text = stringResource(R.string.es_rate_title),
-                    style = MaterialTheme.typography.h6,
-                    color = MaterialTheme.colors.onSurface
-                        .copy(alpha = ContentAlpha.high)
-                )
-
-                Spacer(Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RATINGS.forEach { rating ->
-                        Icon(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(bounded = false)
-                                ) { model.updateRating(rating) },
-                            painter = painterResource(R.drawable.es_ic_star),
-                            contentDescription = null,
-                            tint = if (rating <= model.rating) MaterialTheme.colors.secondary
-                            else MaterialTheme.colors.onSurface
-                                .copy(alpha = 0.12f)
-                        )
-                    }
+                TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
+                    Text(stringResource(R.string.es_confirm))
                 }
             }
-        }
+        )
     }
 }
 

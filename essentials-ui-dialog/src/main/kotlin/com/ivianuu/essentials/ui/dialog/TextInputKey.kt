@@ -44,16 +44,15 @@ fun textInputUi(
             label = { Text(key.label) },
             keyboardOptions = key.keyboardOptions,
             title = key.title?.let { { Text(key.title) } },
-            positiveButton = {
+            buttons = {
+                TextButton(onClick = { navigator.pop(key, null) }) {
+                    Text(stringResource(R.string.es_cancel))
+                }
+
                 TextButton(
                     enabled = key.allowEmpty || currentValue.isNotEmpty(),
                     onClick = { navigator.pop(key, currentValue) }
                 ) { Text(stringResource(R.string.es_ok)) }
-            },
-            negativeButton = {
-                TextButton(onClick = { navigator.pop(key, null) }) {
-                    Text(stringResource(R.string.es_cancel))
-                }
             }
         )
     }

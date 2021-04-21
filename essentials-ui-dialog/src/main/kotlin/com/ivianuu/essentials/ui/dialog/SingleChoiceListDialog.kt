@@ -21,42 +21,38 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import com.google.accompanist.flowlayout.*
 import com.ivianuu.essentials.ui.common.*
 
 @Composable
 fun <T> SingleChoiceListDialog(
     modifier: Modifier = Modifier,
-    items: List<T>,
-    selectedItem: T,
-    onSelectionChanged: (T) -> Unit,
     item: @Composable (T) -> Unit,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
-    positiveButton: @Composable (() -> Unit)? = null,
-    negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
+    buttons: @Composable (() -> Unit)? = null,
+    onSelectionChanged: (T) -> Unit,
+    items: List<T>,
+    selectedItem: T,
 ) {
     Dialog(
         modifier = modifier,
+        applyContentPadding = false,
         icon = icon,
         title = title,
-        buttonLayout = buttonLayout,
-        applyContentPadding = false,
-        positiveButton = positiveButton,
-        negativeButton = negativeButton,
-        neutralButton = neutralButton
-    ) {
-        LazyColumn {
-            items(items) { item ->
-                SingleChoiceDialogListItem(
-                    title = { item(item) },
-                    selected = item == selectedItem,
-                    onSelect = { onSelectionChanged(item) }
-                )
+        content = {
+            LazyColumn {
+                items(items) { item ->
+                    SingleChoiceDialogListItem(
+                        title = { item(item) },
+                        selected = item == selectedItem,
+                        onSelect = { onSelectionChanged(item) }
+                    )
+                }
             }
-        }
-    }
+        },
+        buttons = buttons
+    )
 }
 
 @Composable

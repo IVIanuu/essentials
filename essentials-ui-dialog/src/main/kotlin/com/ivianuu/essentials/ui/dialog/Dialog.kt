@@ -22,55 +22,42 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
+import com.google.accompanist.flowlayout.*
 import com.ivianuu.essentials.ui.material.*
 
 @Composable
 fun Dialog(
     modifier: Modifier = Modifier,
+    icon: @Composable (() -> Unit)? = null,
+    title: @Composable (() -> Unit)? = null,
+    buttons: @Composable (() -> Unit)? = null,
+    content: @Composable (() -> Unit)? = null,
     showTopDivider: Boolean = false,
     showBottomDivider: Boolean = false,
     applyContentPadding: Boolean = true,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
-    icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    positiveButton: @Composable (() -> Unit)? = null,
-    negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null,
-    content: @Composable (() -> Unit)? = null,
 ) {
     BaseDialog(modifier = modifier) {
         DialogBody(
             showTopDivider = showTopDivider,
             showBottomDivider = showBottomDivider,
             applyContentPadding = applyContentPadding,
-            buttonLayout = buttonLayout,
             icon = icon,
             title = title,
             content = content,
-            positiveButton = positiveButton,
-            negativeButton = negativeButton,
-            neutralButton = neutralButton
+            buttons = buttons
         )
     }
 }
 
-enum class AlertDialogButtonLayout {
-    SIDE_BY_SIDE,
-    STACKED
-}
-
 @Composable
 private fun DialogBody(
-    showTopDivider: Boolean = false,
-    showBottomDivider: Boolean = false,
-    applyContentPadding: Boolean,
-    buttonLayout: AlertDialogButtonLayout,
     icon: @Composable (() -> Unit)?,
     title: @Composable (() -> Unit)?,
     content: @Composable (() -> Unit)?,
-    positiveButton: @Composable (() -> Unit)?,
-    negativeButton: @Composable (() -> Unit)?,
-    neutralButton: @Composable (() -> Unit)?
+    buttons: @Composable() (() -> Unit)?,
+    showTopDivider: Boolean = false,
+    showBottomDivider: Boolean = false,
+    applyContentPadding: Boolean
 ) {
     val header: @Composable (() -> Unit)? = if (icon != null || title != null) {
         {
@@ -123,19 +110,6 @@ private fun DialogBody(
         null
     }
 
-    val buttons: @Composable (() -> Unit)? = if (positiveButton != null || negativeButton != null || neutralButton != null) {
-        {
-            DialogButtons(
-                layout = buttonLayout,
-                positiveButton = positiveButton,
-                negativeButton = negativeButton,
-                neutralButton = neutralButton
-            )
-        }
-    } else {
-        null
-    }
-
     DialogContentLayout(
         showTopDivider = showTopDivider,
         showBottomDivider = showBottomDivider,
@@ -155,7 +129,7 @@ private fun DialogContentLayout(
     content: @Composable (() -> Unit)?,
     buttons: @Composable (() -> Unit)?
 ) {
-    val content: @Composable () -> Unit = {
+    val finalContent: @Composable () -> Unit = {
         if (header != null) {
             Box(
                 modifier = Modifier.padding(
@@ -187,19 +161,24 @@ private fun DialogContentLayout(
                 HorizontalDivider(modifier = Modifier.layoutId(DialogContentSlot.BottomDivider))
             }
 
-            val buttonsModifier = if (!showBottomDivider && content != null) {
-                Modifier.padding(top = 28.dp)
+            FlowRow(
+                modifier = Modifier
                     .layoutId(DialogContentSlot.Buttons)
-            } else {
-                Modifier.layoutId(DialogContentSlot.Buttons)
-            }
-            Box(modifier = buttonsModifier) {
-                buttons()
-            }
+                    .padding(
+                        start = 8.dp,
+                        top = if (!showBottomDivider && content != null) 36.dp else 8.dp,
+                        end = 8.dp,
+                        bottom = 8.dp
+                    ),
+                mainAxisSpacing = 8.dp,
+                crossAxisSpacing = 12.dp,
+                mainAxisAlignment = FlowMainAxisAlignment.End,
+                content = buttons
+            )
         }
     }
 
-    Layout(content = content) { measurables, constraints ->
+    Layout(content = finalContent) { measurables, constraints ->
         var childConstraints = constraints.copy(
             minWidth = constraints.maxWidth,
             minHeight = 0
@@ -248,44 +227,6 @@ private fun DialogContentLayout(
             placeables.forEach { placeable ->
                 placeable.place(0, offsetY)
                 offsetY += placeable.height
-            }
-        }
-    }
-}
-
-@Composable
-private fun DialogButtons(
-    layout: AlertDialogButtonLayout,
-    positiveButton: @Composable (() -> Unit)?,
-    negativeButton: @Composable (() -> Unit)?,
-    neutralButton: @Composable (() -> Unit)?
-) {
-    when (layout) {
-        AlertDialogButtonLayout.SIDE_BY_SIDE -> {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                neutralButton?.invoke()
-                Spacer(Modifier.weight(1f))
-                negativeButton?.invoke()
-                positiveButton?.invoke()
-            }
-        }
-        AlertDialogButtonLayout.STACKED -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
-            ) {
-                positiveButton?.invoke()
-                negativeButton?.invoke()
-                neutralButton?.invoke()
             }
         }
     }

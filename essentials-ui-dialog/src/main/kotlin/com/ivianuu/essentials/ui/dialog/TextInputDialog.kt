@@ -29,17 +29,13 @@ fun TextInputDialog(
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
-    positiveButton: @Composable (() -> Unit)? = null,
-    negativeButton: @Composable (() -> Unit)? = null,
-    neutralButton: @Composable (() -> Unit)? = null,
-    buttonLayout: AlertDialogButtonLayout = AlertDialogButtonLayout.SIDE_BY_SIDE,
+    buttons: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     Dialog(
         modifier = modifier,
-        buttonLayout = buttonLayout,
         icon = icon,
         title = title,
         content = {
@@ -60,8 +56,6 @@ fun TextInputDialog(
                 }
             }
         },
-        positiveButton = positiveButton,
-        negativeButton = negativeButton,
-        neutralButton = neutralButton
+        buttons = buttons
     )
 }

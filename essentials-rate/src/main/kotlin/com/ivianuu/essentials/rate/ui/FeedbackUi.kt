@@ -24,32 +24,21 @@ val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
         Dialog(
             title = { Text(stringResource(R.string.es_feedback_title)) },
             content = { Text(stringResource(R.string.es_feedback_content)) },
-            neutralButton = {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    if (model.displayShowNever) {
-                        TextButton(onClick = model.showNever) {
-                            Text(stringResource(R.string.es_never))
-                        }
-                    }
-                    TextButton(onClick = model.showLater) {
-                        Text(stringResource(R.string.es_later))
+            buttons = {
+                if (model.displayShowNever) {
+                    TextButton(onClick = model.showNever) {
+                        Text(stringResource(R.string.es_never))
                     }
                 }
-            },
-            negativeButton = {
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    TextButton(onClick = model.openReddit) {
-                        Text(stringResource(R.string.es_open_reddit))
-                    }
-                    TextButton(onClick = model.sendMail) {
-                        Text(stringResource(R.string.es_send_mail))
-                    }
+                TextButton(onClick = model.showLater) {
+                    Text(stringResource(R.string.es_later))
+                }
+
+                TextButton(onClick = model.openReddit) {
+                    Text(stringResource(R.string.es_open_reddit))
+                }
+                TextButton(onClick = model.sendMail) {
+                    Text(stringResource(R.string.es_send_mail))
                 }
             }
         )

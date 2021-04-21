@@ -21,6 +21,7 @@ import com.ivianuu.essentials.boot.*
 import com.ivianuu.essentials.broadcast.*
 import com.ivianuu.essentials.clipboard.*
 import com.ivianuu.essentials.coil.*
+import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.donation.*

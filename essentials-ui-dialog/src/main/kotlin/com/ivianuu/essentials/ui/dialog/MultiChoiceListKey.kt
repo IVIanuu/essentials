@@ -33,15 +33,14 @@ fun multiChoiceListUi(
                 Text(key.items.single { it.value == item }.title)
             },
             title = { Text(key.title) },
-            positiveButton = {
-                TextButton(
-                    onClick = { navigator.pop(key, selectedItems) }
-                ) { Text(stringResource(R.string.es_ok)) }
-            },
-            negativeButton = {
+            buttons = {
                 TextButton(onClick = { navigator.pop(key, null) }) {
                     Text(stringResource(R.string.es_cancel))
                 }
+
+                TextButton(
+                    onClick = { navigator.pop(key, selectedItems) }
+                ) { Text(stringResource(R.string.es_ok)) }
             }
         )
     }
