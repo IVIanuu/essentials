@@ -20,7 +20,7 @@ import com.ivianuu.essentials.ui.animatedstack.animation.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-typealias DialogKey<T> = Key<T>
+interface DialogKey<T> : Key<T>
 
 @Given
 fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
