@@ -60,6 +60,7 @@ dependencies {
     api(Deps.androidGradlePlugin)
     api(Deps.KotlinSerialization.gradlePlugin)
     api(Deps.Injekt.gradlePlugin)
+    api(Deps.licenseGradlePlugin)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

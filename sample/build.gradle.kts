@@ -1,3 +1,4 @@
+import com.ivianuu.essentials.gradle.*
 import com.ivianuu.injekt.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.*
 
@@ -30,6 +31,10 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/an
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
+
+essentials {
+    withLicenses()
+}
 
 android {
     // todo remove once fixed

@@ -91,7 +91,7 @@ object Deps {
     const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
     const val essentialsGradlePlugin =
-        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev835"
+        "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev841"
 
     const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
@@ -128,6 +128,8 @@ object Deps {
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
+
+    const val licenseGradlePlugin = "com.jaredsburrows:gradle-license-plugin:0.8.90"
 
     const val mockk = "io.mockk:mockk:1.11.0"
 
