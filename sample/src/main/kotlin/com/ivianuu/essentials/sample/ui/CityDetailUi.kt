@@ -64,7 +64,7 @@ fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
 
 @Given
 val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
-    val spec = defaultAnimationSpec(1.seconds)
+    val spec = defaultAnimationSpec(500.milliseconds)
     KeyUiOptions(
         enterTransition = SharedElementStackTransition(
             "image ${it.city.name}" to "image",

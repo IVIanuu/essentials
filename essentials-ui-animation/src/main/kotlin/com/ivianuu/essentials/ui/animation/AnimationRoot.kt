@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 @Composable
 fun AnimationRootProvider(
@@ -37,3 +38,8 @@ typealias AnimationRootProvider = UiDecorator
 val animationRootProvider: AnimationRootProvider = { content ->
     AnimationRootProvider(content = content)
 }
+
+@Given
+val animationRootProviderConfig = UiDecoratorConfig<AnimationRootProvider>(
+    dependencies = setOf(typeKeyOf<AppTheme>())
+)
