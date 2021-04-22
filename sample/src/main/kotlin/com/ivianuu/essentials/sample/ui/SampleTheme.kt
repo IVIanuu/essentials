@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.*
 fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { content ->
     TwilightTheme(
         shapes = Shapes(
-            medium = RoundedCornerShape(16.dp)
+            medium = RoundedCornerShape(12.dp)
         ),
         twilightState = twilightState.collectAsState().value
     ) {
