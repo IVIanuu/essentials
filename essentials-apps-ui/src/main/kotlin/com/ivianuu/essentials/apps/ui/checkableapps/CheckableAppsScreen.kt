@@ -162,7 +162,7 @@ fun checkableAppsModel(
     }
     action(CheckableAppsModel.updateAppCheckedState()) { app, isChecked ->
         pushNewCheckedApps {
-            if (!isChecked) this + app.info.packageName
+            if (isChecked) this + app.info.packageName
             else this - app.info.packageName
         }
     }
