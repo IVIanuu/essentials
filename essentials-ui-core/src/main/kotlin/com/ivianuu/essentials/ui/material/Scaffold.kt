@@ -69,7 +69,7 @@ fun Scaffold(
             backgroundColor = backgroundColor
         ) { bodyPadding ->
             val insets = if (applyInsets) LocalInsets.current else Insets()
-            ProvideInsets(
+            InsetsProvider(
                 Insets(
                     left = max(bodyPadding.calculateLeftPadding(LocalLayoutDirection.current), insets.left),
                     top = if (topBar == null) insets.top else bodyPadding.calculateTopPadding(),

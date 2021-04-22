@@ -92,7 +92,7 @@ fun ConsumeInsets(
     content: @Composable () -> Unit
 ) {
     val currentInsets = LocalInsets.current
-    ProvideInsets(
+    InsetsProvider(
         currentInsets.copy(
             left = if (left) 0.dp else currentInsets.left,
             top = if (top) 0.dp else currentInsets.top,
@@ -104,7 +104,7 @@ fun ConsumeInsets(
 }
 
 @Composable
-fun ProvideInsets(
+fun InsetsProvider(
     insets: Insets,
     content: @Composable () -> Unit,
 ) {
@@ -165,7 +165,7 @@ fun windowInsetsProvider(): WindowInsetsProvider = { content ->
         }
     }
 
-    ProvideInsets(insets, content)
+    InsetsProvider(insets, content)
 }
 
 @Composable

@@ -7,7 +7,7 @@ import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 
 @Composable
-fun ProvideAnimationRoot(
+fun AnimationRootProvider(
     modifier: Modifier = Modifier,
     animationRoot: AnimationRoot = remember { AnimationRoot() },
     content: @Composable () -> Unit
@@ -35,5 +35,5 @@ typealias AnimationRootProvider = UiDecorator
 
 @Given
 val animationRootProvider: AnimationRootProvider = { content ->
-    ProvideAnimationRoot(content = content)
+    AnimationRootProvider(content = content)
 }
