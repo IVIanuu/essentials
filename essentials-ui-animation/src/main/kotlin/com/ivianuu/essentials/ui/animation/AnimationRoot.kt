@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
@@ -41,5 +42,5 @@ val animationRootProvider: AnimationRootProvider = { content ->
 
 @Given
 val animationRootProviderConfig = UiDecoratorConfig<AnimationRootProvider>(
-    dependencies = setOf(typeKeyOf<AppTheme>())
+    dependencies = setOf(typeKeyOf<RootSystemBarsStyle>())
 )
