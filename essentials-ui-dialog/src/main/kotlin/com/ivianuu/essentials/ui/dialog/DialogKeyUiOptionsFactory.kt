@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlin.time.*
 
 interface DialogKey<T> : Key<T>
 
@@ -34,7 +35,9 @@ fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
     )
 }
 
-fun DialogStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
+fun DialogStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec(220.milliseconds)
+): StackTransition = {
     attachTo()
     val fromContentModifier = fromElementModifier(ContentAnimationElementKey)
     val toContentModifier = toElementModifier(ContentAnimationElementKey)
