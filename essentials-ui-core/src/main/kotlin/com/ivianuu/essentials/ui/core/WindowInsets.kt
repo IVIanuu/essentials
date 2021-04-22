@@ -17,14 +17,18 @@
 package com.ivianuu.essentials.ui.core
 
 import android.view.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 import kotlin.math.*
 
 @Composable
@@ -34,15 +38,25 @@ fun InsetsPadding(
     top: Boolean = true,
     right: Boolean = true,
     bottom: Boolean = true,
+    animate: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val currentInsets = LocalInsets.current
+    val targetInsets = LocalInsets.current
+    val animatedInsets = if (!animate) targetInsets else {
+        val animation = remember(targetInsets) { Animatable(0f) }
+        LaunchedEffect(animation) {
+            animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
+        }
+        var lastInsets by remember { refOf(targetInsets) }
+        remember(animation.value) { lerp(lastInsets, targetInsets, animation.value) }
+            .also { lastInsets = it }
+    }
     Box(
         modifier = Modifier.absolutePadding(
-            if (left) currentInsets.left else 0.dp,
-            if (top) currentInsets.top else 0.dp,
-            if (right) currentInsets.right else 0.dp,
-            if (bottom) currentInsets.bottom else 0.dp
+            if (left) animatedInsets.left else 0.dp,
+            if (top) animatedInsets.top else 0.dp,
+            if (right) animatedInsets.right else 0.dp,
+            if (bottom) animatedInsets.bottom else 0.dp
         ).then(modifier)
     ) {
         ConsumeInsets(left, top, right, bottom, content)
@@ -54,6 +68,17 @@ data class Insets(
     val top: Dp = 0.dp,
     val right: Dp = 0.dp,
     val bottom: Dp = 0.dp
+)
+
+fun lerp(
+    start: Insets,
+    end: Insets,
+    fraction: Float
+): Insets = Insets(
+    left = lerp(start.left, end.left, fraction),
+    top = lerp(start.top, end.top, fraction),
+    right = lerp(start.right, end.right, fraction),
+    bottom = lerp(start.bottom, end.bottom, fraction),
 )
 
 val LocalInsets = compositionLocalOf { Insets() }
@@ -144,14 +169,10 @@ fun windowInsetsProvider(): WindowInsetsProvider = { content ->
 }
 
 @Composable
-fun localHorizontalInsetsPadding() = LocalInsets.current.let {
-    PaddingValues(start = it.left, end = it.right)
-}
+fun localHorizontalInsetsPadding() = LocalInsets.current.toPaddingValues()
 
 @Composable
-fun localVerticalInsetsPadding() = LocalInsets.current.let {
-    PaddingValues(top = it.top, bottom = it.bottom)
-}
+fun localVerticalInsetsPadding() = LocalInsets.current.toPaddingValues()
 
 fun Insets.toPaddingValues() = PaddingValues(
     start = left, top = top, end = right, bottom = bottom
