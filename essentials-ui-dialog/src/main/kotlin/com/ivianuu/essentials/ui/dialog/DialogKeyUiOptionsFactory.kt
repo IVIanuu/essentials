@@ -29,10 +29,7 @@ interface DialogKey<T> : Key<T>
 
 @Given
 fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
-    KeyUiOptions(
-        opaque = true,
-        transition = DialogStackTransition()
-    )
+    KeyUiOptions(opaque = true, transition = DialogStackTransition())
 }
 
 fun DialogStackTransition(

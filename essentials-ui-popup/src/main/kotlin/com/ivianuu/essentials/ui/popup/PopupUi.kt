@@ -89,11 +89,7 @@ fun popupUi(
 
 @Given
 val popupKeyOptionsFactory: KeyUiOptionsFactory<PopupKey> = {
-    KeyUiOptions(
-        opaque = true,
-        enterTransition = PopupStackTransition,
-        exitTransition = PopupStackTransition
-    )
+    KeyUiOptions(opaque = true, transition = PopupStackTransition)
 }
 
 val PopupStackTransition: StackTransition = transition@ {

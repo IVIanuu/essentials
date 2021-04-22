@@ -57,7 +57,6 @@ fun SharedElementStackTransition(
 
     // install overlay
     overlay {
-        println("compose overlays")
         states
             .filter { it.first.bounds != null && it.second.bounds != null }
             .forEach { (_, endState) ->
@@ -88,7 +87,7 @@ fun SharedElementStackTransition(
         start.modifier?.value = Modifier.alpha(0f)
     }
     // show the content
-    toContentModifier?.value = Modifier.alpha(1f)
+    toContentModifier?.value = Modifier
 
     par(
         {
@@ -139,7 +138,7 @@ fun SharedElementStackTransition(
     )
 
     // show the "real" elements
-    states.forEach { (_, end) -> end.modifier?.value = Modifier.alpha(1f) }
+    states.forEach { (_, end) -> end.modifier?.value = Modifier }
 }
 
 val SharedElementComposable = AnimationElementPropKey<@Composable () -> Unit>()

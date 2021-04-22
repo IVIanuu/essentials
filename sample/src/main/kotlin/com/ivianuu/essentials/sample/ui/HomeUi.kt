@@ -20,7 +20,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
@@ -100,9 +100,16 @@ private fun HomeItem(
     item: HomeItem,
 ) {
     ListItem(
-        title = { Text(item.title) },
+        title = {
+            SharedElement("title ${item.title}") {
+                Text(
+                    item.title,
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
+        },
         leading = {
-            SharedElement(item.title) {
+            SharedElement("color ${item.title}") {
                 Box(
                     modifier = Modifier
                         .size(40.dp)
