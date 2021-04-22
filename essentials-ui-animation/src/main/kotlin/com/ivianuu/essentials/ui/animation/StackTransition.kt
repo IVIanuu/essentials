@@ -18,7 +18,9 @@ interface StackTransitionScope : CoroutineScope {
     fun detachFrom()
 }
 
-fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch {
+fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
+    start = CoroutineStart.UNDISPATCHED
+) {
     animationRoot.animationOverlays += overlay
     runOnCancellation { animationRoot.animationOverlays -= overlay }
 }
@@ -50,11 +52,12 @@ private fun StackTransitionScope.element(
     child: AnimatedStackChild<*>?,
     key: Any,
 ): AnimationElement? {
-    val element = child?.elementStore?.referenceElement(this, key)
+    val refKey = Any()
+    val element = child?.elementStore?.referenceElement(key, refKey)
     if (element != null) {
         launch {
             runOnCancellation {
-                child.elementStore.disposeRef(this, key)
+                child.elementStore.disposeRef(key, refKey)
             }
         }
     }
@@ -81,6 +84,10 @@ private fun StackTransitionScope.elementModifier(
         }
     }
     return modifier
+}
+
+operator fun StackTransition.plus(other: StackTransition): StackTransition = {
+    par({ this@plus() }, { other() })
 }
 
 val NoOpStackTransition: StackTransition = {

@@ -1,9 +1,7 @@
 package com.ivianuu.essentials.ui.animation.transition
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
@@ -21,52 +19,79 @@ import kotlin.time.*
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
     sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(),
-    contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
-    waitingTimeout: Duration = 2.seconds
+    contentTransition: StackTransition = VerticalStackTransition(sharedElementAnimationSpec),
+    waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = {
     val states = sharedElements
         .map { (from, to) ->
-            val fromState = SharedElementState(from, fromElement(from), fromElementModifier(from))
-            val toState = SharedElementState(to, toElement(to), toElementModifier(to))
-            if (isPush) fromState to toState
-            else toState to fromState
+            if (isPush) {
+                SharedElementState(from, fromElement(from), fromElementModifier(from)) to
+                        SharedElementState(to, toElement(to), toElementModifier(to))
+            } else {
+                SharedElementState(to, fromElement(to), fromElementModifier(to)) to
+                        SharedElementState(from, toElement(from), toElementModifier(from))
+            }
         }
 
-    println("initialized states $states")
-
-    if (!isPush) {
-        fromElementModifier(ContentAnimationElementKey)!!
-            .value = Modifier.alpha(0.2f)
-        toElementModifier(ContentAnimationElementKey)!!
-            .value = Modifier.alpha(1f)
-    }
+    // hide "to" content while waiting for shared elements
+    val toContentModifier = toElementModifier(ContentAnimationElementKey)
+    toContentModifier?.value = Modifier.alpha(0f)
 
     attachTo()
 
-    println("attach to")
-
-    raceOf(
-        {
-            while (true) {
-                delay(1)
-                if (states.all { (start, end) ->
-                        start.bounds != null &&
-                                end.bounds != null
-                    }) break
-            }
-            println("has bounds")
-        },
-        {
-            delay(waitingTimeout.toLongMilliseconds())
-            println("timeout")
+    // wait until all shared elements has been placed on the screen
+    withTimeoutOrNull(waitingTimeout) {
+        while (true) {
+            delay(1)
+            if (states.all { (start, end) ->
+                    start.bounds != null &&
+                            end.bounds != null
+                }) break
         }
-    )
+    }
 
-    println("run")
+    // hide the "real to" elements
+    states.forEach { (_, end) ->
+        end.modifier?.value = Modifier.alpha(0f)
+    }
+
+    // install overlay
+    overlay {
+        println("compose overlays")
+        states
+            .filter { it.first.bounds != null && it.second.bounds != null }
+            .forEach { (_, endState) ->
+                val endBounds = endState.bounds!!
+                val currentProps = endState.animatedProps!!
+                val sharedElementComposable =
+                    endState.element!![SharedElementComposable]!!
+                with(LocalDensity.current) {
+                    Box(
+                        modifier = Modifier
+                            .size(
+                                width = endBounds.width.toDp(),
+                                height = endBounds.height.toDp()
+                            )
+                            .offset(
+                                x = currentProps.position.x.toDp(),
+                                y = currentProps.position.y.toDp()
+                            )
+                            .graphicsLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
+                    ) {
+                        sharedElementComposable()
+                    }
+                }
+            }
+    }
+    // hide the "real from" elements
+    states.forEach { (start, _) ->
+        start.modifier?.value = Modifier.alpha(0f)
+    }
+    // show the content
+    toContentModifier?.value = Modifier.alpha(1f)
 
     par(
         {
-            println("run content transition")
             contentTransition(
                 object : StackTransitionScope by this {
                     override fun attachTo() {
@@ -77,34 +102,6 @@ fun SharedElementStackTransition(
             )
         },
         {
-            println("run shared element transition")
-            overlay {
-                states
-                    .filter { it.first.bounds != null && it.second.bounds != null }
-                    .forEach { (_, endState) ->
-                        val endBounds = endState.bounds!!
-                        val currentProps = endState.animatedProps!!
-                        val sharedElementComposable =
-                            endState.element!![SharedElementComposable]!!
-                        with(LocalDensity.current) {
-                            Box(
-                                modifier = Modifier
-                                    .size(
-                                        width = endBounds.width.toDp(),
-                                        height = endBounds.height.toDp()
-                                    )
-                                    .offset(
-                                        x = currentProps.position.x.toDp(),
-                                        y = currentProps.position.y.toDp()
-                                    )
-                                    .graphicsLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
-                            ) {
-                                sharedElementComposable()
-                            }
-                        }
-                    }
-            }
-
             states
                 .filter { it.first.bounds != null && it.second.bounds != null }
                 .forEach { (start, end) ->
@@ -141,7 +138,8 @@ fun SharedElementStackTransition(
         }
     )
 
-    println("completed")
+    // show the "real" elements
+    states.forEach { (_, end) -> end.modifier?.value = Modifier.alpha(1f) }
 }
 
 val SharedElementComposable = AnimationElementPropKey<@Composable () -> Unit>()
@@ -167,11 +165,10 @@ private data class SharedElementState(
                         ?.boundsInRoot()
                 }
             }
-            .alpha(0f)
     }
 }
 
-data class SharedElementProps(
+private data class SharedElementProps(
     val position: Offset,
     val scaleX: Float,
     val scaleY: Float

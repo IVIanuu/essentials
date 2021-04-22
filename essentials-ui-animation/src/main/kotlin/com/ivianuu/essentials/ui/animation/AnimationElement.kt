@@ -17,19 +17,19 @@ class AnimationElement(val key: Any) {
     operator fun <T> get(key: AnimationElementPropKey<T>): T? = props[key] as? T
 }
 
-val ContentAnimationElementKey = Any()
+object ContentAnimationElementKey
 
 class AnimationElementPropKey<T>
 
 @Stable
 class AnimationElementStore {
     private val elements = mutableMapOf<Any, AnimationElement>()
-    fun referenceElement(refKey: Any, elementKey: Any): AnimationElement {
+    fun referenceElement(elementKey: Any, refKey: Any): AnimationElement {
         val element = elements.getOrPut(elementKey) { AnimationElement(elementKey) }
         element.refs += refKey
         return element
     }
-    fun disposeRef(refKey: Any, elementKey: Any) {
+    fun disposeRef(elementKey: Any, refKey: Any) {
         val element = elements[elementKey] ?: return
         element.refs -= refKey
         if (element.refs.isEmpty()) elements -= elementKey
@@ -39,9 +39,10 @@ class AnimationElementStore {
 @Composable
 fun animationElementFor(key: Any): AnimationElement {
     val stackChild = LocalAnimatedStackChild.current
-    val element = stackChild.elementStore.referenceElement(stackChild, key)
+    val refKey = remember { Any() }
+    val element = stackChild.elementStore.referenceElement(key, refKey)
     DisposableEffect(stackChild) {
-        onDispose { stackChild.elementStore.disposeRef(stackChild, key) }
+        onDispose { stackChild.elementStore.disposeRef(key, refKey) }
     }
     return element
 }
@@ -51,9 +52,7 @@ fun Modifier.animationElement(
     vararg props: Pair<AnimationElementPropKey<*>, Any?>
 ): Modifier = composed {
     val element = animationElementFor(key)
-    props.forEach {
-        element[it.first.cast<AnimationElementPropKey<Any?>>()] = it.second
-    }
+    props.forEach { element[it.first.cast<AnimationElementPropKey<Any?>>()] = it.second }
     element.modifiers.toSet().fold(Modifier as Modifier) { acc, modifier ->
         acc.then(modifier.value)
     }
