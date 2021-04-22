@@ -116,7 +116,7 @@ fun <T> ResourceBox(
 }
 
 object ResourceBoxDefaults {
-    val transition = com.ivianuu.essentials.ui.animation.transition.FadeStackTransition()
+    val transition = FadeStackTransition()
     val error: @Composable (Throwable) -> Unit = {
         Text(
             modifier = Modifier
