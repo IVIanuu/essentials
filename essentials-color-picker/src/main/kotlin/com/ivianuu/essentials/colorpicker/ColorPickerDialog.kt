@@ -32,8 +32,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.animatedstack.*
-import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.dialog.R
@@ -74,7 +73,7 @@ fun ColorPickerDialog(
                 modifier = Modifier.height(300.dp)
                     .padding(start = 24.dp, end = 24.dp),
                 current = currentScreen,
-                transition = FadeStackTransition()
+                transition = com.ivianuu.essentials.ui.animation.transition.FadeStackTransition()
             ) { currentScreen ->
                 when (currentScreen) {
                     ColorPickerTab.COLORS -> {

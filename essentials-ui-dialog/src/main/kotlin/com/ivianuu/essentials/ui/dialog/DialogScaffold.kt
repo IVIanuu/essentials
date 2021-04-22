@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.core.*
 
 @Composable
@@ -52,16 +52,11 @@ fun DialogScaffold(
         contentAlignment = Alignment.Center
     ) {
         InsetsPadding {
-            val scale = catch {
-                val child = LocalAnimatedStackChild.current
-                if (child.changeType == AnimatedStackChangeType.PUSH_ENTER)
-                    child.animationProgress else 1f
-            }.getOrElse { 1f }
             Box(
                 modifier = Modifier
                     .pointerInput(Unit) { detectTapGestures {  } }
                     .wrapContentSize(align = Alignment.Center)
-                    .scale(scale),
+                    .animationElement(DialogAnimationElementKey),
                 contentAlignment = Alignment.Center
             ) {
                 dialog()
@@ -69,6 +64,8 @@ fun DialogScaffold(
         }
     }
 }
+
+val DialogAnimationElementKey = Any()
 
 private val defaultDismissRequestHandler: () -> Unit
     @Composable get() {

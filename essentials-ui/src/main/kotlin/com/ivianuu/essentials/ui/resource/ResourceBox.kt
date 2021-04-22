@@ -24,8 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.ui.animatedstack.*
-import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.layout.*
 
@@ -116,7 +115,7 @@ fun <T> ResourceBox(
 }
 
 object ResourceBoxDefaults {
-    val transition = FadeStackTransition()
+    val transition = com.ivianuu.essentials.ui.animation.transition.FadeStackTransition()
     val error: @Composable (Throwable) -> Unit = {
         Text(
             modifier = Modifier

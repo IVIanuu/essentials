@@ -45,7 +45,7 @@ import com.ivianuu.essentials.permission.notificationlistener.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.*

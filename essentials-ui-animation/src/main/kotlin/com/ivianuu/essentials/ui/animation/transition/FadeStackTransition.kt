@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.animatedstack.animation
+package com.ivianuu.essentials.ui.animation.transition
 
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.animation.*
 
-class ScaleStackTransition(
-    private val spec: AnimationSpec<Float> = defaultAnimationSpec()
-) : StackTransition {
-    override fun createSpec(isPush: Boolean): AnimationSpec<Float> = spec
-    override fun createToModifier(progress: Float, isPush: Boolean): Modifier =
-        if (isPush) Modifier.scale(scaleX = progress, scaleY = progress) else Modifier
-    override fun createFromModifier(progress: Float, isPush: Boolean): Modifier =
-        if (isPush) Modifier else Modifier.scale(scaleX = 1f - progress, scaleY = 1f - progress)
+fun FadeStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
+    attachTo()
+    val fromModifier = fromElementModifier(ContentAnimationElementKey)
+    val toModifier = toElementModifier(ContentAnimationElementKey)
+    animate(spec) {
+        fromModifier?.value = Modifier.alpha(1f - value)
+        toModifier?.value = Modifier.alpha(value)
+    }
 }

@@ -25,7 +25,7 @@ import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

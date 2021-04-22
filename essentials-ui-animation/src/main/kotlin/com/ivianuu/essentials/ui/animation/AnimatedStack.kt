@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.animatedstack
+package com.ivianuu.essentials.ui.animation
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.key
 import androidx.compose.ui.*
-import com.ivianuu.essentials.ui.animatedstack.animation.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.animation.transition.*
+import kotlinx.coroutines.*
 
 @Composable
 fun <T> AnimatedBox(
@@ -65,12 +67,11 @@ fun <T> AnimatedStack(
     modifier: Modifier = Modifier,
     children: List<AnimatedStackChild<T>>,
 ) {
-    val state = remember { AnimatedStackState(children) }
+    val scope = rememberCoroutineScope()
+    val root = LocalAnimationRoot.current
+    val state = remember { AnimatedStackState(children, scope, root) }
     state.defaultTransition = LocalStackTransition.current
     state.setChildren(children)
-    state.runningTransactions.values.toList().forEach { transaction ->
-        key(transaction) { transaction.run() }
-    }
     Box(modifier = modifier) {
         state.visibleChildren.toList().forEach { child ->
             key(child.key) { child.Content() }
@@ -78,14 +79,42 @@ fun <T> AnimatedStack(
     }
 }
 
+
 @Stable
-internal class AnimatedStackState<T>(initialChildren: List<AnimatedStackChild<T>>) {
+class AnimatedStackChild<T>(
+    val key: T,
+    val opaque: Boolean = false,
+    val enterTransition: StackTransition? = null,
+    val exitTransition: StackTransition? = null,
+    val content: @Composable () -> Unit
+) {
+    val elementStore = AnimationElementStore()
+    @Composable
+    internal fun Content() {
+        CompositionLocalProvider(LocalAnimatedStackChild provides this@AnimatedStackChild) {
+            Box(modifier = Modifier.animationElement(ContentAnimationElementKey)) {
+                content()
+            }
+        }
+    }
+}
+
+val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
+    error("No stack child provided")
+}
+
+@Stable
+internal class AnimatedStackState<T>(
+    initialChildren: List<AnimatedStackChild<T>>,
+    val scope: CoroutineScope,
+    val root: AnimationRoot
+) {
     private var _children = initialChildren
     val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
 
     var defaultTransition: StackTransition = NoOpStackTransition
 
-    val runningTransactions = mutableStateMapOf<T, AnimatedStackTransaction<T>>()
+    internal val runningTransactions = mutableMapOf<T, AnimatedStackTransaction<T>>()
 
     init {
         _children
@@ -195,51 +224,13 @@ internal class AnimatedStackState<T>(initialChildren: List<AnimatedStackChild<T>
         from?.let { runningTransactions[it.key]?.cancel() }
         val transaction = AnimatedStackTransaction(from, to, isPush, transition, this)
         runningTransactions[transaction.transactionKey] = transaction
+        transaction.execute()
     }
 }
 
-@Stable
-class AnimatedStackChild<T>(
-    val key: T,
-    val opaque: Boolean = false,
-    val enterTransition: StackTransition? = null,
-    val exitTransition: StackTransition? = null,
-    val content: @Composable () -> Unit
-) {
-    var isAnimating by mutableStateOf(false)
-        internal set
-    var changeType: AnimatedStackChangeType? by mutableStateOf(null)
-        internal set
-    var animationProgress by mutableStateOf(0f)
-        internal set
-    internal var transitionModifier: Modifier by mutableStateOf(Modifier)
-
-    @Composable
-    internal fun Content() {
-        Box(modifier = transitionModifier) {
-            CompositionLocalProvider(
-                LocalAnimatedStackChild provides this@AnimatedStackChild,
-                content = content
-            )
-        }
-    }
-}
-
-val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
-    error("No stack child provided")
-}
-
-enum class AnimatedStackChangeType(val isPush: Boolean, val isEnter: Boolean) {
-    PUSH_ENTER(true, true),
-    PUSH_EXIT(true, false),
-    POP_ENTER(false, true),
-    POP_EXIT(false, false)
-}
-
-@Stable
 internal class AnimatedStackTransaction<T>(
-    val from: AnimatedStackChild<T>?,
-    val to: AnimatedStackChild<T>?,
+    private val from: AnimatedStackChild<T>?,
+    private val to: AnimatedStackChild<T>?,
     private val isPush: Boolean,
     private val transition: StackTransition,
     private val state: AnimatedStackState<T>
@@ -247,71 +238,53 @@ internal class AnimatedStackTransaction<T>(
     val transactionKey = when {
         to != null -> to.key
         from != null -> from.key
-        else -> error("No transition needed")
+        else -> throw AssertionError()
     }
 
-    private val removesFrom = from != null && (!isPush || !to!!.opaque)
+    private val removesFrom: Boolean
+        get() = from != null && (!isPush || !to!!.opaque)
 
-    @Composable
-    fun run() {
-        remember {
-            from?.isAnimating = true
-            from?.changeType = if (isPush) AnimatedStackChangeType.PUSH_EXIT else
-                AnimatedStackChangeType.POP_EXIT
-            to?.changeType = if (isPush) AnimatedStackChangeType.PUSH_ENTER else
-                AnimatedStackChangeType.POP_ENTER
-        }
+    private var job: Job? = null
 
-        val animationState: AnimationState<Float, AnimationVector1D> = remember {
-            AnimationState(0f)
-        }
-        DisposableEffect(animationState.value) {
-            from?.animationProgress = animationState.value
-            from?.transitionModifier = transition.createFromModifier(animationState.value, isPush)
-            to?.animationProgress = animationState.value
-            to?.transitionModifier = transition.createToModifier(animationState.value, isPush)
-            onDispose {  }
-        }
-
-        LaunchedEffect(true) {
-            if (to !in state.visibleChildren)
-                this@AnimatedStackTransaction.addTo()
-            animationState.animateTo(
-                targetValue = 1f,
-                animationSpec = transition.createSpec(isPush)
+    fun execute() {
+        job = state.scope.launch {
+            runWithCleanup(
+                block = {
+                    val transitionScope = object : StackTransitionScope, CoroutineScope by this {
+                        override val animationRoot: AnimationRoot
+                            get() = state.root
+                        override val isPush: Boolean
+                            get() = this@AnimatedStackTransaction.isPush
+                        override val from: AnimatedStackChild<*>?
+                            get() = this@AnimatedStackTransaction.from
+                        override val to: AnimatedStackChild<*>?
+                            get() = this@AnimatedStackTransaction.to
+                        override fun attachTo() {
+                            this@AnimatedStackTransaction.attachTo()
+                        }
+                        override fun detachFrom() {
+                            this@AnimatedStackTransaction.removeFrom()
+                        }
+                    }
+                    transition(transitionScope)
+                },
+                cleanup = { complete() }
             )
-            if (from in state.visibleChildren)
-                this@AnimatedStackTransaction.removeFrom()
-            complete()
         }
     }
 
     fun cancel() {
-        complete()
+        job?.cancel()
+        job = null
     }
 
-    private fun complete() {
-        if (to != null && to !in state.visibleChildren) addTo()
-        if (removesFrom && from in state.visibleChildren) removeFrom()
-        to?.isAnimating = false
-        to?.transitionModifier = Modifier
-        from?.isAnimating = false
-        from?.transitionModifier = Modifier
-        to?.changeType = null
-        from?.changeType = null
-        state.runningTransactions -= transactionKey
-    }
-
-    private fun addTo() {
+    private fun attachTo() {
         if (to == null) return
-        to.isAnimating = true
-
         val oldToIndex = state.visibleChildren.indexOf(to)
         val fromIndex = state.visibleChildren.indexOf(from)
         val toIndex = if (fromIndex != -1) {
             if (isPush) fromIndex + 1 else fromIndex
         } else if (oldToIndex != -1) oldToIndex else state.visibleChildren.size
-
         if (oldToIndex != toIndex) {
             if (oldToIndex != -1) state.visibleChildren.removeAt(oldToIndex)
             state.visibleChildren.add(toIndex, to)
@@ -319,8 +292,14 @@ internal class AnimatedStackTransaction<T>(
     }
 
     private fun removeFrom() {
-        if (from == null) return
-        from.isAnimating = false
+        if (from == null || !removesFrom) return
         state.visibleChildren -= from
+    }
+
+    private fun complete() {
+        cancel()
+        if (to != null && to !in state.visibleChildren) attachTo()
+        if (removesFrom && from in state.visibleChildren) removeFrom()
+        state.runningTransactions -= transactionKey
     }
 }

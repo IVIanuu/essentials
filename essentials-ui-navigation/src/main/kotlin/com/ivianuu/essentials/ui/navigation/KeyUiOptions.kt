@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.ui.animatedstack.*
+import com.ivianuu.essentials.ui.animation.*
 
 data class KeyUiOptions(
     val opaque: Boolean = false,

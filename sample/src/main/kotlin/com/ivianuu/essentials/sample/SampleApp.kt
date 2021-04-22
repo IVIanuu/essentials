@@ -75,6 +75,7 @@ import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.essentials.twilight.domain.*
 import com.ivianuu.essentials.twilight.ui.*
 import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*

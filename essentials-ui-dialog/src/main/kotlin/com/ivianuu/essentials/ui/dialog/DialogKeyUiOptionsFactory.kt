@@ -16,7 +16,11 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import com.ivianuu.essentials.ui.animatedstack.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
@@ -26,6 +30,19 @@ interface DialogKey<T> : Key<T>
 fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
     KeyUiOptions(
         opaque = true,
-        transition = FadeStackTransition()
+        transition = DialogStackTransition()
     )
+}
+
+fun DialogStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
+    attachTo()
+    val fromContentModifier = fromElementModifier(ContentAnimationElementKey)
+    val toContentModifier = toElementModifier(ContentAnimationElementKey)
+    val toDialogModifier = toElementModifier(DialogAnimationElementKey)
+    animate(spec) {
+        fromContentModifier?.value = Modifier.alpha(1f - value)
+        toContentModifier?.value = Modifier.alpha(value)
+        toDialogModifier?.value = Modifier.scale(value)
+    }
+    detachFrom()
 }

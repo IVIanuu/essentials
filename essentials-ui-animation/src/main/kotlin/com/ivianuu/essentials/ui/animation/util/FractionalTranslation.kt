@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.ui.animatedstack
+package com.ivianuu.essentials.ui.animation.util
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -13,7 +13,7 @@ fun Modifier.fractionalTranslation(
     var size by remember { mutableStateOf(IntSize(Int.MAX_VALUE, Int.MAX_VALUE)) }
     onSizeChanged { size = it }
         .graphicsLayer {
-            this.translationX = size.width * translationXFraction
-            this.translationY = size.height * translationYFraction
+            translationX = size.width * translationXFraction
+            translationY = size.height * translationYFraction
         }
 }
