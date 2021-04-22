@@ -12,9 +12,9 @@ fun FlipStackTransition(
         .graphicsLayer {
             alpha = value
             if (direction == FlipDirection.LEFT || direction == FlipDirection.RIGHT)
-                rotationY = direction.startRotation * value
+                rotationY = direction.startRotation - direction.startRotation * value
             else
-                rotationX = direction.startRotation * value
+                rotationX = direction.startRotation - direction.startRotation * value
         }
     fromModifier?.value = Modifier
         .graphicsLayer {
