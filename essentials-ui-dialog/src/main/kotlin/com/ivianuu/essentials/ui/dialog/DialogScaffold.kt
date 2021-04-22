@@ -43,7 +43,7 @@ fun DialogScaffold(
 
     Box(
         modifier = Modifier
-            .pointerInput(Unit) {
+            .pointerInput(true) {
                 detectTapGestures { onDismissRequest() }
             }
             .fillMaxSize()
@@ -54,7 +54,7 @@ fun DialogScaffold(
         InsetsPadding {
             Box(
                 modifier = Modifier
-                    .pointerInput(Unit) { detectTapGestures {  } }
+                    .pointerInput(true) { detectTapGestures {  } }
                     .wrapContentSize(align = Alignment.Center)
                     .animationElement(DialogAnimationElementKey),
                 contentAlignment = Alignment.Center

@@ -3,6 +3,8 @@ package com.ivianuu.essentials.ui.animation
 import androidx.compose.animation.core.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.node.*
 import com.ivianuu.essentials.coroutines.*
 import kotlinx.coroutines.*
 import kotlin.time.*
@@ -17,6 +19,20 @@ interface StackTransitionScope : CoroutineScope {
     fun attachTo()
     fun detachFrom()
 }
+
+suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
+    val coordinates = CompletableDeferred<LayoutCoordinates>()
+    val previousModifier = value
+    value = previousModifier.onGloballyPositioned { coordinates.complete(it) }
+    return try {
+        coordinates.await()
+    } finally {
+        value = previousModifier
+    }
+}
+
+val LayoutCoordinates.rootCoordinates: LayoutCoordinates
+ get() = parentCoordinates?.rootCoordinates ?: this
 
 fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
     start = CoroutineStart.UNDISPATCHED

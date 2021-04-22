@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
