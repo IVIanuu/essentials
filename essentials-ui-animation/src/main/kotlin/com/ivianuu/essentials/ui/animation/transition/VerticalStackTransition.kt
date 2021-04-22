@@ -27,7 +27,7 @@ fun VerticalStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec())
     val toModifier = toElementModifier(ContentAnimationElementKey)
     animate(spec) {
         fromModifier?.value = if (isPush) Modifier
-        else Modifier.fractionalTranslation(translationYFraction = 1f - value)
+        else Modifier.fractionalTranslation(translationYFraction = value)
         toModifier?.value = if (isPush) Modifier.fractionalTranslation(translationYFraction = 1f - value)
         else Modifier
     }
