@@ -22,15 +22,12 @@ import androidx.compose.ui.draw.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
-fun VerticalFadeStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
-    attachTo()
-    val fromModifier = fromElementModifier(ContentAnimationElementKey)
-    val toModifier = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
-        fromModifier?.value = if (isPush) Modifier else Modifier.alpha(1f - value)
-            .fractionalTranslation(translationYFraction = 0.3f * value)
-        toModifier?.value =  if (isPush) Modifier.alpha(value)
-            .fractionalTranslation(translationYFraction = 0.3f * (1f - value))
-        else Modifier
-    }
+fun VerticalFadeStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
+    fromModifier?.value = if (isPush) Modifier else Modifier.alpha(1f - value)
+        .fractionalTranslation(translationYFraction = 0.3f * value)
+    toModifier?.value =  if (isPush) Modifier.alpha(value)
+        .fractionalTranslation(translationYFraction = 0.3f * (1f - value))
+    else Modifier
 }

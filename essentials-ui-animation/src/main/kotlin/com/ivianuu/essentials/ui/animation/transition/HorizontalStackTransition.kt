@@ -18,17 +18,13 @@ package com.ivianuu.essentials.ui.animation.transition
 
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
-fun HorizontalStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
-    attachTo()
-    val fromModifier = fromElementModifier(ContentAnimationElementKey)
-    val toModifier = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
-        fromModifier?.value = Modifier
-            .fractionalTranslation(translationXFraction = if (isPush) -value else value)
-        toModifier?.value = Modifier
-            .fractionalTranslation(translationXFraction = if (isPush) (1f - value) else -1f + value)
-    }
+fun HorizontalStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
+    fromModifier?.value = Modifier
+        .fractionalTranslation(translationXFraction = if (isPush) -value else value)
+    toModifier?.value = Modifier
+        .fractionalTranslation(translationXFraction = if (isPush) (1f - value) else -1f + value)
 }

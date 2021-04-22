@@ -69,8 +69,9 @@ fun <T> AnimatedStack(
 ) {
     val scope = rememberCoroutineScope()
     val root = LocalAnimationRoot.current
-    val state = remember { AnimatedStackState(children, scope, root) }
-    state.defaultTransition = LocalStackTransition.current
+    val defaultTransition = LocalStackTransition.current
+    val state = remember { AnimatedStackState(scope, root, children, defaultTransition) }
+    state.defaultTransition = defaultTransition
     state.setChildren(children)
     Box(modifier = modifier) {
         state.visibleChildren.toList().forEach { child ->
@@ -78,7 +79,6 @@ fun <T> AnimatedStack(
         }
     }
 }
-
 
 @Stable
 class AnimatedStackChild<T>(
@@ -89,6 +89,14 @@ class AnimatedStackChild<T>(
     val content: @Composable () -> Unit
 ) {
     val elementStore = AnimationElementStore()
+
+    constructor(
+        key: T,
+        opaque: Boolean = false,
+        transition: StackTransition? = null,
+        content: @Composable () -> Unit
+    ) : this(key, opaque, transition, transition, content)
+
     @Composable
     internal fun Content() {
         CompositionLocalProvider(LocalAnimatedStackChild provides this@AnimatedStackChild) {
@@ -105,19 +113,16 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
 
 @Stable
 internal class AnimatedStackState<T>(
-    initialChildren: List<AnimatedStackChild<T>>,
     val scope: CoroutineScope,
-    val root: AnimationRoot
+    val root: AnimationRoot,
+    private var children: List<AnimatedStackChild<T>>,
+    var defaultTransition: StackTransition,
 ) {
-    private var _children = initialChildren
     val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
-
-    var defaultTransition: StackTransition = NoOpStackTransition
-
     internal val runningTransactions = mutableMapOf<T, AnimatedStackTransaction<T>>()
 
     init {
-        _children
+        children
             .filterVisible()
             .forEach {
                 performChange(
@@ -130,7 +135,7 @@ internal class AnimatedStackState<T>(
     }
 
     fun setChildren(newChildren: List<AnimatedStackChild<T>>) {
-        if (newChildren == _children) return
+        if (newChildren == children) return
 
         // do not allow pushing the same child twice
         newChildren
@@ -141,10 +146,10 @@ internal class AnimatedStackState<T>(
                 }
             }
 
-        val oldChildren = _children.toList()
+        val oldChildren = children.toList()
         val oldVisibleChildren = oldChildren.filterVisible()
 
-        _children = newChildren
+        children = newChildren
 
         val newVisibleChildren = newChildren.filterVisible()
 
@@ -282,9 +287,11 @@ internal class AnimatedStackTransaction<T>(
         if (to == null) return
         val oldToIndex = state.visibleChildren.indexOf(to)
         val fromIndex = state.visibleChildren.indexOf(from)
-        val toIndex = if (fromIndex != -1) {
-            if (isPush) fromIndex + 1 else fromIndex
-        } else if (oldToIndex != -1) oldToIndex else state.visibleChildren.size
+        val toIndex = when {
+            fromIndex != -1 -> if (isPush) fromIndex + 1 else fromIndex
+            oldToIndex != -1 -> oldToIndex
+            else -> state.visibleChildren.size
+        }
         if (oldToIndex != toIndex) {
             if (oldToIndex != -1) state.visibleChildren.removeAt(oldToIndex)
             state.visibleChildren.add(toIndex, to)

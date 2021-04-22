@@ -1,11 +1,13 @@
-package com.ivianuu.essentials.ui.animation
+package com.ivianuu.essentials.ui.animation.transition
 
 import androidx.compose.animation.core.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.node.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.animation.*
 import kotlinx.coroutines.*
 import kotlin.time.*
 
@@ -18,6 +20,17 @@ interface StackTransitionScope : CoroutineScope {
     val to: AnimatedStackChild<*>?
     fun attachTo()
     fun detachFrom()
+}
+
+fun ContentAnimationStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec(),
+    block: StackTransitionScope.(MutableState<Modifier>?, MutableState<Modifier>?, Float) -> Unit
+): StackTransition = {
+    attachTo()
+    val fromModifier = fromElementModifier(ContentAnimationElementKey)
+    val toModifier = toElementModifier(ContentAnimationElementKey)
+    animate(spec) { block(fromModifier, toModifier, value) }
+    detachFrom()
 }
 
 suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {

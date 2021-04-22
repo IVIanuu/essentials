@@ -19,16 +19,12 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.ui.animation.*
 
-fun ScaleStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
-    attachTo()
-    val fromModifier = fromElementModifier(ContentAnimationElementKey)
-    val toModifier = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
-        fromModifier?.value = if (isPush) Modifier
-        else Modifier.scale(scaleX = 1f - value, scaleY = 1f - value)
-        toModifier?.value = if (isPush) Modifier.scale(scaleX = value, scaleY = value)
-        else Modifier
-    }
+fun ScaleStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
+    fromModifier?.value = if (isPush) Modifier
+    else Modifier.scale(scaleX = 1f - value, scaleY = 1f - value)
+    toModifier?.value = if (isPush) Modifier.scale(scaleX = value, scaleY = value)
+    else Modifier
 }

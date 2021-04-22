@@ -25,6 +25,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.layout.*
 
