@@ -42,7 +42,7 @@ class UiDecoratorConfig<out T : UiDecorator>(
 
 typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
-class UiDecoratorElement(
+data class UiDecoratorElement(
     val key: TypeKey<UiDecorator>,
     val decorator: UiDecorator,
     val config: UiDecoratorConfig<*>

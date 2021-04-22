@@ -24,7 +24,7 @@ class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
     }
 }
 
-class ScopeInitializerElement<S>(
+data class ScopeInitializerElement<S>(
     val key: TypeKey<ScopeInitializer<S>>,
     val instance: () -> ScopeInitializer<S>,
     val config: ScopeInitializerConfig<ScopeInitializer<S>>

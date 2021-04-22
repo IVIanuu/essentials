@@ -25,7 +25,7 @@ class KeyUiDecoratorConfig<out T : KeyUiDecorator>(
 
 typealias KeyUiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
-class KeyUiDecoratorElement(
+data class KeyUiDecoratorElement(
     val key: TypeKey<KeyUiDecorator>,
     val decorator: KeyUiDecorator,
     val config: KeyUiDecoratorConfig<*>
