@@ -195,8 +195,6 @@ fun SharedElement(
     }
 }
 
-private const val kOnAxisDelta = 2f
-
 fun arcLerp(
     start: Offset,
     end: Offset,
@@ -210,7 +208,7 @@ fun arcLerp(
     val distanceFromAtoB = delta.getDistance()
     val c = Offset(end.x, start.y)
 
-    if (deltaX < kOnAxisDelta || deltaY < kOnAxisDelta)
+    if (deltaX < 2f || deltaY < 2f)
         return lerp(start, end, fraction)
 
     val radius: Float
