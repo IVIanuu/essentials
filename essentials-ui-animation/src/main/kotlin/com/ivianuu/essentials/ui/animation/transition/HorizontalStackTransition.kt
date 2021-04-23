@@ -21,7 +21,7 @@ import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.animation.util.*
 
 fun HorizontalStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
     fromModifier?.value = Modifier
         .fractionalTranslation(translationXFraction = if (isPush) -value else value)

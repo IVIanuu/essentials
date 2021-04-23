@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.resource
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -117,7 +118,7 @@ fun <T> ResourceBox(
 }
 
 object ResourceBoxDefaults {
-    val transition = FadeStackTransition(defaultAnimationSpec(150.milliseconds))
+    val transition = FadeStackTransition(defaultAnimationSpec(150.milliseconds, easing = FastOutSlowInEasing))
     val error: @Composable (Throwable) -> Unit = {
         Text(
             modifier = Modifier

@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
 fun VerticalStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
     fromModifier?.value = if (isPush) Modifier else Modifier
         .fractionalTranslation(translationYFraction = value)

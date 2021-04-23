@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -64,7 +65,7 @@ fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
 
 @Given
 val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
-    val spec = defaultAnimationSpec(400.milliseconds)
+    val spec = defaultAnimationSpec(400.milliseconds, easing = FastOutSlowInEasing)
     KeyUiOptions(
         enterTransition = SharedElementStackTransition(
             "image ${it.city.name}" to "image",

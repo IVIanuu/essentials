@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.*
 
 fun FlipStackTransition(
     direction: FlipDirection = FlipDirection.RIGHT,
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
     toModifier?.value = Modifier
         .graphicsLayer {
