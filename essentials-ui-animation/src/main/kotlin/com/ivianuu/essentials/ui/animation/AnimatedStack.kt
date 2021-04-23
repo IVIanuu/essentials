@@ -30,7 +30,7 @@ import kotlinx.coroutines.*
 fun <T> AnimatedBox(
     current: T,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeTroughStackTransition(),
+    transition: StackTransition = FadeThroughStackTransition(),
     item: @Composable (T) -> Unit
 ) {
     AnimatedStack(

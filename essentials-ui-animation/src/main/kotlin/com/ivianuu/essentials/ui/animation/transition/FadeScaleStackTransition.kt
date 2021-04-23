@@ -28,8 +28,8 @@ fun FadeScaleStackTransition(
                 .graphicsLayer {
                     transformOrigin = origin
                     alpha = interval(0f, 0.3f, value)
-                    scaleX = lerp(0.8f, 1f, AccelerateEasing.transform(value))
-                    scaleY = lerp(0.8f, 1f, AccelerateEasing.transform(value))
+                    scaleX = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
+                    scaleY = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
                 }
         }
     } else {

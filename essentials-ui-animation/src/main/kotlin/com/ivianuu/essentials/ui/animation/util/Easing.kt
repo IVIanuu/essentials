@@ -1,11 +1,8 @@
 package com.ivianuu.essentials.ui.animation.util
 
-import androidx.compose.animation.core.*
 import androidx.compose.ui.geometry.*
 import com.ivianuu.essentials.*
 import kotlin.math.*
-
-val AccelerateEasing = CubicBezierEasing(0f, 0f, 0.2f, 1f)
 
 fun interval(
     start: Float,

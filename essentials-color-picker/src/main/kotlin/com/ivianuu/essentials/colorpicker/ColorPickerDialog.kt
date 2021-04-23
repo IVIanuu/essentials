@@ -31,8 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.dialog.R
@@ -73,7 +74,7 @@ fun ColorPickerDialog(
                 modifier = Modifier.height(300.dp)
                     .padding(start = 24.dp, end = 24.dp),
                 current = currentScreen,
-                transition = com.ivianuu.essentials.ui.animation.transition.FadeStackTransition()
+                transition = VerticalSharedAxisStackTransition()
             ) { currentScreen ->
                 when (currentScreen) {
                     ColorPickerTab.COLORS -> {
@@ -128,8 +129,11 @@ private fun ColorGrid(
     onColorSelected: (Color) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentPalette by remember { mutableStateOf<ColorPickerPalette?>(null) }
-    AnimatedBox(current = currentPalette) { palette ->
+    var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
+    AnimatedStack(
+        items = palettesStack,
+        transition = HorizontalSharedAxisStackTransition()
+    ) { palette ->
         val items = remember {
             palette
                 ?.colors
@@ -145,42 +149,62 @@ private fun ColorGrid(
             LazyColumn {
                 items.chunked(4).forEach { rowItems ->
                     item {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            rowItems.forEach { item ->
-                                key(item) {
-                                    Box(
-                                        modifier = Modifier.size(this@BoxWithConstraints.maxWidth / 4),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        when (item) {
-                                            is ColorGridItem.Back -> ColorGridBackButton(
-                                                onClick = { currentPalette = null }
-                                            )
-                                            is ColorGridItem.Color -> ColorGridItem(
-                                                color = item.color,
-                                                isSelected = item.color == currentColor,
-                                                onClick = {
-                                                    if (palette == null) {
-                                                        val paletteForItem =
-                                                            colors.first { it.front == item.color }
-                                                        if (paletteForItem.colors.size > 1) {
-                                                            currentPalette = paletteForItem
-                                                        } else {
-                                                            onColorSelected(item.color)
-                                                        }
-                                                    } else {
-                                                        onColorSelected(item.color)
-                                                    }
-                                                }
-                                            )
+                        ColorGridRow(
+                            items = rowItems,
+                            currentColor = currentColor,
+                            maxWidth = this@BoxWithConstraints.maxWidth,
+                            onItemClick = { item ->
+                                when (item) {
+                                    ColorGridItem.Back -> palettesStack = listOf(null)
+                                    is ColorGridItem.Color -> {
+                                        if (palette == null) {
+                                            val paletteForItem =
+                                                colors.first { it.front == item.color }
+                                            if (paletteForItem.colors.size > 1) {
+                                                palettesStack += paletteForItem
+                                            } else {
+                                                onColorSelected(item.color)
+                                            }
+                                        } else {
+                                            onColorSelected(item.color)
                                         }
                                     }
                                 }
                             }
-                        }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColorGridRow(
+    items: List<ColorGridItem>,
+    onItemClick: (ColorGridItem) -> Unit,
+    currentColor: Color,
+    maxWidth: Dp,
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items.forEach { item ->
+            key(item) {
+                Box(
+                    modifier = Modifier.size(maxWidth / 4),
+                    contentAlignment = Alignment.Center
+                ) {
+                    when (item) {
+                        is ColorGridItem.Back -> ColorGridBackButton(
+                            onClick = { onItemClick(item) }
+                        )
+                        is ColorGridItem.Color -> ColorGridItem(
+                            color = item.color,
+                            isSelected = item.color == currentColor,
+                            onClick = { onItemClick(item) }
+                        )
                     }
                 }
             }

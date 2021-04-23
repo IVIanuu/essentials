@@ -3,192 +3,95 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
+import kotlin.time.*
+
+fun HorizontalSharedAxisStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+): StackTransition = {
+    attachTo()
+    val from = fromElementModifier(ContentAnimationElementKey)
+    val to = toElementModifier(ContentAnimationElementKey)
+    animate(spec) {
+        if (isPush) {
+            to?.value = Modifier.graphicsLayer {
+                alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
+                translationX = lerp(30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+            }
+            from?.value = Modifier.graphicsLayer {
+                alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
+                translationX = lerp(0f, -30.dp.toPx(), FastOutSlowInEasing.transform(value))
+            }
+        } else {
+            to?.value = Modifier.graphicsLayer {
+                alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
+                translationX = lerp(-30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+            }
+            from?.value = Modifier.graphicsLayer {
+                alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
+                translationX = lerp(0f, 30.dp.toPx(), FastOutSlowInEasing.transform(value))
+            }
+        }
+    }
+    detachFrom()
+}
+
+fun VerticalSharedAxisStackTransition(
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+): StackTransition = {
+    attachTo()
+    val from = fromElementModifier(ContentAnimationElementKey)
+    val to = toElementModifier(ContentAnimationElementKey)
+    animate(spec) {
+        if (isPush) {
+            to?.value = Modifier.graphicsLayer {
+                alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
+                translationY = lerp(30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+            }
+            from?.value = Modifier.graphicsLayer {
+                alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
+                translationY = lerp(0f, -30.dp.toPx(), FastOutSlowInEasing.transform(value))
+            }
+        } else {
+            to?.value = Modifier.graphicsLayer {
+                alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
+                translationY = lerp(-30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+            }
+            from?.value = Modifier.graphicsLayer {
+                alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
+                translationY = lerp(0f, 30.dp.toPx(), FastOutSlowInEasing.transform(value))
+            }
+        }
+    }
+    detachFrom()
+}
 
 fun ScaledSharedAxisStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    /*attachTo()
-    val fromModifier = fromElementModifier(ContentAnimationElementKey)
-    val toModifier = toElementModifier(ContentAnimationElementKey)
-
-    if (isPush) {
-        val fromAlphaEasing = RangeEasing(0.3f)
-        animate(spec) {
-        }
-    } else {
-
-    }
-
-    animate(spec) {
-
-    }
-
-    suspend fun animate(
-        child: AnimatedStackChild<*>?,
-        alphaDelay: Int,
-        startScale: Float,
-        endScale: Float,
-        startAlpha: Float,
-        endAlpha: Float
-    ) {
-        if (child == null) return
-        par(
-            {
-                val alphaModifier = elementModifier(child, ContentAnimationElementKey)!!
-                animate(tween(
-                    durationMillis = (alphaDelay * speed).toInt(),
-                    delayMillis = (alphaDelay * speed).toInt(),
-                    easing = LinearEasing
-                )) {
-                    alphaModifier.value = Modifier.alpha(lerp(startAlpha, endAlpha, value))
-                }
-            },
-            {
-                val toScaleModifier = elementModifier(child, ContentAnimationElementKey)!!
-                animate(
-                    startScale,
-                    endScale,
-                    animationSpec = tween(durationMillis = (300 * speed).toInt())
-                ) { value, _ -> toScaleModifier.value = Modifier.scale(value) }
-            }
-        )
-    }
-
-    if (isPush) {
-        par(
-            {
-                animate(
-                    child = to,
-                    alphaDelay = 50,
-                    startAlpha = 0f,
-                    endAlpha = 1f,
-                    startScale = 0.8f,
-                    endScale = 1f
-                )
-            },
-            {
-                animate(
-                    child = from,
-                    alphaDelay = 50,
-                    startAlpha = 1f,
-                    endAlpha = 0f,
-                    startScale = 1f,
-                    endScale = 1.1f
-                )
-            }
-        )
-    } else {
-        par(
-            {
-                animate(
-                    child = to,
-                    alphaDelay = 66,
-                    startAlpha = 0f,
-                    endAlpha = 1f,
-                    startScale = 1.1f,
-                    endScale = 1f
-                )
-            },
-            {
-                animate(
-                    child = from,
-                    alphaDelay = 66,
-                    startAlpha = 1f,
-                    endAlpha = 0f,
-                    startScale = 1f,
-                    endScale = 0.9f
-                )
-            }
-        )
-    }
-    detachFrom()*/
-}
-
-fun SharedAxisStackTransition(): StackTransition = {
     attachTo()
-    val speed = 1f
-
-    suspend fun animate(
-        child: AnimatedStackChild<*>?,
-        alphaDelay: Int,
-        startScale: Float,
-        endScale: Float,
-        startAlpha: Float,
-        endAlpha: Float
-    ) {
-        if (child == null) return
-        par(
-            {
-                val alphaModifier = elementModifier(child, ContentAnimationElementKey)!!
-                animate(tween(
-                    durationMillis = (alphaDelay * speed).toInt(),
-                    delayMillis = (alphaDelay * speed).toInt(),
-                    easing = LinearEasing
-                )) {
-                    alphaModifier.value = Modifier.alpha(lerp(startAlpha, endAlpha, value))
-                }
-            },
-            {
-                val toScaleModifier = elementModifier(child, ContentAnimationElementKey)!!
-                animate(
-                    startScale,
-                    endScale,
-                    animationSpec = tween(durationMillis = (300 * speed).toInt())
-                ) { value, _ -> toScaleModifier.value = Modifier.scale(value) }
-            }
-        )
-    }
-
-    if (isPush) {
-        par(
-            {
-                animate(
-                    child = to,
-                    alphaDelay = 50,
-                    startAlpha = 0f,
-                    endAlpha = 1f,
-                    startScale = 0.85f,
-                    endScale = 1f
-                )
-            },
-            {
-                animate(
-                    child = from,
-                    alphaDelay = 50,
-                    startAlpha = 1f,
-                    endAlpha = 0f,
-                    startScale = 1f,
-                    endScale = 1.15f
-                )
-            }
-        )
-    } else {
-        par(
-            {
-                animate(
-                    child = to,
-                    alphaDelay = 66,
-                    startAlpha = 0f,
-                    endAlpha = 1f,
-                    startScale = 1.1f,
-                    endScale = 1f
-                )
-            },
-            {
-                animate(
-                    child = from,
-                    alphaDelay = 66,
-                    startAlpha = 1f,
-                    endAlpha = 0f,
-                    startScale = 1f,
-                    endScale = 0.9f
-                )
-            }
-        )
+    val from = fromElementModifier(ContentAnimationElementKey)
+    val to = toElementModifier(ContentAnimationElementKey)
+    animate(spec) {
+        if (isPush) {
+            to?.value = Modifier
+                .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
+                .scale(lerp(0.8f, 1f, FastOutSlowInEasing.transform(value)))
+            from?.value = Modifier
+                .alpha(lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value))))
+                .scale(lerp(1f, 1.1f, FastOutSlowInEasing.transform(value)))
+        } else {
+            to?.value = Modifier
+                .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
+                .scale(lerp(1.1f, 1f, FastOutSlowInEasing.transform(value)))
+            from?.value = Modifier
+                .alpha(lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value))))
+                .scale(lerp(1f, 0.8f, FastOutSlowInEasing.transform(value)))
+        }
     }
     detachFrom()
 }

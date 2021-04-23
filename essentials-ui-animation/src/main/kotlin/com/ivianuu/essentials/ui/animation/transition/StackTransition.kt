@@ -58,13 +58,14 @@ suspend fun StackTransitionScope.animate(
     spec: AnimationSpec<Float>,
     block: Animatable<Float, AnimationVector1D>.() -> Unit
 ) {
-    Animatable(0f).animateTo(1f, spec, block = block)
+    Animatable(0f)
+        .animateTo(1f, spec, block = block)
 }
 
 fun defaultAnimationSpec(
     duration: Duration = 300.milliseconds,
     delay: Duration = 0.milliseconds,
-    easing: Easing = FastOutSlowInEasing
+    easing: Easing = LinearEasing
 ) = TweenSpec<Float>(
     durationMillis = duration.toLongMilliseconds().toInt(),
     delay = delay.toLongMilliseconds().toInt(),
