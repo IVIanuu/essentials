@@ -29,7 +29,7 @@ import kotlinx.coroutines.*
 fun <T> AnimatedBox(
     current: T,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeStackTransition(),
+    transition: StackTransition = FadeTroughStackTransition(),
     item: @Composable (T) -> Unit
 ) {
     AnimatedStack(
@@ -44,7 +44,7 @@ fun <T> AnimatedBox(
 fun <T> AnimatedStack(
     items: List<T>,
     modifier: Modifier = Modifier,
-    transition: StackTransition = FadeStackTransition(),
+    transition: StackTransition = LocalStackTransition.current,
     item: @Composable (T) -> Unit
 ) {
     val children = remember(items, item as? Any?) {

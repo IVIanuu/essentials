@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.util.*
 import kotlinx.coroutines.*
 import kotlin.math.*
 import kotlin.time.*
@@ -189,58 +190,10 @@ fun SharedElement(
 ) {
     Box(
         modifier = Modifier
-            .animationElement(key, SharedElementComposable to content).then(modifier)
+            .animationElement(key, SharedElementComposable to content)
+            .then(modifier)
     ) {
         content()
     }
 }
 
-fun arcLerp(
-    start: Offset,
-    end: Offset,
-    fraction: Float
-): Offset {
-    if (fraction == 0f) return start
-    if (fraction == 1f) return end
-    val delta = end - start
-    val deltaX = abs(delta.x)
-    val deltaY = abs(delta.y)
-    val distanceFromAtoB = delta.getDistance()
-    val c = Offset(end.x, start.y)
-
-    if (deltaX < 2f || deltaY < 2f)
-        return lerp(start, end, fraction)
-
-    val radius: Float
-    val beginAngle: Float
-    val endAngle: Float
-    val center: Offset
-    if (deltaX < deltaY) {
-        radius = distanceFromAtoB * distanceFromAtoB / (c - start).getDistance() / 2f
-        center = Offset(end.x + radius * (start.x - end.x).sign, end.y)
-        val sweepAngle = 2f * asin(distanceFromAtoB / (2f * radius))
-        if (start.x < end.x) {
-            beginAngle = sweepAngle * (start.y - end.y).sign
-            endAngle = 0f
-        } else {
-            beginAngle = PI.toFloat() + sweepAngle * (end.y - start.y).sign
-            endAngle = PI.toFloat()
-        }
-    } else {
-        radius = distanceFromAtoB * distanceFromAtoB / (c - end).getDistance() / 2f
-        center = Offset(start.x, start.y + (end.y - start.y).sign * radius)
-        val sweepAngle = 2f * asin(distanceFromAtoB / (2f * radius))
-        if (start.y < end.y) {
-            beginAngle = -PI.toFloat() / 2f
-            endAngle = beginAngle + sweepAngle * (end.x - start.x).sign
-        } else {
-            beginAngle = PI.toFloat() / 2f
-            endAngle = beginAngle + sweepAngle * (start.x - end.x).sign
-        }
-    }
-
-    val angle = lerp(beginAngle, endAngle, fraction)
-    val x = cos(angle) * radius
-    val y = sin(angle) * radius
-    return center + Offset(x, y)
-}

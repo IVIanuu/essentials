@@ -76,11 +76,11 @@ fun popupUi(
     ) {
         Box(
             modifier = Modifier
+                .animationElement(PopupAnimationElementKey)
                 .pointerInput(true) {
                     detectTapGestures {
                     }
                 }
-                .animationElement(PopupAnimationElementKey)
         ) {
             key.content()
         }
@@ -105,26 +105,17 @@ val PopupStackTransition: StackTransition = transition@ {
         val isLeft = (boundsInWindow.center.x < windowCoords.size.width / 2)
         val isTop = (boundsInWindow.center.y <
                 windowCoords.size.height - (windowCoords.size.height / 10))
-        animate(defaultAnimationSpec(180.milliseconds)) {
-            popupModifier.value = Modifier
-                .alpha(value)
-                .graphicsLayer {
-                    transformOrigin = TransformOrigin(
-                        if (isLeft) 0f else 1f,
-                        if (isTop) 0f else 1f
-                    )
-                    scaleX = 0.5f + (0.5f * value)
-                    scaleY = value
-                }
-        }
+        popupModifier.value = Modifier
+        FadeScaleStackTransition(
+            TransformOrigin(
+                if (isLeft) 0f else 1f,
+                if (isTop) 0f else 1f
+            )
+        )(this)
     } else {
-        animate(defaultAnimationSpec(120.milliseconds)) {
-            popupModifier.value = Modifier.alpha(1f - value)
-        }
+        FadeScaleStackTransition()(this)
     }
 }
-
-val PopupAnimationElementKey = Any()
 
 @Composable
 private fun PopupLayout(

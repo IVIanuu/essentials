@@ -37,7 +37,7 @@ fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { co
         twilightState = twilightState.collectAsState().value
     ) {
         CompositionLocalProvider(
-            LocalStackTransition provides remember { HorizontalStackTransition() },
+            LocalStackTransition provides remember { OpenCloseStackTransition() },
             content = content
         )
     }

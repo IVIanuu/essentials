@@ -28,6 +28,7 @@ import androidx.compose.ui.input.pointer.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 
 @Composable
@@ -43,6 +44,7 @@ fun DialogScaffold(
 
     Box(
         modifier = Modifier
+            .animationElement(ScrimAnimationElementKey)
             .pointerInput(true) {
                 detectTapGestures { onDismissRequest() }
             }
@@ -56,7 +58,7 @@ fun DialogScaffold(
                 modifier = Modifier
                     .pointerInput(true) { detectTapGestures {  } }
                     .wrapContentSize(align = Alignment.Center)
-                    .animationElement(DialogAnimationElementKey),
+                    .animationElement(PopupAnimationElementKey),
                 contentAlignment = Alignment.Center
             ) {
                 dialog()
@@ -64,8 +66,6 @@ fun DialogScaffold(
         }
     }
 }
-
-val DialogAnimationElementKey = Any()
 
 private val defaultDismissRequestHandler: () -> Unit
     @Composable get() {

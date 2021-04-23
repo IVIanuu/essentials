@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.layout.*
+import kotlin.time.*
 
 @Composable
 fun <T> ResourceLazyColumnFor(
@@ -116,7 +117,7 @@ fun <T> ResourceBox(
 }
 
 object ResourceBoxDefaults {
-    val transition = FadeStackTransition()
+    val transition = FadeStackTransition(defaultAnimationSpec(150.milliseconds))
     val error: @Composable (Throwable) -> Unit = {
         Text(
             modifier = Modifier
