@@ -15,7 +15,7 @@ import kotlin.time.*
 
 fun CircularRevealStackTransition(
     centerElementKey: Any,
-    spec: AnimationSpec<Float> = defaultAnimationSpec(500.milliseconds)
+    spec: AnimationSpec<Float> = defaultAnimationSpec(500.milliseconds, easing = FastOutSlowInEasing)
 ): StackTransition = {
     val clipTarget = if (isPush) toElementModifier(ContentAnimationElementKey)
     else fromElementModifier(ContentAnimationElementKey)
