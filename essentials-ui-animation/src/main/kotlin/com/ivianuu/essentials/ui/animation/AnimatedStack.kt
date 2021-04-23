@@ -23,6 +23,7 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
 @Composable
@@ -47,19 +48,31 @@ fun <T> AnimatedStack(
     transition: StackTransition = LocalStackTransition.current,
     item: @Composable (T) -> Unit
 ) {
-    val children = remember(items, item as? Any?) {
-        items
-            .map { item ->
-                AnimatedStackChild(
-                    key = item,
-                    enterTransition = transition,
-                    exitTransition = transition
-                ) {
-                    item(item)
-                }
-            }
+    val state = remember { AnimatedStackWithItemsState(item, transition) }
+    state.update(items)
+    AnimatedStack(modifier = modifier, children = state.children)
+}
+
+private class AnimatedStackWithItemsState<T>(
+    private val content: @Composable (T) -> Unit,
+    private val transition: StackTransition
+) {
+    var children by mutableStateOf(emptyList<AnimatedStackChild<T>>())
+        private set
+
+    fun update(items: List<T>) {
+        children = items
+            .map { getOrCreateChild(it) }
     }
-    AnimatedStack(modifier = modifier, children = children)
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getOrCreateChild(item: T): AnimatedStackChild<T> {
+        children.firstOrNull { it.key == item }?.let { return it }
+        return AnimatedStackChild(
+            key = item,
+            transition = transition
+        ) { content(item) }
+    }
 }
 
 @Composable
