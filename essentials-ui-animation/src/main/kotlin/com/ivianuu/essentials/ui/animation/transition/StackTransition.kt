@@ -77,7 +77,7 @@ fun StackTransitionScope.fromElement(key: Any): AnimationElement? =
 fun StackTransitionScope.toElement(key: Any): AnimationElement? =
     element(to, key)
 
-private fun StackTransitionScope.element(
+fun StackTransitionScope.element(
     child: AnimatedStackChild<*>?,
     key: Any,
 ): AnimationElement? {
@@ -99,7 +99,7 @@ fun StackTransitionScope.fromElementModifier(key: Any): MutableState<Modifier>? 
 fun StackTransitionScope.toElementModifier(key: Any): MutableState<Modifier>? =
     elementModifier(to, key)
 
-private fun StackTransitionScope.elementModifier(
+fun StackTransitionScope.elementModifier(
     child: AnimatedStackChild<*>?,
     key: Any,
 ): MutableState<Modifier>? {
