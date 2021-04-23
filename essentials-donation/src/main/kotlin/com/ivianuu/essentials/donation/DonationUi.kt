@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.donation
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -35,6 +36,7 @@ val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
             title = { Text(stringResource(R.string.es_donation_title)) },
             content = {
                 ResourceLazyColumnFor(
+                    modifier = Modifier.animateContentSize(),
                     resource = model.skus,
                     loading = {
                         CircularProgressIndicator(
