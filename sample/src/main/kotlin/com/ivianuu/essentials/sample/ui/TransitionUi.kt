@@ -77,7 +77,7 @@ fun transitionUi(
 ): KeyUi<TransitionKey> = {
     Scaffold(
         topBar = {
-            SharedElement("app bar") {
+            SharedElement(key = "app bar", isStart = false) {
                 Box(
                     modifier = Modifier.background(MaterialTheme.colors.primary)
                         .fillMaxWidth()
@@ -102,7 +102,8 @@ fun transitionUi(
             )
 
             SharedElement(
-                "fab",
+                key = "fab",
+                isStart = true,
                 modifier = Modifier
                     .align(key.fabAlignment)
                     .padding(16.dp)

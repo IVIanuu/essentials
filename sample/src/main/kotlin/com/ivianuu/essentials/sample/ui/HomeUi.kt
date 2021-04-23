@@ -101,22 +101,14 @@ private fun HomeItem(
 ) {
     ListItem(
         title = {
-            SharedElement("title ${item.title}") {
+            SharedElement(key = "title ${item.title}", isStart = true) {
                 Text(
                     item.title,
                     style = MaterialTheme.typography.subtitle1
                 )
             }
         },
-        leading = {
-            SharedElement("color ${item.title}") {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(color, CircleShape)
-                )
-            }
-        },
+        leading = { SharedCircleBadge("color ${item.title}", color, 40.dp, true) },
         trailing = {
             PopupMenuButton(
                 items = listOf(1, 2, 3)
@@ -129,6 +121,23 @@ private fun HomeItem(
         },
         onClick = onClick
     )
+}
+
+@Composable
+fun SharedCircleBadge(
+    key: Any,
+    color: Color,
+    size: Dp,
+    isStart: Boolean
+) {
+    SharedElement(key = key, isStart = isStart) {
+        val fraction = LocalSharedElementTransitionFraction.current
+        Box(
+            modifier = Modifier
+                .size(size)
+                .background(color, RoundedCornerShape((size / 2) * (1f - fraction)))
+        )
+    }
 }
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Nothing>)

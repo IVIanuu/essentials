@@ -40,17 +40,11 @@ fun sharedElementKeyUi(
                 .scrollable(rememberScrollState(), Orientation.Vertical),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SharedElement(key = "color") {
-                Box(
-                    modifier = Modifier
-                        .size(150.dp)
-                        .background(key.color, CircleShape)
-                )
-            }
+            SharedCircleBadge("color", key.color, 150.dp, false)
 
             Spacer(Modifier.height(16.dp))
 
-            SharedElement(key = "title") {
+            SharedElement(key = "title", isStart = false) {
                 Text(
                     "Shared element",
                     style = MaterialTheme.typography.subtitle1
@@ -65,7 +59,7 @@ fun sharedElementKeyUi(
                         modifier = Modifier.clickable { navigator.push(CityDetailKey(city)) }
                             .padding(8.dp)
                     ) {
-                        SharedElement("image ${city.name}") {
+                        SharedElement(key = "image ${city.name}", isStart = true) {
                             Image(
                                 modifier = Modifier
                                     .size(width = 200.dp, height = 100.dp),
@@ -74,7 +68,7 @@ fun sharedElementKeyUi(
                                 contentScale = ContentScale.FillBounds
                             )
                         }
-                        SharedElement("title ${city.name}") {
+                        SharedElement(key = "title ${city.name}", isStart = true) {
                             Text(
                                 text = city.name,
                                 style = MaterialTheme.typography.h6

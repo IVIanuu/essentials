@@ -20,7 +20,7 @@ import kotlin.time.*
 
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
-    sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(400.milliseconds, easing = FastOutSlowInEasing),
+    sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(2000.milliseconds, easing = FastOutSlowInEasing),
     contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
     waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = {
@@ -80,7 +80,10 @@ fun SharedElementStackTransition(
                                 )
                                 .graphicsLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
                         ) {
-                            sharedElementComposable()
+                            CompositionLocalProvider(
+                                LocalSharedElementTransitionFraction provides endState.animatedProps!!.fraction,
+                                content = sharedElementComposable
+                            )
                         }
                     }
                 }
@@ -116,12 +119,14 @@ fun SharedElementStackTransition(
                             y = startBounds.top + (startBounds.height - endBounds.height) / 2
                         ),
                         scaleX = startBounds.width / endBounds.width,
-                        scaleY = startBounds.height / endBounds.height
+                        scaleY = startBounds.height / endBounds.height,
+                        fraction = 0f
                     )
                     val endProps = SharedElementProps(
                         position = Offset(endBounds.left, endBounds.top),
                         scaleX = 1f,
-                        scaleY = 1f
+                        scaleY = 1f,
+                        fraction = 1f
                     )
                     start.capturedProps = startProps
                     end.capturedProps = endProps
@@ -139,7 +144,8 @@ fun SharedElementStackTransition(
                         end.animatedProps = SharedElementProps(
                             position = position,
                             scaleX = lerp(start.capturedProps!!.scaleX, end.capturedProps!!.scaleX, value),
-                            scaleY = lerp(start.capturedProps!!.scaleY, end.capturedProps!!.scaleY, value)
+                            scaleY = lerp(start.capturedProps!!.scaleY, end.capturedProps!!.scaleY, value),
+                            fraction = if (isPush) value else 1f - value
                         )
                     }
             }
@@ -149,6 +155,8 @@ fun SharedElementStackTransition(
     // show the "real" elements
     states.forEach { (_, end) -> end.modifier?.value = Modifier }
 }
+
+val LocalSharedElementTransitionFraction = compositionLocalOf<Float> { 1f }
 
 val SharedElementComposable = AnimationElementPropKey<@Composable () -> Unit>()
 
@@ -177,6 +185,7 @@ private data class SharedElementState(
 }
 
 private data class SharedElementProps(
+    val fraction: Float,
     val position: Offset,
     val scaleX: Float,
     val scaleY: Float
@@ -184,8 +193,9 @@ private data class SharedElementProps(
 
 @Composable
 fun SharedElement(
-    key: Any,
     modifier: Modifier = Modifier,
+    key: Any,
+    isStart: Boolean,
     content: @Composable () -> Unit
 ) {
     Box(
@@ -193,7 +203,9 @@ fun SharedElement(
             .animationElement(key, SharedElementComposable to content)
             .then(modifier)
     ) {
-        content()
+        CompositionLocalProvider(
+            LocalSharedElementTransitionFraction provides if (isStart) 0f else 1f,
+            content = content
+        )
     }
 }
-

@@ -31,7 +31,7 @@ fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
             )
         }
         item {
-            SharedElement("image") {
+            SharedElement(key = "image", isStart = false) {
                 Image(
                     modifier = Modifier.fillMaxWidth()
                         .height(300.dp),
