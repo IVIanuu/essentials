@@ -69,22 +69,6 @@ fun homeUi(
                     )
                 }
             )
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            ContainerTransformElement(
-                key = "fab",
-                color = MaterialTheme.colors.secondary,
-                elevation = 4.dp
-            ) {
-                Icon(
-                    modifier = Modifier.size(56.dp)
-                        .clickable { navigator.push(ContainerTransformKey("fab")) }
-                        .padding(16.dp),
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            }
         }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {

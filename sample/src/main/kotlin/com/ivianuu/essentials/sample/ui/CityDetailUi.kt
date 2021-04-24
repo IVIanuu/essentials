@@ -47,7 +47,7 @@ fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
                     .background(MaterialTheme.colors.surface)
             ) {
                 Text(
-                    text = LOREM_IMPSUM_CHAIN,
+                    text = Strings.LoremIpsumChain,
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.h6
                 )

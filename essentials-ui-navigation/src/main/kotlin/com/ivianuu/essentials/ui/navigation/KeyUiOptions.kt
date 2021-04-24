@@ -19,14 +19,14 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.ui.animation.transition.*
 
 data class KeyUiOptions(
-    val opaque: Boolean = false,
     val enterTransition: StackTransition? = null,
     val exitTransition: StackTransition? = null,
+    val opaque: Boolean = false,
 ) {
     constructor(
-        opaque: Boolean = false,
         transition: StackTransition,
-    ) : this(opaque, transition, transition)
+        opaque: Boolean = false,
+    ) : this(transition, transition, opaque)
 }
 
 typealias KeyUiOptionsFactory<K> = (K) -> KeyUiOptions
