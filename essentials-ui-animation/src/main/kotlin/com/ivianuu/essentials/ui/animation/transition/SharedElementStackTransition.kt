@@ -52,11 +52,6 @@ fun SharedElementStackTransition(
         }
     }
 
-    // hide the "real to" elements
-    states.forEach { (_, end) ->
-        end.modifier?.value = Modifier.alpha(0f)
-    }
-
     // install overlay
     overlay {
         states
@@ -88,10 +83,6 @@ fun SharedElementStackTransition(
                     }
                 }
             }
-    }
-    // hide the "real from" elements
-    states.forEach { (start, _) ->
-        start.modifier?.value = Modifier.alpha(0f)
     }
     // show the content
     toContentModifier?.value = Modifier
@@ -136,6 +127,8 @@ fun SharedElementStackTransition(
                 states
                     .filter { it.first.capturedProps != null && it.second.capturedProps != null }
                     .forEach { (start, end) ->
+                        end.modifier?.value = Modifier.alpha(0f)
+                        start.modifier?.value = Modifier.alpha(0f)
                         val position = arcLerp(
                             if (isPush) start.capturedProps!!.position else end.capturedProps!!.position,
                             if (isPush) end.capturedProps!!.position else start.capturedProps!!.position,
@@ -151,9 +144,6 @@ fun SharedElementStackTransition(
             }
         }
     )
-
-    // show the "real" elements
-    states.forEach { (_, end) -> end.modifier?.value = Modifier }
 }
 
 val LocalSharedElementTransitionFraction = compositionLocalOf<Float> { 1f }

@@ -60,7 +60,6 @@ fun ContainerTransformStackTransition(
     val fromProps = fromElement(if (isPush) closedKey else openedKey)!![ContainerTransformPropsKey]!!
     val toProps = toElement(if (isPush) openedKey else closedKey)!![ContainerTransformPropsKey]!!
 
-    val laidOut = CompletableDeferred<Unit>()
     overlay {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -68,9 +67,6 @@ fun ContainerTransformStackTransition(
         ) {
             Surface(
                 modifier = Modifier
-                    .onGloballyPositioned {
-                        launch { laidOut.complete(Unit) }
-                    }
                     .composed {
                         with(LocalDensity.current) {
                             size(currentWidth.toDp(), currentHeight.toDp())
@@ -94,10 +90,9 @@ fun ContainerTransformStackTransition(
             }
         }
     }
-    laidOut.await()
-    fromModifier.value = Modifier.alpha(0f)
 
     animate(spec) { value ->
+        fromModifier.value = Modifier.alpha(0f)
         currentScrimAlpha = if (isPush) {
             interval(0f, 0.3f, value)
         } else {
