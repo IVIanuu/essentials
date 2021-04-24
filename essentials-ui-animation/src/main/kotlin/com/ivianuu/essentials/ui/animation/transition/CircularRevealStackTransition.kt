@@ -46,7 +46,7 @@ fun CircularRevealStackTransition(
     }
 
     val path = Path()
-    animate(spec) {
+    animate(spec) { value ->
         clipTarget?.value = Modifier
             .drawWithContent {
                 clipPath(

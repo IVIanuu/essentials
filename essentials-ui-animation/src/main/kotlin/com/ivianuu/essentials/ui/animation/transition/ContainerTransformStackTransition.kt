@@ -60,7 +60,7 @@ fun ContainerTransformStackTransition(closedKey: Any, openedKey: Any): StackTran
     overlay {
         Box(
             modifier = Modifier.fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.6f * currentScrimAlpha))
+                .background(Color.Black.copy(alpha = 0.54f * currentScrimAlpha))
         ) {
             Surface(
                 modifier = Modifier
@@ -93,7 +93,7 @@ fun ContainerTransformStackTransition(closedKey: Any, openedKey: Any): StackTran
     laidOut.await()
     fromModifier.value = Modifier.alpha(0f)
 
-    animate(defaultAnimationSpec(if (isPush) 300.milliseconds else 250.milliseconds)) {
+    animate(defaultAnimationSpec(if (isPush) 300.milliseconds else 250.milliseconds)) { value ->
         currentScrimAlpha = if (isPush) {
             interval(0f, 0.3f, value)
         } else {

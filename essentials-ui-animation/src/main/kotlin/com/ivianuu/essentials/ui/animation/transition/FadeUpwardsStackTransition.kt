@@ -19,15 +19,29 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
-fun VerticalFadeStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
-) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
-    fromModifier?.value = if (isPush) Modifier else Modifier.alpha(1f - value)
-        .fractionalTranslation(translationYFraction = 0.3f * value)
-    toModifier?.value =  if (isPush) Modifier.alpha(value)
-        .fractionalTranslation(translationYFraction = 0.3f * (1f - value))
-    else Modifier
+fun FadeUpwardsStackTransition(): StackTransition = {
+    val target = if (isPush) toElementModifier(ContentAnimationElementKey)
+    else fromElementModifier(ContentAnimationElementKey)
+    attachTo()
+    animate { value ->
+        target?.value = Modifier
+            .fractionalTranslation(
+                yFraction = lerp(
+                    if (isPush) 0.25f else 0f,
+                    if (isPush) 0f else 0.25f,
+                    FastOutSlowInEasing.transform(value)
+                )
+            )
+            .alpha(
+                lerp(
+                    if (isPush) 0f else 1f,
+                    if (isPush) 1f else 0f,
+                    FastOutLinearInEasing.transform(value)
+                )
+            )
+    }
 }

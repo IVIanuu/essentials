@@ -67,9 +67,9 @@ val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
             contentTransition = {
                 val fromContentModifier = fromElementModifier(ContentAnimationElementKey)!!
                 val card = toElementModifier("card")!!
-                animate(spec) {
+                animate(spec) { value ->
                     fromContentModifier.value = Modifier.fractionalTranslation(-value)
-                    card.value = Modifier.fractionalTranslation(translationYFraction = 1f - value)
+                    card.value = Modifier.fractionalTranslation(yFraction = 1f - value)
                 }
             }
         ),
@@ -79,11 +79,11 @@ val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
             contentTransition = {
                 val appBarModifier = fromElementModifier("app bar")!!
                 val textModifier = fromElementModifier("card")!!
-                animate(spec) {
+                animate(spec) { value ->
                     appBarModifier.value = Modifier.alpha(1f - value)
                     textModifier.value = Modifier.fractionalTranslation(
-                        translationYFraction = value,
-                        translationXFraction = value
+                        yFraction = value,
+                        xFraction = value
                     ).rotate(-180f * value)
                 }
             }

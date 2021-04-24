@@ -29,7 +29,7 @@ fun ContentAnimationStackTransition(
     attachTo()
     val fromModifier = fromElementModifier(ContentAnimationElementKey)
     val toModifier = toElementModifier(ContentAnimationElementKey)
-    animate(spec) { block(fromModifier, toModifier, value) }
+    animate(spec) { block(fromModifier, toModifier, it) }
 }
 
 suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
@@ -54,11 +54,12 @@ fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
 }
 
 suspend fun StackTransitionScope.animate(
-    spec: AnimationSpec<Float>,
-    block: Animatable<Float, AnimationVector1D>.() -> Unit
+    spec: AnimationSpec<Float> = defaultAnimationSpec(),
+    block: (Float) -> Unit
 ) {
-    Animatable(0f)
-        .animateTo(1f, spec, block = block)
+    Animatable(0f).animateTo(1f, spec) {
+        block(value)
+    }
 }
 
 fun defaultAnimationSpec(

@@ -132,7 +132,7 @@ fun SharedElementStackTransition(
                     end.capturedProps = endProps
                 }
 
-            animate(sharedElementAnimationSpec) {
+            animate(sharedElementAnimationSpec) { value ->
                 states
                     .filter { it.first.capturedProps != null && it.second.capturedProps != null }
                     .forEach { (start, end) ->

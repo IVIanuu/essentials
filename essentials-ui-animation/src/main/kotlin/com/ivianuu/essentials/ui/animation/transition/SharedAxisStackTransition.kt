@@ -16,7 +16,7 @@ fun HorizontalSharedAxisStackTransition(
     attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
+    animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier.graphicsLayer {
                 alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
@@ -45,7 +45,7 @@ fun VerticalSharedAxisStackTransition(
     attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
+    animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier.graphicsLayer {
                 alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
@@ -74,7 +74,7 @@ fun ScaledSharedAxisStackTransition(
     attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
-    animate(spec) {
+    animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier
                 .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))

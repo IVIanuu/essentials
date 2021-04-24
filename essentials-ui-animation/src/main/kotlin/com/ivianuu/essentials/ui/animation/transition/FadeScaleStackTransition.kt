@@ -22,7 +22,7 @@ fun FadeScaleStackTransition(
     if (isPush) {
         val scrim = toElementModifier(ScrimAnimationElementKey)
         val popup = toElementModifier(PopupAnimationElementKey)
-        animate(enterSpec) {
+        animate(enterSpec) { value ->
             scrim?.value = Modifier.alpha(value)
             popup?.value = Modifier
                 .graphicsLayer {
@@ -35,7 +35,7 @@ fun FadeScaleStackTransition(
     } else {
         val scrim = fromElementModifier(ScrimAnimationElementKey)
         val popup = fromElementModifier(PopupAnimationElementKey)
-        animate(exitSpec) {
+        animate(exitSpec) { value ->
             scrim?.value = Modifier.alpha(1f - value)
             popup?.value = Modifier.alpha(1f - value)
         }
