@@ -3,6 +3,7 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -51,6 +52,7 @@ fun ContainerTransformStackTransition(
     var currentWidth by mutableStateOf(startWidth)
     var currentHeight by mutableStateOf(startHeight)
     var currentColor by mutableStateOf(Color.Transparent)
+    var currentCornerSize by mutableStateOf(0.dp)
     var currentBorderWidth by mutableStateOf(0.dp)
     var currentBorderColor by mutableStateOf(Color.Transparent)
     var currentElevation by mutableStateOf(0.dp)
@@ -73,6 +75,7 @@ fun ContainerTransformStackTransition(
                                 .offset(currentPosition.x.toDp(), currentPosition.y.toDp())
                         }
                     },
+                shape = RoundedCornerShape(currentCornerSize),
                 color = currentColor,
                 border = if (currentBorderWidth > 0.dp) BorderStroke(currentBorderWidth, currentBorderColor) else null,
                 elevation = currentElevation
@@ -102,6 +105,7 @@ fun ContainerTransformStackTransition(
         currentWidth = lerp(startWidth, endWidth, FastOutSlowInEasing.transform(value))
         currentHeight = lerp(startHeight, endHeight, FastOutSlowInEasing.transform(value))
         currentColor = lerp(fromProps.color, toProps.color, value)
+        currentCornerSize = lerp(fromProps.cornerSize, toProps.cornerSize, value)
         currentBorderWidth = lerp(fromProps.borderWidth, toProps.borderWidth, value)
         currentBorderColor = lerp(fromProps.borderColor, toProps.borderColor, value)
         currentElevation = lerp(fromProps.elevation, toProps.elevation, value)
@@ -135,6 +139,7 @@ class ContainerTransformProps(
     compositionContext: CompositionContext,
     content: @Composable () -> Unit,
     color: Color,
+    cornerSize: Dp,
     borderWidth: Dp,
     borderColor: Color,
     elevation: Dp
@@ -142,6 +147,7 @@ class ContainerTransformProps(
     var compositionContext by mutableStateOf(compositionContext)
     var content by mutableStateOf(content)
     var color by mutableStateOf(color)
+    var cornerSize by mutableStateOf(cornerSize)
     var borderWidth by mutableStateOf(borderWidth)
     var borderColor by mutableStateOf(borderColor)
     var elevation by mutableStateOf(elevation)
@@ -152,15 +158,20 @@ fun ContainerTransformElement(
     key: Any,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.surface,
+    cornerSize: Dp = 0.dp,
     borderWidth: Dp = 0.dp,
     borderColor: Color = Color.Transparent,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit = {}
 ) {
     val compositionContext = rememberCompositionContext()
-    val props = remember { ContainerTransformProps(compositionContext, content, color, borderWidth, borderColor, elevation) }
+    val props = remember {
+        ContainerTransformProps(compositionContext, content, color,
+            cornerSize, borderWidth, borderColor, elevation)
+    }
     props.compositionContext = compositionContext
     props.content = content
+    props.cornerSize = cornerSize
     props.color = color
     props.borderWidth = borderWidth
     props.borderColor = borderColor
@@ -170,6 +181,7 @@ fun ContainerTransformElement(
             .animationElement(key, ContainerTransformPropsKey to props)
             .then(modifier),
         color = color,
+        shape = RoundedCornerShape(cornerSize),
         border = if (borderWidth > 0.dp) BorderStroke(borderWidth, borderColor) else null,
         elevation = elevation
     ) {
