@@ -14,9 +14,11 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
 @Given
-val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
+val containerTransformHomeItem = HomeItem("Container transform") {
+    ContainerTransformKey("container Container transform")
+}
 
-object ContainerTransformKey : Key<Nothing>
+data class ContainerTransformKey(val closedKey: Any) : Key<Nothing>
 
 @Given
 val containerTransformUi: KeyUi<ContainerTransformKey> = {
@@ -33,8 +35,5 @@ val containerTransformUi: KeyUi<ContainerTransformKey> = {
 
 @Given
 val containerTransformUiOptions: KeyUiOptionsFactory<ContainerTransformKey> = {
-    KeyUiOptions(transition = ContainerTransformStackTransition(
-        "container Container transform",
-        "opened"
-    ))
+    KeyUiOptions(transition = ContainerTransformStackTransition(it.closedKey, "opened"))
 }

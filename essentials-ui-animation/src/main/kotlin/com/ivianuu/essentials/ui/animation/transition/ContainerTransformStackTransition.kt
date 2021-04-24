@@ -156,7 +156,7 @@ fun ContainerTransformElement(
     borderWidth: Dp = 0.dp,
     borderColor: Color = Color.Transparent,
     elevation: Dp = 0.dp,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = {}
 ) {
     val compositionContext = rememberCompositionContext()
     val props = remember { ContainerTransformProps(compositionContext, content, color, borderWidth, borderColor, elevation) }

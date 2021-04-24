@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
@@ -67,6 +69,22 @@ fun homeUi(
                     )
                 }
             )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            ContainerTransformElement(
+                key = "fab",
+                color = MaterialTheme.colors.secondary,
+                elevation = 4.dp
+            ) {
+                Icon(
+                    modifier = Modifier.size(56.dp)
+                        .clickable { navigator.push(ContainerTransformKey("fab")) }
+                        .padding(16.dp),
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
         }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
