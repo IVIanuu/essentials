@@ -114,7 +114,7 @@ fun InsetsProvider(
 typealias WindowInsetsProvider = UiDecorator
 
 @Given
-fun windowInsetsProvider(): WindowInsetsProvider = { content ->
+val windowInsetsProvider: WindowInsetsProvider = { content ->
     val ownerView = LocalView.current
     val density = LocalDensity.current
     var insets by remember { mutableStateOf(Insets()) }

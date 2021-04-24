@@ -41,7 +41,7 @@ fun bluetoothAction(
 )
 
 @Given
-fun bluetoothActionExecutor(): ActionExecutor<BluetoothActionId> = {
+val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
     BluetoothAdapter.getDefaultAdapter()?.let {
         if (it.isEnabled) {
             it.disable()

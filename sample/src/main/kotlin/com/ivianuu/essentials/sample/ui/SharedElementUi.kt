@@ -92,7 +92,7 @@ val cities = listOf(
 )
 
 @Given
-fun sharedElementsNavigationOptionFactory(): KeyUiOptionsFactory<SharedElementKey> = {
+val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
     KeyUiOptions(
         transition = SharedElementStackTransition(
             "title Shared element" to "title",
