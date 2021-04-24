@@ -63,6 +63,19 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
             LazyColumn(state = listState) {
                 item { BigDetailsCard(navigator) }
                 item { SmallDetailsCard(navigator) }
+                item {
+                    Row {
+                        DetailsGridCard(Modifier.weight(0.5f), "grid item 0_0", navigator)
+                        DetailsGridCard(Modifier.weight(0.5f), "grid item 0_1", navigator)
+                    }
+                }
+                item {
+                    Row {
+                        DetailsGridCard(Modifier.weight(0.33f), "grid item 1_0", navigator)
+                        DetailsGridCard(Modifier.weight(0.33f),"grid item 1_1", navigator)
+                        DetailsGridCard(Modifier.weight(0.33f),"grid item 1_2", navigator)
+                    }
+                }
                 items(10) { DetailsListItem(it, navigator) }
             }
         }
@@ -146,6 +159,59 @@ private fun SmallDetailsCard(navigator: Navigator) {
                 )
             }
             Column(modifier = Modifier.padding(16.dp)) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+                    Text(
+                        text = Strings.Title,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(
+                        text = Strings.LoremIpsum,
+                        maxLines = 2,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailsGridCard(
+    modifier: Modifier = Modifier,
+    key: Any,
+    navigator: Navigator
+) {
+    ContainerTransformElement(
+        key = key,
+        isOpened = false,
+        modifier = modifier
+            .padding(8.dp),
+        cornerSize = 4.dp,
+        elevation = 2.dp
+    ) {
+        Column(
+            modifier = Modifier.clickable { navigator.push(ContainerTransformDetailsKey(key)) }
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth()
+                    .background(Color.Black.copy(alpha = 0.38f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    modifier = Modifier.padding(16.dp),
+                    painter = painterResource(R.drawable.placeholder_image),
+                    contentDescription = null
+                )
+            }
+
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
                     Text(
                         text = Strings.Title,
