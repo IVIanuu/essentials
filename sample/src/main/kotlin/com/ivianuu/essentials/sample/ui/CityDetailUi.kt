@@ -47,13 +47,7 @@ fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
                     .background(MaterialTheme.colors.surface)
             ) {
                 Text(
-                    "• This is a city.\n" +
-                            "• There's some cool stuff about it.\n" +
-                            "• But really this is just a demo, not a city guide app.\n" +
-                            "• This demo is meant to show some nice transitions.\n" +
-                            "• You should have seen some sweet shared element transitions using the ImageView and the TextView in the \"header\" above.\n" +
-                            "• This transition utilized some callbacks to ensure all the necessary rows in the RecyclerView were laid about before the transition occurred.\n" +
-                            "• Just adding some more lines so it scrolls now...\n\n\n\n\n\n\nThe end.",
+                    text = LOREM_IMPSUM_CHAIN,
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.h6
                 )

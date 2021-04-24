@@ -99,28 +99,30 @@ private fun HomeItem(
     onClick: () -> Unit,
     item: HomeItem,
 ) {
-    ListItem(
-        title = {
-            SharedElement(key = "title ${item.title}", isStart = true) {
-                Text(
-                    item.title,
-                    style = MaterialTheme.typography.subtitle1
-                )
-            }
-        },
-        leading = { SharedCircleBadge("color ${item.title}", color, 40.dp, true) },
-        trailing = {
-            PopupMenuButton(
-                items = listOf(1, 2, 3)
-                    .map { index ->
-                        PopupMenu.Item(onSelected = {}) {
-                            Text(index.toString())
+    ContainerTransformElement(key = "container ${item.title}") {
+        ListItem(
+            title = {
+                SharedElement(key = "title ${item.title}", isStart = true) {
+                    Text(
+                        item.title,
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                }
+            },
+            leading = { SharedCircleBadge("color ${item.title}", color, 40.dp, true) },
+            trailing = {
+                PopupMenuButton(
+                    items = listOf(1, 2, 3)
+                        .map { index ->
+                            PopupMenu.Item(onSelected = {}) {
+                                Text(index.toString())
+                            }
                         }
-                    }
-            )
-        },
-        onClick = onClick
-    )
+                )
+            },
+            onClick = onClick
+        )
+    }
 }
 
 @Composable

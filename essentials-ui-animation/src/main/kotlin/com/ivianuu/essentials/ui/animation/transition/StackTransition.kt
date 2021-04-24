@@ -30,7 +30,6 @@ fun ContentAnimationStackTransition(
     val fromModifier = fromElementModifier(ContentAnimationElementKey)
     val toModifier = toElementModifier(ContentAnimationElementKey)
     animate(spec) { block(fromModifier, toModifier, value) }
-    detachFrom()
 }
 
 suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
@@ -120,9 +119,6 @@ operator fun StackTransition.plus(other: StackTransition): StackTransition = {
     par({ this@plus() }, { other() })
 }
 
-val NoOpStackTransition: StackTransition = {
-    attachTo()
-    detachFrom()
-}
+val NoOpStackTransition: StackTransition = { }
 
 val LocalStackTransition = staticCompositionLocalOf { NoOpStackTransition }

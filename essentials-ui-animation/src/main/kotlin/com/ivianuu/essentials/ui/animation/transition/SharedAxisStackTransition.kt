@@ -37,7 +37,6 @@ fun HorizontalSharedAxisStackTransition(
             }
         }
     }
-    detachFrom()
 }
 
 fun VerticalSharedAxisStackTransition(
@@ -67,7 +66,6 @@ fun VerticalSharedAxisStackTransition(
             }
         }
     }
-    detachFrom()
 }
 
 fun ScaledSharedAxisStackTransition(
@@ -93,5 +91,4 @@ fun ScaledSharedAxisStackTransition(
                 .scale(lerp(1f, 0.8f, FastOutSlowInEasing.transform(value)))
         }
     }
-    detachFrom()
 }

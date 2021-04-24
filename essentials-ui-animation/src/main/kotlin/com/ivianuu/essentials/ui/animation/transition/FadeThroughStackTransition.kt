@@ -27,5 +27,4 @@ fun FadeThroughStackTransition(
         }
         from?.value = Modifier.alpha(lerp(1f, 0f, FastOutLinearInEasing.transform(value)))
     }
-    detachFrom()
 }

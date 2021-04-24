@@ -40,5 +40,4 @@ fun FadeScaleStackTransition(
             popup?.value = Modifier.alpha(1f - value)
         }
     }
-    detachFrom()
 }
