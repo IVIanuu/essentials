@@ -22,6 +22,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.focus.*
+import androidx.compose.ui.text.*
+import androidx.compose.ui.text.input.*
 
 @Composable
 fun TextInputDialog(
@@ -41,10 +43,17 @@ fun TextInputDialog(
         content = {
             Box {
                 val focusRequester = remember { FocusRequester() }
+                var textFieldValue by remember {
+                    mutableStateOf(TextFieldValue(value, TextRange(value.length)))
+                }
+                textFieldValue = textFieldValue.copy(value)
                 TextField(
                     modifier = Modifier.focusRequester(focusRequester),
-                    value = value,
-                    onValueChange = onValueChange,
+                    value = textFieldValue,
+                    onValueChange = {
+                        textFieldValue = it
+                        onValueChange(it.text)
+                    },
                     keyboardOptions = keyboardOptions,
                     textStyle = MaterialTheme.typography.subtitle1,
                     label = label ?: {}
