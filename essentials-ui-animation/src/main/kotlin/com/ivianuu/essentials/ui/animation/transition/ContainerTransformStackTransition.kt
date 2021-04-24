@@ -21,7 +21,11 @@ import com.ivianuu.essentials.ui.core.*
 import kotlinx.coroutines.*
 import kotlin.time.*
 
-fun ContainerTransformStackTransition(closedKey: Any, openedKey: Any): StackTransition = {
+fun ContainerTransformStackTransition(
+    closedKey: Any,
+    openedKey: Any,
+    spec: AnimationSpec<Float> = defaultAnimationSpec()
+): StackTransition = {
     val fromModifier = fromElementModifier(if (isPush) closedKey else openedKey)!!
     val toModifier = toElementModifier(if (isPush) openedKey else closedKey)!!
 
@@ -93,7 +97,7 @@ fun ContainerTransformStackTransition(closedKey: Any, openedKey: Any): StackTran
     laidOut.await()
     fromModifier.value = Modifier.alpha(0f)
 
-    animate(defaultAnimationSpec(if (isPush) 300.milliseconds else 250.milliseconds)) { value ->
+    animate(spec) { value ->
         currentScrimAlpha = if (isPush) {
             interval(0f, 0.3f, value)
         } else {
