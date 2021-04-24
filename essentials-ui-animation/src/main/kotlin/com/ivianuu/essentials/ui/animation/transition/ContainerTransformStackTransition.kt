@@ -12,14 +12,12 @@ import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 import com.ivianuu.essentials.ui.core.*
-import kotlinx.coroutines.*
 import kotlin.time.*
 
 fun ContainerTransformStackTransition(
@@ -47,6 +45,7 @@ fun ContainerTransformStackTransition(
     val endWidth = toBounds.width
     val endHeight = toBounds.height
 
+    var currentFraction by mutableStateOf(0f)
     var currentScrimAlpha by mutableStateOf(0f)
     var currentPosition by mutableStateOf(startPosition)
     var currentWidth by mutableStateOf(startWidth)
@@ -82,12 +81,20 @@ fun ContainerTransformStackTransition(
             ) {
                 withCompositionContext(fromProps.compositionContext) {
                     FittedBox(fromBounds.width.toInt(), fromBounds.height.toInt(), currentFromAlpha)  {
-                        fromProps.content()
+                        CompositionLocalProvider(
+                            LocalContainerTransformTransitionFraction provides
+                                    if (isPush) currentFraction else 1f - currentFraction,
+                            content = fromProps.content
+                        )
                     }
                 }
                 withCompositionContext(toProps.compositionContext) {
                     FittedBox(toBounds.width.toInt(), toBounds.height.toInt(), currentToAlpha)  {
-                        toProps.content()
+                        CompositionLocalProvider(
+                            LocalContainerTransformTransitionFraction provides
+                                    if (isPush) 1f - currentFraction else currentFraction,
+                            content = toProps.content
+                        )
                     }
                 }
             }
@@ -153,9 +160,12 @@ class ContainerTransformProps(
     var elevation by mutableStateOf(elevation)
 }
 
+val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
+
 @Composable
 fun ContainerTransformElement(
     key: Any,
+    isOpened: Boolean,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.surface,
     cornerSize: Dp = 0.dp,
@@ -185,6 +195,9 @@ fun ContainerTransformElement(
         border = if (borderWidth > 0.dp) BorderStroke(borderWidth, borderColor) else null,
         elevation = elevation
     ) {
-        content()
+        CompositionLocalProvider(
+            LocalContainerTransformTransitionFraction provides if (isOpened) 1f else 0f,
+            content = content
+        )
     }
 }

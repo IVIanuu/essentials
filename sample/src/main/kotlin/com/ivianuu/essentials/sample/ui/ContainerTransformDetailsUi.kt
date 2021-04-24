@@ -11,13 +11,11 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
-import com.ivianuu.injekt.scope.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
@@ -26,7 +24,7 @@ val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
     var listInfo by rememberScopedValue(key = "list_state") {
         mutableStateOf(0 to 0)
     }
-    ContainerTransformElement("opened", elevation = 8.dp) {
+    ContainerTransformElement(key = "opened", elevation = 8.dp, isOpened = false) {
         Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
             val listState = rememberLazyListState(listInfo.first, listInfo.second)
             listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset

@@ -146,7 +146,7 @@ fun SharedElementStackTransition(
     )
 }
 
-val LocalSharedElementTransitionFraction = compositionLocalOf<Float> { 1f }
+val LocalSharedElementTransitionFraction = compositionLocalOf { 0f }
 
 val SharedElementComposable = AnimationElementPropKey<@Composable () -> Unit>()
 

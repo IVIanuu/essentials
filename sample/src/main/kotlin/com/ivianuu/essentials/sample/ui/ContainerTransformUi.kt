@@ -8,6 +8,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -18,6 +19,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.compose.*
 
 @Given
 val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
@@ -26,26 +28,39 @@ object ContainerTransformKey : Key<Nothing>
 
 @Given
 fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformKey> = {
-    ContainerTransformElement("opened", elevation = 8.dp) {
+    var listInfo by rememberScopedValue(key = "list_state") {
+        mutableStateOf(0 to 0)
+    }
+    ContainerTransformElement(key = "opened", elevation = 8.dp, isOpened = true) {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Container transform") }) },
             floatingActionButton = {
                 ContainerTransformElement(
                     key = "fab",
+                    isOpened = false,
                     color = MaterialTheme.colors.secondary,
                     cornerSize = 28.dp,
                     elevation = 6.dp
                 ) {
-                    FloatingActionButton(
-                        onClick = { navigator.push(ContainerTransformDetailsKey("fab")) },
-                        elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp)
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clickable {
+                                navigator.push(ContainerTransformDetailsKey("fab"))
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Default.Add, null)
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null
+                        )
                     }
                 }
             }
         ) {
-            LazyColumn {
+            val listState = rememberLazyListState(listInfo.first, listInfo.second)
+            listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+            LazyColumn(state = listState) {
                 item { BigDetailsCard(navigator) }
                 item { SmallDetailsCard(navigator) }
                 items(10) { DetailsListItem(it, navigator) }
@@ -58,6 +73,7 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
 private fun BigDetailsCard(navigator: Navigator) {
     ContainerTransformElement(
         key = "big card",
+        isOpened = false,
         modifier = Modifier.padding(8.dp),
         cornerSize = 4.dp,
         elevation = 2.dp
@@ -106,6 +122,7 @@ private fun BigDetailsCard(navigator: Navigator) {
 private fun SmallDetailsCard(navigator: Navigator) {
     ContainerTransformElement(
         key = "small card",
+        isOpened = false,
         modifier = Modifier.padding(8.dp),
         cornerSize = 4.dp,
         elevation = 2.dp
@@ -152,7 +169,10 @@ private fun DetailsListItem(
     index: Int,
     navigator: Navigator
 ) {
-    ContainerTransformElement("list item $index") {
+    ContainerTransformElement(
+        key = "list item $index",
+        isOpened = false
+    ) {
         ListItem(
             leading = {
                 Image(

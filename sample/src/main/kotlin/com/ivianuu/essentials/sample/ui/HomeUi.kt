@@ -101,7 +101,7 @@ private fun HomeItem(
     onClick: () -> Unit,
     item: HomeItem,
 ) {
-    ContainerTransformElement(key = "container ${item.title}") {
+    ContainerTransformElement(key = "container ${item.title}", isOpened = false) {
         ListItem(
             title = {
                 SharedElement(key = "title ${item.title}", isStart = true) {
