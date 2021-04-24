@@ -22,12 +22,13 @@ import androidx.compose.ui.draw.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
+import kotlin.time.*
 
-fun FadeUpwardsStackTransition(): StackTransition = {
+fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
     val target = if (isPush) toElementModifier(ContentAnimationElementKey)
     else fromElementModifier(ContentAnimationElementKey)
     attachTo()
-    animate { value ->
+    animate(spec) { value ->
         target?.value = Modifier
             .fractionalTranslation(
                 yFraction = lerp(
