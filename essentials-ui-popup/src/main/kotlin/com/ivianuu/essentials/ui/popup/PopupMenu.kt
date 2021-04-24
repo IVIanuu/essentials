@@ -39,7 +39,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = element<PopupMenuComponent>()
+            val dependencies = rememberElement<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(

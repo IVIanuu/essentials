@@ -58,7 +58,7 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indication: Indication = LocalIndication.current,
 ) = composed {
-    val dependencies = element<PopupMenuComponent>()
+    val dependencies = rememberElement<PopupMenuComponent>()
 
     var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

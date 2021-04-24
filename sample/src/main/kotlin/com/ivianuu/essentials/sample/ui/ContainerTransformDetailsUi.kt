@@ -23,7 +23,7 @@ data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
 @Given
 val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
-    var listInfo by rememberScoped(key = "list_state") {
+    var listInfo by rememberScopedValue(key = "list_state") {
         mutableStateOf(0 to 0)
     }
     ContainerTransformElement("opened", elevation = 8.dp) {

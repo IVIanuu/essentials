@@ -31,7 +31,7 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
 
 @Given
 val navigationStateContent: NavigationStateContent = { state, modifier ->
-    val keyUiGivenScopeFactory = element<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
+    val keyUiGivenScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
     val contentState = remember {
         NavigationContentState(
             backStack = state.backStack.cast(),

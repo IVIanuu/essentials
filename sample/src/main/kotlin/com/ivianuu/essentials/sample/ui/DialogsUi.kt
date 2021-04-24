@@ -246,7 +246,7 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val component = element<DialogLauncherComponent>()
+    val component = rememberElement<DialogLauncherComponent>()
     TextButton(
         enabled = enabled,
         onClick = {
@@ -267,7 +267,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-    val component = element<DialogLauncherComponent>()
+    val component = rememberElement<DialogLauncherComponent>()
     Button(
         onClick = {
             component.navigator.push(

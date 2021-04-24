@@ -129,8 +129,8 @@ private val DefaultAppBarElevation = 4.dp
 
 @Composable
 private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-    val component = element<AutoTopAppBarComponent>()
-    val canGoBack = rememberScoped(key = "can_go_back") {
+    val component = rememberElement<AutoTopAppBarComponent>()
+    val canGoBack = rememberScopedValue(key = "can_go_back") {
         component.navigator.state.value.backStack.indexOf(component.key) > 0
     }
     return when {
