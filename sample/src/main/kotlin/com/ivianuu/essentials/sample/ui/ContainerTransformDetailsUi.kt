@@ -16,14 +16,20 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.scope.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
 @Given
 val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
+    var listInfo by LocalKeyUiGivenScope.current.getOrCreateScopedValue {
+        mutableStateOf(0 to 0)
+    }
     ContainerTransformElement("opened", elevation = 8.dp) {
         Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
-            LazyColumn {
+            val listState = rememberLazyListState(listInfo.first, listInfo.second)
+            listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+            LazyColumn(state = listState) {
                 item {
                     Box(
                         modifier = Modifier.fillMaxWidth()
@@ -50,9 +56,7 @@ val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
                     )
                 }
                 item {
-                    CompositionLocalProvider(
-                        LocalContentAlpha provides ContentAlpha.medium
-                    ) {
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                         Text(
                             modifier = Modifier.padding(
                                 start = 16.dp,
