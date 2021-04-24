@@ -24,6 +24,7 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -36,7 +37,7 @@ enum class ScreenState(val isOn: Boolean) {
 fun screenState(
     @Given broadcastsFactory: BroadcastsFactory,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
     @Given screenStateProvider: CurrentScreenStateProvider
 ): @Scoped<AppGivenScope> Flow<ScreenState> = merge(
     broadcastsFactory(Intent.ACTION_SCREEN_OFF),

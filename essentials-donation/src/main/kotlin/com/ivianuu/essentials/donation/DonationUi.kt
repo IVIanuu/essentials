@@ -21,6 +21,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -100,7 +101,7 @@ fun donationModel(
     @Given key: DonationKey,
     @Given navigator: Navigator,
     @Given purchase: PurchaseUseCase,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<DonationModel> = scope.state(DonationModel()) {

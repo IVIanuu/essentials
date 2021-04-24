@@ -56,6 +56,7 @@ import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
@@ -172,7 +173,7 @@ fun notificationsModel(
     @Given openNotification: OpenNotificationUseCase,
     @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
     @Given permissionRequester: PermissionRequester,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
     notifications
         .map { notifications ->

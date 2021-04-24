@@ -20,6 +20,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -42,7 +43,7 @@ class NavigatorImpl(
     @Given private val intentKeyHandler: IntentKeyHandler,
     @Given private val logger: Logger,
     @Given rootKey: RootKey? = null,
-    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
+    @Given private val scope: GivenCoroutineScope<AppGivenScope>
 ) : Navigator {
     private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
     override val state: StateFlow<NavigationState>

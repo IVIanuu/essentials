@@ -34,6 +34,7 @@ dependencies {
     api(Deps.AndroidX.Compose.core)
     api(Deps.AndroidX.Compose.material)
     api(Deps.Injekt.android)
+    api(Deps.Injekt.compose)
     api(project(":essentials-core"))
     api(project(":essentials-coroutines"))
     api(project(":essentials-logging"))

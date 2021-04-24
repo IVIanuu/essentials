@@ -20,6 +20,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -29,7 +30,7 @@ typealias IsOnSecureScreen = Boolean
 fun isOnSecureScreen(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
     .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
     .map { it.packageName to it.className }

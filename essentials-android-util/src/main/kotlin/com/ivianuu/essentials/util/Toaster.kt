@@ -20,6 +20,7 @@ import android.widget.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
@@ -29,7 +30,7 @@ typealias Toaster = (String) -> Unit
 fun toaster(
     @Given appContext: AppContext,
     @Given mainDispatcher: MainDispatcher,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ): Toaster = { message ->
     scope.launch(mainDispatcher) {
         Toast.makeText(

@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -70,7 +71,7 @@ data class BackupAndRestoreModel(
 fun backupAndRestoreModel(
     @Given createBackupUseCase: CreateBackupUseCase,
     @Given restoreBackupUseCase: RestoreBackupUseCase,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster,
 ): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {

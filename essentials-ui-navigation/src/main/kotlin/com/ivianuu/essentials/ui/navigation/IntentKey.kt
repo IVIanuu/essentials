@@ -24,6 +24,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import java.util.*
@@ -50,7 +51,7 @@ fun intentKeyHandler(
     @Given appUiStarter: IntentAppUiStarter,
     @Given dispatcher: MainDispatcher,
     @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ): IntentKeyHandler = handler@ { key, onResult ->
     if (key !is IntentKey) return@handler false
     val intentFactory = intentFactories[key::class]

@@ -23,6 +23,7 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
@@ -45,7 +46,7 @@ fun displayRotation(
     @Given dispatcher: IODispatcher,
     @Given logger: Logger,
     @Given rotationChanges: () -> Flow<RotationChange>,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
     @Given screenState: () -> Flow<ScreenState>,
     @Given windowManager: @SystemService WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayRotation> = flow {

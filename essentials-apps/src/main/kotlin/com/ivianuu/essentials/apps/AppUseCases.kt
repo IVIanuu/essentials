@@ -22,6 +22,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>

@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 
@@ -46,7 +47,7 @@ object PrefsKey : Key<Nothing>
 fun prefsUi(
     @Given navigator: Navigator,
     @Given prefStore: DataStore<SamplePrefs>,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<PrefsKey> = {
     val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
     Scaffold(

@@ -21,6 +21,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -30,7 +31,7 @@ typealias RecentApps = List<String>
 fun recentApps(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<RecentApps> = accessibilityEvents
     .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
     .filter { it.isFullScreen }

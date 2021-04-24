@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
@@ -30,7 +30,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
 @Given
 fun <S : GivenScope> scopeWorkerRunner(
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<S>,
+    @Given scope: GivenCoroutineScope<S>,
     @Given typeKey: TypeKey<S>,
     @Given workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {

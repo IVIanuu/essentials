@@ -20,6 +20,7 @@ import android.content.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
@@ -29,7 +30,7 @@ typealias ClipboardText = String?
 @Given
 fun clipboardText(
     @Given clipboardManager: @SystemService ClipboardManager,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ) = callbackFlow<ClipboardText> {
     val listener = ClipboardManager.OnPrimaryClipChangedListener {
         val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()

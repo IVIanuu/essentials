@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 @Given
@@ -39,7 +40,7 @@ object ActionsKey : Key<Nothing>
 fun actionsUi(
     @Given executeAction: ExecuteActionUseCase,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<UiGivenScope>,
+    @Given scope: GivenCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Actions") }) }

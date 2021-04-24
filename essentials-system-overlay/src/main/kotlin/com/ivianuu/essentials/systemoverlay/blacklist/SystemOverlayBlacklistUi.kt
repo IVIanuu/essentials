@@ -16,6 +16,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -118,7 +119,7 @@ fun systemOverlayBlacklistModel(
     @Given initial: @Initial SystemOverlayBlacklistModel,
     @Given navigator: Navigator,
     @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
     pref.data.update {
         copy(

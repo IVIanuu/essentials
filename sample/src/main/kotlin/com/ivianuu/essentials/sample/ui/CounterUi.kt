@@ -31,6 +31,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -80,7 +81,7 @@ data class CounterModel(
 
 @Given
 fun counterModel(
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
     action(CounterModel.inc()) { update { copy(count = count.inc()) } }

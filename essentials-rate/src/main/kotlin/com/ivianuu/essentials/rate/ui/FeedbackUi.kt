@@ -12,6 +12,7 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -58,7 +59,7 @@ data class FeedbackModel(
 fun feedbackModel(
     @Given displayShowNever: DisplayShowNeverUseCase,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given showLater: ShowLaterUseCase,
     @Given showNever: ShowNeverUseCase
 ): @Scoped<KeyUiGivenScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {

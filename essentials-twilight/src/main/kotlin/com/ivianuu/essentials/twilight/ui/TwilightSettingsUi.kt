@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 object TwilightSettingsKey : Key<Nothing>
@@ -39,7 +40,7 @@ object TwilightSettingsKey : Key<Nothing>
 @Given
 fun twilightSettingsUi(
     @Given pref: DataStore<TwilightPrefs>,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<TwilightSettingsKey> = {
     val prefs by pref.data.collectAsState(TwilightPrefs())
     Scaffold(

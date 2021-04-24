@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
 object PopupMenu {
@@ -38,7 +39,7 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = LocalUiGivenScope.current.element<PopupMenuComponent>()
+            val dependencies = element<PopupMenuComponent>()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(

@@ -6,6 +6,7 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -19,7 +20,7 @@ class AndroidSettingModule<T : S, S>(
         @Given adapter: AndroidSettingAdapter<T>,
         @Given contentChangesFactory: ContentChangesFactory,
         @Given dispatcher: IODispatcher,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>
+        @Given scope: GivenCoroutineScope<AppGivenScope>
     ): @Scoped<AppGivenScope> DataStore<T> = object : DataStore<T> {
         override val data: Flow<T> = contentChangesFactory(
             when (type) {

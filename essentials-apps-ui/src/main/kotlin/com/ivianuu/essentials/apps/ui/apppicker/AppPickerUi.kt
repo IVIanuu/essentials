@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -87,7 +88,7 @@ fun appPickerModel(
     @Given key: AppPickerKey,
     @Given getInstalledApps: GetInstalledAppsUseCase,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<AppPickerModel> = scope.state(AppPickerModel(
     appPredicate = key.appPredicate,
     title = key.title

@@ -24,6 +24,7 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -116,7 +117,7 @@ class FunTileServiceComponent(
 class TileModelComponent(
     @Given tileKey: TypeKey<AbstractFunTileService>,
     @Given tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
-    @Given val scope: ScopeCoroutineScope<TileGivenScope>,
+    @Given val scope: GivenCoroutineScope<TileGivenScope>,
     @Given val tileGivenScope: TileGivenScope
 ) {
     val tileModel = tileModelElements.toMap()[tileKey]

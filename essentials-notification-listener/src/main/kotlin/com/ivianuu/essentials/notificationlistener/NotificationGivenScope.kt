@@ -20,7 +20,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias NotificationGivenScope = DefaultGivenScope
+typealias NotificationGivenScope = GivenScope
 
 @Given
 val notificationGivenScopeModule =

@@ -28,6 +28,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
 @Composable
@@ -57,7 +58,7 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indication: Indication = LocalIndication.current,
 ) = composed {
-    val dependencies = LocalUiGivenScope.current.element<PopupMenuComponent>()
+    val dependencies = element<PopupMenuComponent>()
 
     var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

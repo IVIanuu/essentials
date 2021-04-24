@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -113,7 +114,7 @@ fun aboutModel(
     @Given buildInfo: BuildInfo,
     @Given initial: @Initial AboutModel,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<AboutModel> = scope.state(initial) {
     action(AboutModel.rate()) {
         navigator.push(

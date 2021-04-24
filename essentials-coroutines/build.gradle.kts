@@ -31,6 +31,7 @@ kotlin {
                 api(Deps.Coroutines.core)
                 api(Deps.Injekt.core)
                 api(Deps.Injekt.common)
+                api(Deps.Injekt.coroutines)
                 api(Deps.Injekt.scope)
             }
         }

@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -40,7 +41,7 @@ object UnlockKey : Key<Nothing>
 fun unlockUi(
     @Given screenState: Flow<ScreenState>,
     @Given screenUnlocker: ScreenUnlocker,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster,
 ): KeyUi<UnlockKey> = {
     Scaffold(

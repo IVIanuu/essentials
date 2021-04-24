@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -78,7 +79,7 @@ fun shortcutPickerModel(
     @Given extractShortcut: ExtractShortcutUseCase,
     @Given key: ShortcutPickerKey,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {

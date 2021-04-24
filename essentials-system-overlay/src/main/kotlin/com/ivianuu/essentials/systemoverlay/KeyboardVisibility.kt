@@ -23,6 +23,7 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -33,7 +34,7 @@ typealias KeyboardVisible = Boolean
 fun keyboardVisible(
     @Given accessibilityEvents: Flow<AccessibilityEvent>,
     @Given keyboardHeightProvider: KeyboardHeightProvider,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ): @Scoped<AppGivenScope> Flow<KeyboardVisible> = accessibilityEvents
     .filter {
         it.isFullScreen &&

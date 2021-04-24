@@ -5,6 +5,7 @@ import android.view.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
@@ -19,7 +20,7 @@ data class DisplayInfo(
 fun displayInfo(
     @Given configChanges: () -> Flow<ConfigChange>,
     @Given displayRotation: () -> Flow<DisplayRotation>,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
     @Given windowManager: @SystemService WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayInfo> = flow {
     combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->

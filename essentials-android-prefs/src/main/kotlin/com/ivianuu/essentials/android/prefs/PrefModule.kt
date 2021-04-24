@@ -8,6 +8,7 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.KSerializer
@@ -24,7 +25,7 @@ class PrefModule<T : Any>(
         @Given jsonFactory: () -> Json,
         @Given serializerFactory: () -> KSerializer<T>,
         @Given prefsDir: () -> PrefsDir,
-        @Given scope: ScopeCoroutineScope<AppGivenScope>
+        @Given scope: GivenCoroutineScope<AppGivenScope>
     ): @Scoped<AppGivenScope> DataStore<T> {
         val dataStore = DataStoreFactory.create(
             produceFile = { prefsDir().resolve(name) },

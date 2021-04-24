@@ -41,6 +41,7 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -57,7 +58,7 @@ fun appTrackerUi(
     @Given foregroundState: AppTrackerForegroundState,
     @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
     @Given permissionRequester: PermissionRequester,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
     val currentForegroundState by foregroundState.collectAsState()

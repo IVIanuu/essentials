@@ -20,7 +20,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias AccessibilityGivenScope = DefaultGivenScope
+typealias AccessibilityGivenScope = GivenScope
 
 @Given
 val accessibilityGivenScopeModule =

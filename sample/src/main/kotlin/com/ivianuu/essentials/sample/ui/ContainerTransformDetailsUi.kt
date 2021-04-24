@@ -16,13 +16,14 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
 @Given
 val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
-    var listInfo by LocalKeyUiGivenScope.current.getOrCreateScopedValue {
+    var listInfo by rememberScoped(key = "list_state") {
         mutableStateOf(0 to 0)
     }
     ContainerTransformElement("opened", elevation = 8.dp) {

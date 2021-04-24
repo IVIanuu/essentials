@@ -23,6 +23,7 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*
 
@@ -30,12 +31,11 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
 
 @Given
 val navigationStateContent: NavigationStateContent = { state, modifier ->
-    val uiGivenScope = LocalUiGivenScope.current
+    val keyUiGivenScopeFactory = element<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
     val contentState = remember {
         NavigationContentState(
             backStack = state.backStack.cast(),
-            keyUiGivenScopeFactory = uiGivenScope
-                .element<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
+            keyUiGivenScopeFactory = keyUiGivenScopeFactory
         )
     }
     SideEffect {
@@ -111,7 +111,7 @@ private class NavigationContentState(
                 )
             }
             CompositionLocalProvider(
-                LocalKeyUiGivenScope provides givenScope,
+                LocalGivenScope provides givenScope,
                 LocalSaveableStateRegistry provides savableStateRegistry
             ) {
                 content()

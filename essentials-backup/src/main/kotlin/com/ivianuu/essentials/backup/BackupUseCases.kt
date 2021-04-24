@@ -11,6 +11,7 @@ import com.ivianuu.essentials.processrestart.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import java.text.*
@@ -28,7 +29,7 @@ fun createBackupUseCase(
     @Given dispatcher: IODispatcher,
     @Given logger: Logger,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ): CreateBackupUseCase = {
     catch {
         withContext(scope.coroutineContext + dispatcher) {
@@ -74,7 +75,7 @@ fun restoreBackupUseCase(
     @Given logger: Logger,
     @Given navigator: Navigator,
     @Given processRestarter: ProcessRestarter,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>
+    @Given scope: GivenCoroutineScope<AppGivenScope>
 ): RestoreBackupUseCase = {
     catch {
         withContext(scope.coroutineContext + dispatcher) {

@@ -38,6 +38,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
 @Given
@@ -245,7 +246,7 @@ private fun DialogCloseButton(
     onClick: () -> Unit = {},
     text: String
 ) {
-    val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
+    val component = element<DialogLauncherComponent>()
     TextButton(
         enabled = enabled,
         onClick = {
@@ -266,7 +267,7 @@ private fun DialogLauncherButton(
     Spacer(Modifier.height(8.dp))
 
     val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-    val component = LocalUiGivenScope.current.element<DialogLauncherComponent>()
+    val component = element<DialogLauncherComponent>()
     Button(
         onClick = {
             component.navigator.push(

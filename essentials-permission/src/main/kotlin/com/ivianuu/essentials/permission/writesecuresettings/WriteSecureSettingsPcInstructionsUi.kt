@@ -34,6 +34,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.*
@@ -134,7 +135,7 @@ fun writeSecureSettingsPcInstructionsModel(
     @Given key: WriteSecureSettingsPcInstructionsKey,
     @Given navigator: Navigator,
     @Given permissionStateFactory: PermissionStateFactory,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given updateClipboardText: UpdateClipboardTextUseCase
 ): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
     initial

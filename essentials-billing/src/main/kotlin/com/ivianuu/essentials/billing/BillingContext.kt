@@ -8,6 +8,7 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -29,7 +30,7 @@ class BillingContextImpl(
     @Given private val dispatcher: IODispatcher,
     @Given override val logger: Logger,
     @Given override val refreshes: MutableSharedFlow<BillingRefresh>,
-    @Given private val scope: ScopeCoroutineScope<AppGivenScope>
+    @Given private val scope: GivenCoroutineScope<AppGivenScope>
 ) : BillingContext {
     private var isConnected = false
     private val connectionMutex = Mutex()

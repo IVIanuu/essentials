@@ -23,12 +23,13 @@ import com.ivianuu.essentials.tile.*
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Given
 fun testTileModel(
-    @Given scope: ScopeCoroutineScope<TileGivenScope>,
+    @Given scope: GivenCoroutineScope<TileGivenScope>,
     @Given twilightPref: DataStore<TwilightPrefs>
 ): @Scoped<TileGivenScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
     twilightPref.data.update {

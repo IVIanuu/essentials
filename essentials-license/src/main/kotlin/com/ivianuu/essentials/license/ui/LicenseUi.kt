@@ -16,6 +16,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -52,7 +53,7 @@ data class LicenseModel(
 @Given
 fun licenseModel(
     @Given getProjects: GetLicenseProjectsUseCase,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
     flow { emit(getProjects()) }
         .flowResultAsResource()

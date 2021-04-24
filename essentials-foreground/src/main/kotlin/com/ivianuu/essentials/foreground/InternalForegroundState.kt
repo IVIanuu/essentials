@@ -3,6 +3,7 @@ package com.ivianuu.essentials.foreground
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -16,7 +17,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 fun internalForegroundState(
     @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
     @Given logger: Logger,
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<InternalForegroundState> = combine(
     foregroundStates
         .mapIndexed { index, foregroundState ->

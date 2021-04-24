@@ -9,6 +9,7 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
@@ -47,7 +48,7 @@ data class NavBarUnsupportedModel(
 fun navBarUnsupportedModel(
     @Given key: NavBarUnsupportedKey,
     @Given navigator: Navigator,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<NavBarUnsupportedModel> = scope.state(
     NavBarUnsupportedModel()
 ) {

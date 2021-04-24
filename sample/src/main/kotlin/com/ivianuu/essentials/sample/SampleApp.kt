@@ -88,6 +88,8 @@ import com.ivianuu.essentials.work.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*
 import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.compose.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 
 class SampleApp : EsApp() {

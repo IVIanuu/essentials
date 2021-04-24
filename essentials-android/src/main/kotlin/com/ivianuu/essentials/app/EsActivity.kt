@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
@@ -44,7 +45,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
         val component = uiGivenScope.element<EsActivityComponent>()
 
         setContent {
-            CompositionLocalProvider(LocalUiGivenScope provides uiGivenScope) {
+            CompositionLocalProvider(LocalGivenScope provides uiGivenScope) {
                 component.decorateUi {
                     component.appUi()
                 }

@@ -21,9 +21,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias UiGivenScope = DefaultGivenScope
+typealias UiGivenScope = GivenScope
 
 @Given
 val uiGivenScopeModule = ChildGivenScopeModule0<ActivityGivenScope, UiGivenScope>()
-
-val LocalUiGivenScope = staticCompositionLocalOf<UiGivenScope> { error("No UiGivenScope provided") }

@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 typealias ExecuteActionUseCase = suspend (String) -> com.github.michaelbull.result.Result<Boolean, Throwable>

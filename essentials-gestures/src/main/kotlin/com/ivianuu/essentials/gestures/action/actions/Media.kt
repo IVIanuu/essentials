@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
@@ -119,7 +120,7 @@ fun mediaActionSettingsModel(
     @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
     @Given navigator: Navigator,
     @Given pref: DataStore<MediaActionPrefs>,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<MediaActionSettingsModel> = scope.state(
     MediaActionSettingsModel()
 ) {

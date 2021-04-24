@@ -50,7 +50,7 @@ fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelEl
 ): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> =
     serviceKey to provider.cast()
 
-typealias TileGivenScope = DefaultGivenScope
+typealias TileGivenScope = GivenScope
 
 @Given
 val tileGivenScopeModule = ChildGivenScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()

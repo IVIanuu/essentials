@@ -25,6 +25,7 @@ import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import java.util.*
@@ -36,7 +37,7 @@ data class TwilightState(
 
 @Given
 fun twilightState(
-    @Given scope: ScopeCoroutineScope<AppGivenScope>,
+    @Given scope: GivenCoroutineScope<AppGivenScope>,
     @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
     @Given systemTwilightState: () -> Flow<SystemTwilightState>,
     @Given timeTwilightState: () -> Flow<TimeTwilightState>,

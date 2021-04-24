@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 @Given
@@ -36,7 +37,7 @@ object RestartProcessKey : Key<Nothing>
 @Given
 fun restartProcessUi(
     @Given processRestarter: ProcessRestarter,
-    @Given scope: ScopeCoroutineScope<KeyUiGivenScope>
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<RestartProcessKey> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Restart process") }) }
