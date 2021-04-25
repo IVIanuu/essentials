@@ -6,8 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.*
-import androidx.compose.ui.geometry.lerp
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.LocalDensity
 import com.ivianuu.essentials.*
@@ -15,7 +14,6 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 import kotlinx.coroutines.*
-import kotlin.math.*
 import kotlin.time.*
 
 fun SharedElementStackTransition(
@@ -52,15 +50,39 @@ fun SharedElementStackTransition(
         }
     }
 
+    // capture geometry
+    states
+        .filter { it.first.bounds != null && it.second.bounds != null }
+        .forEach { (start, end) ->
+            val startBounds = start.bounds!!
+            val endBounds = end.bounds!!
+            val startGeometry = SharedElementGeometry(
+                position = Offset(
+                    x = startBounds.left + (startBounds.width - endBounds.width) / 2,
+                    y = startBounds.top + (startBounds.height - endBounds.height) / 2
+                ),
+                scaleX = startBounds.width / endBounds.width,
+                scaleY = startBounds.height / endBounds.height,
+                fraction = 0f
+            )
+            val endGeometry = SharedElementGeometry(
+                position = Offset(endBounds.left, endBounds.top),
+                scaleX = 1f,
+                scaleY = 1f,
+                fraction = 1f
+            )
+            start.capturedGeometry = startGeometry
+            end.capturedGeometry = endGeometry
+        }
+
     // install overlay
     overlay {
         states
             .filter { it.first.bounds != null && it.second.bounds != null }
             .forEach { (_, endState) ->
                 val endBounds = endState.bounds!!
-                val currentProps = endState.animatedProps!!
-                val sharedElementComposable =
-                    endState.element!![SharedElementComposable]!!
+                val currentGeometry = endState.animatedGeometry!!
+                val sharedElementProps = endState.element!![SharedElementPropsKey]!!
                 key(endState) {
                     with(LocalDensity.current) {
                         Box(
@@ -70,14 +92,14 @@ fun SharedElementStackTransition(
                                     height = endBounds.height.toDp()
                                 )
                                 .offset(
-                                    x = currentProps.position.x.toDp(),
-                                    y = currentProps.position.y.toDp()
+                                    x = currentGeometry.position.x.toDp(),
+                                    y = currentGeometry.position.y.toDp()
                                 )
-                                .graphicsLayer(scaleX = currentProps.scaleX, scaleY = currentProps.scaleY)
+                                .graphicsLayer(scaleX = currentGeometry.scaleX, scaleY = currentGeometry.scaleY)
                         ) {
                             CompositionLocalProvider(
-                                LocalSharedElementTransitionFraction provides endState.animatedProps!!.fraction,
-                                content = sharedElementComposable
+                                LocalSharedElementTransitionFraction provides endState.animatedGeometry!!.fraction,
+                                content = sharedElementProps.content
                             )
                         }
                     }
@@ -99,45 +121,20 @@ fun SharedElementStackTransition(
             )
         },
         {
-            states
-                .filter { it.first.bounds != null && it.second.bounds != null }
-                .forEach { (start, end) ->
-                    val startBounds = start.bounds!!
-                    val endBounds = end.bounds!!
-                    val startProps = SharedElementProps(
-                        position = Offset(
-                            x = startBounds.left + (startBounds.width - endBounds.width) / 2,
-                            y = startBounds.top + (startBounds.height - endBounds.height) / 2
-                        ),
-                        scaleX = startBounds.width / endBounds.width,
-                        scaleY = startBounds.height / endBounds.height,
-                        fraction = 0f
-                    )
-                    val endProps = SharedElementProps(
-                        position = Offset(endBounds.left, endBounds.top),
-                        scaleX = 1f,
-                        scaleY = 1f,
-                        fraction = 1f
-                    )
-                    start.capturedProps = startProps
-                    end.capturedProps = endProps
-                }
-
             animate(sharedElementAnimationSpec) { value ->
                 states
-                    .filter { it.first.capturedProps != null && it.second.capturedProps != null }
+                    .filter { it.first.capturedGeometry != null && it.second.capturedGeometry != null }
                     .forEach { (start, end) ->
                         end.modifier?.value = Modifier.alpha(0f)
                         start.modifier?.value = Modifier.alpha(0f)
-                        val position = arcLerp(
-                            if (isPush) start.capturedProps!!.position else end.capturedProps!!.position,
-                            if (isPush) end.capturedProps!!.position else start.capturedProps!!.position,
-                            if (isPush) value else 1f - value
-                        )
-                        end.animatedProps = SharedElementProps(
-                            position = position,
-                            scaleX = lerp(start.capturedProps!!.scaleX, end.capturedProps!!.scaleX, value),
-                            scaleY = lerp(start.capturedProps!!.scaleY, end.capturedProps!!.scaleY, value),
+                        end.animatedGeometry = SharedElementGeometry(
+                            position = arcLerp(
+                                if (isPush) start.capturedGeometry!!.position else end.capturedGeometry!!.position,
+                                if (isPush) end.capturedGeometry!!.position else start.capturedGeometry!!.position,
+                                if (isPush) value else 1f - value
+                            ),
+                            scaleX = lerp(start.capturedGeometry!!.scaleX, end.capturedGeometry!!.scaleX, value),
+                            scaleY = lerp(start.capturedGeometry!!.scaleY, end.capturedGeometry!!.scaleY, value),
                             fraction = if (isPush) value else 1f - value
                         )
                     }
@@ -148,8 +145,6 @@ fun SharedElementStackTransition(
 
 val LocalSharedElementTransitionFraction = compositionLocalOf { 0f }
 
-val SharedElementComposable = AnimationElementPropKey<@Composable () -> Unit>()
-
 private data class SharedElementState(
     val key: Any?,
     val element: AnimationElement?,
@@ -157,8 +152,8 @@ private data class SharedElementState(
 ) {
     var bounds: Rect? = null
         private set
-    var animatedProps: SharedElementProps? by mutableStateOf(null)
-    var capturedProps: SharedElementProps? = null
+    var animatedGeometry: SharedElementGeometry? by mutableStateOf(null)
+    var capturedGeometry: SharedElementGeometry? = null
     init {
         updateModifier()
     }
@@ -174,12 +169,22 @@ private data class SharedElementState(
     }
 }
 
-private data class SharedElementProps(
+private data class SharedElementGeometry(
     val fraction: Float,
     val position: Offset,
     val scaleX: Float,
     val scaleY: Float
 )
+
+private class SharedElementProps(
+    compositionContext: CompositionContext,
+    content: @Composable () -> Unit
+) {
+    var compositionContext by mutableStateOf(compositionContext)
+    var content by mutableStateOf(content)
+}
+
+private val SharedElementPropsKey = AnimationElementPropKey<SharedElementProps>()
 
 @Composable
 fun SharedElement(
@@ -188,9 +193,13 @@ fun SharedElement(
     isStart: Boolean,
     content: @Composable () -> Unit
 ) {
+    val compositionContext = rememberCompositionContext()
+    val props = remember { SharedElementProps(compositionContext, content) }
+    props.compositionContext = compositionContext
+    props.content = content
     Box(
         modifier = Modifier
-            .animationElement(key, SharedElementComposable to content)
+            .animationElement(key, SharedElementPropsKey to props)
             .then(modifier)
     ) {
         CompositionLocalProvider(
