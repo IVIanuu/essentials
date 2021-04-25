@@ -131,7 +131,6 @@ data class AboutModel(
 @Given
 fun aboutModel(
     @Given initial: @Initial AboutModel,
-    @Given buildInfo: BuildInfo,
     @Given navigator: Navigator,
     @Given rateOnPlayUseCase: RateOnPlayUseCase,
     @Given stringResource: StringResourceProvider,
