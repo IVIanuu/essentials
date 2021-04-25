@@ -24,8 +24,8 @@
     <string name="about_reddit">Reddit</string>
     <string name="about_reddit_desc">If you need help or have questions, my subreddit is a good place to go</string>
     <string name="about_github">Github</string>
-    <string name="about_github_desc">Checkout my work on github</string>
+    <string name="about_github_desc">Checkout my work on Github</string>
     <string name="about_twitter">Twitter</string>
-    <string name="about_twitter_desc">Follow me on twitter</string>
+    <string name="about_twitter_desc">Follow me on Twitter</string>
     <string name="about_privacy_policy">Privacy policy</string>
 </resources>

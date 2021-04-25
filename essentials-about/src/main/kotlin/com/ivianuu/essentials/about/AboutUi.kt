@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.about
 
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.optics.*
@@ -42,7 +42,8 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
-                    title = { Text(stringResource(R.string.about_rate, )) },
+                    leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
+                    title = { Text(stringResource(R.string.about_rate)) },
                     subtitle = { Text(stringResource(R.string.about_rate_desc)) },
                     onClick = model.rate
                 )
@@ -50,6 +51,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
                     title = { Text(stringResource(R.string.about_more_apps)) },
                     subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
                     onClick = model.openMoreApps
@@ -58,6 +60,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
                     title = { Text(stringResource(R.string.about_reddit)) },
                     subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
                     onClick = model.openRedditPage
@@ -66,6 +69,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
                     title = { Text(stringResource(R.string.about_github)) },
                     subtitle = { Text(stringResource(R.string.about_github_desc)) },
                     onClick = model.openGithubPage
@@ -74,6 +78,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
                     title = { Text(stringResource(R.string.about_twitter)) },
                     subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
                     onClick = model.openTwitterPage
@@ -83,6 +88,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             if (model.privacyPolicyUrl != null) {
                 item {
                     ListItem(
+                        leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
                         title = { Text(stringResource(R.string.about_privacy_policy)) },
                         onClick = model.openPrivacyPolicy
                     )
