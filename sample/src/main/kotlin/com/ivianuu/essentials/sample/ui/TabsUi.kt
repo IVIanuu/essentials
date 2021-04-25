@@ -17,31 +17,29 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.animation.*
+import com.google.accompanist.pager.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 val tabsHomeItem = HomeItem("Tabs") { TabsKey }
 
 object TabsKey : Key<Nothing>
 
+@OptIn(ExperimentalPagerApi::class)
 @Given
 val tabsUi: KeyUi<TabsKey> = {
-    var selectedIndex by rememberSaveable { mutableStateOf(0) }
+    val pagerState = rememberPagerState(TabItems.size)
+    val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             Surface(
@@ -54,14 +52,23 @@ val tabsUi: KeyUi<TabsKey> = {
                         elevation = 0.dp
                     )
                     TabRow(
-                        selectedTabIndex = selectedIndex,
-                        backgroundColor = MaterialTheme.colors.primary
+                        selectedTabIndex = pagerState.currentPage,
+                        backgroundColor = MaterialTheme.colors.primary,
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                            )
+                        }
                     ) {
-                        TabItems.indices.forEach { index ->
+                        TabItems.indices.forEach { page ->
                             Tab(
-                                selected = selectedIndex == index,
-                                onClick = { selectedIndex = index },
-                                text = { Text("Item: $index") }
+                                selected = pagerState.currentPage == page,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(page)
+                                    }
+                                },
+                                text = { Text("Item: $page") }
                             )
                         }
                     }
@@ -69,10 +76,11 @@ val tabsUi: KeyUi<TabsKey> = {
             }
         }
     ) {
-        AnimatedBox(current = TabItems[selectedIndex]) { item ->
-            Surface(color = item) {
+        HorizontalPager(pagerState) { page ->
+            val color = TabItems[page]
+            Surface(color = color) {
                 Text(
-                    text = "Index: ${TabItems.indexOf(item)}",
+                    text = "Index: $page",
                     modifier = Modifier.center()
                 )
             }
