@@ -23,6 +23,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.essentials.ui.core.*
@@ -33,16 +35,14 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 object TwilightSettingsKey : Key<Nothing>
 
 @Given
-fun twilightSettingsUi(
-    @Given pref: DataStore<TwilightPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): KeyUi<TwilightSettingsKey> = {
-    val prefs by pref.data.collectAsState(TwilightPrefs())
+val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
     ) {
@@ -50,12 +50,8 @@ fun twilightSettingsUi(
             items(TwilightMode.values()) { mode ->
                 TwilightModeItem(
                     mode = mode,
-                    isSelected = prefs.twilightMode == mode,
-                    onClick = {
-                        scope.launch {
-                            pref.updateData { copy(twilightMode = mode) }
-                        }
-                    }
+                    isSelected = model.twilightMode == mode,
+                    onClick = { model.updateTwilightMode(mode) }
                 )
             }
             item {
@@ -63,12 +59,8 @@ fun twilightSettingsUi(
             }
             item {
                 CheckboxListItem(
-                    value = prefs.useBlackInDarkMode,
-                    onValueChange = {
-                        scope.launch {
-                            pref.updateData { copy(useBlackInDarkMode = it) }
-                        }
-                    },
+                    value = model.useBlackInDarkMode,
+                    onValueChange = model.updateUseBlackInDarkMode,
                     title = { Text(stringResource(R.string.es_twilight_use_black)) }
                 )
             }
@@ -117,4 +109,32 @@ private fun TwilightModeItem(
         },
         onClick = onClick
     )
+}
+
+
+@Optics
+data class TwilightSettingsModel(
+    val twilightMode: TwilightMode = TwilightMode.SYSTEM,
+    val useBlackInDarkMode: Boolean = false,
+    val updateTwilightMode: (TwilightMode) -> Unit = {},
+    val updateUseBlackInDarkMode: (Boolean) -> Unit = {}
+)
+
+@Given
+fun twilightSettingsModel(
+    @Given pref: DataStore<TwilightPrefs>,
+    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<TwilightSettingsModel> = scope.state(TwilightSettingsModel()) {
+    pref.data.update {
+        copy(
+            twilightMode = it.twilightMode,
+            useBlackInDarkMode = it.useBlackInDarkMode
+        )
+    }
+    action(TwilightSettingsModel.updateTwilightMode()) { value ->
+        pref.updateData { copy(twilightMode = value) }
+    }
+    action(TwilightSettingsModel.updateUseBlackInDarkMode()) { value ->
+        pref.updateData { copy(useBlackInDarkMode = value) }
+    }
 }
