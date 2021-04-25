@@ -20,14 +20,15 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
+import com.ivianuu.essentials.rate.domain.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.web.ui.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
@@ -111,16 +112,13 @@ data class AboutModel(
 
 @Given
 fun aboutModel(
-    @Given buildInfo: BuildInfo,
     @Given initial: @Initial AboutModel,
     @Given navigator: Navigator,
+    @Given rateOnPlayUseCase: RateOnPlayUseCase,
+    @Given stringResource: StringResourceProvider,
     @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<AboutModel> = scope.state(initial) {
-    action(AboutModel.rate()) {
-        navigator.push(
-            UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
-        )
-    }
+    action(AboutModel.rate()) { rateOnPlayUseCase() }
     action(AboutModel.openMoreApps()) {
         navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     }
@@ -134,7 +132,10 @@ fun aboutModel(
         navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     }
     action(AboutModel.openPrivacyPolicy()) {
-        navigator.push(UrlKey(state.first().privacyPolicyUrl!!))
+        navigator.push(WebKey(
+            stringResource(R.string.about_privacy_policy, emptyList()),
+            state.first().privacyPolicyUrl!!
+        ))
     }
 }
 

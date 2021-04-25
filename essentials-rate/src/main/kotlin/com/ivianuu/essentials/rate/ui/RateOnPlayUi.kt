@@ -54,6 +54,8 @@ data class RateOnPlayModel(
 @Given
 fun rateOnPlayModel(
     @Given displayShowNever: DisplayShowNeverUseCase,
+    @Given key: RateOnPlayKey,
+    @Given navigator: Navigator,
     @Given rateOnPlay: RateOnPlayUseCase,
     @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given showLater: ShowLaterUseCase,
@@ -65,5 +67,8 @@ fun rateOnPlayModel(
     }
     action(RateOnPlayModel.showLater()) { showLater() }
     action(RateOnPlayModel.showNever()) { showNever() }
-    action(RateOnPlayModel.rate()) { rateOnPlay() }
+    action(RateOnPlayModel.rate()) {
+        rateOnPlay()
+        navigator.pop(key)
+    }
 }

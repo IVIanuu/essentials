@@ -12,16 +12,13 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
-internal typealias RateOnPlayUseCase = suspend () -> Unit
+typealias RateOnPlayUseCase = suspend () -> Unit
 
 @Given
 fun rateOnPlayUseCase(
     @Given activity: ComponentActivity,
-    @Given key: Key<*>,
-    @Given navigator: Navigator,
     @Given pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {
-    navigator.pop(key)
     catch {
         val reviewManagerFactory = ReviewManagerFactory.create(activity)
         val reviewInfo = suspendCoroutine<ReviewInfo> { cont ->
