@@ -200,7 +200,7 @@ class ContainerTransformProps(
 val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
 
 @Composable
-fun ContainerTransformElement(
+fun ContainerTransformSurface(
     key: Any,
     isOpened: Boolean,
     modifier: Modifier = Modifier,

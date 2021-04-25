@@ -21,18 +21,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.colorpicker.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -101,7 +97,7 @@ private fun HomeItem(
     onClick: () -> Unit,
     item: HomeItem,
 ) {
-    ContainerTransformElement(key = "container ${item.title}", isOpened = false) {
+    ContainerTransformSurface(key = "container ${item.title}", isOpened = false) {
         ListItem(
             title = {
                 SharedElement(key = "title ${item.title}", isStart = true) {

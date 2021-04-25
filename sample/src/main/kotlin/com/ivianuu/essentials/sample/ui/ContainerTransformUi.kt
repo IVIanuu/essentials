@@ -31,11 +31,11 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
     var listInfo by rememberScopedValue(key = "list_state") {
         mutableStateOf(0 to 0)
     }
-    ContainerTransformElement(key = "opened", elevation = 8.dp, isOpened = true) {
+    ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = true) {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Container transform") }) },
             floatingActionButton = {
-                ContainerTransformElement(
+                ContainerTransformSurface(
                     key = "fab",
                     isOpened = false,
                     color = MaterialTheme.colors.secondary,
@@ -84,7 +84,7 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
 
 @Composable
 private fun BigDetailsCard(navigator: Navigator) {
-    ContainerTransformElement(
+    ContainerTransformSurface(
         key = "big card",
         isOpened = false,
         modifier = Modifier.padding(8.dp),
@@ -133,7 +133,7 @@ private fun BigDetailsCard(navigator: Navigator) {
 
 @Composable
 private fun SmallDetailsCard(navigator: Navigator) {
-    ContainerTransformElement(
+    ContainerTransformSurface(
         key = "small card",
         isOpened = false,
         modifier = Modifier.padding(8.dp),
@@ -183,7 +183,7 @@ private fun DetailsGridCard(
     key: Any,
     navigator: Navigator
 ) {
-    ContainerTransformElement(
+    ContainerTransformSurface(
         key = key,
         isOpened = false,
         modifier = modifier
@@ -235,7 +235,7 @@ private fun DetailsListItem(
     index: Int,
     navigator: Navigator
 ) {
-    ContainerTransformElement(
+    ContainerTransformSurface(
         key = "list item $index",
         isOpened = false
     ) {

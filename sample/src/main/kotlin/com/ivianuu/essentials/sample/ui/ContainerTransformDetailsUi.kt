@@ -25,7 +25,7 @@ val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
     var listInfo by rememberScopedValue(key = "list_state") {
         mutableStateOf(0 to 0)
     }
-    ContainerTransformElement(key = "opened", elevation = 8.dp, isOpened = false) {
+    ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {
         Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
             val listState = rememberLazyListState(listInfo.first, listInfo.second)
             listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
