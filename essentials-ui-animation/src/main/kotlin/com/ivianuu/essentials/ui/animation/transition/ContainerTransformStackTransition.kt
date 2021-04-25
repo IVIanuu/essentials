@@ -23,7 +23,7 @@ import kotlin.time.*
 fun ContainerTransformStackTransition(
     closedKey: Any,
     openedKey: Any,
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+    spec: AnimationSpec<Float> = defaultAnimationSpec(),
 ): StackTransition = {
     val fromModifier = fromElementModifier(if (isPush) closedKey else openedKey)!!
     val toModifier = toElementModifier(if (isPush) openedKey else closedKey)!!
@@ -71,7 +71,10 @@ fun ContainerTransformStackTransition(
                     .composed {
                         with(LocalDensity.current) {
                             size(currentWidth.toDp(), currentHeight.toDp())
-                                .offset(currentPosition.x.toDp(), currentPosition.y.toDp())
+                                .graphicsLayer {
+                                    translationX = currentPosition.x
+                                    translationY = currentPosition.y
+                                }
                         }
                     },
                 shape = RoundedCornerShape(currentCornerSize),
@@ -80,7 +83,32 @@ fun ContainerTransformStackTransition(
                 elevation = currentElevation
             ) {
                 withCompositionContext(fromProps.compositionContext) {
-                    FittedBox(fromBounds.width.toInt(), fromBounds.height.toInt(), currentFromAlpha)  {
+                    Box(
+                        modifier = Modifier
+                            .then(object : LayoutModifier {
+                                override fun MeasureScope.measure(
+                                    measurable: Measurable,
+                                    constraints: Constraints
+                                ): MeasureResult {
+                                    val placeable = measurable.measure(Constraints.fixed(
+                                        fromBounds.width.toInt(), fromBounds.height.toInt()
+                                    ))
+                                    return layout(currentWidth.toInt(), currentHeight.toInt()) {
+                                        placeable.place(0, 0)
+                                    }
+                                }
+                            })
+                            .graphicsLayer {
+                                alpha = currentFromAlpha
+                                val sourceSize = Size(fromBounds.width,
+                                    fromBounds.width * currentHeight / currentWidth)
+                                val destinationSize = Size(currentWidth,
+                                    sourceSize.height * currentWidth / sourceSize.width)
+                                transformOrigin = TransformOrigin(0f, 0f)
+                                scaleX = destinationSize.width / sourceSize.width
+                                scaleY = destinationSize.height / sourceSize.height
+                            },
+                    ) {
                         CompositionLocalProvider(
                             LocalContainerTransformTransitionFraction provides
                                     if (isPush) currentFraction else 1f - currentFraction,
@@ -89,7 +117,32 @@ fun ContainerTransformStackTransition(
                     }
                 }
                 withCompositionContext(toProps.compositionContext) {
-                    FittedBox(toBounds.width.toInt(), toBounds.height.toInt(), currentToAlpha)  {
+                    Box(
+                        modifier = Modifier
+                            .then(object : LayoutModifier {
+                                override fun MeasureScope.measure(
+                                    measurable: Measurable,
+                                    constraints: Constraints
+                                ): MeasureResult {
+                                    val placeable = measurable.measure(Constraints.fixed(
+                                        toBounds.width.toInt(), toBounds.height.toInt()
+                                    ))
+                                    return layout(currentWidth.toInt(), currentHeight.toInt()) {
+                                        placeable.place(0, 0)
+                                    }
+                                }
+                            })
+                            .graphicsLayer {
+                                alpha = currentToAlpha
+                                val sourceSize = Size(toBounds.width,
+                                    toBounds.width * currentHeight / currentWidth)
+                                val destinationSize = Size(currentWidth,
+                                    sourceSize.height * currentWidth / sourceSize.width)
+                                transformOrigin = TransformOrigin(0f, 0f)
+                                scaleX = destinationSize.width / sourceSize.width
+                                scaleY = destinationSize.height / sourceSize.height
+                            },
+                    ) {
                         CompositionLocalProvider(
                             LocalContainerTransformTransitionFraction provides
                                     if (isPush) 1f - currentFraction else currentFraction,
@@ -103,6 +156,7 @@ fun ContainerTransformStackTransition(
 
     animate(spec) { value ->
         fromModifier.value = Modifier.alpha(0f)
+        currentFraction = value
         currentScrimAlpha = if (isPush) {
             interval(0f, 0.3f, value)
         } else {
@@ -123,23 +177,6 @@ fun ContainerTransformStackTransition(
     }
 }
 
-@Composable
-private fun FittedBox(
-    width: Int,
-    height: Int,
-    alpha: Float,
-    content: @Composable () -> Unit,
-) {
-    Layout(content, Modifier.alpha(alpha)) { measurables, constraints ->
-        val placeables = measurables.map {
-            it.measure(Constraints.fixed(width, height))
-        }
-        layout(constraints.maxWidth, constraints.maxHeight) {
-            placeables.forEach { it.place(0, 0) }
-        }
-    }
-}
-
 val ContainerTransformPropsKey = AnimationElementPropKey<ContainerTransformProps>()
 
 class ContainerTransformProps(
@@ -149,7 +186,7 @@ class ContainerTransformProps(
     cornerSize: Dp,
     borderWidth: Dp,
     borderColor: Color,
-    elevation: Dp
+    elevation: Dp,
 ) {
     var compositionContext by mutableStateOf(compositionContext)
     var content by mutableStateOf(content)
@@ -172,7 +209,7 @@ fun ContainerTransformElement(
     borderWidth: Dp = 0.dp,
     borderColor: Color = Color.Transparent,
     elevation: Dp = 0.dp,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) {
     val compositionContext = rememberCompositionContext()
     val props = remember {
