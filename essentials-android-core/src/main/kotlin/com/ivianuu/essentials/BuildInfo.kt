@@ -24,6 +24,7 @@ import com.ivianuu.injekt.scope.*
 data class BuildInfo(
     val isDebug: Boolean,
     val packageName: String,
+    val versionName: String,
     val versionCode: Int,
 )
 
@@ -38,6 +39,7 @@ fun androidBuildInfo(
     return BuildInfo(
         isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
         packageName = appInfo.packageName,
+        versionName = packageInfo.versionName,
         versionCode = packageInfo.versionCode
     )
 }

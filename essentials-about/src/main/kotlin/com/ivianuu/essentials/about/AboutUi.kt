@@ -38,13 +38,20 @@ object AboutKey : Key<Nothing>
 
 @Given
 val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.about_title)) }) }) {
+    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_info), null) },
+                    title = { Text(stringResource(R.string.es_about_version)) },
+                    subtitle = { Text(model.version) }
+                )
+            }
+            item {
+                ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
-                    title = { Text(stringResource(R.string.about_rate)) },
-                    subtitle = { Text(stringResource(R.string.about_rate_desc)) },
+                    title = { Text(stringResource(R.string.es_about_rate)) },
+                    subtitle = { Text(stringResource(R.string.es_about_rate_desc)) },
                     onClick = model.rate
                 )
             }
@@ -52,8 +59,8 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
-                    title = { Text(stringResource(R.string.about_more_apps)) },
-                    subtitle = { Text(stringResource(R.string.about_more_apps_desc)) },
+                    title = { Text(stringResource(R.string.es_about_more_apps)) },
+                    subtitle = { Text(stringResource(R.string.es_about_more_apps_desc)) },
                     onClick = model.openMoreApps
                 )
             }
@@ -61,8 +68,8 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
-                    title = { Text(stringResource(R.string.about_reddit)) },
-                    subtitle = { Text(stringResource(R.string.about_reddit_desc)) },
+                    title = { Text(stringResource(R.string.es_about_reddit)) },
+                    subtitle = { Text(stringResource(R.string.es_about_reddit_desc)) },
                     onClick = model.openRedditPage
                 )
             }
@@ -70,8 +77,8 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
-                    title = { Text(stringResource(R.string.about_github)) },
-                    subtitle = { Text(stringResource(R.string.about_github_desc)) },
+                    title = { Text(stringResource(R.string.es_about_github)) },
+                    subtitle = { Text(stringResource(R.string.es_about_github_desc)) },
                     onClick = model.openGithubPage
                 )
             }
@@ -79,8 +86,8 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
-                    title = { Text(stringResource(R.string.about_twitter)) },
-                    subtitle = { Text(stringResource(R.string.about_twitter_desc)) },
+                    title = { Text(stringResource(R.string.es_about_twitter)) },
+                    subtitle = { Text(stringResource(R.string.es_about_twitter_desc)) },
                     onClick = model.openTwitterPage
                 )
             }
@@ -89,7 +96,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
                 item {
                     ListItem(
                         leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
-                        title = { Text(stringResource(R.string.about_privacy_policy)) },
+                        title = { Text(stringResource(R.string.es_about_privacy_policy)) },
                         onClick = model.openPrivacyPolicy
                     )
                 }
@@ -100,6 +107,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 
 @Optics
 data class AboutModel(
+    val version: String = "",
     val privacyPolicyUrl: PrivacyPolicyUrl? = null,
     val rate: () -> Unit = {},
     val openMoreApps: () -> Unit = {},
@@ -111,14 +119,19 @@ data class AboutModel(
     companion object {
         @Given
         fun initial(
+            @Given buildInfo: BuildInfo,
             @Given privacyPolicyUrl: PrivacyPolicyUrl? = null
-        ): @Initial AboutModel = AboutModel(privacyPolicyUrl = privacyPolicyUrl)
+        ): @Initial AboutModel = AboutModel(
+            version = buildInfo.versionName,
+            privacyPolicyUrl = privacyPolicyUrl
+        )
     }
 }
 
 @Given
 fun aboutModel(
     @Given initial: @Initial AboutModel,
+    @Given buildInfo: BuildInfo,
     @Given navigator: Navigator,
     @Given rateOnPlayUseCase: RateOnPlayUseCase,
     @Given stringResource: StringResourceProvider,
@@ -139,7 +152,7 @@ fun aboutModel(
     }
     action(AboutModel.openPrivacyPolicy()) {
         navigator.push(WebKey(
-            stringResource(R.string.about_privacy_policy, emptyList()),
+            stringResource(R.string.es_about_privacy_policy, emptyList()),
             state.first().privacyPolicyUrl!!
         ))
     }
