@@ -35,7 +35,10 @@ fun webUi(
         bottomBar = {
             Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
                 InsetsPadding(left = false, top = false, right = false) {
-                    BottomAppBar(elevation = 0.dp) {
+                    BottomAppBar(
+                        elevation = 0.dp,
+                        backgroundColor = MaterialTheme.colors.primary
+                    ) {
                         IconButton(onClick = { webViewRef!!.goBack() }) {
                             Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
                         }
