@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
@@ -45,6 +45,7 @@ val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> =
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
                     title = { Text(stringResource(R.string.es_pref_backup)) },
                     subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
                     onClick = { model.backupData() }
@@ -52,6 +53,7 @@ val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> =
             }
             item {
                 ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
                     title = { Text(stringResource(R.string.es_pref_restore)) },
                     subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
                     onClick = { model.restoreData() }
