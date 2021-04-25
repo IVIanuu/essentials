@@ -8,11 +8,12 @@ import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
+import com.ivianuu.essentials.ui.core.*
 import kotlinx.coroutines.*
 import kotlin.time.*
 
@@ -82,19 +83,29 @@ fun SharedElementStackTransition(
                 val currentGeometry = endState.animatedGeometry!!
                 val sharedElementProps = endState.element!![SharedElementPropsKey]!!
                 key(endState) {
-                    with(LocalDensity.current) {
-                        Box(
-                            modifier = Modifier
-                                .size(
-                                    width = endBounds.width.toDp(),
-                                    height = endBounds.height.toDp()
-                                )
-                                .offset(
-                                    x = currentGeometry.position.x.toDp(),
-                                    y = currentGeometry.position.y.toDp()
-                                )
-                                .graphicsLayer(scaleX = currentGeometry.scaleX, scaleY = currentGeometry.scaleY)
-                        ) {
+                    Box(
+                        modifier = Modifier
+                            .then(object : LayoutModifier {
+                                override fun MeasureScope.measure(
+                                    measurable: Measurable,
+                                    constraints: Constraints
+                                ): MeasureResult {
+                                    val placeable = measurable.measure(Constraints.fixed(
+                                        endBounds.width.toInt(), endBounds.height.toInt()
+                                    ))
+                                    return layout(placeable.width, placeable.height) {
+                                        placeable.place(0, 0)
+                                    }
+                                }
+                            })
+                            .graphicsLayer {
+                                scaleX = currentGeometry.scaleX
+                                scaleY = currentGeometry.scaleY
+                                translationX = currentGeometry.position.x
+                                translationY = currentGeometry.position.y
+                            }
+                    ) {
+                        withCompositionContext(sharedElementProps.compositionContext) {
                             CompositionLocalProvider(
                                 LocalSharedElementTransitionFraction provides endState.animatedGeometry!!.fraction,
                                 content = sharedElementProps.content
