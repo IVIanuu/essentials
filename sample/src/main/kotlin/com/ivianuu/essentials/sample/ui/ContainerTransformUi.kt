@@ -8,12 +8,12 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -60,7 +60,7 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
         ) {
             val listState = rememberLazyListState(listInfo.first, listInfo.second)
             listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-            LazyColumn(state = listState) {
+            LazyColumn(state = listState, contentPadding = localVerticalInsetsPadding()) {
                 item { BigDetailsCard(navigator) }
                 item { SmallDetailsCard(navigator) }
                 item {

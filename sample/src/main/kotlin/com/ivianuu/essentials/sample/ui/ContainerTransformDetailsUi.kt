@@ -11,6 +11,7 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
@@ -28,7 +29,7 @@ val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
         Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
             val listState = rememberLazyListState(listInfo.first, listInfo.second)
             listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-            LazyColumn(state = listState) {
+            LazyColumn(state = listState, contentPadding = localVerticalInsetsPadding()) {
                 item {
                     Box(
                         modifier = Modifier.fillMaxWidth()
