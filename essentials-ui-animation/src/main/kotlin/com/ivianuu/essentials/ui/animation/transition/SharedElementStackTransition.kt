@@ -56,7 +56,7 @@ fun SharedElementStackTransition(
         .forEach { (start, end) ->
             val startBounds = start.bounds!!
             val endBounds = end.bounds!!
-            val startGeometry = SharedElementGeometry(
+            start.capturedGeometry = SharedElementGeometry(
                 position = Offset(
                     x = startBounds.left + (startBounds.width - endBounds.width) / 2,
                     y = startBounds.top + (startBounds.height - endBounds.height) / 2
@@ -65,14 +65,12 @@ fun SharedElementStackTransition(
                 scaleY = startBounds.height / endBounds.height,
                 fraction = 0f
             )
-            val endGeometry = SharedElementGeometry(
-                position = Offset(endBounds.left, endBounds.top),
+            end.capturedGeometry = SharedElementGeometry(
+                position = Offset(x = endBounds.left, y = endBounds.top),
                 scaleX = 1f,
                 scaleY = 1f,
                 fraction = 1f
             )
-            start.capturedGeometry = startGeometry
-            end.capturedGeometry = endGeometry
         }
 
     // install overlay
