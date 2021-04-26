@@ -20,7 +20,8 @@
     <string name="es_request_permission_title">Required permissions</string>
     <string name="es_grant">Grant</string>
 
-    <string name="find_app_here">Find %s here</string>
+    <string name="es_find_app_here">Find %s here</string>
+    <string name="es_grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>
 
     <!-- Secure settings dialog -->
     <string name="es_title_secure_settings">Permission required</string>

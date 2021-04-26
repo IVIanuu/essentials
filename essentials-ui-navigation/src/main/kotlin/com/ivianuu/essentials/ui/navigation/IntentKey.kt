@@ -17,9 +17,11 @@
 package com.ivianuu.essentials.ui.navigation
 
 import android.content.*
+import android.content.pm.*
 import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
@@ -43,7 +45,7 @@ typealias KeyIntentFactory<T> = (T) -> Intent
 
 typealias IntentAppUiStarter = suspend () -> ComponentActivity
 
-typealias IntentKeyHandler = (Key<*>, ((ActivityResult) -> Unit)?) -> Boolean
+typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Unit)?) -> Boolean
 
 @Given
 fun intentKeyHandler(
@@ -62,12 +64,15 @@ fun intentKeyHandler(
                 activity.startActivity(intent)
             } else {
                 withContext(dispatcher) {
-                    val result = suspendCancellableCoroutine<ActivityResult> { continuation ->
+                    val result = suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
                         val launcher = activity.activityResultRegistry.register(
                             UUID.randomUUID().toString(),
                             ActivityResultContracts.StartActivityForResult()
-                        ) { continuation.resume(it) }
-                        launcher.launch(intent)
+                        ) {
+                            if (continuation.isActive) continuation.resume(it.ok())
+                        }
+                        catch { launcher.launch(intent) }
+                            .onFailure { continuation.resume(it.err()) }
                         continuation.invokeOnCancellation { launcher.unregister() }
                     }
                     onResult(result)

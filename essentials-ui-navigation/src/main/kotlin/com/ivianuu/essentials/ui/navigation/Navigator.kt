@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -62,7 +63,12 @@ class NavigatorImpl(
             _state.value.results[key]
                 ?.safeAs<CompletableDeferred<Any?>>()
                 ?.complete(null)
-            if (!intentKeyHandler(key) { result.complete(it as R) }) {
+            if (!intentKeyHandler(key) { intentResult ->
+                    intentResult.fold(
+                        success = { result.complete(it as R) },
+                        failure = { result.completeExceptionally(it) }
+                    )
+            }) {
                 _state.update {
                     copy(
                         backStack = backStack
