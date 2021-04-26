@@ -22,7 +22,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.navigation.*

@@ -21,7 +21,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.animation.*
 
 @Composable
 fun Popup(content: @Composable () -> Unit) {

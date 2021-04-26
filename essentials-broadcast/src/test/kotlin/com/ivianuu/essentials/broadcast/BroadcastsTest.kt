@@ -22,7 +22,6 @@ import com.ivianuu.essentials.test.*
 import com.ivianuu.injekt.android.*
 import io.kotest.matchers.collections.*
 import io.mockk.*
-import kotlinx.coroutines.*
 import org.junit.*
 import org.junit.runner.*
 import org.robolectric.annotation.*

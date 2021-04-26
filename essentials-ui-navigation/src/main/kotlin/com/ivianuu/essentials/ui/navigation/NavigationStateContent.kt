@@ -20,7 +20,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*

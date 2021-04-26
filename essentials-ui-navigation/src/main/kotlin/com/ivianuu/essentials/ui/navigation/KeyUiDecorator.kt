@@ -5,7 +5,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.scope.*
 
 @Given
 fun <@Given T : KeyUiDecorator> keyUiDecoratorElement(

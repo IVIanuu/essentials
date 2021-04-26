@@ -19,7 +19,6 @@ package com.ivianuu.essentials.screenstate
 import android.hardware.*
 import android.view.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*

@@ -5,7 +5,6 @@ import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.tuples.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
 import kotlin.jvm.*
 
 fun <S> CoroutineScope.state(

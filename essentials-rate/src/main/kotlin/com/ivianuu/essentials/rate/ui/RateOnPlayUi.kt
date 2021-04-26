@@ -2,11 +2,9 @@ package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*

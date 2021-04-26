@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.systemoverlay
 
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*

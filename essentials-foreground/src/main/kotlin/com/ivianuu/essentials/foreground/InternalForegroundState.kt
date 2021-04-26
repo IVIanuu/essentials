@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*

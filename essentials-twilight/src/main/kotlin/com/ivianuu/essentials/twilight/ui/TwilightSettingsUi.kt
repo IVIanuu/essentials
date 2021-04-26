@@ -21,7 +21,6 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
@@ -36,7 +35,6 @@ import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 object TwilightSettingsKey : Key<Nothing>

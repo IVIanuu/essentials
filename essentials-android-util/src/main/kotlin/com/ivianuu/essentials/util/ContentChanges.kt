@@ -22,7 +22,6 @@ import android.database.*
 import android.net.*
 import android.os.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*

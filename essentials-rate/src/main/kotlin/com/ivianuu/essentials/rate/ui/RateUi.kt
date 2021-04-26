@@ -12,11 +12,9 @@ import androidx.compose.ui.unit.*
 import com.google.accompanist.coil.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.coil.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*

@@ -21,7 +21,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.hidenavbar.R

@@ -1,10 +1,8 @@
 package com.ivianuu.essentials.ui.animation
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
+import androidx.compose.ui.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
 
 @Stable
 class AnimationElement(val key: Any) {

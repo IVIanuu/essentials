@@ -28,7 +28,6 @@ import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.store.*

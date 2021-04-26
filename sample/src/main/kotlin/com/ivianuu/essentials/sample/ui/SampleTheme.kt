@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.twilight.domain.*
 import com.ivianuu.essentials.twilight.ui.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*

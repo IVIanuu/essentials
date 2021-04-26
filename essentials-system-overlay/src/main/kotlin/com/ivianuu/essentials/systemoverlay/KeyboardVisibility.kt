@@ -20,7 +20,6 @@ import android.view.inputmethod.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*

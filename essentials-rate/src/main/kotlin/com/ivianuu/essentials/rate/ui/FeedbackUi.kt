@@ -1,10 +1,7 @@
 package com.ivianuu.essentials.rate.ui
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.ui.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*

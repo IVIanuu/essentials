@@ -19,7 +19,6 @@ package com.ivianuu.essentials.screenstate
 import android.content.*
 import android.content.res.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*

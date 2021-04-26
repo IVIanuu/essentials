@@ -26,7 +26,6 @@ import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.apppicker.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*

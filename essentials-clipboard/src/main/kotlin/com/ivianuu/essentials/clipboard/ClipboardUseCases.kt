@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*

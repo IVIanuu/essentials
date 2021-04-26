@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import com.google.accompanist.flowlayout.*
 import com.ivianuu.essentials.ui.common.*
 
 @Composable

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.injekt.*
-import kotlin.reflect.*
 
 @Qualifier
 annotation class Initial

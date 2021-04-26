@@ -19,7 +19,6 @@ package com.ivianuu.essentials.permission.ui
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.store.*

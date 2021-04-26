@@ -1,12 +1,9 @@
 package com.ivianuu.essentials.billing
 
 import androidx.test.ext.junit.runners.*
-import com.android.billingclient.api.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.booleans.*
 import io.mockk.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import org.junit.*
 import org.junit.runner.*
 import org.robolectric.annotation.*

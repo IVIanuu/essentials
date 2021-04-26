@@ -20,7 +20,6 @@ import android.content.*
 import android.content.res.*
 import android.os.*
 import com.ivianuu.essentials.broadcast.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.twilight.data.*
 import com.ivianuu.injekt.*

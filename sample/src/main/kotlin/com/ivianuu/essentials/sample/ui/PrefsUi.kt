@@ -27,7 +27,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

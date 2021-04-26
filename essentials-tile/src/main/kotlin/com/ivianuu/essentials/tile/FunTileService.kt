@@ -19,7 +19,6 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.*
 import android.service.quicksettings.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*

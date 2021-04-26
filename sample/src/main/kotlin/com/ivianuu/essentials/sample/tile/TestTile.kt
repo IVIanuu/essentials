@@ -16,12 +16,10 @@
 
 package com.ivianuu.essentials.sample.tile
 
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.tile.*
 import com.ivianuu.essentials.twilight.data.*
-import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*

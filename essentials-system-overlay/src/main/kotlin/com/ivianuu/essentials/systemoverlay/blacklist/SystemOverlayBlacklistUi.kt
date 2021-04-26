@@ -3,10 +3,8 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.optics.update
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.core.*

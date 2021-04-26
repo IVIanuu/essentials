@@ -3,7 +3,6 @@ package com.ivianuu.essentials.license.ui
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.*
 import com.ivianuu.essentials.license.domain.*
@@ -41,7 +40,7 @@ private fun Project(
 ) {
     ListItem(
         title = { Text(project.project) },
-        onClick = {}
+        onClick = onClick
     )
 }
 

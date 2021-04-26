@@ -18,7 +18,6 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 import com.ivianuu.essentials.ui.core.*
-import kotlin.time.*
 
 fun ContainerTransformStackTransition(
     closedKey: Any,

@@ -8,7 +8,6 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
-import kotlin.time.*
 
 fun HorizontalSharedAxisStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()

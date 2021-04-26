@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.web.ui
 
 import android.webkit.*
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -9,7 +8,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.*
-import androidx.compose.ui.window.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.Scaffold

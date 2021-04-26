@@ -20,7 +20,6 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.checkableapps.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*

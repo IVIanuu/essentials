@@ -4,22 +4,18 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.ui.*
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.Given
-import kotlin.time.*
+import com.ivianuu.injekt.*
 
 @Given
 val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
