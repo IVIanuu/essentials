@@ -21,7 +21,7 @@ fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
     sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing),
     contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
-    waitingTimeout: Duration = 300.milliseconds
+    waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = {
     val states = sharedElements
         .map { (from, to) ->
@@ -37,7 +37,8 @@ fun SharedElementStackTransition(
     // hide "to" content while waiting for shared elements
     val toContentModifier = toElementModifier(ContentAnimationElementKey)
     toContentModifier?.value = Modifier.alpha(0f)
-
+    // if we do not yield here some items bounds do not appear
+    yield()
     attachTo()
 
     // wait until all shared elements has been placed on the screen
