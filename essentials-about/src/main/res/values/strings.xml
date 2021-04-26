@@ -18,6 +18,7 @@
     <!-- About -->
     <string name="es_about_title">About</string>
     <string name="es_about_version">Version</string>
+    <string name="es_about_donate">Version</string>
     <string name="es_about_rate">Rate</string>
     <string name="es_about_rate_desc">I\'ll be happy if you give me 5 stars</string>
     <string name="es_about_more_apps">More apps</string>
