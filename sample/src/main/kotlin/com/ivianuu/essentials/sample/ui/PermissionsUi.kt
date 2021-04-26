@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.accessibilityservice.*
+import android.app.admin.*
 import android.service.notification.*
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -29,11 +30,16 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.*
+import com.ivianuu.essentials.permission.deviceadmin.*
+import com.ivianuu.essentials.permission.ignorebatteryoptimizations.*
+import com.ivianuu.essentials.permission.installunknownapps.*
 import com.ivianuu.essentials.permission.notificationlistener.*
+import com.ivianuu.essentials.permission.packageusagestats.*
 import com.ivianuu.essentials.permission.runtime.*
 import com.ivianuu.essentials.permission.systemoverlay.*
 import com.ivianuu.essentials.permission.writesecuresettings.*
 import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.essentials.sample.deviceadmin.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -64,9 +70,13 @@ fun permissionUi(
                     permissionRequester(
                         listOf(
                             typeKeyOf<SampleCameraPermission>(),
+                            typeKeyOf<SampleDeviceAdminPermission>(),
                             typeKeyOf<SamplePhonePermission>(),
                             typeKeyOf<SampleAccessibilityPermission>(),
                             typeKeyOf<SampleNotificationListenerPermission>(),
+                            typeKeyOf<SampleIgnoreBatteryOptimizationsPermission>(),
+                            typeKeyOf<SampleInstallUnknownAppsPermission>(),
+                            typeKeyOf<SamplePackageUsageStatsPermission>(),
                             typeKeyOf<SampleSystemOverlayPermission>(),
                             typeKeyOf<SampleWriteSecureSettingsPermission>(),
                             typeKeyOf<SampleWriteSettingsPermission>()
@@ -103,6 +113,38 @@ object SampleAccessibilityPermission : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
         get() = EsAccessibilityService::class
     override val title: String = "Accessibility"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+}
+
+@Given
+object SampleDeviceAdminPermission : DeviceAdminPermission {
+    override val deviceAdminClass: KClass<out DeviceAdminReceiver>
+        get() = SampleDeviceAdmin::class
+    override val explanation: String
+        get() = "Explanation"
+    override val title: String = "Device admin"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+}
+
+@Given
+object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
+    override val title: String = "Ignore battery optimizations"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+}
+
+@Given
+object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
+    override val title: String = "Install unknown apps"
+    override val desc: String = "This is a desc"
+    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+}
+
+@Given
+object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
+    override val title: String = "Package usage stats"
     override val desc: String = "This is a desc"
     override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }

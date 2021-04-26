@@ -19,8 +19,10 @@ package com.ivianuu.essentials.permission.ui
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.ui.res.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.*
@@ -41,7 +43,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
 val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Required permissions") }) // todo customizable and/or res
+            TopAppBar(title = { Text(stringResource(R.string.es_request_permission_title)) })
         }
     ) {
         LazyColumn(contentPadding = localVerticalInsetsPadding()) {
@@ -56,7 +58,7 @@ val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel
                     leading = permission.permission.icon,
                     trailing = {
                         Button(onClick = { model.grantPermission(permission) }) {
-                            Text("GRANT") // todo res
+                            Text(stringResource(R.string.es_grant))
                         }
                     },
                     onClick = { model.grantPermission(permission) }

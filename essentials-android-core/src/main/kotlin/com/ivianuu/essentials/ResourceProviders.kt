@@ -91,7 +91,7 @@ typealias StringResourceProvider = (Int, List<Any?>) -> String
 
 @Given
 fun stringResourceProvider(@Given context: AppContext): StringResourceProvider = { id, args ->
-    context.getString(id, args)
+    context.getString(id, *args.toTypedArray())
 }
 
 typealias StringArrayResourceProvider = (Int) -> Array<String>

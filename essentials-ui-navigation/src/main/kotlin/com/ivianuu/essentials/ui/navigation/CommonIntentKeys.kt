@@ -22,7 +22,7 @@ import android.provider.*
 import androidx.core.net.*
 import com.ivianuu.injekt.*
 
-class DefaultIntentKey(val intent: Intent) : IntentKey
+data class DefaultIntentKey(val intent: Intent) : IntentKey
 
 fun Intent.toIntentKey() = DefaultIntentKey(this)
 

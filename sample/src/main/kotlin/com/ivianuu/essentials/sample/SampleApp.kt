@@ -58,6 +58,7 @@ import com.ivianuu.essentials.rate.data.*
 import com.ivianuu.essentials.rate.domain.*
 import com.ivianuu.essentials.rate.ui.*
 import com.ivianuu.essentials.recentapps.*
+import com.ivianuu.essentials.sample.deviceadmin.*
 import com.ivianuu.essentials.sample.tile.*
 import com.ivianuu.essentials.sample.ui.*
 import com.ivianuu.essentials.sample.work.*

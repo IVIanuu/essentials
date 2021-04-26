@@ -24,15 +24,15 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlin.reflect.*
 
-interface DeviceAdminPermission {
-    val deviceAdminClass: KClass<*>
+interface DeviceAdminPermission : Permission {
+    val deviceAdminClass: KClass<out DeviceAdminReceiver>
     val explanation: String
 }
 
 @Given
 fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
     @Given context: AppContext,
-    @Given devicePolicyManager: DevicePolicyManager
+    @Given devicePolicyManager: @SystemService DevicePolicyManager
 ): PermissionStateProvider<P> = { permission ->
     devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
 }

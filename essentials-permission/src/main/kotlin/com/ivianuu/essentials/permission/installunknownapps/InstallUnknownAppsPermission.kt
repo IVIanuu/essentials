@@ -19,12 +19,18 @@ package com.ivianuu.essentials.permission.installunknownapps
 import android.annotation.*
 import android.content.*
 import android.content.pm.*
+import android.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 
 interface InstallUnknownAppsPermission : Permission
+
+@Given
+fun <P : InstallUnknownAppsPermission> installUnknownAppsFindPermissionHint(
+): ShowFindPermissionHint<P> = true
 
 @SuppressLint("NewApi")
 @Given
@@ -36,7 +42,9 @@ fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider
 }
 
 @Given
-fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory():
-        PermissionIntentFactory<P> = {
-    Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES")
+fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
+    @Given buildInfo: BuildInfo
+): PermissionIntentFactory<P> = {
+    Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES",
+        Uri.parse("package:${buildInfo.packageName}"))
 }

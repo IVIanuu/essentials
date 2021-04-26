@@ -18,8 +18,10 @@ package com.ivianuu.essentials.permission.accessibility
 
 import android.accessibilityservice.*
 import android.content.*
+import android.os.*
 import android.provider.*
 import android.view.accessibility.*
+import androidx.core.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
@@ -44,5 +46,18 @@ fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProv
 }
 
 @Given
-fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory():
-        PermissionIntentFactory<P> = { Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS) }
+fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
+): ShowFindPermissionHint<P> = true
+
+@Given
+fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
+    @Given buildInfo: BuildInfo
+): PermissionIntentFactory<P> = { permission ->
+    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+        val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
+        putExtra(":settings:fragment_args_key", componentName)
+        putExtra(":settings:show_fragment_args", bundleOf(
+            ":settings:fragment_args_key" to componentName
+        ))
+    }
+}

@@ -23,6 +23,7 @@ import com.ivianuu.injekt.scope.*
 
 data class BuildInfo(
     val isDebug: Boolean,
+    val appName: String,
     val packageName: String,
     val versionName: String,
     val versionCode: Int,
@@ -38,6 +39,7 @@ fun androidBuildInfo(
         .getPackageInfo(appInfo.packageName, 0)
     return BuildInfo(
         isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+        appName = appInfo.loadLabel(packageManager).toString(),
         packageName = appInfo.packageName,
         versionName = packageInfo.versionName,
         versionCode = packageInfo.versionCode

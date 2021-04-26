@@ -23,18 +23,24 @@ import android.provider.*
 import androidx.core.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 interface IgnoreBatteryOptimizationsPermission : Permission
 
 @Given
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
     @Given buildInfo: BuildInfo,
-    @Given powerManager: PowerManager
+    @Given powerManager: @SystemService PowerManager
 ): PermissionStateProvider<P> = {
     powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 }
+
+@Given
+fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsShowFindPermissionHint(
+): ShowFindPermissionHint<P> = true
 
 @SuppressLint("BatteryLife")
 @Given

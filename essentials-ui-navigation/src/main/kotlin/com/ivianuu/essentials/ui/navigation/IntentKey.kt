@@ -47,7 +47,6 @@ typealias IntentKeyHandler = (Key<*>, ((ActivityResult) -> Unit)?) -> Boolean
 
 @Given
 fun intentKeyHandler(
-    @Given appContext: AppContext,
     @Given appUiStarter: IntentAppUiStarter,
     @Given dispatcher: MainDispatcher,
     @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
@@ -57,9 +56,11 @@ fun intentKeyHandler(
     val intentFactory = intentFactories[key::class]
     if (intentFactory != null) {
         val intent = intentFactory(key)
-        if (onResult != null) {
-            scope.launch {
-                val activity = appUiStarter()
+        scope.launch {
+            val activity = appUiStarter()
+            if (onResult == null) {
+                activity.startActivity(intent)
+            } else {
                 withContext(dispatcher) {
                     val result = suspendCancellableCoroutine<ActivityResult> { continuation ->
                         val launcher = activity.activityResultRegistry.register(
@@ -72,8 +73,6 @@ fun intentKeyHandler(
                     onResult(result)
                 }
             }
-        } else {
-            appContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
     }
     intentFactory != null

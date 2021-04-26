@@ -17,23 +17,34 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 typealias PermissionIntentFactory<P> = (P) -> Intent
 
+typealias ShowFindPermissionHint<P> = Boolean
+
 @Given
 fun <P : Permission> permissionIntentRequestHandler(
+    @Given buildInfo: BuildInfo,
     @Given intentFactory: PermissionIntentFactory<P>,
     @Given navigator: Navigator,
-    @Given state: Flow<PermissionState<P>>
+    @Given showFindPermissionHint: ShowFindPermissionHint<P> = false,
+    @Given state: Flow<PermissionState<P>>,
+    @Given stringResource: StringResourceProvider,
+    @Given toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
     raceOf(
         {
+            if (showFindPermissionHint)
+                toaster(stringResource(R.string.find_app_here, listOf(buildInfo.appName)))
             // wait until user navigates back from the permission screen
             navigator.pushForResult(intentFactory(permission).toIntentKey())
         },
