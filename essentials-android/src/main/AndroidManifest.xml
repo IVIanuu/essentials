@@ -19,7 +19,8 @@
     <application>
         <activity
             android:name="com.ivianuu.essentials.app.EsActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:configChanges="colorMode|density|fontScale|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc
+            |navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
