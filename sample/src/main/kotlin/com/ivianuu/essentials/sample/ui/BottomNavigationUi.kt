@@ -45,7 +45,7 @@ object BottomNavigationKey : Key<Nothing>
 
 @Given
 val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
-    var selectedItem by rememberSaveable { mutableStateOf(BottomNavItem.values().first()) }
+    var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
@@ -66,6 +66,7 @@ val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
                     ) {
                         BottomNavItem.values().forEach { item ->
                             BottomNavigationItem(
+                                alwaysShowLabel = false,
                                 selected = item == selectedItem,
                                 onClick = { selectedItem = item },
                                 icon = { Icon(painterResource(item.icon), null) },
