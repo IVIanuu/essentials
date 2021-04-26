@@ -54,6 +54,7 @@ fun ContainerTransformStackTransition(
     var currentBorderWidth by mutableStateOf(0.dp)
     var currentBorderColor by mutableStateOf(Color.Transparent)
     var currentElevation by mutableStateOf(0.dp)
+    var currentAbsoluteElevation by mutableStateOf(0.dp)
     var currentFromAlpha by mutableStateOf(1f)
     var currentToAlpha by mutableStateOf(0f)
 
@@ -65,88 +66,92 @@ fun ContainerTransformStackTransition(
             modifier = Modifier.fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.54f * currentScrimAlpha))
         ) {
-            Surface(
-                modifier = Modifier
-                    .composed {
-                        with(LocalDensity.current) {
-                            size(currentWidth.toDp(), currentHeight.toDp())
-                                .graphicsLayer {
-                                    translationX = currentPosition.x
-                                    translationY = currentPosition.y
-                                }
-                        }
-                    },
-                shape = RoundedCornerShape(currentCornerSize),
-                color = currentColor,
-                border = if (currentBorderWidth > 0.dp) BorderStroke(currentBorderWidth, currentBorderColor) else null,
-                elevation = currentElevation
+            CompositionLocalProvider(
+                LocalAbsoluteElevation provides currentAbsoluteElevation
             ) {
-                withCompositionContext(fromProps.compositionContext) {
-                    Box(
-                        modifier = Modifier
-                            .then(object : LayoutModifier {
-                                override fun MeasureScope.measure(
-                                    measurable: Measurable,
-                                    constraints: Constraints
-                                ): MeasureResult {
-                                    val placeable = measurable.measure(Constraints.fixed(
-                                        fromBounds.width.toInt(), fromBounds.height.toInt()
-                                    ))
-                                    return layout(currentWidth.toInt(), currentHeight.toInt()) {
-                                        placeable.place(0, 0)
+                Surface(
+                    modifier = Modifier
+                        .composed {
+                            with(LocalDensity.current) {
+                                size(currentWidth.toDp(), currentHeight.toDp())
+                                    .graphicsLayer {
+                                        translationX = currentPosition.x
+                                        translationY = currentPosition.y
                                     }
-                                }
-                            })
-                            .graphicsLayer {
-                                alpha = currentFromAlpha
-                                val sourceSize = Size(fromBounds.width,
-                                    fromBounds.width * currentHeight / currentWidth)
-                                val destinationSize = Size(currentWidth,
-                                    sourceSize.height * currentWidth / sourceSize.width)
-                                transformOrigin = TransformOrigin(0f, 0f)
-                                scaleX = destinationSize.width / sourceSize.width
-                                scaleY = destinationSize.height / sourceSize.height
-                            },
-                    ) {
-                        CompositionLocalProvider(
-                            LocalContainerTransformTransitionFraction provides
-                                    if (isPush) currentFraction else 1f - currentFraction,
-                            content = fromProps.content
-                        )
+                            }
+                        },
+                    shape = RoundedCornerShape(currentCornerSize),
+                    color = currentColor,
+                    border = if (currentBorderWidth > 0.dp) BorderStroke(currentBorderWidth, currentBorderColor) else null,
+                    elevation = currentElevation
+                ) {
+                    withCompositionContext(fromProps.compositionContext) {
+                        Box(
+                            modifier = Modifier
+                                .then(object : LayoutModifier {
+                                    override fun MeasureScope.measure(
+                                        measurable: Measurable,
+                                        constraints: Constraints
+                                    ): MeasureResult {
+                                        val placeable = measurable.measure(Constraints.fixed(
+                                            fromBounds.width.toInt(), fromBounds.height.toInt()
+                                        ))
+                                        return layout(currentWidth.toInt(), currentHeight.toInt()) {
+                                            placeable.place(0, 0)
+                                        }
+                                    }
+                                })
+                                .graphicsLayer {
+                                    alpha = currentFromAlpha
+                                    val sourceSize = Size(fromBounds.width,
+                                        fromBounds.width * currentHeight / currentWidth)
+                                    val destinationSize = Size(currentWidth,
+                                        sourceSize.height * currentWidth / sourceSize.width)
+                                    transformOrigin = TransformOrigin(0f, 0f)
+                                    scaleX = destinationSize.width / sourceSize.width
+                                    scaleY = destinationSize.height / sourceSize.height
+                                },
+                        ) {
+                            CompositionLocalProvider(
+                                LocalContainerTransformTransitionFraction provides
+                                        if (isPush) currentFraction else 1f - currentFraction,
+                                content = fromProps.content
+                            )
+                        }
                     }
-                }
-                withCompositionContext(toProps.compositionContext) {
-                    Box(
-                        modifier = Modifier
-                            .then(object : LayoutModifier {
-                                override fun MeasureScope.measure(
-                                    measurable: Measurable,
-                                    constraints: Constraints
-                                ): MeasureResult {
-                                    val placeable = measurable.measure(Constraints.fixed(
-                                        toBounds.width.toInt(), toBounds.height.toInt()
-                                    ))
-                                    return layout(currentWidth.toInt(), currentHeight.toInt()) {
-                                        placeable.place(0, 0)
+                    withCompositionContext(toProps.compositionContext) {
+                        Box(
+                            modifier = Modifier
+                                .then(object : LayoutModifier {
+                                    override fun MeasureScope.measure(
+                                        measurable: Measurable,
+                                        constraints: Constraints
+                                    ): MeasureResult {
+                                        val placeable = measurable.measure(Constraints.fixed(
+                                            toBounds.width.toInt(), toBounds.height.toInt()
+                                        ))
+                                        return layout(currentWidth.toInt(), currentHeight.toInt()) {
+                                            placeable.place(0, 0)
+                                        }
                                     }
-                                }
-                            })
-                            .graphicsLayer {
-                                alpha = currentToAlpha
-                                val sourceSize = Size(toBounds.width,
-                                    toBounds.width * currentHeight / currentWidth)
-                                val destinationSize = Size(currentWidth,
-                                    sourceSize.height * currentWidth / sourceSize.width)
-                                transformOrigin = TransformOrigin(0f, 0f)
-                                scaleX = destinationSize.width / sourceSize.width
-                                scaleY = destinationSize.height / sourceSize.height
-                            },
-                    ) {
-                        CompositionLocalProvider(
-                            LocalContainerTransformTransitionFraction provides
-                                    if (isPush) 1f - currentFraction else currentFraction,
-                            content = toProps.content
-                        )
+                                })
+                                .graphicsLayer {
+                                    alpha = currentToAlpha
+                                    val sourceSize = Size(toBounds.width,
+                                        toBounds.width * currentHeight / currentWidth)
+                                    val destinationSize = Size(currentWidth,
+                                        sourceSize.height * currentWidth / sourceSize.width)
+                                    transformOrigin = TransformOrigin(0f, 0f)
+                                    scaleX = destinationSize.width / sourceSize.width
+                                    scaleY = destinationSize.height / sourceSize.height
+                                },
+                        ) {
+                            CompositionLocalProvider(
+                                LocalContainerTransformTransitionFraction provides
+                                        if (isPush) 1f - currentFraction else currentFraction,
+                                content = toProps.content
+                            )
+                        }
                     }
                 }
             }
@@ -169,6 +174,7 @@ fun ContainerTransformStackTransition(
         currentBorderWidth = lerp(fromProps.borderWidth, toProps.borderWidth, value)
         currentBorderColor = lerp(fromProps.borderColor, toProps.borderColor, value)
         currentElevation = lerp(fromProps.elevation, toProps.elevation, value)
+        currentAbsoluteElevation = lerp(fromProps.absoluteElevation, toProps.absoluteElevation, value)
         currentToAlpha = interval(0.2f, 0.4f, value)
         if (!isPush) {
             currentFromAlpha = lerp(1f, 0f, interval(0.15f, 0.45f, value))
@@ -186,6 +192,7 @@ class ContainerTransformProps(
     borderWidth: Dp,
     borderColor: Color,
     elevation: Dp,
+    absoluteElevation: Dp
 ) {
     var compositionContext by mutableStateOf(compositionContext)
     var content by mutableStateOf(content)
@@ -194,6 +201,7 @@ class ContainerTransformProps(
     var borderWidth by mutableStateOf(borderWidth)
     var borderColor by mutableStateOf(borderColor)
     var elevation by mutableStateOf(elevation)
+    var absoluteElevation by mutableStateOf(absoluteElevation)
 }
 
 val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
@@ -211,17 +219,18 @@ fun ContainerTransformSurface(
     content: @Composable () -> Unit = {},
 ) {
     val compositionContext = rememberCompositionContext()
+    val absoluteElevation = LocalAbsoluteElevation.current
     val props = remember {
         ContainerTransformProps(compositionContext, content, color,
-            cornerSize, borderWidth, borderColor, elevation)
+            cornerSize, borderWidth, borderColor, elevation, absoluteElevation)
     }
-    props.compositionContext = compositionContext
     props.content = content
     props.cornerSize = cornerSize
     props.color = color
     props.borderWidth = borderWidth
     props.borderColor = borderColor
     props.elevation = elevation
+    props.absoluteElevation = absoluteElevation
     Surface(
         Modifier
             .animationElement(key, ContainerTransformPropsKey to props)
@@ -232,8 +241,10 @@ fun ContainerTransformSurface(
         elevation = elevation
     ) {
         CompositionLocalProvider(
-            LocalContainerTransformTransitionFraction provides if (isOpened) 1f else 0f,
-            content = content
-        )
+            LocalContainerTransformTransitionFraction provides if (isOpened) 1f else 0f
+        ) {
+            props.compositionContext = rememberCompositionContext()
+            content()
+        }
     }
 }
