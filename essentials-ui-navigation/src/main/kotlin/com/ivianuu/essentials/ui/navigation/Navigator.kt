@@ -49,6 +49,18 @@ class NavigatorImpl(
 
     private val actor = scope.actor()
 
+    init {
+        if (logger.isEnabled) {
+            _state
+                .map { it.backStack }
+                .distinctUntilChanged()
+                .onEach {
+                    logger.d { "back stack changed -> $it" }
+                }
+                .launchIn(scope)
+        }
+    }
+
     override suspend fun <R> push(key: Key<R>): R? {
         val result = CompletableDeferred<R?>()
         actor.act {
@@ -57,9 +69,9 @@ class NavigatorImpl(
                 ?.safeAs<CompletableDeferred<Any?>>()
                 ?.complete(null)
             if (!intentKeyHandler(key) {
-                    @Suppress("UNCHECKED_CAST")
-                    result.complete(it as R)
-                }) {
+                @Suppress("UNCHECKED_CAST")
+                result.complete(it as R)
+            }) {
                 _state.update {
                     copy(
                         backStack = backStack
@@ -79,13 +91,14 @@ class NavigatorImpl(
             _state.value.results[key]
                 ?.safeAs<CompletableDeferred<Any?>>()
                 ?.complete(null)
-            if (intentKeyHandler(key) { result.complete(it as R?) }) {
-                _state.update {
-                    copy(
-                        backStack = backStack.dropLast(1),
-                        results = results + mapOf(key to result)
-                    )
-                }
+            if (intentKeyHandler(key) {
+                @Suppress("UNCHECKED_CAST")
+                result.complete(it as R)
+            }) {
+                _state.update { copy(
+                    backStack = backStack.dropLast(1),
+                    results = results - key
+                ) }
             } else {
                 _state.update {
                     copy(
