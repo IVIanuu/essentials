@@ -37,9 +37,7 @@ val navigationStateContent: NavigationStateContent = { state, modifier ->
             keyUiGivenScopeFactory = keyUiGivenScopeFactory
         )
     }
-    SideEffect {
-        contentState.updateBackStack(state.backStack.cast())
-    }
+    contentState.updateBackStack(state.backStack.cast())
     DisposableEffect(true) {
         onDispose {
             contentState.updateBackStack(emptyList())
