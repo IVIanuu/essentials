@@ -63,7 +63,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_favorite), null) },
-                    title = { Text(stringResource(R.string.es_donation_title)) },
+                    title = { Text(stringResource(R.string.es_about_donate)) },
                     onClick = model.donate
                 )
             }
@@ -107,7 +107,7 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
             item {
                 ListItem(
                     leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
-                    title = { Text(stringResource(R.string.es_send_mail)) },
+                    title = { Text(stringResource(R.string.es_about_feedback)) },
                     subtitle = { Text(model.email) },
                     onClick = model.sendMail
                 )
