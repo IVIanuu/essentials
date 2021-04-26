@@ -55,6 +55,7 @@ data class FeedbackModel(
 @Given
 fun feedbackModel(
     @Given displayShowNever: DisplayShowNeverUseCase,
+    @Given key: FeedbackKey,
     @Given navigator: Navigator,
     @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
     @Given showLater: ShowLaterUseCase,
@@ -68,6 +69,10 @@ fun feedbackModel(
     action(FeedbackModel.showNever()) { showNever() }
     action(FeedbackModel.openReddit()) {
         navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+        navigator.pop(key)
     }
-    action(FeedbackModel.sendMail()) { navigator.push(FeedbackMailKey) }
+    action(FeedbackModel.sendMail()) {
+        navigator.push(FeedbackMailKey)
+        navigator.pop(key)
+    }
 }
