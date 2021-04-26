@@ -85,7 +85,7 @@ fun <T> AnimatedStack(
     val defaultTransition = LocalStackTransition.current
     val state = remember { AnimatedStackState(scope, root, children, defaultTransition) }
     state.defaultTransition = defaultTransition
-    state.setChildren(children)
+    state.updateChildren(children)
     Box(modifier = modifier) {
         state.visibleChildren.toList().forEach { child ->
             key(child.key) { child.Content() }
@@ -147,7 +147,7 @@ internal class AnimatedStackState<T>(
             }
     }
 
-    fun setChildren(newChildren: List<AnimatedStackChild<T>>) {
+    fun updateChildren(newChildren: List<AnimatedStackChild<T>>) {
         if (newChildren == children) return
 
         // do not allow pushing the same child twice
@@ -166,59 +166,59 @@ internal class AnimatedStackState<T>(
 
         val newVisibleChildren = newChildren.filterVisible()
 
-        if (oldVisibleChildren != newVisibleChildren) {
-            val oldTopChild = oldVisibleChildren.lastOrNull()
-            val newTopChild = newVisibleChildren.lastOrNull()
+        if (oldVisibleChildren == newVisibleChildren) return
 
-            // check if we should animate the top children
-            val replacingTopChildren = newTopChild != null && oldTopChild != newTopChild
+        val oldTopChild = oldVisibleChildren.lastOrNull()
+        val newTopChild = newVisibleChildren.lastOrNull()
 
-            // Remove all visible children which shouldn't be visible anymore
-            // from top to bottom
-            oldVisibleChildren
-                .dropLast(if (replacingTopChildren) 1 else 0)
-                .reversed()
-                .filterNot { it in newVisibleChildren }
-                .forEach { child ->
-                    val localTransition = child.exitTransition
-                        ?: defaultTransition
-                    performChange(
-                        from = child,
-                        to = null,
-                        isPush = false,
-                        transition = localTransition
-                    )
-                }
+        // check if we should animate the top children
+        val replacingTopChildren = newTopChild != null && oldTopChild != newTopChild
 
-            // Add any new children to the stack from bottom to top
-            newVisibleChildren
-                .dropLast(if (replacingTopChildren) 1 else 0)
-                .filterNot { it in oldVisibleChildren }
-                .forEachIndexed { i, child ->
-                    val localTransition =
-                        child.enterTransition ?: defaultTransition
-                    performChange(
-                        from = newVisibleChildren.getOrNull(i - 1),
-                        to = child,
-                        isPush = true,
-                        transition = localTransition
-                    )
-                }
-
-            val isPush = newTopChild !in oldChildren
-
-            // Replace the old visible top with the new one
-            if (replacingTopChildren) {
-                val localTransition =
-                    if (isPush) newTopChild?.enterTransition ?: defaultTransition
-                    else oldTopChild?.exitTransition ?: defaultTransition
+        // Remove all visible children which shouldn't be visible anymore
+        // from top to bottom
+        oldVisibleChildren
+            .dropLast(if (replacingTopChildren) 1 else 0)
+            .reversed()
+            .filterNot { it in newVisibleChildren }
+            .forEach { child ->
+                val localTransition = child.exitTransition
+                    ?: defaultTransition
                 performChange(
-                    from = oldTopChild,
-                    to = newTopChild,
-                    isPush = isPush,
+                    from = child,
+                    to = null,
+                    isPush = false,
                     transition = localTransition
                 )
             }
+
+        // Add any new children to the stack from bottom to top
+        newVisibleChildren
+            .dropLast(if (replacingTopChildren) 1 else 0)
+            .filterNot { it in oldVisibleChildren }
+            .forEachIndexed { i, child ->
+                val localTransition =
+                    child.enterTransition ?: defaultTransition
+                performChange(
+                    from = newVisibleChildren.getOrNull(i - 1),
+                    to = child,
+                    isPush = true,
+                    transition = localTransition
+                )
+            }
+
+        val isPush = newTopChild !in oldChildren
+
+        // Replace the old visible top with the new one
+        if (replacingTopChildren) {
+            val localTransition =
+                if (isPush) newTopChild?.enterTransition ?: defaultTransition
+                else oldTopChild?.exitTransition ?: defaultTransition
+            performChange(
+                from = oldTopChild,
+                to = newTopChild,
+                isPush = isPush,
+                transition = localTransition
+            )
         }
     }
 
@@ -226,7 +226,7 @@ internal class AnimatedStackState<T>(
         val visibleChildren = mutableListOf<AnimatedStackChild<T>>()
 
         for (child in reversed()) {
-            visibleChildren += child
+            visibleChildren.add(0, child)
             if (!child.opaque) break
         }
 
