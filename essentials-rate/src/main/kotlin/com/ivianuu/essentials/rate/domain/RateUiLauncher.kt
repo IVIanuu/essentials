@@ -2,6 +2,7 @@ package com.ivianuu.essentials.rate.domain
 
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.rate.data.*
 import com.ivianuu.essentials.rate.ui.*
 import com.ivianuu.essentials.time.*
@@ -32,18 +33,29 @@ internal typealias ShouldShowRateDialogUseCase = suspend () -> Boolean
 
 @Given
 fun shouldShowRateDialogUseCase(
+    @Given logger: Logger,
     @Given pref: DataStore<RatePrefs>,
     @Given timestampProvider: TimestampProvider
 ): ShouldShowRateDialogUseCase = useCase@ {
     val prefs = pref.data.first()
     if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-        return@useCase false
+        return@useCase false.also {
+            logger.d { "show not: already completed" }
+        }
     if (prefs.launchTimes < MIN_LAUNCH_TIMES)
-        return@useCase false
+        return@useCase false.also {
+            logger.d { "show not: launch times -> ${prefs.launchTimes} < $MIN_LAUNCH_TIMES" }
+        }
     val now = timestampProvider()
     val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
-    return@useCase installedDuration >= MIN_INSTALL_DURATION
+    if (installedDuration <= MIN_INSTALL_DURATION)
+        return@useCase false.also {
+            logger.d { "show not: install duration -> $installedDuration < $MIN_INSTALL_DURATION" }
+        }
+
+    return@useCase true
+        .also { logger.d { "show" } }
 }
 
-private val MIN_INSTALL_DURATION = 3.days
+private val MIN_INSTALL_DURATION = 10.seconds//7.days
 private const val MIN_LAUNCH_TIMES = 10
