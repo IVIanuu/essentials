@@ -18,13 +18,18 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.*
 import android.content.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
+import androidx.compose.ui.unit.*
 import com.github.michaelbull.result.*
 import com.google.accompanist.coil.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.shell.*
@@ -34,7 +39,11 @@ import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 
 internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
-    CoilImage(data = data, contentDescription = null)
+    Image(
+        painter = rememberCoilPainter(data),
+        modifier = Modifier.size(40.dp),
+        contentDescription = null
+    )
 }
 
 internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)

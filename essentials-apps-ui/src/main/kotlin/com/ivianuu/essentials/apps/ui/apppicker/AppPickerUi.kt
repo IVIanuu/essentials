@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.ui.*
@@ -59,8 +60,8 @@ val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
             ListItem(
                 title = { Text(app.appName) },
                 leading = {
-                    CoilImage(
-                        data = AppIcon(packageName = app.packageName),
+                    Image(
+                        painter = rememberCoilPainter(AppIcon(packageName = app.packageName)),
                         modifier = Modifier.size(40.dp),
                         contentDescription = null
                     )

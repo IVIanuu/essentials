@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
@@ -77,8 +78,8 @@ fun checkableAppsScreen(@Given modelFlow: StateFlow<CheckableAppsModel>): Checka
             ListItem(
                 title = { Text(app.info.appName) },
                 leading = {
-                    CoilImage(
-                        data = AppIcon(packageName = app.info.packageName),
+                    Image(
+                        painter = rememberCoilPainter(AppIcon(packageName = app.info.packageName)),
                         modifier = Modifier.size(40.dp),
                         contentDescription = null
                     )
