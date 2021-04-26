@@ -69,7 +69,7 @@ object NotificationsKey : Key<Nothing>
 @Given
 val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
     Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
-        AnimatedBox(model.hasPermissions) { hasPermission ->
+        ResourceBox(model.hasPermissions) { hasPermission ->
             if (hasPermission) {
                 NotificationsList(
                     notifications = model.notifications,
@@ -149,7 +149,7 @@ private fun NotificationPermissions(
 
 @Optics
 data class NotificationsModel(
-    val hasPermissions: Boolean = false,
+    val hasPermissions: Resource<Boolean> = Idle,
     val notifications: Resource<List<UiNotification>> = Idle,
     val requestPermissions: () -> Unit = {},
     val openNotification: (UiNotification) -> Unit = {},
@@ -182,7 +182,9 @@ fun notificationsModel(
         }
         .flowAsResource()
         .update { copy(notifications = it) }
-    permissionState.update { copy(hasPermissions = it) }
+    permissionState
+        .flowAsResource()
+        .update { copy(hasPermissions = it) }
     action(NotificationsModel.requestPermissions()) {
         permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
     }
