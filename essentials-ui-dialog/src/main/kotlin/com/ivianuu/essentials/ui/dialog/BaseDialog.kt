@@ -28,10 +28,7 @@ fun BaseDialog(
     content: @Composable () -> Unit
 ) {
     Surface(
-        modifier = Modifier
-            .padding(all = 32.dp)
-            .widthIn(min = 280.dp, max = 356.dp)
-            .then(modifier),
+        modifier = modifier.widthIn(min = 280.dp, max = 356.dp),
         color = MaterialTheme.colors.surface,
         elevation = 24.dp,
         shape = MaterialTheme.shapes.medium,

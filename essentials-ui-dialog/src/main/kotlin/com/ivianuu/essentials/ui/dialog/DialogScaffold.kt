@@ -24,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
@@ -55,7 +56,8 @@ fun DialogScaffold(
                 modifier = Modifier
                     .pointerInput(true) { detectTapGestures {  } }
                     .wrapContentSize(align = Alignment.Center)
-                    .animationElement(PopupAnimationElementKey),
+                    .animationElement(PopupAnimationElementKey)
+                    .padding(all = 32.dp),
                 contentAlignment = Alignment.Center
             ) {
                 dialog()
