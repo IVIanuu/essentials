@@ -35,6 +35,7 @@ internal typealias ShouldShowRateDialogUseCase = suspend () -> Boolean
 fun shouldShowRateDialogUseCase(
     @Given logger: Logger,
     @Given pref: DataStore<RatePrefs>,
+    @Given schedule: RateUiSchedule = RateUiSchedule(),
     @Given timestampProvider: TimestampProvider
 ): ShouldShowRateDialogUseCase = useCase@ {
     val prefs = pref.data.first()
@@ -42,20 +43,22 @@ fun shouldShowRateDialogUseCase(
         return@useCase false.also {
             logger.d { "show not: already completed" }
         }
-    if (prefs.launchTimes < MIN_LAUNCH_TIMES)
+    if (prefs.launchTimes < schedule.minLaunchTimes)
         return@useCase false.also {
-            logger.d { "show not: launch times -> ${prefs.launchTimes} < $MIN_LAUNCH_TIMES" }
+            logger.d { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
         }
     val now = timestampProvider()
     val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
-    if (installedDuration <= MIN_INSTALL_DURATION)
+    if (installedDuration <= schedule.minInstallDuration)
         return@useCase false.also {
-            logger.d { "show not: install duration -> $installedDuration < $MIN_INSTALL_DURATION" }
+            logger.d { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
         }
 
     return@useCase true
         .also { logger.d { "show" } }
 }
 
-private val MIN_INSTALL_DURATION = 10.seconds//7.days
-private const val MIN_LAUNCH_TIMES = 10
+data class RateUiSchedule(
+    val minInstallDuration: Duration = 7.days,
+    val minLaunchTimes: Int = 10
+)
