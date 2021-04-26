@@ -123,7 +123,9 @@ fun navBarUi(
 
             Button(
                 onClick = {
-                    navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
+                    scope.launch {
+                        navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
+                    }
                 }
             ) { Text("Settings") }
         }

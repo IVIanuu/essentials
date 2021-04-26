@@ -122,7 +122,7 @@ fun prefsUi(
                     subtitle = { Text("This is a text input preference") },
                     onClick = {
                         scope.launch {
-                            val newTextInput = navigator.pushForResult(
+                            val newTextInput = navigator.push(
                                 TextInputKey(
                                     initial = prefs.textInput,
                                     label = "Input",
@@ -142,7 +142,7 @@ fun prefsUi(
                     value = Color(prefs.color),
                     onValueChangeRequest = {
                         scope.launch {
-                            val newColor = navigator.pushForResult(
+                            val newColor = navigator.push(
                                 com.ivianuu.essentials.colorpicker.ColorPickerKey(
                                     initialColor = Color(prefs.color),
                                     title = "Color"
@@ -165,7 +165,7 @@ fun prefsUi(
                     subtitle = { Text("This is a multi select list preference") },
                     onClick = {
                         scope.launch {
-                            val newItems = navigator.pushForResult(
+                            val newItems = navigator.push(
                                 MultiChoiceListKey(
                                     items = listOf(
                                         MultiChoiceListKey.Item("A", "A"),
@@ -190,7 +190,7 @@ fun prefsUi(
                     subtitle = { Text("This is a single item list preference") },
                     onClick = {
                         scope.launch {
-                            val newItem = navigator.pushForResult(
+                            val newItem = navigator.push(
                                 SingleChoiceListKey(
                                     items = listOf(
                                         SingleChoiceListKey.Item("A", "A"),

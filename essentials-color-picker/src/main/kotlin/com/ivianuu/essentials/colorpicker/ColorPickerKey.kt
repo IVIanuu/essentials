@@ -17,10 +17,12 @@
 package com.ivianuu.essentials.colorpicker
 
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class ColorPickerKey(
     val initialColor: Color,
@@ -36,10 +38,15 @@ fun colorPickerUi(
     @Given navigator: Navigator,
 ): KeyUi<ColorPickerKey> = {
     DialogScaffold {
+        val scope = rememberCoroutineScope()
         ColorPickerDialog(
             initialColor = key.initialColor,
-            onColorSelected = { navigator.pop(key, it) },
-            onCancel = { navigator.pop(key, null) },
+            onColorSelected = {
+                scope.launch { navigator.pop(key, it) }
+            },
+            onCancel = {
+                scope.launch { navigator.pop(key, null) }
+            },
             colorPalettes = key.colorPalettes,
             showAlphaSelector = key.showAlphaSelector,
             allowCustomArgb = key.allowCustomArgb,

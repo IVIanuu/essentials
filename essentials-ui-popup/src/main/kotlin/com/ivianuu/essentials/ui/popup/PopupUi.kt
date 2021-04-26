@@ -52,8 +52,9 @@ fun popupUi(
 ): KeyUi<PopupKey> = {
     val configuration = LocalConfiguration.current
     val initialConfiguration = remember { configuration }
+    val scope = rememberCoroutineScope()
     if (configuration !== initialConfiguration) {
-        navigator.pop(key)
+        scope.launch { navigator.pop(key) }
     }
 
     var dismissed by remember { refOf(false) }
@@ -61,7 +62,7 @@ fun popupUi(
     val dismiss: (Boolean) -> Unit = { cancelled ->
         if (!dismissed) {
             dismissed = true
-            navigator.pop(key)
+            scope.launch { navigator.pop(key) }
             if (cancelled) key.onCancel?.invoke()
         }
     }

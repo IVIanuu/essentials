@@ -20,6 +20,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
+import kotlinx.coroutines.*
 
 @Given
 val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
@@ -42,11 +43,14 @@ fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformK
                     cornerSize = 28.dp,
                     elevation = 6.dp
                 ) {
+                    val scope = rememberCoroutineScope()
                     Box(
                         modifier = Modifier
                             .size(56.dp)
                             .clickable {
-                                navigator.push(ContainerTransformDetailsKey("fab"))
+                                scope.launch {
+                                    navigator.push(ContainerTransformDetailsKey("fab"))
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -91,11 +95,16 @@ private fun BigDetailsCard(navigator: Navigator) {
         cornerSize = 4.dp,
         elevation = 2.dp
     ) {
+        val scope = rememberCoroutineScope()
         Column(
             modifier = Modifier.height(300.dp)
                 .fillMaxWidth()
-                .clickable { navigator.push(ContainerTransformDetailsKey("big card")) },
-            ) {
+                .clickable {
+                    scope.launch {
+                        navigator.push(ContainerTransformDetailsKey("big card"))
+                    }
+                },
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,10 +149,15 @@ private fun SmallDetailsCard(navigator: Navigator) {
         cornerSize = 4.dp,
         elevation = 2.dp
     ) {
+        val scope = rememberCoroutineScope()
         Row(
             modifier = Modifier.height(125.dp)
                 .fillMaxWidth()
-                .clickable { navigator.push(ContainerTransformDetailsKey("small card")) },
+                .clickable {
+                    scope.launch {
+                        navigator.push(ContainerTransformDetailsKey("small card"))
+                    }
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -191,8 +205,13 @@ private fun DetailsGridCard(
         cornerSize = 4.dp,
         elevation = 2.dp
     ) {
+        val scope = rememberCoroutineScope()
         Column(
-            modifier = Modifier.clickable { navigator.push(ContainerTransformDetailsKey(key)) }
+            modifier = Modifier.clickable {
+                scope.launch {
+                    navigator.push(ContainerTransformDetailsKey(key))
+                }
+            }
         ) {
             Box(
                 modifier = Modifier
@@ -239,6 +258,7 @@ private fun DetailsListItem(
         key = "list item $index",
         isOpened = false
     ) {
+        val scope = rememberCoroutineScope()
         ListItem(
             leading = {
                 Image(
@@ -249,7 +269,11 @@ private fun DetailsListItem(
             },
             title = { Text("List item $index") },
             subtitle = { Text(Strings.Text) },
-            onClick = { navigator.push(ContainerTransformDetailsKey("list item $index")) }
+            onClick = {
+                scope.launch {
+                    navigator.push(ContainerTransformDetailsKey("list item $index"))
+                }
+            }
         )
     }
 }

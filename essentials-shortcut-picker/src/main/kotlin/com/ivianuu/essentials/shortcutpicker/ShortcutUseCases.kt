@@ -51,7 +51,7 @@ fun getAllShortcutsUseCase(
                         name = resolveInfo.loadLabel(packageManager).toString(),
                         icon = resolveInfo.loadIcon(packageManager).toBitmap().toImageBitmap()
                     )
-                }.getOrElse { null }
+                }.getOrNull()
             }
             .filterNotNull()
             .sortedBy { it.name }

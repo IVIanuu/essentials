@@ -78,7 +78,7 @@ class AppActionPickerDelegate(
     }
 
     override suspend fun pickAction(): ActionPickerKey.Result? {
-        val app = navigator.pushForResult(AppPickerKey(launchableAppPredicate)) ?: return null
+        val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
         return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
     }
 }

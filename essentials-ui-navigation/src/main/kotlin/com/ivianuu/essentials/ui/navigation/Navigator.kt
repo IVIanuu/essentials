@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -28,12 +27,10 @@ import kotlinx.coroutines.flow.*
 
 interface Navigator {
     val state: StateFlow<NavigationState>
-    fun push(key: Key<*>)
-    suspend fun <R> pushForResult(key: Key<R>): R?
-    fun replaceTop(key: Key<*>)
-    suspend fun <R> replaceTopForResult(key: Key<R>): R?
-    fun <R> pop(key: Key<R>, result: R? = null)
-    fun popTop()
+    suspend fun <R> push(key: Key<R>): R?
+    suspend fun <R> replaceTop(key: Key<R>): R?
+    suspend fun <R> pop(key: Key<R>, result: R? = null)
+    suspend fun popTop()
 }
 
 data class NavigationState(val backStack: List<Key<*>> = emptyList())
@@ -52,23 +49,17 @@ class NavigatorImpl(
 
     private val actor = scope.actor()
 
-    override fun push(key: Key<*>) {
-        scope.launch { pushForResult(key) }
-    }
-
-    override suspend fun <R> pushForResult(key: Key<R>): R? {
+    override suspend fun <R> push(key: Key<R>): R? {
         val result = CompletableDeferred<R?>()
         actor.act {
             logger.d { "push $key" }
             _state.value.results[key]
                 ?.safeAs<CompletableDeferred<Any?>>()
                 ?.complete(null)
-            if (!intentKeyHandler(key) { intentResult ->
-                    intentResult.fold(
-                        success = { result.complete(it as R) },
-                        failure = { result.completeExceptionally(it) }
-                    )
-            }) {
+            if (!intentKeyHandler(key) {
+                    @Suppress("UNCHECKED_CAST")
+                    result.complete(it as R)
+                }) {
                 _state.update {
                     copy(
                         backStack = backStack
@@ -81,11 +72,7 @@ class NavigatorImpl(
         return result.await()
     }
 
-    override fun replaceTop(key: Key<*>) {
-        scope.launch { replaceTopForResult(key) }
-    }
-
-    override suspend fun <R> replaceTopForResult(key: Key<R>): R? {
+    override suspend fun <R> replaceTop(key: Key<R>): R? {
         val result = CompletableDeferred<R?>()
         actor.act {
             logger.d { "replace top $key" }
@@ -113,24 +100,20 @@ class NavigatorImpl(
         return result.await()
     }
 
-    override fun <R> pop(key: Key<R>, result: R?) {
-        scope.launch {
-            actor.act {
-                logger.d { "pop $key" }
-                _state.update { popKey(key, result) }
-            }
+    override suspend fun <R> pop(key: Key<R>, result: R?) {
+        actor.act {
+            logger.d { "pop $key" }
+            _state.update { popKey(key, result) }
         }
     }
 
-    override fun popTop() {
-        scope.launch {
-            actor.act {
-                val topKey = state.first().backStack.last()
-                logger.d { "pop top $topKey" }
-                _state.update {
-                    @Suppress("UNCHECKED_CAST")
-                    popKey(topKey as Key<Any>, null)
-                }
+    override suspend fun popTop() {
+        actor.act {
+            val topKey = state.first().backStack.last()
+            logger.d { "pop top $topKey" }
+            _state.update {
+                @Suppress("UNCHECKED_CAST")
+                popKey(topKey as Key<Any>, null)
             }
         }
     }

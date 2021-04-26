@@ -28,6 +28,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.injekt.compose.*
+import kotlinx.coroutines.*
 
 @Composable
 fun PopupMenuButton(
@@ -56,22 +57,25 @@ fun Modifier.popupClickable(
     onCancel: (() -> Unit)? = null,
     indication: Indication = LocalIndication.current,
 ) = composed {
-    val dependencies = rememberElement<PopupMenuComponent>()
+    val component = rememberElement<PopupMenuComponent>()
 
     var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
+    val scope = rememberCoroutineScope()
     onGloballyPositioned { coordinates = it }
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = indication
         ) {
-            dependencies.navigator.push(
-                PopupKey(
-                    position = coordinates!!.boundsInRoot(),
-                    onCancel = onCancel
-                ) {
-                    PopupMenu(items = items)
-                }
-            )
+            scope.launch {
+                component.navigator.push(
+                    PopupKey(
+                        position = coordinates!!.boundsInRoot(),
+                        onCancel = onCancel
+                    ) {
+                        PopupMenu(items = items)
+                    }
+                )
+            }
         }
 }

@@ -70,5 +70,5 @@ fun keyboardHeightProvider(
     catch {
         val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
         method.invoke(inputMethodManager) as Int
-    }.getOrElse { null }
+    }.getOrNull()
 }

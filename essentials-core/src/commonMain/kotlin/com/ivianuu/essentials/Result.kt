@@ -8,6 +8,8 @@ inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
 
+fun <V> Result<V, *>.getOrNull(): V? = getOrElse { null }
+
 inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = try {
     Ok(block())
 } catch (e: CancellationException) {

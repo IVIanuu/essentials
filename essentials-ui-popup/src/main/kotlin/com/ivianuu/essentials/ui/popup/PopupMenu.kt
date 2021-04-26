@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
 
 object PopupMenu {
     data class Item(
@@ -38,12 +39,13 @@ object PopupMenu {
 fun PopupMenu(items: List<PopupMenu.Item>) {
     Popup {
         Column {
-            val dependencies = rememberElement<PopupMenuComponent>()
+            val component = rememberElement<PopupMenuComponent>()
+            val scope = rememberCoroutineScope()
             items.forEach { item ->
                 key(item) {
                     PopupMenuItem(
                         onSelected = {
-                            dependencies.navigator.popTop()
+                            scope.launch { component.navigator.popTop() }
                             item.onSelected()
                         },
                         content = item.content

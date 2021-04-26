@@ -129,7 +129,7 @@ fun mediaActionSettingsModel(
         .flowAsResource()
         .update { copy(mediaApp = it) }
     action(MediaActionSettingsModel.updateMediaApp()) {
-        val newMediaApp = navigator.pushForResult(
+        val newMediaApp = navigator.push(
             AppPickerKey(
                 intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
             )

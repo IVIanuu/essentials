@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class TextInputKey(
     val initial: String = "",
@@ -45,13 +46,18 @@ fun textInputUi(
             keyboardOptions = key.keyboardOptions,
             title = key.title?.let { { Text(key.title) } },
             buttons = {
-                TextButton(onClick = { navigator.pop(key, null) }) {
+                val scope = rememberCoroutineScope()
+                TextButton(onClick = {
+                    scope.launch { navigator.pop(key, null) }
+                }) {
                     Text(stringResource(R.string.es_cancel))
                 }
 
                 TextButton(
                     enabled = key.allowEmpty || currentValue.isNotEmpty(),
-                    onClick = { navigator.pop(key, currentValue) }
+                    onClick = {
+                        scope.launch { navigator.pop(key, currentValue) }
+                    }
                 ) { Text(stringResource(R.string.es_ok)) }
             }
         )

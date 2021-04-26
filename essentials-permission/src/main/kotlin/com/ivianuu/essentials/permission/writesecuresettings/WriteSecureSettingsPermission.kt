@@ -39,5 +39,5 @@ fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHan
     @Given navigator: Navigator,
     @Given permissionKey: TypeKey<P>
 ): PermissionRequestHandler<P> = {
-    navigator.pushForResult(WriteSecureSettingsKey(permissionKey))
+    navigator.push(WriteSecureSettingsKey(permissionKey))
 }

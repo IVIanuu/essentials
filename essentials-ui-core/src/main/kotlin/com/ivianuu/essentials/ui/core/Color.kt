@@ -90,11 +90,11 @@ fun Color.toHexString(includeAlpha: Boolean = true) = if (this.toArgb() == 0) {
 }
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true) =
-    catch { toHexString(includeAlpha) }.getOrElse { null }
+    catch { toHexString(includeAlpha) }.getOrNull()
 
 fun String.toColor(): Color {
     val finalColorString = if (startsWith("#")) this else "#$this"
     return Color(android.graphics.Color.parseColor(finalColorString))
 }
 
-fun String.toColorOrNull(): Color? = catch { toColor() }.getOrElse { null }
+fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()

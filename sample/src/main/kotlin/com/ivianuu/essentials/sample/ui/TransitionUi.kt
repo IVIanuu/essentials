@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
@@ -16,6 +17,7 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
@@ -109,11 +111,14 @@ fun transitionUi(
                     .padding(16.dp)
                     .padding(bottom = LocalInsets.current.bottom)
             ) {
+                val scope = rememberCoroutineScope()
                 FloatingActionButton(
                     onClick = {
                         val next = TransitionKey.values()
                             .getOrNull(TransitionKey.values().indexOf(key) + 1)
-                        if (next != null) navigator.push(next)
+                        if (next != null) scope.launch {
+                            navigator.push(next)
+                        }
                     }
                 ) {
                     Icon(

@@ -49,7 +49,7 @@ fun actionsUi(
             modifier = Modifier.center(),
             onClick = {
                 scope.launch {
-                    val action = navigator.pushForResult(ActionPickerKey())
+                    val action = navigator.push(ActionPickerKey())
                         ?.let { it as? ActionPickerKey.Result.Action }
                         ?.actionId ?: return@launch
 

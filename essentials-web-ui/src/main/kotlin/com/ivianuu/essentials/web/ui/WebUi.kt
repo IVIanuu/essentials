@@ -14,6 +14,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class WebKey(val title: String, val url: String) : Key<Nothing>
 
@@ -43,7 +44,12 @@ fun webUi(
                         IconButton(onClick = { webViewRef!!.reload() }) {
                             Icon(painterResource(R.drawable.es_ic_refresh), null)
                         }
-                        IconButton(onClick = { navigator.push(UrlKey(webViewRef!!.url)) }) {
+                        val scope = rememberCoroutineScope()
+                        IconButton(onClick = {
+                            scope.launch {
+                                navigator.push(UrlKey(webViewRef!!.url))
+                            }
+                        }) {
                             Icon(painterResource(R.drawable.es_ic_open_in_browser), null)
                         }
                     }

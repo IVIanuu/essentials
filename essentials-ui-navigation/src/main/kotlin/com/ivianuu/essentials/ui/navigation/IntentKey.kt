@@ -33,7 +33,7 @@ import java.util.*
 import kotlin.coroutines.*
 import kotlin.reflect.*
 
-interface IntentKey : Key<ActivityResult>
+interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
 @Given
 fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(

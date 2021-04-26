@@ -98,7 +98,7 @@ fun navBarModel(
         }
     }
     action(NavBarModel.updateNavBarRotationMode()) {
-        navigator.pushForResult(
+        navigator.push(
             SingleChoiceListKey(
                 items = NavBarRotationMode.values()
                     .map { mode ->

@@ -87,7 +87,8 @@ fun shortcutPickerModel(
         .update { copy(shortcuts = it) }
     action(ShortcutPickerModel.pickShortcut()) { shortcut ->
         catch {
-            val shortcutRequestResult = navigator.pushForResult(shortcut.intent.toIntentKey())
+            val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
+                ?.getOrNull()
                 ?.data ?: return@catch
             val finalShortcut = extractShortcut(shortcutRequestResult)
             navigator.pop(key, finalShortcut)

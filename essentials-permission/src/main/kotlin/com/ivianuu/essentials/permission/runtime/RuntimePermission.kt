@@ -40,5 +40,5 @@ fun <P : RuntimePermission> runtimePermissionRequestHandler(
     @Given navigator: Navigator
 ): PermissionRequestHandler<P> = { permission ->
     val contract = ActivityResultContracts.RequestPermission()
-    navigator.pushForResult(contract.createIntent(context, permission.permissionName).toIntentKey())
+    navigator.push(contract.createIntent(context, permission.permissionName).toIntentKey())
 }

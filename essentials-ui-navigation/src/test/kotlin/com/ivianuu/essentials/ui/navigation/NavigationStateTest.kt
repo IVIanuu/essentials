@@ -62,7 +62,7 @@ class NavigationStateTest {
             logger = com.ivianuu.essentials.logging.NoopLogger,
             scope = this
         )
-        val result = async { navigator.pushForResult(KeyWithResult) }
+        val result = async { navigator.push(KeyWithResult) }
         navigator.pop(KeyWithResult, "b")
         result.await() shouldBe "b"
     }
@@ -74,7 +74,7 @@ class NavigationStateTest {
             logger = com.ivianuu.essentials.logging.NoopLogger,
             scope = this
         )
-        val result = async { navigator.pushForResult(KeyWithResult) }
+        val result = async { navigator.push(KeyWithResult) }
         navigator.popTop()
         result.await() shouldBe null
     }

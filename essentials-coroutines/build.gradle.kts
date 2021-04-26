@@ -33,6 +33,7 @@ kotlin {
                 api(Deps.Injekt.common)
                 api(Deps.Injekt.coroutines)
                 api(Deps.Injekt.scope)
+                api(Deps.kotlinResult)
             }
         }
         named("jvmTest") {

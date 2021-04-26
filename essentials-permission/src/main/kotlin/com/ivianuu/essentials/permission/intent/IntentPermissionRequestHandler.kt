@@ -47,7 +47,7 @@ fun <P : Permission> permissionIntentRequestHandler(
             if (showFindPermissionHint)
                 toaster(stringResource(R.string.es_find_app_here, listOf(buildInfo.appName)))
             // wait until user navigates back from the permission screen
-            catch { navigator.pushForResult(intentFactory(permission).toIntentKey()) }
+            catch { navigator.push(intentFactory(permission).toIntentKey()) }
                 .onFailure {
                     toaster(stringResource(R.string.es_grant_permission_manually, emptyList()))
                 }

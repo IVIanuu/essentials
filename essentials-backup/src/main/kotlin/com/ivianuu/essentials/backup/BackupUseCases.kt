@@ -79,14 +79,14 @@ fun restoreBackupUseCase(
 ): RestoreBackupUseCase = {
     catch {
         withContext(scope.coroutineContext + dispatcher) {
-            val uri = navigator.pushForResult(
+            val uri = navigator.push(
                 Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
                         type = "application/zip"
                     },
                     ""
                 ).toIntentKey()
-            )?.data?.data ?: return@withContext
+            )?.getOrNull()?.data?.data ?: return@withContext
 
             val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 

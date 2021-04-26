@@ -40,6 +40,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.*
 
 @Given
 val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
@@ -247,11 +248,12 @@ private fun DialogCloseButton(
     text: String
 ) {
     val component = rememberElement<DialogLauncherComponent>()
+    val scope = rememberCoroutineScope()
     TextButton(
         enabled = enabled,
         onClick = {
             onClick()
-            component.navigator.popTop()
+            scope.launch { component.navigator.popTop() }
         }
     ) {
         Text(text)
@@ -268,17 +270,20 @@ private fun DialogLauncherButton(
 
     val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
     val component = rememberElement<DialogLauncherComponent>()
+    val scope = rememberCoroutineScope()
     Button(
         onClick = {
-            component.navigator.push(
-                DialogLauncherKey(dismissible) {
-                    dialog {
-                        if (dismissible) {
-                            onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+            scope.launch {
+                component.navigator.push(
+                    DialogLauncherKey(dismissible) {
+                        dialog {
+                            if (dismissible) {
+                                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     ) { Text(text) }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
@@ -16,6 +17,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
@@ -51,9 +53,11 @@ fun sharedElementKeyUi(
 
             LazyVerticalGrid(cells = GridCells.Fixed(2)) {
                 items(cities) { city ->
+                    val scope = rememberCoroutineScope()
                     Column(
-                        modifier = Modifier.clickable { navigator.push(CityDetailKey(city)) }
-                            .padding(8.dp)
+                        modifier = Modifier.clickable {
+                            scope.launch { navigator.push(CityDetailKey(city)) }
+                        }.padding(8.dp)
                     ) {
                         SharedElement(key = "image ${city.name}", isStart = true) {
                             Image(

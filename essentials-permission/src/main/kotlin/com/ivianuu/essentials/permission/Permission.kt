@@ -126,7 +126,7 @@ fun permissionRequester(
 
         appUiStarter()
 
-        val result = navigator.pushForResult(
+        val result = navigator.push(
             PermissionRequestKey(requestedPermissions)) == true
         logger.d { "request permissions result $requestedPermissions -> $result" }
         return@withContext result

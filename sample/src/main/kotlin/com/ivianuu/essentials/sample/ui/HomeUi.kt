@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Given
 class HomeKey : RootKey
@@ -77,10 +78,13 @@ fun homeUi(
                         .front
                 }
 
+                val scope = rememberCoroutineScope()
                 HomeItem(
                     item = item,
                     color = color,
-                    onClick = { navigator.push(item.keyFactory(color)) }
+                    onClick = {
+                        scope.launch { navigator.push(item.keyFactory(color)) }
+                    }
                 )
 
                 if (finalItems.indexOf(item) != finalItems.lastIndex) {

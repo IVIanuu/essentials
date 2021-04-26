@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class MultiChoiceListKey<T : Any>(
     val items: List<Item<T>>,
@@ -34,12 +35,17 @@ fun multiChoiceListUi(
             },
             title = { Text(key.title) },
             buttons = {
-                TextButton(onClick = { navigator.pop(key, null) }) {
+                val scope = rememberCoroutineScope()
+                TextButton(onClick = {
+                    scope.launch { navigator.pop(key, null) }
+                }) {
                     Text(stringResource(R.string.es_cancel))
                 }
 
                 TextButton(
-                    onClick = { navigator.pop(key, selectedItems) }
+                    onClick = {
+                        scope.launch { navigator.pop(key, selectedItems) }
+                    }
                 ) { Text(stringResource(R.string.es_ok)) }
             }
         )
