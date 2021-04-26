@@ -37,7 +37,7 @@ val rateUi: ModelKeyUi<RateKey, RateModel> = {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = rememberCoilPainter(model.packageName),
+                        painter = rememberCoilPainter(AppIcon(model.packageName)),
                         modifier = Modifier.size(96.dp),
                         contentDescription = null
                     )
