@@ -22,6 +22,7 @@ import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.rate.domain.*
+import com.ivianuu.essentials.rate.ui.*
 import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.*
@@ -92,6 +93,15 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
                 )
             }
 
+            item {
+                ListItem(
+                    leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
+                    title = { Text(stringResource(R.string.es_send_mail)) },
+                    subtitle = { Text(model.email) },
+                    onClick = model.sendMail
+                )
+            }
+
             if (model.privacyPolicyUrl != null) {
                 item {
                     ListItem(
@@ -108,13 +118,15 @@ val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
 @Optics
 data class AboutModel(
     val version: String = "",
+    val email: String = "ivianuu@gmail.com",
     val privacyPolicyUrl: PrivacyPolicyUrl? = null,
     val rate: () -> Unit = {},
     val openMoreApps: () -> Unit = {},
     val openRedditPage: () -> Unit = {},
     val openGithubPage: () -> Unit = {},
     val openTwitterPage: () -> Unit = {},
-    val openPrivacyPolicy: () -> Unit = {}
+    val openPrivacyPolicy: () -> Unit = {},
+    val sendMail: () -> Unit = {}
 ) {
     companion object {
         @Given
@@ -155,6 +167,7 @@ fun aboutModel(
             state.first().privacyPolicyUrl!!
         ))
     }
+    action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
 }
 
 typealias PrivacyPolicyUrl = String
