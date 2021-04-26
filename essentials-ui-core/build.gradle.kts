@@ -32,6 +32,7 @@ dependencies {
     api(Deps.Accompanist.pagerIndicators)
     api(Deps.Accompanist.swipeRefresh)
     api(Deps.AndroidX.core)
+    api(Deps.AndroidX.Compose.constraintLayout)
     api(Deps.AndroidX.Compose.core)
     api(Deps.AndroidX.Compose.material)
     api(Deps.Injekt.android)
