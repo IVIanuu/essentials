@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="es_colors_tab_title">Colors</string>
+    <string name="es_custom_tab_title">Custom</string>
+</resources>

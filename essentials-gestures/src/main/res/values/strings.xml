@@ -64,4 +64,15 @@
     <string name="es_unknown_action_name">Unknown</string>
     <string name="es_activity_not_found">Failed to launch screen!</string>
 
+    <string name="es_action_execution_failed">Failed to execute action %s!</string>
+
+    <!-- Permissions -->
+    <string name="es_action_accessibility_permission_title">Accessibility</string>
+    <string name="es_action_accessibility_permission_desc">Required to click buttons</string>
+    <string name="es_action_root_permission_title">Root</string>
+    <string name="es_action_write_secure_settings_permission_title">Write secure settings</string>
+    <string name="es_action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
+    <string name="es_action_write_settings_permission_title">Write settings</string>
+    <string name="es_action_write_settings_permission_desc">Required to change settings</string>
+
 </resources>

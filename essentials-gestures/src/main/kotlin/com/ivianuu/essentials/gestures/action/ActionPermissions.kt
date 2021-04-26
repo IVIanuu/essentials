@@ -20,6 +20,7 @@ import android.accessibilityservice.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.accessibility.*
@@ -30,38 +31,53 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Given
-object ActionAccessibilityPermission : AccessibilityServicePermission {
+class ActionAccessibilityPermission(
+    @Given private val stringResource: StringResourceProvider
+) : AccessibilityServicePermission {
     override val serviceClass: KClass<out AccessibilityService>
         get() = EsAccessibilityService::class
-    override val title: String = "Accessibility"
-    override val desc: String = "Required to click buttons"
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_accessibility), null)
-    }
+    override val title: String
+        get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+    override val desc: String
+            get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+    override val icon: @Composable () -> Unit
+        get() = {
+            Icon(painterResource(R.drawable.es_ic_accessibility), null)
+        }
 }
 
 @Given
-object ActionRootPermission : RootPermission {
-    override val title = "Root" // todo res
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_adb), null)
-    }
+class ActionRootPermission(
+    @Given private val stringResource: StringResourceProvider
+) : RootPermission {
+    override val title: String
+        get() = stringResource(R.string.es_action_root_permission_title, emptyList())
+    override val icon: @Composable () -> Unit
+        get() = {
+            Icon(painterResource(R.drawable.es_ic_adb), null)
+        }
 }
 
 @Given
-object ActionWriteSecureSettingsPermission : WriteSecureSettingsPermission {
-    override val title: String = "Write secure settings" // todo res
-    override val desc: String = "Required to change the navigation bar visibility" // todo res
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_settings), null)
-    }
+class ActionWriteSecureSettingsPermission(
+    @Given private val stringResource: StringResourceProvider
+) : WriteSecureSettingsPermission {
+    override val title: String
+        get() = stringResource(R.string.es_action_write_secure_settings_permission_title, emptyList())
+    override val desc: String
+        get() = stringResource(R.string.es_action_write_secure_settings_permission_desc, emptyList())
+    override val icon: @Composable () -> Unit
+        get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }
 
 @Given
-object ActionWriteSettingsPermission : WriteSettingsPermission {
-    override val title: String = "Write Settings" // todo res
-    override val desc: String = "Required to change settings" // todo res
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_settings), null)
-    }
+class ActionWriteSettingsPermission(
+    @Given private val stringResource: StringResourceProvider
+) : WriteSettingsPermission {
+    override val title: String
+        get() = stringResource(R.string.es_action_write_settings_permission_title, emptyList())
+    override val desc: String
+        get() = stringResource(R.string.es_action_write_settings_permission_desc, emptyList())
+    override val icon: @Composable () -> Unit
+        get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }

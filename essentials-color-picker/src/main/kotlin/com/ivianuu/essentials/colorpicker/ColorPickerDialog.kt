@@ -36,7 +36,6 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.dialog.R
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
@@ -104,7 +103,7 @@ fun ColorPickerDialog(
                         contentColor = currentColor
                     )
                 ) {
-                    Text(otherScreen.title)
+                    Text(stringResource(otherScreen.titleRes))
                 }
             }
 
@@ -430,9 +429,6 @@ private enum class ColorComponent(
     abstract fun apply(color: Color, value: Float): Color
 }
 
-// todo title convert to resource
-private enum class ColorPickerTab(
-    val title: String,
-) {
-    COLORS("Colors"), EDITOR("Custom")
+private enum class ColorPickerTab(val titleRes: Int) {
+    COLORS(R.string.es_colors_tab_title), EDITOR(R.string.es_custom_tab_title)
 }

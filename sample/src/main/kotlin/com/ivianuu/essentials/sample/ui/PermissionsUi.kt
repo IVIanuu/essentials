@@ -123,58 +123,82 @@ object SampleDeviceAdminPermission : DeviceAdminPermission {
         get() = SampleDeviceAdmin::class
     override val explanation: String
         get() = "Explanation"
-    override val title: String = "Device admin"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Device admin"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
-    override val title: String = "Ignore battery optimizations"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Ignore battery optimizations"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
-    override val title: String = "Install unknown apps"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Install unknown apps"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
-    override val title: String = "Package usage stats"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Package usage stats"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleNotificationListenerPermission : NotificationListenerPermission {
     override val serviceClass: KClass<out NotificationListenerService>
         get() = EsNotificationListenerService::class
-    override val title: String = "Notification listener"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Notification listener"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleSystemOverlayPermission : SystemOverlayPermission {
-    override val title: String = "System overlay"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "System overlay"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
-    override val title: String = "Write secure settings"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Write secure settings"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }
 
 @Given
 object SampleWriteSettingsPermission : WriteSettingsPermission {
-    override val title: String = "Write settings"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+    override val title: String
+        get() = "Write settings"
+    override val desc: String
+        get() = "This is a desc"
+    override val icon: @Composable () -> Unit
+        get() = { Icon(Icons.Default.Menu, null) }
 }

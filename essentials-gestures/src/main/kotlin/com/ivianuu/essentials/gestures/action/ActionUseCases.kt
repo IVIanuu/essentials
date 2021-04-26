@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
@@ -39,6 +40,7 @@ fun executeActionUseCase(
     @Given logger: Logger,
     @Given permissionRequester: PermissionRequester,
     @Given screenUnlocker: ScreenUnlocker,
+    @Given stringResource: StringResourceProvider,
     @Given toaster: Toaster
 ): ExecuteActionUseCase = { key ->
     withContext(dispatcher) {
@@ -65,7 +67,7 @@ fun executeActionUseCase(
             return@catch true
         }.onFailure {
             it.printStackTrace()
-            toaster("Failed to execute '$key'") // todo res
+            toaster(stringResource(R.string.es_action_execution_failed, listOf(key)))
         }
     }
 }
