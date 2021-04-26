@@ -61,8 +61,7 @@ private class AnimatedStackWithItemsState<T>(
         private set
 
     fun update(items: List<T>) {
-        children = items
-            .map { getOrCreateChild(it) }
+        children = items.map { getOrCreateChild(it) }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -240,7 +239,8 @@ internal class AnimatedStackState<T>(
         transition: StackTransition
     ) {
         from?.let { runningTransactions[it.key]?.cancel() }
-        val transaction = AnimatedStackTransaction(from, to, isPush, transition, this)
+        val transaction = AnimatedStackTransaction(from, to, isPush, transition, this,
+            from !in children)
         runningTransactions[transaction.transactionKey] = transaction
         transaction.execute()
     }
@@ -251,7 +251,8 @@ internal class AnimatedStackTransaction<T>(
     private val to: AnimatedStackChild<T>?,
     private val isPush: Boolean,
     private val transition: StackTransition,
-    private val state: AnimatedStackState<T>
+    private val state: AnimatedStackState<T>,
+    private val forceFromRemoval: Boolean
 ) {
     val transactionKey = when {
         to != null -> to.key
@@ -260,12 +261,15 @@ internal class AnimatedStackTransaction<T>(
     }
 
     private val removesFrom: Boolean
-        get() = from != null && (!isPush || !to!!.opaque)
+        get() = forceFromRemoval || (from != null && (!isPush || !to!!.opaque))
 
     private var job: Job? = null
 
+    private var isCancelled = false
+    private var isCompleted = false
+
     fun execute() {
-        job = state.scope.launch {
+        job = state.scope.launch(start = CoroutineStart.UNDISPATCHED) {
             runWithCleanup(
                 block = {
                     val transitionScope = object : StackTransitionScope, CoroutineScope by this {
@@ -277,6 +281,8 @@ internal class AnimatedStackTransaction<T>(
                             get() = this@AnimatedStackTransaction.from
                         override val to: AnimatedStackChild<*>?
                             get() = this@AnimatedStackTransaction.to
+                        override val fromWillBeRemoved: Boolean
+                            get() = removesFrom
                         override fun attachTo() {
                             this@AnimatedStackTransaction.attachTo()
                         }
@@ -292,8 +298,11 @@ internal class AnimatedStackTransaction<T>(
     }
 
     fun cancel() {
+        if (isCancelled) return
+        isCancelled = true
         job?.cancel()
         job = null
+        complete()
     }
 
     private fun attachTo() {
@@ -317,7 +326,10 @@ internal class AnimatedStackTransaction<T>(
     }
 
     private fun complete() {
-        cancel()
+        if (isCompleted) return
+        isCompleted = true
+        job?.cancel()
+        job = null
         if (to != null && to !in state.visibleChildren) attachTo()
         if (removesFrom && from in state.visibleChildren) removeFrom()
         state.runningTransactions -= transactionKey

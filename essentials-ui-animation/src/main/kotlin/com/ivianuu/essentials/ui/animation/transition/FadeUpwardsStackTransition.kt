@@ -26,6 +26,7 @@ import com.ivianuu.essentials.ui.animation.util.*
 fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
     val target = if (isPush) toElementModifier(ContentAnimationElementKey)
     else fromElementModifier(ContentAnimationElementKey)
+    if (isPush) target?.value = Modifier.alpha(0f)
     attachTo()
     animate(spec) { value ->
         target?.value = Modifier

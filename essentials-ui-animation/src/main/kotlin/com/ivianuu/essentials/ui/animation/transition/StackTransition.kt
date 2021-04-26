@@ -18,6 +18,7 @@ interface StackTransitionScope : CoroutineScope {
     val isPush: Boolean
     val from: AnimatedStackChild<*>?
     val to: AnimatedStackChild<*>?
+    val fromWillBeRemoved: Boolean
     fun attachTo()
     fun detachFrom()
 }
@@ -26,9 +27,10 @@ fun ContentAnimationStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec(),
     block: StackTransitionScope.(MutableState<Modifier>?, MutableState<Modifier>?, Float) -> Unit
 ): StackTransition = {
-    attachTo()
     val fromModifier = fromElementModifier(ContentAnimationElementKey)
     val toModifier = toElementModifier(ContentAnimationElementKey)
+    if (isPush) toModifier?.value = Modifier.alpha(0f)
+    attachTo()
     animate(spec) { block(fromModifier, toModifier, it) }
 }
 

@@ -12,9 +12,10 @@ import com.ivianuu.essentials.ui.animation.util.*
 fun HorizontalSharedAxisStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
+    if (isPush) to?.value = Modifier.alpha(0f)
+    attachTo()
     animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier.graphicsLayer {
@@ -41,9 +42,10 @@ fun HorizontalSharedAxisStackTransition(
 fun VerticalSharedAxisStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
+    if (isPush) to?.value = Modifier.alpha(0f)
+    attachTo()
     animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier.graphicsLayer {
@@ -70,9 +72,10 @@ fun VerticalSharedAxisStackTransition(
 fun ScaledSharedAxisStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
+    if (isPush) to?.value = Modifier.alpha(0f)
+    attachTo()
     animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier

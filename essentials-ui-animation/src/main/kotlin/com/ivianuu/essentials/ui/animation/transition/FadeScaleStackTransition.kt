@@ -5,6 +5,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 import kotlin.time.*
 
@@ -17,11 +18,15 @@ fun FadeScaleStackTransition(
     enterSpec: AnimationSpec<Float> = defaultAnimationSpec(150.milliseconds),
     exitSpec: AnimationSpec<Float> = defaultAnimationSpec(75.milliseconds)
 ): StackTransition = {
-    attachTo()
     if (isPush) {
         val scrim = toElementModifier(ScrimAnimationElementKey)
         val popup = toElementModifier(PopupAnimationElementKey)
+        val from = if (fromWillBeRemoved) fromElementModifier(ContentAnimationElementKey) else null
+        scrim?.value = Modifier.alpha(0f)
+        popup?.value = Modifier.alpha(0f)
+        attachTo()
         animate(enterSpec) { value ->
+            from?.value = Modifier.alpha(1f - value)
             scrim?.value = Modifier.alpha(value)
             popup?.value = Modifier
                 .graphicsLayer {

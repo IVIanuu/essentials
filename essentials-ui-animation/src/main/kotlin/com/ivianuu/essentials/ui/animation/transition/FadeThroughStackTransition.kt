@@ -10,9 +10,10 @@ import com.ivianuu.essentials.ui.animation.util.*
 fun FadeThroughStackTransition(
     spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    attachTo()
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
+    if (isPush) to?.value = Modifier.alpha(0f)
+    attachTo()
     animate(spec) { value ->
         if (isPush) {
             to?.value = Modifier
