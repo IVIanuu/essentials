@@ -16,8 +16,12 @@ import kotlin.time.*
 fun rateUiLauncher(
     @Given navigator: Navigator,
     @Given pref: DataStore<RatePrefs>,
-    @Given shouldShowRateDialog: ShouldShowRateDialogUseCase
+    @Given shouldShowRateDialog: ShouldShowRateDialogUseCase,
+    @Given timestampProvider: TimestampProvider
 ): ScopeWorker<UiGivenScope> = {
+    if (pref.data.first().installTime == 0L) {
+        pref.updateData { copy(installTime = timestampProvider().toLongMilliseconds()) }
+    }
     pref.updateData { copy(launchTimes = launchTimes.inc()) }
     if (shouldShowRateDialog()) {
         navigator.push(RateKey)
