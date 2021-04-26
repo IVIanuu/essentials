@@ -38,10 +38,6 @@ fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermiss
     powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 }
 
-@Given
-fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsShowFindPermissionHint(
-): ShowFindPermissionHint<P> = true
-
 @SuppressLint("BatteryLife")
 @Given
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(

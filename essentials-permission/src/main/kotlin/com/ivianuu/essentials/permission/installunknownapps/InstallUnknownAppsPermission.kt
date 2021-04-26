@@ -28,10 +28,6 @@ import com.ivianuu.injekt.*
 
 interface InstallUnknownAppsPermission : Permission
 
-@Given
-fun <P : InstallUnknownAppsPermission> installUnknownAppsFindPermissionHint(
-): ShowFindPermissionHint<P> = true
-
 @SuppressLint("NewApi")
 @Given
 fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider(
