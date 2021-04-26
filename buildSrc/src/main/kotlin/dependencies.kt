@@ -47,11 +47,14 @@ object Deps {
         object Compose {
             const val version = "1.0.0-beta04"
             const val compiler = "androidx.compose.compiler:compiler:$version"
-            const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:$version"
             const val core = "androidx.compose.ui:ui:$version"
             const val material = "androidx.compose.material:material:$version"
             const val runtime = "androidx.compose.runtime:runtime:$version"
             const val test = "androidx.compose.test:test-core:$version"
+        }
+
+        object ConstraintLayout {
+            const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha03"
         }
 
         const val dataStore = "androidx.datastore:datastore:1.0.0-alpha08"
