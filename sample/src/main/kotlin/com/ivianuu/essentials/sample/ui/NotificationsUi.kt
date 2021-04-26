@@ -202,23 +202,27 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
     icon = catch {
         notification.smallIcon
             .loadDrawable(appContext)
-            .toBitmap()
-            .toImageBitmap()
-
-    }.fold(
-        success = { bitmap ->
-            {
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    bitmap = bitmap,
-                    contentDescription = null
-                )
-            }
-        },
-        failure = {
-            { Icon(painterResource(R.drawable.es_ic_error), null) }
+    }.orElse {
+        catch {
+            notification.getLargeIcon()
+                .loadDrawable(appContext)
         }
-    ),
+    }
+        .map { it.toBitmap().toImageBitmap() }
+        .fold(
+            success = { bitmap ->
+                {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        bitmap = bitmap,
+                        contentDescription = null
+                    )
+                }
+            },
+            failure = {
+                { Icon(painterResource(R.drawable.es_ic_error), null) }
+            }
+        ),
     color = Color(notification.color),
     isClearable = isClearable,
     sbn = this
