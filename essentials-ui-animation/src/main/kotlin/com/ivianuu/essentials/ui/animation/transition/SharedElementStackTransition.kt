@@ -21,7 +21,7 @@ fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
     sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing),
     contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
-    waitingTimeout: Duration = 200.milliseconds
+    waitingTimeout: Duration = 300.milliseconds
 ): StackTransition = {
     val states = sharedElements
         .map { (from, to) ->
