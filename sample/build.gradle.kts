@@ -44,10 +44,6 @@ android {
     }
 }
 
-tasks.withType<KotlinCompile> {
-    withGivenCalls()
-}
-
 dependencies {
     implementation(project(":essentials-android"))
     implementation(project(":essentials-android-core"))
