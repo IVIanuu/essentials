@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
@@ -34,9 +35,15 @@ fun webUi(
         bottomBar = {
             Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
                 InsetsPadding(left = false, top = false, right = false) {
+                    val backgroundColor = when (LocalAppBarStyle.current) {
+                        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+                        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+                    }
                     BottomAppBar(
+                        modifier = Modifier
+                            .systemBarStyle(backgroundColor),
                         elevation = 0.dp,
-                        backgroundColor = MaterialTheme.colors.primary
+                        backgroundColor = backgroundColor
                     ) {
                         IconButton(onClick = { webViewRef!!.goBack() }) {
                             Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
@@ -57,18 +64,20 @@ fun webUi(
             }
         }
     ) {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { WebView(it) }
-        ) { webView ->
-            webViewRef = webView
-            webView.settings.javaScriptEnabled = true
-            webView.loadUrl(key.url)
-            webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean = false
+        InsetsPadding {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { WebView(it) }
+            ) { webView ->
+                webViewRef = webView
+                webView.settings.javaScriptEnabled = true
+                webView.loadUrl(key.url)
+                webView.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        request: WebResourceRequest?
+                    ): Boolean = false
+                }
             }
         }
     }

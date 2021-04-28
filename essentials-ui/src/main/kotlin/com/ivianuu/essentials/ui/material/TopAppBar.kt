@@ -29,11 +29,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
-enum class TopAppBarStyle {
+enum class AppBarStyle {
     PRIMARY, SURFACE
 }
 
-val LocalTopAppBarStyle = compositionLocalOf { TopAppBarStyle.PRIMARY }
+val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 
 @Composable
 fun TopAppBar(
@@ -41,9 +41,9 @@ fun TopAppBar(
     title: @Composable (() -> Unit)? = null,
     leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
     actions: @Composable (() -> Unit)? = null,
-    backgroundColor: Color = when (LocalTopAppBarStyle.current) {
-        TopAppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-        TopAppBarStyle.SURFACE -> MaterialTheme.colors.surface
+    backgroundColor: Color = when (LocalAppBarStyle.current) {
+        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
@@ -85,9 +85,9 @@ fun TopAppBar(
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = when (LocalTopAppBarStyle.current) {
-        TopAppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-        TopAppBarStyle.SURFACE -> MaterialTheme.colors.surface
+    backgroundColor: Color = when (LocalAppBarStyle.current) {
+        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
     },
     contentColor: Color = guessingContentColorFor(backgroundColor),
     elevation: Dp = DefaultAppBarElevation,
@@ -95,7 +95,7 @@ fun TopAppBar(
     content: @Composable RowScope.() -> Unit,
 ) {
     val systemBarStyleModifier = if (applySystemBarStyle) {
-        val systemBarBackgroundColor = if (LocalTopAppBarStyle.current == TopAppBarStyle.PRIMARY ||
+        val systemBarBackgroundColor = if (LocalAppBarStyle.current == AppBarStyle.PRIMARY ||
             backgroundColor.isDark) Color.Black.copy(alpha = 0.2f)
         else Color.White.copy(alpha = 0.4f)
         val lightIcons = backgroundColor.isLight
