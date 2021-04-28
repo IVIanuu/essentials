@@ -89,7 +89,5 @@ import com.ivianuu.injekt.scope.*
     "com.ivianuu.injekt.scope.*"
 )
 class SampleApp : EsApp() {
-    fun aha() {
-    }
     override fun buildAppGivenScope(): AppGivenScope = createAppGivenScope()
 }
