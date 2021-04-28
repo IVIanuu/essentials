@@ -5,9 +5,7 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Given
-fun systemOverlayBlacklistHomeItem(
-    @Given gesturesState: Flow<SystemOverlayBlacklistState>
-) = HomeItem("System overlay blacklist") {
+val systemOverlayBlacklistHomeItem = HomeItem("System overlay blacklist") {
     SystemOverlayBlacklistKey("Gestures")
 }
 
