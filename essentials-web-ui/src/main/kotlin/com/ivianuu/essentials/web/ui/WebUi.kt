@@ -33,15 +33,19 @@ fun webUi(
     Scaffold(
         topBar = { TopAppBar(title = { Text(key.title) }) },
         bottomBar = {
-            Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
-                InsetsPadding(left = false, top = false, right = false) {
-                    val backgroundColor = when (LocalAppBarStyle.current) {
-                        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-                        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
-                    }
+            val backgroundColor = when (LocalAppBarStyle.current) {
+                AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+                AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+            }
+            Surface(color = backgroundColor, elevation = 8.dp) {
+                InsetsPadding(
+                    modifier = Modifier
+                        .systemBarStyle(backgroundColor),
+                    left = false,
+                    top = false,
+                    right = false
+                ) {
                     BottomAppBar(
-                        modifier = Modifier
-                            .systemBarStyle(backgroundColor),
                         elevation = 0.dp,
                         backgroundColor = backgroundColor
                     ) {
