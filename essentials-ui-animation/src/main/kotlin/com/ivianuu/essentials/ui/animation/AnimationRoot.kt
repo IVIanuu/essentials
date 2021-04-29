@@ -32,15 +32,3 @@ val LocalAnimationRoot = staticCompositionLocalOf<AnimationRoot> {
 class AnimationRoot {
     internal val animationOverlays = mutableStateListOf<@Composable () -> Unit>()
 }
-
-typealias AnimationRootProvider = UiDecorator
-
-@Given
-val animationRootProvider: AnimationRootProvider = { content ->
-    AnimationRootProvider(content = content)
-}
-
-@Given
-val animationRootProviderConfig = UiDecoratorConfig<AnimationRootProvider>(
-    dependencies = setOf(typeKeyOf<RootSystemBarsStyle>())
-)

@@ -72,7 +72,6 @@ import com.ivianuu.injekt.scope.*
     "com.ivianuu.essentials.twilight.domain.*",
     "com.ivianuu.essentials.twilight.ui.*",
     "com.ivianuu.essentials.ui.*",
-    "com.ivianuu.essentials.ui.animation.*",
     "com.ivianuu.essentials.ui.core.*",
     "com.ivianuu.essentials.ui.dialog.*",
     "com.ivianuu.essentials.ui.material.*",

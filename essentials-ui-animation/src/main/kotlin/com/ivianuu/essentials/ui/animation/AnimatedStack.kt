@@ -80,12 +80,12 @@ fun <T> AnimatedStack(
     children: List<AnimatedStackChild<T>>,
 ) {
     val scope = rememberCoroutineScope()
-    val root = LocalAnimationRoot.current
+    val root = remember { AnimationRoot() }
     val defaultTransition = LocalStackTransition.current
     val state = remember { AnimatedStackState(scope, root, children, defaultTransition) }
     state.defaultTransition = defaultTransition
     state.updateChildren(children)
-    Box(modifier = modifier) {
+    AnimationRootProvider(modifier = modifier, animationRoot = root) {
         state.visibleChildren.toList().forEach { child ->
             key(child.key) { child.Content() }
         }
