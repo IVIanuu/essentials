@@ -6,8 +6,8 @@ actual val Logger.stackTraceTag: String
     get() = Throwable().stackTrace
         .first {
             it.className != javaClass.canonicalName &&
-                    it.className != "com.ivianuu.essentials.util.JvmLoggerKt" &&
-                    it.className != "com.ivianuu.essentials.Logger\$DefaultImpls"
+                    it.className != "com.ivianuu.essentials.logging.JvmLoggerKt" &&
+                    it.className != "com.ivianuu.essentials.logging.Logger\$DefaultImpls"
         }
         .let { createStackElementTag(it) }
 
