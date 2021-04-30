@@ -31,13 +31,13 @@ fun <T> AnimatedBox(
     current: T,
     modifier: Modifier = Modifier,
     transition: StackTransition = FadeThroughStackTransition(),
-    item: @Composable (T) -> Unit
+    itemContent: @Composable (T) -> Unit
 ) {
     AnimatedStack(
         modifier = modifier,
         items = listOf(current),
         transition = transition,
-        item = item
+        itemContent = itemContent
     )
 }
 
@@ -46,31 +46,36 @@ fun <T> AnimatedStack(
     items: List<T>,
     modifier: Modifier = Modifier,
     transition: StackTransition = LocalStackTransition.current,
-    item: @Composable (T) -> Unit
+    itemContent: @Composable (T) -> Unit
 ) {
-    val state = remember { AnimatedStackWithItemsState(item, transition) }
-    state.update(items)
+    val state = remember { AnimatedStackWithItemsState<T>() }
+    state.update(transition, itemContent, items)
     AnimatedStack(modifier = modifier, children = state.children)
 }
 
-private class AnimatedStackWithItemsState<T>(
-    private val content: @Composable (T) -> Unit,
-    private val transition: StackTransition
-) {
+private class AnimatedStackWithItemsState<T> {
     var children by mutableStateOf(emptyList<AnimatedStackChild<T>>())
         private set
 
-    fun update(items: List<T>) {
-        children = items.map { getOrCreateChild(it) }
+    fun update(transition: StackTransition, itemContent: @Composable (T) -> Unit, items: List<T>) {
+        children = items.map { getOrCreateChild(it, transition, itemContent) }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getOrCreateChild(item: T): AnimatedStackChild<T> {
-        children.firstOrNull { it.key == item }?.let { return it }
-        return AnimatedStackChild(
-            key = item,
-            transition = transition
-        ) { content(item) }
+    private fun getOrCreateChild(
+        item: T,
+        transition: StackTransition,
+        itemContent: @Composable (T) -> Unit
+    ): AnimatedStackChild<T> {
+        val content: @Composable () -> Unit = { itemContent(item) }
+        children.firstOrNull { it.key == item }
+            ?.let {
+                it.enterTransition = transition
+                it.exitTransition = transition
+                it.content = content
+                return it
+            }
+        return AnimatedStackChild(key = item, transition = transition, content = content)
     }
 }
 
@@ -80,14 +85,16 @@ fun <T> AnimatedStack(
     children: List<AnimatedStackChild<T>>,
 ) {
     val scope = rememberCoroutineScope()
-    val root = remember { AnimationRoot() }
     val defaultTransition = LocalStackTransition.current
-    val state = remember { AnimatedStackState(scope, root, children, defaultTransition) }
+    val state = remember { AnimatedStackState(scope, children, defaultTransition) }
     state.defaultTransition = defaultTransition
     state.updateChildren(children)
-    AnimationRootProvider(modifier = modifier, animationRoot = root) {
+    Box(modifier = modifier, propagateMinConstraints = true) {
         state.visibleChildren.toList().forEach { child ->
             key(child.key) { child.Content() }
+        }
+        state.animationOverlays.toList().forEach { overlay ->
+            key(overlay) { overlay() }
         }
     }
 }
@@ -95,11 +102,15 @@ fun <T> AnimatedStack(
 @Stable
 class AnimatedStackChild<T>(
     val key: T,
-    val opaque: Boolean = false,
-    val enterTransition: StackTransition? = null,
-    val exitTransition: StackTransition? = null,
-    val content: @Composable () -> Unit
+    opaque: Boolean = false,
+    enterTransition: StackTransition? = null,
+    exitTransition: StackTransition? = null,
+    content: @Composable () -> Unit
 ) {
+    var opaque by mutableStateOf(opaque)
+    var enterTransition by mutableStateOf(enterTransition)
+    var exitTransition by mutableStateOf(exitTransition)
+    var content by mutableStateOf(content)
     val elementStore = AnimationElementStore()
 
     constructor(
@@ -124,13 +135,13 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
 }
 
 @Stable
-internal class AnimatedStackState<T>(
+class AnimatedStackState<T>(
     val scope: CoroutineScope,
-    val root: AnimationRoot,
     private var children: List<AnimatedStackChild<T>>,
     var defaultTransition: StackTransition,
 ) {
-    val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
+    internal val animationOverlays = mutableStateListOf<@Composable () -> Unit>()
+    internal val visibleChildren = mutableStateListOf<AnimatedStackChild<T>>()
     internal val runningTransactions = mutableMapOf<T, AnimatedStackTransaction<T>>()
 
     init {
@@ -146,9 +157,7 @@ internal class AnimatedStackState<T>(
             }
     }
 
-    fun updateChildren(newChildren: List<AnimatedStackChild<T>>) {
-        if (newChildren == children) return
-
+    internal fun updateChildren(newChildren: List<AnimatedStackChild<T>>) {
         // do not allow pushing the same child twice
         newChildren
             .groupBy { it }
@@ -273,8 +282,8 @@ internal class AnimatedStackTransaction<T>(
             runWithCleanup(
                 block = {
                     val transitionScope = object : StackTransitionScope, CoroutineScope by this {
-                        override val animationRoot: AnimationRoot
-                            get() = state.root
+                        override val state: AnimatedStackState<*>
+                            get() = this@AnimatedStackTransaction.state
                         override val isPush: Boolean
                             get() = this@AnimatedStackTransaction.isPush
                         override val from: AnimatedStackChild<*>?

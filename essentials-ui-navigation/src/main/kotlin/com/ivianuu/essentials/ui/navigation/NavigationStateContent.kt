@@ -32,10 +32,7 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
 val navigationStateContent: NavigationStateContent = { state, modifier ->
     val keyUiGivenScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
     val contentState = remember {
-        NavigationContentState(
-            backStack = state.backStack.cast(),
-            keyUiGivenScopeFactory = keyUiGivenScopeFactory
-        )
+        NavigationContentState(keyUiGivenScopeFactory = keyUiGivenScopeFactory)
     }
     contentState.updateBackStack(state.backStack.cast())
     DisposableEffect(true) {
@@ -54,18 +51,11 @@ class KeyUiComponent(
     @Given val decorateUi: DecorateKeyUi,
 )
 
-private class NavigationContentState(
-    var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope,
-    backStack: List<Key<Any>>,
-) {
+private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope) {
     private var children by mutableStateOf(emptyList<Child>())
 
     val stackChildren: List<AnimatedStackChild<Key<Any>>>
         get() = children.map { it.stackChild }
-
-    init {
-        updateBackStack(backStack)
-    }
 
     fun updateBackStack(backStack: List<Key<Any>>) {
         val removedChildren = children

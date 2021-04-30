@@ -14,7 +14,7 @@ import kotlin.time.*
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
 
 interface StackTransitionScope : CoroutineScope {
-    val animationRoot: AnimationRoot
+    val state: AnimatedStackState<*>
     val isPush: Boolean
     val from: AnimatedStackChild<*>?
     val to: AnimatedStackChild<*>?
@@ -51,8 +51,8 @@ val LayoutCoordinates.rootCoordinates: LayoutCoordinates
 fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
     start = CoroutineStart.UNDISPATCHED
 ) {
-    animationRoot.animationOverlays += overlay
-    runOnCancellation { animationRoot.animationOverlays -= overlay }
+    state.animationOverlays += overlay
+    runOnCancellation { state.animationOverlays -= overlay }
 }
 
 suspend fun StackTransitionScope.animate(
@@ -82,7 +82,7 @@ fun StackTransitionScope.element(
     child: AnimatedStackChild<*>,
     key: Any,
 ): AnimationElement {
-    val refKey = Any()
+    val refKey = "stack transition $key ${child.key} $this"
     val element = child.elementStore.referenceElement(key, refKey)
     launch {
         runOnCancellation {

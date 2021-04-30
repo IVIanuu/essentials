@@ -35,11 +35,11 @@ class AnimationElementStore {
 }
 
 @Composable
-fun animationElementFor(key: Any): AnimationElement {
+fun rememberAnimationElementFor(key: Any): AnimationElement {
     val stackChild = LocalAnimatedStackChild.current
     val refKey = remember { Any() }
-    val element = stackChild.elementStore.referenceElement(key, refKey)
-    DisposableEffect(stackChild) {
+    val element = remember { stackChild.elementStore.referenceElement(key, refKey) }
+    DisposableEffect(refKey) {
         onDispose { stackChild.elementStore.disposeRef(key, refKey) }
     }
     return element
@@ -49,7 +49,7 @@ fun Modifier.animationElement(
     key: Any,
     vararg props: Pair<AnimationElementPropKey<*>, Any?>
 ): Modifier = composed {
-    val element = animationElementFor(key)
+    val element = rememberAnimationElementFor(key)
     props.forEach { element[it.first.cast<AnimationElementPropKey<Any?>>()] = it.second }
     element.modifiers.toSet().fold(Modifier as Modifier) { acc, modifier ->
         acc.then(modifier.value)
