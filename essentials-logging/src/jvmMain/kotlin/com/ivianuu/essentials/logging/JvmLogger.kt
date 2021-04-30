@@ -5,7 +5,7 @@ import java.util.regex.*
 actual val Logger.stackTraceTag: String
     get() = Throwable().stackTrace
         .first {
-            it.className != javaClass.canonicalName &&
+            it.className != javaClass.name &&
                     it.className != "com.ivianuu.essentials.logging.JvmLoggerKt" &&
                     it.className != "com.ivianuu.essentials.logging.Logger\$DefaultImpls"
         }
