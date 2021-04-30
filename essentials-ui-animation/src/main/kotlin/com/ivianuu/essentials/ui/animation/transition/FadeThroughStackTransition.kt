@@ -12,7 +12,7 @@ fun FadeThroughStackTransition(
 ): StackTransition = {
     val from = fromElementModifier(ContentAnimationElementKey)
     val to = toElementModifier(ContentAnimationElementKey)
-    if (isPush) to?.value = Modifier.alpha(0f)
+    to?.value = Modifier.alpha(0f)
     attachTo()
     animate(spec) { value ->
         if (isPush) {

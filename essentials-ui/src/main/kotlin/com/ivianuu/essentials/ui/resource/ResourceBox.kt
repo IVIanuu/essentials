@@ -118,7 +118,12 @@ fun <T> ResourceBox(
 }
 
 object ResourceBoxDefaults {
-    val transition = FadeStackTransition(defaultAnimationSpec(150.milliseconds, easing = FastOutSlowInEasing))
+    val transition = CrossFadeStackTransition(
+        defaultAnimationSpec(
+            150.milliseconds,
+            easing = FastOutSlowInEasing
+        )
+    )
     val error: @Composable (Throwable) -> Unit = {
         Text(
             modifier = Modifier

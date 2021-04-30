@@ -20,7 +20,7 @@ import kotlin.time.*
 fun SharedElementStackTransition(
     vararg sharedElements: Pair<Any, Any>,
     sharedElementAnimationSpec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing),
-    contentTransition: StackTransition = FadeStackTransition(sharedElementAnimationSpec),
+    contentTransition: StackTransition = CrossFadeStackTransition(sharedElementAnimationSpec),
     waitingTimeout: Duration = 200.milliseconds
 ): StackTransition = {
     val states = sharedElements

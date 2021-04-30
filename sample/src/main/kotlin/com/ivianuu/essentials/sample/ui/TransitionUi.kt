@@ -140,10 +140,10 @@ val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
                 CircularRevealStackTransition("fab")
         TransitionKey.FADE -> SharedElementStackTransition(
             "app bar" to "app bar",
-            contentTransition = FadeStackTransition()
+            contentTransition = CrossFadeStackTransition()
         ) to SharedElementStackTransition(
             "app bar" to "app bar",
-            contentTransition = FadeStackTransition()
+            contentTransition = CrossFadeStackTransition()
         )
         TransitionKey.FLIP -> SharedElementStackTransition(
             "app bar" to "app bar",
