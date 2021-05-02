@@ -1,5 +1,3 @@
-@file:Suppress("UnusedImport")
-
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.*
