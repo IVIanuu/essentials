@@ -67,7 +67,7 @@ fun recentApps(
     .distinctUntilChanged()
 
 @Given
-fun recentAppsAccessibilityConfig() = flow {
+val recentAppsAccessibilityConfig = flow {
     emit(
         AccessibilityConfig(
             eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
