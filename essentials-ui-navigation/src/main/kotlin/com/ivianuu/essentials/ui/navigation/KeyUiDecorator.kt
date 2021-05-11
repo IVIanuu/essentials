@@ -30,6 +30,16 @@ data class KeyUiDecoratorElement(
     val config: KeyUiDecoratorConfig<*>
 )
 
+@Given
+object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
+    override val KeyUiDecoratorElement.key: Any
+        get() = key
+    override val KeyUiDecoratorElement.dependencies: Set<Any>
+        get() = config.dependencies
+    override val KeyUiDecoratorElement.dependents: Set<Any>
+        get() = config.dependents
+}
+
 typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
 
 @Given
@@ -39,11 +49,7 @@ fun decorateKeyUi(
 ): DecorateKeyUi = { content ->
     remember {
         elements
-            .sortedTopological(
-                key = { it.key },
-                dependencies = { it.config.dependencies },
-                dependents = { it.config.dependents }
-            )
+            .sortedTopological()
             .reversed()
             .fold(content) { acc, element ->
                 {

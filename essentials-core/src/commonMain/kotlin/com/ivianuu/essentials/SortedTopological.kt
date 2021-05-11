@@ -16,23 +16,28 @@
 
 package com.ivianuu.essentials
 
-fun <T, K> Collection<T>.sortedTopological(
-    key: (T) -> K,
-    dependents: (T) -> Set<K>,
-    dependencies: (T) -> Set<K>
-): List<T> {
-    if (isEmpty()) return emptyList()
-    val sortedItems = mutableListOf<T>()
-    var lastItems = emptyList<T>()
-    val realDependencies = mutableMapOf<K, MutableSet<K>>()
-    forEach { item ->
-        realDependencies.getOrPut(key(item)) { mutableSetOf() } += dependencies(item)
-        dependents(item).forEach { dependent ->
-            realDependencies.getOrPut(dependent) { mutableSetOf() } += key(item)
+import com.ivianuu.injekt.*
+
+interface TreeDescriptor<in T> {
+    val T.key: Any
+    val T.dependents: Set<Any>
+    val T.dependencies: Set<Any>
+}
+
+fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): List<T> =
+    with(descriptor) {
+        if (isEmpty()) return emptyList()
+        val sortedItems = mutableListOf<T>()
+        var lastItems = emptyList<T>()
+        val realDependencies = mutableMapOf<Any, MutableSet<Any>>()
+        forEach { item ->
+            realDependencies.getOrPut(item.key) { mutableSetOf() }.addAll(item.dependencies)
+            item.dependents.forEach { dependent ->
+                realDependencies.getOrPut(dependent) { mutableSetOf() } += item.key
+            }
         }
-    }
     while (true) {
-        val unprocessedItems = this - sortedItems
+        val unprocessedItems = this@sortedTopological - sortedItems
         if (unprocessedItems.isEmpty()) break
         // todo improve error message
         check(lastItems != unprocessedItems) {
@@ -41,10 +46,8 @@ fun <T, K> Collection<T>.sortedTopological(
         lastItems = unprocessedItems
         sortedItems += unprocessedItems
             .filter { item ->
-                realDependencies.getValue(key(item)).all { dependency ->
-                    sortedItems.any {
-                        key(it) == dependency
-                    }
+                realDependencies.getValue(item.key).all { dependency ->
+                    sortedItems.any { it.key == dependency }
                 }
             }
     }

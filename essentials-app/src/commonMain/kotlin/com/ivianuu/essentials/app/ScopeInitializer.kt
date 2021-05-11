@@ -31,6 +31,16 @@ data class ScopeInitializerElement<S>(
 )
 
 @Given
+object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
+    override val ScopeInitializerElement<*>.dependencies: Set<TypeKey<*>>
+        get() = config.dependencies
+    override val ScopeInitializerElement<*>.dependents: Set<TypeKey<*>>
+        get() = config.dependents
+    override val ScopeInitializerElement<*>.key: TypeKey<*>
+        get() = key
+}
+
+@Given
 fun <S : GivenScope> scopeInitializerRunner(
     @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
     @Given logger: Logger,
@@ -38,11 +48,7 @@ fun <S : GivenScope> scopeInitializerRunner(
     @Given workerRunner: ScopeWorkerRunner<S>
 ): GivenScopeInitializer<S> = {
     initializers
-        .sortedTopological(
-            key = { it.key },
-            dependencies = { it.config.dependencies },
-            dependents = { it.config.dependents }
-        )
+        .sortedTopological()
         .forEach {
             logger.d { "$scopeKey initialize ${it.key}" }
             it.instance()()

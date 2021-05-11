@@ -21,7 +21,6 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class SortedTopologicalTest {
-
     @Test
     fun testSortedTopologial() {
         val unsorted = listOf(
@@ -37,9 +36,14 @@ class SortedTopologicalTest {
         )
 
         val sorted = unsorted.sortedTopological(
-            key = { it.key },
-            dependencies = { it.dependencies },
-            dependents = { it.dependents }
+            object : TreeDescriptor<Item> {
+                override val Item.dependencies: Set<Any>
+                    get() = dependencies
+                override val Item.dependents: Set<Any>
+                    get() = dependents
+                override val Item.key: String
+                    get() = key
+            }
         )
 
         sorted
@@ -52,5 +56,4 @@ class SortedTopologicalTest {
         val dependencies: Set<String> = emptySet(),
         val dependents: Set<String> = emptySet()
     )
-
 }
