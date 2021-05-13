@@ -23,5 +23,4 @@ import com.ivianuu.injekt.scope.*
 typealias NotificationGivenScope = GivenScope
 
 @Given
-val notificationGivenScopeModule =
-    ChildGivenScopeModule0<ServiceGivenScope, NotificationGivenScope>()
+val notificationGivenScopeModule = ChildScopeModule0<ServiceGivenScope, NotificationGivenScope>()

@@ -26,6 +26,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(Deps.Injekt.core)
                 api(Deps.kotlinResult)
             }
         }

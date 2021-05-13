@@ -53,4 +53,5 @@ fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelEl
 typealias TileGivenScope = GivenScope
 
 @Given
-val tileGivenScopeModule = ChildGivenScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()
+val tileGivenScopeModule =
+    ChildScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()

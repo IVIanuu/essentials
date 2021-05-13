@@ -25,6 +25,11 @@ kotlin {
     }
 
     sourceSets {
+        commonMain {
+            dependencies {
+                implementation(Deps.Injekt.core)
+            }
+        }
         named("jvmTest") {
             dependencies {
                 implementation(project(":essentials-test"))
