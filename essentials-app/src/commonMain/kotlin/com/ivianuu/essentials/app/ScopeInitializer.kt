@@ -32,12 +32,9 @@ data class ScopeInitializerElement<S>(
 
 @Given
 object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
-    override val ScopeInitializerElement<*>.dependencies: Set<TypeKey<*>>
-        get() = config.dependencies
-    override val ScopeInitializerElement<*>.dependents: Set<TypeKey<*>>
-        get() = config.dependents
-    override val ScopeInitializerElement<*>.key: TypeKey<*>
-        get() = key
+    override fun ScopeInitializerElement<*>.dependencies(): Set<TypeKey<*>> = config.dependencies
+    override fun ScopeInitializerElement<*>.dependents(): Set<TypeKey<*>> = config.dependents
+    override fun ScopeInitializerElement<*>.key(): TypeKey<*> = key
 }
 
 @Given

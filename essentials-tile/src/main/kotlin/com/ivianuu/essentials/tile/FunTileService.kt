@@ -38,7 +38,6 @@ class FunTileService8 : AbstractFunTileService(typeKeyOf<FunTileService8>())
 class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 
 abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) : TileService() {
-
     private val component by lazy {
         createServiceGivenScope()
             .element<FunTileServiceComponent>()

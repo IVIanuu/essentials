@@ -17,25 +17,29 @@
 package com.ivianuu.essentials
 
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.TreeDescriptor.Companion.key
+import com.ivianuu.essentials.TreeDescriptor.Companion.dependents
+import com.ivianuu.essentials.TreeDescriptor.Companion.dependencies
 
+@Extension
 interface TreeDescriptor<in T> {
-    val T.key: Any
-    val T.dependents: Set<Any>
-    val T.dependencies: Set<Any>
+    fun T.key(): Any
+    fun T.dependents(): Set<Any>
+    fun T.dependencies(): Set<Any>
 }
 
-fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): List<T> =
-    with(descriptor) {
-        if (isEmpty()) return emptyList()
-        val sortedItems = mutableListOf<T>()
-        var lastItems = emptyList<T>()
-        val realDependencies = mutableMapOf<Any, MutableSet<Any>>()
-        forEach { item ->
-            realDependencies.getOrPut(item.key) { mutableSetOf() }.addAll(item.dependencies)
-            item.dependents.forEach { dependent ->
-                realDependencies.getOrPut(dependent) { mutableSetOf() } += item.key
-            }
+fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): List<T> {
+    if (isEmpty()) return emptyList()
+    val sortedItems = mutableListOf<T>()
+    var lastItems = emptyList<T>()
+    val realDependencies = mutableMapOf<Any, MutableSet<Any>>()
+    forEach { item ->
+        realDependencies.getOrPut(item.key()) { mutableSetOf() }.addAll(item.dependencies())
+        item.dependents().forEach { dependent ->
+            realDependencies.getOrPut(dependent) { mutableSetOf() } += item.key()
         }
+    }
     while (true) {
         val unprocessedItems = this@sortedTopological - sortedItems
         if (unprocessedItems.isEmpty()) break
@@ -46,8 +50,8 @@ fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): L
         lastItems = unprocessedItems
         sortedItems += unprocessedItems
             .filter { item ->
-                realDependencies.getValue(item.key).all { dependency ->
-                    sortedItems.any { it.key == dependency }
+                realDependencies.getValue(item.key()).all { dependency ->
+                    sortedItems.any { it.key() == dependency }
                 }
             }
     }
