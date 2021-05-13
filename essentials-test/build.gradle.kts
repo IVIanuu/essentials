@@ -27,6 +27,7 @@ dependencies {
     compile(Deps.AndroidX.Test.rules)
     compile(Deps.AndroidX.Test.runner)
     // compile(Deps.AndroidX.Ui.test)
+    compile(Deps.Injekt.core)
     compile(Deps.Coroutines.test)
     compile(Deps.junit)
     compile(Deps.kotestAssertions)
