@@ -37,12 +37,9 @@ class SortedTopologicalTest {
 
     val sorted = unsorted.sortedTopological(
       object : TreeDescriptor<Item> {
-        override val Item.dependencies: Set<Any>
-          get() = dependencies
-        override val Item.dependents: Set<Any>
-          get() = dependents
-        override val Item.key: String
-          get() = key
+        override fun Item.dependencies(): Set<Any> = dependencies
+        override fun Item.dependents(): Set<Any> = dependents
+        override fun Item.key(): String = key
       }
     )
 

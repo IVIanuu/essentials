@@ -40,6 +40,8 @@ class ForegroundActivityStateTest {
         }
         return _lifecycle !!
       }
+
+      override fun getViewModelStore(): ViewModelStore = ViewModelStore()
     }
     launch { foregroundActivityStateWorker(activity, dispatcher, foregroundState)() }
     val collector = foregroundState.testCollect(this)

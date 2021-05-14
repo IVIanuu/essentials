@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
@@ -31,16 +32,16 @@ class NavigationStateTest {
   fun testNavigationState() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
-      logger = com.ivianuu.essentials.logging.NoopLogger,
+      logger = NoopLogger,
       scope = this
     )
 
     val collector = navigator.state.testCollect(this)
 
-    navigator.push(KeyA)
+    launch { navigator.push(KeyA) }
     navigator.pop(KeyA)
-    navigator.push(KeyB)
-    navigator.replaceTop(KeyC)
+    launch { navigator.push(KeyB) }
+    launch { navigator.replaceTop(KeyC) }
     navigator.popTop()
 
     collector.values.shouldContainExactly(
@@ -59,7 +60,7 @@ class NavigationStateTest {
   fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
-      logger = com.ivianuu.essentials.logging.NoopLogger,
+      logger = NoopLogger,
       scope = this
     )
     val result = async { navigator.push(KeyWithResult) }
@@ -71,7 +72,7 @@ class NavigationStateTest {
   fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
-      logger = com.ivianuu.essentials.logging.NoopLogger,
+      logger = NoopLogger,
       scope = this
     )
     val result = async { navigator.push(KeyWithResult) }
