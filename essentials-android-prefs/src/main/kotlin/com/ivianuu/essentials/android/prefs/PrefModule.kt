@@ -15,10 +15,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.*
 import java.io.*
 
-class PrefModule<T : Any>(
-    private val name: String,
-    private val initial: () -> T
-) {
+class PrefModule<T : Any>(private val name: String, private val initial: () -> T) {
     @Given
     fun dataStore(
         @Given dispatcher: IODispatcher,
