@@ -2,11 +2,11 @@ package com.ivianuu.essentials.foreground
 
 import android.app.*
 import androidx.work.*
-import androidx.work.ForegroundInfo
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.work.*
+import com.ivianuu.essentials.work.Worker
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.*
