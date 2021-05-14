@@ -30,25 +30,23 @@ import kotlinx.coroutines.flow.*
 
 typealias ContentChangesFactory = (Uri) -> Flow<Unit>
 
-@Given
-fun contentChangesFactory(
-    @Given contentResolver: ContentResolver,
-    @Given mainDispatcher: MainDispatcher,
+@Given fun contentChangesFactory(
+  @Given contentResolver: ContentResolver,
+  @Given mainDispatcher: MainDispatcher,
 ): ContentChangesFactory = { uri ->
-    callbackFlow<Unit> {
-        val observer = withContext(mainDispatcher) {
-            object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
-                override fun onChange(selfChange: Boolean) {
-                    super.onChange(selfChange)
-                    catch { offer(Unit) }
-                }
-            }
+  callbackFlow<Unit> {
+    val observer = withContext(mainDispatcher) {
+      object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
+        override fun onChange(selfChange: Boolean) {
+          super.onChange(selfChange)
+          catch { offer(Unit) }
         }
-        contentResolver.registerContentObserver(uri, false, observer)
-        awaitClose { contentResolver.unregisterContentObserver(observer) }
-    }.flowOn(mainDispatcher)
+      }
+    }
+    contentResolver.registerContentObserver(uri, false, observer)
+    awaitClose { contentResolver.unregisterContentObserver(observer) }
+  }.flowOn(mainDispatcher)
 }
 
-@Given
-inline val Application.bindContentResolver: ContentResolver
-    get() = contentResolver
+@Given inline val Application.bindContentResolver: ContentResolver
+  get() = contentResolver

@@ -34,63 +34,61 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import java.io.*
 
-@Given
-class ShortcutActionFactory(
-    @Given private val actionIntentSender: ActionIntentSender,
-    @Given private val logger: Logger
+@Given class ShortcutActionFactory(
+  @Given private val actionIntentSender: ActionIntentSender,
+  @Given private val logger: Logger
 ) : ActionFactory {
-    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
-    override suspend fun createAction(id: String): Action<*> {
-        logger.d { "create action from $id" }
-        val tmp = id.split(DELIMITER)
-        val label = tmp[1]
+  override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+  override suspend fun createAction(id: String): Action<*> {
+    logger.d { "create action from $id" }
+    val tmp = id.split(DELIMITER)
+    val label = tmp[1]
 
-        val iconBytes = Base64.decode(tmp[3], 0)
-        val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
-        return Action<ActionId>(
-            id = id,
-            title = label,
-            unlockScreen = true,
-            enabled = true,
-            icon = singleActionIcon { Image(icon, null) }
-        )
-    }
+    val iconBytes = Base64.decode(tmp[3], 0)
+    val icon = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.size).toImageBitmap()
+    return Action<ActionId>(
+      id = id,
+      title = label,
+      unlockScreen = true,
+      enabled = true,
+      icon = singleActionIcon { Image(icon, null) }
+    )
+  }
 
-    @Suppress("DEPRECATION")
-    override suspend fun createExecutor(id: String): ActionExecutor<*> {
-        val tmp = id.split(DELIMITER)
-        val intent = Intent.getIntent(tmp[2])
-        return { actionIntentSender(intent) }
-    }
+  @Suppress("DEPRECATION")
+  override suspend fun createExecutor(id: String): ActionExecutor<*> {
+    val tmp = id.split(DELIMITER)
+    val intent = Intent.getIntent(tmp[2])
+    return { actionIntentSender(intent) }
+  }
 }
 
-@Given
-class ShortcutActionPickerDelegate(
-    @Given private val navigator: Navigator,
-    @Given private val stringResource: StringResourceProvider,
+@Given class ShortcutActionPickerDelegate(
+  @Given private val navigator: Navigator,
+  @Given private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
-    override val title: String
-        get() = stringResource(R.string.es_action_shortcut, emptyList())
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_content_cut), null)
-    }
+  override val title: String
+    get() = stringResource(R.string.es_action_shortcut, emptyList())
+  override val icon: @Composable () -> Unit = {
+    Icon(painterResource(R.drawable.es_ic_content_cut), null)
+  }
 
-    override suspend fun pickAction(): ActionPickerKey.Result? {
-        val shortcut = navigator.push(ShortcutPickerKey) ?: return null
-        val label = shortcut.name
-        val icon = shortcut.icon.toBitmap()
-        val stream = ByteArrayOutputStream()
-        icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val iconBytes = stream.toByteArray()
-        val key =
-            "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
-                Base64.encodeToString(
-                    iconBytes,
-                    0
-                )
-            }"
-        return ActionPickerKey.Result.Action(key)
-    }
+  override suspend fun pickAction(): ActionPickerKey.Result? {
+    val shortcut = navigator.push(ShortcutPickerKey) ?: return null
+    val label = shortcut.name
+    val icon = shortcut.icon.toBitmap()
+    val stream = ByteArrayOutputStream()
+    icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
+    val iconBytes = stream.toByteArray()
+    val key =
+      "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
+        Base64.encodeToString(
+          iconBytes,
+          0
+        )
+      }"
+    return ActionPickerKey.Result.Action(key)
+  }
 }
 
 private const val ACTION_KEY_PREFIX = "shortcut"

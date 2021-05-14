@@ -22,7 +22,6 @@ import com.ivianuu.injekt.*
 
 interface DialogKey<T> : Key<T>
 
-@Given
-fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
-    KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
+@Given fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
+  KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
 }

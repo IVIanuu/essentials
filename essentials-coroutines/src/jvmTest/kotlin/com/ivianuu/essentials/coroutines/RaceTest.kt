@@ -22,69 +22,69 @@ import kotlinx.coroutines.*
 import org.junit.*
 
 class RaceTest {
-    @Test
-    fun testFirstOneWins() = runCancellingBlockingTest {
-        val result = race {
-            launchRacer {
-                delay(1)
-                "a"
-            }
-            launchRacer { "b" }
-        }
-        result shouldBe "b"
+  @Test
+  fun testFirstOneWins() = runCancellingBlockingTest {
+    val result = race {
+      launchRacer {
+        delay(1)
+        "a"
+      }
+      launchRacer { "b" }
     }
+    result shouldBe "b"
+  }
 
-    @Test
-    fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
-        var bCancelled = false
-        race {
-            launchRacer {
-                delay(1)
-                "a"
-            }
-            launchRacer {
-                try {
-                    awaitCancellation()
-                } catch (e: CancellationException) {
-                    bCancelled = true
-                    throw e
-                }
-            }
-        }
-
-        bCancelled shouldBe true
-    }
-
-    @Test
-    fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
-        var thrown = false
+  @Test
+  fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
+    var bCancelled = false
+    race {
+      launchRacer {
+        delay(1)
+        "a"
+      }
+      launchRacer {
         try {
-            race<String> {
-                launchRacer {
-                    throw RuntimeException()
-                }
-            }
-        } catch (e: Throwable) {
-            thrown = true
+          awaitCancellation()
+        } catch (e: CancellationException) {
+          bCancelled = true
+          throw e
         }
-
-        thrown shouldBe true
+      }
     }
 
-    @Test
-    fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
-        var blockCancelled = false
-        race {
-            launchRacer {
-                delay(1)
-            }
-            try {
-                awaitCancellation()
-            } catch (e: CancellationException) {
-                blockCancelled = true
-            }
-        }
+    bCancelled shouldBe true
+  }
 
-        blockCancelled shouldBe true
+  @Test
+  fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
+    var thrown = false
+    try {
+      race<String> {
+        launchRacer {
+          throw RuntimeException()
+        }
+      }
+    } catch (e: Throwable) {
+      thrown = true
     }
+
+    thrown shouldBe true
+  }
+
+  @Test
+  fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
+    var blockCancelled = false
+    race {
+      launchRacer {
+        delay(1)
+      }
+      try {
+        awaitCancellation()
+      } catch (e: CancellationException) {
+        blockCancelled = true
+      }
+    }
+
+    blockCancelled shouldBe true
+  }
 }

@@ -32,29 +32,28 @@ typealias PermissionIntentFactory<P> = (P) -> Intent
 
 typealias ShowFindPermissionHint<P> = Boolean
 
-@Given
-fun <P : Permission> permissionIntentRequestHandler(
-    @Given buildInfo: BuildInfo,
-    @Given intentFactory: PermissionIntentFactory<P>,
-    @Given navigator: Navigator,
-    @Given showFindPermissionHint: ShowFindPermissionHint<P> = false,
-    @Given state: Flow<PermissionState<P>>,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster
+@Given fun <P : Permission> permissionIntentRequestHandler(
+  @Given buildInfo: BuildInfo,
+  @Given intentFactory: PermissionIntentFactory<P>,
+  @Given navigator: Navigator,
+  @Given showFindPermissionHint: ShowFindPermissionHint<P> = false,
+  @Given state: Flow<PermissionState<P>>,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
-    raceOf(
-        {
-            if (showFindPermissionHint)
-                toaster(stringResource(R.string.es_find_app_here, listOf(buildInfo.appName)))
-            // wait until user navigates back from the permission screen
-            catch { navigator.push(intentFactory(permission).toIntentKey()) }
-                .onFailure {
-                    toaster(stringResource(R.string.es_grant_permission_manually, emptyList()))
-                }
-        },
-        {
-            // wait until user granted permission
-            while (!state.first()) delay(100)
+  raceOf(
+    {
+      if (showFindPermissionHint)
+        toaster(stringResource(R.string.es_find_app_here, listOf(buildInfo.appName)))
+      // wait until user navigates back from the permission screen
+      catch { navigator.push(intentFactory(permission).toIntentKey()) }
+        .onFailure {
+          toaster(stringResource(R.string.es_grant_permission_manually, emptyList()))
         }
-    )
+    },
+    {
+      // wait until user granted permission
+      while (! state.first()) delay(100)
+    }
+  )
 }

@@ -27,42 +27,39 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-@Given
-object HomeActionId : ActionId("home")
+@Given object HomeActionId : ActionId("home")
 
-@Given
-fun homeAction(
-    @Given stringResource: StringResourceProvider
+@Given fun homeAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<HomeActionId>(
-    id = HomeActionId,
-    title = stringResource(R.string.es_action_home, emptyList()),
-    permissions = if (needsHomeIntentWorkaround) emptyList()
-    else accessibilityActionPermissions,
-    icon = singleActionIcon(R.drawable.es_ic_action_home)
+  id = HomeActionId,
+  title = stringResource(R.string.es_action_home, emptyList()),
+  permissions = if (needsHomeIntentWorkaround) emptyList()
+  else accessibilityActionPermissions,
+  icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
-@Given
-fun homeActionExecutor(
-    @Given actionIntentSender: ActionIntentSender,
-    @Given appContext: AppContext,
-    @Given globalActionExecutor: GlobalActionExecutor,
+@Given fun homeActionExecutor(
+  @Given actionIntentSender: ActionIntentSender,
+  @Given appContext: AppContext,
+  @Given globalActionExecutor: GlobalActionExecutor,
 ): ActionExecutor<HomeActionId> = {
-    if (!needsHomeIntentWorkaround) {
-        globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
-    } else {
-        catch {
-            val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-            appContext.sendBroadcast(intent)
-        }.onFailure { it.printStackTrace() }
+  if (! needsHomeIntentWorkaround) {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
+  } else {
+    catch {
+      val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+      appContext.sendBroadcast(intent)
+    }.onFailure { it.printStackTrace() }
 
-        actionIntentSender(
-            Intent(Intent.ACTION_MAIN).apply {
-                addCategory(
-                    Intent.CATEGORY_HOME
-                )
-            }
+    actionIntentSender(
+      Intent(Intent.ACTION_MAIN).apply {
+        addCategory(
+          Intent.CATEGORY_HOME
         )
-    }
+      }
+    )
+  }
 }
 
 private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"

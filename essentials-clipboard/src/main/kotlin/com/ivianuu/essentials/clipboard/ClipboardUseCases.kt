@@ -26,23 +26,21 @@ import kotlinx.coroutines.flow.*
 
 typealias ClipboardText = String?
 
-@Given
-fun clipboardText(
-    @Given clipboardManager: @SystemService ClipboardManager,
-    @Given scope: GivenCoroutineScope<AppGivenScope>
+@Given fun clipboardText(
+  @Given clipboardManager: @SystemService ClipboardManager,
+  @Given scope: GivenCoroutineScope<AppGivenScope>
 ) = callbackFlow<ClipboardText> {
-    val listener = ClipboardManager.OnPrimaryClipChangedListener {
-        val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
-        offer(current)
-    }
-    awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
+  val listener = ClipboardManager.OnPrimaryClipChangedListener {
+    val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+    offer(current)
+  }
+  awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
 typealias UpdateClipboardTextUseCase = suspend (String) -> Unit
 
-@Given
-fun updateClipboardTextUseCase(
-    @Given clipboardManager: @SystemService ClipboardManager
+@Given fun updateClipboardTextUseCase(
+  @Given clipboardManager: @SystemService ClipboardManager
 ): UpdateClipboardTextUseCase = { value ->
-    clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
+  clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
 }

@@ -46,96 +46,91 @@ import kotlinx.serialization.*
 
 typealias MediaActionSender = suspend (Int) -> Unit
 
-@Given
-fun mediaActionSender(
-    @Given appContext: AppContext,
-    @Given prefs: Flow<MediaActionPrefs>
+@Given fun mediaActionSender(
+  @Given appContext: AppContext,
+  @Given prefs: Flow<MediaActionPrefs>
 ): MediaActionSender = { keycode ->
-    val currentPrefs = prefs.first()
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
-    appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
+  val currentPrefs = prefs.first()
+  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }
 
 private fun mediaIntentFor(
-    keyEvent: Int,
-    keycode: Int,
-    prefs: MediaActionPrefs
+  keyEvent: Int,
+  keycode: Int,
+  prefs: MediaActionPrefs
 ): Intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
-    putExtra(
-        Intent.EXTRA_KEY_EVENT,
-        KeyEvent(keyEvent, keycode)
-    )
+  putExtra(
+    Intent.EXTRA_KEY_EVENT,
+    KeyEvent(keyEvent, keycode)
+  )
 
-    val mediaApp = prefs.mediaApp
-    if (mediaApp != null) {
-        `package` = mediaApp
-    }
+  val mediaApp = prefs.mediaApp
+  if (mediaApp != null) {
+    `package` = mediaApp
+  }
 }
 
-@Serializable
-data class MediaActionPrefs(
-    @SerialName("media_app") val mediaApp: String? = null,
+@Serializable data class MediaActionPrefs(
+  @SerialName("media_app") val mediaApp: String? = null,
 )
 
-@Given
-val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
+@Given val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
 
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
 @Given
 val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
-    Scaffold(topBar = {
-        TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
-    }) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            item {
-                ListItem(
-                    title = { Text(stringResource(R.string.es_pref_media_app)) },
-                    subtitle = {
-                        Text(
-                            stringResource(
-                                R.string.es_pref_media_app_summary,
-                                model.mediaApp.get()?.appName
-                                    ?: stringResource(R.string.es_none)
-                            )
-                        )
-                    },
-                    onClick = model.updateMediaApp
-                )
-            }
-        }
+  Scaffold(topBar = {
+    TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
+  }) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      item {
+        ListItem(
+          title = { Text(stringResource(R.string.es_pref_media_app)) },
+          subtitle = {
+            Text(
+              stringResource(
+                R.string.es_pref_media_app_summary,
+                model.mediaApp.get()?.appName
+                  ?: stringResource(R.string.es_none)
+              )
+            )
+          },
+          onClick = model.updateMediaApp
+        )
+      }
     }
+  }
 }
 
-@Optics
-data class MediaActionSettingsModel(
-    val mediaApp: Resource<AppInfo> = Idle,
-    val updateMediaApp: () -> Unit = {}
+@Optics data class MediaActionSettingsModel(
+  val mediaApp: Resource<AppInfo> = Idle,
+  val updateMediaApp: () -> Unit = {}
 )
 
-@Given
-fun mediaActionSettingsModel(
-    @Given getAppInfo: GetAppInfoUseCase,
-    @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
-    @Given navigator: Navigator,
-    @Given pref: DataStore<MediaActionPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun mediaActionSettingsModel(
+  @Given getAppInfo: GetAppInfoUseCase,
+  @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
+  @Given navigator: Navigator,
+  @Given pref: DataStore<MediaActionPrefs>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<MediaActionSettingsModel> = scope.state(
-    MediaActionSettingsModel()
+  MediaActionSettingsModel()
 ) {
-    pref.data
-        .map { it.mediaApp }
-        .mapNotNull { if (it != null) getAppInfo(it) else null }
-        .flowAsResource()
-        .update { copy(mediaApp = it) }
-    action(MediaActionSettingsModel.updateMediaApp()) {
-        val newMediaApp = navigator.push(
-            AppPickerKey(
-                intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
-            )
-        )
-        if (newMediaApp != null) {
-            pref.updateData { copy(mediaApp = newMediaApp.packageName) }
-        }
+  pref.data
+    .map { it.mediaApp }
+    .mapNotNull { if (it != null) getAppInfo(it) else null }
+    .flowAsResource()
+    .update { copy(mediaApp = it) }
+  action(MediaActionSettingsModel.updateMediaApp()) {
+    val newMediaApp = navigator.push(
+      AppPickerKey(
+        intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
+      )
+    )
+    if (newMediaApp != null) {
+      pref.updateData { copy(mediaApp = newMediaApp.packageName) }
     }
+  }
 }

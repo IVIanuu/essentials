@@ -25,22 +25,19 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object NotificationsActionId : ActionId("notifications")
+@Given object NotificationsActionId : ActionId("notifications")
 
-@Given
-fun notificationsAction(
-    @Given stringResource: StringResourceProvider
+@Given fun notificationsAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<NotificationsActionId>(
-    id = NotificationsActionId,
-    title = stringResource(R.string.es_action_notifications, emptyList()),
-    permissions = accessibilityActionPermissions,
-    icon = singleActionIcon(Icons.Default.Notifications)
+  id = NotificationsActionId,
+  title = stringResource(R.string.es_action_notifications, emptyList()),
+  permissions = accessibilityActionPermissions,
+  icon = singleActionIcon(Icons.Default.Notifications)
 )
 
-@Given
-fun notificationsActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor
+@Given fun notificationsActionExecutor(
+  @Given globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<NotificationsActionId> = {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

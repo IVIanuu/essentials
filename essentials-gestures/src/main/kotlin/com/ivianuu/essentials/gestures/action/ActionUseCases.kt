@@ -30,113 +30,107 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-typealias ExecuteActionUseCase = suspend (String) -> com.github.michaelbull.result.Result<Boolean, Throwable>
+typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
-@Given
-fun executeActionUseCase(
-    @Given dispatcher: DefaultDispatcher,
-    @Given getAction: GetActionUseCase,
-    @Given getActionExecutor: GetActionExecutorUseCase,
-    @Given logger: Logger,
-    @Given permissionRequester: PermissionRequester,
-    @Given screenUnlocker: ScreenUnlocker,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster
+@Given fun executeActionUseCase(
+  @Given dispatcher: DefaultDispatcher,
+  @Given getAction: GetActionUseCase,
+  @Given getActionExecutor: GetActionExecutorUseCase,
+  @Given logger: Logger,
+  @Given permissionRequester: PermissionRequester,
+  @Given screenUnlocker: ScreenUnlocker,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster
 ): ExecuteActionUseCase = { key ->
-    withContext(dispatcher) {
-        catch {
-            logger.d { "execute $key" }
-            val action = getAction(key)!!
+  withContext(dispatcher) {
+    catch {
+      logger.d { "execute $key" }
+      val action = getAction(key) !!
 
-            // check permissions
-            if (!permissionRequester(action.permissions)) {
-                logger.d { "couldn't get permissions for $key" }
-                return@catch false
-            }
+      // check permissions
+      if (! permissionRequester(action.permissions)) {
+        logger.d { "couldn't get permissions for $key" }
+        return@catch false
+      }
 
-            // unlock screen
-            if (action.unlockScreen && !screenUnlocker()) {
-                logger.d { "couldn't unlock screen for $key" }
-                return@catch false
-            }
+      // unlock screen
+      if (action.unlockScreen && ! screenUnlocker()) {
+        logger.d { "couldn't unlock screen for $key" }
+        return@catch false
+      }
 
-            logger.d { "fire $key" }
+      logger.d { "fire $key" }
 
-            // fire
-            getActionExecutor(key)!!()
-            return@catch true
-        }.onFailure {
-            it.printStackTrace()
-            toaster(stringResource(R.string.es_action_execution_failed, listOf(key)))
-        }
+      // fire
+      getActionExecutor(key) !!()
+      return@catch true
+    }.onFailure {
+      it.printStackTrace()
+      toaster(stringResource(R.string.es_action_execution_failed, listOf(key)))
     }
+  }
 }
 
 typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 
-@Given
-fun getAllActionsUseCase(
-    @Given actions: Map<String, () -> Action<*>>,
-    @Given dispatcher: DefaultDispatcher
+@Given fun getAllActionsUseCase(
+  @Given actions: Map<String, () -> Action<*>>,
+  @Given dispatcher: DefaultDispatcher
 ): GetAllActionsUseCase = {
-    withContext(dispatcher) { actions.values.map { it() } }
+  withContext(dispatcher) { actions.values.map { it() } }
 }
 
 typealias GetActionUseCase = suspend (String) -> Action<*>?
 
-@Given
-fun getActionUseCase(
-    @Given actions: Map<String, () -> Action<*>>,
-    @Given actionFactories: () -> Set<() -> ActionFactory>,
-    @Given dispatcher: DefaultDispatcher
+@Given fun getActionUseCase(
+  @Given actions: Map<String, () -> Action<*>>,
+  @Given actionFactories: () -> Set<() -> ActionFactory>,
+  @Given dispatcher: DefaultDispatcher
 ): GetActionUseCase = { key ->
-    withContext(dispatcher) {
-        actions[key]
-            ?.invoke()
-            ?: actionFactories()
-                .asSequence()
-                .map { it() }
-                .firstOrNull { it.handles(key) }
-                ?.createAction(key)
-    }
+  withContext(dispatcher) {
+    actions[key]
+      ?.invoke()
+      ?: actionFactories()
+        .asSequence()
+        .map { it() }
+        .firstOrNull { it.handles(key) }
+        ?.createAction(key)
+  }
 }
 
 typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
 
-@Given
-fun getActionExecutorUseCase(
-    @Given actionsExecutors: Map<String, () -> ActionExecutor<*>>,
-    @Given actionFactories: () -> Set<() -> ActionFactory>,
-    @Given dispatcher: DefaultDispatcher
+@Given fun getActionExecutorUseCase(
+  @Given actionsExecutors: Map<String, () -> ActionExecutor<*>>,
+  @Given actionFactories: () -> Set<() -> ActionFactory>,
+  @Given dispatcher: DefaultDispatcher
 ): GetActionExecutorUseCase = { key ->
-    withContext(dispatcher) {
-        actionsExecutors[key]
-            ?.invoke()
-            ?: actionFactories()
-                .asSequence()
-                .map { it() }
-                .firstOrNull { it.handles(key) }
-                ?.createExecutor(key)
-            ?: error("Unsupported action key $key")
-    }
+  withContext(dispatcher) {
+    actionsExecutors[key]
+      ?.invoke()
+      ?: actionFactories()
+        .asSequence()
+        .map { it() }
+        .firstOrNull { it.handles(key) }
+        ?.createExecutor(key)
+      ?: error("Unsupported action key $key")
+  }
 }
 
 typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
 
-@Given
-fun getActionSettingsKeyUseCase(
-    @Given actionSettings: Map<String, () -> ActionSettingsKey<*>>,
-    @Given dispatcher: DefaultDispatcher
+@Given fun getActionSettingsKeyUseCase(
+  @Given actionSettings: Map<String, () -> ActionSettingsKey<*>>,
+  @Given dispatcher: DefaultDispatcher
 ): GetActionSettingsKeyUseCase = { key ->
-    withContext(dispatcher) { actionSettings[key]?.invoke() }
+  withContext(dispatcher) { actionSettings[key]?.invoke() }
 }
 
 typealias GetActionPickerDelegatesUseCase = suspend () -> List<ActionPickerDelegate>
 
-@Given
-fun getActionPickerDelegatesUseCase(
-    @Given actionPickerDelegates: Set<() -> ActionPickerDelegate>,
-    @Given dispatcher: DefaultDispatcher
+@Given fun getActionPickerDelegatesUseCase(
+  @Given actionPickerDelegates: Set<() -> ActionPickerDelegate>,
+  @Given dispatcher: DefaultDispatcher
 ): GetActionPickerDelegatesUseCase = {
-    withContext(dispatcher) { actionPickerDelegates.map { it() } }
+  withContext(dispatcher) { actionPickerDelegates.map { it() } }
 }

@@ -20,8 +20,7 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given
-fun androidAppForegroundState(
-    @Given foregroundActivity: Flow<ForegroundActivity>
+@Given fun androidAppForegroundState(
+  @Given foregroundActivity: Flow<ForegroundActivity>
 ): Flow<AppForegroundState> = foregroundActivity
-    .map { if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND }
+  .map { if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND }

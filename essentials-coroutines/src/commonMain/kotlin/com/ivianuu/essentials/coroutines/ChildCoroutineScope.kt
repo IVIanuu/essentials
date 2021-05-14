@@ -20,11 +20,11 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
 fun CoroutineScope.childCoroutineScope(
-    context: CoroutineContext = EmptyCoroutineContext,
+  context: CoroutineContext = EmptyCoroutineContext,
 ): CoroutineScope = CoroutineScope(childJob() + context)
 
 suspend fun childCoroutineScope(context: CoroutineContext = EmptyCoroutineContext): CoroutineScope =
-    CoroutineScope(childJob() + context)
+  CoroutineScope(childJob() + context)
 
 fun CoroutineScope.childJob() = Job(parent = coroutineContext.job)
 

@@ -19,84 +19,81 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given
-val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
+@Given val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
 
 data class SharedElementKey(val color: Color) : Key<Nothing>
 
-@Given
-fun sharedElementKeyUi(
-    @Given key: SharedElementKey,
-    @Given navigator: Navigator
+@Given fun sharedElementKeyUi(
+  @Given key: SharedElementKey,
+  @Given navigator: Navigator
 ): KeyUi<SharedElementKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Shared Elements") }) }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Shared Elements") }) }
+  ) {
+    Column(
+      modifier = Modifier.fillMaxSize()
+        .padding(16.dp)
+        .scrollable(rememberScrollState(), Orientation.Vertical),
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(16.dp)
-                .scrollable(rememberScrollState(), Orientation.Vertical),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SharedCircleBadge("color", key.color, 150.dp, false)
+      SharedCircleBadge("color", key.color, 150.dp, false)
 
-            Spacer(Modifier.height(16.dp))
+      Spacer(Modifier.height(16.dp))
 
-            SharedElement(key = "title", isStart = false) {
-                Text(
-                    "Shared element",
-                    style = MaterialTheme.typography.subtitle1
-                )
+      SharedElement(key = "title", isStart = false) {
+        Text(
+          "Shared element",
+          style = MaterialTheme.typography.subtitle1
+        )
+      }
+
+      Spacer(Modifier.height(16.dp))
+
+      LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+        items(cities) { city ->
+          val scope = rememberCoroutineScope()
+          Column(
+            modifier = Modifier.clickable {
+              scope.launch { navigator.push(CityDetailKey(city)) }
+            }.padding(8.dp)
+          ) {
+            SharedElement(key = "image ${city.name}", isStart = true) {
+              Image(
+                modifier = Modifier
+                  .size(width = 200.dp, height = 100.dp),
+                painter = painterResource(city.imageRes),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+              )
             }
-
-            Spacer(Modifier.height(16.dp))
-
-            LazyVerticalGrid(cells = GridCells.Fixed(2)) {
-                items(cities) { city ->
-                    val scope = rememberCoroutineScope()
-                    Column(
-                        modifier = Modifier.clickable {
-                            scope.launch { navigator.push(CityDetailKey(city)) }
-                        }.padding(8.dp)
-                    ) {
-                        SharedElement(key = "image ${city.name}", isStart = true) {
-                            Image(
-                                modifier = Modifier
-                                    .size(width = 200.dp, height = 100.dp),
-                                painter = painterResource(city.imageRes),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillBounds
-                            )
-                        }
-                        SharedElement(key = "title ${city.name}", isStart = true) {
-                            Text(
-                                text = city.name,
-                                style = MaterialTheme.typography.h6
-                            )
-                        }
-                    }
-                }
+            SharedElement(key = "title ${city.name}", isStart = true) {
+              Text(
+                text = city.name,
+                style = MaterialTheme.typography.h6
+              )
             }
+          }
         }
+      }
     }
+  }
 }
 
 data class City(val name: String, val imageRes: Int)
 
 val cities = listOf(
-    City("Chicago", R.drawable.chicago),
-    City("Jakarta", R.drawable.jakarta),
-    City("London", R.drawable.london),
-    City("Sao Paulo", R.drawable.sao_paulo),
-    City("Tokyo", R.drawable.tokyo)
+  City("Chicago", R.drawable.chicago),
+  City("Jakarta", R.drawable.jakarta),
+  City("London", R.drawable.london),
+  City("Sao Paulo", R.drawable.sao_paulo),
+  City("Tokyo", R.drawable.tokyo)
 )
 
-@Given
-val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
-    KeyUiOptions(
-        transition = SharedElementStackTransition(
-            "title Shared element" to "title",
-            "color Shared element" to "color"
-        )
+@Given val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
+  KeyUiOptions(
+    transition = SharedElementStackTransition(
+      "title Shared element" to "title",
+      "color Shared element" to "color"
     )
+  )
 }

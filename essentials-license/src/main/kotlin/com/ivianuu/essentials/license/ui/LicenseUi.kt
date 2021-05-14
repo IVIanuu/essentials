@@ -21,40 +21,36 @@ import kotlinx.coroutines.flow.*
 
 object LicenseKey : Key<Nothing>
 
-@Given
-val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_licenses_title)) }) }) {
-        ResourceLazyColumnFor(model.projects) { project ->
-            Project(
-                project = project,
-                onClick = {}
-            )
-        }
+@Given val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
+  Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_licenses_title)) }) }) {
+    ResourceLazyColumnFor(model.projects) { project ->
+      Project(
+        project = project,
+        onClick = {}
+      )
     }
+  }
 }
 
-@Composable
-private fun Project(
-    onClick: () -> Unit,
-    project: Project
+@Composable private fun Project(
+  onClick: () -> Unit,
+  project: Project
 ) {
-    ListItem(
-        title = { Text(project.project) },
-        onClick = onClick
-    )
+  ListItem(
+    title = { Text(project.project) },
+    onClick = onClick
+  )
 }
 
-@Optics
-data class LicenseModel(
-    val projects: Resource<List<Project>> = Idle
+@Optics data class LicenseModel(
+  val projects: Resource<List<Project>> = Idle
 )
 
-@Given
-fun licenseModel(
-    @Given getProjects: GetLicenseProjectsUseCase,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun licenseModel(
+  @Given getProjects: GetLicenseProjectsUseCase,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
-    flow { emit(getProjects()) }
-        .flowResultAsResource()
-        .update { copy(projects = it) }
+  flow { emit(getProjects()) }
+    .flowResultAsResource()
+    .update { copy(projects = it) }
 }

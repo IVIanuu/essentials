@@ -41,98 +41,96 @@ object TwilightSettingsKey : Key<Nothing>
 
 @Given
 val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            items(TwilightMode.values()) { mode ->
-                TwilightModeItem(
-                    mode = mode,
-                    isSelected = model.twilightMode == mode,
-                    onClick = { model.updateTwilightMode(mode) }
-                )
-            }
-            item {
-                Subheader { Text(stringResource(R.string.es_twilight_pref_category_more)) }
-            }
-            item {
-                CheckboxListItem(
-                    value = model.useBlackInDarkMode,
-                    onValueChange = model.updateUseBlackInDarkMode,
-                    title = { Text(stringResource(R.string.es_twilight_use_black)) }
-                )
-            }
-        }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      items(TwilightMode.values()) { mode ->
+        TwilightModeItem(
+          mode = mode,
+          isSelected = model.twilightMode == mode,
+          onClick = { model.updateTwilightMode(mode) }
+        )
+      }
+      item {
+        Subheader { Text(stringResource(R.string.es_twilight_pref_category_more)) }
+      }
+      item {
+        CheckboxListItem(
+          value = model.useBlackInDarkMode,
+          onValueChange = model.updateUseBlackInDarkMode,
+          title = { Text(stringResource(R.string.es_twilight_use_black)) }
+        )
+      }
     }
+  }
 }
 
-@Composable
-private fun TwilightModeItem(
-    mode: TwilightMode,
-    onClick: () -> Unit,
-    isSelected: Boolean
+@Composable private fun TwilightModeItem(
+  mode: TwilightMode,
+  onClick: () -> Unit,
+  isSelected: Boolean
 ) {
-    ListItem(
-        title = {
-            Text(
-                stringResource(
-                    when (mode) {
-                        TwilightMode.SYSTEM -> R.string.es_twilight_mode_system
-                        TwilightMode.LIGHT -> R.string.es_twilight_mode_light
-                        TwilightMode.DARK -> R.string.es_twilight_mode_dark
-                        TwilightMode.BATTERY -> R.string.es_twilight_mode_battery
-                        TwilightMode.TIME -> R.string.es_twilight_mode_time
-                    }
-                )
-            )
-        },
-        subtitle = {
-            Text(
-                stringResource(
-                    when (mode) {
-                        TwilightMode.SYSTEM -> R.string.es_twilight_mode_system_desc
-                        TwilightMode.LIGHT -> R.string.es_twilight_mode_light_desc
-                        TwilightMode.DARK -> R.string.es_twilight_mode_dark_desc
-                        TwilightMode.BATTERY -> R.string.es_twilight_mode_battery_desc
-                        TwilightMode.TIME -> R.string.es_twilight_mode_time_desc
-                    }
-                )
-            )
-       },
-        trailing = {
-            RadioButton(
-                selected = isSelected,
-                onClick = null
-            )
-        },
-        onClick = onClick
-    )
+  ListItem(
+    title = {
+      Text(
+        stringResource(
+          when (mode) {
+            TwilightMode.SYSTEM -> R.string.es_twilight_mode_system
+            TwilightMode.LIGHT -> R.string.es_twilight_mode_light
+            TwilightMode.DARK -> R.string.es_twilight_mode_dark
+            TwilightMode.BATTERY -> R.string.es_twilight_mode_battery
+            TwilightMode.TIME -> R.string.es_twilight_mode_time
+          }
+        )
+      )
+    },
+    subtitle = {
+      Text(
+        stringResource(
+          when (mode) {
+            TwilightMode.SYSTEM -> R.string.es_twilight_mode_system_desc
+            TwilightMode.LIGHT -> R.string.es_twilight_mode_light_desc
+            TwilightMode.DARK -> R.string.es_twilight_mode_dark_desc
+            TwilightMode.BATTERY -> R.string.es_twilight_mode_battery_desc
+            TwilightMode.TIME -> R.string.es_twilight_mode_time_desc
+          }
+        )
+      )
+    },
+    trailing = {
+      RadioButton(
+        selected = isSelected,
+        onClick = null
+      )
+    },
+    onClick = onClick
+  )
 }
 
 
-@Optics
-data class TwilightSettingsModel(
-    val twilightMode: TwilightMode = TwilightMode.SYSTEM,
-    val useBlackInDarkMode: Boolean = false,
-    val updateTwilightMode: (TwilightMode) -> Unit = {},
-    val updateUseBlackInDarkMode: (Boolean) -> Unit = {}
+@Optics data class TwilightSettingsModel(
+  val twilightMode: TwilightMode = TwilightMode.SYSTEM,
+  val useBlackInDarkMode: Boolean = false,
+  val updateTwilightMode: (TwilightMode) -> Unit = {},
+  val updateUseBlackInDarkMode: (Boolean) -> Unit = {}
 )
 
-@Given
-fun twilightSettingsModel(
-    @Given pref: DataStore<TwilightPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<TwilightSettingsModel> = scope.state(TwilightSettingsModel()) {
+@Given fun twilightSettingsModel(
+  @Given pref: DataStore<TwilightPrefs>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<TwilightSettingsModel> =
+  scope.state(TwilightSettingsModel()) {
     pref.data.update {
-        copy(
-            twilightMode = it.twilightMode,
-            useBlackInDarkMode = it.useBlackInDarkMode
-        )
+      copy(
+        twilightMode = it.twilightMode,
+        useBlackInDarkMode = it.useBlackInDarkMode
+      )
     }
     action(TwilightSettingsModel.updateTwilightMode()) { value ->
-        pref.updateData { copy(twilightMode = value) }
+      pref.updateData { copy(twilightMode = value) }
     }
     action(TwilightSettingsModel.updateUseBlackInDarkMode()) { value ->
-        pref.updateData { copy(useBlackInDarkMode = value) }
+      pref.updateData { copy(useBlackInDarkMode = value) }
     }
-}
+  }

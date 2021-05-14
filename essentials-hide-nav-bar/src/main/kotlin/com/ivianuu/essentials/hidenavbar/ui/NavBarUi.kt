@@ -43,75 +43,72 @@ import kotlinx.coroutines.flow.*
 
 object NavBarKey : Key<Nothing>
 
-@Given
-val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            item {
-                SwitchListItem(
-                    value = model.hideNavBar,
-                    onValueChange = model.updateHideNavBar,
-                    title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
-                )
-            }
-            item {
-                ListItem(
-                    title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
-                    subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
-                    modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
-                    onClick = model.updateNavBarRotationMode
-                )
-            }
-        }
+@Given val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      item {
+        SwitchListItem(
+          value = model.hideNavBar,
+          onValueChange = model.updateHideNavBar,
+          title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
+        )
+      }
+      item {
+        ListItem(
+          title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
+          subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
+          modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
+          onClick = model.updateNavBarRotationMode
+        )
+      }
     }
+  }
 }
 
-@Optics
-data class NavBarModel(
-    val hideNavBar: Boolean = false,
-    val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
-    val updateHideNavBar: (Boolean) -> Unit = {},
-    val updateNavBarRotationMode: () -> Unit = {}
+@Optics data class NavBarModel(
+  val hideNavBar: Boolean = false,
+  val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
+  val updateHideNavBar: (Boolean) -> Unit = {},
+  val updateNavBarRotationMode: () -> Unit = {}
 ) {
-    val canChangeNavBarRotationMode: Boolean
-        get() = hideNavBar
+  val canChangeNavBarRotationMode: Boolean
+    get() = hideNavBar
 }
 
-@Given
-fun navBarModel(
-    @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester,
-    @Given pref: DataStore<NavBarPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given stringResource: StringResourceProvider,
+@Given fun navBarModel(
+  @Given navigator: Navigator,
+  @Given permissionRequester: PermissionRequester,
+  @Given pref: DataStore<NavBarPrefs>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given stringResource: StringResourceProvider,
 ): @Scoped<KeyUiGivenScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
-    pref.data.update {
-        copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
+  pref.data.update {
+    copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
+  }
+  action(NavBarModel.updateHideNavBar()) { value ->
+    if (! value) {
+      pref.updateData { copy(hideNavBar = false) }
+    } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
+      pref.updateData { copy(hideNavBar = value) }
     }
-    action(NavBarModel.updateHideNavBar()) { value ->
-        if (!value) {
-            pref.updateData { copy(hideNavBar = false) }
-        } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-            pref.updateData { copy(hideNavBar = value) }
-        }
-    }
-    action(NavBarModel.updateNavBarRotationMode()) {
-        navigator.push(
-            SingleChoiceListKey(
-                items = NavBarRotationMode.values()
-                    .map { mode ->
-                        SingleChoiceListKey.Item(
-                            title = stringResource(mode.titleRes, emptyList()),
-                            value = mode
-                        )
-                    },
-                selectedItem = state.first().navBarRotationMode,
-                title = stringResource(R.string.es_pref_nav_bar_rotation_mode, emptyList())
+  }
+  action(NavBarModel.updateNavBarRotationMode()) {
+    navigator.push(
+      SingleChoiceListKey(
+        items = NavBarRotationMode.values()
+          .map { mode ->
+            SingleChoiceListKey.Item(
+              title = stringResource(mode.titleRes, emptyList()),
+              value = mode
             )
-        )?.let { newRotationMode ->
-            pref.updateData { copy(navBarRotationMode = newRotationMode) }
-        }
+          },
+        selectedItem = state.first().navBarRotationMode,
+        title = stringResource(R.string.es_pref_nav_bar_rotation_mode, emptyList())
+      )
+    )?.let { newRotationMode ->
+      pref.updateData { copy(navBarRotationMode = newRotationMode) }
     }
+  }
 }

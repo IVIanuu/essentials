@@ -31,56 +31,54 @@ import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given
-class AppActionFactory(
-    @Given private val actionIntentSender: ActionIntentSender,
-    @Given private val getAppInfo: GetAppInfoUseCase,
-    @Given private val packageManager: PackageManager,
-    @Given private val stringResource: StringResourceProvider
+@Given class AppActionFactory(
+  @Given private val actionIntentSender: ActionIntentSender,
+  @Given private val getAppInfo: GetAppInfoUseCase,
+  @Given private val packageManager: PackageManager,
+  @Given private val stringResource: StringResourceProvider
 ) : ActionFactory {
-    override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+  override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
-    override suspend fun createAction(id: String): Action<*> {
-        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
-        return Action<ActionId>(
-            id = id,
-            title = getAppInfo(packageName)?.appName
-                ?: stringResource(R.string.es_unknown_action_name, emptyList()),
-            unlockScreen = true,
-            enabled = true,
-            icon = coilActionIcon(AppIcon(packageName))
-        )
-    }
+  override suspend fun createAction(id: String): Action<*> {
+    val packageName = id.removePrefix(ACTION_KEY_PREFIX)
+    return Action<ActionId>(
+      id = id,
+      title = getAppInfo(packageName)?.appName
+        ?: stringResource(R.string.es_unknown_action_name, emptyList()),
+      unlockScreen = true,
+      enabled = true,
+      icon = coilActionIcon(AppIcon(packageName))
+    )
+  }
 
-    override suspend fun createExecutor(id: String): ActionExecutor<*> {
-        val packageName = id.removePrefix(ACTION_KEY_PREFIX)
-        return {
-            actionIntentSender(
-                packageManager.getLaunchIntentForPackage(
-                    packageName
-                )!!
-            )
-        }
+  override suspend fun createExecutor(id: String): ActionExecutor<*> {
+    val packageName = id.removePrefix(ACTION_KEY_PREFIX)
+    return {
+      actionIntentSender(
+        packageManager.getLaunchIntentForPackage(
+          packageName
+        ) !!
+      )
     }
+  }
 }
 
-@Given
-class AppActionPickerDelegate(
-    @Given private val launchableAppPredicate: LaunchableAppPredicate,
-    @Given private val navigator: Navigator,
-    @Given private val stringResource: StringResourceProvider,
+@Given class AppActionPickerDelegate(
+  @Given private val launchableAppPredicate: LaunchableAppPredicate,
+  @Given private val navigator: Navigator,
+  @Given private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
-    override val title: String
-        get() = stringResource(R.string.es_action_app, emptyList())
+  override val title: String
+    get() = stringResource(R.string.es_action_app, emptyList())
 
-    override val icon: @Composable () -> Unit = {
-        Icon(painterResource(R.drawable.es_ic_apps), null)
-    }
+  override val icon: @Composable () -> Unit = {
+    Icon(painterResource(R.drawable.es_ic_apps), null)
+  }
 
-    override suspend fun pickAction(): ActionPickerKey.Result? {
-        val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
-        return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
-    }
+  override suspend fun pickAction(): ActionPickerKey.Result? {
+    val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
+    return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
+  }
 }
 
 private const val ACTION_KEY_PREFIX = "app=:="

@@ -7,13 +7,13 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 
 fun Modifier.fractionalTranslation(
-    xFraction: Float = 0f,
-    yFraction: Float = 0f
+  xFraction: Float = 0f,
+  yFraction: Float = 0f
 ) = composed {
-    var size by remember { mutableStateOf(IntSize(Int.MAX_VALUE, Int.MAX_VALUE)) }
-    onSizeChanged { size = it }
-        .graphicsLayer {
-            translationX = size.width * xFraction
-            translationY = size.height * yFraction
-        }
+  var size by remember { mutableStateOf(IntSize(Int.MAX_VALUE, Int.MAX_VALUE)) }
+  onSizeChanged { size = it }
+    .graphicsLayer {
+      translationX = size.width * xFraction
+      translationY = size.height * yFraction
+    }
 }

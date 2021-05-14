@@ -27,18 +27,16 @@ import com.ivianuu.injekt.android.*
 
 interface WriteSettingsPermission : Permission
 
-@Given
-fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
-    @Given context: AppContext
+@Given fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
+  @Given context: AppContext
 ): PermissionStateProvider<P> = { Settings.System.canWrite(context) }
 
 
-@Given
-fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
-    Intent(
-        Settings.ACTION_MANAGE_WRITE_SETTINGS,
-        "package:${buildInfo.packageName}".toUri()
-    )
+  Intent(
+    Settings.ACTION_MANAGE_WRITE_SETTINGS,
+    "package:${buildInfo.packageName}".toUri()
+  )
 }

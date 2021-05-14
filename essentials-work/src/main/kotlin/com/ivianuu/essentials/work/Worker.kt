@@ -8,38 +8,37 @@ import kotlin.time.*
 typealias Worker<I> = suspend WorkScope.() -> ListenableWorker.Result
 
 interface WorkScope {
-    val inputData: Data
-    val id: UUID
-    val tags: Set<String>
-    val runAttemptCount: Int
-    suspend fun setProgress(data: Data)
-    suspend fun setForeground(foregroundInfo: ForegroundInfo)
+  val inputData: Data
+  val id: UUID
+  val tags: Set<String>
+  val runAttemptCount: Int
+  suspend fun setProgress(data: Data)
+  suspend fun setForeground(foregroundInfo: ForegroundInfo)
 }
 
 abstract class WorkerId(val value: String)
 
 typealias WorkerElement = Pair<WorkerId, () -> Worker<*>>
 
-@Given
-fun <@Given T : Worker<I>, I : WorkerId> workerElement(
-    @Given id: I,
-    @Given factory: () -> T
+@Given fun <@Given T : Worker<I>, I : WorkerId> workerElement(
+  @Given id: I,
+  @Given factory: () -> T
 ): WorkerElement = id to factory
 
 fun WorkerId.toFunctionalWorkerTag() = WORKER_ID_TAG_PREFIX + value
 
 fun OneTimeWorkRequestBuilder(id: WorkerId): OneTimeWorkRequest.Builder =
-    OneTimeWorkRequestBuilder<FunctionalWorker>()
-        .addTag(id.toFunctionalWorkerTag())
+  OneTimeWorkRequestBuilder<FunctionalWorker>()
+    .addTag(id.toFunctionalWorkerTag())
 
 fun PeriodicWorkRequestBuilder(
-    id: WorkerId,
-    repeatInterval: Duration,
-    flexTimeInterval: Duration? = null
+  id: WorkerId,
+  repeatInterval: Duration,
+  flexTimeInterval: Duration? = null
 ): PeriodicWorkRequest.Builder =
-    (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
-        repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
-    ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
-        .addTag(id.toFunctionalWorkerTag())
+  (if (flexTimeInterval != null) PeriodicWorkRequestBuilder<FunctionalWorker>(
+    repeatInterval.toJavaDuration(), flexTimeInterval.toJavaDuration()
+  ) else PeriodicWorkRequestBuilder<FunctionalWorker>(repeatInterval.toJavaDuration()))
+    .addTag(id.toFunctionalWorkerTag())
 
 internal const val WORKER_ID_TAG_PREFIX = "worker_id_"

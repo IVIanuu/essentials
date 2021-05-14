@@ -23,21 +23,18 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object RecentAppsActionId : ActionId("recent_apps")
+@Given object RecentAppsActionId : ActionId("recent_apps")
 
-@Given
-fun recentAppsAction(
-    @Given stringResource: StringResourceProvider
+@Given fun recentAppsAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<RecentAppsActionId>(
-    id = RecentAppsActionId,
-    title = stringResource(R.string.es_action_recent_apps, emptyList()),
-    icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
+  id = RecentAppsActionId,
+  title = stringResource(R.string.es_action_recent_apps, emptyList()),
+  icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
-@Given
-fun recentAppsActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor
+@Given fun recentAppsActionExecutor(
+  @Given globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<RecentAppsActionId> = {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

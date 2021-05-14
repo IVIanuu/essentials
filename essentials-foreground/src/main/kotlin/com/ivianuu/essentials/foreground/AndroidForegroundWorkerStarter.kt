@@ -25,25 +25,24 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given
-fun androidForegroundWorkerStarter(
-    @Given logger: Logger,
-    @Given state: Flow<InternalForegroundState>,
-    @Given workManager: WorkManager
+@Given fun androidForegroundWorkerStarter(
+  @Given logger: Logger,
+  @Given state: Flow<InternalForegroundState>,
+  @Given workManager: WorkManager
 ): ScopeWorker<AppGivenScope> = {
-    state
-        .filter { it.isForeground }
-        .filter {
-            workManager.getWorkInfosByTag(ForegroundWorkerId.toFunctionalWorkerTag())
-                .await()
-                .none { it.state == WorkInfo.State.RUNNING }
-        }
-        .collect {
-            logger.d { "start foreground worker $it" }
-            workManager.cancelAllWorkByTag(ForegroundWorkerId.toFunctionalWorkerTag())
-            workManager.enqueue(
-                OneTimeWorkRequestBuilder(ForegroundWorkerId)
-                    .build()
-            )
-        }
+  state
+    .filter { it.isForeground }
+    .filter {
+      workManager.getWorkInfosByTag(ForegroundWorkerId.toFunctionalWorkerTag())
+        .await()
+        .none { it.state == WorkInfo.State.RUNNING }
+    }
+    .collect {
+      logger.d { "start foreground worker $it" }
+      workManager.cancelAllWorkByTag(ForegroundWorkerId.toFunctionalWorkerTag())
+      workManager.enqueue(
+        OneTimeWorkRequestBuilder(ForegroundWorkerId)
+          .build()
+      )
+    }
 }

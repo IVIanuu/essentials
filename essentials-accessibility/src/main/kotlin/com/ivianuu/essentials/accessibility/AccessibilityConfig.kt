@@ -25,55 +25,54 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 data class AccessibilityConfig(
-    val eventTypes: Int = 0,
-    val flags: Int = 0,
-    val packageNames: Set<String>? = null,
-    val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
-    val notificationTimeout: Long = 0L,
+  val eventTypes: Int = 0,
+  val flags: Int = 0,
+  val packageNames: Set<String>? = null,
+  val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
+  val notificationTimeout: Long = 0L,
 )
 
-@Given
-fun accessibilityConfigWorker(
-    @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
-    @Given ref: Flow<EsAccessibilityService?>,
+@Given fun accessibilityConfigWorker(
+  @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
+  @Given ref: Flow<EsAccessibilityService?>,
 ): ScopeWorker<AccessibilityGivenScope> = {
-    coroutineScope {
-        ref
-            .flatMapLatest { service ->
-                if (service != null) {
-                    combine(
-                        configs
-                            .map { it() }
-                            .map { config ->
-                                config
-                                    .stateIn(this, SharingStarted.Eagerly, null)
-                            }
-                    ) { it.filterNotNull() }
-                        .map { service to it }
-                } else {
-                    infiniteEmptyFlow()
-                }
-            }
-            .collect { (service, configs) ->
-                service.serviceInfo = service.serviceInfo?.apply {
-                    eventTypes = configs
-                        .map { it.eventTypes }
-                        .fold(0) { acc, events -> acc.addFlag(events) }
+  coroutineScope {
+    ref
+      .flatMapLatest { service ->
+        if (service != null) {
+          combine(
+            configs
+              .map { it() }
+              .map { config ->
+                config
+                  .stateIn(this, SharingStarted.Eagerly, null)
+              }
+          ) { it.filterNotNull() }
+            .map { service to it }
+        } else {
+          infiniteEmptyFlow()
+        }
+      }
+      .collect { (service, configs) ->
+        service.serviceInfo = service.serviceInfo?.apply {
+          eventTypes = configs
+            .map { it.eventTypes }
+            .fold(0) { acc, events -> acc.addFlag(events) }
 
-                    flags = configs
-                        .map { it.flags }
-                        .fold(0) { acc, flags -> acc.addFlag(flags) }
+          flags = configs
+            .map { it.flags }
+            .fold(0) { acc, flags -> acc.addFlag(flags) }
 
-                    // first one wins
-                    configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
-                    feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+          // first one wins
+          configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+          feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-                    notificationTimeout = configs
-                        .map { it.notificationTimeout }
-                        .maxOrNull() ?: 0L
+          notificationTimeout = configs
+            .map { it.notificationTimeout }
+            .maxOrNull() ?: 0L
 
-                    packageNames = null
-                }
-            }
-    }
+          packageNames = null
+        }
+      }
+  }
 }

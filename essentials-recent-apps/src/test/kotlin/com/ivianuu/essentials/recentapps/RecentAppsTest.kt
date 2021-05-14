@@ -30,79 +30,81 @@ import org.robolectric.annotation.*
 @Config(sdk = [24])
 class RecentAppsTest {
 
-    @Test
-    fun testRecentApps() = runCancellingBlockingTest {
-        val recentAppsScopeDispatcher = TestCoroutineDispatcher()
-        val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
-        val accessibilityEvents = EventFlow<AccessibilityEvent>()
-        val collector = recentApps(accessibilityEvents,
-            com.ivianuu.essentials.logging.NoopLogger, recentAppsScope)
-            .testCollect(this)
+  @Test
+  fun testRecentApps() = runCancellingBlockingTest {
+    val recentAppsScopeDispatcher = TestCoroutineDispatcher()
+    val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
+    val accessibilityEvents = EventFlow<AccessibilityEvent>()
+    val collector = recentApps(
+      accessibilityEvents,
+      com.ivianuu.essentials.logging.NoopLogger, recentAppsScope
+    )
+      .testCollect(this)
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "a",
-                null,
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "a",
+        null,
+        true
+      )
+    )
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "b",
-                null,
-                false
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "b",
+        null,
+        false
+      )
+    )
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_ANNOUNCEMENT,
-                "c",
-                null,
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_ANNOUNCEMENT,
+        "c",
+        null,
+        true
+      )
+    )
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "b",
-                null,
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "b",
+        null,
+        true
+      )
+    )
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "c",
-                null,
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "c",
+        null,
+        true
+      )
+    )
 
-        collector.values.shouldContainExactly(
-            listOf(),
-            listOf("a"),
-            listOf("b", "a"),
-            listOf("c", "b", "a")
-        )
-    }
+    collector.values.shouldContainExactly(
+      listOf(),
+      listOf("a"),
+      listOf("b", "a"),
+      listOf("c", "b", "a")
+    )
+  }
 
-    @Test
-    fun testCurrentApp() = runCancellingBlockingTest {
-        val recentApps = EventFlow<List<String>>()
-        val collector = currentApp(recentApps).testCollect(this)
+  @Test
+  fun testCurrentApp() = runCancellingBlockingTest {
+    val recentApps = EventFlow<List<String>>()
+    val collector = currentApp(recentApps).testCollect(this)
 
-        recentApps.emit(listOf("a", "b", "c"))
-        recentApps.emit(listOf("a", "b", "c"))
-        recentApps.emit(listOf("c", "a", "b"))
-        recentApps.emit(listOf("a", "b", "c"))
-        recentApps.emit(listOf("b", "c", "a"))
+    recentApps.emit(listOf("a", "b", "c"))
+    recentApps.emit(listOf("a", "b", "c"))
+    recentApps.emit(listOf("c", "a", "b"))
+    recentApps.emit(listOf("a", "b", "c"))
+    recentApps.emit(listOf("b", "c", "a"))
 
-        collector.values.shouldContainExactly("a", "c", "a", "b")
-    }
+    collector.values.shouldContainExactly("a", "c", "a", "b")
+  }
 }

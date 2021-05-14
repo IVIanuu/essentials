@@ -23,22 +23,19 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object SplitScreenActionId : ActionId("split_screen")
+@Given object SplitScreenActionId : ActionId("split_screen")
 
-@Given
-fun splitScreenAction(
-    @Given stringResource: StringResourceProvider
+@Given fun splitScreenAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<SplitScreenActionId>(
-    id = SplitScreenActionId,
-    title = stringResource(R.string.es_action_split_screen, emptyList()),
-    permissions = accessibilityActionPermissions,
-    icon = singleActionIcon(R.drawable.es_ic_view_agenda)
+  id = SplitScreenActionId,
+  title = stringResource(R.string.es_action_split_screen, emptyList()),
+  permissions = accessibilityActionPermissions,
+  icon = singleActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-@Given
-fun splitScreenActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor
+@Given fun splitScreenActionExecutor(
+  @Given globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<SplitScreenActionId> = {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

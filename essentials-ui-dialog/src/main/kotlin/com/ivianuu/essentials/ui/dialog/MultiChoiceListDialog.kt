@@ -21,60 +21,58 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 
-@Composable
-fun <T> MultiChoiceListDialog(
-    modifier: Modifier = Modifier,
-    item: @Composable (T) -> Unit,
-    icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    buttons: @Composable (() -> Unit)? = null,
-    selectedItems: Set<T>,
-    onSelectionsChanged: (Set<T>) -> Unit,
-    items: List<T>,
+@Composable fun <T> MultiChoiceListDialog(
+  modifier: Modifier = Modifier,
+  item: @Composable (T) -> Unit,
+  icon: @Composable (() -> Unit)? = null,
+  title: @Composable (() -> Unit)? = null,
+  buttons: @Composable (() -> Unit)? = null,
+  selectedItems: Set<T>,
+  onSelectionsChanged: (Set<T>) -> Unit,
+  items: List<T>,
 ) {
-    Dialog(
-        modifier = modifier,
-        applyContentPadding = false,
-        icon = icon,
-        title = title,
-        content = {
-            LazyColumn {
-                items(items) { item ->
-                    MultiChoiceDialogListItem(
-                        title = { item(item) },
-                        checked = item in selectedItems,
-                        onCheckedChange = {
-                            val newSelectedItems = selectedItems.toMutableSet()
-                            if (it) {
-                                newSelectedItems += item
-                            } else {
-                                newSelectedItems -= item
-                            }
+  Dialog(
+    modifier = modifier,
+    applyContentPadding = false,
+    icon = icon,
+    title = title,
+    content = {
+      LazyColumn {
+        items(items) { item ->
+          MultiChoiceDialogListItem(
+            title = { item(item) },
+            checked = item in selectedItems,
+            onCheckedChange = {
+              val newSelectedItems = selectedItems.toMutableSet()
+              if (it) {
+                newSelectedItems += item
+              } else {
+                newSelectedItems -= item
+              }
 
-                            onSelectionsChanged(newSelectedItems)
-                        }
-                    )
-                }
+              onSelectionsChanged(newSelectedItems)
             }
-        },
-        buttons = buttons
-    )
+          )
+        }
+      }
+    },
+    buttons = buttons
+  )
 }
 
-@Composable
-private fun MultiChoiceDialogListItem(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    title: @Composable () -> Unit
+@Composable private fun MultiChoiceDialogListItem(
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  title: @Composable () -> Unit
 ) {
-    SimpleDialogListItem(
-        leading = {
-            Checkbox(
-                checked = checked,
-                onCheckedChange = null
-            )
-        },
-        title = title,
-        onClick = { onCheckedChange(!checked) }
-    )
+  SimpleDialogListItem(
+    leading = {
+      Checkbox(
+        checked = checked,
+        onCheckedChange = null
+      )
+    },
+    title = title,
+    onClick = { onCheckedChange(! checked) }
+  )
 }

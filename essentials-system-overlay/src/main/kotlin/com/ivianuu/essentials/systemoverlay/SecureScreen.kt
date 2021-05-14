@@ -25,33 +25,31 @@ import kotlinx.coroutines.flow.*
 
 typealias IsOnSecureScreen = Boolean
 
-@Given
-fun isOnSecureScreen(
-    @Given accessibilityEvents: Flow<AccessibilityEvent>,
-    @Given logger: Logger,
-    @Given scope: GivenCoroutineScope<AppGivenScope>,
+@Given fun isOnSecureScreen(
+  @Given accessibilityEvents: Flow<AccessibilityEvent>,
+  @Given logger: Logger,
+  @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
-    .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-    .map { it.packageName to it.className }
-    .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
-    .map { (packageName, className) ->
-        var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
-        if (!isOnSecureScreen) {
-            isOnSecureScreen = packageName == "com.android.settings" &&
-                    className == "android.app.MaterialDialog"
-        }
-
-        isOnSecureScreen
+  .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
+  .map { it.packageName to it.className }
+  .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
+  .map { (packageName, className) ->
+    var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
+    if (! isOnSecureScreen) {
+      isOnSecureScreen = packageName == "com.android.settings" &&
+          className == "android.app.MaterialDialog"
     }
-    .distinctUntilChanged()
-    .onEach { logger.d { "on secure screen changed: $it" } }
-    .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
-@Given
-val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {
-    emit(
-        AccessibilityConfig(
-            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
+    isOnSecureScreen
+  }
+  .distinctUntilChanged()
+  .onEach { logger.d { "on secure screen changed: $it" } }
+  .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
+
+@Given val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {
+  emit(
+    AccessibilityConfig(
+      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
     )
+  )
 }

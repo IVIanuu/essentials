@@ -27,38 +27,36 @@ import kotlinx.coroutines.*
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 
-@Given
-fun getInstalledAppsUseCase(
-    @Given dispatcher: IODispatcher,
-    @Given packageManager: PackageManager
+@Given fun getInstalledAppsUseCase(
+  @Given dispatcher: IODispatcher,
+  @Given packageManager: PackageManager
 ): GetInstalledAppsUseCase = {
-    withContext(dispatcher) {
-        packageManager.getInstalledApplications(0)
-            .parMap {
-                AppInfo(
-                    appName = it.loadLabel(packageManager).toString(),
-                    packageName = it.packageName
-                )
-            }
-            .distinctBy { it.packageName }
-            .sortedBy { it.appName.toLowerCase() }
-            .toList()
-    }
+  withContext(dispatcher) {
+    packageManager.getInstalledApplications(0)
+      .parMap {
+        AppInfo(
+          appName = it.loadLabel(packageManager).toString(),
+          packageName = it.packageName
+        )
+      }
+      .distinctBy { it.packageName }
+      .sortedBy { it.appName.toLowerCase() }
+      .toList()
+  }
 }
 
 typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
 
-@Given
-fun getAppInfoUseCase(
-    @Given dispatcher: IODispatcher,
-    @Given packageManager: PackageManager
+@Given fun getAppInfoUseCase(
+  @Given dispatcher: IODispatcher,
+  @Given packageManager: PackageManager
 ): GetAppInfoUseCase = { packageName ->
-    withContext(dispatcher) {
-        val applicationInfo = catch {
-            packageManager.getApplicationInfo(packageName, 0)
-        }.get() ?: return@withContext null
-        AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
-    }
+  withContext(dispatcher) {
+    val applicationInfo = catch {
+      packageManager.getApplicationInfo(packageName, 0)
+    }.get() ?: return@withContext null
+    AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
+  }
 }
 
 data class AppInfo(val packageName: String, val appName: String)

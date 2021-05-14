@@ -35,94 +35,94 @@ import kotlinx.coroutines.flow.*
  * Requests a screen unlock
  */
 class UnlockScreenActivity : ComponentActivity() {
-    private var hasResult = false
-    private var valid = true
-    private lateinit var requestId: String
+  private var hasResult = false
+  private var valid = true
+  private lateinit var requestId: String
 
-    @SuppressLint("NewApi")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (!intent.hasExtra(KEY_REQUEST_ID)) {
-            valid = false
-            finish()
-            return
-        }
-
-        requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
-
-        val component = activityGivenScope.element<UnlockScreenComponent>()
-
-        component.logger.d { "unlock screen for $requestId" }
-
-        fun finishWithResult(success: Boolean) {
-            component.logger.d { "finish with result $success" }
-            hasResult = true
-            onUnlockScreenResult(requestId, success)
-            finish()
-        }
-
-        if (component.systemBuildInfo.sdk >= 26) {
-            component.keyguardManager.requestDismissKeyguard(
-                this,
-                object :
-                    KeyguardManager.KeyguardDismissCallback() {
-                    override fun onDismissSucceeded() {
-                        super.onDismissSucceeded()
-                        finishWithResult(true)
-                    }
-
-                    override fun onDismissCancelled() {
-                        super.onDismissCancelled()
-                        finishWithResult(false)
-                    }
-
-                    override fun onDismissError() {
-                        super.onDismissError()
-                        finishWithResult(false)
-                    }
-                }
-            )
-        } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
-            merge(
-                component.broadcastsFactory(Intent.ACTION_SCREEN_OFF),
-                component.broadcastsFactory(Intent.ACTION_SCREEN_ON),
-                component.broadcastsFactory(Intent.ACTION_USER_PRESENT)
-            )
-                .take(1)
-                .onEach {
-                    finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
-                }
-                .launchIn(lifecycleScope)
-        }
+  @SuppressLint("NewApi")
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    if (! intent.hasExtra(KEY_REQUEST_ID)) {
+      valid = false
+      finish()
+      return
     }
 
-    override fun onDestroy() {
-        // just in case we didn't respond yet
-        if (valid && !hasResult) {
-            onUnlockScreenResult(requestId, false)
-        }
-        super.onDestroy()
+    requestId = intent.getStringExtra(KEY_REQUEST_ID) !!
+
+    val component = activityGivenScope.element<UnlockScreenComponent>()
+
+    component.logger.d { "unlock screen for $requestId" }
+
+    fun finishWithResult(success: Boolean) {
+      component.logger.d { "finish with result $success" }
+      hasResult = true
+      onUnlockScreenResult(requestId, success)
+      finish()
     }
 
-    internal companion object {
-        private const val KEY_REQUEST_ID = "request_id"
-        fun unlock(context: Context, requestId: String) {
-            context.startActivity(
-                Intent(context, UnlockScreenActivity::class.java).apply {
-                    putExtra(KEY_REQUEST_ID, requestId)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            )
+    if (component.systemBuildInfo.sdk >= 26) {
+      component.keyguardManager.requestDismissKeyguard(
+        this,
+        object :
+          KeyguardManager.KeyguardDismissCallback() {
+          override fun onDismissSucceeded() {
+            super.onDismissSucceeded()
+            finishWithResult(true)
+          }
+
+          override fun onDismissCancelled() {
+            super.onDismissCancelled()
+            finishWithResult(false)
+          }
+
+          override fun onDismissError() {
+            super.onDismissError()
+            finishWithResult(false)
+          }
         }
+      )
+    } else {
+      window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+      merge(
+        component.broadcastsFactory(Intent.ACTION_SCREEN_OFF),
+        component.broadcastsFactory(Intent.ACTION_SCREEN_ON),
+        component.broadcastsFactory(Intent.ACTION_USER_PRESENT)
+      )
+        .take(1)
+        .onEach {
+          finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
+        }
+        .launchIn(lifecycleScope)
     }
+  }
+
+  override fun onDestroy() {
+    // just in case we didn't respond yet
+    if (valid && ! hasResult) {
+      onUnlockScreenResult(requestId, false)
+    }
+    super.onDestroy()
+  }
+
+  internal companion object {
+    private const val KEY_REQUEST_ID = "request_id"
+    fun unlock(context: Context, requestId: String) {
+      context.startActivity(
+        Intent(context, UnlockScreenActivity::class.java).apply {
+          putExtra(KEY_REQUEST_ID, requestId)
+          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+      )
+    }
+  }
 }
 
 @InstallElement<ActivityGivenScope>
 @Given
 class UnlockScreenComponent(
-    @Given val broadcastsFactory: BroadcastsFactory,
-    @Given val keyguardManager: @SystemService KeyguardManager,
-    @Given val logger: Logger,
-    @Given val systemBuildInfo: SystemBuildInfo
+  @Given val broadcastsFactory: BroadcastsFactory,
+  @Given val keyguardManager: @SystemService KeyguardManager,
+  @Given val logger: Logger,
+  @Given val systemBuildInfo: SystemBuildInfo
 )

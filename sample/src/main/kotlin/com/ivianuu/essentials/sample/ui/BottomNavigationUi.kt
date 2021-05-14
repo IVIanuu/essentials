@@ -25,7 +25,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
@@ -38,84 +37,82 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given
-val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
+@Given val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
 
 object BottomNavigationKey : Key<Nothing>
 
-@Given
-val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
-    var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
+@Given val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
+  var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
-        bottomBar = {
-            Surface(
-                modifier = Modifier.systemBarStyle(
-                    bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
-                    lightIcons = MaterialTheme.colors.primary.isLight,
-                    elevation = 8.dp
-                ),
-                elevation = 8.dp,
-                color = MaterialTheme.colors.primary
-            ) {
-                InsetsPadding(left = false, top = false, right = false) {
-                    BottomNavigation(
-                        backgroundColor = MaterialTheme.colors.primary,
-                        elevation = 0.dp
-                    ) {
-                        BottomNavItem.values().forEach { item ->
-                            BottomNavigationItem(
-                                alwaysShowLabel = false,
-                                selected = item == selectedItem,
-                                onClick = { selectedItem = item },
-                                icon = { Icon(painterResource(item.icon), null) },
-                                label = { Text(item.title) }
-                            )
-                        }
-                    }
-                }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Bottom navigation") }) },
+    bottomBar = {
+      Surface(
+        modifier = Modifier.systemBarStyle(
+          bgColor = overlaySystemBarBgColor(MaterialTheme.colors.primary),
+          lightIcons = MaterialTheme.colors.primary.isLight,
+          elevation = 8.dp
+        ),
+        elevation = 8.dp,
+        color = MaterialTheme.colors.primary
+      ) {
+        InsetsPadding(left = false, top = false, right = false) {
+          BottomNavigation(
+            backgroundColor = MaterialTheme.colors.primary,
+            elevation = 0.dp
+          ) {
+            BottomNavItem.values().forEach { item ->
+              BottomNavigationItem(
+                alwaysShowLabel = false,
+                selected = item == selectedItem,
+                onClick = { selectedItem = item },
+                icon = { Icon(painterResource(item.icon), null) },
+                label = { Text(item.title) }
+              )
             }
+          }
         }
-    ) {
-        AnimatedBox(current = selectedItem) { item ->
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .background(item.color)
-            )
-        }
+      }
     }
+  ) {
+    AnimatedBox(current = selectedItem) { item ->
+      Box(
+        modifier = Modifier.fillMaxSize()
+          .background(item.color)
+      )
+    }
+  }
 }
 
 
 private enum class BottomNavItem(
-    val title: String,
-    val icon: Int,
-    val color: Color
+  val title: String,
+  val icon: Int,
+  val color: Color
 ) {
-    HOME(
-        title = "Home",
-        icon = R.drawable.ic_home,
-        color = Color.Yellow
-    ),
-    MAILS(
-        title = "Mails",
-        icon = R.drawable.ic_email,
-        color = Color.Red
-    ),
-    SEARCH(
-        title = "Search",
-        icon = R.drawable.ic_search,
-        color = Color.Blue
-    ),
-    SCHEDULE(
-        title = "Schedule",
-        icon = R.drawable.ic_view_agenda,
-        color = Color.Cyan
-    ),
-    SETTINGS(
-        title = "Settings",
-        icon = R.drawable.ic_settings,
-        color = Color.Green
-    )
+  HOME(
+    title = "Home",
+    icon = R.drawable.ic_home,
+    color = Color.Yellow
+  ),
+  MAILS(
+    title = "Mails",
+    icon = R.drawable.ic_email,
+    color = Color.Red
+  ),
+  SEARCH(
+    title = "Search",
+    icon = R.drawable.ic_search,
+    color = Color.Blue
+  ),
+  SCHEDULE(
+    title = "Schedule",
+    icon = R.drawable.ic_view_agenda,
+    color = Color.Cyan
+  ),
+  SETTINGS(
+    title = "Settings",
+    icon = R.drawable.ic_settings,
+    color = Color.Green
+  )
 }

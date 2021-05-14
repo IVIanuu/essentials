@@ -5,7 +5,6 @@ import com.ivianuu.injekt.*
 
 typealias NavBarFeatureSupported = Boolean
 
-@Given
-fun navBarFeatureSupported(
-    @Given systemBuildInfo: SystemBuildInfo
+@Given fun navBarFeatureSupported(
+  @Given systemBuildInfo: SystemBuildInfo
 ): NavBarFeatureSupported = systemBuildInfo.sdk < 30

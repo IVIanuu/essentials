@@ -27,22 +27,21 @@ import kotlinx.coroutines.flow.*
 
 typealias ConfigChange = Unit
 
-@Given
-fun configChanges(
-    @Given appContext: AppContext,
-    @Given mainDispatcher: MainDispatcher,
+@Given fun configChanges(
+  @Given appContext: AppContext,
+  @Given mainDispatcher: MainDispatcher,
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
-    val callbacks = object : ComponentCallbacks2 {
-        override fun onConfigurationChanged(newConfig: Configuration) {
-            catch { offer(ConfigChange) }
-        }
-
-        override fun onLowMemory() {
-        }
-
-        override fun onTrimMemory(level: Int) {
-        }
+  val callbacks = object : ComponentCallbacks2 {
+    override fun onConfigurationChanged(newConfig: Configuration) {
+      catch { offer(ConfigChange) }
     }
-    appContext.registerComponentCallbacks(callbacks)
-    awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
+
+    override fun onLowMemory() {
+    }
+
+    override fun onTrimMemory(level: Int) {
+    }
+  }
+  appContext.registerComponentCallbacks(callbacks)
+  awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
 }.flowOn(mainDispatcher)

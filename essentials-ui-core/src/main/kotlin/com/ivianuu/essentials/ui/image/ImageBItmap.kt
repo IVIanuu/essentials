@@ -20,6 +20,6 @@ import android.graphics.*
 import androidx.compose.ui.graphics.*
 
 fun Bitmap.toImageBitmap(): ImageBitmap =
-    AndroidImageBitmapAccessor.createAndroidImageBitmap(this)
+  AndroidImageBitmapAccessor.createAndroidImageBitmap(this)
 
 fun ImageBitmap.toBitmap(): Bitmap = AndroidImageBitmapAccessor.getBitmap(this)

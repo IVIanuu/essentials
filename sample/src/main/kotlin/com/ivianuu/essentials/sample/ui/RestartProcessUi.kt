@@ -28,28 +28,26 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-@Given
-val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }
+@Given val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }
 
 object RestartProcessKey : Key<Nothing>
 
-@Given
-fun restartProcessUi(
-    @Given processRestarter: ProcessRestarter,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun restartProcessUi(
+  @Given processRestarter: ProcessRestarter,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<RestartProcessKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Restart process") }) }
-    ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    processRestarter()
-                }
-            }
-        ) {
-            Text("Restart process")
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Restart process") }) }
+  ) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          processRestarter()
         }
+      }
+    ) {
+      Text("Restart process")
     }
+  }
 }

@@ -6,53 +6,50 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given
-fun <@Given T : KeyUiDecorator> keyUiDecoratorElement(
-    @Given instance: T,
-    @Given key: TypeKey<T>,
-    @Given config: KeyUiDecoratorConfig<T> = KeyUiDecoratorConfig.DEFAULT
+@Given fun <@Given T : KeyUiDecorator> keyUiDecoratorElement(
+  @Given instance: T,
+  @Given key: TypeKey<T>,
+  @Given config: KeyUiDecoratorConfig<T> = KeyUiDecoratorConfig.DEFAULT
 ): KeyUiDecoratorElement = KeyUiDecoratorElement(key, instance as KeyUiDecorator, config)
 
 class KeyUiDecoratorConfig<out T : KeyUiDecorator>(
-    val dependencies: Set<TypeKey<KeyUiDecorator>> = emptySet(),
-    val dependents: Set<TypeKey<KeyUiDecorator>> = emptySet(),
+  val dependencies: Set<TypeKey<KeyUiDecorator>> = emptySet(),
+  val dependents: Set<TypeKey<KeyUiDecorator>> = emptySet(),
 ) {
-    companion object {
-        val DEFAULT = KeyUiDecoratorConfig<Nothing>(emptySet(), emptySet())
-    }
+  companion object {
+    val DEFAULT = KeyUiDecoratorConfig<Nothing>(emptySet(), emptySet())
+  }
 }
 
 typealias KeyUiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
 data class KeyUiDecoratorElement(
-    val key: TypeKey<KeyUiDecorator>,
-    val decorator: KeyUiDecorator,
-    val config: KeyUiDecoratorConfig<*>
+  val key: TypeKey<KeyUiDecorator>,
+  val decorator: KeyUiDecorator,
+  val config: KeyUiDecoratorConfig<*>
 )
 
-@Given
-object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
-    override fun KeyUiDecoratorElement.key(): Any = key
-    override fun KeyUiDecoratorElement.dependencies(): Set<Any> = config.dependencies
-    override fun KeyUiDecoratorElement.dependents(): Set<Any> = config.dependents
+@Given object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
+  override fun KeyUiDecoratorElement.key(): Any = key
+  override fun KeyUiDecoratorElement.dependencies(): Set<Any> = config.dependencies
+  override fun KeyUiDecoratorElement.dependents(): Set<Any> = config.dependents
 }
 
 typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
 
-@Given
-fun decorateKeyUi(
-    @Given elements: Set<KeyUiDecoratorElement> = emptySet(),
-    @Given logger: Logger
+@Given fun decorateKeyUi(
+  @Given elements: Set<KeyUiDecoratorElement> = emptySet(),
+  @Given logger: Logger
 ): DecorateKeyUi = { content ->
-    remember {
-        elements
-            .sortedTopological()
-            .reversed()
-            .fold(content) { acc, element ->
-                {
-                    logger.d { "Decorate key ui ${element.key}" }
-                    element.decorator(acc)
-                }
-            }
-    }.invoke()
+  remember {
+    elements
+      .sortedTopological()
+      .reversed()
+      .fold(content) { acc, element ->
+        {
+          logger.d { "Decorate key ui ${element.key}" }
+          element.decorator(acc)
+        }
+      }
+  }.invoke()
 }

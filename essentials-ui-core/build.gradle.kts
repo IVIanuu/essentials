@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -27,21 +27,21 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(Deps.Accompanist.flowLayout)
-    api(Deps.Accompanist.pager)
-    api(Deps.Accompanist.pagerIndicators)
-    api(Deps.Accompanist.swipeRefresh)
-    api(Deps.AndroidX.core)
-    api(Deps.AndroidX.Compose.core)
-    api(Deps.AndroidX.Compose.material)
-    api(Deps.AndroidX.ConstraintLayout.compose)
-    api(Deps.Injekt.android)
-    api(Deps.Injekt.compose)
-    api(project(":essentials-core"))
-    api(project(":essentials-coroutines"))
-    api(project(":essentials-logging"))
-    api(project(":essentials-optics"))
-    api(project(":essentials-time"))
+  api(Deps.Accompanist.flowLayout)
+  api(Deps.Accompanist.pager)
+  api(Deps.Accompanist.pagerIndicators)
+  api(Deps.Accompanist.swipeRefresh)
+  api(Deps.AndroidX.core)
+  api(Deps.AndroidX.Compose.core)
+  api(Deps.AndroidX.Compose.material)
+  api(Deps.AndroidX.ConstraintLayout.compose)
+  api(Deps.Injekt.android)
+  api(Deps.Injekt.compose)
+  api(project(":essentials-core"))
+  api(project(":essentials-coroutines"))
+  api(project(":essentials-logging"))
+  api(project(":essentials-optics"))
+  api(project(":essentials-time"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

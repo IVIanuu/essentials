@@ -21,10 +21,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 
 fun ScaleStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
+  spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
-    fromModifier?.value = if (isPush) Modifier
-    else Modifier.scale(scaleX = 1f - value, scaleY = 1f - value)
-    toModifier?.value = if (isPush) Modifier.scale(scaleX = value, scaleY = value)
-    else Modifier
+  fromModifier?.value = if (isPush) Modifier
+  else Modifier.scale(scaleX = 1f - value, scaleY = 1f - value)
+  toModifier?.value = if (isPush) Modifier.scale(scaleX = value, scaleY = value)
+  else Modifier
 }

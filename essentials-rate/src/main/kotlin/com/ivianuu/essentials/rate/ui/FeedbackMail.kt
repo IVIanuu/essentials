@@ -11,14 +11,16 @@ object FeedbackMailKey : IntentKey
 
 @Given
 fun feedbackMailKeyIntentFactory(
-    @Given appContext: AppContext,
-    @Given stringResource: StringResourceProvider
+  @Given appContext: AppContext,
+  @Given stringResource: StringResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {
-    Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:")
-        putExtra(Intent.EXTRA_EMAIL, arrayOf("ivianuu@gmail.com"))
-        putExtra(Intent.EXTRA_SUBJECT, "Feedback for ${
-            stringResource(appContext.applicationInfo.labelRes, emptyList())
-        }")
-    }
+  Intent(Intent.ACTION_SENDTO).apply {
+    data = Uri.parse("mailto:")
+    putExtra(Intent.EXTRA_EMAIL, arrayOf("ivianuu@gmail.com"))
+    putExtra(
+      Intent.EXTRA_SUBJECT, "Feedback for ${
+        stringResource(appContext.applicationInfo.labelRes, emptyList())
+      }"
+    )
+  }
 }

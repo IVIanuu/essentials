@@ -20,18 +20,18 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class TestCollector<T>(
-    private val onEach: suspend (T) -> Unit = {}
+  private val onEach: suspend (T) -> Unit = {}
 ) : FlowCollector<T> {
-    val values = mutableListOf<T>()
-    override suspend fun emit(value: T) {
-        values += value
-        onEach(value)
-    }
+  val values = mutableListOf<T>()
+  override suspend fun emit(value: T) {
+    values += value
+    onEach(value)
+  }
 }
 
 fun <T> Flow<T>.testCollect(scope: CoroutineScope, onEach: suspend (T) -> Unit = {}) =
-    TestCollector(onEach).also { collector ->
-        scope.launch {
-            collect(collector)
-        }
+  TestCollector(onEach).also { collector ->
+    scope.launch {
+      collect(collector)
     }
+  }

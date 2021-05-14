@@ -22,26 +22,25 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 data class BuildInfo(
-    val isDebug: Boolean,
-    val appName: String,
-    val packageName: String,
-    val versionName: String,
-    val versionCode: Int,
+  val isDebug: Boolean,
+  val appName: String,
+  val packageName: String,
+  val versionName: String,
+  val versionCode: Int,
 )
 
-@Given
-fun androidBuildInfo(
-    @Given appContext: AppContext,
-    @Given packageManager: PackageManager
+@Given fun androidBuildInfo(
+  @Given appContext: AppContext,
+  @Given packageManager: PackageManager
 ): @Scoped<AppGivenScope> BuildInfo {
-    val appInfo = appContext.applicationInfo
-    val packageInfo = packageManager
-        .getPackageInfo(appInfo.packageName, 0)
-    return BuildInfo(
-        isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-        appName = appInfo.loadLabel(packageManager).toString(),
-        packageName = appInfo.packageName,
-        versionName = packageInfo.versionName,
-        versionCode = packageInfo.versionCode
-    )
+  val appInfo = appContext.applicationInfo
+  val packageInfo = packageManager
+    .getPackageInfo(appInfo.packageName, 0)
+  return BuildInfo(
+    isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+    appName = appInfo.loadLabel(packageManager).toString(),
+    packageName = appInfo.packageName,
+    versionName = packageInfo.versionName,
+    versionCode = packageInfo.versionCode
+  )
 }

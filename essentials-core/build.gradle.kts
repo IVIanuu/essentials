@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 plugins {
-    kotlin("multiplatform")
-    id("com.ivianuu.essentials")
+  kotlin("multiplatform")
+  id("com.ivianuu.essentials")
 }
 
 kotlin {
-    jvm {
-        withJava()
-    }
+  jvm {
+    withJava()
+  }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(Deps.Injekt.core)
-                api(Deps.Injekt.scope)
-                api(Deps.kotlinResult)
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(project(":essentials-test"))
-            }
-        }
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(Deps.Injekt.core)
+        api(Deps.Injekt.scope)
+        api(Deps.kotlinResult)
+      }
     }
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":essentials-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

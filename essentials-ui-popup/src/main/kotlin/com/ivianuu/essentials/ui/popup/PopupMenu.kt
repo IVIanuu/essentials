@@ -29,53 +29,51 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
 object PopupMenu {
-    data class Item(
-        val onSelected: () -> Unit,
-        val content: @Composable () -> Unit
-    )
+  data class Item(
+    val onSelected: () -> Unit,
+    val content: @Composable () -> Unit
+  )
 }
 
-@Composable
-fun PopupMenu(items: List<PopupMenu.Item>) {
-    Popup {
-        Column {
-            val component = rememberElement<PopupMenuComponent>()
-            val scope = rememberCoroutineScope()
-            items.forEach { item ->
-                key(item) {
-                    PopupMenuItem(
-                        onSelected = {
-                            scope.launch { component.navigator.popTop() }
-                            item.onSelected()
-                        },
-                        content = item.content
-                    )
-                }
-            }
+@Composable fun PopupMenu(items: List<PopupMenu.Item>) {
+  Popup {
+    Column {
+      val component = rememberElement<PopupMenuComponent>()
+      val scope = rememberCoroutineScope()
+      items.forEach { item ->
+        key(item) {
+          PopupMenuItem(
+            onSelected = {
+              scope.launch { component.navigator.popTop() }
+              item.onSelected()
+            },
+            content = item.content
+          )
         }
+      }
     }
+  }
 }
 
 @InstallElement<UiGivenScope>
 @Given
 class PopupMenuComponent(@Given val navigator: Navigator)
 
-@Composable
-private fun PopupMenuItem(
-    onSelected: () -> Unit,
-    content: @Composable () -> Unit,
+@Composable private fun PopupMenuItem(
+  onSelected: () -> Unit,
+  content: @Composable () -> Unit,
 ) {
+  Box(
+    modifier = Modifier.widthIn(min = 200.dp)
+      .height(48.dp)
+      .clickable(onClick = onSelected),
+    contentAlignment = Alignment.CenterStart
+  ) {
     Box(
-        modifier = Modifier.widthIn(min = 200.dp)
-            .height(48.dp)
-            .clickable(onClick = onSelected),
-        contentAlignment = Alignment.CenterStart
+      modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+      contentAlignment = Alignment.CenterStart
     ) {
-        Box(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            content()
-        }
+      content()
     }
+  }
 }

@@ -24,42 +24,41 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
 
-@Composable
-fun TwilightTheme(
-    lightColors: Colors = lightColors(),
-    darkColors: Colors = darkColors(),
-    blackColors: Colors = blackColors(),
-    typography: Typography = Typography(),
-    shapes: Shapes = Shapes(),
-    twilightState: TwilightState,
-    content: @Composable () -> Unit
+@Composable fun TwilightTheme(
+  lightColors: Colors = lightColors(),
+  darkColors: Colors = darkColors(),
+  blackColors: Colors = blackColors(),
+  typography: Typography = Typography(),
+  shapes: Shapes = Shapes(),
+  twilightState: TwilightState,
+  content: @Composable () -> Unit
 ) {
-    val targetColors = remember(twilightState) {
-        if (twilightState.isDark) {
-            if (twilightState.useBlack) blackColors else darkColors
-        } else lightColors
-    }
+  val targetColors = remember(twilightState) {
+    if (twilightState.isDark) {
+      if (twilightState.useBlack) blackColors else darkColors
+    } else lightColors
+  }
 
-    var lastColors by remember { refOf(targetColors) }
+  var lastColors by remember { refOf(targetColors) }
 
-    val animation = remember(targetColors) { Animatable(0f) }
-    LaunchedEffect(animation) {
-        animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
-    }
+  val animation = remember(targetColors) { Animatable(0f) }
+  LaunchedEffect(animation) {
+    animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
+  }
 
-    val animatedColors = remember(animation.value) {
-        lerp(
-            lastColors,
-            targetColors,
-            animation.value
-        )
-    }
-    lastColors = animatedColors
-
-    MaterialTheme(
-        colors = animatedColors,
-        typography = typography,
-        shapes = shapes,
-        content = content
+  val animatedColors = remember(animation.value) {
+    lerp(
+      lastColors,
+      targetColors,
+      animation.value
     )
+  }
+  lastColors = animatedColors
+
+  MaterialTheme(
+    colors = animatedColors,
+    typography = typography,
+    shapes = shapes,
+    content = content
+  )
 }

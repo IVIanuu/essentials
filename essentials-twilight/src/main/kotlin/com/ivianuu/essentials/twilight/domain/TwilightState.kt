@@ -30,64 +30,60 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 
 data class TwilightState(
-    val isDark: Boolean = false,
-    val useBlack: Boolean = false,
+  val isDark: Boolean = false,
+  val useBlack: Boolean = false,
 )
 
-@Given
-fun twilightState(
-    @Given scope: GivenCoroutineScope<AppGivenScope>,
-    @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
-    @Given systemTwilightState: () -> Flow<SystemTwilightState>,
-    @Given timeTwilightState: () -> Flow<TimeTwilightState>,
-    @Given twilightPrefs: Flow<TwilightPrefs>,
+@Given fun twilightState(
+  @Given scope: GivenCoroutineScope<AppGivenScope>,
+  @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
+  @Given systemTwilightState: () -> Flow<SystemTwilightState>,
+  @Given timeTwilightState: () -> Flow<TimeTwilightState>,
+  @Given twilightPrefs: Flow<TwilightPrefs>,
 ): @Eager<AppGivenScope> StateFlow<TwilightState> = twilightPrefs
-    .flatMapLatest { (mode, useBlack) ->
-        (when (mode) {
-            TwilightMode.SYSTEM -> systemTwilightState()
-            TwilightMode.LIGHT -> flowOf(false)
-            TwilightMode.DARK -> flowOf(true)
-            TwilightMode.BATTERY -> batteryTwilightState()
-            TwilightMode.TIME -> timeTwilightState()
-        }).map { TwilightState(it, useBlack) }
-    }
-    .distinctUntilChanged()
-    .stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
+  .flatMapLatest { (mode, useBlack) ->
+    (when (mode) {
+      TwilightMode.SYSTEM -> systemTwilightState()
+      TwilightMode.LIGHT -> flowOf(false)
+      TwilightMode.DARK -> flowOf(true)
+      TwilightMode.BATTERY -> batteryTwilightState()
+      TwilightMode.TIME -> timeTwilightState()
+    }).map { TwilightState(it, useBlack) }
+  }
+  .distinctUntilChanged()
+  .stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
 
 typealias BatteryTwilightState = Boolean
 
-@Given
-fun batteryTwilightState(
-    @Given broadcastsFactory: BroadcastsFactory,
-    @Given powerManager: @SystemService PowerManager,
+@Given fun batteryTwilightState(
+  @Given broadcastsFactory: BroadcastsFactory,
+  @Given powerManager: @SystemService PowerManager,
 ): Flow<BatteryTwilightState> = broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
-    .map { Unit }
-    .onStart { emit(Unit) }
-    .map { powerManager.isPowerSaveMode }
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map { powerManager.isPowerSaveMode }
 
 typealias SystemTwilightState = Boolean
 
-@Given
-fun systemTwilightState(
-    @Given configChanges: Flow<ConfigChange>,
-    @Given resources: AppResources,
+@Given fun systemTwilightState(
+  @Given configChanges: Flow<ConfigChange>,
+  @Given resources: AppResources,
 ): Flow<SystemTwilightState> = configChanges
-    .onStart { emit(ConfigChange) }
-    .map {
-        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
-            .UI_MODE_NIGHT_YES
-    }
+  .onStart { emit(ConfigChange) }
+  .map {
+    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
+      .UI_MODE_NIGHT_YES
+  }
 
 typealias TimeTwilightState = Boolean
 
-@Given
-fun timeTwilightState(
-    @Given broadcastsFactory: BroadcastsFactory,
+@Given fun timeTwilightState(
+  @Given broadcastsFactory: BroadcastsFactory,
 ): Flow<TimeTwilightState> = broadcastsFactory(Intent.ACTION_TIME_TICK)
-    .map { Unit }
-    .onStart { emit(Unit) }
-    .map {
-        val calendar = Calendar.getInstance()
-        val hour = calendar[Calendar.HOUR_OF_DAY]
-        hour < 6 || hour >= 22
-    }
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map {
+    val calendar = Calendar.getInstance()
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    hour < 6 || hour >= 22
+  }

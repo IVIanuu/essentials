@@ -8,24 +8,24 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
 fun FadeThroughStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+  spec: AnimationSpec<Float> = defaultAnimationSpec()
 ): StackTransition = {
-    val from = fromElementModifier(ContentAnimationElementKey)
-    val to = toElementModifier(ContentAnimationElementKey)
-    to?.value = Modifier.alpha(0f)
-    attachTo()
-    animate(spec) { value ->
-        if (isPush) {
-            to?.value = Modifier
-                .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
-                .scale(
-                    lerp(
-                        0.92f,
-                        1f,
-                        LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
-                    )
-                )
-        }
-        from?.value = Modifier.alpha(lerp(1f, 0f, FastOutLinearInEasing.transform(value)))
+  val from = fromElementModifier(ContentAnimationElementKey)
+  val to = toElementModifier(ContentAnimationElementKey)
+  to?.value = Modifier.alpha(0f)
+  attachTo()
+  animate(spec) { value ->
+    if (isPush) {
+      to?.value = Modifier
+        .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
+        .scale(
+          lerp(
+            0.92f,
+            1f,
+            LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
+          )
+        )
     }
+    from?.value = Modifier.alpha(lerp(1f, 0f, FastOutLinearInEasing.transform(value)))
+  }
 }

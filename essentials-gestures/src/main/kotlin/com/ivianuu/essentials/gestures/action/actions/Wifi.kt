@@ -26,46 +26,42 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 
-@Given
-object WifiActionId : ActionId("wifi")
+@Given object WifiActionId : ActionId("wifi")
 
-@Given
-fun wifiAction(
-    @Given stringResource: StringResourceProvider,
-    @Given wifiIcon: Flow<WifiIcon>,
+@Given fun wifiAction(
+  @Given stringResource: StringResourceProvider,
+  @Given wifiIcon: Flow<WifiIcon>,
 ) = Action<WifiActionId>(
-    id = WifiActionId,
-    title = stringResource(R.string.es_action_wifi, emptyList()),
-    icon = wifiIcon
+  id = WifiActionId,
+  title = stringResource(R.string.es_action_wifi, emptyList()),
+  icon = wifiIcon
 )
 
-@Given
-fun wifiActionExecutor(
-    @Given wifiManager: @SystemService WifiManager
+@Given fun wifiActionExecutor(
+  @Given wifiManager: @SystemService WifiManager
 ): ActionExecutor<WifiActionId> = {
-    @Suppress("DEPRECATION")
-    wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
+  @Suppress("DEPRECATION")
+  wifiManager.isWifiEnabled = ! wifiManager.isWifiEnabled
 }
 
 typealias WifiIcon = ActionIcon
 
-@Given
-fun wifiIcon(
-    @Given broadcastsFactory: BroadcastsFactory,
-    @Given wifiManager: @SystemService WifiManager,
+@Given fun wifiIcon(
+  @Given broadcastsFactory: BroadcastsFactory,
+  @Given wifiManager: @SystemService WifiManager,
 ): Flow<WifiIcon> = broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
-    .map {
-        val state =
-            it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
-        state == WifiManager.WIFI_STATE_ENABLED
+  .map {
+    val state =
+      it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
+    state == WifiManager.WIFI_STATE_ENABLED
+  }
+  .onStart { emit(wifiManager.isWifiEnabled) }
+  .map { wifiEnabled ->
+    if (wifiEnabled) R.drawable.es_ic_network_wifi
+    else R.drawable.es_ic_signal_wifi_off
+  }
+  .map {
+    {
+      Icon(painterResource(it), null)
     }
-    .onStart { emit(wifiManager.isWifiEnabled) }
-    .map { wifiEnabled ->
-        if (wifiEnabled) R.drawable.es_ic_network_wifi
-        else R.drawable.es_ic_signal_wifi_off
-    }
-    .map {
-        {
-            Icon(painterResource(it), null)
-        }
-    }
+  }

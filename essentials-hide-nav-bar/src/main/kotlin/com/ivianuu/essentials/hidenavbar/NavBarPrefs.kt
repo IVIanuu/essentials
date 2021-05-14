@@ -22,30 +22,27 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
-@Serializable
-data class NavBarPrefs(
-    @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
-    @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
+@Serializable data class NavBarPrefs(
+  @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
+  @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
 ) {
-    companion object {
-        @Given
-        fun initial(@Given systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
-            hideNavBar = false,
-            navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
-                NavBarRotationMode.NOUGAT
-            } else {
-                NavBarRotationMode.MARSHMALLOW
-            }
-        )
-    }
+  companion object {
+    @Given
+    fun initial(@Given systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
+      hideNavBar = false,
+      navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
+        NavBarRotationMode.NOUGAT
+      } else {
+        NavBarRotationMode.MARSHMALLOW
+      }
+    )
+  }
 }
 
-@Given
-fun navBarPrefsModule(
-    @Given initialFactory: () -> @Initial NavBarPrefs
+@Given fun navBarPrefsModule(
+  @Given initialFactory: () -> @Initial NavBarPrefs
 ) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
 
 internal typealias WasNavBarHidden = Boolean
 
-@Given
-val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }
+@Given val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }

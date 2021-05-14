@@ -50,155 +50,142 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlin.reflect.*
 
-@Given
-val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
+@Given val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
 
 object PermissionsKey : Key<Nothing>
 
-@Given
-fun permissionUi(
-    @Given permissionRequester: PermissionRequester,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun permissionUi(
+  @Given permissionRequester: PermissionRequester,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<PermissionsKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Permissions") }) }
-    ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    permissionRequester(
-                        listOf(
-                            typeKeyOf<SampleCameraPermission>(),
-                            typeKeyOf<SampleDeviceAdminPermission>(),
-                            typeKeyOf<SamplePhonePermission>(),
-                            typeKeyOf<SampleAccessibilityPermission>(),
-                            typeKeyOf<SampleNotificationListenerPermission>(),
-                            typeKeyOf<SampleIgnoreBatteryOptimizationsPermission>(),
-                            typeKeyOf<SampleInstallUnknownAppsPermission>(),
-                            typeKeyOf<SamplePackageUsageStatsPermission>(),
-                            typeKeyOf<SampleSystemOverlayPermission>(),
-                            typeKeyOf<SampleWriteSecureSettingsPermission>(),
-                            typeKeyOf<SampleWriteSettingsPermission>()
-                        )
-                    )
-                }
-            }
-        ) {
-            Text("Request")
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Permissions") }) }
+  ) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          permissionRequester(
+            listOf(
+              typeKeyOf<SampleCameraPermission>(),
+              typeKeyOf<SampleDeviceAdminPermission>(),
+              typeKeyOf<SamplePhonePermission>(),
+              typeKeyOf<SampleAccessibilityPermission>(),
+              typeKeyOf<SampleNotificationListenerPermission>(),
+              typeKeyOf<SampleIgnoreBatteryOptimizationsPermission>(),
+              typeKeyOf<SampleInstallUnknownAppsPermission>(),
+              typeKeyOf<SamplePackageUsageStatsPermission>(),
+              typeKeyOf<SampleSystemOverlayPermission>(),
+              typeKeyOf<SampleWriteSecureSettingsPermission>(),
+              typeKeyOf<SampleWriteSettingsPermission>()
+            )
+          )
         }
+      }
+    ) {
+      Text("Request")
     }
+  }
 }
 
-@Given
-object SampleCameraPermission : RuntimePermission {
-    override val permissionName: String
-        get() = android.Manifest.permission.CAMERA
-    override val title: String = "Camera"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+@Given object SampleCameraPermission : RuntimePermission {
+  override val permissionName: String
+    get() = android.Manifest.permission.CAMERA
+  override val title: String = "Camera"
+  override val desc: String = "This is a desc"
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SamplePhonePermission : RuntimePermission {
-    override val permissionName: String
-        get() = android.Manifest.permission.CALL_PHONE
-    override val title: String = "Call phone"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+@Given object SamplePhonePermission : RuntimePermission {
+  override val permissionName: String
+    get() = android.Manifest.permission.CALL_PHONE
+  override val title: String = "Call phone"
+  override val desc: String = "This is a desc"
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleAccessibilityPermission : AccessibilityServicePermission {
-    override val serviceClass: KClass<out AccessibilityService>
-        get() = EsAccessibilityService::class
-    override val title: String = "Accessibility"
-    override val desc: String = "This is a desc"
-    override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+@Given object SampleAccessibilityPermission : AccessibilityServicePermission {
+  override val serviceClass: KClass<out AccessibilityService>
+    get() = EsAccessibilityService::class
+  override val title: String = "Accessibility"
+  override val desc: String = "This is a desc"
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleDeviceAdminPermission : DeviceAdminPermission {
-    override val deviceAdminClass: KClass<out DeviceAdminReceiver>
-        get() = SampleDeviceAdmin::class
-    override val explanation: String
-        get() = "Explanation"
-    override val title: String
-        get() = "Device admin"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleDeviceAdminPermission : DeviceAdminPermission {
+  override val deviceAdminClass: KClass<out DeviceAdminReceiver>
+    get() = SampleDeviceAdmin::class
+  override val explanation: String
+    get() = "Explanation"
+  override val title: String
+    get() = "Device admin"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
-    override val title: String
-        get() = "Ignore battery optimizations"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
+  override val title: String
+    get() = "Ignore battery optimizations"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
-    override val title: String
-        get() = "Install unknown apps"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
+  override val title: String
+    get() = "Install unknown apps"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
-    override val title: String
-        get() = "Package usage stats"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
+  override val title: String
+    get() = "Package usage stats"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleNotificationListenerPermission : NotificationListenerPermission {
-    override val serviceClass: KClass<out NotificationListenerService>
-        get() = EsNotificationListenerService::class
-    override val title: String
-        get() = "Notification listener"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleNotificationListenerPermission : NotificationListenerPermission {
+  override val serviceClass: KClass<out NotificationListenerService>
+    get() = EsNotificationListenerService::class
+  override val title: String
+    get() = "Notification listener"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleSystemOverlayPermission : SystemOverlayPermission {
-    override val title: String
-        get() = "System overlay"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleSystemOverlayPermission : SystemOverlayPermission {
+  override val title: String
+    get() = "System overlay"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
-    override val title: String
-        get() = "Write secure settings"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
+  override val title: String
+    get() = "Write secure settings"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given
-object SampleWriteSettingsPermission : WriteSettingsPermission {
-    override val title: String
-        get() = "Write settings"
-    override val desc: String
-        get() = "This is a desc"
-    override val icon: @Composable () -> Unit
-        get() = { Icon(Icons.Default.Menu, null) }
+@Given object SampleWriteSettingsPermission : WriteSettingsPermission {
+  override val title: String
+    get() = "Write settings"
+  override val desc: String
+    get() = "This is a desc"
+  override val icon: @Composable () -> Unit
+    get() = { Icon(Icons.Default.Menu, null) }
 }

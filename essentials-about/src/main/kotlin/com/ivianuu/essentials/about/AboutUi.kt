@@ -39,161 +39,159 @@ import kotlinx.coroutines.flow.*
 
 object AboutKey : Key<Nothing>
 
-@Given
-val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_info), null) },
-                    title = { Text(stringResource(R.string.es_about_version)) },
-                    subtitle = { Text(model.version) }
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
-                    title = { Text(stringResource(R.string.es_about_rate)) },
-                    subtitle = { Text(stringResource(R.string.es_about_rate_desc)) },
-                    onClick = model.rate
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_favorite), null) },
-                    title = { Text(stringResource(R.string.es_about_donate)) },
-                    onClick = model.donate
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
-                    title = { Text(stringResource(R.string.es_about_more_apps)) },
-                    subtitle = { Text(stringResource(R.string.es_about_more_apps_desc)) },
-                    onClick = model.openMoreApps
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
-                    title = { Text(stringResource(R.string.es_about_reddit)) },
-                    subtitle = { Text(stringResource(R.string.es_about_reddit_desc)) },
-                    onClick = model.openRedditPage
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
-                    title = { Text(stringResource(R.string.es_about_github)) },
-                    subtitle = { Text(stringResource(R.string.es_about_github_desc)) },
-                    onClick = model.openGithubPage
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
-                    title = { Text(stringResource(R.string.es_about_twitter)) },
-                    subtitle = { Text(stringResource(R.string.es_about_twitter_desc)) },
-                    onClick = model.openTwitterPage
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
-                    title = { Text(stringResource(R.string.es_about_feedback)) },
-                    subtitle = { Text(model.email) },
-                    onClick = model.sendMail
-                )
-            }
-
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_assignment), null) },
-                    title = { Text(stringResource(R.string.es_licenses_title)) },
-                    onClick = model.openLicenses
-                )
-            }
-
-            if (model.privacyPolicyUrl != null) {
-                item {
-                    ListItem(
-                        leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
-                        title = { Text(stringResource(R.string.es_about_privacy_policy)) },
-                        onClick = model.openPrivacyPolicy
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Optics
-data class AboutModel(
-    val version: String = "",
-    val email: String = "ivianuu@gmail.com",
-    val privacyPolicyUrl: PrivacyPolicyUrl? = null,
-    val showDonate: Boolean = false,
-    val donate: () -> Unit = {},
-    val rate: () -> Unit = {},
-    val openLicenses: () -> Unit = {},
-    val openMoreApps: () -> Unit = {},
-    val openRedditPage: () -> Unit = {},
-    val openGithubPage: () -> Unit = {},
-    val openTwitterPage: () -> Unit = {},
-    val openPrivacyPolicy: () -> Unit = {},
-    val sendMail: () -> Unit = {}
-) {
-    companion object {
-        @Given
-        fun initial(
-            @Given buildInfo: BuildInfo,
-            @Given privacyPolicyUrl: PrivacyPolicyUrl? = null,
-            @Given donations: (() -> Set<Donation>)? = null,
-        ): @Initial AboutModel = AboutModel(
-            version = buildInfo.versionName,
-            privacyPolicyUrl = privacyPolicyUrl,
-            showDonate = donations != null
+@Given val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
+  Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_info), null) },
+          title = { Text(stringResource(R.string.es_about_version)) },
+          subtitle = { Text(model.version) }
         )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
+          title = { Text(stringResource(R.string.es_about_rate)) },
+          subtitle = { Text(stringResource(R.string.es_about_rate_desc)) },
+          onClick = model.rate
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_favorite), null) },
+          title = { Text(stringResource(R.string.es_about_donate)) },
+          onClick = model.donate
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
+          title = { Text(stringResource(R.string.es_about_more_apps)) },
+          subtitle = { Text(stringResource(R.string.es_about_more_apps_desc)) },
+          onClick = model.openMoreApps
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
+          title = { Text(stringResource(R.string.es_about_reddit)) },
+          subtitle = { Text(stringResource(R.string.es_about_reddit_desc)) },
+          onClick = model.openRedditPage
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
+          title = { Text(stringResource(R.string.es_about_github)) },
+          subtitle = { Text(stringResource(R.string.es_about_github_desc)) },
+          onClick = model.openGithubPage
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
+          title = { Text(stringResource(R.string.es_about_twitter)) },
+          subtitle = { Text(stringResource(R.string.es_about_twitter_desc)) },
+          onClick = model.openTwitterPage
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
+          title = { Text(stringResource(R.string.es_about_feedback)) },
+          subtitle = { Text(model.email) },
+          onClick = model.sendMail
+        )
+      }
+
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_assignment), null) },
+          title = { Text(stringResource(R.string.es_licenses_title)) },
+          onClick = model.openLicenses
+        )
+      }
+
+      if (model.privacyPolicyUrl != null) {
+        item {
+          ListItem(
+            leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
+            title = { Text(stringResource(R.string.es_about_privacy_policy)) },
+            onClick = model.openPrivacyPolicy
+          )
+        }
+      }
     }
+  }
 }
 
-@Given
-fun aboutModel(
-    @Given initial: @Initial AboutModel,
-    @Given navigator: Navigator,
-    @Given rateOnPlayUseCase: RateOnPlayUseCase,
-    @Given stringResource: StringResourceProvider,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Optics data class AboutModel(
+  val version: String = "",
+  val email: String = "ivianuu@gmail.com",
+  val privacyPolicyUrl: PrivacyPolicyUrl? = null,
+  val showDonate: Boolean = false,
+  val donate: () -> Unit = {},
+  val rate: () -> Unit = {},
+  val openLicenses: () -> Unit = {},
+  val openMoreApps: () -> Unit = {},
+  val openRedditPage: () -> Unit = {},
+  val openGithubPage: () -> Unit = {},
+  val openTwitterPage: () -> Unit = {},
+  val openPrivacyPolicy: () -> Unit = {},
+  val sendMail: () -> Unit = {}
+) {
+  companion object {
+    @Given fun initial(
+      @Given buildInfo: BuildInfo,
+      @Given privacyPolicyUrl: PrivacyPolicyUrl? = null,
+      @Given donations: (() -> Set<Donation>)? = null,
+    ): @Initial AboutModel = AboutModel(
+      version = buildInfo.versionName,
+      privacyPolicyUrl = privacyPolicyUrl,
+      showDonate = donations != null
+    )
+  }
+}
+
+@Given fun aboutModel(
+  @Given initial: @Initial AboutModel,
+  @Given navigator: Navigator,
+  @Given rateOnPlayUseCase: RateOnPlayUseCase,
+  @Given stringResource: StringResourceProvider,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<AboutModel> = scope.state(initial) {
-    action(AboutModel.donate()) { navigator.push(DonationKey) }
-    action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
-    action(AboutModel.rate()) { rateOnPlayUseCase() }
-    action(AboutModel.openMoreApps()) {
-        navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-    }
-    action(AboutModel.openRedditPage()) {
-        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-    }
-    action(AboutModel.openGithubPage()) {
-        navigator.push(UrlKey("https://github.com/IVIanuu"))
-    }
-    action(AboutModel.openTwitterPage()) {
-        navigator.push(UrlKey("https://twitter.com/IVIanuu"))
-    }
-    action(AboutModel.openPrivacyPolicy()) {
-        navigator.push(WebKey(
-            stringResource(R.string.es_about_privacy_policy, emptyList()),
-            state.first().privacyPolicyUrl!!
-        ))
-    }
-    action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
+  action(AboutModel.donate()) { navigator.push(DonationKey) }
+  action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
+  action(AboutModel.rate()) { rateOnPlayUseCase() }
+  action(AboutModel.openMoreApps()) {
+    navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+  }
+  action(AboutModel.openRedditPage()) {
+    navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+  }
+  action(AboutModel.openGithubPage()) {
+    navigator.push(UrlKey("https://github.com/IVIanuu"))
+  }
+  action(AboutModel.openTwitterPage()) {
+    navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+  }
+  action(AboutModel.openPrivacyPolicy()) {
+    navigator.push(
+      WebKey(
+        stringResource(R.string.es_about_privacy_policy, emptyList()),
+        state.first().privacyPolicyUrl !!
+      )
+    )
+  }
+  action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
 }
 
 typealias PrivacyPolicyUrl = String

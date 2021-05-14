@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -27,12 +27,12 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(project(":essentials-android-util"))
-    api(project(":essentials-donation"))
-    api(project(":essentials-license"))
-    api(project(":essentials-rate"))
-    api(project(":essentials-ui"))
-    api(project(":essentials-web-ui"))
+  api(project(":essentials-android-util"))
+  api(project(":essentials-donation"))
+  api(project(":essentials-license"))
+  api(project(":essentials-rate"))
+  api(project(":essentials-ui"))
+  api(project(":essentials-web-ui"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

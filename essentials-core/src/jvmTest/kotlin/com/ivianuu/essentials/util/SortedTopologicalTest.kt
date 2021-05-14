@@ -21,39 +21,39 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class SortedTopologicalTest {
-    @Test
-    fun testSortedTopologial() {
-        val unsorted = listOf(
-            Item(
-                key = "c",
-                dependencies = setOf("b")
-            ),
-            Item(
-                key = "a",
-                dependents = setOf("b")
-            ),
-            Item(key = "b")
-        )
-
-        val sorted = unsorted.sortedTopological(
-            object : TreeDescriptor<Item> {
-                override val Item.dependencies: Set<Any>
-                    get() = dependencies
-                override val Item.dependents: Set<Any>
-                    get() = dependents
-                override val Item.key: String
-                    get() = key
-            }
-        )
-
-        sorted
-            .map { it.key }
-            .shouldContainInOrder("a", "b", "c")
-    }
-
-    private data class Item(
-        val key: String,
-        val dependencies: Set<String> = emptySet(),
-        val dependents: Set<String> = emptySet()
+  @Test
+  fun testSortedTopologial() {
+    val unsorted = listOf(
+      Item(
+        key = "c",
+        dependencies = setOf("b")
+      ),
+      Item(
+        key = "a",
+        dependents = setOf("b")
+      ),
+      Item(key = "b")
     )
+
+    val sorted = unsorted.sortedTopological(
+      object : TreeDescriptor<Item> {
+        override val Item.dependencies: Set<Any>
+          get() = dependencies
+        override val Item.dependents: Set<Any>
+          get() = dependents
+        override val Item.key: String
+          get() = key
+      }
+    )
+
+    sorted
+      .map { it.key }
+      .shouldContainInOrder("a", "b", "c")
+  }
+
+  private data class Item(
+    val key: String,
+    val dependencies: Set<String> = emptySet(),
+    val dependents: Set<String> = emptySet()
+  )
 }

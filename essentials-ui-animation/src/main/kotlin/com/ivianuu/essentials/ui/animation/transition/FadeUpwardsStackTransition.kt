@@ -23,26 +23,27 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
-fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition = {
+fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition =
+  {
     val target = if (isPush) toElementModifier(ContentAnimationElementKey)
     else fromElementModifier(ContentAnimationElementKey)
     if (isPush) target?.value = Modifier.alpha(0f)
     attachTo()
     animate(spec) { value ->
-        target?.value = Modifier
-            .fractionalTranslation(
-                yFraction = lerp(
-                    if (isPush) 0.25f else 0f,
-                    if (isPush) 0f else 0.25f,
-                    FastOutSlowInEasing.transform(value)
-                )
-            )
-            .alpha(
-                lerp(
-                    if (isPush) 0f else 1f,
-                    if (isPush) 1f else 0f,
-                    FastOutLinearInEasing.transform(value)
-                )
-            )
+      target?.value = Modifier
+        .fractionalTranslation(
+          yFraction = lerp(
+            if (isPush) 0.25f else 0f,
+            if (isPush) 0f else 0.25f,
+            FastOutSlowInEasing.transform(value)
+          )
+        )
+        .alpha(
+          lerp(
+            if (isPush) 0f else 1f,
+            if (isPush) 1f else 0f,
+            FastOutLinearInEasing.transform(value)
+          )
+        )
     }
-}
+  }

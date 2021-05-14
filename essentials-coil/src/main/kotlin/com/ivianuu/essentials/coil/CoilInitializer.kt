@@ -22,6 +22,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
 @Given
-fun coilInitializer(@Given imageLoaderFactory: () -> ImageLoader): ScopeInitializer<AppGivenScope> = {
+fun coilInitializer(@Given imageLoaderFactory: () -> ImageLoader): ScopeInitializer<AppGivenScope> =
+  {
     Coil.setImageLoader(imageLoaderFactory)
-}
+  }

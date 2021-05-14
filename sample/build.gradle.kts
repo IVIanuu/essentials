@@ -1,6 +1,4 @@
 import com.ivianuu.essentials.gradle.*
-import com.ivianuu.injekt.gradle.*
-import org.jetbrains.kotlin.gradle.tasks.*
 
 /*
  * Copyright 2020 Manuel Wrage
@@ -19,11 +17,11 @@ import org.jetbrains.kotlin.gradle.tasks.*
  */
 
 plugins {
-    id("com.android.application")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
-    kotlin("plugin.serialization")
+  id("com.android.application")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
+  kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
@@ -33,48 +31,48 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 essentials {
-    withLicenses()
+  withLicenses()
 }
 
 android {
-    // todo remove once fixed
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+  // todo remove once fixed
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
-    implementation(project(":essentials-android"))
-    implementation(project(":essentials-android-core"))
-    implementation(project(":essentials-android-prefs"))
-    implementation(project(":essentials-android-settings"))
-    implementation(project(":essentials-about"))
-    implementation(project(":essentials-accessibility"))
-    implementation(project(":essentials-apps"))
-    implementation(project(":essentials-apps-coil"))
-    implementation(project(":essentials-apps-ui"))
-    implementation(project(":essentials-backup"))
-    implementation(project(":essentials-billing"))
-    implementation(project(":essentials-boot"))
-    implementation(project(":essentials-donation"))
-    implementation(project(":essentials-foreground"))
-    implementation(project(":essentials-gestures"))
-    implementation(project(":essentials-hide-nav-bar"))
-    implementation(project(":essentials-license"))
-    implementation(project(":essentials-notification-listener"))
-    implementation(project(":essentials-permission"))
-    implementation(project(":essentials-process-restart"))
-    implementation(project(":essentials-rate"))
-    implementation(project(":essentials-shell"))
-    implementation(project(":essentials-shortcut-picker"))
-    implementation(project(":essentials-tile"))
-    implementation(project(":essentials-torch"))
-    implementation(project(":essentials-twilight"))
-    implementation(project(":essentials-unlock"))
-    implementation(project(":essentials-web-ui"))
-    implementation(project(":essentials-work"))
+  implementation(project(":essentials-android"))
+  implementation(project(":essentials-android-core"))
+  implementation(project(":essentials-android-prefs"))
+  implementation(project(":essentials-android-settings"))
+  implementation(project(":essentials-about"))
+  implementation(project(":essentials-accessibility"))
+  implementation(project(":essentials-apps"))
+  implementation(project(":essentials-apps-coil"))
+  implementation(project(":essentials-apps-ui"))
+  implementation(project(":essentials-backup"))
+  implementation(project(":essentials-billing"))
+  implementation(project(":essentials-boot"))
+  implementation(project(":essentials-donation"))
+  implementation(project(":essentials-foreground"))
+  implementation(project(":essentials-gestures"))
+  implementation(project(":essentials-hide-nav-bar"))
+  implementation(project(":essentials-license"))
+  implementation(project(":essentials-notification-listener"))
+  implementation(project(":essentials-permission"))
+  implementation(project(":essentials-process-restart"))
+  implementation(project(":essentials-rate"))
+  implementation(project(":essentials-shell"))
+  implementation(project(":essentials-shortcut-picker"))
+  implementation(project(":essentials-tile"))
+  implementation(project(":essentials-torch"))
+  implementation(project(":essentials-twilight"))
+  implementation(project(":essentials-unlock"))
+  implementation(project(":essentials-web-ui"))
+  implementation(project(":essentials-work"))
 
-    testImplementation(project(":essentials-android-test"))
-    testImplementation(project(":essentials-test"))
+  testImplementation(project(":essentials-android-test"))
+  testImplementation(project(":essentials-test"))
 }

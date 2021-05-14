@@ -23,20 +23,20 @@ import org.jetbrains.kotlin.gradle.plugin.*
 
 @AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class ComposePlugin : KotlinCompilerPluginSupportPlugin {
-    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
-        kotlinCompilation.target.project.plugins.hasPlugin(ComposePlugin::class.java)
+  override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
+    kotlinCompilation.target.project.plugins.hasPlugin(ComposePlugin::class.java)
 
-    override fun apply(target: Project) {
-    }
+  override fun apply(target: Project) {
+  }
 
-    override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> =
-        kotlinCompilation.target.project.provider { emptyList() }
+  override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> =
+    kotlinCompilation.target.project.provider { emptyList() }
 
-    override fun getCompilerPluginId(): String = "androidx.compose"
+  override fun getCompilerPluginId(): String = "androidx.compose"
 
-    override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-        groupId = BuildConfig.COMPOSE_GROUP_ID,
-        artifactId = BuildConfig.COMPOSE_ARTIFACT_ID,
-        version = BuildConfig.COMPOSE_VERSION
-    )
+  override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
+    groupId = BuildConfig.COMPOSE_GROUP_ID,
+    artifactId = BuildConfig.COMPOSE_ARTIFACT_ID,
+    version = BuildConfig.COMPOSE_VERSION
+  )
 }

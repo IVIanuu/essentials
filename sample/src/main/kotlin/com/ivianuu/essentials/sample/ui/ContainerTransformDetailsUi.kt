@@ -20,60 +20,59 @@ import com.ivianuu.injekt.compose.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
-@Given
-val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
-    var listInfo by rememberScopedValue(key = "list_state") {
-        mutableStateOf(0 to 0)
-    }
-    ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {
-        Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
-            val listState = rememberLazyListState(listInfo.first, listInfo.second)
-            listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-            LazyColumn(state = listState, contentPadding = localVerticalInsetsPadding()) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                            .height(250.dp)
-                            .background(Color.Black.copy(alpha = 0.38f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            modifier = Modifier.padding(70.dp),
-                            painter = painterResource(R.drawable.placeholder_image),
-                            contentDescription = null
-                        )
-                    }
-                }
-                item {
-                    Text(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 16.dp
-                        ),
-                        text = "Title",
-                        style = MaterialTheme.typography.h4
-                    )
-                }
-                item {
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                        Text(
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                top = 16.dp
-                            ),
-                            text = Strings.LoremIpsumChain,
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
-                }
-            }
+@Given val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
+  var listInfo by rememberScopedValue(key = "list_state") {
+    mutableStateOf(0 to 0)
+  }
+  ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {
+    Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
+      val listState = rememberLazyListState(listInfo.first, listInfo.second)
+      listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+      LazyColumn(state = listState, contentPadding = localVerticalInsetsPadding()) {
+        item {
+          Box(
+            modifier = Modifier.fillMaxWidth()
+              .height(250.dp)
+              .background(Color.Black.copy(alpha = 0.38f)),
+            contentAlignment = Alignment.Center
+          ) {
+            Image(
+              modifier = Modifier.padding(70.dp),
+              painter = painterResource(R.drawable.placeholder_image),
+              contentDescription = null
+            )
+          }
         }
+        item {
+          Text(
+            modifier = Modifier.padding(
+              start = 16.dp,
+              end = 16.dp,
+              top = 16.dp
+            ),
+            text = "Title",
+            style = MaterialTheme.typography.h4
+          )
+        }
+        item {
+          CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+              modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp
+              ),
+              text = Strings.LoremIpsumChain,
+              style = MaterialTheme.typography.body2
+            )
+          }
+        }
+      }
     }
+  }
 }
 
 @Given
 val containerTransformDetailsOptionsFactory: KeyUiOptionsFactory<ContainerTransformDetailsKey> = {
-    KeyUiOptions(ContainerTransformStackTransition(it.closedKey, "opened"))
+  KeyUiOptions(ContainerTransformStackTransition(it.closedKey, "opened"))
 }

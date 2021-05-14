@@ -19,161 +19,158 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given
-val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
+@Given val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
 
 enum class TransitionKey(
-    val title: String,
-    val shared: Boolean,
-    val color: Color,
-    val fabAlignment: Alignment
+  val title: String,
+  val shared: Boolean,
+  val color: Color,
+  val fabAlignment: Alignment
 ) : Key<Nothing> {
-    VERTICAL(
-        "Vertical Slide Animation",
-        false,
-        ColorPickerPalette.BLUE_GREY.colors[3],
-        Alignment.BottomEnd
-    ),
-    CIRCULAR(
-        "Circular Reveal Animation",
-        false,
-        ColorPickerPalette.RED.colors[3],
-        Alignment.BottomEnd
-    ),
-    FADE(
-        "Fade Animation",
-        false,
-        ColorPickerPalette.BLUE.colors[3],
-        Alignment.BottomEnd
-    ),
-    FLIP(
-        "Flip Animation",
-        false,
-        ColorPickerPalette.ORANGE.colors[3],
-        Alignment.BottomEnd
-    ),
-    HORIZONTAL(
-        "Horizontal Slide Animation",
-        false,
-        ColorPickerPalette.GREEN.colors[3],
-        Alignment.BottomEnd
-    ),
-    ARC_FADE(
-        "Fade Shared Element Transition",
-        true,
-        ColorPickerPalette.YELLOW.colors[3],
-        Alignment.Center
-    ),
-    ARC_FADE_RESET(
-        "Fade Shared Element Transition",
-        true,
-        ColorPickerPalette.PINK.colors[3],
-        Alignment.BottomEnd
-    )
+  VERTICAL(
+    "Vertical Slide Animation",
+    false,
+    ColorPickerPalette.BLUE_GREY.colors[3],
+    Alignment.BottomEnd
+  ),
+  CIRCULAR(
+    "Circular Reveal Animation",
+    false,
+    ColorPickerPalette.RED.colors[3],
+    Alignment.BottomEnd
+  ),
+  FADE(
+    "Fade Animation",
+    false,
+    ColorPickerPalette.BLUE.colors[3],
+    Alignment.BottomEnd
+  ),
+  FLIP(
+    "Flip Animation",
+    false,
+    ColorPickerPalette.ORANGE.colors[3],
+    Alignment.BottomEnd
+  ),
+  HORIZONTAL(
+    "Horizontal Slide Animation",
+    false,
+    ColorPickerPalette.GREEN.colors[3],
+    Alignment.BottomEnd
+  ),
+  ARC_FADE(
+    "Fade Shared Element Transition",
+    true,
+    ColorPickerPalette.YELLOW.colors[3],
+    Alignment.Center
+  ),
+  ARC_FADE_RESET(
+    "Fade Shared Element Transition",
+    true,
+    ColorPickerPalette.PINK.colors[3],
+    Alignment.BottomEnd
+  )
 }
 
-@Given
-fun transitionUi(
-    @Given key: TransitionKey,
-    @Given navigator: Navigator
+@Given fun transitionUi(
+  @Given key: TransitionKey,
+  @Given navigator: Navigator
 ): KeyUi<TransitionKey> = {
-    Scaffold(
-        topBar = {
-            SharedElement(key = "app bar", isStart = false) {
-                Box(
-                    modifier = Modifier.background(MaterialTheme.colors.primary)
-                        .fillMaxWidth()
-                        .height(56.dp)
-                )
-                TopAppBar(
-                    title = { Text("Transition") },
-                    leading = null
-                )
-            }
-        }
-    ) {
+  Scaffold(
+    topBar = {
+      SharedElement(key = "app bar", isStart = false) {
         Box(
-            modifier = Modifier.fillMaxSize()
-                .background(key.color)
-        ) {
-            Text(
-                text = key.title,
-                modifier = Modifier.align(Alignment.TopCenter)
-                    .padding(top = 72.dp),
-                style = MaterialTheme.typography.h6
-            )
-
-            SharedElement(
-                key = "fab",
-                isStart = true,
-                modifier = Modifier
-                    .align(key.fabAlignment)
-                    .padding(16.dp)
-                    .padding(bottom = LocalInsets.current.bottom)
-            ) {
-                val scope = rememberCoroutineScope()
-                FloatingActionButton(
-                    onClick = {
-                        val next = TransitionKey.values()
-                            .getOrNull(TransitionKey.values().indexOf(key) + 1)
-                        if (next != null) scope.launch {
-                            navigator.push(next)
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        modifier = Modifier.rotate(180f),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
+          modifier = Modifier.background(MaterialTheme.colors.primary)
+            .fillMaxWidth()
+            .height(56.dp)
+        )
+        TopAppBar(
+          title = { Text("Transition") },
+          leading = null
+        )
+      }
     }
+  ) {
+    Box(
+      modifier = Modifier.fillMaxSize()
+        .background(key.color)
+    ) {
+      Text(
+        text = key.title,
+        modifier = Modifier.align(Alignment.TopCenter)
+          .padding(top = 72.dp),
+        style = MaterialTheme.typography.h6
+      )
+
+      SharedElement(
+        key = "fab",
+        isStart = true,
+        modifier = Modifier
+          .align(key.fabAlignment)
+          .padding(16.dp)
+          .padding(bottom = LocalInsets.current.bottom)
+      ) {
+        val scope = rememberCoroutineScope()
+        FloatingActionButton(
+          onClick = {
+            val next = TransitionKey.values()
+              .getOrNull(TransitionKey.values().indexOf(key) + 1)
+            if (next != null) scope.launch {
+              navigator.push(next)
+            }
+          }
+        ) {
+          Icon(
+            imageVector = Icons.Default.ArrowBack,
+            modifier = Modifier.rotate(180f),
+            contentDescription = null
+          )
+        }
+      }
+    }
+  }
 }
 
-@Given
-val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
-    val (enterTransition, exitTransition) = when (key) {
-        TransitionKey.VERTICAL -> VerticalStackTransition() to VerticalStackTransition()
-        TransitionKey.CIRCULAR -> CircularRevealStackTransition("fab") to
-                CircularRevealStackTransition("fab")
-        TransitionKey.FADE -> SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = CrossFadeStackTransition()
-        ) to SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = CrossFadeStackTransition()
-        )
-        TransitionKey.FLIP -> SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = FlipStackTransition()
-        ) to SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = FlipStackTransition()
-        )
-        TransitionKey.HORIZONTAL -> SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = HorizontalStackTransition()
-        ) to SharedElementStackTransition(
-            "app bar" to "app bar",
-            contentTransition = HorizontalStackTransition()
-        )
-        TransitionKey.ARC_FADE -> SharedElementStackTransition(
-            "app bar" to "app bar",
-            "fab" to "fab"
-        ) to SharedElementStackTransition(
-            "app bar" to "app bar",
-            "fab" to "fab"
-        )
-        TransitionKey.ARC_FADE_RESET -> SharedElementStackTransition(
-            "app bar" to "app bar",
-            "fab" to "fab"
-        ) to SharedElementStackTransition(
-            "app bar" to "app bar",
-            "fab" to "fab"
-        )
-    }
-    KeyUiOptions(enterTransition = enterTransition, exitTransition = exitTransition)
+@Given val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
+  val (enterTransition, exitTransition) = when (key) {
+    TransitionKey.VERTICAL -> VerticalStackTransition() to VerticalStackTransition()
+    TransitionKey.CIRCULAR -> CircularRevealStackTransition("fab") to
+        CircularRevealStackTransition("fab")
+    TransitionKey.FADE -> SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = CrossFadeStackTransition()
+    ) to SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = CrossFadeStackTransition()
+    )
+    TransitionKey.FLIP -> SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = FlipStackTransition()
+    ) to SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = FlipStackTransition()
+    )
+    TransitionKey.HORIZONTAL -> SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = HorizontalStackTransition()
+    ) to SharedElementStackTransition(
+      "app bar" to "app bar",
+      contentTransition = HorizontalStackTransition()
+    )
+    TransitionKey.ARC_FADE -> SharedElementStackTransition(
+      "app bar" to "app bar",
+      "fab" to "fab"
+    ) to SharedElementStackTransition(
+      "app bar" to "app bar",
+      "fab" to "fab"
+    )
+    TransitionKey.ARC_FADE_RESET -> SharedElementStackTransition(
+      "app bar" to "app bar",
+      "fab" to "fab"
+    ) to SharedElementStackTransition(
+      "app bar" to "app bar",
+      "fab" to "fab"
+    )
+  }
+  KeyUiOptions(enterTransition = enterTransition, exitTransition = exitTransition)
 }
 

@@ -28,40 +28,36 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
-@Given
-val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
+@Given val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 
 object CheckAppsKey : Key<Nothing>
 
-@Given
-fun checkAppsUi(
-    @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-    @Given launchableAppPredicate: LaunchableAppPredicate,
-    @Given pref: DataStore<CheckAppsPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun checkAppsUi(
+  @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
+  @Given launchableAppPredicate: LaunchableAppPredicate,
+  @Given pref: DataStore<CheckAppsPrefs>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): KeyUi<CheckAppsKey> = {
-    remember {
-        checkableAppsScreen(
-            CheckableAppsParams(
-                pref.data.map { it.checkedApps },
-                { checkedApps ->
-                    scope.launch {
-                        pref.updateData {
-                            copy(checkedApps = checkedApps)
-                        }
-                    }
-                },
-                launchableAppPredicate,
-                "Send check apps"
-            )
-        )
-    }.invoke()
+  remember {
+    checkableAppsScreen(
+      CheckableAppsParams(
+        pref.data.map { it.checkedApps },
+        { checkedApps ->
+          scope.launch {
+            pref.updateData {
+              copy(checkedApps = checkedApps)
+            }
+          }
+        },
+        launchableAppPredicate,
+        "Send check apps"
+      )
+    )
+  }.invoke()
 }
 
-@Serializable
-data class CheckAppsPrefs(
-    @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
+@Serializable data class CheckAppsPrefs(
+  @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
 )
 
-@Given
-val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }
+@Given val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }

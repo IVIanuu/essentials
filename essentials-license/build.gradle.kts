@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
-    kotlin("plugin.serialization")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
+  kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -26,9 +26,9 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(project(":essentials-store"))
-    api(project(":essentials-ui"))
-    api(project(":essentials-serialization"))
+  api(project(":essentials-store"))
+  api(project(":essentials-ui"))
+  api(project(":essentials-serialization"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

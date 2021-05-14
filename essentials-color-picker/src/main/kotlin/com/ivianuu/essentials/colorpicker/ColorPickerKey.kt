@@ -25,32 +25,31 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class ColorPickerKey(
-    val initialColor: Color,
-    val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
-    val title: String? = null,
-    val allowCustomArgb: Boolean = true,
-    val showAlphaSelector: Boolean = false,
+  val initialColor: Color,
+  val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
+  val title: String? = null,
+  val allowCustomArgb: Boolean = true,
+  val showAlphaSelector: Boolean = false,
 ) : DialogKey<Color>
 
-@Given
-fun colorPickerUi(
-    @Given key: ColorPickerKey,
-    @Given navigator: Navigator,
+@Given fun colorPickerUi(
+  @Given key: ColorPickerKey,
+  @Given navigator: Navigator,
 ): KeyUi<ColorPickerKey> = {
-    DialogScaffold {
-        val scope = rememberCoroutineScope()
-        ColorPickerDialog(
-            initialColor = key.initialColor,
-            onColorSelected = {
-                scope.launch { navigator.pop(key, it) }
-            },
-            onCancel = {
-                scope.launch { navigator.pop(key, null) }
-            },
-            colorPalettes = key.colorPalettes,
-            showAlphaSelector = key.showAlphaSelector,
-            allowCustomArgb = key.allowCustomArgb,
-            title = key.title?.let { { Text(it) } }
-        )
-    }
+  DialogScaffold {
+    val scope = rememberCoroutineScope()
+    ColorPickerDialog(
+      initialColor = key.initialColor,
+      onColorSelected = {
+        scope.launch { navigator.pop(key, it) }
+      },
+      onCancel = {
+        scope.launch { navigator.pop(key, null) }
+      },
+      colorPalettes = key.colorPalettes,
+      showAlphaSelector = key.showAlphaSelector,
+      allowCustomArgb = key.allowCustomArgb,
+      title = key.title?.let { { Text(it) } }
+    )
+  }
 }

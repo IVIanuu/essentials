@@ -43,159 +43,151 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 data class ActionPickerKey(
-    val showDefaultOption: Boolean = false,
-    val showNoneOption: Boolean = false,
+  val showDefaultOption: Boolean = false,
+  val showNoneOption: Boolean = false,
 ) : Key<ActionPickerKey.Result> {
-    sealed class Result {
-        data class Action(val actionId: String) : Result()
-        object Default : Result()
-        object None : Result()
-    }
+  sealed class Result {
+    data class Action(val actionId: String) : Result()
+    object Default : Result()
+    object None : Result()
+  }
 }
 
-@Given
-val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
-    ) {
-        ResourceLazyColumnFor(model.items) { item ->
-            ListItem(
-                leading = { item.Icon(Modifier.size(24.dp)) },
-                trailing = if (item.settingsKey != null) ({
-                    IconButton(onClick = { model.openActionSettings(item) }) {
-                        Icon(painterResource(R.drawable.es_ic_settings), null)
-                    }
-                }) else null,
-                title = { Text(item.title) },
-                onClick = { model.pickAction(item) }
-            )
-        }
+@Given val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
+  ) {
+    ResourceLazyColumnFor(model.items) { item ->
+      ListItem(
+        leading = { item.Icon(Modifier.size(24.dp)) },
+        trailing = if (item.settingsKey != null) ({
+          IconButton(onClick = { model.openActionSettings(item) }) {
+            Icon(painterResource(R.drawable.es_ic_settings), null)
+          }
+        }) else null,
+        title = { Text(item.title) },
+        onClick = { model.pickAction(item) }
+      )
     }
+  }
 }
 
-@Optics
-data class ActionPickerModel(
-    val items: Resource<List<ActionPickerItem>> = Idle,
-    val openActionSettings: (ActionPickerItem) -> Unit = {},
-    val pickAction: (ActionPickerItem) -> Unit = {}
+@Optics data class ActionPickerModel(
+  val items: Resource<List<ActionPickerItem>> = Idle,
+  val openActionSettings: (ActionPickerItem) -> Unit = {},
+  val pickAction: (ActionPickerItem) -> Unit = {}
 )
 
 sealed class ActionPickerItem {
-    data class ActionItem(
-        val action: Action<*>,
-        override val settingsKey: Key<Nothing>?,
-    ) : ActionPickerItem() {
-        override val title: String
-            get() = action.title
+  data class ActionItem(
+    val action: Action<*>,
+    override val settingsKey: Key<Nothing>?,
+  ) : ActionPickerItem() {
+    override val title: String
+      get() = action.title
 
-        @Composable
-        override fun Icon(modifier: Modifier) {
-            ActionIcon(action = action, modifier = modifier)
-        }
-
-        override suspend fun getResult() = ActionPickerKey.Result.Action(action.id)
+    @Composable override fun Icon(modifier: Modifier) {
+      ActionIcon(action = action, modifier = modifier)
     }
 
-    data class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem() {
-        override val title: String
-            get() = delegate.title
+    override suspend fun getResult() = ActionPickerKey.Result.Action(action.id)
+  }
 
-        override val settingsKey: Key<Nothing>?
-            get() = delegate.settingsKey
+  data class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem() {
+    override val title: String
+      get() = delegate.title
 
-        @Composable
-        override fun Icon(modifier: Modifier) {
-            Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                delegate.icon()
-            }
-        }
+    override val settingsKey: Key<Nothing>?
+      get() = delegate.settingsKey
 
-        override suspend fun getResult() = delegate.pickAction()
+    @Composable override fun Icon(modifier: Modifier) {
+      Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        delegate.icon()
+      }
     }
 
-    data class SpecialOption(
-        override val title: String,
-        val getResult: () -> ActionPickerKey.Result?
-    ) : ActionPickerItem() {
-        override val settingsKey: Key<Nothing>?
-            get() = null
+    override suspend fun getResult() = delegate.pickAction()
+  }
 
-        @Composable
-        override fun Icon(modifier: Modifier) {
-            Spacer(modifier)
-        }
+  data class SpecialOption(
+    override val title: String,
+    val getResult: () -> ActionPickerKey.Result?
+  ) : ActionPickerItem() {
+    override val settingsKey: Key<Nothing>?
+      get() = null
 
-        override suspend fun getResult() = getResult.invoke()
+    @Composable override fun Icon(modifier: Modifier) {
+      Spacer(modifier)
     }
 
-    abstract val title: String
-    abstract val settingsKey: Key<Nothing>?
+    override suspend fun getResult() = getResult.invoke()
+  }
 
-    @Composable
-    abstract fun Icon(modifier: Modifier = Modifier)
+  abstract val title: String
+  abstract val settingsKey: Key<Nothing>?
 
-    abstract suspend fun getResult(): ActionPickerKey.Result?
+  @Composable abstract fun Icon(modifier: Modifier = Modifier)
+
+  abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Given
-fun actionPickerModel(
-    @Given getAction: GetActionUseCase,
-    @Given getActionPickerItems: GetActionPickerItemsUseCase,
-    @Given key: ActionPickerKey,
-    @Given navigator: Navigator,
-    @Given permissionRequester: PermissionRequester,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun actionPickerModel(
+  @Given getAction: GetActionUseCase,
+  @Given getActionPickerItems: GetActionPickerItemsUseCase,
+  @Given key: ActionPickerKey,
+  @Given navigator: Navigator,
+  @Given permissionRequester: PermissionRequester,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
-    resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
-    action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
-    action(ActionPickerModel.pickAction()) { item ->
-        val result = item.getResult() ?: return@action
-        if (result is ActionPickerKey.Result.Action) {
-            val action = getAction(result.actionId)!!
-            if (!permissionRequester(action.permissions))
-                return@action
-        }
-        navigator.pop(key, result)
+  resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
+  action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey !!) }
+  action(ActionPickerModel.pickAction()) { item ->
+    val result = item.getResult() ?: return@action
+    if (result is ActionPickerKey.Result.Action) {
+      val action = getAction(result.actionId) !!
+      if (! permissionRequester(action.permissions))
+        return@action
     }
+    navigator.pop(key, result)
+  }
 }
 
 private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerItem>
 
-@Given
-fun getActionPickerItemsUseCase(
-    @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-    @Given getAllActions: GetAllActionsUseCase,
-    @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
-    @Given key: ActionPickerKey,
-    @Given stringResource: StringResourceProvider
+@Given fun getActionPickerItemsUseCase(
+  @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+  @Given getAllActions: GetAllActionsUseCase,
+  @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
+  @Given key: ActionPickerKey,
+  @Given stringResource: StringResourceProvider
 ): GetActionPickerItemsUseCase = {
-    val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
+  val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
-    if (key.showDefaultOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = stringResource(R.string.es_default, emptyList()),
-            getResult = { ActionPickerKey.Result.Default }
-        )
-    }
+  if (key.showDefaultOption) {
+    specialOptions += ActionPickerItem.SpecialOption(
+      title = stringResource(R.string.es_default, emptyList()),
+      getResult = { ActionPickerKey.Result.Default }
+    )
+  }
 
-    if (key.showNoneOption) {
-        specialOptions += ActionPickerItem.SpecialOption(
-            title = stringResource(R.string.es_none, emptyList()),
-            getResult = { ActionPickerKey.Result.None }
-        )
-    }
+  if (key.showNoneOption) {
+    specialOptions += ActionPickerItem.SpecialOption(
+      title = stringResource(R.string.es_none, emptyList()),
+      getResult = { ActionPickerKey.Result.None }
+    )
+  }
 
-    val actionsAndDelegates = (
-            (getActionPickerDelegates()
-                .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
-                .map {
-                    ActionPickerItem.ActionItem(
-                        it,
-                        getActionSettingsKey(it.id)
-                    )
-                })
-            )
-        .sortedBy { it.title }
+  val actionsAndDelegates = (
+      (getActionPickerDelegates()
+        .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+        .map {
+          ActionPickerItem.ActionItem(
+            it,
+            getActionSettingsKey(it.id)
+          )
+        })
+      )
+    .sortedBy { it.title }
 
-    specialOptions + actionsAndDelegates
+  specialOptions + actionsAndDelegates
 }

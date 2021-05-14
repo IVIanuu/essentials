@@ -41,74 +41,71 @@ import kotlinx.coroutines.flow.*
 import kotlin.time.*
 
 data class WriteSecureSettingsKey(
-    val permissionKey: TypeKey<WriteSecureSettingsPermission>
+  val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Given
-val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            item {
-                SecureSettingsHeader(
-                    stringResource(R.string.es_pref_secure_settings_header_summary)
-                )
-            }
-            item {
-                ListItem(
-                    title = { Text(stringResource(R.string.es_pref_use_pc)) },
-                    subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
-                    onClick = model.openPcInstructions
-                )
-            }
-            item {
-                ListItem(
-                    title = { Text(stringResource(R.string.es_pref_use_root)) },
-                    subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
-                    onClick = model.grantPermissionsViaRoot
-                )
-            }
-        }
+@Given val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      item {
+        SecureSettingsHeader(
+          stringResource(R.string.es_pref_secure_settings_header_summary)
+        )
+      }
+      item {
+        ListItem(
+          title = { Text(stringResource(R.string.es_pref_use_pc)) },
+          subtitle = { Text(stringResource(R.string.es_pref_use_pc_summary)) },
+          onClick = model.openPcInstructions
+        )
+      }
+      item {
+        ListItem(
+          title = { Text(stringResource(R.string.es_pref_use_root)) },
+          subtitle = { Text(stringResource(R.string.es_pref_use_root_summary)) },
+          onClick = model.grantPermissionsViaRoot
+        )
+      }
     }
+  }
 }
 
-@Optics
-data class WriteSecureSettingsModel(
-    val openPcInstructions: () -> Unit = {},
-    val grantPermissionsViaRoot: () -> Unit = {}
+@Optics data class WriteSecureSettingsModel(
+  val openPcInstructions: () -> Unit = {},
+  val grantPermissionsViaRoot: () -> Unit = {}
 )
 
-@Given
-fun writeSecureSettingsModel(
-    @Given buildInfo: BuildInfo,
-    @Given key: WriteSecureSettingsKey,
-    @Given navigator: Navigator,
-    @Given permissionStateFactory: PermissionStateFactory,
-    @Given runShellCommand: RunShellCommandUseCase,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster,
+@Given fun writeSecureSettingsModel(
+  @Given buildInfo: BuildInfo,
+  @Given key: WriteSecureSettingsKey,
+  @Given navigator: Navigator,
+  @Given permissionStateFactory: PermissionStateFactory,
+  @Given runShellCommand: RunShellCommandUseCase,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster,
 ): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsModel> = scope.state(
-    WriteSecureSettingsModel()
+  WriteSecureSettingsModel()
 ) {
-    timer(200.milliseconds)
-        .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
-        .filter { it }
-        .take(1)
-        .onEach {
-            toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
-            navigator.pop(key, true)
-        }
-        .launchIn(this)
-    action(WriteSecureSettingsModel.openPcInstructions()) {
-        navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
+  timer(200.milliseconds)
+    .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
+    .filter { it }
+    .take(1)
+    .onEach {
+      toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
+      navigator.pop(key, true)
     }
-    action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
-        runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
-            .onFailure {
-                it.printStackTrace()
-                toaster(stringResource(R.string.es_secure_settings_no_root, emptyList()))
-            }
-    }
+    .launchIn(this)
+  action(WriteSecureSettingsModel.openPcInstructions()) {
+    navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
+  }
+  action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
+    runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
+      .onFailure {
+        it.printStackTrace()
+        toaster(stringResource(R.string.es_secure_settings_no_root, emptyList()))
+      }
+  }
 }

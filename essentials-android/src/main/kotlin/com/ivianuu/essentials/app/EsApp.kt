@@ -5,10 +5,11 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 abstract class EsApp : Application(), AppGivenScopeOwner {
-    override lateinit var appGivenScope: AppGivenScope
-    override fun onCreate() {
-        appGivenScope = buildAppGivenScope()
-        super.onCreate()
-    }
-    protected abstract fun buildAppGivenScope(): AppGivenScope
+  override lateinit var appGivenScope: AppGivenScope
+  override fun onCreate() {
+    appGivenScope = buildAppGivenScope()
+    super.onCreate()
+  }
+
+  protected abstract fun buildAppGivenScope(): AppGivenScope
 }

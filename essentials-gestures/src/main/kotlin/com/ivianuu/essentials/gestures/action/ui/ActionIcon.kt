@@ -21,16 +21,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.gestures.action.*
 
-@Composable
-fun ActionIcon(
-    action: Action<*>,
-    modifier: Modifier = Modifier,
+@Composable fun ActionIcon(
+  action: Action<*>,
+  modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier,
-        propagateMinConstraints = true,
-        contentAlignment = Alignment.Center
-    ) {
-        action.icon.collectAsState(null).value?.invoke()
-    }
+  Box(
+    modifier = modifier,
+    propagateMinConstraints = true,
+    contentAlignment = Alignment.Center
+  ) {
+    action.icon.collectAsState(null).value?.invoke()
+  }
 }

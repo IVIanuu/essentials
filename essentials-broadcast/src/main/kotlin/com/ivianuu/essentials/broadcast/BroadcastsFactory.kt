@@ -26,22 +26,21 @@ import kotlinx.coroutines.flow.*
 
 typealias BroadcastsFactory = (String) -> Flow<Intent>
 
-@Given
-fun broadcastsFactory(
-    @Given appContext: AppContext,
-    @Given mainDispatcher: MainDispatcher
+@Given fun broadcastsFactory(
+  @Given appContext: AppContext,
+  @Given mainDispatcher: MainDispatcher
 ): BroadcastsFactory = { action ->
-    callbackFlow<Intent> {
-        val broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                catch { offer(intent) }
-            }
-        }
-        appContext.registerReceiver(broadcastReceiver, IntentFilter(action))
-        awaitClose {
-            catch {
-                appContext.unregisterReceiver(broadcastReceiver)
-            }
-        }
-    }.flowOn(mainDispatcher)
+  callbackFlow<Intent> {
+    val broadcastReceiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context, intent: Intent) {
+        catch { offer(intent) }
+      }
+    }
+    appContext.registerReceiver(broadcastReceiver, IntentFilter(action))
+    awaitClose {
+      catch {
+        appContext.unregisterReceiver(broadcastReceiver)
+      }
+    }
+  }.flowOn(mainDispatcher)
 }

@@ -29,46 +29,46 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 enum class ScreenState(val isOn: Boolean) {
-    OFF(false), LOCKED(true), UNLOCKED(true)
+  OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
 @Given
 fun screenState(
-    @Given broadcastsFactory: BroadcastsFactory,
-    @Given logger: Logger,
-    @Given scope: GivenCoroutineScope<AppGivenScope>,
-    @Given screenStateProvider: CurrentScreenStateProvider
+  @Given broadcastsFactory: BroadcastsFactory,
+  @Given logger: Logger,
+  @Given scope: GivenCoroutineScope<AppGivenScope>,
+  @Given screenStateProvider: CurrentScreenStateProvider
 ): @Scoped<AppGivenScope> Flow<ScreenState> = merge(
-    broadcastsFactory(Intent.ACTION_SCREEN_OFF),
-    broadcastsFactory(Intent.ACTION_SCREEN_ON),
-    broadcastsFactory(Intent.ACTION_USER_PRESENT)
+  broadcastsFactory(Intent.ACTION_SCREEN_OFF),
+  broadcastsFactory(Intent.ACTION_SCREEN_ON),
+  broadcastsFactory(Intent.ACTION_USER_PRESENT)
 )
-    .onStart { logger.d { "sub for screen state" } }
-    .onCompletion { logger.d { "dispose screen state" } }
-    .map { Unit }
-    .onStart { emit(Unit) }
-    .map { screenStateProvider() }
-    .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
-    .distinctUntilChanged()
+  .onStart { logger.d { "sub for screen state" } }
+  .onCompletion { logger.d { "dispose screen state" } }
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map { screenStateProvider() }
+  .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+  .distinctUntilChanged()
 
 private typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
 @Given
 fun currentScreenStateProvider(
-    @Given dispatcher: DefaultDispatcher,
-    @Given keyguardManager: @SystemService KeyguardManager,
-    @Given powerManager: @SystemService PowerManager,
+  @Given dispatcher: DefaultDispatcher,
+  @Given keyguardManager: @SystemService KeyguardManager,
+  @Given powerManager: @SystemService PowerManager,
 ): CurrentScreenStateProvider = {
-    withContext(dispatcher) {
-        if (powerManager.isInteractive) {
-            if (keyguardManager.isDeviceLocked) {
-                ScreenState.LOCKED
-            } else {
-                ScreenState.UNLOCKED
-            }
-        } else {
-            ScreenState.OFF
-        }
+  withContext(dispatcher) {
+    if (powerManager.isInteractive) {
+      if (keyguardManager.isDeviceLocked) {
+        ScreenState.LOCKED
+      } else {
+        ScreenState.UNLOCKED
+      }
+    } else {
+      ScreenState.OFF
     }
+  }
 }
 

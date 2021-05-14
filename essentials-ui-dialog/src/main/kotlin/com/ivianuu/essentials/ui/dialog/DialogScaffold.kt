@@ -29,48 +29,47 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 
-@Composable
-fun DialogScaffold(
-    modifier: Modifier = Modifier,
-    dismissible: Boolean = true,
-    onDismissRequest: () -> Unit = defaultDismissRequestHandler,
-    dialog: @Composable () -> Unit,
+@Composable fun DialogScaffold(
+  modifier: Modifier = Modifier,
+  dismissible: Boolean = true,
+  onDismissRequest: () -> Unit = defaultDismissRequestHandler,
+  dialog: @Composable () -> Unit,
 ) {
-    if (!dismissible) {
-        BackHandler { }
-    }
+  if (! dismissible) {
+    BackHandler { }
+  }
 
-    Box(
+  Box(
+    modifier = Modifier
+      .animationElement(ScrimAnimationElementKey)
+      .pointerInput(true) {
+        detectTapGestures { onDismissRequest() }
+      }
+      .fillMaxSize()
+      .background(Color.Black.copy(alpha = 0.6f))
+      .then(modifier),
+    contentAlignment = Alignment.Center
+  ) {
+    InsetsPadding {
+      Box(
         modifier = Modifier
-            .animationElement(ScrimAnimationElementKey)
-            .pointerInput(true) {
-                detectTapGestures { onDismissRequest() }
-            }
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
-            .then(modifier),
+          .pointerInput(true) { detectTapGestures { } }
+          .wrapContentSize(align = Alignment.Center)
+          .animationElement(PopupAnimationElementKey)
+          .padding(all = 32.dp),
         contentAlignment = Alignment.Center
-    ) {
-        InsetsPadding {
-            Box(
-                modifier = Modifier
-                    .pointerInput(true) { detectTapGestures {  } }
-                    .wrapContentSize(align = Alignment.Center)
-                    .animationElement(PopupAnimationElementKey)
-                    .padding(all = 32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                dialog()
-            }
-        }
+      ) {
+        dialog()
+      }
     }
+  }
 }
 
 private val defaultDismissRequestHandler: () -> Unit
-    @Composable get() {
-        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-        return {
-            backPressedDispatcherOwner.onBackPressedDispatcher
-                .onBackPressed()
-        }
+  @Composable get() {
+    val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current !!
+    return {
+      backPressedDispatcherOwner.onBackPressedDispatcher
+        .onBackPressed()
     }
+  }

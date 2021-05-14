@@ -39,77 +39,75 @@ import kotlinx.coroutines.flow.*
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
-@Given
-val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.es_request_permission_title)) })
-        }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            items(model.permissions) { permission ->
-                ListItem(
-                    title = { Text(permission.permission.title) },
-                    subtitle = permission.permission.desc?.let {
-                        {
-                            Text(it)
-                        }
-                    },
-                    leading = permission.permission.icon,
-                    trailing = {
-                        Button(onClick = { model.grantPermission(permission) }) {
-                            Text(stringResource(R.string.es_grant))
-                        }
-                    },
-                    onClick = { model.grantPermission(permission) }
-                )
-            }
-        }
+@Given val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
+  Scaffold(
+    topBar = {
+      TopAppBar(title = { Text(stringResource(R.string.es_request_permission_title)) })
     }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      items(model.permissions) { permission ->
+        ListItem(
+          title = { Text(permission.permission.title) },
+          subtitle = permission.permission.desc?.let {
+            {
+              Text(it)
+            }
+          },
+          leading = permission.permission.icon,
+          trailing = {
+            Button(onClick = { model.grantPermission(permission) }) {
+              Text(stringResource(R.string.es_grant))
+            }
+          },
+          onClick = { model.grantPermission(permission) }
+        )
+      }
+    }
+  }
 }
 
-@Optics
-data class PermissionRequestModel(
-    val permissions: List<UiPermission<*>> = emptyList(),
-    val grantPermission: (UiPermission<*>) -> Unit = {}
+@Optics data class PermissionRequestModel(
+  val permissions: List<UiPermission<*>> = emptyList(),
+  val grantPermission: (UiPermission<*>) -> Unit = {}
 )
 
 data class UiPermission<P : Permission>(
-    val permissionKey: TypeKey<P>,
-    val permission: P
+  val permissionKey: TypeKey<P>,
+  val permission: P
 )
 
-@Given
-fun permissionRequestModel(
-    @Given appUiStarter: AppUiStarter,
-    @Given key: PermissionRequestKey,
-    @Given navigator: Navigator,
-    @Given permissions: Map<TypeKey<Permission>, Permission>,
-    @Given permissionStateFactory: PermissionStateFactory,
-    @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<PermissionRequestModel> = scope.state(PermissionRequestModel()) {
+@Given fun permissionRequestModel(
+  @Given appUiStarter: AppUiStarter,
+  @Given key: PermissionRequestKey,
+  @Given navigator: Navigator,
+  @Given permissions: Map<TypeKey<Permission>, Permission>,
+  @Given permissionStateFactory: PermissionStateFactory,
+  @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<PermissionRequestModel> =
+  scope.state(PermissionRequestModel()) {
     state
-        .filter {
-            key.permissionsKeys
-                .all { permissionStateFactory(listOf(it)).first() }
-        }
-        .take(1)
-        .onEach { navigator.pop(key, true) }
-        .launchIn(this)
+      .filter {
+        key.permissionsKeys
+          .all { permissionStateFactory(listOf(it)).first() }
+      }
+      .take(1)
+      .onEach { navigator.pop(key, true) }
+      .launchIn(this)
 
     suspend fun updatePermissions() {
-        val notGrantedPermissions = key.permissionsKeys
-            .filterNot { permissionStateFactory(listOf(it)).first() }
-            .map { UiPermission(it, permissions[it]!!) }
-        update { copy(permissions = notGrantedPermissions) }
+      val notGrantedPermissions = key.permissionsKeys
+        .filterNot { permissionStateFactory(listOf(it)).first() }
+        .map { UiPermission(it, permissions[it] !!) }
+      update { copy(permissions = notGrantedPermissions) }
     }
 
     launch { updatePermissions() }
 
     action(PermissionRequestModel.grantPermission()) { permission ->
-        requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
-        appUiStarter()
-        updatePermissions()
+      requestHandlers[permission.permissionKey] !!(permissions[permission.permissionKey] !!)
+      appUiStarter()
+      updatePermissions()
     }
-}
+  }

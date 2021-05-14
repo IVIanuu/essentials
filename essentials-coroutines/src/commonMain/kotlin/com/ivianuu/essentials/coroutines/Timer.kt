@@ -8,9 +8,9 @@ import kotlin.time.*
 
 @OptIn(ExperimentalTime::class)
 fun timer(duration: Duration): Flow<Long> = flow {
-    var value = 0L
-    while (coroutineContext.isActive) {
-        emit(value++)
-        delay(duration)
-    }
+  var value = 0L
+  while (coroutineContext.isActive) {
+    emit(value ++)
+    delay(duration)
+  }
 }

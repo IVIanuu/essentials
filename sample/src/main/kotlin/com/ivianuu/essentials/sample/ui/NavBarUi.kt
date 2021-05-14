@@ -37,103 +37,100 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
+@Given val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 
 object NavBarKey : Key<Nothing>
 
-@Given
-fun navBarUi(
-    @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
-    @Given navBarPref: DataStore<NavBarPrefs>,
-    @Given navigator: Navigator,
-    @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-    @Given permissionRequester: PermissionRequester,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+@Given fun navBarUi(
+  @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
+  @Given navBarPref: DataStore<NavBarPrefs>,
+  @Given navigator: Navigator,
+  @Given permissionState: Flow<PermissionState<NavBarPermission>>,
+  @Given permissionRequester: PermissionRequester,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
 ): KeyUi<NavBarKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
+  ) {
+    Column(
+      modifier = Modifier.center(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.center(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val navBarPrefs by navBarPref.data.collectAsState(NavBarPrefs())
-            // reshow nav bar when leaving the screen
-            DisposableEffect(true) {
-                onDispose {
-                    scope.launch {
-                        navBarPref.updateData {
-                            copy(hideNavBar = false)
-                        }
-                    }
-                }
+      val navBarPrefs by navBarPref.data.collectAsState(NavBarPrefs())
+      // reshow nav bar when leaving the screen
+      DisposableEffect(true) {
+        onDispose {
+          scope.launch {
+            navBarPref.updateData {
+              copy(hideNavBar = false)
             }
-
-            val hasPermission by permissionState.collectAsState(false)
-
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (hasPermission) {
-                        if (navBarPrefs.hideNavBar) {
-                            "Nav bar hidden"
-                        } else {
-                            if (forceNavBarVisibleState.collectAsState().value) {
-                                "Nav bar forced shown"
-                            } else {
-                                "Nav bar shown"
-                            }
-                        }
-                    } else {
-                        "Unknown nav bar state"
-                    },
-                    style = MaterialTheme.typography.h3
-                )
-            }
-
-            Button(
-                onClick = {
-                    if (hasPermission) {
-                        scope.launch {
-                            navBarPref.updateData {
-                                copy(hideNavBar = !hideNavBar)
-                            }
-                        }
-                    } else {
-                        scope.launch {
-                            permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
-                        }
-                    }
-                }
-            ) {
-                Text("Toggle nav bar")
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            Button(
-                onClick = { forceNavBarVisibleState.value = !forceNavBarVisibleState.value }
-            ) { Text("Toggle force nav bar") }
-
-            Spacer(Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    scope.launch {
-                        navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
-                    }
-                }
-            ) { Text("Settings") }
+          }
         }
+      }
+
+      val hasPermission by permissionState.collectAsState(false)
+
+      Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+      ) {
+        Text(
+          text = if (hasPermission) {
+            if (navBarPrefs.hideNavBar) {
+              "Nav bar hidden"
+            } else {
+              if (forceNavBarVisibleState.collectAsState().value) {
+                "Nav bar forced shown"
+              } else {
+                "Nav bar shown"
+              }
+            }
+          } else {
+            "Unknown nav bar state"
+          },
+          style = MaterialTheme.typography.h3
+        )
+      }
+
+      Button(
+        onClick = {
+          if (hasPermission) {
+            scope.launch {
+              navBarPref.updateData {
+                copy(hideNavBar = ! hideNavBar)
+              }
+            }
+          } else {
+            scope.launch {
+              permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
+            }
+          }
+        }
+      ) {
+        Text("Toggle nav bar")
+      }
+
+      Spacer(Modifier.height(8.dp))
+
+      Button(
+        onClick = { forceNavBarVisibleState.value = ! forceNavBarVisibleState.value }
+      ) { Text("Toggle force nav bar") }
+
+      Spacer(Modifier.height(8.dp))
+
+      Button(
+        onClick = {
+          scope.launch {
+            navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
+          }
+        }
+      ) { Text("Settings") }
     }
+  }
 }
 
 typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
 
-@Given
-val sampleForceNavBarVisibleState: @Scoped<AppGivenScope> SampleForceNavBarVisibleState
-    get() = MutableStateFlow(false)
+@Given val sampleForceNavBarVisibleState: @Scoped<AppGivenScope> SampleForceNavBarVisibleState
+  get() = MutableStateFlow(false)

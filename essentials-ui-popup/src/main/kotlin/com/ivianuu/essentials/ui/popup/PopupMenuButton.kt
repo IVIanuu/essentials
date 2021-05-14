@@ -30,52 +30,50 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.injekt.compose.*
 import kotlinx.coroutines.*
 
-@Composable
-fun PopupMenuButton(
-    items: List<PopupMenu.Item>,
-    onCancel: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+@Composable fun PopupMenuButton(
+  items: List<PopupMenu.Item>,
+  onCancel: (() -> Unit)? = null,
+  modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .size(size = 40.dp)
-            .popupClickable(
-                items = items,
-                onCancel = onCancel,
-                indication = rememberRipple(bounded = false)
-            )
-            .then(modifier),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(Icons.Default.MoreVert, null)
-    }
+  Box(
+    modifier = Modifier
+      .size(size = 40.dp)
+      .popupClickable(
+        items = items,
+        onCancel = onCancel,
+        indication = rememberRipple(bounded = false)
+      )
+      .then(modifier),
+    contentAlignment = Alignment.Center
+  ) {
+    Icon(Icons.Default.MoreVert, null)
+  }
 }
 
-@Composable
-fun Modifier.popupClickable(
-    items: List<PopupMenu.Item>,
-    onCancel: (() -> Unit)? = null,
-    indication: Indication = LocalIndication.current,
+@Composable fun Modifier.popupClickable(
+  items: List<PopupMenu.Item>,
+  onCancel: (() -> Unit)? = null,
+  indication: Indication = LocalIndication.current,
 ) = composed {
-    val component = rememberElement<PopupMenuComponent>()
+  val component = rememberElement<PopupMenuComponent>()
 
-    var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
+  var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
-    val scope = rememberCoroutineScope()
-    onGloballyPositioned { coordinates = it }
-        .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = indication
-        ) {
-            scope.launch {
-                component.navigator.push(
-                    PopupKey(
-                        position = coordinates!!.boundsInRoot(),
-                        onCancel = onCancel
-                    ) {
-                        PopupMenu(items = items)
-                    }
-                )
-            }
-        }
+  val scope = rememberCoroutineScope()
+  onGloballyPositioned { coordinates = it }
+    .clickable(
+      interactionSource = remember { MutableInteractionSource() },
+      indication = indication
+    ) {
+      scope.launch {
+        component.navigator.push(
+          PopupKey(
+            position = coordinates !!.boundsInRoot(),
+            onCancel = onCancel
+          ) {
+            PopupMenu(items = items)
+          }
+        )
+      }
+    }
 }

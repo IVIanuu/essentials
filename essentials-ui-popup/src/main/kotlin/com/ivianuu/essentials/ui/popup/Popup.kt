@@ -22,15 +22,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 
-@Composable
-fun Popup(content: @Composable () -> Unit) {
-    Surface(
-        modifier = Modifier.padding(8.dp),
-        elevation = 8.dp,
-        shape = MaterialTheme.shapes.medium
-    ) {
-        Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
-            content()
-        }
+@Composable fun Popup(content: @Composable () -> Unit) {
+  Surface(
+    modifier = Modifier.padding(8.dp),
+    elevation = 8.dp,
+    shape = MaterialTheme.shapes.medium
+  ) {
+    Box(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)) {
+      content()
     }
+  }
 }

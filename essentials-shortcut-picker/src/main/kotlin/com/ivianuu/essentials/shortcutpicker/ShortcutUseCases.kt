@@ -32,57 +32,57 @@ typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
 
 @Given
 fun getAllShortcutsUseCase(
-    @Given dispatcher: IODispatcher,
-    @Given packageManager: PackageManager
+  @Given dispatcher: IODispatcher,
+  @Given packageManager: PackageManager
 ): GetAllShortcutsUseCase = {
-    withContext(dispatcher) {
-        val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-        packageManager.queryIntentActivities(shortcutsIntent, 0)
-            .parMap { resolveInfo ->
-                catch {
-                    Shortcut(
-                        intent = Intent().apply {
-                            action = Intent.ACTION_CREATE_SHORTCUT
-                            component = ComponentName(
-                                resolveInfo.activityInfo.packageName,
-                                resolveInfo.activityInfo.name
-                            )
-                        },
-                        name = resolveInfo.loadLabel(packageManager).toString(),
-                        icon = resolveInfo.loadIcon(packageManager).toBitmap().toImageBitmap()
-                    )
-                }.getOrNull()
-            }
-            .filterNotNull()
-            .sortedBy { it.name }
-    }
+  withContext(dispatcher) {
+    val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
+    packageManager.queryIntentActivities(shortcutsIntent, 0)
+      .parMap { resolveInfo ->
+        catch {
+          Shortcut(
+            intent = Intent().apply {
+              action = Intent.ACTION_CREATE_SHORTCUT
+              component = ComponentName(
+                resolveInfo.activityInfo.packageName,
+                resolveInfo.activityInfo.name
+              )
+            },
+            name = resolveInfo.loadLabel(packageManager).toString(),
+            icon = resolveInfo.loadIcon(packageManager).toBitmap().toImageBitmap()
+          )
+        }.getOrNull()
+      }
+      .filterNotNull()
+      .sortedBy { it.name }
+  }
 }
 
 typealias ExtractShortcutUseCase = (Intent) -> Shortcut
 
 @Given
 fun extractShortcutUseCase(
-    @Given packageManager: PackageManager
+  @Given packageManager: PackageManager
 ): ExtractShortcutUseCase = { shortcutRequestResult ->
-    val intent =
-        shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
-    val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
-    val bitmapIcon =
-        shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
-    val iconResource =
-        shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
+  val intent =
+    shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT) !!
+  val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME) !!
+  val bitmapIcon =
+    shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
+  val iconResource =
+    shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
-    @Suppress("DEPRECATION") val icon = when {
-        bitmapIcon != null -> bitmapIcon.toImageBitmap()
-        iconResource != null -> {
-            val resources =
-                packageManager.getResourcesForApplication(iconResource.packageName)
-            val id =
-                resources.getIdentifier(iconResource.resourceName, null, null)
-            resources.getDrawable(id).toBitmap().toImageBitmap()
-        }
-        else -> error("no icon provided $shortcutRequestResult")
+  @Suppress("DEPRECATION") val icon = when {
+    bitmapIcon != null -> bitmapIcon.toImageBitmap()
+    iconResource != null -> {
+      val resources =
+        packageManager.getResourcesForApplication(iconResource.packageName)
+      val id =
+        resources.getIdentifier(iconResource.resourceName, null, null)
+      resources.getDrawable(id).toBitmap().toImageBitmap()
     }
+    else -> error("no icon provided $shortcutRequestResult")
+  }
 
-    Shortcut(intent, name, icon)
+  Shortcut(intent, name, icon)
 }

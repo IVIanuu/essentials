@@ -28,24 +28,24 @@ import org.junit.runner.*
 
 @RunWith(AndroidJUnit4::class)
 class ContentChangesTest {
-    @Test
-    fun testContentChanges() = runCancellingBlockingTest {
-        lateinit var observer: ContentObserver
-        val contentResolver = mockk<ContentResolver> {
-            every { registerContentObserver(any(), any(), any()) } answers {
-                observer = arg(2)
-            }
-        }
-        val dispatcher = TestCoroutineDispatcher()
-        val collector = contentChangesFactory(
-            contentResolver,
-            dispatcher
-        )(mockk()).testCollect(this)
-
-        observer.onChange(false)
-        observer.onChange(false)
-        observer.onChange(false)
-
-        collector.values shouldHaveSize 3
+  @Test
+  fun testContentChanges() = runCancellingBlockingTest {
+    lateinit var observer: ContentObserver
+    val contentResolver = mockk<ContentResolver> {
+      every { registerContentObserver(any(), any(), any()) } answers {
+        observer = arg(2)
+      }
     }
+    val dispatcher = TestCoroutineDispatcher()
+    val collector = contentChangesFactory(
+      contentResolver,
+      dispatcher
+    )(mockk()).testCollect(this)
+
+    observer.onChange(false)
+    observer.onChange(false)
+    observer.onChange(false)
+
+    collector.values shouldHaveSize 3
+  }
 }

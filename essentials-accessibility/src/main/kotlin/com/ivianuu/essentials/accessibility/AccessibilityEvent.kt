@@ -22,20 +22,18 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 data class AccessibilityEvent(
-    val type: Int,
-    val packageName: String?,
-    val className: String?,
-    val isFullScreen: Boolean,
+  val type: Int,
+  val packageName: String?,
+  val className: String?,
+  val isFullScreen: Boolean,
 )
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
 
 internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityEvent>
 
-@Given
-val mutableAccessibilityEvents: @Scoped<AppGivenScope> MutableAccessibilityEvents
-    get() = EventFlow()
+@Given val mutableAccessibilityEvents: @Scoped<AppGivenScope> MutableAccessibilityEvents
+  get() = EventFlow()
 
-@Given
-inline val MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
-    get() = this
+@Given inline val MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
+  get() = this

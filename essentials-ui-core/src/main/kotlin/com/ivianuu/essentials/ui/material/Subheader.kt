@@ -22,20 +22,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 
-@Composable
-fun Subheader(
-    modifier: Modifier = Modifier,
-    text: @Composable () -> Unit
+@Composable fun Subheader(
+  modifier: Modifier = Modifier,
+  text: @Composable () -> Unit
 ) {
-    Box(
-        modifier = Modifier.height(48.dp)
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp)
-            .then(modifier),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
-            ProvideTextStyle(MaterialTheme.typography.body2, text)
-        }
+  Box(
+    modifier = Modifier.height(48.dp)
+      .fillMaxWidth()
+      .padding(start = 16.dp, end = 16.dp)
+      .then(modifier),
+    contentAlignment = Alignment.CenterStart
+  ) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
+      ProvideTextStyle(MaterialTheme.typography.body2, text)
     }
+  }
 }

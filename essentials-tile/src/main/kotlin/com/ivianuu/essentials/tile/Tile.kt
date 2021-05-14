@@ -25,33 +25,30 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Optics
-data class TileModel<out T : AbstractFunTileService>(
-    val icon: Icon? = null,
-    val iconRes: Int? = null,
-    val label: String? = null,
-    val labelRes: Int? = null,
-    val description: String? = null,
-    val descriptionRes: Int? = null,
-    val status: Status = Status.UNAVAILABLE,
-    val onTileClicked: () -> Unit = {}
+@Optics data class TileModel<out T : AbstractFunTileService>(
+  val icon: Icon? = null,
+  val iconRes: Int? = null,
+  val label: String? = null,
+  val labelRes: Int? = null,
+  val description: String? = null,
+  val descriptionRes: Int? = null,
+  val status: Status = Status.UNAVAILABLE,
+  val onTileClicked: () -> Unit = {}
 ) {
-    enum class Status {
-        UNAVAILABLE, ACTIVE, INACTIVE
-    }
+  enum class Status {
+    UNAVAILABLE, ACTIVE, INACTIVE
+  }
 }
 
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
-@Given
-fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
-    @Given serviceKey: TypeKey<S>,
-    @Given provider: () -> T
+@Given fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
+  @Given serviceKey: TypeKey<S>,
+  @Given provider: () -> T
 ): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> =
-    serviceKey to provider.cast()
+  serviceKey to provider.cast()
 
 typealias TileGivenScope = GivenScope
 
-@Given
-val tileGivenScopeModule =
-    ChildScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()
+@Given val tileGivenScopeModule =
+  ChildScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()

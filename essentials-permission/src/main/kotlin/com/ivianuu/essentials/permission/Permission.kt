@@ -32,34 +32,27 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 interface Permission {
-    val title: String
-    val desc: String? get() = null
-    val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
+  val title: String
+  val desc: String? get() = null
+  val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-@Given
-class PermissionModule<@Given T : Permission> {
-    @Suppress("UNCHECKED_CAST")
-    @Given
-    fun permissionSetElement(
-        @Given permissionKey: TypeKey<T>,
-        @Given permission: T
-    ): Pair<TypeKey<Permission>, Permission> = permissionKey to permission
+@Given class PermissionModule<@Given T : Permission> {
+  @Given fun permissionSetElement(
+    @Given permissionKey: TypeKey<T>,
+    @Given permission: T
+  ): Pair<TypeKey<Permission>, Permission> = permissionKey to permission
 
-    @Suppress("UNCHECKED_CAST")
-    @Given
-    fun requestHandler(
-        @Given permissionKey: TypeKey<T>,
-        @Given requestHandler: PermissionRequestHandler<T>
-    ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-        (permissionKey to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+  @Given fun requestHandler(
+    @Given permissionKey: TypeKey<T>,
+    @Given requestHandler: PermissionRequestHandler<T>
+  ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
+    (permissionKey to requestHandler.intercept()).cast()
 
-    @Suppress("UNCHECKED_CAST")
-    @Given
-    fun permissionState(
-        @Given permissionKey: TypeKey<T>,
-        @Given state: Flow<PermissionState<T>>
-    ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
+  @Given fun permissionState(
+    @Given permissionKey: TypeKey<T>,
+    @Given state: Flow<PermissionState<T>>
+  ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 }
 
 typealias PermissionStateProvider<P> = suspend (P) -> Boolean
@@ -68,67 +61,64 @@ typealias PermissionRequestHandler<P> = suspend (P) -> Unit
 
 typealias PermissionState<P> = Boolean
 
-@Given
-fun <P : Permission> permissionState(
-    @Given dispatcher: DefaultDispatcher,
-    @Given permission: P,
-    @Given stateProvider: PermissionStateProvider<P>
+@Given fun <P : Permission> permissionState(
+  @Given dispatcher: DefaultDispatcher,
+  @Given permission: P,
+  @Given stateProvider: PermissionStateProvider<P>
 ): Flow<PermissionState<P>> = permissionRefreshes
-    .map { Unit }
-    .onStart { emit(Unit) }
-    .map {
-        withContext(dispatcher) {
-            stateProvider(permission)
-        }
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map {
+    withContext(dispatcher) {
+      stateProvider(permission)
     }
+  }
 
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
-@Given
-fun permissionStateFactory(
-    @Given permissionStates: Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>
+@Given fun permissionStateFactory(
+  @Given permissionStates: Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>
 ): PermissionStateFactory = { permissions ->
-    combine(
-        *permissions
-            .map { permissionStates[it]!! }
-            .toTypedArray()
-    ) { states -> states.all { it } }
+  combine(
+    *permissions
+      .map { permissionStates[it] !! }
+      .toTypedArray()
+  ) { states -> states.all { it } }
 }
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
-@Given
-fun <S : GivenScope> permissionRefreshesWorker(): ScopeWorker<S> = {
-    permissionRefreshes.tryEmit(Unit)
-    runOnCancellation { permissionRefreshes.tryEmit(Unit) }
+@Given fun <S : GivenScope> permissionRefreshesWorker(): ScopeWorker<S> = {
+  permissionRefreshes.tryEmit(Unit)
+  runOnCancellation { permissionRefreshes.tryEmit(Unit) }
 }
 
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> = {
-    this(it)
-    permissionRefreshes.tryEmit(Unit)
+  this(it)
+  permissionRefreshes.tryEmit(Unit)
 }
 
 typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
 
-@Given
-fun permissionRequester(
-    @Given appUiStarter: AppUiStarter,
-    @Given dispatcher: DefaultDispatcher,
-    @Given logger: Logger,
-    @Given navigator: Navigator,
-    @Given permissionStateFactory: PermissionStateFactory
+@Given fun permissionRequester(
+  @Given appUiStarter: AppUiStarter,
+  @Given dispatcher: DefaultDispatcher,
+  @Given logger: Logger,
+  @Given navigator: Navigator,
+  @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
-    withContext(dispatcher) {
-        logger.d { "request permissions $requestedPermissions" }
+  withContext(dispatcher) {
+    logger.d { "request permissions $requestedPermissions" }
 
-        if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
-            return@withContext true
+    if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
+      return@withContext true
 
-        appUiStarter()
+    appUiStarter()
 
-        val result = navigator.push(
-            PermissionRequestKey(requestedPermissions)) == true
-        logger.d { "request permissions result $requestedPermissions -> $result" }
-        return@withContext result
-    }
+    val result = navigator.push(
+      PermissionRequestKey(requestedPermissions)
+    ) == true
+    logger.d { "request permissions result $requestedPermissions -> $result" }
+    return@withContext result
+  }
 }

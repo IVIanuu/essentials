@@ -28,42 +28,39 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
-@Given
-object KillCurrentAppActionId : ActionId("kill_current_app")
+@Given object KillCurrentAppActionId : ActionId("kill_current_app")
 
-@Given
-fun killCurrentAppAction(
-    @Given stringResource: StringResourceProvider,
+@Given fun killCurrentAppAction(
+  @Given stringResource: StringResourceProvider,
 ) = Action<KillCurrentAppActionId>(
-    id = KillCurrentAppActionId,
-    title = stringResource(R.string.es_action_kill_current_app, emptyList()),
-    icon = singleActionIcon(Icons.Default.Clear),
-    permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
+  id = KillCurrentAppActionId,
+  title = stringResource(R.string.es_action_kill_current_app, emptyList()),
+  icon = singleActionIcon(Icons.Default.Clear),
+  permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-@Given
-fun killCurrentAppActionExecutor(
-    @Given actionRootCommandRunner: ActionRootCommandRunner,
-    @Given buildInfo: BuildInfo,
-    @Given currentAppFlow: Flow<CurrentApp>,
-    @Given packageManager: PackageManager
+@Given fun killCurrentAppActionExecutor(
+  @Given actionRootCommandRunner: ActionRootCommandRunner,
+  @Given buildInfo: BuildInfo,
+  @Given currentAppFlow: Flow<CurrentApp>,
+  @Given packageManager: PackageManager
 ): ActionExecutor<KillCurrentAppActionId> = {
-    val currentApp = currentAppFlow.first()
-    if (currentApp != "android" &&
-        currentApp != "com.android.systemui" &&
-        currentApp != buildInfo.packageName && // we have no suicidal intentions :D
-        currentApp != packageManager.getHomePackage()
-    ) {
-        actionRootCommandRunner("am force-stop $currentApp")
-    }
+  val currentApp = currentAppFlow.first()
+  if (currentApp != "android" &&
+    currentApp != "com.android.systemui" &&
+    currentApp != buildInfo.packageName && // we have no suicidal intentions :D
+    currentApp != packageManager.getHomePackage()
+  ) {
+    actionRootCommandRunner("am force-stop $currentApp")
+  }
 }
 
 private fun PackageManager.getHomePackage(): String {
-    val intent = Intent(Intent.ACTION_MAIN).apply {
-        addCategory(Intent.CATEGORY_HOME)
-    }
-    return resolveActivity(
-        intent,
-        PackageManager.MATCH_DEFAULT_ONLY
-    )?.activityInfo?.packageName ?: ""
+  val intent = Intent(Intent.ACTION_MAIN).apply {
+    addCategory(Intent.CATEGORY_HOME)
+  }
+  return resolveActivity(
+    intent,
+    PackageManager.MATCH_DEFAULT_ONLY
+  )?.activityInfo?.packageName ?: ""
 }

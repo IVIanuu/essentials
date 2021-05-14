@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2020 Manuel Wrage
  *
@@ -23,6 +22,6 @@ import android.graphics.drawable.*
 
 @SuppressLint("DiscouragedPrivateApi")
 fun Notification.setSmallIcon(icon: Icon) {
-    javaClass.getDeclaredMethod("setSmallIcon", Icon::class.java)
-        .invoke(this, icon)
+  javaClass.getDeclaredMethod("setSmallIcon", Icon::class.java)
+    .invoke(this, icon)
 }

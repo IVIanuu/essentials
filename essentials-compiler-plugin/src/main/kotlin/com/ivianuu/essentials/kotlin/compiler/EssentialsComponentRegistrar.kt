@@ -11,21 +11,21 @@ import org.jetbrains.kotlin.config.*
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {
-    override fun registerProjectComponents(
-        project: MockProject,
-        configuration: CompilerConfiguration
-    ) {
-        project.serializationFix()
-        project.optics()
-    }
+  override fun registerProjectComponents(
+    project: MockProject,
+    configuration: CompilerConfiguration
+  ) {
+    project.serializationFix()
+    project.optics()
+  }
 }
 
 fun IrGenerationExtension.Companion.registerExtensionWithLoadingOrder(
-    project: MockProject,
-    loadingOrder: LoadingOrder,
-    extension: IrGenerationExtension,
+  project: MockProject,
+  loadingOrder: LoadingOrder,
+  extension: IrGenerationExtension,
 ) {
-    project.extensionArea
-        .getExtensionPoint(IrGenerationExtension.extensionPointName)
-        .registerExtension(extension, loadingOrder, project)
+  project.extensionArea
+    .getExtensionPoint(IrGenerationExtension.extensionPointName)
+    .registerExtension(extension, loadingOrder, project)
 }

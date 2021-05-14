@@ -42,260 +42,255 @@ import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
-@Given
-val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
+@Given val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
 
 object DialogsKey : Key<Nothing>
 
-@Given
-val dialogsUi: KeyUi<DialogsKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Dialogs") }) }
+@Given val dialogsUi: KeyUi<DialogsKey> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Dialogs") }) }
+  ) {
+    LazyColumn(
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = localVerticalInsetsPadding(),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = localVerticalInsetsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+      item {
+        DialogLauncherButton(text = "Simple") {
+          Dialog(
+            title = { Text("Simple") },
+            content = { Text("This is a message") },
+            buttons = {
+              DialogCloseButton(text = "Cancel")
+              DialogCloseButton(text = "OK")
+            }
+          )
+        }
+      }
+      item {
+        DialogLauncherButton(
+          text = "Simple with neutral"
         ) {
-            item {
-                DialogLauncherButton(text = "Simple") {
-                    Dialog(
-                        title = { Text("Simple") },
-                        content = { Text("This is a message") },
-                        buttons = {
-                            DialogCloseButton(text = "Cancel")
-                            DialogCloseButton(text = "OK")
-                        }
-                    )
-                }
+          Dialog(
+            title = { Text("Simple") },
+            content = { Text("This is a message") },
+            buttons = {
+              DialogCloseButton(text = "Neutral")
+              DialogCloseButton(text = "Negative")
+              DialogCloseButton(text = "Positive")
             }
-            item {
-                DialogLauncherButton(
-                    text = "Simple with neutral"
-                ) {
-                    Dialog(
-                        title = { Text("Simple") },
-                        content = { Text("This is a message") },
-                        buttons = {
-                            DialogCloseButton(text = "Neutral")
-                            DialogCloseButton(text = "Negative")
-                            DialogCloseButton(text = "Positive")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(text = "Title only") {
-                    Dialog(
-                        title = { Text("Title only") }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(text = "With icon") {
-                    Dialog(
-                        title = { Text("With icon") },
-                        icon = { Icon(Icons.Default.Settings, null) },
-                        buttons = {
-                            DialogCloseButton(text = "OK")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(text = "Message only") {
-                    Dialog(content = { Text("Message only") })
-                }
-            }
-            item {
-                DialogLauncherButton(text = "Buttons only") {
-                    Dialog(
-                        buttons = {
-                            DialogCloseButton(text = "Cancel")
-                            DialogCloseButton(text = "OK")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(
-                    dismissible = false,
-                    text = "Not cancelable"
-                ) {
-                    Dialog(
-                        title = { Text("Not cancelable") },
-                        buttons = {
-                            DialogCloseButton(text = "Close")
-                        }
-                    )
-                }
-            }
-            item {
-                DialogLauncherButton(text = "List") {
-                    Dialog(
-                        title = { Text("List") },
-                        content = {
-                            LazyColumn {
-                                items((1..100).toList()) { item ->
-                                    ListItem(
-                                        title = {
-                                            Text(
-                                                "Item: $item"
-                                            )
-                                        },
-                                        onClick = {}
-                                    )
-                                }
-                            }
-                        },
-                        applyContentPadding = false,
-                        buttons = {
-                            DialogCloseButton(text = "Close")
-                        }
-                    )
-                }
-            }
-            item {
-                val singleChoiceItems = listOf(1, 2, 3, 4, 5)
-                var selectedSingleChoiceItem by remember { mutableStateOf(1) }
-                DialogLauncherButton(text = "Single choice list") {
-                    var tmpSelectedItem by remember { mutableStateOf(selectedSingleChoiceItem) }
-
-                    SingleChoiceListDialog(
-                        title = { Text("Single choice") },
-                        items = singleChoiceItems,
-                        selectedItem = tmpSelectedItem,
-                        onSelectionChanged = { tmpSelectedItem = it },
-
-                        item = { Text("Item: $it") },
-                        buttons = {
-                            DialogCloseButton(text = "Cancel")
-                            DialogCloseButton(
-                                text = "OK",
-                                onClick = { selectedSingleChoiceItem = tmpSelectedItem }
-                            )
-                        }
-                    )
-                }
-            }
-            item {
-                val multiChoiceItems = listOf("A", "B", "C")
-                var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems.toSet()) }
-                DialogLauncherButton(text = "Multi choice list") {
-                    var tmpSelectedItems by remember { mutableStateOf(selectedMultiChoiceItems) }
-
-                    MultiChoiceListDialog(
-                        title = { Text("Multi choice") },
-                        items = multiChoiceItems,
-                        selectedItems = tmpSelectedItems,
-                        onSelectionsChanged = { tmpSelectedItems = it },
-                        item = { Text(it) },
-                        buttons = {
-                            DialogCloseButton(text = "Cancel")
-                            DialogCloseButton(
-                                text = "OK",
-                                onClick = { selectedMultiChoiceItems = tmpSelectedItems }
-                            )
-                        }
-                    )
-                }
-            }
-            item {
-                val primaryColor = MaterialTheme.colors.primary
-                var currentColor by remember { mutableStateOf(primaryColor) }
-                DialogLauncherButton(text = "Color Picker") { dismiss ->
-                    ColorPickerDialog(
-                        title = { Text("Color Picker") },
-                        showAlphaSelector = true,
-                        initialColor = currentColor,
-                        onCancel = dismiss,
-                        onColorSelected = {
-                            currentColor = it
-                            dismiss()
-                        }
-                    )
-                }
-            }
-            item {
-                var textInputValue by remember { mutableStateOf("") }
-                DialogLauncherButton(text = "Text input") {
-                    var tmpTextInputValue by remember { mutableStateOf(textInputValue) }
-                    TextInputDialog(
-                        value = tmpTextInputValue,
-                        onValueChange = { tmpTextInputValue = it },
-                        title = { Text("Text input") },
-                        label = { Text("Hint..") },
-                        buttons = {
-                            DialogCloseButton(text = "Cancel")
-                            DialogCloseButton(
-                                text = "OK",
-                                onClick = { textInputValue = tmpTextInputValue },
-                                enabled = tmpTextInputValue.isNotEmpty()
-                            )
-                        }
-                    )
-                }
-            }
+          )
         }
+      }
+      item {
+        DialogLauncherButton(text = "Title only") {
+          Dialog(
+            title = { Text("Title only") }
+          )
+        }
+      }
+      item {
+        DialogLauncherButton(text = "With icon") {
+          Dialog(
+            title = { Text("With icon") },
+            icon = { Icon(Icons.Default.Settings, null) },
+            buttons = {
+              DialogCloseButton(text = "OK")
+            }
+          )
+        }
+      }
+      item {
+        DialogLauncherButton(text = "Message only") {
+          Dialog(content = { Text("Message only") })
+        }
+      }
+      item {
+        DialogLauncherButton(text = "Buttons only") {
+          Dialog(
+            buttons = {
+              DialogCloseButton(text = "Cancel")
+              DialogCloseButton(text = "OK")
+            }
+          )
+        }
+      }
+      item {
+        DialogLauncherButton(
+          dismissible = false,
+          text = "Not cancelable"
+        ) {
+          Dialog(
+            title = { Text("Not cancelable") },
+            buttons = {
+              DialogCloseButton(text = "Close")
+            }
+          )
+        }
+      }
+      item {
+        DialogLauncherButton(text = "List") {
+          Dialog(
+            title = { Text("List") },
+            content = {
+              LazyColumn {
+                items((1..100).toList()) { item ->
+                  ListItem(
+                    title = {
+                      Text(
+                        "Item: $item"
+                      )
+                    },
+                    onClick = {}
+                  )
+                }
+              }
+            },
+            applyContentPadding = false,
+            buttons = {
+              DialogCloseButton(text = "Close")
+            }
+          )
+        }
+      }
+      item {
+        val singleChoiceItems = listOf(1, 2, 3, 4, 5)
+        var selectedSingleChoiceItem by remember { mutableStateOf(1) }
+        DialogLauncherButton(text = "Single choice list") {
+          var tmpSelectedItem by remember { mutableStateOf(selectedSingleChoiceItem) }
+
+          SingleChoiceListDialog(
+            title = { Text("Single choice") },
+            items = singleChoiceItems,
+            selectedItem = tmpSelectedItem,
+            onSelectionChanged = { tmpSelectedItem = it },
+
+            item = { Text("Item: $it") },
+            buttons = {
+              DialogCloseButton(text = "Cancel")
+              DialogCloseButton(
+                text = "OK",
+                onClick = { selectedSingleChoiceItem = tmpSelectedItem }
+              )
+            }
+          )
+        }
+      }
+      item {
+        val multiChoiceItems = listOf("A", "B", "C")
+        var selectedMultiChoiceItems by remember { mutableStateOf(multiChoiceItems.toSet()) }
+        DialogLauncherButton(text = "Multi choice list") {
+          var tmpSelectedItems by remember { mutableStateOf(selectedMultiChoiceItems) }
+
+          MultiChoiceListDialog(
+            title = { Text("Multi choice") },
+            items = multiChoiceItems,
+            selectedItems = tmpSelectedItems,
+            onSelectionsChanged = { tmpSelectedItems = it },
+            item = { Text(it) },
+            buttons = {
+              DialogCloseButton(text = "Cancel")
+              DialogCloseButton(
+                text = "OK",
+                onClick = { selectedMultiChoiceItems = tmpSelectedItems }
+              )
+            }
+          )
+        }
+      }
+      item {
+        val primaryColor = MaterialTheme.colors.primary
+        var currentColor by remember { mutableStateOf(primaryColor) }
+        DialogLauncherButton(text = "Color Picker") { dismiss ->
+          ColorPickerDialog(
+            title = { Text("Color Picker") },
+            showAlphaSelector = true,
+            initialColor = currentColor,
+            onCancel = dismiss,
+            onColorSelected = {
+              currentColor = it
+              dismiss()
+            }
+          )
+        }
+      }
+      item {
+        var textInputValue by remember { mutableStateOf("") }
+        DialogLauncherButton(text = "Text input") {
+          var tmpTextInputValue by remember { mutableStateOf(textInputValue) }
+          TextInputDialog(
+            value = tmpTextInputValue,
+            onValueChange = { tmpTextInputValue = it },
+            title = { Text("Text input") },
+            label = { Text("Hint..") },
+            buttons = {
+              DialogCloseButton(text = "Cancel")
+              DialogCloseButton(
+                text = "OK",
+                onClick = { textInputValue = tmpTextInputValue },
+                enabled = tmpTextInputValue.isNotEmpty()
+              )
+            }
+          )
+        }
+      }
     }
+  }
 }
 
-@Composable
-private fun DialogCloseButton(
-    enabled: Boolean = true,
-    onClick: () -> Unit = {},
-    text: String
+@Composable private fun DialogCloseButton(
+  enabled: Boolean = true,
+  onClick: () -> Unit = {},
+  text: String
 ) {
-    val component = rememberElement<DialogLauncherComponent>()
-    val scope = rememberCoroutineScope()
-    TextButton(
-        enabled = enabled,
-        onClick = {
-            onClick()
-            scope.launch { component.navigator.popTop() }
-        }
-    ) {
-        Text(text)
+  val component = rememberElement<DialogLauncherComponent>()
+  val scope = rememberCoroutineScope()
+  TextButton(
+    enabled = enabled,
+    onClick = {
+      onClick()
+      scope.launch { component.navigator.popTop() }
     }
+  ) {
+    Text(text)
+  }
 }
 
-@Composable
-private fun DialogLauncherButton(
-    text: String,
-    dismissible: Boolean = true,
-    dialog: @Composable (() -> Unit) -> Unit
+@Composable private fun DialogLauncherButton(
+  text: String,
+  dismissible: Boolean = true,
+  dialog: @Composable (() -> Unit) -> Unit
 ) {
-    Spacer(Modifier.height(8.dp))
+  Spacer(Modifier.height(8.dp))
 
-    val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-    val component = rememberElement<DialogLauncherComponent>()
-    val scope = rememberCoroutineScope()
-    Button(
-        onClick = {
-            scope.launch {
-                component.navigator.push(
-                    DialogLauncherKey(dismissible) {
-                        dialog {
-                            if (dismissible) {
-                                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
-                            }
-                        }
-                    }
-                )
+  val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current !!
+  val component = rememberElement<DialogLauncherComponent>()
+  val scope = rememberCoroutineScope()
+  Button(
+    onClick = {
+      scope.launch {
+        component.navigator.push(
+          DialogLauncherKey(dismissible) {
+            dialog {
+              if (dismissible) {
+                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
+              }
             }
-        }
-    ) { Text(text) }
+          }
+        )
+      }
+    }
+  ) { Text(text) }
 }
 
 data class DialogLauncherKey(
-    val dismissible: Boolean = true,
-    val dialog: @Composable () -> Unit
+  val dismissible: Boolean = true,
+  val dialog: @Composable () -> Unit
 ) : DialogKey<Nothing>
 
-@Given
-fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
-    DialogScaffold(dismissible = key.dismissible) { key.dialog() }
+@Given fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
+  DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
 @InstallElement<UiGivenScope>

@@ -23,38 +23,38 @@ import kotlinx.coroutines.flow.*
 import org.junit.*
 
 class OnCancelTest {
-    @Test
-    fun testOnCancel() = runCancellingBlockingTest {
-        val sender = EventFlow<String>()
-        val received = mutableListOf<String>()
-        val job = launch {
-            sender
-                .onCancel { emit("b") }
-                .collect { received += it }
-        }
-
-        sender.emit("a")
-        job.cancel()
-
-        received.shouldContainExactly("a", "b")
+  @Test
+  fun testOnCancel() = runCancellingBlockingTest {
+    val sender = EventFlow<String>()
+    val received = mutableListOf<String>()
+    val job = launch {
+      sender
+        .onCancel { emit("b") }
+        .collect { received += it }
     }
 
-    @Test
-    fun testOnCancelDoesNotRunIfTheCollectorThrows() = runCancellingBlockingTest {
-        val sender = EventFlow<String>()
-        val received = mutableListOf<String>()
-        val job = launch {
-            sender
-                .onCancel { emit("b") }
-                .collect {
-                    received += it
-                    throw CancellationException()
-                }
+    sender.emit("a")
+    job.cancel()
+
+    received.shouldContainExactly("a", "b")
+  }
+
+  @Test
+  fun testOnCancelDoesNotRunIfTheCollectorThrows() = runCancellingBlockingTest {
+    val sender = EventFlow<String>()
+    val received = mutableListOf<String>()
+    val job = launch {
+      sender
+        .onCancel { emit("b") }
+        .collect {
+          received += it
+          throw CancellationException()
         }
-
-        sender.emit("a")
-        job.cancel()
-
-        received.shouldContainExactly("a")
     }
+
+    sender.emit("a")
+    job.cancel()
+
+    received.shouldContainExactly("a")
+  }
 }

@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -27,23 +27,23 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(Deps.AndroidX.Activity.activity)
-    api(Deps.AndroidX.Activity.compose)
-    api(Deps.AndroidX.core)
-    api(Deps.AndroidX.Lifecycle.runtime)
+  api(Deps.AndroidX.Activity.activity)
+  api(Deps.AndroidX.Activity.compose)
+  api(Deps.AndroidX.core)
+  api(Deps.AndroidX.Lifecycle.runtime)
 
-    api(Deps.Coroutines.android)
+  api(Deps.Coroutines.android)
 
-    api(Deps.Injekt.android)
+  api(Deps.Injekt.android)
 
-    api(project(":essentials-common"))
-    api(project(":essentials-android-core"))
-    api(project(":essentials-android-data"))
-    api(project(":essentials-logging-android"))
-    api(project(":essentials-android-prefs"))
-    api(project(":essentials-android-settings"))
-    api(project(":essentials-android-util"))
-    api(project(":essentials-ui"))
+  api(project(":essentials-common"))
+  api(project(":essentials-android-core"))
+  api(project(":essentials-android-data"))
+  api(project(":essentials-logging-android"))
+  api(project(":essentials-android-prefs"))
+  api(project(":essentials-android-settings"))
+  api(project(":essentials-android-util"))
+  api(project(":essentials-ui"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

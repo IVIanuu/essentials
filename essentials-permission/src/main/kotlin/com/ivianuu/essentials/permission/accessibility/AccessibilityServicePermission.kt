@@ -18,7 +18,6 @@ package com.ivianuu.essentials.permission.accessibility
 
 import android.accessibilityservice.*
 import android.content.*
-import android.os.*
 import android.provider.*
 import android.view.accessibility.*
 import androidx.core.os.*
@@ -30,34 +29,33 @@ import com.ivianuu.injekt.android.*
 import kotlin.reflect.*
 
 interface AccessibilityServicePermission : Permission {
-    val serviceClass: KClass<out AccessibilityService>
+  val serviceClass: KClass<out AccessibilityService>
 }
 
-@Given
-fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
-    @Given accessibilityManager: @SystemService AccessibilityManager,
-    @Given buildInfo: BuildInfo
+@Given fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
+  @Given accessibilityManager: @SystemService AccessibilityManager,
+  @Given buildInfo: BuildInfo
 ): PermissionStateProvider<P> = { permission ->
-    accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
-        .any {
-            it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
-                    it.resolveInfo.serviceInfo.name == permission.serviceClass.java.canonicalName
-        }
+  accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+    .any {
+      it.resolveInfo.serviceInfo.packageName == buildInfo.packageName &&
+          it.resolveInfo.serviceInfo.name == permission.serviceClass.java.canonicalName
+    }
 }
 
-@Given
-fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
+@Given fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = true
 
-@Given
-fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = { permission ->
-    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-        val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
-        putExtra(":settings:fragment_args_key", componentName)
-        putExtra(":settings:show_fragment_args", bundleOf(
-            ":settings:fragment_args_key" to componentName
-        ))
-    }
+  Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+    val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
+    putExtra(":settings:fragment_args_key", componentName)
+    putExtra(
+      ":settings:show_fragment_args", bundleOf(
+        ":settings:fragment_args_key" to componentName
+      )
+    )
+  }
 }

@@ -25,60 +25,57 @@ import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
 data class Action<i : ActionId>(
-    val id: String,
-    val title: String,
-    val permissions: List<TypeKey<Permission>> = emptyList(),
-    val unlockScreen: Boolean = false,
-    val enabled: Boolean = true,
-    val icon: Flow<ActionIcon>,
+  val id: String,
+  val title: String,
+  val permissions: List<TypeKey<Permission>> = emptyList(),
+  val unlockScreen: Boolean = false,
+  val enabled: Boolean = true,
+  val icon: Flow<ActionIcon>,
 ) {
-    constructor(
-        id: ActionId,
-        title: String,
-        permissions: List<TypeKey<Permission>> = emptyList(),
-        unlockScreen: Boolean = false,
-        enabled: Boolean = true,
-        icon: Flow<ActionIcon>
-    ) : this(id.value, title, permissions, unlockScreen, enabled, icon)
+  constructor(
+    id: ActionId,
+    title: String,
+    permissions: List<TypeKey<Permission>> = emptyList(),
+    unlockScreen: Boolean = false,
+    enabled: Boolean = true,
+    icon: Flow<ActionIcon>
+  ) : this(id.value, title, permissions, unlockScreen, enabled, icon)
 }
 
 typealias ActionIcon = @Composable () -> Unit
 
 abstract class ActionId(val value: String)
 
-@Given
-fun <@Given T : Action<I>, I : ActionId> actionPair(
-    @Given id: I,
-    @Given provider: () -> T,
+@Given fun <@Given T : Action<I>, I : ActionId> actionPair(
+  @Given id: I,
+  @Given provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
 
 typealias ActionExecutor<I> = suspend () -> Unit
 
-@Given
-fun <@Given T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
-    @Given id: I,
-    @Given provider: () -> T
+@Given fun <@Given T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
+  @Given id: I,
+  @Given provider: () -> T
 ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
 
 internal operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 interface ActionFactory {
-    suspend fun handles(id: String): Boolean
-    suspend fun createAction(id: String): Action<*>
-    suspend fun createExecutor(id: String): ActionExecutor<*>
+  suspend fun handles(id: String): Boolean
+  suspend fun createAction(id: String): Action<*>
+  suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
 typealias ActionSettingsKey<I> = Key<Nothing>
 
-@Given
-fun <@Given T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
-    @Given id: I,
-    @Given provider: () -> T,
+@Given fun <@Given T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
+  @Given id: I,
+  @Given provider: () -> T,
 ): Pair<String, () -> ActionSettingsKey<*>> = id.value to provider
 
 interface ActionPickerDelegate {
-    val title: String
-    val icon: @Composable () -> Unit
-    val settingsKey: Key<Nothing>? get() = null
-    suspend fun pickAction(): ActionPickerKey.Result?
+  val title: String
+  val icon: @Composable () -> Unit
+  val settingsKey: Key<Nothing>? get() = null
+  suspend fun pickAction(): ActionPickerKey.Result?
 }

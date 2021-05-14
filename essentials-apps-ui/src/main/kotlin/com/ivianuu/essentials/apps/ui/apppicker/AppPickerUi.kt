@@ -41,59 +41,58 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 data class AppPickerKey(
-    val appPredicate: AppPredicate = DefaultAppPredicate,
-    val title: String? = null,
+  val appPredicate: AppPredicate = DefaultAppPredicate,
+  val title: String? = null,
 ) : Key<AppInfo>
 
-@Given
-val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(model.title ?: stringResource(R.string.es_title_app_picker))
-                }
-            )
+@Given val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text(model.title ?: stringResource(R.string.es_title_app_picker))
         }
-    ) {
-        ResourceLazyColumnFor(model.filteredApps) { app ->
-            ListItem(
-                title = { Text(app.appName) },
-                leading = {
-                    Image(
-                        painter = rememberCoilPainter(AppIcon(packageName = app.packageName)),
-                        modifier = Modifier.size(40.dp),
-                        contentDescription = null
-                    )
-                },
-                onClick = { model.pickApp(app) }
-            )
-        }
+      )
     }
+  ) {
+    ResourceLazyColumnFor(model.filteredApps) { app ->
+      ListItem(
+        title = { Text(app.appName) },
+        leading = {
+          Image(
+            painter = rememberCoilPainter(AppIcon(packageName = app.packageName)),
+            modifier = Modifier.size(40.dp),
+            contentDescription = null
+          )
+        },
+        onClick = { model.pickApp(app) }
+      )
+    }
+  }
 }
 
-@Optics
-data class AppPickerModel(
-    private val allApps: Resource<List<AppInfo>> = Idle,
-    val appPredicate: AppPredicate = DefaultAppPredicate,
-    val title: String? = null,
-    val pickApp: (AppInfo) -> Unit = {}
+@Optics data class AppPickerModel(
+  private val allApps: Resource<List<AppInfo>> = Idle,
+  val appPredicate: AppPredicate = DefaultAppPredicate,
+  val title: String? = null,
+  val pickApp: (AppInfo) -> Unit = {}
 ) {
-    val filteredApps = allApps
-        .map { it.filter(appPredicate) }
+  val filteredApps = allApps
+    .map { it.filter(appPredicate) }
 }
 
-@Given
-fun appPickerModel(
-    @Given key: AppPickerKey,
-    @Given getInstalledApps: GetInstalledAppsUseCase,
-    @Given navigator: Navigator,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<AppPickerModel> = scope.state(AppPickerModel(
+@Given fun appPickerModel(
+  @Given key: AppPickerKey,
+  @Given getInstalledApps: GetInstalledAppsUseCase,
+  @Given navigator: Navigator,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<AppPickerModel> = scope.state(
+  AppPickerModel(
     appPredicate = key.appPredicate,
     title = key.title
-)) {
-    resourceFlow { emit(getInstalledApps()) }
-        .update { copy(allApps = it) }
-    action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
+  )
+) {
+  resourceFlow { emit(getInstalledApps()) }
+    .update { copy(allApps = it) }
+  action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
 }

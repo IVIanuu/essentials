@@ -27,52 +27,51 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 
-@Given
-fun torchForegroundState(
-    @Given createTorchNotification: () -> TorchNotification,
-    @Given state: Flow<TorchState>
+@Given fun torchForegroundState(
+  @Given createTorchNotification: () -> TorchNotification,
+  @Given state: Flow<TorchState>
 ): Flow<ForegroundState> = state
-    .map { torchEnabled ->
-        if (torchEnabled) Foreground(createTorchNotification())
-        else Background
-    }
+  .map { torchEnabled ->
+    if (torchEnabled) Foreground(createTorchNotification())
+    else Background
+  }
 
 typealias TorchNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
 fun torchNotification(
-    @Given appContext: AppContext,
-    @Given notificationManager: @SystemService NotificationManager,
-    @Given stringResource: StringResourceProvider,
-    @Given systemBuildInfo: SystemBuildInfo,
+  @Given appContext: AppContext,
+  @Given notificationManager: @SystemService NotificationManager,
+  @Given stringResource: StringResourceProvider,
+  @Given systemBuildInfo: SystemBuildInfo,
 ): TorchNotification {
-    if (systemBuildInfo.sdk >= 26) {
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                stringResource(R.string.es_notif_channel_torch, emptyList()),
-                NotificationManager.IMPORTANCE_LOW
-            )
-        )
-    }
+  if (systemBuildInfo.sdk >= 26) {
+    notificationManager.createNotificationChannel(
+      NotificationChannel(
+        NOTIFICATION_CHANNEL_ID,
+        stringResource(R.string.es_notif_channel_torch, emptyList()),
+        NotificationManager.IMPORTANCE_LOW
+      )
+    )
+  }
 
-    return NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
-        .apply {
-            setAutoCancel(true)
-            setSmallIcon(R.drawable.es_ic_flash_on)
-            setContentTitle(stringResource(R.string.es_notif_title_torch, emptyList()))
-            setContentText(stringResource(R.string.es_notif_text_torch, emptyList()))
-            setContentIntent(
-                PendingIntent.getBroadcast(
-                    appContext,
-                    1,
-                    Intent(ACTION_DISABLE_TORCH),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
-            )
-        }
-        .build()
+  return NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
+    .apply {
+      setAutoCancel(true)
+      setSmallIcon(R.drawable.es_ic_flash_on)
+      setContentTitle(stringResource(R.string.es_notif_title_torch, emptyList()))
+      setContentText(stringResource(R.string.es_notif_text_torch, emptyList()))
+      setContentIntent(
+        PendingIntent.getBroadcast(
+          appContext,
+          1,
+          Intent(ACTION_DISABLE_TORCH),
+          PendingIntent.FLAG_UPDATE_CURRENT
+        )
+      )
+    }
+    .build()
 }
 
 private const val NOTIFICATION_CHANNEL_ID = "torch"

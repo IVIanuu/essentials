@@ -47,96 +47,92 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Given
-val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
+@Given val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
 object AppTrackerKey : Key<Nothing>
 
-@Given
-fun appTrackerUi(
-    @Given currentApp: Flow<CurrentApp>,
-    @Given foregroundState: AppTrackerForegroundState,
-    @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
-    @Given permissionRequester: PermissionRequester,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given toaster: Toaster,
+@Given fun appTrackerUi(
+  @Given currentApp: Flow<CurrentApp>,
+  @Given foregroundState: AppTrackerForegroundState,
+  @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
+  @Given permissionRequester: PermissionRequester,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
-    val currentForegroundState by foregroundState.collectAsState()
+  val currentForegroundState by foregroundState.collectAsState()
 
-    if (currentForegroundState is Foreground) {
-        LaunchedEffect(true) {
-            runWithCleanup(
-                block = {
-                    currentApp.collect {
-                        toaster("App changed $it")
-                        foregroundState.value = Foreground(createNotification(it))
-                    }
-                },
-                cleanup = {
-                    foregroundState.value = Background
-                }
-            )
+  if (currentForegroundState is Foreground) {
+    LaunchedEffect(true) {
+      runWithCleanup(
+        block = {
+          currentApp.collect {
+            toaster("App changed $it")
+            foregroundState.value = Foreground(createNotification(it))
+          }
+        },
+        cleanup = {
+          foregroundState.value = Background
         }
+      )
     }
+  }
 
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("App tracker") }) }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("App tracker") }) }
+  ) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
+            foregroundState.value = if (currentForegroundState is Foreground) Background
+            else Foreground(createNotification(null))
+          }
+        }
+      }
     ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
-                        foregroundState.value = if (currentForegroundState is Foreground) Background
-                        else Foreground(createNotification(null))
-                    }
-                }
-            }
-        ) {
-            Text("Toggle tracking")
-        }
+      Text("Toggle tracking")
     }
+  }
 }
 
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
-@Given
-val appTrackerForegroundState: @Scoped<AppGivenScope> AppTrackerForegroundState
-    get() = MutableStateFlow(Background)
+@Given val appTrackerForegroundState: @Scoped<AppGivenScope> AppTrackerForegroundState
+  get() = MutableStateFlow(Background)
 
 typealias AppTrackerNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
 fun appTrackerNotification(
-    @Given appContext: AppContext,
-    @Given currentApp: CurrentApp,
-    @Given notificationManager: @SystemService NotificationManager,
-    @Given systemBuildInfo: SystemBuildInfo
+  @Given appContext: AppContext,
+  @Given currentApp: CurrentApp,
+  @Given notificationManager: @SystemService NotificationManager,
+  @Given systemBuildInfo: SystemBuildInfo
 ): AppTrackerNotification {
-    if (systemBuildInfo.sdk >= 26) {
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                "app_tracker",
-                "App tracking",
-                NotificationManager.IMPORTANCE_LOW
-            )
-        )
+  if (systemBuildInfo.sdk >= 26) {
+    notificationManager.createNotificationChannel(
+      NotificationChannel(
+        "app_tracker",
+        "App tracking",
+        NotificationManager.IMPORTANCE_LOW
+      )
+    )
+  }
+  return NotificationCompat.Builder(appContext, "app_tracker")
+    .apply {
+      setSmallIcon(R.mipmap.ic_launcher)
+      setContentTitle("Current app: $currentApp")
     }
-    return NotificationCompat.Builder(appContext, "app_tracker")
-        .apply {
-            setSmallIcon(R.mipmap.ic_launcher)
-            setContentTitle("Current app: $currentApp")
-        }
-        .build()
+    .build()
 }
 
-@Given
-object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
-    override val serviceClass: KClass<out AccessibilityService>
-        get() = EsAccessibilityService::class
-    override val title: String = "Accessibility"
-    override val desc: String = "Needs the permission to track the current app"
-    override val icon: @Composable (() -> Unit)?
-        get() = null
+@Given object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
+  override val serviceClass: KClass<out AccessibilityService>
+    get() = EsAccessibilityService::class
+  override val title: String = "Accessibility"
+  override val desc: String = "Needs the permission to track the current app"
+  override val icon: @Composable (() -> Unit)?
+    get() = null
 }

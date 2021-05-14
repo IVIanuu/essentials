@@ -17,36 +17,34 @@ import kotlinx.coroutines.flow.*
 
 object SystemOverlayAppBlacklistKey : Key<Nothing>
 
-@Given
-fun systemOverlayAppBlacklistUi(
-    @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-    @Given stringResource: StringResourceProvider
+@Given fun systemOverlayAppBlacklistUi(
+  @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
+  @Given stringResource: StringResourceProvider
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
-    remember {
-        checkableAppsPageFactory(
-            CheckableAppsParams(
-                checkedApps = model.appBlacklist,
-                onCheckedAppsChanged = model.updateAppBlacklist,
-                appPredicate = DefaultAppPredicate,
-                appBarTitle = stringResource(R.string.es_system_overlay_blacklist_title, emptyList())
-            )
-        )
-    }.invoke()
+  remember {
+    checkableAppsPageFactory(
+      CheckableAppsParams(
+        checkedApps = model.appBlacklist,
+        onCheckedAppsChanged = model.updateAppBlacklist,
+        appPredicate = DefaultAppPredicate,
+        appBarTitle = stringResource(R.string.es_system_overlay_blacklist_title, emptyList())
+      )
+    )
+  }.invoke()
 }
 
-@Optics
-data class SystemOverlayAppBlacklistModel(
-    val appBlacklist: Flow<Set<String>> = emptyFlow(),
-    val updateAppBlacklist: (Set<String>) -> Unit = {}
+@Optics data class SystemOverlayAppBlacklistModel(
+  val appBlacklist: Flow<Set<String>> = emptyFlow(),
+  val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Given
-fun systemOverlayAppBlacklistModel(
-    @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayAppBlacklistModel> = scope.state(SystemOverlayAppBlacklistModel()) {
+@Given fun systemOverlayAppBlacklistModel(
+  @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayAppBlacklistModel> =
+  scope.state(SystemOverlayAppBlacklistModel()) {
     update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
     action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
-        pref.updateData { copy(appBlacklist = appBlacklist) }
+      pref.updateData { copy(appBlacklist = appBlacklist) }
     }
-}
+  }

@@ -25,24 +25,25 @@ import com.ivianuu.injekt.android.*
 import kotlin.reflect.*
 
 interface DeviceAdminPermission : Permission {
-    val deviceAdminClass: KClass<out DeviceAdminReceiver>
-    val explanation: String
+  val deviceAdminClass: KClass<out DeviceAdminReceiver>
+  val explanation: String
 }
 
-@Given
-fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
-    @Given context: AppContext,
-    @Given devicePolicyManager: @SystemService DevicePolicyManager
+@Given fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
+  @Given context: AppContext,
+  @Given devicePolicyManager: @SystemService DevicePolicyManager
 ): PermissionStateProvider<P> = { permission ->
-    devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
+  devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
 }
 
-@Given
-fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
-    @Given context: AppContext
+@Given fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
+  @Given context: AppContext
 ): PermissionIntentFactory<P> = { permission ->
-    Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
-        putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(context, permission.deviceAdminClass.java))
-        putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, permission.explanation)
-    }
+  Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+    putExtra(
+      DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+      ComponentName(context, permission.deviceAdminClass.java)
+    )
+    putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, permission.explanation)
+  }
 }

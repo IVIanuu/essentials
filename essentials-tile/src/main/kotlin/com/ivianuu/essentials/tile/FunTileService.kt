@@ -37,88 +37,89 @@ class FunTileService7 : AbstractFunTileService(typeKeyOf<FunTileService7>())
 class FunTileService8 : AbstractFunTileService(typeKeyOf<FunTileService8>())
 class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 
-abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) : TileService() {
-    private val component by lazy {
-        createServiceGivenScope()
-            .element<FunTileServiceComponent>()
+abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) :
+  TileService() {
+  private val component by lazy {
+    createServiceGivenScope()
+      .element<FunTileServiceComponent>()
+  }
+
+  private var tileModelComponent: TileModelComponent? = null
+
+  override fun onStartListening() {
+    super.onStartListening()
+    component.logger.d { "$tileKey on start listening" }
+    val tileModelComponent = component.tileGivenScopeFactory(tileKey)
+      .element<TileModelComponent>()
+      .also { this.tileModelComponent = it }
+    tileModelComponent.tileModel
+      .onEach { applyModel(it) }
+      .launchIn(tileModelComponent.scope)
+  }
+
+  override fun onClick() {
+    super.onClick()
+    component.logger.d { "$tileKey on click" }
+    tileModelComponent !!.tileModel.value.onTileClicked()
+  }
+
+  override fun onStopListening() {
+    tileModelComponent?.tileGivenScope?.dispose()
+    tileModelComponent = null
+    component.logger.d { "$tileKey on stop listening" }
+    super.onStopListening()
+  }
+
+  override fun onDestroy() {
+    component.serviceGivenScope.dispose()
+    super.onDestroy()
+  }
+
+  private fun applyModel(model: TileModel<*>) {
+    val qsTile = qsTile ?: return
+
+    qsTile.state = when (model.status) {
+      TileModel.Status.ACTIVE -> Tile.STATE_ACTIVE
+      TileModel.Status.INACTIVE -> Tile.STATE_INACTIVE
+      TileModel.Status.UNAVAILABLE -> Tile.STATE_UNAVAILABLE
     }
-
-    private var tileModelComponent: TileModelComponent? = null
-
-    override fun onStartListening() {
-        super.onStartListening()
-        component.logger.d { "$tileKey on start listening" }
-        val tileModelComponent = component.tileGivenScopeFactory(tileKey)
-            .element<TileModelComponent>()
-            .also { this.tileModelComponent = it }
-        tileModelComponent.tileModel
-            .onEach { applyModel(it) }
-            .launchIn(tileModelComponent.scope)
+    qsTile.icon = when {
+      model.icon != null -> model.icon
+      model.iconRes != null -> Icon.createWithResource(this, model.iconRes)
+      else -> null
     }
-
-    override fun onClick() {
-        super.onClick()
-        component.logger.d { "$tileKey on click" }
-        tileModelComponent!!.tileModel.value.onTileClicked()
+    qsTile.label = when {
+      model.label != null -> model.label
+      model.labelRes != null -> component.stringResource(model.labelRes, emptyList())
+      else -> null
     }
-
-    override fun onStopListening() {
-        tileModelComponent?.tileGivenScope?.dispose()
-        tileModelComponent = null
-        component.logger.d { "$tileKey on stop listening" }
-        super.onStopListening()
+    qsTile.contentDescription = when {
+      model.description != null -> model.description
+      model.descriptionRes != null -> component.stringResource(model.descriptionRes, emptyList())
+      else -> null
     }
-
-    override fun onDestroy() {
-        component.serviceGivenScope.dispose()
-        super.onDestroy()
-    }
-
-    private fun applyModel(model: TileModel<*>) {
-        val qsTile = qsTile ?: return
-
-        qsTile.state = when (model.status) {
-            TileModel.Status.ACTIVE -> Tile.STATE_ACTIVE
-            TileModel.Status.INACTIVE -> Tile.STATE_INACTIVE
-            TileModel.Status.UNAVAILABLE -> Tile.STATE_UNAVAILABLE
-        }
-        qsTile.icon = when {
-            model.icon != null -> model.icon
-            model.iconRes != null -> Icon.createWithResource(this, model.iconRes)
-            else -> null
-        }
-        qsTile.label = when {
-            model.label != null -> model.label
-            model.labelRes != null -> component.stringResource(model.labelRes, emptyList())
-            else -> null
-        }
-        qsTile.contentDescription = when {
-            model.description != null -> model.description
-            model.descriptionRes != null -> component.stringResource(model.descriptionRes, emptyList())
-            else -> null
-        }
-        qsTile.updateTile()
-    }
+    qsTile.updateTile()
+  }
 }
 
 @InstallElement<ServiceGivenScope>
 @Given
 class FunTileServiceComponent(
-    @Given val logger: Logger,
-    @Given val serviceGivenScope: ServiceGivenScope,
-    @Given val stringResource: StringResourceProvider,
-    @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
+  @Given val logger: Logger,
+  @Given val serviceGivenScope: ServiceGivenScope,
+  @Given val stringResource: StringResourceProvider,
+  @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
 )
 
 @InstallElement<TileGivenScope>
 @Given
 class TileModelComponent(
-    @Given tileKey: TypeKey<AbstractFunTileService>,
-    @Given tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
-    @Given val scope: GivenCoroutineScope<TileGivenScope>,
-    @Given val tileGivenScope: TileGivenScope
+  @Given tileKey: TypeKey<AbstractFunTileService>,
+  @Given tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
+  @Given val scope: GivenCoroutineScope<TileGivenScope>,
+  @Given val tileGivenScope: TileGivenScope
 ) {
-    val tileModel = tileModelElements.toMap()[tileKey]
-        ?.invoke()
-        ?: error("No tile found for $tileKey in ${tileModelElements.toMap()}")
+  val tileModel = tileModelElements.toMap()[tileKey]
+    ?.invoke()
+    ?: error("No tile found for $tileKey in ${tileModelElements.toMap()}")
 }

@@ -28,16 +28,16 @@ interface WriteSecureSettingsPermission : Permission
 
 @Given
 fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
-    @Given appContext: AppContext
+  @Given appContext: AppContext
 ): PermissionStateProvider<P> = {
-    appContext.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
-            PackageManager.PERMISSION_GRANTED
+  appContext.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
+      PackageManager.PERMISSION_GRANTED
 }
 
 @Given
 fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
-    @Given navigator: Navigator,
-    @Given permissionKey: TypeKey<P>
+  @Given navigator: Navigator,
+  @Given permissionKey: TypeKey<P>
 ): PermissionRequestHandler<P> = {
-    navigator.push(WriteSecureSettingsKey(permissionKey))
+  navigator.push(WriteSecureSettingsKey(permissionKey))
 }

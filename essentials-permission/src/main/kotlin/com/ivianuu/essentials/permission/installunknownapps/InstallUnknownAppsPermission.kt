@@ -22,7 +22,6 @@ import android.content.pm.*
 import android.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 
@@ -31,16 +30,17 @@ interface InstallUnknownAppsPermission : Permission
 @SuppressLint("NewApi")
 @Given
 fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider(
-    @Given packageManager: PackageManager,
-    @Given systemBuildInfo: SystemBuildInfo
+  @Given packageManager: PackageManager,
+  @Given systemBuildInfo: SystemBuildInfo
 ): PermissionStateProvider<P> = {
-    systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
+  systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
 }
 
-@Given
-fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
-    Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES",
-        Uri.parse("package:${buildInfo.packageName}"))
+  Intent(
+    "android.settings.MANAGE_UNKNOWN_APP_SOURCES",
+    Uri.parse("package:${buildInfo.packageName}")
+  )
 }

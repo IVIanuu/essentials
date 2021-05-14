@@ -22,5 +22,5 @@ import com.ivianuu.injekt.scope.*
 
 typealias AccessibilityGivenScope = GivenScope
 
-@Given
-val accessibilityGivenScopeModule = ChildScopeModule0<ServiceGivenScope, AccessibilityGivenScope>()
+@Given val accessibilityGivenScopeModule =
+  ChildScopeModule0<ServiceGivenScope, AccessibilityGivenScope>()

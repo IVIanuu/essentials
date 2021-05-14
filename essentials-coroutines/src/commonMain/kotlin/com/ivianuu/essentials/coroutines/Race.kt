@@ -20,50 +20,51 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.*
 
 suspend fun <T> raceOf(vararg racers: suspend () -> T): T {
-    require(racers.isNotEmpty()) { "A race needs racers." }
-    return race {
-        racers.forEach {
-            launchRacer { it() }
-        }
+  require(racers.isNotEmpty()) { "A race needs racers." }
+  return race {
+    racers.forEach {
+      launchRacer { it() }
     }
+  }
 }
 
 suspend fun <T> Iterable<suspend () -> T>.race(): T = race {
-    forEach {
-        launchRacer { it() }
-    }
+  forEach {
+    launchRacer { it() }
+  }
 }
 
-suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit): T = coroutineScope {
+suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit): T =
+  coroutineScope {
     val racers = mutableListOf<Deferred<T>>()
     select {
-        val scopeBlockJob = childJob()
-        val racingScope = object : RacingScope<T>, CoroutineScope by this@coroutineScope {
-            var finished = false
-            override fun launchRacer(block: suspend CoroutineScope.() -> T) {
-                if (finished) return
-                synchronized(this@coroutineScope) {
-                    if (finished) return
-                    async { block() }.also { racers += it }
-                }.onAwait { result ->
-                    result.also {
-                        synchronized(this@coroutineScope) {
-                            if (!finished) {
-                                finished = true
-                                scopeBlockJob.cancel()
-                                racers.forEach { it.cancel() }
-                            }
-                        }
-                    }
+      val scopeBlockJob = childJob()
+      val racingScope = object : RacingScope<T>, CoroutineScope by this@coroutineScope {
+        var finished = false
+        override fun launchRacer(block: suspend CoroutineScope.() -> T) {
+          if (finished) return
+          synchronized(this@coroutineScope) {
+            if (finished) return
+            async { block() }.also { racers += it }
+          }.onAwait { result ->
+            result.also {
+              synchronized(this@coroutineScope) {
+                if (! finished) {
+                  finished = true
+                  scopeBlockJob.cancel()
+                  racers.forEach { it.cancel() }
                 }
+              }
             }
+          }
         }
-        launch(context = scopeBlockJob, start = CoroutineStart.UNDISPATCHED) {
-            racingScope.block()
-        }
+      }
+      launch(context = scopeBlockJob, start = CoroutineStart.UNDISPATCHED) {
+        racingScope.block()
+      }
     }
-}
+  }
 
 interface RacingScope<in T> : CoroutineScope {
-    fun launchRacer(block: suspend CoroutineScope.() -> T)
+  fun launchRacer(block: suspend CoroutineScope.() -> T)
 }

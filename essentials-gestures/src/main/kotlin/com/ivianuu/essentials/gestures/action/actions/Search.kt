@@ -24,29 +24,26 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object SearchActionId : ActionId("search")
+@Given object SearchActionId : ActionId("search")
 
-@Given
-fun searchAction(
-    @Given stringResource: StringResourceProvider
+@Given fun searchAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<ScreenshotActionId>(
-    id = "search",
-    title = stringResource(R.string.es_action_search, emptyList()),
-    icon = singleActionIcon(Icons.Default.Search)
+  id = "search",
+  title = stringResource(R.string.es_action_search, emptyList()),
+  icon = singleActionIcon(Icons.Default.Search)
 )
 
-@Given
-fun searchActionExecutor(
-    @Given intentSender: ActionIntentSender
+@Given fun searchActionExecutor(
+  @Given intentSender: ActionIntentSender
 ): ActionExecutor<ScreenshotActionId> = {
-    intentSender(
-        Intent(Intent.ACTION_MAIN).apply {
-            component = ComponentName(
-                "com.google.android.googlequicksearchbox",
-                "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
-            )
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-    )
+  intentSender(
+    Intent(Intent.ACTION_MAIN).apply {
+      component = ComponentName(
+        "com.google.android.googlequicksearchbox",
+        "com.google.android.apps.gsa.queryentry.QueryEntryActivity"
+      )
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+  )
 }

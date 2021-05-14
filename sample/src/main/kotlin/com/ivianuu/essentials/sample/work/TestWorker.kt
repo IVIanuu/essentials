@@ -24,20 +24,17 @@ import com.ivianuu.essentials.work.Worker
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given
-object TestWorkerId : WorkerId("test")
+@Given object TestWorkerId : WorkerId("test")
 
-@Given
-fun testWorker(@Given logger: Logger): Worker<TestWorkerId> = {
-    logger.d { "start work" }
-    delay(5000)
-    logger.d { "finish work" }
-    ListenableWorker.Result.success()
+@Given fun testWorker(@Given logger: Logger): Worker<TestWorkerId> = {
+  logger.d { "start work" }
+  delay(5000)
+  logger.d { "finish work" }
+  ListenableWorker.Result.success()
 }
 
 typealias TestWorkScheduler = () -> Unit
 
-@Given
-fun testWorkScheduler(@Given workManager: WorkManager): TestWorkScheduler = {
-    workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
+@Given fun testWorkScheduler(@Given workManager: WorkManager): TestWorkScheduler = {
+  workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
 }

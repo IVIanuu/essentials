@@ -9,13 +9,12 @@ import kotlinx.coroutines.flow.*
 
 @Given
 val notificationListenerRef: @Scoped<AppGivenScope> MutableStateFlow<EsNotificationListenerService?>
-    get() = MutableStateFlow(null)
+  get() = MutableStateFlow(null)
 
-@Given
-fun notificationServiceRefWorker(
-    @Given ref: MutableStateFlow<EsNotificationListenerService?>,
-    @Given service: Service
+@Given fun notificationServiceRefWorker(
+  @Given ref: MutableStateFlow<EsNotificationListenerService?>,
+  @Given service: Service
 ): ScopeWorker<NotificationGivenScope> = {
-    ref.value = service as EsNotificationListenerService
-    runOnCancellation { ref.value = null }
+  ref.value = service as EsNotificationListenerService
+  runOnCancellation { ref.value = null }
 }

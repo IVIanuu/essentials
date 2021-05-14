@@ -18,5 +18,4 @@ package com.ivianuu.essentials.store
 
 import com.ivianuu.injekt.*
 
-@Qualifier
-annotation class Initial
+@Qualifier annotation class Initial

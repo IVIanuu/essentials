@@ -27,34 +27,33 @@ import java.io.*
 
 data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
 
-@Given
-fun shareBackupFileKeyIntentFactory(
-    @Given appContext: AppContext,
-    @Given buildInfo: BuildInfo,
-    @Given packageManager: PackageManager
+@Given fun shareBackupFileKeyIntentFactory(
+  @Given appContext: AppContext,
+  @Given buildInfo: BuildInfo,
+  @Given packageManager: PackageManager
 ): KeyIntentFactory<ShareBackupFileKey> = { key ->
-    val uri = FileProvider.getUriForFile(
-        appContext,
-        "${buildInfo.packageName}.backupprovider",
-        File(key.backupFilePath)
-    )
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "application/zip"
-        data = uri
-        putExtra(Intent.EXTRA_STREAM, uri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+  val uri = FileProvider.getUriForFile(
+    appContext,
+    "${buildInfo.packageName}.backupprovider",
+    File(key.backupFilePath)
+  )
+  val intent = Intent(Intent.ACTION_SEND).apply {
+    type = "application/zip"
+    data = uri
+    putExtra(Intent.EXTRA_STREAM, uri)
+    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+  }
+  packageManager
+    .queryIntentActivities(intent, PackageManager.MATCH_ALL)
+    .map { it.activityInfo.packageName }
+    .distinct()
+    .forEach {
+      appContext.grantUriPermission(
+        it,
+        uri,
+        Intent.FLAG_GRANT_READ_URI_PERMISSION
+      )
     }
-    packageManager
-        .queryIntentActivities(intent, PackageManager.MATCH_ALL)
-        .map { it.activityInfo.packageName }
-        .distinct()
-        .forEach {
-            appContext.grantUriPermission(
-                it,
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        }
 
-    Intent.createChooser(intent,"Share File")
+  Intent.createChooser(intent, "Share File")
 }

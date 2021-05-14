@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.*
 
 typealias GlobalActionExecutor = suspend (Int) -> Boolean
 
-@Given
-fun globalActionExecutor(
-    @Given ref: Flow<EsAccessibilityService?>,
+@Given fun globalActionExecutor(
+  @Given ref: Flow<EsAccessibilityService?>,
 ): GlobalActionExecutor = { action -> ref.first()?.performGlobalAction(action) ?: false }

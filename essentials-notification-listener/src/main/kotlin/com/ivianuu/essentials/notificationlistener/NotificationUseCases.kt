@@ -27,29 +27,26 @@ typealias Notifications = List<StatusBarNotification>
 
 @Given
 fun notifications(@Given ref: Flow<EsNotificationListenerService?>): Flow<Notifications> = ref
-    .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+  .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
 typealias OpenNotificationUseCase = suspend (Notification) -> Result<Unit, Throwable>
 
-@Given
-val openNotificationUseCase: OpenNotificationUseCase = { notification ->
-    catch { notification.contentIntent.send() }
+@Given val openNotificationUseCase: OpenNotificationUseCase = { notification ->
+  catch { notification.contentIntent.send() }
 }
 
 typealias DismissNotificationUseCase = suspend (String) -> Result<Unit, Throwable>
 
-@Given
-fun dismissNotificationUseCase(
-    @Given ref: Flow<EsNotificationListenerService?>
+@Given fun dismissNotificationUseCase(
+  @Given ref: Flow<EsNotificationListenerService?>
 ): DismissNotificationUseCase = { key ->
-    catch { ref.first()!!.cancelNotification(key) }
+  catch { ref.first() !!.cancelNotification(key) }
 }
 
 typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
 
-@Given
-fun dismissAllNotificationsUseCase(
-    @Given ref: Flow<EsNotificationListenerService?>
+@Given fun dismissAllNotificationsUseCase(
+  @Given ref: Flow<EsNotificationListenerService?>
 ): DismissAllNotificationsUseCase = {
-    catch { ref.first()!!.cancelAllNotifications() }
+  catch { ref.first() !!.cancelAllNotifications() }
 }

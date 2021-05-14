@@ -7,6 +7,5 @@ import com.ivianuu.injekt.*
 
 typealias AccessibilityWindowManager = WindowManager
 
-@Given
-inline val Service.accessibilityWindowManager: AccessibilityWindowManager
-    get() = getSystemService()!!
+@Given inline val Service.accessibilityWindowManager: AccessibilityWindowManager
+  get() = getSystemService() !!

@@ -21,37 +21,35 @@ import android.content.*
 import android.net.*
 import android.os.*
 import android.provider.*
-import androidx.core.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
 interface PackageUsageStatsPermission : Permission
 
-@Given
-fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
+@Given fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = true
 
 @Suppress("DEPRECATION")
 @Given
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
-    @Given appOpsManager: @SystemService AppOpsManager,
-    @Given buildInfo: BuildInfo,
+  @Given appOpsManager: @SystemService AppOpsManager,
+  @Given buildInfo: BuildInfo,
 ): PermissionStateProvider<P> = {
-    appOpsManager.checkOpNoThrow(
-        AppOpsManager.OPSTR_GET_USAGE_STATS,
-        Process.myUid(),
-        buildInfo.packageName
-    ) == AppOpsManager.MODE_ALLOWED
+  appOpsManager.checkOpNoThrow(
+    AppOpsManager.OPSTR_GET_USAGE_STATS,
+    Process.myUid(),
+    buildInfo.packageName
+  ) == AppOpsManager.MODE_ALLOWED
 }
 
-@Given
-fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
-    Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS,
-        Uri.parse("package:${buildInfo.packageName}"))
+  Intent(
+    Settings.ACTION_USAGE_ACCESS_SETTINGS,
+    Uri.parse("package:${buildInfo.packageName}")
+  )
 }

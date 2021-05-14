@@ -6,5 +6,4 @@ import com.ivianuu.injekt.scope.*
 
 typealias KeyUiGivenScope = GivenScope
 
-@Given
-val keyUiGivenScopeModule = ChildScopeModule1<UiGivenScope, Key<*>, KeyUiGivenScope>()
+@Given val keyUiGivenScopeModule = ChildScopeModule1<UiGivenScope, Key<*>, KeyUiGivenScope>()

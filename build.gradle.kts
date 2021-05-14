@@ -15,35 +15,35 @@
  */
 
 buildscript {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        jcenter()
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-        maven("https://plugins.gradle.org/m2")
-    }
+  repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+    jcenter()
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://plugins.gradle.org/m2")
+  }
 
-    dependencies {
-        classpath(Deps.androidGradlePlugin)
-        classpath(Deps.buildConfigGradlePlugin)
-        classpath(Deps.dexcountGradlePlugin)
-        classpath(Deps.dokkaGradlePlugin)
-        classpath(Deps.essentialsGradlePlugin)
-        classpath(Deps.Injekt.gradlePlugin)
-        classpath(Deps.Kotlin.gradlePlugin)
-        classpath(Deps.KotlinSerialization.gradlePlugin)
-        classpath(Deps.mavenPublishGradlePlugin)
-        classpath(Deps.shadowGradlePlugin)
-    }
+  dependencies {
+    classpath(Deps.androidGradlePlugin)
+    classpath(Deps.buildConfigGradlePlugin)
+    classpath(Deps.dexcountGradlePlugin)
+    classpath(Deps.dokkaGradlePlugin)
+    classpath(Deps.essentialsGradlePlugin)
+    classpath(Deps.Injekt.gradlePlugin)
+    classpath(Deps.Kotlin.gradlePlugin)
+    classpath(Deps.KotlinSerialization.gradlePlugin)
+    classpath(Deps.mavenPublishGradlePlugin)
+    classpath(Deps.shadowGradlePlugin)
+  }
 }
 
 allprojects {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        jcenter()
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-    }
+  repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+    jcenter()
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+  }
 }

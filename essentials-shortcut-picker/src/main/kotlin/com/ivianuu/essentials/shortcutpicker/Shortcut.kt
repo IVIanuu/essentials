@@ -20,7 +20,7 @@ import android.content.*
 import androidx.compose.ui.graphics.*
 
 data class Shortcut(
-    val intent: Intent,
-    val name: String,
-    val icon: ImageBitmap
+  val intent: Intent,
+  val name: String,
+  val icon: ImageBitmap
 )

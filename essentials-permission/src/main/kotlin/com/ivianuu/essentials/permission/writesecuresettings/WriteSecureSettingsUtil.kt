@@ -22,11 +22,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 
-@Composable
-internal fun SecureSettingsHeader(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
-        modifier = Modifier.padding(all = 16.dp)
-    )
+@Composable internal fun SecureSettingsHeader(text: String) {
+  Text(
+    text = text,
+    style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
+    modifier = Modifier.padding(all = 16.dp)
+  )
 }

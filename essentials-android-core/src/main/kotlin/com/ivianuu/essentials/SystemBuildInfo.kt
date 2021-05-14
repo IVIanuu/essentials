@@ -21,5 +21,4 @@ import com.ivianuu.injekt.*
 
 data class SystemBuildInfo(val sdk: Int)
 
-@Given
-val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)
+@Given val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)

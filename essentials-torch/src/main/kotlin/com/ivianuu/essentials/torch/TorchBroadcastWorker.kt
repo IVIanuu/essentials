@@ -23,12 +23,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given
-fun torchBroadcastWorker(
-    @Given broadcastsFactory: BroadcastsFactory,
-    @Given torchStore: MutableStateFlow<TorchState>
+@Given fun torchBroadcastWorker(
+  @Given broadcastsFactory: BroadcastsFactory,
+  @Given torchStore: MutableStateFlow<TorchState>
 ): ScopeWorker<AppGivenScope> = {
-    broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.update { false } }
+  broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.update { false } }
 }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"

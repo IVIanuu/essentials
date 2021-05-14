@@ -22,25 +22,21 @@ import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object StopActionId : ActionId("media_stop")
+@Given object StopActionId : ActionId("media_stop")
 
-@Given
-fun stopMediaAction(
-    @Given stringResource: StringResourceProvider
+@Given fun stopMediaAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<StopActionId>(
-    id = StopActionId,
-    title = stringResource(R.string.es_action_media_stop, emptyList()),
-    icon = singleActionIcon(R.drawable.es_ic_stop)
+  id = StopActionId,
+  title = stringResource(R.string.es_action_media_stop, emptyList()),
+  icon = singleActionIcon(R.drawable.es_ic_stop)
 )
 
-@Given
-fun stopMediaActionExecutor(
-    @Given mediaActionSender: MediaActionSender
+@Given fun stopMediaActionExecutor(
+  @Given mediaActionSender: MediaActionSender
 ): ActionExecutor<StopActionId> = {
-    mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
+  mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
-@Given
-inline val stopMediaActionSettingsKey: MediaActionSettingsKey<StopActionId>
-    get() = MediaActionSettingsKey()
+@Given inline val stopMediaActionSettingsKey: MediaActionSettingsKey<StopActionId>
+  get() = MediaActionSettingsKey()

@@ -30,62 +30,61 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given
-val tabsHomeItem = HomeItem("Tabs") { TabsKey }
+@Given val tabsHomeItem = HomeItem("Tabs") { TabsKey }
 
 object TabsKey : Key<Nothing>
 
 @OptIn(ExperimentalPagerApi::class)
 @Given
 val tabsUi: KeyUi<TabsKey> = {
-    val pagerState = rememberPagerState(TabItems.size)
-    val scope = rememberCoroutineScope()
-    Scaffold(
-        topBar = {
-            Surface(
-                color = MaterialTheme.colors.primary,
-                elevation = 8.dp
-            ) {
-                Column {
-                    TopAppBar(
-                        title = { Text("Tabs") },
-                        elevation = 0.dp
-                    )
-                    TabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                        backgroundColor = MaterialTheme.colors.primary,
-                        indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                            )
-                        }
-                    ) {
-                        TabItems.indices.forEach { page ->
-                            Tab(
-                                selected = pagerState.currentPage == page,
-                                onClick = {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(page)
-                                    }
-                                },
-                                text = { Text("Item: $page") }
-                            )
-                        }
-                    }
-                }
+  val pagerState = rememberPagerState(TabItems.size)
+  val scope = rememberCoroutineScope()
+  Scaffold(
+    topBar = {
+      Surface(
+        color = MaterialTheme.colors.primary,
+        elevation = 8.dp
+      ) {
+        Column {
+          TopAppBar(
+            title = { Text("Tabs") },
+            elevation = 0.dp
+          )
+          TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = MaterialTheme.colors.primary,
+            indicator = { tabPositions ->
+              TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+              )
             }
-        }
-    ) {
-        HorizontalPager(pagerState) { page ->
-            val color = TabItems[page]
-            Surface(color = color) {
-                Text(
-                    text = "Index: $page",
-                    modifier = Modifier.center()
-                )
+          ) {
+            TabItems.indices.forEach { page ->
+              Tab(
+                selected = pagerState.currentPage == page,
+                onClick = {
+                  scope.launch {
+                    pagerState.animateScrollToPage(page)
+                  }
+                },
+                text = { Text("Item: $page") }
+              )
             }
+          }
         }
+      }
     }
+  ) {
+    HorizontalPager(pagerState) { page ->
+      val color = TabItems[page]
+      Surface(color = color) {
+        Text(
+          text = "Index: $page",
+          modifier = Modifier.center()
+        )
+      }
+    }
+  }
 }
 
 private val TabItems = listOf(Color.Blue, Color.Red, Color.Magenta, Color.Green, Color.Cyan)

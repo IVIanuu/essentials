@@ -31,31 +31,29 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
+@Given val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
 
 object UnlockKey : Key<Nothing>
 
-@Given
-fun unlockUi(
-    @Given screenState: Flow<ScreenState>,
-    @Given screenUnlocker: ScreenUnlocker,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given toaster: Toaster,
+@Given fun unlockUi(
+  @Given screenState: Flow<ScreenState>,
+  @Given screenUnlocker: ScreenUnlocker,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given toaster: Toaster,
 ): KeyUi<UnlockKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Unlock") }) }
-    ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    toaster("Turn the screen off and on")
-                    screenState.first { it == ScreenState.LOCKED }
-                    val unlocked = screenUnlocker()
-                    toaster("Screen unlocked $unlocked")
-                }
-            }
-        ) { Text("Unlock") }
-    }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Unlock") }) }
+  ) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          toaster("Turn the screen off and on")
+          screenState.first { it == ScreenState.LOCKED }
+          val unlocked = screenUnlocker()
+          toaster("Screen unlocked $unlocked")
+        }
+      }
+    ) { Text("Unlock") }
+  }
 }

@@ -28,108 +28,107 @@ import kotlin.reflect.*
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
 
-@Given
-val navigationStateContent: NavigationStateContent = { state, modifier ->
-    val keyUiGivenScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
-    val contentState = remember {
-        NavigationContentState(keyUiGivenScopeFactory = keyUiGivenScopeFactory)
+@Given val navigationStateContent: NavigationStateContent = { state, modifier ->
+  val keyUiGivenScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
+  val contentState = remember {
+    NavigationContentState(keyUiGivenScopeFactory = keyUiGivenScopeFactory)
+  }
+  contentState.updateBackStack(state.backStack.cast())
+  DisposableEffect(true) {
+    onDispose {
+      contentState.updateBackStack(emptyList())
     }
-    contentState.updateBackStack(state.backStack.cast())
-    DisposableEffect(true) {
-        onDispose {
-            contentState.updateBackStack(emptyList())
-        }
-    }
-    AnimatedStack(modifier = modifier, children = contentState.stackChildren)
+  }
+  AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
 @Given
 @InstallElement<KeyUiGivenScope>
 class KeyUiComponent(
-    @Given val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
-    @Given val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
-    @Given val decorateUi: DecorateKeyUi,
+  @Given val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
+  @Given val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
+  @Given val decorateUi: DecorateKeyUi,
 )
 
 private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope) {
-    private var children by mutableStateOf(emptyList<Child>())
+  private var children by mutableStateOf(emptyList<Child>())
 
-    val stackChildren: List<AnimatedStackChild<Key<Any>>>
-        get() = children.map { it.stackChild }
+  val stackChildren: List<AnimatedStackChild<Key<Any>>>
+    get() = children.map { it.stackChild }
 
-    fun updateBackStack(backStack: List<Key<Any>>) {
-        val removedChildren = children
-            .filter { it.key !in backStack }
-        children = backStack
-            .map { getOrCreateEntry(it) }
-        removedChildren.forEach { it.detach() }
-    }
+  fun updateBackStack(backStack: List<Key<Any>>) {
+    val removedChildren = children
+      .filter { it.key !in backStack }
+    children = backStack
+      .map { getOrCreateEntry(it) }
+    removedChildren.forEach { it.detach() }
+  }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun getOrCreateEntry(key: Key<Any>): Child {
-        children.firstOrNull { it.key == key }?.let { return it }
-        val scope = keyUiGivenScopeFactory(key)
-        val component = scope.element<KeyUiComponent>()
-        val content = component.uiFactories[key::class]?.invoke(key, scope)
-        checkNotNull(content) { "No factory found for $key" }
-        val decoratedContent: @Composable () -> Unit = { component.decorateUi(content) }
-        val options = component.optionFactories[key::class]?.invoke(key)
-        return Child(key, options, decoratedContent, scope)
-    }
+  @Suppress("UNCHECKED_CAST")
+  private fun getOrCreateEntry(key: Key<Any>): Child {
+    children.firstOrNull { it.key == key }?.let { return it }
+    val scope = keyUiGivenScopeFactory(key)
+    val component = scope.element<KeyUiComponent>()
+    val content = component.uiFactories[key::class]?.invoke(key, scope)
+    checkNotNull(content) { "No factory found for $key" }
+    val decoratedContent: @Composable () -> Unit = { component.decorateUi(content) }
+    val options = component.optionFactories[key::class]?.invoke(key)
+    return Child(key, options, decoratedContent, scope)
+  }
 
-    private class Child(
-        val key: Key<Any>,
-        options: KeyUiOptions? = null,
-        val content: @Composable () -> Unit,
-        val givenScope: KeyUiGivenScope
+  private class Child(
+    val key: Key<Any>,
+    options: KeyUiOptions? = null,
+    val content: @Composable () -> Unit,
+    val givenScope: KeyUiGivenScope
+  ) {
+    val stackChild = AnimatedStackChild(
+      key = key,
+      opaque = options?.opaque ?: false,
+      enterTransition = options?.enterTransition,
+      exitTransition = options?.exitTransition
     ) {
-        val stackChild = AnimatedStackChild(
-            key = key,
-            opaque = options?.opaque ?: false,
-            enterTransition = options?.enterTransition,
-            exitTransition = options?.exitTransition
-        ) {
-            val compositionKey = currentCompositeKeyHash
+      val compositionKey = currentCompositeKeyHash
 
-            val savableStateRegistry = remember {
-                SaveableStateRegistry(
-                    restoredValues = savedState.remove(compositionKey),
-                    canBeSaved = { true }
-                )
-            }
-            CompositionLocalProvider(
-                LocalGivenScope provides givenScope,
-                LocalSaveableStateRegistry provides savableStateRegistry
-            ) {
-                content()
-                DisposableEffect(true) {
-                    isComposing = true
-                    onDispose {
-                        isComposing = false
-                        savedState[compositionKey] = savableStateRegistry.performSave()
-                        finalizeIfNeeded()
-                    }
-                }
-            }
-        }
-
-        private var savedState =
-            mutableMapOf<Any, Map<String, List<Any?>>>()
-
-        private var isComposing = false
-        private var isDetached = false
-        private var isFinalized = false
-
-        fun detach() {
-            isDetached = true
+      val savableStateRegistry = remember {
+        SaveableStateRegistry(
+          restoredValues = savedState.remove(compositionKey),
+          canBeSaved = { true }
+        )
+      }
+      CompositionLocalProvider(
+        LocalGivenScope provides givenScope,
+        LocalSaveableStateRegistry provides savableStateRegistry
+      ) {
+        content()
+        DisposableEffect(true) {
+          isComposing = true
+          onDispose {
+            isComposing = false
+            savedState[compositionKey] = savableStateRegistry.performSave()
             finalizeIfNeeded()
+          }
         }
-
-        private fun finalizeIfNeeded() {
-            if (isFinalized) return
-            if (isComposing || !isDetached) return
-            isFinalized = true
-            givenScope.dispose()
-        }
+      }
     }
+
+    private var savedState =
+      mutableMapOf<Any, Map<String, List<Any?>>>()
+
+    private var isComposing = false
+    private var isDetached = false
+    private var isFinalized = false
+
+    fun detach() {
+      isDetached = true
+      finalizeIfNeeded()
+    }
+
+    private fun finalizeIfNeeded() {
+      if (isFinalized) return
+      if (isComposing || ! isDetached) return
+      isFinalized = true
+      givenScope.dispose()
+    }
+  }
 }

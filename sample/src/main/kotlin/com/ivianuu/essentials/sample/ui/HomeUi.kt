@@ -38,110 +38,106 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given
-class HomeKey : RootKey
+@Given class HomeKey : RootKey
 
-@Given
-fun homeUi(
-    @Given navigator: Navigator,
-    @Given itemsFactory: () -> Set<HomeItem>,
-    @Given toaster: Toaster,
+@Given fun homeUi(
+  @Given navigator: Navigator,
+  @Given itemsFactory: () -> Set<HomeItem>,
+  @Given toaster: Toaster,
 ): KeyUi<HomeKey> = {
-    val finalItems = remember { itemsFactory().sortedBy { it.title } }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Home") },
-                actions = {
-                    PopupMenuButton(
-                        items = listOf(
-                            "Option 1",
-                            "Option 2",
-                            "Option 3"
-                        ).map { title ->
-                            PopupMenu.Item(onSelected = { toaster("Selected $title") }) {
-                                Text(title)
-                            }
-                        }
-                    )
-                }
-            )
-        }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            items(finalItems) { item ->
-                val color = rememberSaveable(item) {
-                    ColorPickerPalette.values()
-                        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-                        .shuffled()
-                        .first()
-                        .front
-                }
-
-                val scope = rememberCoroutineScope()
-                HomeItem(
-                    item = item,
-                    color = color,
-                    onClick = {
-                        scope.launch { navigator.push(item.keyFactory(color)) }
-                    }
-                )
-
-                if (finalItems.indexOf(item) != finalItems.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
-                }
+  val finalItems = remember { itemsFactory().sortedBy { it.title } }
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = { Text("Home") },
+        actions = {
+          PopupMenuButton(
+            items = listOf(
+              "Option 1",
+              "Option 2",
+              "Option 3"
+            ).map { title ->
+              PopupMenu.Item(onSelected = { toaster("Selected $title") }) {
+                Text(title)
+              }
             }
+          )
         }
+      )
     }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      items(finalItems) { item ->
+        val color = rememberSaveable(item) {
+          ColorPickerPalette.values()
+            .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+            .shuffled()
+            .first()
+            .front
+        }
+
+        val scope = rememberCoroutineScope()
+        HomeItem(
+          item = item,
+          color = color,
+          onClick = {
+            scope.launch { navigator.push(item.keyFactory(color)) }
+          }
+        )
+
+        if (finalItems.indexOf(item) != finalItems.lastIndex) {
+          HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+        }
+      }
+    }
+  }
 }
 
-@Composable
-private fun HomeItem(
-    color: Color,
-    onClick: () -> Unit,
-    item: HomeItem,
+@Composable private fun HomeItem(
+  color: Color,
+  onClick: () -> Unit,
+  item: HomeItem,
 ) {
-    ContainerTransformSurface(key = "container ${item.title}", isOpened = false) {
-        ListItem(
-            title = {
-                SharedElement(key = "title ${item.title}", isStart = true) {
-                    Text(
-                        item.title,
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                }
-            },
-            leading = { SharedCircleBadge("color ${item.title}", color, 40.dp, true) },
-            trailing = {
-                PopupMenuButton(
-                    items = listOf(1, 2, 3)
-                        .map { index ->
-                            PopupMenu.Item(onSelected = {}) {
-                                Text(index.toString())
-                            }
-                        }
-                )
-            },
-            onClick = onClick
+  ContainerTransformSurface(key = "container ${item.title}", isOpened = false) {
+    ListItem(
+      title = {
+        SharedElement(key = "title ${item.title}", isStart = true) {
+          Text(
+            item.title,
+            style = MaterialTheme.typography.subtitle1
+          )
+        }
+      },
+      leading = { SharedCircleBadge("color ${item.title}", color, 40.dp, true) },
+      trailing = {
+        PopupMenuButton(
+          items = listOf(1, 2, 3)
+            .map { index ->
+              PopupMenu.Item(onSelected = {}) {
+                Text(index.toString())
+              }
+            }
         )
-    }
+      },
+      onClick = onClick
+    )
+  }
 }
 
-@Composable
-fun SharedCircleBadge(
-    key: Any,
-    color: Color,
-    size: Dp,
-    isStart: Boolean
+@Composable fun SharedCircleBadge(
+  key: Any,
+  color: Color,
+  size: Dp,
+  isStart: Boolean
 ) {
-    SharedElement(key = key, isStart = isStart) {
-        val fraction = LocalSharedElementTransitionFraction.current
-        Box(
-            modifier = Modifier
-                .size(size)
-                .background(color, RoundedCornerShape((size / 2) * (1f - fraction)))
-        )
-    }
+  SharedElement(key = key, isStart = isStart) {
+    val fraction = LocalSharedElementTransitionFraction.current
+    Box(
+      modifier = Modifier
+        .size(size)
+        .background(color, RoundedCornerShape((size / 2) * (1f - fraction)))
+    )
+  }
 }
 
 data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Nothing>)

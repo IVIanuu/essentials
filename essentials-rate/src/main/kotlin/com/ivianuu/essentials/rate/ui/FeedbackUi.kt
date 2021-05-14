@@ -16,63 +16,60 @@ import kotlinx.coroutines.flow.*
 
 object FeedbackKey : DialogKey<Nothing>
 
-@Given
-val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
-    DialogScaffold(dismissible = false) {
-        Dialog(
-            title = { Text(stringResource(R.string.es_feedback_title)) },
-            content = { Text(stringResource(R.string.es_feedback_content)) },
-            buttons = {
-                if (model.displayShowNever) {
-                    TextButton(onClick = model.showNever) {
-                        Text(stringResource(R.string.es_never))
-                    }
-                }
-                TextButton(onClick = model.showLater) {
-                    Text(stringResource(R.string.es_later))
-                }
+@Given val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
+  DialogScaffold(dismissible = false) {
+    Dialog(
+      title = { Text(stringResource(R.string.es_feedback_title)) },
+      content = { Text(stringResource(R.string.es_feedback_content)) },
+      buttons = {
+        if (model.displayShowNever) {
+          TextButton(onClick = model.showNever) {
+            Text(stringResource(R.string.es_never))
+          }
+        }
+        TextButton(onClick = model.showLater) {
+          Text(stringResource(R.string.es_later))
+        }
 
-                TextButton(onClick = model.openReddit) {
-                    Text(stringResource(R.string.es_open_reddit))
-                }
-                TextButton(onClick = model.sendMail) {
-                    Text(stringResource(R.string.es_send_mail))
-                }
-            }
-        )
-    }
+        TextButton(onClick = model.openReddit) {
+          Text(stringResource(R.string.es_open_reddit))
+        }
+        TextButton(onClick = model.sendMail) {
+          Text(stringResource(R.string.es_send_mail))
+        }
+      }
+    )
+  }
 }
 
-@Optics
-data class FeedbackModel(
-    val displayShowNever: Boolean = false,
-    val showNever: () -> Unit = {},
-    val showLater: () -> Unit = {},
-    val openReddit: () -> Unit = {},
-    val sendMail: () -> Unit = {},
+@Optics data class FeedbackModel(
+  val displayShowNever: Boolean = false,
+  val showNever: () -> Unit = {},
+  val showLater: () -> Unit = {},
+  val openReddit: () -> Unit = {},
+  val sendMail: () -> Unit = {},
 )
 
-@Given
-fun feedbackModel(
-    @Given displayShowNever: DisplayShowNeverUseCase,
-    @Given key: FeedbackKey,
-    @Given navigator: Navigator,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given showLater: ShowLaterUseCase,
-    @Given showNever: ShowNeverUseCase
+@Given fun feedbackModel(
+  @Given displayShowNever: DisplayShowNeverUseCase,
+  @Given key: FeedbackKey,
+  @Given navigator: Navigator,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given showLater: ShowLaterUseCase,
+  @Given showNever: ShowNeverUseCase
 ): @Scoped<KeyUiGivenScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {
-    launch {
-        val showDoNotShowAgain = displayShowNever()
-        update { copy(displayShowNever = showDoNotShowAgain) }
-    }
-    action(FeedbackModel.showLater()) { showLater() }
-    action(FeedbackModel.showNever()) { showNever() }
-    action(FeedbackModel.openReddit()) {
-        navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-        navigator.pop(key)
-    }
-    action(FeedbackModel.sendMail()) {
-        navigator.push(FeedbackMailKey)
-        navigator.pop(key)
-    }
+  launch {
+    val showDoNotShowAgain = displayShowNever()
+    update { copy(displayShowNever = showDoNotShowAgain) }
+  }
+  action(FeedbackModel.showLater()) { showLater() }
+  action(FeedbackModel.showNever()) { showNever() }
+  action(FeedbackModel.openReddit()) {
+    navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    navigator.pop(key)
+  }
+  action(FeedbackModel.sendMail()) {
+    navigator.push(FeedbackMailKey)
+    navigator.pop(key)
+  }
 }

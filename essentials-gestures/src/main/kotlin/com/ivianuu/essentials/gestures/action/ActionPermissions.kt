@@ -30,54 +30,50 @@ import com.ivianuu.essentials.permission.writesettings.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
-@Given
-class ActionAccessibilityPermission(
-    @Given private val stringResource: StringResourceProvider
+@Given class ActionAccessibilityPermission(
+  @Given private val stringResource: StringResourceProvider
 ) : AccessibilityServicePermission {
-    override val serviceClass: KClass<out AccessibilityService>
-        get() = EsAccessibilityService::class
-    override val title: String
-        get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
-    override val desc: String
-            get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
-    override val icon: @Composable () -> Unit
-        get() = {
-            Icon(painterResource(R.drawable.es_ic_accessibility), null)
-        }
+  override val serviceClass: KClass<out AccessibilityService>
+    get() = EsAccessibilityService::class
+  override val title: String
+    get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+  override val desc: String
+    get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+  override val icon: @Composable () -> Unit
+    get() = {
+      Icon(painterResource(R.drawable.es_ic_accessibility), null)
+    }
 }
 
-@Given
-class ActionRootPermission(
-    @Given private val stringResource: StringResourceProvider
+@Given class ActionRootPermission(
+  @Given private val stringResource: StringResourceProvider
 ) : RootPermission {
-    override val title: String
-        get() = stringResource(R.string.es_action_root_permission_title, emptyList())
-    override val icon: @Composable () -> Unit
-        get() = {
-            Icon(painterResource(R.drawable.es_ic_adb), null)
-        }
+  override val title: String
+    get() = stringResource(R.string.es_action_root_permission_title, emptyList())
+  override val icon: @Composable () -> Unit
+    get() = {
+      Icon(painterResource(R.drawable.es_ic_adb), null)
+    }
 }
 
-@Given
-class ActionWriteSecureSettingsPermission(
-    @Given private val stringResource: StringResourceProvider
+@Given class ActionWriteSecureSettingsPermission(
+  @Given private val stringResource: StringResourceProvider
 ) : WriteSecureSettingsPermission {
-    override val title: String
-        get() = stringResource(R.string.es_action_write_secure_settings_permission_title, emptyList())
-    override val desc: String
-        get() = stringResource(R.string.es_action_write_secure_settings_permission_desc, emptyList())
-    override val icon: @Composable () -> Unit
-        get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
+  override val title: String
+    get() = stringResource(R.string.es_action_write_secure_settings_permission_title, emptyList())
+  override val desc: String
+    get() = stringResource(R.string.es_action_write_secure_settings_permission_desc, emptyList())
+  override val icon: @Composable () -> Unit
+    get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }
 
-@Given
-class ActionWriteSettingsPermission(
-    @Given private val stringResource: StringResourceProvider
+@Given class ActionWriteSettingsPermission(
+  @Given private val stringResource: StringResourceProvider
 ) : WriteSettingsPermission {
-    override val title: String
-        get() = stringResource(R.string.es_action_write_settings_permission_title, emptyList())
-    override val desc: String
-        get() = stringResource(R.string.es_action_write_settings_permission_desc, emptyList())
-    override val icon: @Composable () -> Unit
-        get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
+  override val title: String
+    get() = stringResource(R.string.es_action_write_settings_permission_title, emptyList())
+  override val desc: String
+    get() = stringResource(R.string.es_action_write_settings_permission_desc, emptyList())
+  override val icon: @Composable () -> Unit
+    get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }

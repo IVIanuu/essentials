@@ -23,20 +23,20 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 class StartupReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        val component = createReceiverGivenScope(context, intent)
-            .element<StartupReceiverComponent>()
-        component.logger.d { "on system boot" }
-        component.bootListeners.forEach { it() }
-        component.receiverGivenScope.dispose()
-    }
+  override fun onReceive(context: Context, intent: Intent) {
+    if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
+    val component = createReceiverGivenScope(context, intent)
+      .element<StartupReceiverComponent>()
+    component.logger.d { "on system boot" }
+    component.bootListeners.forEach { it() }
+    component.receiverGivenScope.dispose()
+  }
 }
 
 @InstallElement<ReceiverGivenScope>
 @Given
 class StartupReceiverComponent(
-    @Given val bootListeners: Set<BootListener> = emptySet(),
-    @Given val logger: Logger,
-    @Given val receiverGivenScope: ReceiverGivenScope,
+  @Given val bootListeners: Set<BootListener> = emptySet(),
+  @Given val logger: Logger,
+  @Given val receiverGivenScope: ReceiverGivenScope,
 )

@@ -23,53 +23,51 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.common.*
 
-@Composable
-fun <T> SingleChoiceListDialog(
-    modifier: Modifier = Modifier,
-    item: @Composable (T) -> Unit,
-    icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    buttons: @Composable (() -> Unit)? = null,
-    onSelectionChanged: (T) -> Unit,
-    items: List<T>,
-    selectedItem: T,
+@Composable fun <T> SingleChoiceListDialog(
+  modifier: Modifier = Modifier,
+  item: @Composable (T) -> Unit,
+  icon: @Composable (() -> Unit)? = null,
+  title: @Composable (() -> Unit)? = null,
+  buttons: @Composable (() -> Unit)? = null,
+  onSelectionChanged: (T) -> Unit,
+  items: List<T>,
+  selectedItem: T,
 ) {
-    Dialog(
-        modifier = modifier,
-        applyContentPadding = false,
-        icon = icon,
-        title = title,
-        content = {
-            LazyColumn {
-                items(items) { item ->
-                    SingleChoiceDialogListItem(
-                        title = { item(item) },
-                        selected = item == selectedItem,
-                        onSelect = { onSelectionChanged(item) }
-                    )
-                }
-            }
-        },
-        buttons = buttons
-    )
+  Dialog(
+    modifier = modifier,
+    applyContentPadding = false,
+    icon = icon,
+    title = title,
+    content = {
+      LazyColumn {
+        items(items) { item ->
+          SingleChoiceDialogListItem(
+            title = { item(item) },
+            selected = item == selectedItem,
+            onSelect = { onSelectionChanged(item) }
+          )
+        }
+      }
+    },
+    buttons = buttons
+  )
 }
 
-@Composable
-private fun SingleChoiceDialogListItem(
-    selected: Boolean,
-    onSelect: () -> Unit,
-    title: @Composable () -> Unit
+@Composable private fun SingleChoiceDialogListItem(
+  selected: Boolean,
+  onSelect: () -> Unit,
+  title: @Composable () -> Unit
 ) {
-    SimpleDialogListItem(
-        leading = {
-            Box(modifier = Modifier.absorbPointer()) {
-                RadioButton(
-                    selected = selected,
-                    onClick = null
-                )
-            }
-        },
-        title = title,
-        onClick = onSelect
-    )
+  SimpleDialogListItem(
+    leading = {
+      Box(modifier = Modifier.absorbPointer()) {
+        RadioButton(
+          selected = selected,
+          onClick = null
+        )
+      }
+    },
+    title = title,
+    onClick = onSelect
+  )
 }

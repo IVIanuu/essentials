@@ -24,58 +24,60 @@ import org.junit.*
 
 class SecureScreenTest {
 
-    @Test
-    fun testIsOnSecureScreen() = runCancellingBlockingTest {
-        val accessibilityEvents = EventFlow<AccessibilityEvent>()
-        val collector = isOnSecureScreen(
-            accessibilityEvents,
-            com.ivianuu.essentials.logging.NoopLogger,
-            this
-        ).testCollect(this)
+  @Test
+  fun testIsOnSecureScreen() = runCancellingBlockingTest {
+    val accessibilityEvents = EventFlow<AccessibilityEvent>()
+    val collector = isOnSecureScreen(
+      accessibilityEvents,
+      com.ivianuu.essentials.logging.NoopLogger,
+      this
+    ).testCollect(this)
 
-        val idleEvent = AccessibilityEvent(AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-            null,
-            null,
-            false)
+    val idleEvent = AccessibilityEvent(
+      AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+      null,
+      null,
+      false
+    )
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "com.android.settings",
-                "android.app.MaterialDialog",
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "com.android.settings",
+        "android.app.MaterialDialog",
+        true
+      )
+    )
 
-        accessibilityEvents.emit(idleEvent)
+    accessibilityEvents.emit(idleEvent)
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "packageinstaller",
-                "packageinstaller",
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "packageinstaller",
+        "packageinstaller",
+        true
+      )
+    )
 
-        accessibilityEvents.emit(idleEvent)
+    accessibilityEvents.emit(idleEvent)
 
-        accessibilityEvents.emit(
-            AccessibilityEvent(
-                AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-                "android",
-                "android.inputmethodservice.SoftInputWindow",
-                true
-            )
-        )
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+        "android",
+        "android.inputmethodservice.SoftInputWindow",
+        true
+      )
+    )
 
-        collector.values.shouldContainExactly(
-            false,
-            true,
-            false,
-            true,
-            false
-        )
-    }
+    collector.values.shouldContainExactly(
+      false,
+      true,
+      false,
+      true,
+      false
+    )
+  }
 
 }

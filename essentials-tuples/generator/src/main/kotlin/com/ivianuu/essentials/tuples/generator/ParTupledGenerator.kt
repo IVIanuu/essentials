@@ -19,51 +19,51 @@ package com.ivianuu.essentials.tuples.generator
 import java.io.*
 
 fun generatePar(genDir: File) {
-    val file = genDir.resolve("ParTupled.kt")
-    file.createNewFile()
-    val code = buildString {
-        appendLine("package com.ivianuu.essentials.coroutines")
-        appendLine()
-        appendLine("import com.ivianuu.essentials.tuples.tupleOf")
-        (2..TUPLES_SIZE).forEach { tuple ->
-            appendLine("import com.ivianuu.essentials.tuples.Tuple$tuple")
-        }
-        appendLine()
-        (2..TUPLES_SIZE).forEach { tuple ->
-            append("suspend fun <")
-            (1..tuple).forEachIndexed { index, arg ->
-                append("${ALPHABET[index]}")
-                if (index != tuple - 1) append(", ")
-            }
-            append("> parTupled(")
-            (1..tuple).forEachIndexed { index, arg ->
-                val char = ALPHABET[index]
-                append("block$char: suspend () -> $char")
-                if (index != tuple - 1) append(", ")
-            }
-            append(", concurrency: Int = defaultConcurrency): Tuple$tuple<")
-            (1..tuple).forEachIndexed { index, arg ->
-                append("${ALPHABET[index]}")
-                if (index != tuple - 1) append(", ")
-            }
-            appendLine("> {")
-            append("    val result = par<Any?>(")
-            (1..tuple).forEachIndexed { index, arg ->
-                append("block${ALPHABET[index]}")
-                if (index != tuple - 1) append(", ")
-            }
-            appendLine(", concurrency = concurrency)")
-            appendLine("    @Suppress(\"UNCHECKED_CAST\")")
-            append("    return tupleOf(")
-            (1..tuple).forEachIndexed { index, arg ->
-                append("result[$index] as ${ALPHABET[index]}")
-                if (index != tuple - 1) append(", ")
-            }
-            appendLine(")")
-            appendLine("}")
-
-            appendLine()
-        }
+  val file = genDir.resolve("ParTupled.kt")
+  file.createNewFile()
+  val code = buildString {
+    appendLine("package com.ivianuu.essentials.coroutines")
+    appendLine()
+    appendLine("import com.ivianuu.essentials.tuples.tupleOf")
+    (2..TUPLES_SIZE).forEach { tuple ->
+      appendLine("import com.ivianuu.essentials.tuples.Tuple$tuple")
     }
-    file.writeText(code)
+    appendLine()
+    (2..TUPLES_SIZE).forEach { tuple ->
+      append("suspend fun <")
+      (1..tuple).forEachIndexed { index, arg ->
+        append("${ALPHABET[index]}")
+        if (index != tuple - 1) append(", ")
+      }
+      append("> parTupled(")
+      (1..tuple).forEachIndexed { index, arg ->
+        val char = ALPHABET[index]
+        append("block$char: suspend () -> $char")
+        if (index != tuple - 1) append(", ")
+      }
+      append(", concurrency: Int = defaultConcurrency): Tuple$tuple<")
+      (1..tuple).forEachIndexed { index, arg ->
+        append("${ALPHABET[index]}")
+        if (index != tuple - 1) append(", ")
+      }
+      appendLine("> {")
+      append("    val result = par<Any?>(")
+      (1..tuple).forEachIndexed { index, arg ->
+        append("block${ALPHABET[index]}")
+        if (index != tuple - 1) append(", ")
+      }
+      appendLine(", concurrency = concurrency)")
+      appendLine("    @Suppress(\"UNCHECKED_CAST\")")
+      append("    return tupleOf(")
+      (1..tuple).forEachIndexed { index, arg ->
+        append("result[$index] as ${ALPHABET[index]}")
+        if (index != tuple - 1) append(", ")
+      }
+      appendLine(")")
+      appendLine("}")
+
+      appendLine()
+    }
+  }
+  file.writeText(code)
 }

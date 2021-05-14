@@ -23,22 +23,19 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object BackActionId : ActionId("back")
+@Given object BackActionId : ActionId("back")
 
-@Given
-fun backAction(
-    @Given stringResource: StringResourceProvider
+@Given fun backAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<BackActionId>(
-    id = BackActionId,
-    title = stringResource(R.string.es_action_back, emptyList()),
-    permissions = accessibilityActionPermissions,
-    icon = singleActionIcon(R.drawable.es_ic_action_back)
+  id = BackActionId,
+  title = stringResource(R.string.es_action_back, emptyList()),
+  permissions = accessibilityActionPermissions,
+  icon = singleActionIcon(R.drawable.es_ic_action_back)
 )
 
-@Given
-fun backActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor
+@Given fun backActionExecutor(
+  @Given globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<BackActionId> = {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
 }

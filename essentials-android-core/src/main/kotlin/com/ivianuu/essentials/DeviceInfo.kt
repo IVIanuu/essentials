@@ -21,5 +21,4 @@ import com.ivianuu.injekt.*
 
 data class DeviceInfo(val model: String, val manufacturer: String)
 
-@Given
-val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+@Given val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)

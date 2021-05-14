@@ -19,11 +19,11 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.*
 
 suspend inline fun <R> runOnCancellation(crossinline block: suspend () -> R): R {
-    try {
-        awaitCancellation()
-    } finally {
-        return withContext(NonCancellable) {
-            block()
-        }
+  try {
+    awaitCancellation()
+  } finally {
+    return withContext(NonCancellable) {
+      block()
     }
+  }
 }

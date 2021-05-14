@@ -26,59 +26,59 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 class EsNotificationListenerService : NotificationListenerService() {
-    private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-    internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
+  private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
+  internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
-    private val component by lazy {
-        createServiceGivenScope()
-            .element<EsNotificationListenerServiceComponent>()
-    }
+  private val component by lazy {
+    createServiceGivenScope()
+      .element<EsNotificationListenerServiceComponent>()
+  }
 
-    private var notificationGivenScope: NotificationGivenScope? = null
+  private var notificationGivenScope: NotificationGivenScope? = null
 
-    override fun onListenerConnected() {
-        super.onListenerConnected()
-        component.logger.d { "listener connected" }
-        notificationGivenScope = component.notificationGivenScopeFactory()
-        updateNotifications()
-    }
+  override fun onListenerConnected() {
+    super.onListenerConnected()
+    component.logger.d { "listener connected" }
+    notificationGivenScope = component.notificationGivenScopeFactory()
+    updateNotifications()
+  }
 
-    override fun onNotificationPosted(sbn: StatusBarNotification) {
-        super.onNotificationPosted(sbn)
-        component.logger.d { "notification posted $sbn" }
-        updateNotifications()
-    }
+  override fun onNotificationPosted(sbn: StatusBarNotification) {
+    super.onNotificationPosted(sbn)
+    component.logger.d { "notification posted $sbn" }
+    updateNotifications()
+  }
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        super.onNotificationRemoved(sbn)
-        component.logger.d { "notification removed $sbn" }
-        updateNotifications()
-    }
+  override fun onNotificationRemoved(sbn: StatusBarNotification) {
+    super.onNotificationRemoved(sbn)
+    component.logger.d { "notification removed $sbn" }
+    updateNotifications()
+  }
 
-    override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
-        super.onNotificationRankingUpdate(rankingMap)
-        component.logger.d { "ranking update $rankingMap" }
-        updateNotifications()
-    }
+  override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
+    super.onNotificationRankingUpdate(rankingMap)
+    component.logger.d { "ranking update $rankingMap" }
+    updateNotifications()
+  }
 
-    override fun onListenerDisconnected() {
-        component.logger.d { "listener disconnected" }
-        notificationGivenScope?.dispose()
-        notificationGivenScope = null
-        component.serviceGivenScope.dispose()
-        super.onListenerDisconnected()
-    }
+  override fun onListenerDisconnected() {
+    component.logger.d { "listener disconnected" }
+    notificationGivenScope?.dispose()
+    notificationGivenScope = null
+    component.serviceGivenScope.dispose()
+    super.onListenerDisconnected()
+  }
 
-    private fun updateNotifications() {
-        _notifications.value = catch { activeNotifications!!.toList() }
-            .getOrElse { emptyList() }
-    }
+  private fun updateNotifications() {
+    _notifications.value = catch { activeNotifications !!.toList() }
+      .getOrElse { emptyList() }
+  }
 }
 
 @InstallElement<ServiceGivenScope>
 @Given
 class EsNotificationListenerServiceComponent(
-    @Given val logger: Logger,
-    @Given val notificationGivenScopeFactory: () -> NotificationGivenScope,
-    @Given val serviceGivenScope: ServiceGivenScope
+  @Given val logger: Logger,
+  @Given val notificationGivenScopeFactory: () -> NotificationGivenScope,
+  @Given val serviceGivenScope: ServiceGivenScope
 )

@@ -21,26 +21,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.material.*
 
-@Composable
-fun SwitchListItem(
-    value: Boolean,
-    onValueChange: (Boolean) -> Unit,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+@Composable fun SwitchListItem(
+  value: Boolean,
+  onValueChange: (Boolean) -> Unit,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  modifier: Modifier = Modifier
 ) {
-    ListItem(
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        trailing = {
-            Switch(
-                checked = value,
-                onCheckedChange = null
-            )
-        },
-        onClick = { onValueChange(!value) }
-    )
+  ListItem(
+    modifier = modifier,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    trailing = {
+      Switch(
+        checked = value,
+        onCheckedChange = null
+      )
+    },
+    onClick = { onValueChange(! value) }
+  )
 }

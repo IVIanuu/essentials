@@ -20,37 +20,37 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 
 suspend fun <T> par(
-    vararg blocks: suspend () -> T,
-    concurrency: Int = defaultConcurrency
+  vararg blocks: suspend () -> T,
+  concurrency: Int = defaultConcurrency
 ): List<T> = blocks.asIterable().parMap(concurrency) { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
-    concurrency: Int = defaultConcurrency,
-    transform: suspend (T) -> R
+  concurrency: Int = defaultConcurrency,
+  transform: suspend (T) -> R
 ): List<R> = supervisorScope {
-    val semaphore = Semaphore(concurrency)
-    map { item ->
-        async {
-            semaphore.acquire()
-            try {
-                transform(item)
-            } finally {
-                semaphore.release()
-            }
-        }
-    }.awaitAll()
+  val semaphore = Semaphore(concurrency)
+  map { item ->
+    async {
+      semaphore.acquire()
+      try {
+        transform(item)
+      } finally {
+        semaphore.release()
+      }
+    }
+  }.awaitAll()
 }
 
 suspend fun <T> Iterable<T>.parFilter(
-    concurrency: Int = defaultConcurrency,
-    predicate: suspend (T) -> Boolean
+  concurrency: Int = defaultConcurrency,
+  predicate: suspend (T) -> Boolean
 ): List<T> = parMap(concurrency) { if (predicate(it)) it else null }.filterNotNull()
 
 suspend fun <T> Iterable<T>.parForEach(
-    concurrency: Int = defaultConcurrency,
-    action: suspend (T) -> Unit
+  concurrency: Int = defaultConcurrency,
+  action: suspend (T) -> Unit
 ) {
-    parMap(concurrency) { action(it) }
+  parMap(concurrency) { action(it) }
 }
 
 internal expect val defaultConcurrency: Int

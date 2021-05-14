@@ -22,27 +22,27 @@ import androidx.activity.*
 
 class ProcessRestartActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val restartIntent = intent.getParcelableExtra<Intent>(KEY_RESTART_INTENT)
-        if (restartIntent != null) {
-            startActivity(restartIntent)
-        }
-
-        finish()
-        Runtime.getRuntime().exit(0)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    val restartIntent = intent.getParcelableExtra<Intent>(KEY_RESTART_INTENT)
+    if (restartIntent != null) {
+      startActivity(restartIntent)
     }
 
-    internal companion object {
-        private const val KEY_RESTART_INTENT = "restart_intent"
-        fun launch(context: Context, restartIntent: Intent) {
-            context.startActivity(
-                Intent(context, ProcessRestartActivity::class.java).apply {
-                    putExtra(KEY_RESTART_INTENT, restartIntent)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            )
+    finish()
+    Runtime.getRuntime().exit(0)
+  }
+
+  internal companion object {
+    private const val KEY_RESTART_INTENT = "restart_intent"
+    fun launch(context: Context, restartIntent: Intent) {
+      context.startActivity(
+        Intent(context, ProcessRestartActivity::class.java).apply {
+          putExtra(KEY_RESTART_INTENT, restartIntent)
+          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+      )
     }
+  }
 
 }

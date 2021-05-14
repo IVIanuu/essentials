@@ -30,32 +30,31 @@ import java.util.concurrent.*
 
 typealias ScreenUnlocker = suspend () -> Boolean
 
-@Given
-fun screenUnlocker(
-    @Given appContext: AppContext,
-    @Given dispatcher: DefaultDispatcher,
-    @Given logger: Logger,
-    @Given keyguardManager: @SystemService KeyguardManager,
+@Given fun screenUnlocker(
+  @Given appContext: AppContext,
+  @Given dispatcher: DefaultDispatcher,
+  @Given logger: Logger,
+  @Given keyguardManager: @SystemService KeyguardManager,
 ): ScreenUnlocker = {
-    withContext(dispatcher) {
-        if (!keyguardManager.isKeyguardLocked) return@withContext true
+  withContext(dispatcher) {
+    if (! keyguardManager.isKeyguardLocked) return@withContext true
 
-        val result = CompletableDeferred<Boolean>()
-        val requestId = UUID.randomUUID().toString()
-        requestsById[requestId] = result
+    val result = CompletableDeferred<Boolean>()
+    val requestId = UUID.randomUUID().toString()
+    requestsById[requestId] = result
 
-        logger.d { "unlock screen $requestId" }
+    logger.d { "unlock screen $requestId" }
 
-        UnlockScreenActivity.unlock(appContext, requestId)
+    UnlockScreenActivity.unlock(appContext, requestId)
 
-        return@withContext result.await().also {
-            logger.d { "unlock result $requestId -> $it" }
-        }
+    return@withContext result.await().also {
+      logger.d { "unlock result $requestId -> $it" }
     }
+  }
 }
 
 private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
 internal fun onUnlockScreenResult(requestId: String, success: Boolean) {
-    requestsById.remove(requestId)?.complete(success)
+  requestsById.remove(requestId)?.complete(success)
 }

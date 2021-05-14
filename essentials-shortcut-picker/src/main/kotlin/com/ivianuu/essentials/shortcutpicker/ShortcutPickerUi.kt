@@ -42,59 +42,56 @@ import kotlinx.coroutines.flow.*
 
 object ShortcutPickerKey : Key<Shortcut>
 
-@Given
-val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.es_title_shortcut_picker)) }
-            )
-        }
-    ) {
-        ResourceLazyColumnFor(model.shortcuts) { shortcut ->
-            ListItem(
-                leading = {
-                    Image(
-                        modifier = Modifier.size(40.dp),
-                        painter = BitmapPainter(shortcut.icon),
-                        contentDescription = null
-                    )
-                },
-                title = { Text(shortcut.name) },
-                onClick = { model.pickShortcut(shortcut) }
-            )
-        }
+@Given val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = { Text(stringResource(R.string.es_title_shortcut_picker)) }
+      )
     }
+  ) {
+    ResourceLazyColumnFor(model.shortcuts) { shortcut ->
+      ListItem(
+        leading = {
+          Image(
+            modifier = Modifier.size(40.dp),
+            painter = BitmapPainter(shortcut.icon),
+            contentDescription = null
+          )
+        },
+        title = { Text(shortcut.name) },
+        onClick = { model.pickShortcut(shortcut) }
+      )
+    }
+  }
 }
 
-@Optics
-data class ShortcutPickerModel(
-    val shortcuts: Resource<List<Shortcut>> = Idle,
-    val pickShortcut: (Shortcut) -> Unit = {}
+@Optics data class ShortcutPickerModel(
+  val shortcuts: Resource<List<Shortcut>> = Idle,
+  val pickShortcut: (Shortcut) -> Unit = {}
 )
 
-@Given
-fun shortcutPickerModel(
-    @Given getAllShortcuts: GetAllShortcutsUseCase,
-    @Given extractShortcut: ExtractShortcutUseCase,
-    @Given key: ShortcutPickerKey,
-    @Given navigator: Navigator,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster
+@Given fun shortcutPickerModel(
+  @Given getAllShortcuts: GetAllShortcutsUseCase,
+  @Given extractShortcut: ExtractShortcutUseCase,
+  @Given key: ShortcutPickerKey,
+  @Given navigator: Navigator,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
-    resourceFlow { emit(getAllShortcuts()) }
-        .update { copy(shortcuts = it) }
-    action(ShortcutPickerModel.pickShortcut()) { shortcut ->
-        catch {
-            val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
-                ?.getOrNull()
-                ?.data ?: return@catch
-            val finalShortcut = extractShortcut(shortcutRequestResult)
-            navigator.pop(key, finalShortcut)
-        }.onFailure {
-            it.printStackTrace()
-            toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
-        }
+  resourceFlow { emit(getAllShortcuts()) }
+    .update { copy(shortcuts = it) }
+  action(ShortcutPickerModel.pickShortcut()) { shortcut ->
+    catch {
+      val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
+        ?.getOrNull()
+        ?.data ?: return@catch
+      val finalShortcut = extractShortcut(shortcutRequestResult)
+      navigator.pop(key, finalShortcut)
+    }.onFailure {
+      it.printStackTrace()
+      toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
     }
+  }
 }

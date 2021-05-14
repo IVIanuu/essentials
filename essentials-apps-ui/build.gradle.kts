@@ -15,10 +15,10 @@
  */
 
 plugins {
-    id("com.android.library")
-    id("com.ivianuu.essentials")
-    id("com.ivianuu.essentials.compose")
-    kotlin("android")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
+  kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
@@ -27,9 +27,9 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-    api(project(":essentials-android-core"))
-    api(project(":essentials-apps"))
-    api(project(":essentials-apps-coil"))
+  api(project(":essentials-android-core"))
+  api(project(":essentials-apps"))
+  api(project(":essentials-apps-coil"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

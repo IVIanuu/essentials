@@ -15,21 +15,21 @@
  */
 
 plugins {
-    kotlin("jvm")
-    id("org.jetbrains.intellij") version "0.7.2"
+  kotlin("jvm")
+  id("org.jetbrains.intellij") version "0.7.2"
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 intellij {
-    version = "2020.3.1"
-    pluginName = "Essentials ide plugin"
-    updateSinceUntilBuild = false
-    setPlugins("org.jetbrains.kotlin:202-1.4.32-release-AS8194.7", "gradle", "gradle-java", "java")
-    localPath = "/home/manu/android-studio"
+  version = "2020.3.1"
+  pluginName = "Essentials ide plugin"
+  updateSinceUntilBuild = false
+  setPlugins("org.jetbrains.kotlin:202-1.4.32-release-AS8194.7", "gradle", "gradle-java", "java")
+  localPath = "/home/manu/android-studio"
 }
 
 dependencies {
-    compile(project(":essentials-compiler-plugin", "shadow"))
+  compile(project(":essentials-compiler-plugin", "shadow"))
 }

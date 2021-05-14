@@ -22,4 +22,4 @@ import androidx.compose.ui.*
 fun Modifier.center() = align(align = Alignment.Center)
 
 fun Modifier.align(align: Alignment) = fillMaxSize()
-    .wrapContentSize(align = align)
+  .wrapContentSize(align = align)

@@ -25,41 +25,40 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class TextInputKey(
-    val initial: String = "",
-    val label: String,
-    val keyboardOptions: KeyboardOptions = KeyboardOptions(),
-    val title: String? = null,
-    val allowEmpty: Boolean = true,
+  val initial: String = "",
+  val label: String,
+  val keyboardOptions: KeyboardOptions = KeyboardOptions(),
+  val title: String? = null,
+  val allowEmpty: Boolean = true,
 ) : DialogKey<String>
 
-@Given
-fun textInputUi(
-    @Given key: TextInputKey,
-    @Given navigator: Navigator
+@Given fun textInputUi(
+  @Given key: TextInputKey,
+  @Given navigator: Navigator
 ): KeyUi<TextInputKey> = {
-    DialogScaffold {
-        var currentValue by remember { mutableStateOf(key.initial) }
-        TextInputDialog(
-            value = currentValue,
-            onValueChange = { currentValue = it },
-            label = { Text(key.label) },
-            keyboardOptions = key.keyboardOptions,
-            title = key.title?.let { { Text(key.title) } },
-            buttons = {
-                val scope = rememberCoroutineScope()
-                TextButton(onClick = {
-                    scope.launch { navigator.pop(key, null) }
-                }) {
-                    Text(stringResource(R.string.es_cancel))
-                }
+  DialogScaffold {
+    var currentValue by remember { mutableStateOf(key.initial) }
+    TextInputDialog(
+      value = currentValue,
+      onValueChange = { currentValue = it },
+      label = { Text(key.label) },
+      keyboardOptions = key.keyboardOptions,
+      title = key.title?.let { { Text(key.title) } },
+      buttons = {
+        val scope = rememberCoroutineScope()
+        TextButton(onClick = {
+          scope.launch { navigator.pop(key, null) }
+        }) {
+          Text(stringResource(R.string.es_cancel))
+        }
 
-                TextButton(
-                    enabled = key.allowEmpty || currentValue.isNotEmpty(),
-                    onClick = {
-                        scope.launch { navigator.pop(key, currentValue) }
-                    }
-                ) { Text(stringResource(R.string.es_ok)) }
-            }
-        )
-    }
+        TextButton(
+          enabled = key.allowEmpty || currentValue.isNotEmpty(),
+          onClick = {
+            scope.launch { navigator.pop(key, currentValue) }
+          }
+        ) { Text(stringResource(R.string.es_ok)) }
+      }
+    )
+  }
 }

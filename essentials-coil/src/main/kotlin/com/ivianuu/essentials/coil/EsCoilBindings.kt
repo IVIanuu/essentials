@@ -26,46 +26,43 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*
 
-@Given
-fun imageLoader(
-    @Given appContext: AppContext,
-    @Given decoders: Set<Decoder> = emptySet(),
-    @Given fetchers: Set<FetcherPair<Any>> = emptySet(),
-    @Given interceptors: Set<Interceptor> = emptySet(),
-    @Given mappers: Set<MapperPair<Any>> = emptySet(),
+@Given fun imageLoader(
+  @Given appContext: AppContext,
+  @Given decoders: Set<Decoder> = emptySet(),
+  @Given fetchers: Set<FetcherPair<Any>> = emptySet(),
+  @Given interceptors: Set<Interceptor> = emptySet(),
+  @Given mappers: Set<MapperPair<Any>> = emptySet(),
 ): @Scoped<AppGivenScope> ImageLoader = ImageLoader.Builder(appContext)
-    .componentRegistry {
-        decoders.forEach { add(it) }
-        interceptors.forEach { add(it) }
-        fetchers
-            .forEach { binding ->
-                CoilAccessor.add(this, binding.type.java, binding.fetcher)
-            }
-        mappers
-            .forEach { binding ->
-                CoilAccessor.add(this, binding.type.java, binding.mapper)
-            }
-    }
-    .build()
+  .componentRegistry {
+    decoders.forEach { add(it) }
+    interceptors.forEach { add(it) }
+    fetchers
+      .forEach { binding ->
+        CoilAccessor.add(this, binding.type.java, binding.fetcher)
+      }
+    mappers
+      .forEach { binding ->
+        CoilAccessor.add(this, binding.type.java, binding.mapper)
+      }
+  }
+  .build()
 
-@Given
-fun <@Given F : Fetcher<T>, T : Any> fetcherPair(
-    @Given instance: F,
-    @Given typeClass: KClass<T>
+@Given fun <@Given F : Fetcher<T>, T : Any> fetcherPair(
+  @Given instance: F,
+  @Given typeClass: KClass<T>
 ): FetcherPair<Any> = FetcherPair(instance, typeClass) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
-    val fetcher: Fetcher<T>,
-    val type: KClass<T>
+  val fetcher: Fetcher<T>,
+  val type: KClass<T>
 )
 
-@Given
-fun <@Given M : Mapper<T, V>, T : Any, V : Any> mapperPair(
-    @Given instance: M,
-    @Given typeClass: KClass<T>
+@Given fun <@Given M : Mapper<T, V>, T : Any, V : Any> mapperPair(
+  @Given instance: M,
+  @Given typeClass: KClass<T>
 ): MapperPair<Any> = MapperPair(instance, typeClass) as MapperPair<Any>
 
 data class MapperPair<T : Any>(
-    val mapper: Mapper<T, *>,
-    val type: KClass<T>
+  val mapper: Mapper<T, *>,
+  val type: KClass<T>
 )

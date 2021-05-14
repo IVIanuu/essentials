@@ -32,31 +32,31 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
 class EsActivity : ComponentActivity(), ForegroundActivityMarker {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        val uiGivenScope = activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
-        lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-            runOnCancellation {
-                uiGivenScope.dispose()
-            }
-        }
-
-        val component = uiGivenScope.element<EsActivityComponent>()
-
-        setContent {
-            CompositionLocalProvider(LocalGivenScope provides uiGivenScope) {
-                component.decorateUi {
-                    component.appUi()
-                }
-            }
-        }
+    val uiGivenScope = activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
+    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+      runOnCancellation {
+        uiGivenScope.dispose()
+      }
     }
+
+    val component = uiGivenScope.element<EsActivityComponent>()
+
+    setContent {
+      CompositionLocalProvider(LocalGivenScope provides uiGivenScope) {
+        component.decorateUi {
+          component.appUi()
+        }
+      }
+    }
+  }
 }
 
 @InstallElement<UiGivenScope>
 @Given
 class EsActivityComponent(
-    @Given val appUi: AppUi,
-    @Given val decorateUi: DecorateUi
+  @Given val appUi: AppUi,
+  @Given val decorateUi: DecorateUi
 )

@@ -31,110 +31,107 @@ import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.layout.*
 import kotlin.time.*
 
-@Composable
-fun <T> ResourceLazyColumnFor(
-    resource: Resource<List<T>>,
-    modifier: Modifier = Modifier,
-    transition: StackTransition = ResourceBoxDefaults.transition,
-    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
-    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = {},
-    successEmpty: @Composable () -> Unit = {},
-    successItemContent: @Composable LazyItemScope.(T) -> Unit,
+@Composable fun <T> ResourceLazyColumnFor(
+  resource: Resource<List<T>>,
+  modifier: Modifier = Modifier,
+  transition: StackTransition = ResourceBoxDefaults.transition,
+  error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+  loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
+  idle: @Composable () -> Unit = {},
+  successEmpty: @Composable () -> Unit = {},
+  successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    ResourceBox(
-        resource = resource,
-        modifier = modifier,
-        transition = transition,
-        error = error,
-        loading = loading,
-        idle = idle
-    ) { items ->
-        if (items.isNotEmpty()) {
-            LazyColumn(
-                contentPadding = localVerticalInsetsPadding()
-            ) { items(items) { successItemContent(it) } }
-        } else {
-            successEmpty()
-        }
+  ResourceBox(
+    resource = resource,
+    modifier = modifier,
+    transition = transition,
+    error = error,
+    loading = loading,
+    idle = idle
+  ) { items ->
+    if (items.isNotEmpty()) {
+      LazyColumn(
+        contentPadding = localVerticalInsetsPadding()
+      ) { items(items) { successItemContent(it) } }
+    } else {
+      successEmpty()
     }
+  }
 }
 
-@Composable
-fun <T> ResourceLazyRowFor(
-    resource: Resource<List<T>>,
-    modifier: Modifier = Modifier,
-    transition: StackTransition = ResourceBoxDefaults.transition,
-    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
-    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = {},
-    successEmpty: @Composable () -> Unit = {},
-    successItemContent: @Composable LazyItemScope.(T) -> Unit,
+@Composable fun <T> ResourceLazyRowFor(
+  resource: Resource<List<T>>,
+  modifier: Modifier = Modifier,
+  transition: StackTransition = ResourceBoxDefaults.transition,
+  error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+  loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
+  idle: @Composable () -> Unit = {},
+  successEmpty: @Composable () -> Unit = {},
+  successItemContent: @Composable LazyItemScope.(T) -> Unit,
 ) {
-    ResourceBox(
-        resource = resource,
-        modifier = modifier,
-        transition = transition,
-        error = error,
-        loading = loading,
-        idle = idle
-    ) { items ->
-        if (items.isNotEmpty()) {
-            LazyRow(contentPadding = localHorizontalInsetsPadding()) {
-                items(items) { successItemContent(it) }
-            }
-        } else {
-            successEmpty()
-        }
+  ResourceBox(
+    resource = resource,
+    modifier = modifier,
+    transition = transition,
+    error = error,
+    loading = loading,
+    idle = idle
+  ) { items ->
+    if (items.isNotEmpty()) {
+      LazyRow(contentPadding = localHorizontalInsetsPadding()) {
+        items(items) { successItemContent(it) }
+      }
+    } else {
+      successEmpty()
     }
+  }
 }
 
-@Composable
-fun <T> ResourceBox(
-    resource: Resource<T>,
-    modifier: Modifier = Modifier,
-    transition: StackTransition = ResourceBoxDefaults.transition,
-    error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
-    loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
-    idle: @Composable () -> Unit = {},
-    success: @Composable (T) -> Unit
+@Composable fun <T> ResourceBox(
+  resource: Resource<T>,
+  modifier: Modifier = Modifier,
+  transition: StackTransition = ResourceBoxDefaults.transition,
+  error: @Composable (Throwable) -> Unit = ResourceBoxDefaults.error,
+  loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
+  idle: @Composable () -> Unit = {},
+  success: @Composable (T) -> Unit
 ) {
-    // we only wanna animate if the resource type has changed
-    val resourceState = remember(resource::class) { mutableStateOf(resource) }
-    resourceState.value = resource
+  // we only wanna animate if the resource type has changed
+  val resourceState = remember(resource::class) { mutableStateOf(resource) }
+  resourceState.value = resource
 
-    AnimatedBox(
-        current = resourceState,
-        modifier = modifier,
-        transition = transition
-    ) { currentState ->
-        when (val currentValue = currentState.value) {
-            is Idle -> idle()
-            is Loading -> loading()
-            is Success -> success(currentValue.value)
-            is Error -> error(currentValue.error)
-        }
+  AnimatedBox(
+    current = resourceState,
+    modifier = modifier,
+    transition = transition
+  ) { currentState ->
+    when (val currentValue = currentState.value) {
+      is Idle -> idle()
+      is Loading -> loading()
+      is Success -> success(currentValue.value)
+      is Error -> error(currentValue.error)
     }
+  }
 }
 
 object ResourceBoxDefaults {
-    val transition = CrossFadeStackTransition(
-        defaultAnimationSpec(
-            150.milliseconds,
-            easing = FastOutSlowInEasing
-        )
+  val transition = CrossFadeStackTransition(
+    defaultAnimationSpec(
+      150.milliseconds,
+      easing = FastOutSlowInEasing
     )
-    val error: @Composable (Throwable) -> Unit = {
-        Text(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            text = it.stackTraceToString(),
-            color = MaterialTheme.colors.error,
-            style = MaterialTheme.typography.body1
-        )
-    }
-    val loading: @Composable () -> Unit = {
-        CircularProgressIndicator(modifier = Modifier.center())
-    }
+  )
+  val error: @Composable (Throwable) -> Unit = {
+    Text(
+      modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .padding(16.dp),
+      text = it.stackTraceToString(),
+      color = MaterialTheme.colors.error,
+      style = MaterialTheme.typography.body1
+    )
+  }
+  val loading: @Composable () -> Unit = {
+    CircularProgressIndicator(modifier = Modifier.center())
+  }
 }

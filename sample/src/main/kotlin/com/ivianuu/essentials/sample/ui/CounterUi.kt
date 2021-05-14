@@ -34,58 +34,54 @@ import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val counterHomeItem = HomeItem("Counter") { CounterKey }
+@Given val counterHomeItem = HomeItem("Counter") { CounterKey }
 
 object CounterKey : Key<Nothing>
 
-@Given
-val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Counter") }) }
+@Given val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Counter") }) }
+  ) {
+    Column(
+      modifier = Modifier.center(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.center(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Count: ${model.count}",
-                style = MaterialTheme.typography.h3
-            )
+      Text(
+        text = "Count: ${model.count}",
+        style = MaterialTheme.typography.h3
+      )
 
-            Spacer(Modifier.height(8.dp))
+      Spacer(Modifier.height(8.dp))
 
-            ExtendedFloatingActionButton(
-                text = { Text("Inc") },
-                onClick = model.inc
-            )
+      ExtendedFloatingActionButton(
+        text = { Text("Inc") },
+        onClick = model.inc
+      )
 
-            Spacer(Modifier.height(8.dp))
+      Spacer(Modifier.height(8.dp))
 
-            ExtendedFloatingActionButton(
-                text = { Text("dec") },
-                onClick = model.dec
-            )
-        }
+      ExtendedFloatingActionButton(
+        text = { Text("dec") },
+        onClick = model.dec
+      )
     }
+  }
 }
 
-@Optics
-data class CounterModel(
-    val count: Int = 0,
-    val inc: () -> Unit = {},
-    val dec: () -> Unit = {}
+@Optics data class CounterModel(
+  val count: Int = 0,
+  val inc: () -> Unit = {},
+  val dec: () -> Unit = {}
 )
 
-@Given
-fun counterModel(
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given toaster: Toaster
+@Given fun counterModel(
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given toaster: Toaster
 ): @Scoped<KeyUiGivenScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
-    action(CounterModel.inc()) { update { copy(count = count.inc()) } }
-    action(CounterModel.dec()) {
-        if (state.first().count > 0) update { copy(count = count.dec()) }
-        else toaster("Value cannot be less than 0!")
-    }
+  action(CounterModel.inc()) { update { copy(count = count.inc()) } }
+  action(CounterModel.dec()) {
+    if (state.first().count > 0) update { copy(count = count.dec()) }
+    else toaster("Value cannot be less than 0!")
+  }
 }

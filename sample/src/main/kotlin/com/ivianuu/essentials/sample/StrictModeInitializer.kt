@@ -21,16 +21,15 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-@Given
-val strictModeInitializer: ScopeInitializer<AppGivenScope> = {
-    StrictMode.setThreadPolicy(
-        StrictMode.ThreadPolicy.Builder()
-            .detectAll()
-            .build()
-    )
-    StrictMode.setVmPolicy(
-        StrictMode.VmPolicy.Builder()
-            .detectAll()
-            .build()
-    )
+@Given val strictModeInitializer: ScopeInitializer<AppGivenScope> = {
+  StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+      .detectAll()
+      .build()
+  )
+  StrictMode.setVmPolicy(
+    StrictMode.VmPolicy.Builder()
+      .detectAll()
+      .build()
+  )
 }

@@ -22,29 +22,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import kotlin.time.*
 
-@Composable
-fun Slider(
-    value: Float,
-    onValueChange: (Float) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
-    onValueChangeEnd: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    colors: SliderColors = SliderDefaults.colors()
+@Composable fun Slider(
+  value: Float,
+  onValueChange: (Float) -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+  stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
+  onValueChangeEnd: () -> Unit = {},
+  interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+  colors: SliderColors = SliderDefaults.colors()
 ) {
-    androidx.compose.material.Slider(
-        value,
-        onValueChange,
-        modifier,
-        enabled,
-        valueRange,
-        remember(valueRange) { stepPolicy(valueRange) },
-        onValueChangeEnd,
-        interactionSource,
-        colors
-    )
+  androidx.compose.material.Slider(
+    value,
+    onValueChange,
+    modifier,
+    enabled,
+    valueRange,
+    remember(valueRange) { stepPolicy(valueRange) },
+    onValueChangeEnd,
+    interactionSource,
+    colors
+  )
 }
 
 typealias StepPolicy<T> = (ClosedRange<T>) -> Int
@@ -54,21 +53,21 @@ val NoStepsStepPolicy: StepPolicy<*> = { 0 }
 fun <T : Comparable<T>> fixedStepPolicy(steps: Int): StepPolicy<T> = { steps }
 
 fun incrementingStepPolicy(incValue: Int): StepPolicy<Int> = { valueRange ->
-    ((valueRange.endInclusive - valueRange.start) / incValue) - 1
+  ((valueRange.endInclusive - valueRange.start) / incValue) - 1
 }
 
 fun incrementingStepPolicy(incValue: Float): StepPolicy<Float> = { valueRange ->
-    (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+  (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }
 
 fun incrementingStepPolicy(incValue: Double): StepPolicy<Double> = { valueRange ->
-    (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+  (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }
 
 fun incrementingStepPolicy(incValue: Long): StepPolicy<Long> = { valueRange ->
-    (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+  (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }
 
 fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRange ->
-    (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+  (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }

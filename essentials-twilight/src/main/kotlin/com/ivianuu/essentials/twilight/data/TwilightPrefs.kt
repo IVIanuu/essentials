@@ -21,15 +21,13 @@ import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
-@Serializable
-data class TwilightPrefs(
-    @SerialName("twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
-    @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
+@Serializable data class TwilightPrefs(
+  @SerialName("twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
+  @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 
-@Given
-fun twilightPrefsModule(
-    @Given initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
+@Given fun twilightPrefsModule(
+  @Given initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
 ) = PrefModule<TwilightPrefs>("twilight_prefs") {
-    initialTwilightPrefs?.invoke() ?: TwilightPrefs()
+  initialTwilightPrefs?.invoke() ?: TwilightPrefs()
 }

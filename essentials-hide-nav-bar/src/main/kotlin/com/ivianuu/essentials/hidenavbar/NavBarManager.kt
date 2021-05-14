@@ -33,111 +33,113 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given
-fun navBarManager(
-    @Given appContext: AppContext,
-    @Given displayRotation: Flow<DisplayRotation>,
-    @Given forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
-    @Given navBarFeatureSupported: NavBarFeatureSupported,
-    @Given logger: Logger,
-    @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-    @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-    @Given prefs: Flow<NavBarPrefs>,
-    @Given setOverscan: OverscanUpdater,
-    @Given wasNavBarHiddenPref: DataStore<WasNavBarHidden>
-): ScopeWorker<AppGivenScope> = worker@ {
-    if (!navBarFeatureSupported) return@worker
-    permissionState
-        .flatMapLatest { hasPermission ->
-            if (hasPermission) {
-                forceNavBarVisibleState
-                    .flatMapLatest { forceVisible ->
-                        if (!forceVisible) prefs
-                        else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
-                    }
-            } else {
-                infiniteEmptyFlow()
-            }
-        }
-        .flatMapLatest { currentPrefs ->
-            logger.d { "current prefs $currentPrefs" }
-            if (currentPrefs.hideNavBar) {
-                displayRotation
-                    .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
-                    .onEach { wasNavBarHiddenPref.updateData { true } }
-            } else {
-                flowOf(NavBarState.Visible)
-                    .filter { wasNavBarHiddenPref.data.first() }
-                    .onEach { wasNavBarHiddenPref.updateData { false } }
-            }
-        }
-        .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
+@Given fun navBarManager(
+  @Given appContext: AppContext,
+  @Given displayRotation: Flow<DisplayRotation>,
+  @Given forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
+  @Given navBarFeatureSupported: NavBarFeatureSupported,
+  @Given logger: Logger,
+  @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
+  @Given permissionState: Flow<PermissionState<NavBarPermission>>,
+  @Given prefs: Flow<NavBarPrefs>,
+  @Given setOverscan: OverscanUpdater,
+  @Given wasNavBarHiddenPref: DataStore<WasNavBarHidden>
+): ScopeWorker<AppGivenScope> = worker@{
+  if (! navBarFeatureSupported) return@worker
+  permissionState
+    .flatMapLatest { hasPermission ->
+      if (hasPermission) {
+        forceNavBarVisibleState
+          .flatMapLatest { forceVisible ->
+            if (! forceVisible) prefs
+            else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
+          }
+      } else {
+        infiniteEmptyFlow()
+      }
+    }
+    .flatMapLatest { currentPrefs ->
+      logger.d { "current prefs $currentPrefs" }
+      if (currentPrefs.hideNavBar) {
+        displayRotation
+          .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
+          .onEach { wasNavBarHiddenPref.updateData { true } }
+      } else {
+        flowOf(NavBarState.Visible)
+          .filter { wasNavBarHiddenPref.data.first() }
+          .onEach { wasNavBarHiddenPref.updateData { false } }
+      }
+    }
+    .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
 }
 
 private sealed class NavBarState {
-    data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) : NavBarState()
-    object Visible : NavBarState()
+  data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) :
+    NavBarState()
+
+  object Visible : NavBarState()
 }
 
 private suspend fun NavBarState.apply(
-    context: Context,
-    disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
-    logger: Logger,
-    setOverscan: OverscanUpdater
+  context: Context,
+  disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
+  logger: Logger,
+  setOverscan: OverscanUpdater
 ) {
-    logger.d { "apply nav bar state $this" }
+  logger.d { "apply nav bar state $this" }
+  catch {
     catch {
-        catch {
-            // ensure that we can access non sdk interfaces
-            disableNonSdkInterfaceDetection()
-        }.onFailure { it.printStackTrace() }
+      // ensure that we can access non sdk interfaces
+      disableNonSdkInterfaceDetection()
+    }.onFailure { it.printStackTrace() }
 
-        val rect = when (this) {
-            is NavBarState.Hidden -> getOverscanRect(
-                -getNavigationBarHeight(context, rotation), rotationMode, rotation)
-            NavBarState.Visible -> Rect(0, 0, 0, 0)
-        }
-        setOverscan(rect)
-    }.onFailure {
-        logger.e(it) { "Failed to apply nav bar state $this" }
+    val rect = when (this) {
+      is NavBarState.Hidden -> getOverscanRect(
+        - getNavigationBarHeight(context, rotation), rotationMode, rotation
+      )
+      NavBarState.Visible -> Rect(0, 0, 0, 0)
     }
+    setOverscan(rect)
+  }.onFailure {
+    logger.e(it) { "Failed to apply nav bar state $this" }
+  }
 }
 
 private fun getNavigationBarHeight(
-    context: Context,
-    rotation: DisplayRotation
+  context: Context,
+  rotation: DisplayRotation
 ): Int {
-    val name = if (rotation.isPortrait) "navigation_bar_height"
-    else "navigation_bar_width"
-    val id = context.resources.getIdentifier(name, "dimen", "android")
-    return if (id > 0) context.resources.getDimensionPixelSize(id) else 0
+  val name = if (rotation.isPortrait) "navigation_bar_height"
+  else "navigation_bar_width"
+  val id = context.resources.getIdentifier(name, "dimen", "android")
+  return if (id > 0) context.resources.getDimensionPixelSize(id) else 0
 }
 
 private fun getOverscanRect(
-    navBarHeight: Int,
-    rotationMode: NavBarRotationMode,
-    rotation: DisplayRotation
+  navBarHeight: Int,
+  rotationMode: NavBarRotationMode,
+  rotation: DisplayRotation
 ): Rect = when (rotationMode) {
-    NavBarRotationMode.MARSHMALLOW -> {
-        when (rotation) {
-            DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.LANDSCAPE_LEFT -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
-            DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, navBarHeight, 0, 0)
-        }
+  NavBarRotationMode.MARSHMALLOW -> {
+    when (rotation) {
+      DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
+      DisplayRotation.LANDSCAPE_LEFT -> Rect(0, 0, 0, navBarHeight)
+      DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
+      DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, navBarHeight, 0, 0)
     }
-    NavBarRotationMode.NOUGAT -> {
-        when (rotation) {
-            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
-            else -> Rect(0, 0, 0, navBarHeight)
-        }
+  }
+  NavBarRotationMode.NOUGAT -> {
+    when (rotation) {
+      DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
+      else -> Rect(0, 0, 0, navBarHeight)
     }
-    NavBarRotationMode.TABLET -> {
-        when (rotation) {
-            DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
-            DisplayRotation.LANDSCAPE_LEFT -> Rect(navBarHeight, 0, 0, 0)
-            DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
-            DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, 0, navBarHeight, 0)
-        }
+  }
+  NavBarRotationMode.TABLET -> {
+    when (rotation) {
+      DisplayRotation.PORTRAIT_UP -> Rect(0, 0, 0, navBarHeight)
+      DisplayRotation.LANDSCAPE_LEFT -> Rect(navBarHeight, 0, 0, 0)
+      DisplayRotation.PORTRAIT_DOWN -> Rect(0, navBarHeight, 0, 0)
+      DisplayRotation.LANDSCAPE_RIGHT -> Rect(0, 0, navBarHeight, 0)
     }
+  }
 }

@@ -26,58 +26,58 @@ import kotlinx.coroutines.test.*
 import org.junit.*
 
 class StateTest {
-    @Test
-    fun testUpdate() = runCancellingBlockingTest {
-        val state = state(0) {
-            update { inc() }
-        }
-        state.testCollect(this)
-            .values
-            .shouldContainExactly(1)
+  @Test
+  fun testUpdate() = runCancellingBlockingTest {
+    val state = state(0) {
+      update { inc() }
     }
+    state.testCollect(this)
+      .values
+      .shouldContainExactly(1)
+  }
 
-    @Test
-    fun testEmitsInitialState() = runCancellingBlockingTest {
-        val state = state(0) {}
-        state.testCollect(this)
-            .values
-            .shouldContainExactly(0)
+  @Test
+  fun testEmitsInitialState() = runCancellingBlockingTest {
+    val state = state(0) {}
+    state.testCollect(this)
+      .values
+      .shouldContainExactly(0)
+  }
+
+  @Test
+  fun testFlowUpdate() = runCancellingBlockingTest {
+    val actions = EventFlow<Int>()
+    val state = state(0) {
+      actions
+        .update { it }
     }
+    val collector = state.testCollect(this)
 
-    @Test
-    fun testFlowUpdate() = runCancellingBlockingTest {
-        val actions = EventFlow<Int>()
-        val state = state(0) {
-            actions
-                .update { it }
-        }
-        val collector = state.testCollect(this)
+    actions.emit(1)
+    actions.emit(0)
 
-        actions.emit(1)
-        actions.emit(0)
+    collector
+      .values
+      .shouldContainExactly(0, 1, 0)
+  }
 
-        collector
-            .values
-            .shouldContainExactly(0, 1, 0)
+  @Test
+  fun testCancelsStateScope() = runCancellingBlockingTest {
+    val actions = EventFlow<Unit>()
+    val collector = TestCollector<Unit>()
+    val stateScope = TestCoroutineScope(childJob())
+    stateScope.state(0) {
+      actions
+        .onEach { collector.emit(it) }
+        .launchIn(this)
     }
+    stateScope.runCurrent()
 
-    @Test
-    fun testCancelsStateScope() = runCancellingBlockingTest {
-        val actions = EventFlow<Unit>()
-        val collector = TestCollector<Unit>()
-        val stateScope = TestCoroutineScope(childJob())
-        stateScope.state(0) {
-            actions
-                .onEach { collector.emit(it) }
-                .launchIn(this)
-        }
-        stateScope.runCurrent()
+    actions.emit(Unit)
+    actions.emit(Unit)
+    stateScope.cancel()
+    actions.emit(Unit)
 
-        actions.emit(Unit)
-        actions.emit(Unit)
-        stateScope.cancel()
-        actions.emit(Unit)
-
-        collector.values.size shouldBe 2
-    }
+    collector.values.size shouldBe 2
+  }
 }

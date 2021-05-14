@@ -23,59 +23,59 @@ import kotlinx.coroutines.*
 import org.junit.*
 
 class NavigationStateTest {
-    object KeyA : Key<Nothing>
-    object KeyB : Key<Nothing>
-    object KeyC : Key<Nothing>
+  object KeyA : Key<Nothing>
+  object KeyB : Key<Nothing>
+  object KeyC : Key<Nothing>
 
-    @Test
-    fun testNavigationState() = runCancellingBlockingTest {
-        val navigator = NavigatorImpl(
-            intentKeyHandler = { _, _ -> false },
-            logger = com.ivianuu.essentials.logging.NoopLogger,
-            scope = this
-        )
+  @Test
+  fun testNavigationState() = runCancellingBlockingTest {
+    val navigator = NavigatorImpl(
+      intentKeyHandler = { _, _ -> false },
+      logger = com.ivianuu.essentials.logging.NoopLogger,
+      scope = this
+    )
 
-        val collector = navigator.state.testCollect(this)
+    val collector = navigator.state.testCollect(this)
 
-        navigator.push(KeyA)
-        navigator.pop(KeyA)
-        navigator.push(KeyB)
-        navigator.replaceTop(KeyC)
-        navigator.popTop()
+    navigator.push(KeyA)
+    navigator.pop(KeyA)
+    navigator.push(KeyB)
+    navigator.replaceTop(KeyC)
+    navigator.popTop()
 
-        collector.values.shouldContainExactly(
-            NavigationState(listOf()),
-            NavigationState(listOf(KeyA)),
-            NavigationState(listOf()),
-            NavigationState(listOf(KeyB)),
-            NavigationState(listOf(KeyC)),
-            NavigationState(listOf())
-        )
-    }
+    collector.values.shouldContainExactly(
+      NavigationState(listOf()),
+      NavigationState(listOf(KeyA)),
+      NavigationState(listOf()),
+      NavigationState(listOf(KeyB)),
+      NavigationState(listOf(KeyC)),
+      NavigationState(listOf())
+    )
+  }
 
-    object KeyWithResult : Key<String>
+  object KeyWithResult : Key<String>
 
-    @Test
-    fun testReturnsResultOnPop() = runCancellingBlockingTest {
-        val navigator = NavigatorImpl(
-            intentKeyHandler = { _, _ -> false },
-            logger = com.ivianuu.essentials.logging.NoopLogger,
-            scope = this
-        )
-        val result = async { navigator.push(KeyWithResult) }
-        navigator.pop(KeyWithResult, "b")
-        result.await() shouldBe "b"
-    }
+  @Test
+  fun testReturnsResultOnPop() = runCancellingBlockingTest {
+    val navigator = NavigatorImpl(
+      intentKeyHandler = { _, _ -> false },
+      logger = com.ivianuu.essentials.logging.NoopLogger,
+      scope = this
+    )
+    val result = async { navigator.push(KeyWithResult) }
+    navigator.pop(KeyWithResult, "b")
+    result.await() shouldBe "b"
+  }
 
-    @Test
-    fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
-        val navigator = NavigatorImpl(
-            intentKeyHandler = { _, _ -> false },
-            logger = com.ivianuu.essentials.logging.NoopLogger,
-            scope = this
-        )
-        val result = async { navigator.push(KeyWithResult) }
-        navigator.popTop()
-        result.await() shouldBe null
-    }
+  @Test
+  fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
+    val navigator = NavigatorImpl(
+      intentKeyHandler = { _, _ -> false },
+      logger = com.ivianuu.essentials.logging.NoopLogger,
+      scope = this
+    )
+    val result = async { navigator.push(KeyWithResult) }
+    navigator.popTop()
+    result.await() shouldBe null
+  }
 }

@@ -15,29 +15,29 @@
  */
 
 plugins {
-    kotlin("multiplatform")
-    id("com.ivianuu.essentials")
+  kotlin("multiplatform")
+  id("com.ivianuu.essentials")
 }
 
 kotlin {
-    jvm {
-        withJava()
-    }
+  jvm {
+    withJava()
+  }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":essentials-coroutines"))
-                api(project(":essentials-optics"))
-                api(Deps.Injekt.common)
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(project(":essentials-test"))
-            }
-        }
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(project(":essentials-coroutines"))
+        api(project(":essentials-optics"))
+        api(Deps.Injekt.common)
+      }
     }
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":essentials-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

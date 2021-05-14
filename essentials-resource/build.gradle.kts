@@ -15,31 +15,31 @@
  */
 
 plugins {
-    kotlin("multiplatform")
-    id("com.ivianuu.essentials")
+  kotlin("multiplatform")
+  id("com.ivianuu.essentials")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 kotlin {
-    jvm {
-        withJava()
-    }
+  jvm {
+    withJava()
+  }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":essentials-core"))
-                api(project(":essentials-coroutines"))
-                api(project(":essentials-optics"))
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(project(":essentials-test"))
-            }
-        }
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(project(":essentials-core"))
+        api(project(":essentials-coroutines"))
+        api(project(":essentials-optics"))
+      }
     }
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":essentials-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

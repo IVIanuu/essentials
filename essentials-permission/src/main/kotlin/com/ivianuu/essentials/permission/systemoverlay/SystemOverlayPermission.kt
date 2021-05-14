@@ -27,17 +27,15 @@ import com.ivianuu.injekt.android.*
 
 interface SystemOverlayPermission : Permission
 
-@Given
-fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
-    @Given context: AppContext
+@Given fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
+  @Given context: AppContext
 ): PermissionStateProvider<P> = { Settings.canDrawOverlays(context) }
 
-@Given
-fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
-    Intent(
-        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-        "package:${buildInfo.packageName}".toUri()
-    )
+  Intent(
+    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+    "package:${buildInfo.packageName}".toUri()
+  )
 }

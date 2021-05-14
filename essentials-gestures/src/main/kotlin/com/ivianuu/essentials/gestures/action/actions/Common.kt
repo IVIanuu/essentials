@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.*
 import com.github.michaelbull.result.*
 import com.google.accompanist.coil.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.shell.*
@@ -39,53 +38,51 @@ import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 
 internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
-    Image(
-        painter = rememberCoilPainter(data),
-        modifier = Modifier.size(40.dp),
-        contentDescription = null
-    )
+  Image(
+    painter = rememberCoilPainter(data),
+    modifier = Modifier.size(40.dp),
+    contentDescription = null
+  )
 }
 
 internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
 internal fun singleActionIcon(icon: ImageVector) = singleActionIcon {
-    Icon(icon, null)
+  Icon(icon, null)
 }
 
 internal fun singleActionIcon(id: Int) = singleActionIcon {
-    Icon(painterResource(id), null)
+  Icon(painterResource(id), null)
 }
 
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 
-@Given
-fun actionRootCommandRunner(
-    @Given runShellCommand: RunShellCommandUseCase,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster
+@Given fun actionRootCommandRunner(
+  @Given runShellCommand: RunShellCommandUseCase,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster
 ): ActionRootCommandRunner = { command ->
-    catch { runShellCommand(listOf(command)) }
-        .onFailure {
-            it.printStackTrace()
-            toaster(stringResource(R.string.es_no_root, emptyList()))
-        }
+  catch { runShellCommand(listOf(command)) }
+    .onFailure {
+      it.printStackTrace()
+      toaster(stringResource(R.string.es_no_root, emptyList()))
+    }
 }
 
 typealias ActionIntentSender = (Intent) -> Unit
 
-@Given
-fun actionIntentSender(
-    @Given appContext: AppContext,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster
+@Given fun actionIntentSender(
+  @Given appContext: AppContext,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster
 ): ActionIntentSender = { intent ->
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    catch {
-        PendingIntent.getActivity(
-            appContext, 99, intent, 0, null
-        ).send()
-    }.onFailure {
-        it.printStackTrace()
-        toaster(stringResource(R.string.es_activity_not_found, emptyList()))
-    }
+  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  catch {
+    PendingIntent.getActivity(
+      appContext, 99, intent, 0, null
+    ).send()
+  }.onFailure {
+    it.printStackTrace()
+    toaster(stringResource(R.string.es_activity_not_found, emptyList()))
+  }
 }

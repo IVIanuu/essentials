@@ -35,10 +35,9 @@ import kotlin.reflect.*
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
-@Given
-fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
-    @Given intentFactory: T,
-    @Given keyClass: KClass<K>
+@Given fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
+  @Given intentFactory: T,
+  @Given keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
 typealias KeyIntentFactory<T> = (T) -> Intent
@@ -47,38 +46,38 @@ typealias IntentAppUiStarter = suspend () -> ComponentActivity
 
 typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Unit)?) -> Boolean
 
-@Given
-fun intentKeyHandler(
-    @Given appUiStarter: IntentAppUiStarter,
-    @Given dispatcher: MainDispatcher,
-    @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-    @Given scope: GivenCoroutineScope<AppGivenScope>
-): IntentKeyHandler = handler@ { key, onResult ->
-    if (key !is IntentKey) return@handler false
-    val intentFactory = intentFactories[key::class]
-    if (intentFactory != null) {
-        val intent = intentFactory(key)
-        scope.launch {
-            val activity = appUiStarter()
-            if (onResult == null) {
-                activity.startActivity(intent)
-            } else {
-                withContext(dispatcher) {
-                    val result = suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
-                        val launcher = activity.activityResultRegistry.register(
-                            UUID.randomUUID().toString(),
-                            ActivityResultContracts.StartActivityForResult()
-                        ) {
-                            if (continuation.isActive) continuation.resume(it.ok())
-                        }
-                        catch { launcher.launch(intent) }
-                            .onFailure { continuation.resume(it.err()) }
-                        continuation.invokeOnCancellation { launcher.unregister() }
-                    }
-                    onResult(result)
-                }
+@Given fun intentKeyHandler(
+  @Given appUiStarter: IntentAppUiStarter,
+  @Given dispatcher: MainDispatcher,
+  @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
+  @Given scope: GivenCoroutineScope<AppGivenScope>
+): IntentKeyHandler = handler@{ key, onResult ->
+  if (key !is IntentKey) return@handler false
+  val intentFactory = intentFactories[key::class]
+  if (intentFactory != null) {
+    val intent = intentFactory(key)
+    scope.launch {
+      val activity = appUiStarter()
+      if (onResult == null) {
+        activity.startActivity(intent)
+      } else {
+        withContext(dispatcher) {
+          val result =
+            suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+              val launcher = activity.activityResultRegistry.register(
+                UUID.randomUUID().toString(),
+                ActivityResultContracts.StartActivityForResult()
+              ) {
+                if (continuation.isActive) continuation.resume(it.ok())
+              }
+              catch { launcher.launch(intent) }
+                .onFailure { continuation.resume(it.err()) }
+              continuation.invokeOnCancellation { launcher.unregister() }
             }
+          onResult(result)
         }
+      }
     }
-    intentFactory != null
+  }
+  intentFactory != null
 }

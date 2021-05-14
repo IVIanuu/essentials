@@ -19,70 +19,69 @@ import kotlinx.coroutines.*
 
 data class WebKey(val title: String, val url: String) : Key<Nothing>
 
-@Given
-fun webUi(
-    @Given key: WebKey,
-    @Given navigator: Navigator
+@Given fun webUi(
+  @Given key: WebKey,
+  @Given navigator: Navigator
 ): KeyUi<WebKey> = {
-    var webViewRef: WebView? by remember { refOf(null) }
-    DisposableEffect(true) {
-        onDispose {
-            webViewRef?.destroy()
-        }
+  var webViewRef: WebView? by remember { refOf(null) }
+  DisposableEffect(true) {
+    onDispose {
+      webViewRef?.destroy()
     }
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(key.title) }) },
-        bottomBar = {
-            val backgroundColor = when (LocalAppBarStyle.current) {
-                AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
-                AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+  }
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(key.title) }) },
+    bottomBar = {
+      val backgroundColor = when (LocalAppBarStyle.current) {
+        AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
+        AppBarStyle.SURFACE -> MaterialTheme.colors.surface
+      }
+      Surface(color = backgroundColor, elevation = 8.dp) {
+        InsetsPadding(
+          modifier = Modifier
+            .systemBarStyle(backgroundColor),
+          left = false,
+          top = false,
+          right = false
+        ) {
+          BottomAppBar(
+            elevation = 0.dp,
+            backgroundColor = backgroundColor
+          ) {
+            IconButton(onClick = { webViewRef !!.goBack() }) {
+              Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
             }
-            Surface(color = backgroundColor, elevation = 8.dp) {
-                InsetsPadding(
-                    modifier = Modifier
-                        .systemBarStyle(backgroundColor),
-                    left = false,
-                    top = false,
-                    right = false
-                ) {
-                    BottomAppBar(
-                        elevation = 0.dp,
-                        backgroundColor = backgroundColor
-                    ) {
-                        IconButton(onClick = { webViewRef!!.goBack() }) {
-                            Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
-                        }
-                        IconButton(onClick = { webViewRef!!.reload() }) {
-                            Icon(painterResource(R.drawable.es_ic_refresh), null)
-                        }
-                        val scope = rememberCoroutineScope()
-                        IconButton(onClick = {
-                            scope.launch {
-                                navigator.push(UrlKey(webViewRef!!.url))
-                            }
-                        }) {
-                            Icon(painterResource(R.drawable.es_ic_open_in_browser), null)
-                        }
-                    }
-                }
+            IconButton(onClick = { webViewRef !!.reload() }) {
+              Icon(painterResource(R.drawable.es_ic_refresh), null)
             }
+            val scope = rememberCoroutineScope()
+            IconButton(onClick = {
+              scope.launch {
+                navigator.push(UrlKey(webViewRef !!.url))
+              }
+            }) {
+              Icon(painterResource(R.drawable.es_ic_open_in_browser), null)
+            }
+          }
         }
-    ) {
-        InsetsPadding {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { WebView(it) }
-            ) { webView ->
-                webViewRef = webView
-                webView.settings.javaScriptEnabled = true
-                webView.loadUrl(key.url)
-                webView.webViewClient = object : WebViewClient() {
-                    override fun shouldOverrideUrlLoading(
-                        view: WebView?,
-                        request: WebResourceRequest?
-                    ): Boolean = false
-                }
-            }
-        }
+      }
     }
+  ) {
+    InsetsPadding {
+      AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = { WebView(it) }
+      ) { webView ->
+        webViewRef = webView
+        webView.settings.javaScriptEnabled = true
+        webView.loadUrl(key.url)
+        webView.webViewClient = object : WebViewClient() {
+          override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+          ): Boolean = false
+        }
+      }
+    }
+  }
 }

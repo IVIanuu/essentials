@@ -40,103 +40,101 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
+@Given val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 
 object ForegroundKey : Key<Nothing>
 
 @SuppressLint("NewApi")
 @Given
 fun foregroundUi(
-    @Given createNotification: (@Given Int, @Given Color) -> ForegroundNotification,
-    @Given foregroundState: ForegroundScreenState
+  @Given createNotification: (@Given Int, @Given Color) -> ForegroundNotification,
+  @Given foregroundState: ForegroundScreenState
 ): KeyUi<ForegroundKey> = {
-    val currentForegroundState by foregroundState.collectAsState()
+  val currentForegroundState by foregroundState.collectAsState()
 
-    DisposableEffect(true) {
-        onDispose {
-            foregroundState.value = Background
+  DisposableEffect(true) {
+    onDispose {
+      foregroundState.value = Background
+    }
+  }
+
+  val primaryColor = MaterialTheme.colors.primary
+
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Foreground") }) }
+  ) {
+    var count by remember(currentForegroundState is Foreground) { mutableStateOf(0) }
+
+    if (currentForegroundState is Foreground) {
+      LaunchedEffect(true) {
+        while (isActive) {
+          count ++
+          foregroundState.value = Foreground(
+            createNotification(count, primaryColor)
+          )
+          delay(1000)
         }
+      }
     }
 
-    val primaryColor = MaterialTheme.colors.primary
-
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Foreground") }) }
+    Column(
+      modifier = Modifier.fillMaxSize(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var count by remember(currentForegroundState is Foreground) { mutableStateOf(0) }
-
-        if (currentForegroundState is Foreground) {
-            LaunchedEffect(true) {
-                while (isActive) {
-                    count++
-                    foregroundState.value = Foreground(
-                        createNotification(count, primaryColor)
-                    )
-                    delay(1000)
-                }
-            }
+      if (currentForegroundState is Foreground) {
+        Text(
+          text = "Current progress $count",
+          style = MaterialTheme.typography.h5
+        )
+      }
+      Spacer(Modifier.height(8.dp))
+      Button(
+        onClick = {
+          foregroundState.value = (if (currentForegroundState is Foreground) Background
+          else Foreground(createNotification(count, primaryColor)))
         }
-
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (currentForegroundState is Foreground) {
-                Text(
-                    text = "Current progress $count",
-                    style = MaterialTheme.typography.h5
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            Button(
-                onClick = {
-                    foregroundState.value = (if (currentForegroundState is Foreground) Background
-                    else Foreground(createNotification(count, primaryColor)))
-                }
-            ) {
-                Text(
-                    if (currentForegroundState is Foreground) {
-                        "Stop foreground"
-                    } else {
-                        "Start foreground"
-                    }
-                )
-            }
-        }
+      ) {
+        Text(
+          if (currentForegroundState is Foreground) {
+            "Stop foreground"
+          } else {
+            "Start foreground"
+          }
+        )
+      }
     }
+  }
 }
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Given
-val foregroundScreenState: @Scoped<AppGivenScope> ForegroundScreenState
-    get() = MutableStateFlow(Background)
+@Given val foregroundScreenState: @Scoped<AppGivenScope> ForegroundScreenState
+  get() = MutableStateFlow(Background)
 
 typealias ForegroundNotification = Notification
 
 @SuppressLint("NewApi")
 @Given
 fun foregroundNotification(
-    @Given appContext: AppContext,
-    @Given count: Int,
-    @Given color: Color,
-    @Given notificationManager: @SystemService NotificationManager,
-    @Given systemBuildInfo: SystemBuildInfo
+  @Given appContext: AppContext,
+  @Given count: Int,
+  @Given color: Color,
+  @Given notificationManager: @SystemService NotificationManager,
+  @Given systemBuildInfo: SystemBuildInfo
 ): ForegroundNotification {
-    if (systemBuildInfo.sdk >= 26) {
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                "foreground", "Foreground",
-                NotificationManager.IMPORTANCE_LOW
-            )
-        )
-    }
-    return NotificationCompat.Builder(appContext, "foreground")
-        .setSmallIcon(R.drawable.ic_home)
-        .setContentTitle("Foreground")
-        .setContentText("Current progress $count")
-        .setColor(color.toArgb())
-        .build()
+  if (systemBuildInfo.sdk >= 26) {
+    notificationManager.createNotificationChannel(
+      NotificationChannel(
+        "foreground", "Foreground",
+        NotificationManager.IMPORTANCE_LOW
+      )
+    )
+  }
+  return NotificationCompat.Builder(appContext, "foreground")
+    .setSmallIcon(R.drawable.ic_home)
+    .setContentTitle("Foreground")
+    .setContentText("Current progress $count")
+    .setColor(color.toArgb())
+    .build()
 }

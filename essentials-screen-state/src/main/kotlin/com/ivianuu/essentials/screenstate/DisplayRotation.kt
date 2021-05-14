@@ -29,70 +29,73 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
 enum class DisplayRotation(val isPortrait: Boolean) {
-    // 0 degrees
-    PORTRAIT_UP(true),
-    // 90 degrees
-    LANDSCAPE_LEFT(false),
-    // 180 degrees
-    PORTRAIT_DOWN(true),
-    // 270 degrees
-    LANDSCAPE_RIGHT(false)
+  // 0 degrees
+  PORTRAIT_UP(true),
+
+  // 90 degrees
+  LANDSCAPE_LEFT(false),
+
+  // 180 degrees
+  PORTRAIT_DOWN(true),
+
+  // 270 degrees
+  LANDSCAPE_RIGHT(false)
 }
 
 @Given
 fun displayRotation(
-    @Given configChanges: () -> Flow<ConfigChange>,
-    @Given dispatcher: IODispatcher,
-    @Given logger: Logger,
-    @Given rotationChanges: () -> Flow<RotationChange>,
-    @Given scope: GivenCoroutineScope<AppGivenScope>,
-    @Given screenState: () -> Flow<ScreenState>,
-    @Given windowManager: @SystemService WindowManager
+  @Given configChanges: () -> Flow<ConfigChange>,
+  @Given dispatcher: IODispatcher,
+  @Given logger: Logger,
+  @Given rotationChanges: () -> Flow<RotationChange>,
+  @Given scope: GivenCoroutineScope<AppGivenScope>,
+  @Given screenState: () -> Flow<ScreenState>,
+  @Given windowManager: @SystemService WindowManager
 ): @Scoped<AppGivenScope> Flow<DisplayRotation> = flow {
-    screenState()
-        .flatMapLatest { currentScreenState ->
-            if (currentScreenState.isOn) {
-                merge(rotationChanges(), configChanges())
-                    .onStart { logger.d { "sub for rotation" } }
-                    .onCompletion { logger.d { "dispose rotation" } }
-            } else {
-                logger.d { "do not observe rotation while screen is off" }
-                emptyFlow()
-            }
-        }
-        .onStart { emit(Unit) }
-        .map { getCurrentDisplayRotation(dispatcher, windowManager) }
-        .distinctUntilChanged()
-        .let { emitAll(it) }
-}.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
+  screenState()
+    .flatMapLatest { currentScreenState ->
+      if (currentScreenState.isOn) {
+        merge(rotationChanges(), configChanges())
+          .onStart { logger.d { "sub for rotation" } }
+          .onCompletion { logger.d { "dispose rotation" } }
+      } else {
+        logger.d { "do not observe rotation while screen is off" }
+        emptyFlow()
+      }
+    }
+    .onStart { emit(Unit) }
+    .map { getCurrentDisplayRotation(dispatcher, windowManager) }
     .distinctUntilChanged()
+    .let { emitAll(it) }
+}.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
+  .distinctUntilChanged()
 
 private suspend fun getCurrentDisplayRotation(
-    dispatcher: IODispatcher,
-    windowManager: WindowManager,
+  dispatcher: IODispatcher,
+  windowManager: WindowManager,
 ) = withContext(dispatcher) {
-    when (windowManager.defaultDisplay.rotation) {
-        Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
-        Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
-        Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
-        Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
-        else -> error("unexpected rotation")
-    }
+  when (windowManager.defaultDisplay.rotation) {
+    Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
+    Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
+    Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
+    Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
+    else -> error("unexpected rotation")
+  }
 }
 
 typealias RotationChange = Unit
 
 @Given
 fun rotationChanges(
-    @Given appContext: AppContext,
-    @Given mainDispatcher: MainDispatcher,
+  @Given appContext: AppContext,
+  @Given mainDispatcher: MainDispatcher,
 ): Flow<RotationChange> = callbackFlow<RotationChange> {
-    val listener = object :
-        OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
-        override fun onOrientationChanged(orientation: Int) {
-            catch { offer(RotationChange) }
-        }
+  val listener = object :
+    OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
+    override fun onOrientationChanged(orientation: Int) {
+      catch { offer(RotationChange) }
     }
-    listener.enable()
-    awaitClose { listener.disable() }
+  }
+  listener.enable()
+  awaitClose { listener.disable() }
 }.flowOn(mainDispatcher)

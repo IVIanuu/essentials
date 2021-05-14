@@ -21,11 +21,11 @@ import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.animation.util.*
 
 fun VerticalStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
+  spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
-    fromModifier?.value = if (isPush) Modifier else Modifier
-        .fractionalTranslation(yFraction = value)
-    toModifier?.value =  if (isPush)
-        Modifier.fractionalTranslation(yFraction = 1f - value)
-    else Modifier
+  fromModifier?.value = if (isPush) Modifier else Modifier
+    .fractionalTranslation(yFraction = value)
+  toModifier?.value = if (isPush)
+    Modifier.fractionalTranslation(yFraction = 1f - value)
+  else Modifier
 }

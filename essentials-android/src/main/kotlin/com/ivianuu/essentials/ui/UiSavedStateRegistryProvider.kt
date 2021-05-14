@@ -22,10 +22,9 @@ import com.ivianuu.injekt.*
 
 typealias SavableStateRegistryProvider = UiDecorator
 
-@Given
-val savableStateRegistryProvider: SavableStateRegistryProvider = { content ->
-    CompositionLocalProvider(
-        LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
-        content = content
-    )
+@Given val savableStateRegistryProvider: SavableStateRegistryProvider = { content ->
+  CompositionLocalProvider(
+    LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
+    content = content
+  )
 }

@@ -23,30 +23,29 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
 
-@Composable
-fun SimpleDialogListItem(
-    leading: @Composable (() -> Unit)? = null,
-    title: @Composable () -> Unit,
-    onClick: () -> Unit
+@Composable fun SimpleDialogListItem(
+  leading: @Composable (() -> Unit)? = null,
+  title: @Composable () -> Unit,
+  onClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier.fillMaxWidth()
-            .heightIn(min = 48.dp)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.CenterStart
+  Box(
+    modifier = Modifier.fillMaxWidth()
+      .heightIn(min = 48.dp)
+      .clickable(onClick = onClick),
+    contentAlignment = Alignment.CenterStart
+  ) {
+    Row(
+      modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+      verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-                if (leading != null) {
-                    leading()
-                    Spacer(Modifier.width(24.dp))
-                }
-
-                title()
-            }
+      CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
+        if (leading != null) {
+          leading()
+          Spacer(Modifier.width(24.dp))
         }
+
+        title()
+      }
     }
+  }
 }

@@ -31,31 +31,29 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-@Given
-val actionsHomeItem = HomeItem("Actions") { ActionsKey }
+@Given val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
 object ActionsKey : Key<Nothing>
 
-@Given
-fun actionsUi(
-    @Given executeAction: ExecuteActionUseCase,
-    @Given navigator: Navigator,
-    @Given scope: GivenCoroutineScope<UiGivenScope>,
+@Given fun actionsUi(
+  @Given executeAction: ExecuteActionUseCase,
+  @Given navigator: Navigator,
+  @Given scope: GivenCoroutineScope<UiGivenScope>,
 ): KeyUi<ActionsKey> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("Actions") }) }
-    ) {
-        Button(
-            modifier = Modifier.center(),
-            onClick = {
-                scope.launch {
-                    val action = navigator.push(ActionPickerKey())
-                        ?.let { it as? ActionPickerKey.Result.Action }
-                        ?.actionId ?: return@launch
+  Scaffold(
+    topBar = { TopAppBar(title = { Text("Actions") }) }
+  ) {
+    Button(
+      modifier = Modifier.center(),
+      onClick = {
+        scope.launch {
+          val action = navigator.push(ActionPickerKey())
+            ?.let { it as? ActionPickerKey.Result.Action }
+            ?.actionId ?: return@launch
 
-                    executeAction(action)
-                }
-            }
-        ) { Text("Pick action") }
-    }
+          executeAction(action)
+        }
+      }
+    ) { Text("Pick action") }
+  }
 }

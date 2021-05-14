@@ -13,52 +13,50 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.*
 import kotlin.time.*
 
-@Given
-fun rateUiLauncher(
-    @Given navigator: Navigator,
-    @Given pref: DataStore<RatePrefs>,
-    @Given shouldShowRateDialog: ShouldShowRateDialogUseCase,
-    @Given timestampProvider: TimestampProvider
+@Given fun rateUiLauncher(
+  @Given navigator: Navigator,
+  @Given pref: DataStore<RatePrefs>,
+  @Given shouldShowRateDialog: ShouldShowRateDialogUseCase,
+  @Given timestampProvider: TimestampProvider
 ): ScopeWorker<UiGivenScope> = {
-    if (pref.data.first().installTime == 0L) {
-        pref.updateData { copy(installTime = timestampProvider().toLongMilliseconds()) }
-    }
-    pref.updateData { copy(launchTimes = launchTimes.inc()) }
-    if (shouldShowRateDialog()) {
-        navigator.push(RateKey)
-    }
+  if (pref.data.first().installTime == 0L) {
+    pref.updateData { copy(installTime = timestampProvider().toLongMilliseconds()) }
+  }
+  pref.updateData { copy(launchTimes = launchTimes.inc()) }
+  if (shouldShowRateDialog()) {
+    navigator.push(RateKey)
+  }
 }
 
 internal typealias ShouldShowRateDialogUseCase = suspend () -> Boolean
 
-@Given
-fun shouldShowRateDialogUseCase(
-    @Given logger: Logger,
-    @Given pref: DataStore<RatePrefs>,
-    @Given schedule: RateUiSchedule = RateUiSchedule(),
-    @Given timestampProvider: TimestampProvider
-): ShouldShowRateDialogUseCase = useCase@ {
-    val prefs = pref.data.first()
-    if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-        return@useCase false.also {
-            logger.d { "show not: already completed" }
-        }
-    if (prefs.launchTimes < schedule.minLaunchTimes)
-        return@useCase false.also {
-            logger.d { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
-        }
-    val now = timestampProvider()
-    val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
-    if (installedDuration <= schedule.minInstallDuration)
-        return@useCase false.also {
-            logger.d { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
-        }
+@Given fun shouldShowRateDialogUseCase(
+  @Given logger: Logger,
+  @Given pref: DataStore<RatePrefs>,
+  @Given schedule: RateUiSchedule = RateUiSchedule(),
+  @Given timestampProvider: TimestampProvider
+): ShouldShowRateDialogUseCase = useCase@{
+  val prefs = pref.data.first()
+  if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
+    return@useCase false.also {
+      logger.d { "show not: already completed" }
+    }
+  if (prefs.launchTimes < schedule.minLaunchTimes)
+    return@useCase false.also {
+      logger.d { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
+    }
+  val now = timestampProvider()
+  val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
+  if (installedDuration <= schedule.minInstallDuration)
+    return@useCase false.also {
+      logger.d { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
+    }
 
-    return@useCase true
-        .also { logger.d { "show" } }
+  return@useCase true
+    .also { logger.d { "show" } }
 }
 
 data class RateUiSchedule(
-    val minInstallDuration: Duration = 7.days,
-    val minLaunchTimes: Int = 10
+  val minInstallDuration: Duration = 7.days,
+  val minLaunchTimes: Int = 10
 )

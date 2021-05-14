@@ -20,5 +20,5 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun <T> infiniteEmptyFlow(): Flow<T> = flow {
-    awaitCancellation()
+  awaitCancellation()
 }

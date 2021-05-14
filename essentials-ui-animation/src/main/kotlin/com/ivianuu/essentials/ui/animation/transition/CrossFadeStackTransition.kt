@@ -21,8 +21,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 
 fun CrossFadeStackTransition(
-    spec: AnimationSpec<Float> = defaultAnimationSpec()
+  spec: AnimationSpec<Float> = defaultAnimationSpec()
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
-    fromModifier?.value = Modifier.alpha(1f - value)
-    toModifier?.value = Modifier.alpha(value)
+  fromModifier?.value = Modifier.alpha(1f - value)
+  toModifier?.value = Modifier.alpha(value)
 }

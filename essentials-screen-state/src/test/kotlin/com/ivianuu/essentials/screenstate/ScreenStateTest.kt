@@ -31,68 +31,68 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ScreenStateTest {
-    @Test
-    fun testScreenState() = runCancellingBlockingTest {
-        val broadcasts = EventFlow<Intent>()
-        var currentScreenState = ScreenState.OFF
-        val globalScopeDispatcher = TestCoroutineDispatcher()
-        val globalScope = childCoroutineScope(globalScopeDispatcher)
+  @Test
+  fun testScreenState() = runCancellingBlockingTest {
+    val broadcasts = EventFlow<Intent>()
+    var currentScreenState = ScreenState.OFF
+    val globalScopeDispatcher = TestCoroutineDispatcher()
+    val globalScope = childCoroutineScope(globalScopeDispatcher)
 
-        val collector = screenState(
-            broadcastsFactory = { broadcasts },
-            screenStateProvider = { currentScreenState },
-            scope = globalScope,
-            logger = com.ivianuu.essentials.logging.NoopLogger
-        ).testCollect(this)
+    val collector = screenState(
+      broadcastsFactory = { broadcasts },
+      screenStateProvider = { currentScreenState },
+      scope = globalScope,
+      logger = com.ivianuu.essentials.logging.NoopLogger
+    ).testCollect(this)
 
-        globalScopeDispatcher.runCurrent()
+    globalScopeDispatcher.runCurrent()
 
-        currentScreenState = ScreenState.LOCKED
-        broadcasts.emit(Intent())
-        currentScreenState = ScreenState.UNLOCKED
-        broadcasts.emit(Intent())
+    currentScreenState = ScreenState.LOCKED
+    broadcasts.emit(Intent())
+    currentScreenState = ScreenState.UNLOCKED
+    broadcasts.emit(Intent())
 
-        collector.values
-            .shouldContainExactly(ScreenState.OFF, ScreenState.LOCKED, ScreenState.UNLOCKED)
-    }
+    collector.values
+      .shouldContainExactly(ScreenState.OFF, ScreenState.LOCKED, ScreenState.UNLOCKED)
+  }
 
-    @Test
-    fun testCurrentScreenStateProviderWithScreenOff() = runCancellingBlockingTest {
-        val screenState = currentScreenStateProvider(
-            TestCoroutineDispatcher(),
-            mockk(),
-            mockk {
-                every { isInteractive } returns false
-            }
-        )()
-        screenState shouldBe ScreenState.OFF
-    }
+  @Test
+  fun testCurrentScreenStateProviderWithScreenOff() = runCancellingBlockingTest {
+    val screenState = currentScreenStateProvider(
+      TestCoroutineDispatcher(),
+      mockk(),
+      mockk {
+        every { isInteractive } returns false
+      }
+    )()
+    screenState shouldBe ScreenState.OFF
+  }
 
-    @Test
-    fun testCurrentScreenStateProviderWithLockedScreen() = runCancellingBlockingTest {
-        val screenState = currentScreenStateProvider(
-            TestCoroutineDispatcher(),
-            mockk {
-                every { isDeviceLocked } returns true
-            },
-            mockk {
-                every { isInteractive } returns true
-            }
-        )()
-        screenState shouldBe ScreenState.LOCKED
-    }
+  @Test
+  fun testCurrentScreenStateProviderWithLockedScreen() = runCancellingBlockingTest {
+    val screenState = currentScreenStateProvider(
+      TestCoroutineDispatcher(),
+      mockk {
+        every { isDeviceLocked } returns true
+      },
+      mockk {
+        every { isInteractive } returns true
+      }
+    )()
+    screenState shouldBe ScreenState.LOCKED
+  }
 
-    @Test
-    fun testCurrentScreenStateProviderWithUnlockedScreen() = runCancellingBlockingTest {
-        val screenState = currentScreenStateProvider(
-            TestCoroutineDispatcher(),
-            mockk {
-                every { isDeviceLocked } returns false
-            },
-            mockk {
-                every { isInteractive } returns true
-            }
-        )()
-        screenState shouldBe ScreenState.UNLOCKED
-    }
+  @Test
+  fun testCurrentScreenStateProviderWithUnlockedScreen() = runCancellingBlockingTest {
+    val screenState = currentScreenStateProvider(
+      TestCoroutineDispatcher(),
+      mockk {
+        every { isDeviceLocked } returns false
+      },
+      mockk {
+        every { isInteractive } returns true
+      }
+    )()
+    screenState shouldBe ScreenState.UNLOCKED
+  }
 }

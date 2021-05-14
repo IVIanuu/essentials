@@ -26,22 +26,21 @@ import kotlinx.coroutines.flow.*
 
 typealias AppUiStarter = IntentAppUiStarter
 
-@Given
-fun appUiStarter(
-    @Given appContext: AppContext,
-    @Given buildInfo: BuildInfo,
-    @Given foregroundActivity: Flow<ForegroundActivity>,
-    @Given packageManager: PackageManager,
+@Given fun appUiStarter(
+  @Given appContext: AppContext,
+  @Given buildInfo: BuildInfo,
+  @Given foregroundActivity: Flow<ForegroundActivity>,
+  @Given packageManager: PackageManager,
 ): AppUiStarter = {
-    val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-    foregroundActivity
-        .onStart {
-            appContext.startActivity(
-                intent.apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            )
+  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName) !!
+  foregroundActivity
+    .onStart {
+      appContext.startActivity(
+        intent.apply {
+          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        .filterNotNull()
-        .first()
+      )
+    }
+    .filterNotNull()
+    .first()
 }

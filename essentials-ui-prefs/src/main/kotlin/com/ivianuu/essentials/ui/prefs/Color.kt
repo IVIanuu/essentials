@@ -25,30 +25,29 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.material.*
 
-@Composable
-fun ColorListItem(
-    value: Color,
-    onValueChangeRequest: () -> Unit,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+@Composable fun ColorListItem(
+  value: Color,
+  onValueChangeRequest: () -> Unit,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  modifier: Modifier = Modifier
 ) {
-    ListItem(
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        trailing = {
-            Surface(
-                modifier = Modifier.requiredSize(40.dp),
-                color = value,
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.onSurface
-                )
-            ) {}
-        },
-        onClick = onValueChangeRequest
-    )
+  ListItem(
+    modifier = modifier,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    trailing = {
+      Surface(
+        modifier = Modifier.requiredSize(40.dp),
+        color = value,
+        border = BorderStroke(
+          width = 1.dp,
+          color = MaterialTheme.colors.onSurface
+        )
+      ) {}
+    },
+    onClick = onValueChangeRequest
+  )
 }

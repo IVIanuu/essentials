@@ -17,45 +17,42 @@
 package com.ivianuu.essentials.permission.notificationlistener
 
 import android.content.*
-import android.net.*
 import android.provider.*
 import android.service.notification.*
 import androidx.core.app.*
 import androidx.core.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlin.reflect.*
 
 interface NotificationListenerPermission : Permission {
-    val serviceClass: KClass<out NotificationListenerService>
+  val serviceClass: KClass<out NotificationListenerService>
 }
 
-@Given
-fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
+@Given fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = true
 
-@Given
-fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
-    @Given context: AppContext,
-    @Given buildInfo: BuildInfo
+@Given fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
+  @Given context: AppContext,
+  @Given buildInfo: BuildInfo
 ): PermissionStateProvider<P> = {
-    NotificationManagerCompat.getEnabledListenerPackages(context)
-        .any { it == buildInfo.packageName }
+  NotificationManagerCompat.getEnabledListenerPackages(context)
+    .any { it == buildInfo.packageName }
 }
 
-@Given
-fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
-    @Given buildInfo: BuildInfo
+@Given fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
+  @Given buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = { permission ->
-    Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
-        val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
-        putExtra(":settings:fragment_args_key", componentName)
-        putExtra(":settings:show_fragment_args", bundleOf(
-            ":settings:fragment_args_key" to componentName
-        ))
-    }
+  Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
+    val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
+    putExtra(":settings:fragment_args_key", componentName)
+    putExtra(
+      ":settings:show_fragment_args", bundleOf(
+        ":settings:fragment_args_key" to componentName
+      )
+    )
+  }
 }

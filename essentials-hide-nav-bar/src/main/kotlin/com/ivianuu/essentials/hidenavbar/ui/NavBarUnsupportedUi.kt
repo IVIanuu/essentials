@@ -14,49 +14,46 @@ import kotlinx.coroutines.flow.*
 
 object NavBarUnsupportedKey : DialogKey<Nothing>
 
-@Given
-val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
-    DialogScaffold {
-        Dialog(
-            title = {
-                Text(stringResource(R.string.es_nav_bar_unsupported_title))
-            },
-            content = {
-                Text(stringResource(R.string.es_nav_bar_unsupported_content))
-            },
-            buttons = {
-                TextButton(onClick = model.openMoreInfos) {
-                    Text(stringResource(R.string.es_more_infos))
-                }
+@Given val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
+  DialogScaffold {
+    Dialog(
+      title = {
+        Text(stringResource(R.string.es_nav_bar_unsupported_title))
+      },
+      content = {
+        Text(stringResource(R.string.es_nav_bar_unsupported_content))
+      },
+      buttons = {
+        TextButton(onClick = model.openMoreInfos) {
+          Text(stringResource(R.string.es_more_infos))
+        }
 
-                TextButton(onClick = model.close) {
-                    Text(stringResource(R.string.es_close))
-                }
-            }
-        )
-    }
+        TextButton(onClick = model.close) {
+          Text(stringResource(R.string.es_close))
+        }
+      }
+    )
+  }
 }
 
-@Optics
-data class NavBarUnsupportedModel(
-    val openMoreInfos: () -> Unit = {},
-    val close: () -> Unit = {}
+@Optics data class NavBarUnsupportedModel(
+  val openMoreInfos: () -> Unit = {},
+  val close: () -> Unit = {}
 )
 
-@Given
-fun navBarUnsupportedModel(
-    @Given key: NavBarUnsupportedKey,
-    @Given navigator: Navigator,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Given fun navBarUnsupportedModel(
+  @Given key: NavBarUnsupportedKey,
+  @Given navigator: Navigator,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<NavBarUnsupportedModel> = scope.state(
-    NavBarUnsupportedModel()
+  NavBarUnsupportedModel()
 ) {
-    action(NavBarUnsupportedModel.openMoreInfos()) {
-        navigator.push(
-            UrlKey(
-                "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
-            )
-        )
-    }
-    action(NavBarUnsupportedModel.close()) { navigator.pop(key) }
+  action(NavBarUnsupportedModel.openMoreInfos()) {
+    navigator.push(
+      UrlKey(
+        "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
+      )
+    )
+  }
+  action(NavBarUnsupportedModel.close()) { navigator.pop(key) }
 }

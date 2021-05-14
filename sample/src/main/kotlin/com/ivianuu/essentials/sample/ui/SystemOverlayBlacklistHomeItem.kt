@@ -4,10 +4,8 @@ import com.ivianuu.essentials.systemoverlay.blacklist.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val systemOverlayBlacklistHomeItem = HomeItem("System overlay blacklist") {
-    SystemOverlayBlacklistKey("Gestures")
+@Given val systemOverlayBlacklistHomeItem = HomeItem("System overlay blacklist") {
+  SystemOverlayBlacklistKey("Gestures")
 }
 
-@Given
-val overlayEnabled = flowOf<SystemOverlayEnabled>(false)
+@Given val overlayEnabled = flowOf<SystemOverlayEnabled>(false)

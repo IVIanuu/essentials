@@ -19,13 +19,13 @@ package com.ivianuu.essentials.billing
 import com.android.billingclient.api.*
 
 data class Sku(val skuString: String, val type: Type = Type.IN_APP) {
-    fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
-        .setType(type.value)
-        .setSkusList(listOf(skuString))
-        .build()
+  fun toSkuDetailsParams() = SkuDetailsParams.newBuilder()
+    .setType(type.value)
+    .setSkusList(listOf(skuString))
+    .build()
 
-    enum class Type(val value: String) {
-        IN_APP(BillingClient.SkuType.INAPP),
-        SUBS(BillingClient.SkuType.SUBS)
-    }
+  enum class Type(val value: String) {
+    IN_APP(BillingClient.SkuType.INAPP),
+    SUBS(BillingClient.SkuType.SUBS)
+  }
 }

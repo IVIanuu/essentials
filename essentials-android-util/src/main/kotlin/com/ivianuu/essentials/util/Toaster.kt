@@ -25,17 +25,16 @@ import kotlinx.coroutines.*
 
 typealias Toaster = (String) -> Unit
 
-@Given
-fun toaster(
-    @Given appContext: AppContext,
-    @Given mainDispatcher: MainDispatcher,
-    @Given scope: GivenCoroutineScope<AppGivenScope>
+@Given fun toaster(
+  @Given appContext: AppContext,
+  @Given mainDispatcher: MainDispatcher,
+  @Given scope: GivenCoroutineScope<AppGivenScope>
 ): Toaster = { message ->
-    scope.launch(mainDispatcher) {
-        Toast.makeText(
-            appContext,
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+  scope.launch(mainDispatcher) {
+    Toast.makeText(
+      appContext,
+      message,
+      Toast.LENGTH_SHORT
+    ).show()
+  }
 }

@@ -15,25 +15,25 @@
  */
 
 plugins {
-    kotlin("jvm")
-    id("com.ivianuu.essentials")
+  kotlin("jvm")
+  id("com.ivianuu.essentials")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 
 dependencies {
-    compile(Deps.AndroidX.Test.core)
-    compile(Deps.AndroidX.Test.junit)
-    compile(Deps.AndroidX.Test.rules)
-    compile(Deps.AndroidX.Test.runner)
-    // compile(Deps.AndroidX.Ui.test)
-    compile(Deps.Injekt.core)
-    compile(Deps.Coroutines.test)
-    compile(Deps.junit)
-    compile(Deps.kotestAssertions)
-    compile(Deps.Kotlin.stdlib)
-    compile(Deps.mockk)
-    compile(Deps.turbine)
+  compile(Deps.AndroidX.Test.core)
+  compile(Deps.AndroidX.Test.junit)
+  compile(Deps.AndroidX.Test.rules)
+  compile(Deps.AndroidX.Test.runner)
+  // compile(Deps.AndroidX.Ui.test)
+  compile(Deps.Injekt.core)
+  compile(Deps.Coroutines.test)
+  compile(Deps.junit)
+  compile(Deps.kotestAssertions)
+  compile(Deps.Kotlin.stdlib)
+  compile(Deps.mockk)
+  compile(Deps.turbine)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

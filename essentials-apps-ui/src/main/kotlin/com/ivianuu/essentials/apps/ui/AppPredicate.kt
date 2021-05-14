@@ -27,28 +27,26 @@ val DefaultAppPredicate: AppPredicate = { true }
 
 typealias LaunchableAppPredicate = AppPredicate
 
-@Given
-fun launchableAppPredicate(
-    @Given packageManager: PackageManager
+@Given fun launchableAppPredicate(
+  @Given packageManager: PackageManager
 ): LaunchableAppPredicate {
-    val cache = mutableMapOf<String, Boolean>()
-    return { app ->
-        cache.getOrPut(app.packageName) {
-            packageManager.getLaunchIntentForPackage(app.packageName) != null
-        }
+  val cache = mutableMapOf<String, Boolean>()
+  return { app ->
+    cache.getOrPut(app.packageName) {
+      packageManager.getLaunchIntentForPackage(app.packageName) != null
     }
+  }
 }
 
 typealias IntentAppPredicate = AppPredicate
 
-@Given
-fun intentAppPredicate(
-    @Given packageManager: PackageManager,
-    @Given intent: Intent
+@Given fun intentAppPredicate(
+  @Given packageManager: PackageManager,
+  @Given intent: Intent
 ): IntentAppPredicate {
-    val apps by lazy {
-        packageManager.queryIntentActivities(intent, 0)
-            .map { it.activityInfo.applicationInfo.packageName }
-    }
-    return { app -> app.packageName in apps }
+  val apps by lazy {
+    packageManager.queryIntentActivities(intent, 0)
+      .map { it.activityInfo.applicationInfo.packageName }
+  }
+  return { app -> app.packageName in apps }
 }

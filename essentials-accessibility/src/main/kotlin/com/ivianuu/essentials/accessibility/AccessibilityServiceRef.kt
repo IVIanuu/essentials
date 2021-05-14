@@ -23,15 +23,13 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val accessibilityServiceRef: @Scoped<AppGivenScope> MutableStateFlow<EsAccessibilityService?>
-    get() = MutableStateFlow(null)
+@Given val accessibilityServiceRef: @Scoped<AppGivenScope> MutableStateFlow<EsAccessibilityService?>
+  get() = MutableStateFlow(null)
 
-@Given
-fun accessibilityServiceHolderWorker(
-    @Given holder: MutableStateFlow<EsAccessibilityService?>,
-    @Given service: Service
+@Given fun accessibilityServiceHolderWorker(
+  @Given holder: MutableStateFlow<EsAccessibilityService?>,
+  @Given service: Service
 ): ScopeWorker<AccessibilityGivenScope> = {
-    holder.value = service as EsAccessibilityService
-    runOnCancellation { holder.value = null }
+  holder.value = service as EsAccessibilityService
+  runOnCancellation { holder.value = null }
 }

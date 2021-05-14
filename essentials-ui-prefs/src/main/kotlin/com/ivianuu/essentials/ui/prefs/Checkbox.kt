@@ -21,26 +21,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.material.*
 
-@Composable
-fun CheckboxListItem(
-    value: Boolean,
-    onValueChange: (Boolean) -> Unit,
-    title: @Composable (() -> Unit)? = null,
-    subtitle: @Composable (() -> Unit)? = null,
-    leading: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+@Composable fun CheckboxListItem(
+  value: Boolean,
+  onValueChange: (Boolean) -> Unit,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  modifier: Modifier = Modifier
 ) {
-    ListItem(
-        modifier = modifier,
-        title = title,
-        subtitle = subtitle,
-        leading = leading,
-        trailing = {
-            Checkbox(
-                checked = value,
-                onCheckedChange = null
-            )
-        },
-        onClick = { onValueChange(!value) }
-    )
+  ListItem(
+    modifier = modifier,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    trailing = {
+      Checkbox(
+        checked = value,
+        onCheckedChange = null
+      )
+    },
+    onClick = { onValueChange(! value) }
+  )
 }

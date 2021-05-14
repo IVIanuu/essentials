@@ -23,30 +23,32 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class KeyboardVisibilityTest {
-    @Test
-    fun testKeyboardVisibility() = runCancellingBlockingTest {
-        val accessibilityEvents = EventFlow<AccessibilityEvent>()
-        var keyboardHeight = 0
-        val collector = keyboardVisible(
-            accessibilityEvents,
-            { keyboardHeight },
-            this
-        ).testCollect(this)
+  @Test
+  fun testKeyboardVisibility() = runCancellingBlockingTest {
+    val accessibilityEvents = EventFlow<AccessibilityEvent>()
+    var keyboardHeight = 0
+    val collector = keyboardVisible(
+      accessibilityEvents,
+      { keyboardHeight },
+      this
+    ).testCollect(this)
 
-        keyboardHeight = 1
-        accessibilityEvents.emit(AccessibilityEvent(
-            type = 0,
-            isFullScreen = true,
-            packageName = null,
-            className = "android.inputmethodservice.SoftInputWindow"
-        ))
-        keyboardHeight = 0
-        advanceTimeBy(100)
+    keyboardHeight = 1
+    accessibilityEvents.emit(
+      AccessibilityEvent(
+        type = 0,
+        isFullScreen = true,
+        packageName = null,
+        className = "android.inputmethodservice.SoftInputWindow"
+      )
+    )
+    keyboardHeight = 0
+    advanceTimeBy(100)
 
-        collector.values.shouldContainExactly(
-            false,
-            true,
-            false
-        )
-    }
+    collector.values.shouldContainExactly(
+      false,
+      true,
+      false
+    )
+  }
 }

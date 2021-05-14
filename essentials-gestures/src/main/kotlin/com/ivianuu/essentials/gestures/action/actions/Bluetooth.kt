@@ -26,46 +26,41 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given
-object BluetoothActionId : ActionId("bluetooth")
+@Given object BluetoothActionId : ActionId("bluetooth")
 
-@Given
-fun bluetoothAction(
-    @Given bluetoothIcon: Flow<BluetoothIcon>,
-    @Given stringResource: StringResourceProvider,
+@Given fun bluetoothAction(
+  @Given bluetoothIcon: Flow<BluetoothIcon>,
+  @Given stringResource: StringResourceProvider,
 ) = Action<BluetoothActionId>(
-    id = BluetoothActionId,
-    title = stringResource(R.string.es_action_bluetooth, emptyList()),
-    icon = bluetoothIcon,
-    enabled = BluetoothAdapter.getDefaultAdapter() != null
+  id = BluetoothActionId,
+  title = stringResource(R.string.es_action_bluetooth, emptyList()),
+  icon = bluetoothIcon,
+  enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-@Given
-val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
-    BluetoothAdapter.getDefaultAdapter()?.let {
-        if (it.isEnabled) {
-            it.disable()
-        } else {
-            it.enable()
-        }
+@Given val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
+  BluetoothAdapter.getDefaultAdapter()?.let {
+    if (it.isEnabled) {
+      it.disable()
+    } else {
+      it.enable()
     }
+  }
 }
 
 internal typealias BluetoothIcon = ActionIcon
 
-@Given
-fun bluetoothIcon(@Given broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> {
-    return broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
-        .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
-        .onStart {
-            emit(
-                BluetoothAdapter.getDefaultAdapter()?.state ?: BluetoothAdapter.STATE_OFF
-            )
-        }
-        .map { it == BluetoothAdapter.STATE_ON || it == BluetoothAdapter.STATE_TURNING_ON }
-        .map {
-            if (it) R.drawable.es_ic_bluetooth
-            else R.drawable.es_ic_bluetooth_disabled
-        }
-        .map { { Icon(painterResource(it), null) } }
-}
+@Given fun bluetoothIcon(@Given broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> =
+  broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
+    .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
+    .onStart {
+      emit(
+        BluetoothAdapter.getDefaultAdapter()?.state ?: BluetoothAdapter.STATE_OFF
+      )
+    }
+    .map { it == BluetoothAdapter.STATE_ON || it == BluetoothAdapter.STATE_TURNING_ON }
+    .map {
+      if (it) R.drawable.es_ic_bluetooth
+      else R.drawable.es_ic_bluetooth_disabled
+    }
+    .map { { Icon(painterResource(it), null) } }

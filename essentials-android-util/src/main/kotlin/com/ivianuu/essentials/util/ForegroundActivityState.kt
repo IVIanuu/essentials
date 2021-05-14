@@ -31,23 +31,21 @@ typealias ForegroundActivity = ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Given
-val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundActivity>
-    get() = MutableStateFlow(null)
+@Given val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundActivity>
+  get() = MutableStateFlow(null)
 
-@Given
-fun foregroundActivityStateWorker(
-    @Given activity: ComponentActivity,
-    @Given dispatcher: MainDispatcher,
-    @Given state: MutableStateFlow<ForegroundActivity>
-): ScopeWorker<ActivityGivenScope> = worker@ {
-    if (activity !is ForegroundActivityMarker) return@worker
-    val observer = LifecycleEventObserver { _, _ ->
-        state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
-            activity else null
-    }
-    withContext(dispatcher) {
-        activity.lifecycle.addObserver(observer)
-        runOnCancellation { activity.lifecycle.removeObserver(observer) }
-    }
+@Given fun foregroundActivityStateWorker(
+  @Given activity: ComponentActivity,
+  @Given dispatcher: MainDispatcher,
+  @Given state: MutableStateFlow<ForegroundActivity>
+): ScopeWorker<ActivityGivenScope> = worker@{
+  if (activity !is ForegroundActivityMarker) return@worker
+  val observer = LifecycleEventObserver { _, _ ->
+    state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+      activity else null
+  }
+  withContext(dispatcher) {
+    activity.lifecycle.addObserver(observer)
+    runOnCancellation { activity.lifecycle.removeObserver(observer) }
+  }
 }

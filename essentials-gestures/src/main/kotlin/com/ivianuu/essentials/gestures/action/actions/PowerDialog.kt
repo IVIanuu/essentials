@@ -23,22 +23,19 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given
-object PowerDialogActionId : ActionId("power_dialog")
+@Given object PowerDialogActionId : ActionId("power_dialog")
 
-@Given
-fun powerDialogAction(
-    @Given stringResource: StringResourceProvider
+@Given fun powerDialogAction(
+  @Given stringResource: StringResourceProvider
 ) = Action<PowerDialogActionId>(
-    id = PowerDialogActionId,
-    title = stringResource(R.string.es_action_power_dialog, emptyList()),
-    permissions = accessibilityActionPermissions,
-    icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
+  id = PowerDialogActionId,
+  title = stringResource(R.string.es_action_power_dialog, emptyList()),
+  permissions = accessibilityActionPermissions,
+  icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
-@Given
-fun powerDialogActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor
+@Given fun powerDialogActionExecutor(
+  @Given globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<PowerDialogActionId> = {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

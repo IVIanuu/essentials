@@ -15,52 +15,52 @@
  */
 
 plugins {
-    id("java-gradle-plugin")
-    kotlin("jvm")
-    kotlin("kapt")
-    id("de.fuerstenau.buildconfig")
+  id("java-gradle-plugin")
+  kotlin("jvm")
+  kotlin("kapt")
+  id("de.fuerstenau.buildconfig")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 gradlePlugin {
-    plugins {
-        create("essentialsPlugin") {
-            id = "com.ivianuu.essentials"
-            implementationClass =
-                "com.ivianuu.essentials.gradle.EssentialsPlugin"
-        }
-        create("composePlugin") {
-            id = "com.ivianuu.essentials.compose"
-            implementationClass =
-                "com.ivianuu.essentials.gradle.ComposePlugin"
-        }
+  plugins {
+    create("essentialsPlugin") {
+      id = "com.ivianuu.essentials"
+      implementationClass =
+        "com.ivianuu.essentials.gradle.EssentialsPlugin"
     }
+    create("composePlugin") {
+      id = "com.ivianuu.essentials.compose"
+      implementationClass =
+        "com.ivianuu.essentials.gradle.ComposePlugin"
+    }
+  }
 }
 
 buildConfig {
-    clsName = "BuildConfig"
-    packageName = "com.ivianuu.essentials.gradle"
+  clsName = "BuildConfig"
+  packageName = "com.ivianuu.essentials.gradle"
 
-    version = property("VERSION_NAME").toString()
-    buildConfigField("String", "GROUP_ID", property("GROUP").toString())
-    buildConfigField("String", "ARTIFACT_ID", "essentials-compiler-plugin")
+  version = property("VERSION_NAME").toString()
+  buildConfigField("String", "GROUP_ID", property("GROUP").toString())
+  buildConfigField("String", "ARTIFACT_ID", "essentials-compiler-plugin")
 
-    buildConfigField("String", "COMPOSE_GROUP_ID", "androidx.compose.compiler")
-    buildConfigField("String", "COMPOSE_ARTIFACT_ID", "compiler")
-    buildConfigField("String", "COMPOSE_VERSION", Deps.AndroidX.Compose.version)
+  buildConfigField("String", "COMPOSE_GROUP_ID", "androidx.compose.compiler")
+  buildConfigField("String", "COMPOSE_ARTIFACT_ID", "compiler")
+  buildConfigField("String", "COMPOSE_VERSION", Deps.AndroidX.Compose.version)
 }
 
 dependencies {
-    implementation(Deps.autoService)
-    kapt(Deps.autoService)
+  implementation(Deps.autoService)
+  kapt(Deps.autoService)
 
-    implementation(Deps.Kotlin.gradlePlugin)
-    implementation(Deps.Kotlin.gradlePluginApi)
+  implementation(Deps.Kotlin.gradlePlugin)
+  implementation(Deps.Kotlin.gradlePluginApi)
 
-    api(Deps.androidGradlePlugin)
-    api(Deps.KotlinSerialization.gradlePlugin)
-    api(Deps.Injekt.gradlePlugin)
-    api(Deps.licenseGradlePlugin)
+  api(Deps.androidGradlePlugin)
+  api(Deps.KotlinSerialization.gradlePlugin)
+  api(Deps.Injekt.gradlePlugin)
+  api(Deps.licenseGradlePlugin)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

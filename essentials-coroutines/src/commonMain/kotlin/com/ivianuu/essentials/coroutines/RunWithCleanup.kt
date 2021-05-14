@@ -19,15 +19,15 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.*
 
 suspend inline fun runWithCleanup(
-    crossinline cleanup: suspend () -> Unit,
-    block: suspend () -> Unit,
+  crossinline cleanup: suspend () -> Unit,
+  block: suspend () -> Unit,
 ) {
-    try {
-        block()
-    } catch (e: CancellationException) {
-    } finally {
-        withContext(NonCancellable) {
-            cleanup()
-        }
+  try {
+    block()
+  } catch (e: CancellationException) {
+  } finally {
+    withContext(NonCancellable) {
+      cleanup()
     }
+  }
 }

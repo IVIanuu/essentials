@@ -25,46 +25,45 @@ import androidx.compose.ui.focus.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.*
 
-@Composable
-fun TextInputDialog(
-    modifier: Modifier = Modifier,
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: @Composable (() -> Unit)? = null,
-    icon: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    buttons: @Composable (() -> Unit)? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+@Composable fun TextInputDialog(
+  modifier: Modifier = Modifier,
+  value: String,
+  onValueChange: (String) -> Unit,
+  label: @Composable (() -> Unit)? = null,
+  icon: @Composable (() -> Unit)? = null,
+  title: @Composable (() -> Unit)? = null,
+  buttons: @Composable (() -> Unit)? = null,
+  keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
-    Dialog(
-        modifier = modifier,
-        icon = icon,
-        title = title,
-        content = {
-            Box {
-                val focusRequester = remember { FocusRequester() }
-                var textFieldValue by remember {
-                    mutableStateOf(TextFieldValue(value, TextRange(value.length)))
-                }
-                textFieldValue = textFieldValue.copy(value)
-                TextField(
-                    modifier = Modifier.focusRequester(focusRequester),
-                    value = textFieldValue,
-                    onValueChange = {
-                        textFieldValue = it
-                        onValueChange(it.text)
-                    },
-                    keyboardOptions = keyboardOptions,
-                    textStyle = MaterialTheme.typography.subtitle1,
-                    label = label ?: {}
-                )
+  Dialog(
+    modifier = modifier,
+    icon = icon,
+    title = title,
+    content = {
+      Box {
+        val focusRequester = remember { FocusRequester() }
+        var textFieldValue by remember {
+          mutableStateOf(TextFieldValue(value, TextRange(value.length)))
+        }
+        textFieldValue = textFieldValue.copy(value)
+        TextField(
+          modifier = Modifier.focusRequester(focusRequester),
+          value = textFieldValue,
+          onValueChange = {
+            textFieldValue = it
+            onValueChange(it.text)
+          },
+          keyboardOptions = keyboardOptions,
+          textStyle = MaterialTheme.typography.subtitle1,
+          label = label ?: {}
+        )
 
-                DisposableEffect(true) {
-                    focusRequester.requestFocus()
-                    onDispose {  }
-                }
-            }
-        },
-        buttons = buttons
-    )
+        DisposableEffect(true) {
+          focusRequester.requestFocus()
+          onDispose { }
+        }
+      }
+    },
+    buttons = buttons
+  )
 }

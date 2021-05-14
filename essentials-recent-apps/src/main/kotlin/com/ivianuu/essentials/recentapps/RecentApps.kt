@@ -27,58 +27,55 @@ import kotlinx.coroutines.flow.*
 
 typealias RecentApps = List<String>
 
-@Given
-fun recentApps(
-    @Given accessibilityEvents: Flow<AccessibilityEvent>,
-    @Given logger: Logger,
-    @Given scope: GivenCoroutineScope<AppGivenScope>,
+@Given fun recentApps(
+  @Given accessibilityEvents: Flow<AccessibilityEvent>,
+  @Given logger: Logger,
+  @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<RecentApps> = accessibilityEvents
-    .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-    .filter { it.isFullScreen }
-    .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
-    .mapNotNull { it.packageName }
-    .filter { it != "android" }
-    .scan(emptyList<String>()) { recentApps, currentApp ->
-        val index = recentApps.indexOf(currentApp)
+  .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
+  .filter { it.isFullScreen }
+  .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
+  .mapNotNull { it.packageName }
+  .filter { it != "android" }
+  .scan(emptyList<String>()) { recentApps, currentApp ->
+    val index = recentApps.indexOf(currentApp)
 
-        // app has not changed
-        if (index == 0) return@scan recentApps
+    // app has not changed
+    if (index == 0) return@scan recentApps
 
-        val newRecentApps = recentApps.toMutableList()
+    val newRecentApps = recentApps.toMutableList()
 
-        // remove the app from the list
-        if (index != -1) {
-            newRecentApps.removeAt(index)
-        }
-
-        // add the package to the first position
-        newRecentApps.add(0, currentApp)
-
-        // make sure that were not getting bigger than the limit
-        while (newRecentApps.size > 10) {
-            newRecentApps.removeAt(newRecentApps.lastIndex)
-        }
-
-        newRecentApps
+    // remove the app from the list
+    if (index != - 1) {
+      newRecentApps.removeAt(index)
     }
-    .distinctUntilChanged()
-    .onEach { logger.d { "recent apps changed $it" } }
-    .shareIn(scope, SharingStarted.Eagerly, 1)
-    .distinctUntilChanged()
 
-@Given
-val recentAppsAccessibilityConfig = flow {
-    emit(
-        AccessibilityConfig(
-            eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-        )
+    // add the package to the first position
+    newRecentApps.add(0, currentApp)
+
+    // make sure that were not getting bigger than the limit
+    while (newRecentApps.size > 10) {
+      newRecentApps.removeAt(newRecentApps.lastIndex)
+    }
+
+    newRecentApps
+  }
+  .distinctUntilChanged()
+  .onEach { logger.d { "recent apps changed $it" } }
+  .shareIn(scope, SharingStarted.Eagerly, 1)
+  .distinctUntilChanged()
+
+@Given val recentAppsAccessibilityConfig = flow {
+  emit(
+    AccessibilityConfig(
+      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
     )
+  )
 }
 
 typealias CurrentApp = String?
 
-@Given
-fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
-    recentApps
-        .map { it.firstOrNull() }
-        .distinctUntilChanged()
+@Given fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
+  recentApps
+    .map { it.firstOrNull() }
+    .distinctUntilChanged()

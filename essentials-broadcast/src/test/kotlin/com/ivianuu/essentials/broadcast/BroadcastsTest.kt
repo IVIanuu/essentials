@@ -29,22 +29,22 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class BroadcastsTest {
-    @Test
-    fun testBroadcasts() = runCancellingBlockingTest {
-        lateinit var receiver: BroadcastReceiver
-        val appContext = mockk<AppContext> {
-            every { registerReceiver(any(), any()) } answers {
-                receiver = arg(0)
-                null
-            }
-            every { unregisterComponentCallbacks(any()) } returns Unit
-        }
-        val collector = broadcastsFactory(appContext, dispatcher)
-            .invoke("action").testCollect(this)
-
-        receiver.onReceive(appContext, Intent("action"))
-        receiver.onReceive(appContext, Intent("action"))
-
-        collector.values.shouldHaveSize(2)
+  @Test
+  fun testBroadcasts() = runCancellingBlockingTest {
+    lateinit var receiver: BroadcastReceiver
+    val appContext = mockk<AppContext> {
+      every { registerReceiver(any(), any()) } answers {
+        receiver = arg(0)
+        null
+      }
+      every { unregisterComponentCallbacks(any()) } returns Unit
     }
+    val collector = broadcastsFactory(appContext, dispatcher)
+      .invoke("action").testCollect(this)
+
+    receiver.onReceive(appContext, Intent("action"))
+    receiver.onReceive(appContext, Intent("action"))
+
+    collector.values.shouldHaveSize(2)
+  }
 }

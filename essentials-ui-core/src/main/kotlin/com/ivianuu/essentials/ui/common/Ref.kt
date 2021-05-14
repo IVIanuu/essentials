@@ -20,12 +20,12 @@ import androidx.compose.runtime.*
 import kotlin.reflect.*
 
 fun <T> refOf(
-    value: T,
-    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy()
+  value: T,
+  policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy()
 ): Ref<T> = RefImpl(value, policy)
 
 interface Ref<T> {
-    var value: T
+  var value: T
 }
 
 fun <T> Ref<T>.component1(): T = value
@@ -36,19 +36,19 @@ inline operator fun <T> Ref<T>.getValue(thisObj: Any?, property: KProperty<*>): 
 
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <T> Ref<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
-    this.value = value
+  this.value = value
 }
 
 private class RefImpl<T>(
-    value: T,
-    val policy: SnapshotMutationPolicy<T>
+  value: T,
+  val policy: SnapshotMutationPolicy<T>
 ) : Ref<T> {
-    override var value: T = value
-        get() = synchronized(this) { field }
-        set(value) {
-            val oldValue = synchronized(this) { field }
-            if (!policy.equivalent(oldValue, value)) {
-                synchronized(this) { field = value }
-            }
-        }
+  override var value: T = value
+    get() = synchronized(this) { field }
+    set(value) {
+      val oldValue = synchronized(this) { field }
+      if (! policy.equivalent(oldValue, value)) {
+        synchronized(this) { field = value }
+      }
+    }
 }

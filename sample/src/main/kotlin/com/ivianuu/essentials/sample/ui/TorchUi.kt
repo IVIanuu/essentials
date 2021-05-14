@@ -32,27 +32,25 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given
-val torchHomeItem = HomeItem("Torch") { TorchKey }
+@Given val torchHomeItem = HomeItem("Torch") { TorchKey }
 
 object TorchKey : Key<Nothing>
 
-@Given
-fun torchUi(@Given torchState: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
-    val torchEnabled by torchState.collectAsState()
-    Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
-        Column(
-            modifier = Modifier.center(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                "Torch is ${if (torchEnabled) "enabled" else "disabled"}",
-                style = MaterialTheme.typography.h4
-            )
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = { torchState.update { !torchEnabled } }) {
-                Text("Toggle torch")
-            }
-        }
+@Given fun torchUi(@Given torchState: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
+  val torchEnabled by torchState.collectAsState()
+  Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
+    Column(
+      modifier = Modifier.center(),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Text(
+        "Torch is ${if (torchEnabled) "enabled" else "disabled"}",
+        style = MaterialTheme.typography.h4
+      )
+      Spacer(Modifier.height(8.dp))
+      Button(onClick = { torchState.update { ! torchEnabled } }) {
+        Text("Toggle torch")
+      }
     }
+  }
 }

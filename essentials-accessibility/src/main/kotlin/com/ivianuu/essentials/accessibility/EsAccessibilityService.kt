@@ -25,48 +25,48 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 class EsAccessibilityService : AccessibilityService() {
-    private val component by lazy {
-        createServiceGivenScope()
-            .element<EsAccessibilityServiceComponent>()
-    }
+  private val component by lazy {
+    createServiceGivenScope()
+      .element<EsAccessibilityServiceComponent>()
+  }
 
-    private var accessibilityGivenScope: AccessibilityGivenScope? = null
+  private var accessibilityGivenScope: AccessibilityGivenScope? = null
 
-    override fun onServiceConnected() {
-        super.onServiceConnected()
-        component.logger.d { "connected" }
-        accessibilityGivenScope = component.accessibilityGivenScopeFactory()
-    }
+  override fun onServiceConnected() {
+    super.onServiceConnected()
+    component.logger.d { "connected" }
+    accessibilityGivenScope = component.accessibilityGivenScopeFactory()
+  }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        component.logger.d { "on accessibility event $event" }
-        component.accessibilityEvents.tryEmit(
-            AccessibilityEvent(
-                type = event.eventType,
-                packageName = event.packageName?.toString(),
-                className = event.className?.toString(),
-                isFullScreen = event.isFullScreen
-            )
-        )
-    }
+  override fun onAccessibilityEvent(event: AccessibilityEvent) {
+    component.logger.d { "on accessibility event $event" }
+    component.accessibilityEvents.tryEmit(
+      AccessibilityEvent(
+        type = event.eventType,
+        packageName = event.packageName?.toString(),
+        className = event.className?.toString(),
+        isFullScreen = event.isFullScreen
+      )
+    )
+  }
 
-    override fun onInterrupt() {
-    }
+  override fun onInterrupt() {
+  }
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        component.logger.d { "disconnected" }
-        accessibilityGivenScope?.dispose()
-        accessibilityGivenScope = null
-        component.serviceGivenScope.dispose()
-        return super.onUnbind(intent)
-    }
+  override fun onUnbind(intent: Intent?): Boolean {
+    component.logger.d { "disconnected" }
+    accessibilityGivenScope?.dispose()
+    accessibilityGivenScope = null
+    component.serviceGivenScope.dispose()
+    return super.onUnbind(intent)
+  }
 }
 
 @InstallElement<ServiceGivenScope>
 @Given
 class EsAccessibilityServiceComponent(
-    @Given val accessibilityEvents: MutableAccessibilityEvents,
-    @Given val accessibilityGivenScopeFactory: () -> AccessibilityGivenScope,
-    @Given val logger: Logger,
-    @Given val serviceGivenScope: ServiceGivenScope
+  @Given val accessibilityEvents: MutableAccessibilityEvents,
+  @Given val accessibilityGivenScopeFactory: () -> AccessibilityGivenScope,
+  @Given val logger: Logger,
+  @Given val serviceGivenScope: ServiceGivenScope
 )

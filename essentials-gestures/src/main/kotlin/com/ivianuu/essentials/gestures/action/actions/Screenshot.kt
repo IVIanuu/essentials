@@ -27,34 +27,32 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
-@Given
-object ScreenshotActionId : ActionId("screenshot")
+@Given object ScreenshotActionId : ActionId("screenshot")
 
-@Given
-fun screenshotAction(
-    @Given stringResource: StringResourceProvider,
-    @Given systemBuildInfo: SystemBuildInfo,
+@Given fun screenshotAction(
+  @Given stringResource: StringResourceProvider,
+  @Given systemBuildInfo: SystemBuildInfo,
 ) = Action<ScreenshotActionId>(
-    id = "screenshot",
-    title = stringResource(R.string.es_action_screenshot, emptyList()),
-    icon = singleActionIcon(R.drawable.es_ic_photo_album),
-    permissions = listOf(
-        if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
-        else typeKeyOf<ActionRootPermission>()
-    )
+  id = "screenshot",
+  title = stringResource(R.string.es_action_screenshot, emptyList()),
+  icon = singleActionIcon(R.drawable.es_ic_photo_album),
+  permissions = listOf(
+    if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
+    else typeKeyOf<ActionRootPermission>()
+  )
 )
 
 @SuppressLint("InlinedApi")
 @Given
 fun screenshotActionExecutor(
-    @Given globalActionExecutor: GlobalActionExecutor,
-    @Given runShellCommand: RunShellCommandUseCase,
-    @Given systemBuildInfo: SystemBuildInfo,
+  @Given globalActionExecutor: GlobalActionExecutor,
+  @Given runShellCommand: RunShellCommandUseCase,
+  @Given systemBuildInfo: SystemBuildInfo,
 ): ActionExecutor<ScreenshotActionId> = {
-    delay(500)
-    if (systemBuildInfo.sdk >= 28) {
-        globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-    } else {
-        runShellCommand(listOf("input keyevent 26"))
-    }
+  delay(500)
+  if (systemBuildInfo.sdk >= 28) {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+  } else {
+    runShellCommand(listOf("input keyevent 26"))
+  }
 }

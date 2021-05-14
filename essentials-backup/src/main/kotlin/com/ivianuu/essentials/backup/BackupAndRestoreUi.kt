@@ -36,58 +36,56 @@ import kotlinx.coroutines.flow.*
 
 object BackupAndRestoreKey : Key<Nothing>
 
-@Given
-val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
-    ) {
-        LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
-                    title = { Text(stringResource(R.string.es_pref_backup)) },
-                    subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-                    onClick = { model.backupData() }
-                )
-            }
-            item {
-                ListItem(
-                    leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
-                    title = { Text(stringResource(R.string.es_pref_restore)) },
-                    subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-                    onClick = { model.restoreData() }
-                )
-            }
-        }
+@Given val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
+  ) {
+    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
+          title = { Text(stringResource(R.string.es_pref_backup)) },
+          subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
+          onClick = { model.backupData() }
+        )
+      }
+      item {
+        ListItem(
+          leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
+          title = { Text(stringResource(R.string.es_pref_restore)) },
+          subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
+          onClick = { model.restoreData() }
+        )
+      }
     }
+  }
 }
 
-@Optics
-data class BackupAndRestoreModel(
-    val backupData: () -> Unit = {},
-    val restoreData: () -> Unit = {}
+@Optics data class BackupAndRestoreModel(
+  val backupData: () -> Unit = {},
+  val restoreData: () -> Unit = {}
 )
 
-@Given
-fun backupAndRestoreModel(
-    @Given createBackupUseCase: CreateBackupUseCase,
-    @Given restoreBackupUseCase: RestoreBackupUseCase,
-    @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-    @Given stringResource: StringResourceProvider,
-    @Given toaster: Toaster,
-): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {
+@Given fun backupAndRestoreModel(
+  @Given createBackupUseCase: CreateBackupUseCase,
+  @Given restoreBackupUseCase: RestoreBackupUseCase,
+  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+  @Given stringResource: StringResourceProvider,
+  @Given toaster: Toaster,
+): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreModel> =
+  scope.state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
-        createBackupUseCase()
-            .onFailure {
-                it.printStackTrace()
-                toaster(stringResource(R.string.es_backup_error, emptyList()))
-            }
+      createBackupUseCase()
+        .onFailure {
+          it.printStackTrace()
+          toaster(stringResource(R.string.es_backup_error, emptyList()))
+        }
     }
     action(BackupAndRestoreModel.restoreData()) {
-        restoreBackupUseCase()
-            .onFailure {
-                it.printStackTrace()
-                toaster(stringResource(R.string.es_restore_error, emptyList()))
-            }
+      restoreBackupUseCase()
+        .onFailure {
+          it.printStackTrace()
+          toaster(stringResource(R.string.es_restore_error, emptyList()))
+        }
     }
-}
+  }
