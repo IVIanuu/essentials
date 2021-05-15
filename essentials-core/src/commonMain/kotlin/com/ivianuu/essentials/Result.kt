@@ -1,7 +1,6 @@
 package com.ivianuu.essentials
 
 import com.github.michaelbull.result.*
-import kotlin.contracts.*
 import kotlin.coroutines.cancellation.*
 
 inline fun <V> V.ok() = Ok(this)
@@ -19,28 +18,24 @@ inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = t
 }
 
 inline fun <V, E> result(@BuilderInference block: ResultBinding<E>.() -> V): Result<V, E> {
-  val receiver = ResultBindingImpl<E>()
+  @Suppress("UNCHECKED_CAST")
   return try {
-    with(receiver) { Ok(block()) }
-  } catch (e: ResultBindingImpl.ExitException) {
-    receiver.error
+    Ok(block(ResultBindingImpl as ResultBinding<E>))
+  } catch (e: ResultBindingImpl.ShortCircuitException) {
+    e.error as Err<E>
   }
 }
 
-interface ResultBinding<A> {
+interface ResultBinding<in A> {
   fun <T> Result<T, A>.bind(): T
 }
 
 @PublishedApi
-internal class ResultBindingImpl<E> : ResultBinding<E> {
-  lateinit var error: Err<E>
-  override fun <T> Result<T, E>.bind(): T = when (this) {
+internal object ResultBindingImpl : ResultBinding<Nothing> {
+  override fun <T> Result<T, Nothing>.bind(): T = when (this) {
     is Ok -> value
-    is Err -> {
-      this@ResultBindingImpl.error = this
-      throw ExitException
-    }
+    is Err -> throw ShortCircuitException(this)
   }
 
-  object ExitException : ControlException()
+  class ShortCircuitException(val error: Any?) : ControlException()
 }

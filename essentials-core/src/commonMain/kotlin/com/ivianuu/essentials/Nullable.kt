@@ -2,7 +2,7 @@ package com.ivianuu.essentials
 
 inline fun <R> nullable(@BuilderInference block: NullableBinding.() -> R): R? = try {
   with(NullableBindingImpl, block)
-} catch (e: NullableBindingImpl.ExitException) {
+} catch (e: NullableBindingImpl.ShortCircuitException) {
   null
 }
 
@@ -12,7 +12,7 @@ interface NullableBinding {
 
 @PublishedApi
 internal object NullableBindingImpl : NullableBinding {
-  override fun <T> T?.bind(): T = this ?: throw ExitException
+  override fun <T> T?.bind(): T = this ?: throw ShortCircuitException
 
-  object ExitException : ControlException()
+  object ShortCircuitException : ControlException()
 }
