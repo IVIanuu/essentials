@@ -21,7 +21,6 @@ import android.os.*
 import androidx.activity.*
 
 class ProcessRestartActivity : ComponentActivity() {
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val restartIntent = intent.getParcelableExtra<Intent>(KEY_RESTART_INTENT)
@@ -44,5 +43,4 @@ class ProcessRestartActivity : ComponentActivity() {
       )
     }
   }
-
 }
