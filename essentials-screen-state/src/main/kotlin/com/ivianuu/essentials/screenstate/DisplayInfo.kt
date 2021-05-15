@@ -15,8 +15,7 @@ data class DisplayInfo(
   val screenHeight: Int = 0
 )
 
-@Given
-fun displayInfo(
+@Given fun displayInfo(
   @Given configChanges: () -> Flow<ConfigChange>,
   @Given displayRotation: () -> Flow<DisplayRotation>,
   @Given scope: GivenCoroutineScope<AppGivenScope>,

@@ -42,8 +42,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Given
-fun displayRotation(
+@Given fun displayRotation(
   @Given configChanges: () -> Flow<ConfigChange>,
   @Given dispatcher: IODispatcher,
   @Given logger: Logger,
@@ -85,8 +84,7 @@ private suspend fun getCurrentDisplayRotation(
 
 typealias RotationChange = Unit
 
-@Given
-fun rotationChanges(
+@Given fun rotationChanges(
   @Given appContext: AppContext,
   @Given mainDispatcher: MainDispatcher,
 ): Flow<RotationChange> = callbackFlow<RotationChange> {

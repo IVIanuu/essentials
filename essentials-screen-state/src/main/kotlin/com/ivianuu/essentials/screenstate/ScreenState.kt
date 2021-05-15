@@ -32,8 +32,7 @@ enum class ScreenState(val isOn: Boolean) {
   OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
-@Given
-fun screenState(
+@Given fun screenState(
   @Given broadcastsFactory: BroadcastsFactory,
   @Given logger: Logger,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
@@ -53,8 +52,7 @@ fun screenState(
 
 private typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
-@Given
-fun currentScreenStateProvider(
+@Given fun currentScreenStateProvider(
   @Given dispatcher: DefaultDispatcher,
   @Given keyguardManager: @SystemService KeyguardManager,
   @Given powerManager: @SystemService PowerManager,
