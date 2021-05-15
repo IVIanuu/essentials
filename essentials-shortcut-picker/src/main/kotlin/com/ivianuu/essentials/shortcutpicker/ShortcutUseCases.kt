@@ -63,8 +63,8 @@ typealias ExtractShortcutUseCase = (Intent) -> Shortcut
   @Given packageManager: PackageManager
 ): ExtractShortcutUseCase = { shortcutRequestResult ->
   val intent =
-    shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT) !!
-  val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME) !!
+    shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
+  val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
   val bitmapIcon =
     shortcutRequestResult.getParcelableExtra<Bitmap>(Intent.EXTRA_SHORTCUT_ICON)
   val iconResource =

@@ -24,8 +24,8 @@ fun ContainerTransformStackTransition(
   openedKey: Any,
   spec: AnimationSpec<Float> = defaultAnimationSpec(),
 ): StackTransition = {
-  val fromModifier = fromElementModifier(if (isPush) closedKey else openedKey) !!
-  val toModifier = toElementModifier(if (isPush) openedKey else closedKey) !!
+  val fromModifier = fromElementModifier(if (isPush) closedKey else openedKey)!!
+  val toModifier = toElementModifier(if (isPush) openedKey else closedKey)!!
 
   toModifier.value = Modifier.alpha(0f)
 
@@ -59,8 +59,8 @@ fun ContainerTransformStackTransition(
   var currentToAlpha by mutableStateOf(0f)
 
   val fromProps =
-    fromElement(if (isPush) closedKey else openedKey) !![ContainerTransformPropsKey] !!
-  val toProps = toElement(if (isPush) openedKey else closedKey) !![ContainerTransformPropsKey] !!
+    fromElement(if (isPush) closedKey else openedKey)!![ContainerTransformPropsKey]!!
+  val toProps = toElement(if (isPush) openedKey else closedKey)!![ContainerTransformPropsKey]!!
 
   overlay {
     Box(
@@ -192,7 +192,7 @@ fun ContainerTransformStackTransition(
     currentElevation = lerp(fromProps.elevation, toProps.elevation, value)
     currentAbsoluteElevation = lerp(fromProps.absoluteElevation, toProps.absoluteElevation, value)
     currentToAlpha = interval(0.2f, 0.4f, value)
-    if (! isPush) {
+    if (!isPush) {
       currentFromAlpha = lerp(1f, 0f, interval(0.15f, 0.45f, value))
     }
   }

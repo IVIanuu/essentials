@@ -90,7 +90,7 @@ fun checkableAppsScreen(@Given modelFlow: StateFlow<CheckableAppsModel>): Checka
             onCheckedChange = null
           )
         },
-        onClick = { state.updateAppCheckedState(app, ! app.isChecked) }
+        onClick = { state.updateAppCheckedState(app, !app.isChecked) }
       )
     }
   }
@@ -167,7 +167,7 @@ data class CheckableApp(
   }
   action(CheckableAppsModel.selectAll()) {
     pushNewCheckedApps { currentState ->
-      currentState.allApps.get() !!.mapTo(mutableSetOf()) { it.packageName }
+      currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
     }
   }
   action(CheckableAppsModel.deselectAll()) {

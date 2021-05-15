@@ -31,7 +31,7 @@ typealias ProcessRestarter = suspend () -> Unit
   @Given logger: Logger,
   @Given packageManager: PackageManager,
 ): ProcessRestarter = {
-  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName) !!
+  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
   logger.d { "restart process $intent" }
   ProcessRestartActivity.launch(appContext, intent)

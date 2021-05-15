@@ -40,6 +40,6 @@ import com.ivianuu.essentials.ui.material.*
         onClick = null
       )
     },
-    onClick = { onValueChange(! value) }
+    onClick = { onValueChange(!value) }
   )
 }

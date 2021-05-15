@@ -35,7 +35,7 @@ typealias IsOnSecureScreen = Boolean
   .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
   .map { (packageName, className) ->
     var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
-    if (! isOnSecureScreen) {
+    if (!isOnSecureScreen) {
       isOnSecureScreen = packageName == "com.android.settings" &&
           className == "android.app.MaterialDialog"
     }

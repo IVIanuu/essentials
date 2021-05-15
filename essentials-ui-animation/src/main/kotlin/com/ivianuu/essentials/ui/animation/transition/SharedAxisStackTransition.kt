@@ -24,12 +24,12 @@ fun HorizontalSharedAxisStackTransition(
       }
       from?.value = Modifier.graphicsLayer {
         alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
-        translationX = lerp(0f, - 30.dp.toPx(), FastOutSlowInEasing.transform(value))
+        translationX = lerp(0f, -30.dp.toPx(), FastOutSlowInEasing.transform(value))
       }
     } else {
       to?.value = Modifier.graphicsLayer {
         alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
-        translationX = lerp(- 30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+        translationX = lerp(-30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
       }
       from?.value = Modifier.graphicsLayer {
         alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
@@ -54,12 +54,12 @@ fun VerticalSharedAxisStackTransition(
       }
       from?.value = Modifier.graphicsLayer {
         alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
-        translationY = lerp(0f, - 30.dp.toPx(), FastOutSlowInEasing.transform(value))
+        translationY = lerp(0f, -30.dp.toPx(), FastOutSlowInEasing.transform(value))
       }
     } else {
       to?.value = Modifier.graphicsLayer {
         alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
-        translationY = lerp(- 30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
+        translationY = lerp(-30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
       }
       from?.value = Modifier.graphicsLayer {
         alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))

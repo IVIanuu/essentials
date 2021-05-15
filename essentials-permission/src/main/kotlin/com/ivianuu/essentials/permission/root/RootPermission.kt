@@ -35,5 +35,5 @@ interface RootPermission : Permission
   @Given toaster: Toaster
 ): PermissionRequestHandler<P> = {
   val isOk = isShellAvailable()
-  if (! isOk) toaster(stringResource(R.string.es_no_root, emptyList()))
+  if (!isOk) toaster(stringResource(R.string.es_no_root, emptyList()))
 }

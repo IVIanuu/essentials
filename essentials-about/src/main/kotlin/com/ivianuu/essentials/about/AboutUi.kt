@@ -187,7 +187,7 @@ object AboutKey : Key<Nothing>
     navigator.push(
       WebKey(
         stringResource(R.string.es_about_privacy_policy, emptyList()),
-        state.first().privacyPolicyUrl !!
+        state.first().privacyPolicyUrl!!
       )
     )
   }

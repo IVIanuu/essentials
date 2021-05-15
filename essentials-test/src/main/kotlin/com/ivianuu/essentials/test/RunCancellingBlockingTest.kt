@@ -64,4 +64,4 @@ fun TestCoroutineScope.runCancellingBlockingTest(
 }
 
 val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
-  get() = coroutineContext[CoroutineDispatcher] !! as TestCoroutineDispatcher
+  get() = coroutineContext[CoroutineDispatcher]!! as TestCoroutineDispatcher

@@ -63,10 +63,10 @@ data class CityDetailKey(val city: City) : Key<Nothing>
       "image ${it.city.name}" to "image",
       sharedElementAnimationSpec = spec,
       contentTransition = {
-        val fromContentModifier = fromElementModifier(ContentAnimationElementKey) !!
-        val card = toElementModifier("card") !!
+        val fromContentModifier = fromElementModifier(ContentAnimationElementKey)!!
+        val card = toElementModifier("card")!!
         animate(spec) { value ->
-          fromContentModifier.value = Modifier.fractionalTranslation(- value)
+          fromContentModifier.value = Modifier.fractionalTranslation(-value)
           card.value = Modifier.fractionalTranslation(yFraction = 1f - value)
         }
       }
@@ -75,14 +75,14 @@ data class CityDetailKey(val city: City) : Key<Nothing>
       "image ${it.city.name}" to "image",
       sharedElementAnimationSpec = spec,
       contentTransition = {
-        val appBarModifier = fromElementModifier("app bar") !!
-        val textModifier = fromElementModifier("card") !!
+        val appBarModifier = fromElementModifier("app bar")!!
+        val textModifier = fromElementModifier("card")!!
         animate(spec) { value ->
           appBarModifier.value = Modifier.alpha(1f - value)
           textModifier.value = Modifier.fractionalTranslation(
             yFraction = value,
             xFraction = value
-          ).rotate(- 180f * value)
+          ).rotate(-180f * value)
         }
       }
     )

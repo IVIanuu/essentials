@@ -68,7 +68,7 @@ fun foregroundUi(
     if (currentForegroundState is Foreground) {
       LaunchedEffect(true) {
         while (isActive) {
-          count ++
+          count++
           foregroundState.value = Foreground(
             createNotification(count, primaryColor)
           )

@@ -26,8 +26,8 @@ fun CircularRevealStackTransition(
   val startRadius: Float
   val endRadius: Float
   if (isPush) {
-    val toElementCoords = toElementModifier(ContentAnimationElementKey) !!.awaitLayoutCoordinates()
-    val centerElementCoords = fromElementModifier(centerElementKey) !!.awaitLayoutCoordinates()
+    val toElementCoords = toElementModifier(ContentAnimationElementKey)!!.awaitLayoutCoordinates()
+    val centerElementCoords = fromElementModifier(centerElementKey)!!.awaitLayoutCoordinates()
     center = centerElementCoords.boundsInWindow().center
     startRadius = 0f
     endRadius = hypot(
@@ -36,8 +36,8 @@ fun CircularRevealStackTransition(
     )
   } else {
     val toElementCoords =
-      fromElementModifier(ContentAnimationElementKey) !!.awaitLayoutCoordinates()
-    val centerElementCoords = toElementModifier(centerElementKey) !!.awaitLayoutCoordinates()
+      fromElementModifier(ContentAnimationElementKey)!!.awaitLayoutCoordinates()
+    val centerElementCoords = toElementModifier(centerElementKey)!!.awaitLayoutCoordinates()
     center = centerElementCoords.boundsInWindow().center
     startRadius = hypot(
       toElementCoords.size.width.toFloat(),

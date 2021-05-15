@@ -73,6 +73,6 @@ import androidx.compose.ui.*
       )
     },
     title = title,
-    onClick = { onCheckedChange(! checked) }
+    onClick = { onCheckedChange(!checked) }
   )
 }

@@ -107,7 +107,7 @@ data class UiDonation(
         .parMap {
           UiDonation(
             it,
-            getSkuDetails(it.sku) !!
+            getSkuDetails(it.sku)!!
           )
         }
     )

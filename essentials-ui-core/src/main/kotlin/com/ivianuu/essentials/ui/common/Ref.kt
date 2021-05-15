@@ -47,7 +47,7 @@ private class RefImpl<T>(
     get() = synchronized(this) { field }
     set(value) {
       val oldValue = synchronized(this) { field }
-      if (! policy.equivalent(oldValue, value)) {
+      if (!policy.equivalent(oldValue, value)) {
         synchronized(this) { field = value }
       }
     }

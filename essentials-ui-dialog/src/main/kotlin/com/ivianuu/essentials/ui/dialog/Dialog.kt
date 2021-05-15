@@ -163,7 +163,7 @@ import com.ivianuu.essentials.ui.material.*
           .layoutId(DialogContentSlot.Buttons)
           .padding(
             start = 8.dp,
-            top = if (! showBottomDivider && content != null) 36.dp else 8.dp,
+            top = if (!showBottomDivider && content != null) 36.dp else 8.dp,
             end = 8.dp,
             bottom = 8.dp
           ),

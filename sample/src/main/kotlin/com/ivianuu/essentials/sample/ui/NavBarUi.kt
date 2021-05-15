@@ -98,7 +98,7 @@ object NavBarKey : Key<Nothing>
           if (hasPermission) {
             scope.launch {
               navBarPref.updateData {
-                copy(hideNavBar = ! hideNavBar)
+                copy(hideNavBar = !hideNavBar)
               }
             }
           } else {
@@ -114,7 +114,7 @@ object NavBarKey : Key<Nothing>
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = { forceNavBarVisibleState.value = ! forceNavBarVisibleState.value }
+        onClick = { forceNavBarVisibleState.value = !forceNavBarVisibleState.value }
       ) { Text("Toggle force nav bar") }
 
       Spacer(Modifier.height(8.dp))

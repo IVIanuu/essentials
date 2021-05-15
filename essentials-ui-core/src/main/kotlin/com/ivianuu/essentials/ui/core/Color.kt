@@ -24,7 +24,7 @@ val Color.isDark: Boolean
   get() = ColorUtils.calculateLuminance(toArgb()) < 0.5
 
 val Color.isLight: Boolean
-  get() = ! isDark
+  get() = !isDark
 
 fun Color.shifted(by: Float): Color {
   if (by == 1f) return this

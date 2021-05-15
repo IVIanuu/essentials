@@ -231,7 +231,7 @@ class AnimatedStackState<T>(
 
     for (child in reversed()) {
       visibleChildren.add(0, child)
-      if (! child.opaque) break
+      if (!child.opaque) break
     }
 
     return visibleChildren
@@ -268,7 +268,7 @@ internal class AnimatedStackTransaction<T>(
   }
 
   private val removesFrom: Boolean
-    get() = forceFromRemoval || (from != null && (! isPush || ! to !!.opaque))
+    get() = forceFromRemoval || (from != null && (!isPush || !to!!.opaque))
 
   private var job: Job? = null
 
@@ -319,18 +319,18 @@ internal class AnimatedStackTransaction<T>(
     val oldToIndex = state.visibleChildren.indexOf(to)
     val fromIndex = state.visibleChildren.indexOf(from)
     val toIndex = when {
-      fromIndex != - 1 -> if (isPush) fromIndex + 1 else fromIndex
-      oldToIndex != - 1 -> oldToIndex
+      fromIndex != -1 -> if (isPush) fromIndex + 1 else fromIndex
+      oldToIndex != -1 -> oldToIndex
       else -> state.visibleChildren.size
     }
     if (oldToIndex != toIndex) {
-      if (oldToIndex != - 1) state.visibleChildren.removeAt(oldToIndex)
+      if (oldToIndex != -1) state.visibleChildren.removeAt(oldToIndex)
       state.visibleChildren.add(toIndex, to)
     }
   }
 
   private fun removeFrom() {
-    if (from == null || ! removesFrom) return
+    if (from == null || !removesFrom) return
     state.visibleChildren -= from
   }
 

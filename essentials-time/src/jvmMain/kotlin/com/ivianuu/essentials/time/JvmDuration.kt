@@ -12,5 +12,5 @@ actual fun Duration.toDouble(): Double {
   return javaClass.declaredFields
     .first { it.type == Double::class.java }
     .also { it.isAccessible = true }
-    .get(this) !! as Double
+    .get(this)!! as Double
 }

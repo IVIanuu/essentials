@@ -70,7 +70,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.value = catch { activeNotifications !!.toList() }
+    _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 }

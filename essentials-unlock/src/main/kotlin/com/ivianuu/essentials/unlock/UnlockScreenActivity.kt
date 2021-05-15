@@ -42,13 +42,13 @@ class UnlockScreenActivity : ComponentActivity() {
   @SuppressLint("NewApi")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    if (! intent.hasExtra(KEY_REQUEST_ID)) {
+    if (!intent.hasExtra(KEY_REQUEST_ID)) {
       valid = false
       finish()
       return
     }
 
-    requestId = intent.getStringExtra(KEY_REQUEST_ID) !!
+    requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
     val component = activityGivenScope.element<UnlockScreenComponent>()
 
@@ -99,7 +99,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
   override fun onDestroy() {
     // just in case we didn't respond yet
-    if (valid && ! hasResult) {
+    if (valid && !hasResult) {
       onUnlockScreenResult(requestId, false)
     }
     super.onDestroy()

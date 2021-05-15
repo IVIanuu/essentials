@@ -30,8 +30,8 @@ enum class FlipDirection(
   val startRotation: Float,
   val endRotation: Float
 ) {
-  LEFT(- 180f, 180f),
-  RIGHT(180f, - 180f),
-  UP(- 180f, 180f),
-  DOWN(180f, - 180f);
+  LEFT(-180f, 180f),
+  RIGHT(180f, -180f),
+  UP(-180f, 180f),
+  DOWN(180f, -180f);
 }

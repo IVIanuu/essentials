@@ -86,13 +86,13 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
         ).toIntentKey()
       )?.getOrNull()?.data?.data ?: return@withContext
 
-      val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri) !!)
+      val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 
       generateSequence { zipInputStream.nextEntry }
         .forEach { entry ->
           val file = dataDir.resolve(entry.name)
           logger.d { "restore file $file" }
-          if (! file.exists()) {
+          if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()
           }

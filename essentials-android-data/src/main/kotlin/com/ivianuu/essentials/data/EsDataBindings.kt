@@ -29,4 +29,4 @@ typealias PrefsDir = File
 
 @Given fun prefsDir(@Given dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
-@Given inline fun packageManager(@Given context: AppContext) = context.packageManager !!
+@Given inline fun packageManager(@Given context: AppContext) = context.packageManager!!

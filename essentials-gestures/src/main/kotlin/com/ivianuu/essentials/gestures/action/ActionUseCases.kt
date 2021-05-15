@@ -45,16 +45,16 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   withContext(dispatcher) {
     catch {
       logger.d { "execute $key" }
-      val action = getAction(key) !!
+      val action = getAction(key)!!
 
       // check permissions
-      if (! permissionRequester(action.permissions)) {
+      if (!permissionRequester(action.permissions)) {
         logger.d { "couldn't get permissions for $key" }
         return@catch false
       }
 
       // unlock screen
-      if (action.unlockScreen && ! screenUnlocker()) {
+      if (action.unlockScreen && !screenUnlocker()) {
         logger.d { "couldn't unlock screen for $key" }
         return@catch false
       }
@@ -62,7 +62,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
       logger.d { "fire $key" }
 
       // fire
-      getActionExecutor(key) !!()
+      getActionExecutor(key)!!()
       return@catch true
     }.onFailure {
       it.printStackTrace()

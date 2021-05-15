@@ -45,13 +45,13 @@ import kotlinx.coroutines.flow.*
   @Given setOverscan: OverscanUpdater,
   @Given wasNavBarHiddenPref: DataStore<WasNavBarHidden>
 ): ScopeWorker<AppGivenScope> = worker@{
-  if (! navBarFeatureSupported) return@worker
+  if (!navBarFeatureSupported) return@worker
   permissionState
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
         forceNavBarVisibleState
           .flatMapLatest { forceVisible ->
-            if (! forceVisible) prefs
+            if (!forceVisible) prefs
             else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
           }
       } else {
@@ -95,7 +95,7 @@ private suspend fun NavBarState.apply(
 
     val rect = when (this) {
       is NavBarState.Hidden -> getOverscanRect(
-        - getNavigationBarHeight(context, rotation), rotationMode, rotation
+        -getNavigationBarHeight(context, rotation), rotationMode, rotation
       )
       NavBarState.Visible -> Rect(0, 0, 0, 0)
     }

@@ -49,7 +49,7 @@ suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit)
           }.onAwait { result ->
             result.also {
               synchronized(this@coroutineScope) {
-                if (! finished) {
+                if (!finished) {
                   finished = true
                   scopeBlockJob.cancel()
                   racers.forEach { it.cancel() }

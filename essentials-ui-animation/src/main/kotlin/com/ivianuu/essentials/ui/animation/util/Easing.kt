@@ -46,7 +46,7 @@ fun arcLerp(
     center = Offset(start.x, start.y + (end.y - start.y).sign * radius)
     val sweepAngle = 2f * asin(distanceFromAtoB / (2f * radius))
     if (start.y < end.y) {
-      beginAngle = - PI.toFloat() / 2f
+      beginAngle = -PI.toFloat() / 2f
       endAngle = beginAngle + sweepAngle * (end.x - start.x).sign
     } else {
       beginAngle = PI.toFloat() / 2f

@@ -27,6 +27,6 @@ import kotlinx.coroutines.flow.*
   @Given pref: DataStore<NavBarPrefs>
 ): ScopeWorker<AppGivenScope> = {
   permissionState
-    .filter { ! it }
+    .filter { !it }
     .collect { pref.updateData { copy(hideNavBar = false) } }
 }

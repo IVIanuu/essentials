@@ -30,7 +30,7 @@ class AndroidSettingsStateTest {
     val setting = module.dataStore(
       scope = this,
       adapter = adapter,
-      dispatcher = coroutineContext.get(CoroutineDispatcher.Key) !!,
+      dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
       contentChangesFactory = { contentChanges }
     )
 

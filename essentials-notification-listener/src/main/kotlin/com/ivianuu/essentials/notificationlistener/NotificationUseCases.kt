@@ -40,7 +40,7 @@ typealias DismissNotificationUseCase = suspend (String) -> Result<Unit, Throwabl
 @Given fun dismissNotificationUseCase(
   @Given ref: Flow<EsNotificationListenerService?>
 ): DismissNotificationUseCase = { key ->
-  catch { ref.first() !!.cancelNotification(key) }
+  catch { ref.first()!!.cancelNotification(key) }
 }
 
 typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
@@ -48,5 +48,5 @@ typealias DismissAllNotificationsUseCase = suspend () -> Result<Unit, Throwable>
 @Given fun dismissAllNotificationsUseCase(
   @Given ref: Flow<EsNotificationListenerService?>
 ): DismissAllNotificationsUseCase = {
-  catch { ref.first() !!.cancelAllNotifications() }
+  catch { ref.first()!!.cancelAllNotifications() }
 }

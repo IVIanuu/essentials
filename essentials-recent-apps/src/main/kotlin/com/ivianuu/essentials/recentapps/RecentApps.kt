@@ -46,7 +46,7 @@ typealias RecentApps = List<String>
     val newRecentApps = recentApps.toMutableList()
 
     // remove the app from the list
-    if (index != - 1) {
+    if (index != -1) {
       newRecentApps.removeAt(index)
     }
 

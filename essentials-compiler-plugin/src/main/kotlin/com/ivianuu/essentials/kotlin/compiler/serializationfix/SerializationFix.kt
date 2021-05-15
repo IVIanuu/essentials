@@ -25,7 +25,7 @@ fun MockProject.serializationFix() {
           object : IrElementTransformerVoid() {
             override fun visitClass(declaration: IrClass): IrStatement {
               val result = super.visitClass(declaration)
-              if (! declaration.hasAnnotation(SerializerAnnotation)) return result
+              if (!declaration.hasAnnotation(SerializerAnnotation)) return result
               declaration.constructors
                 .flatMap { it.valueParameters }
                 .flatMap { valueParameter ->

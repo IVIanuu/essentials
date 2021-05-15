@@ -55,9 +55,9 @@ class OpticsResolveExtension : SyntheticResolveExtension {
     fromSupertypes: List<SimpleFunctionDescriptor>,
     result: MutableCollection<SimpleFunctionDescriptor>
   ) {
-    if (! thisDescriptor.isCompanionObject) return
+    if (!thisDescriptor.isCompanionObject) return
     val clazz = thisDescriptor.containingDeclaration as ClassDescriptor
-    if (! clazz.annotations.hasAnnotation(OpticsAnnotation)) return
+    if (!clazz.annotations.hasAnnotation(OpticsAnnotation)) return
     val primaryConstructor = clazz.unsubstitutedPrimaryConstructor ?: return
     val parameter = primaryConstructor.valueParameters
       .singleOrNull { it.name == name } ?: return
@@ -83,7 +83,7 @@ class OpticsResolveExtension : SyntheticResolveExtension {
           Annotations.EMPTY,
           thisDescriptor.module.findClassAcrossModuleDependencies(
             ClassId.topLevel(Lens)
-          ) !!,
+          )!!,
           listOf(
             clazz.defaultType.asSimpleType()
               .replace(
@@ -115,10 +115,10 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
     val lensSet = lens.functions.single { it.owner.name.asString() == "set" }
     moduleFragment.transformChildrenVoid(object : IrElementTransformerVoid() {
       override fun visitClass(declaration: IrClass): IrStatement {
-        if (! declaration.isCompanion) return super.visitClass(declaration)
+        if (!declaration.isCompanion) return super.visitClass(declaration)
         val clazz = declaration.parent as IrClass
-        if (! clazz.hasAnnotation(OpticsAnnotation)) return super.visitClass(declaration)
-        val lensParametersWithFunction = clazz.primaryConstructor !!
+        if (!clazz.hasAnnotation(OpticsAnnotation)) return super.visitClass(declaration)
+        val lensParametersWithFunction = clazz.primaryConstructor!!
           .valueParameters
           .map { parameter ->
             parameter to declaration.functions.single { function ->
@@ -150,8 +150,8 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                     pluginContext,
                     symbol
                   ).irBlockBody {
-                    + irDelegatingConstructorCall(context.irBuiltIns.anyClass.constructors.single().owner)
-                    + IrInstanceInitializerCallImpl(
+                    +irDelegatingConstructorCall(context.irBuiltIns.anyClass.constructors.single().owner)
+                    +IrInstanceInitializerCallImpl(
                       UNDEFINED_OFFSET,
                       UNDEFINED_OFFSET,
                       this@clazz.symbol,
@@ -168,10 +168,10 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                   overriddenSymbols += lensGet
                   val tParameter = addValueParameter("t", clazz.defaultType)
                   body = DeclarationIrBuilder(pluginContext, symbol).irBlockBody {
-                    + irReturn(
+                    +irReturn(
                       irCall(
                         clazz.properties
-                          .single { it.name == parameter.name }.getter !!
+                          .single { it.name == parameter.name }.getter!!
                       ).apply {
                         dispatchReceiver = irGet(tParameter)
                       }
@@ -188,7 +188,7 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                   val tParameter = addValueParameter("t", clazz.defaultType)
                   val vParameter = addValueParameter("v", parameter.type)
                   body = DeclarationIrBuilder(pluginContext, symbol).irBlockBody {
-                    + irReturn(
+                    +irReturn(
                       irCall(clazz.functions.single { it.name.asString() == "copy" }).apply {
                         dispatchReceiver = irGet(tParameter)
                         putValueArgument(
@@ -202,15 +202,15 @@ class OpticsIrGenerationExtension : IrGenerationExtension {
                 }
               }
 
-              + lensImpl
-              + irCall(lensImpl.constructors.single())
+              +lensImpl
+              +irCall(lensImpl.constructors.single())
             }
 
             irExprBody(expr)
           }
 
           function.body = DeclarationIrBuilder(pluginContext, function.symbol).irBlockBody {
-            + irReturn(
+            +irReturn(
               irGetField(
                 irGetObject(declaration.symbol),
                 field

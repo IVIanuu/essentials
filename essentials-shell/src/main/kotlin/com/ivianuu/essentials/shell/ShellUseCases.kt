@@ -35,5 +35,5 @@ typealias RunShellCommandUseCase = suspend (List<String>) -> Result<List<String>
 
 @Given
 fun runShellCommandUseCase(@Given dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
-  withContext(dispatcher) { catch { SU.run(commands) !! } }
+  withContext(dispatcher) { catch { SU.run(commands)!! } }
 }

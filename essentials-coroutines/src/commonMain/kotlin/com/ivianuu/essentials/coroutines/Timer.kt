@@ -10,7 +10,7 @@ import kotlin.time.*
 fun timer(duration: Duration): Flow<Long> = flow {
   var value = 0L
   while (coroutineContext.isActive) {
-    emit(value ++)
+    emit(value++)
     delay(duration)
   }
 }

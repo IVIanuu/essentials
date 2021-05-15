@@ -53,7 +53,7 @@ typealias ShowFindPermissionHint<P> = Boolean
     },
     {
       // wait until user granted permission
-      while (! state.first()) delay(100)
+      while (!state.first()) delay(100)
     }
   )
 }

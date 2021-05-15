@@ -81,7 +81,7 @@ typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<Permissio
 ): PermissionStateFactory = { permissions ->
   combine(
     *permissions
-      .map { permissionStates[it] !! }
+      .map { permissionStates[it]!! }
       .toTypedArray()
   ) { states -> states.all { it } }
 }

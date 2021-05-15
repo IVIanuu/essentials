@@ -68,7 +68,7 @@ class NavigatorImpl(
       _state.value.results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
-      if (! intentKeyHandler(key) {
+      if (!intentKeyHandler(key) {
           @Suppress("UNCHECKED_CAST")
           result.complete(it as R)
         }) {

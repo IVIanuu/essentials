@@ -32,7 +32,7 @@ typealias AppUiStarter = IntentAppUiStarter
   @Given foregroundActivity: Flow<ForegroundActivity>,
   @Given packageManager: PackageManager,
 ): AppUiStarter = {
-  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName) !!
+  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
   foregroundActivity
     .onStart {
       appContext.startActivity(

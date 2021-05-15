@@ -28,7 +28,7 @@ import com.ivianuu.injekt.android.*
 typealias BitmapResourceProvider = (Int) -> ImageBitmap
 
 @Given fun bitmapResourceProvider(@Given context: AppContext): BitmapResourceProvider = { id ->
-  context.getDrawable(id) !!.toBitmap().toImageBitmap()
+  context.getDrawable(id)!!.toBitmap().toImageBitmap()
 }
 
 typealias BooleanResourceProvider = (Int) -> Boolean

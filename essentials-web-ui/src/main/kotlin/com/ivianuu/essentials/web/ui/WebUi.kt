@@ -48,16 +48,16 @@ data class WebKey(val title: String, val url: String) : Key<Nothing>
             elevation = 0.dp,
             backgroundColor = backgroundColor
           ) {
-            IconButton(onClick = { webViewRef !!.goBack() }) {
+            IconButton(onClick = { webViewRef!!.goBack() }) {
               Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
             }
-            IconButton(onClick = { webViewRef !!.reload() }) {
+            IconButton(onClick = { webViewRef!!.reload() }) {
               Icon(painterResource(R.drawable.es_ic_refresh), null)
             }
             val scope = rememberCoroutineScope()
             IconButton(onClick = {
               scope.launch {
-                navigator.push(UrlKey(webViewRef !!.url))
+                navigator.push(UrlKey(webViewRef!!.url))
               }
             }) {
               Icon(painterResource(R.drawable.es_ic_open_in_browser), null)

@@ -41,7 +41,7 @@ data class AppKey(val packageName: String) : IntentKey
 @Given fun appKeyIntentFactory(
   @Given packageManager: PackageManager
 ): KeyIntentFactory<AppKey> = { key ->
-  packageManager.getLaunchIntentForPackage(key.packageName) !!
+  packageManager.getLaunchIntentForPackage(key.packageName)!!
 }
 
 data class ShareKey(val text: String) : IntentKey

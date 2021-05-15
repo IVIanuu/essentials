@@ -37,7 +37,7 @@ class ForegroundActivityStateTest {
           _lifecycle = LifecycleRegistry(this)
             .also { lifecycle = it }
         }
-        return _lifecycle !!
+        return _lifecycle!!
       }
 
       override fun getViewModelStore(): ViewModelStore = ViewModelStore()

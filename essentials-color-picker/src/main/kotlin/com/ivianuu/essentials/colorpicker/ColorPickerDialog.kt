@@ -58,7 +58,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
     ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
   }
 
-  if (! allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
+  if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
     currentScreen = ColorPickerTab.COLORS
   }
 
@@ -330,13 +330,13 @@ private sealed class ColorGridItem {
     value = hexInput,
     onValueChange = { newValue ->
       if ((showAlphaSelector && newValue.length > 8) ||
-        (! showAlphaSelector && newValue.length > 6)
+        (!showAlphaSelector && newValue.length > 6)
       ) return@TextField
 
       hexInput = newValue
 
       if ((showAlphaSelector && newValue.length < 8) ||
-        (! showAlphaSelector && newValue.length < 6)
+        (!showAlphaSelector && newValue.length < 6)
       ) return@TextField
 
       val newColor = newValue.toColorOrNull()

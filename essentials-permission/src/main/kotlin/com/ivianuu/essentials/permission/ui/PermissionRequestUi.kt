@@ -99,14 +99,14 @@ data class UiPermission<P : Permission>(
     suspend fun updatePermissions() {
       val notGrantedPermissions = key.permissionsKeys
         .filterNot { permissionStateFactory(listOf(it)).first() }
-        .map { UiPermission(it, permissions[it] !!) }
+        .map { UiPermission(it, permissions[it]!!) }
       update { copy(permissions = notGrantedPermissions) }
     }
 
     launch { updatePermissions() }
 
     action(PermissionRequestModel.grantPermission()) { permission ->
-      requestHandlers[permission.permissionKey] !!(permissions[permission.permissionKey] !!)
+      requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
       appUiStarter()
       updatePermissions()
     }

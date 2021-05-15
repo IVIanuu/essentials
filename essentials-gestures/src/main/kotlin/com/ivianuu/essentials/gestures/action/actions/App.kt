@@ -57,7 +57,7 @@ import com.ivianuu.injekt.*
       actionIntentSender(
         packageManager.getLaunchIntentForPackage(
           packageName
-        ) !!
+        )!!
       )
     }
   }

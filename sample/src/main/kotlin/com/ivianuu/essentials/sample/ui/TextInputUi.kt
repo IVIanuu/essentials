@@ -43,7 +43,7 @@ object TextInputKey : Key<Nothing>
 @Given val textInputUi: KeyUi<TextInputKey> = {
   val state = remember { TextInputState() }
 
-  if (! state.searchVisible) {
+  if (!state.searchVisible) {
     state.inputValue = TextFieldValue()
   }
 
@@ -90,7 +90,7 @@ object TextInputKey : Key<Nothing>
       )
     },
     floatingActionButton = {
-      if (! state.searchVisible) {
+      if (!state.searchVisible) {
         ExtendedFloatingActionButton(
           text = { Text("Search") },
           onClick = { state.searchVisible = true }

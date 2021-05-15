@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.core.*
   onDismissRequest: () -> Unit = defaultDismissRequestHandler,
   dialog: @Composable () -> Unit,
 ) {
-  if (! dismissible) {
+  if (!dismissible) {
     BackHandler { }
   }
 
@@ -67,7 +67,7 @@ import com.ivianuu.essentials.ui.core.*
 
 private val defaultDismissRequestHandler: () -> Unit
   @Composable get() {
-    val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current !!
+    val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
     return {
       backPressedDispatcherOwner.onBackPressedDispatcher
         .onBackPressed()

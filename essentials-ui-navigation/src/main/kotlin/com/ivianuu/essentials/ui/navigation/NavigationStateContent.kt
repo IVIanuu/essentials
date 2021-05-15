@@ -126,7 +126,7 @@ private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> Key
 
     private fun finalizeIfNeeded() {
       if (isFinalized) return
-      if (isComposing || ! isDetached) return
+      if (isComposing || !isDetached) return
       isFinalized = true
       givenScope.dispose()
     }

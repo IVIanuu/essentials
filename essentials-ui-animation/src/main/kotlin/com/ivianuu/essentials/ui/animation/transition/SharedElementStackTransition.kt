@@ -56,8 +56,8 @@ fun SharedElementStackTransition(
   states
     .filter { it.first.bounds != null && it.second.bounds != null }
     .forEach { (start, end) ->
-      val startBounds = start.bounds !!
-      val endBounds = end.bounds !!
+      val startBounds = start.bounds!!
+      val endBounds = end.bounds!!
       start.capturedGeometry = SharedElementGeometry(
         position = Offset(
           x = startBounds.left + (startBounds.width - endBounds.width) / 2,
@@ -80,9 +80,9 @@ fun SharedElementStackTransition(
     states
       .filter { it.first.bounds != null && it.second.bounds != null }
       .forEach { (_, endState) ->
-        val endBounds = endState.bounds !!
-        val currentGeometry = endState.animatedGeometry !!
-        val sharedElementProps = endState.element !![SharedElementPropsKey] !!
+        val endBounds = endState.bounds!!
+        val currentGeometry = endState.animatedGeometry!!
+        val sharedElementProps = endState.element!![SharedElementPropsKey]!!
         key(endState) {
           Box(
             modifier = Modifier
@@ -110,7 +110,7 @@ fun SharedElementStackTransition(
           ) {
             withCompositionContext(sharedElementProps.compositionContext) {
               CompositionLocalProvider(
-                LocalSharedElementTransitionFraction provides endState.animatedGeometry !!.fraction,
+                LocalSharedElementTransitionFraction provides endState.animatedGeometry!!.fraction,
                 content = sharedElementProps.content
               )
             }
@@ -142,18 +142,18 @@ fun SharedElementStackTransition(
             start.modifier?.value = Modifier.alpha(0f)
             end.animatedGeometry = SharedElementGeometry(
               position = arcLerp(
-                if (isPush) start.capturedGeometry !!.position else end.capturedGeometry !!.position,
-                if (isPush) end.capturedGeometry !!.position else start.capturedGeometry !!.position,
+                if (isPush) start.capturedGeometry!!.position else end.capturedGeometry!!.position,
+                if (isPush) end.capturedGeometry!!.position else start.capturedGeometry!!.position,
                 if (isPush) value else 1f - value
               ),
               scaleX = lerp(
-                start.capturedGeometry !!.scaleX,
-                end.capturedGeometry !!.scaleX,
+                start.capturedGeometry!!.scaleX,
+                end.capturedGeometry!!.scaleX,
                 value
               ),
               scaleY = lerp(
-                start.capturedGeometry !!.scaleY,
-                end.capturedGeometry !!.scaleY,
+                start.capturedGeometry!!.scaleY,
+                end.capturedGeometry!!.scaleY,
                 value
               ),
               fraction = if (isPush) value else 1f - value

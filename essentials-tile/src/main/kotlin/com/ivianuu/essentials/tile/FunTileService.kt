@@ -60,7 +60,7 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
   override fun onClick() {
     super.onClick()
     component.logger.d { "$tileKey on click" }
-    tileModelComponent !!.tileModel.value.onTileClicked()
+    tileModelComponent!!.tileModel.value.onTileClicked()
   }
 
   override fun onStopListening() {

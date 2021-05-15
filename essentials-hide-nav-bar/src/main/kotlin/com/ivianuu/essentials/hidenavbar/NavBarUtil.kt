@@ -87,7 +87,7 @@ fun overscanUpdater(@Given logger: Logger): OverscanUpdater = { rect ->
     .invoke(null, "window")
 
   val windowManagerService = cls.getMethod("asInterface", IBinder::class.java)
-    .invoke(null, invoke) !!
+    .invoke(null, invoke)!!
 
   val setOverscanMethod = windowManagerService.javaClass.getDeclaredMethod(
     "setOverscan",

@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.*
   @Given wifiManager: @SystemService WifiManager
 ): ActionExecutor<WifiActionId> = {
   @Suppress("DEPRECATION")
-  wifiManager.isWifiEnabled = ! wifiManager.isWifiEnabled
+  wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
 typealias WifiIcon = ActionIcon

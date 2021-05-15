@@ -44,7 +44,7 @@ import com.ivianuu.injekt.android.*
   @Given appContext: AppContext,
   @Given globalActionExecutor: GlobalActionExecutor,
 ): ActionExecutor<HomeActionId> = {
-  if (! needsHomeIntentWorkaround) {
+  if (!needsHomeIntentWorkaround) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
   } else {
     catch {

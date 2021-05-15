@@ -41,7 +41,7 @@ import kotlin.math.*
   content: @Composable () -> Unit
 ) {
   val targetInsets = LocalInsets.current
-  val animatedInsets = if (! animate) targetInsets else {
+  val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
     LaunchedEffect(animation) {
       animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))

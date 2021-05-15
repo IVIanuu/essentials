@@ -24,7 +24,7 @@ fun HorizontalStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)
 ) = ContentAnimationStackTransition(spec) { fromModifier, toModifier, value ->
   fromModifier?.value = Modifier
-    .fractionalTranslation(xFraction = if (isPush) - value else value)
+    .fractionalTranslation(xFraction = if (isPush) -value else value)
   toModifier?.value = Modifier
-    .fractionalTranslation(xFraction = if (isPush) (1f - value) else - 1f + value)
+    .fractionalTranslation(xFraction = if (isPush) (1f - value) else -1f + value)
 }

@@ -88,7 +88,7 @@ object NavBarKey : Key<Nothing>
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
   }
   action(NavBarModel.updateHideNavBar()) { value ->
-    if (! value) {
+    if (!value) {
       pref.updateData { copy(hideNavBar = false) }
     } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
       pref.updateData { copy(hideNavBar = value) }

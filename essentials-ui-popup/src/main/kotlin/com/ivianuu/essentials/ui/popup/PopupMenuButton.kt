@@ -68,7 +68,7 @@ import kotlinx.coroutines.*
       scope.launch {
         component.navigator.push(
           PopupKey(
-            position = coordinates !!.boundsInRoot(),
+            position = coordinates!!.boundsInRoot(),
             onCancel = onCancel
           ) {
             PopupMenu(items = items)

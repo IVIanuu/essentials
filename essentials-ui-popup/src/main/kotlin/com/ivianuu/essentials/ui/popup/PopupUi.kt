@@ -56,7 +56,7 @@ data class PopupKey(
   var dismissed by remember { refOf(false) }
 
   val dismiss: (Boolean) -> Unit = { cancelled ->
-    if (! dismissed) {
+    if (!dismissed) {
       dismissed = true
       scope.launch { navigator.pop(key) }
       if (cancelled) key.onCancel?.invoke()

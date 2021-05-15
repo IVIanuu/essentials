@@ -48,7 +48,7 @@ object TorchKey : Key<Nothing>
         style = MaterialTheme.typography.h4
       )
       Spacer(Modifier.height(8.dp))
-      Button(onClick = { torchState.update { ! torchEnabled } }) {
+      Button(onClick = { torchState.update { !torchEnabled } }) {
         Text("Toggle torch")
       }
     }

@@ -264,7 +264,7 @@ object DialogsKey : Key<Nothing>
 ) {
   Spacer(Modifier.height(8.dp))
 
-  val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current !!
+  val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
   val component = rememberElement<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(

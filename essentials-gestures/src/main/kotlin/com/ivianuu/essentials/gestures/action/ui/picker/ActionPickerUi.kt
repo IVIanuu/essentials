@@ -140,12 +140,12 @@ sealed class ActionPickerItem {
   @Given scope: GivenCoroutineScope<KeyUiGivenScope>
 ): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
-  action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey !!) }
+  action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
   action(ActionPickerModel.pickAction()) { item ->
     val result = item.getResult() ?: return@action
     if (result is ActionPickerKey.Result.Action) {
-      val action = getAction(result.actionId) !!
-      if (! permissionRequester(action.permissions))
+      val action = getAction(result.actionId)!!
+      if (!permissionRequester(action.permissions))
         return@action
     }
     navigator.pop(key, result)
