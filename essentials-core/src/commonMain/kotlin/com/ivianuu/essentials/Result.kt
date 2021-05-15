@@ -13,6 +13,8 @@ inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = t
   Ok(block())
 } catch (e: CancellationException) {
   throw e
+} catch (e: ControlException) {
+  throw e
 } catch (e: Throwable) {
   Err(e)
 }
