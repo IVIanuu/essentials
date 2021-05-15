@@ -9,8 +9,7 @@ import com.ivianuu.injekt.android.*
 
 object FeedbackMailKey : IntentKey
 
-@Given
-fun feedbackMailKeyIntentFactory(
+@Given fun feedbackMailKeyIntentFactory(
   @Given appContext: AppContext,
   @Given stringResource: StringResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {

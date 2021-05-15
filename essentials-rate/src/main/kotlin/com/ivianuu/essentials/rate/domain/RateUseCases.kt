@@ -37,8 +37,7 @@ fun rateOnPlayUseCase(
 
 internal typealias DisplayShowNeverUseCase = suspend () -> Boolean
 
-@Given
-fun displayShowNeverUseCase(
+@Given fun displayShowNeverUseCase(
   @Given pref: DataStore<RatePrefs>
 ): DisplayShowNeverUseCase = {
   pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
@@ -46,8 +45,7 @@ fun displayShowNeverUseCase(
 
 internal typealias ShowNeverUseCase = suspend () -> Unit
 
-@Given
-fun showNeverUseCase(
+@Given fun showNeverUseCase(
   @Given key: Key<*>,
   @Given navigator: Navigator,
   @Given pref: DataStore<RatePrefs>
@@ -58,8 +56,7 @@ fun showNeverUseCase(
 
 internal typealias ShowLaterUseCase = suspend () -> Unit
 
-@Given
-fun showLaterUseCase(
+@Given fun showLaterUseCase(
   @Given key: Key<*>,
   @Given navigator: Navigator,
   @Given pref: DataStore<RatePrefs>,

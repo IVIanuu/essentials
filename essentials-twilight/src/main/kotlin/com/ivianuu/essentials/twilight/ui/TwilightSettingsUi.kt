@@ -39,8 +39,7 @@ import kotlinx.coroutines.flow.*
 
 object TwilightSettingsKey : Key<Nothing>
 
-@Given
-val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
+@Given val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
   ) {

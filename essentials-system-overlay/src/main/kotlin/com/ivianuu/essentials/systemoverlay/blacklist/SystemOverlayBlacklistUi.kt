@@ -102,8 +102,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   val updateDisableOnSecureScreens: (Boolean) -> Unit = {}
 ) {
   companion object {
-    @Given
-    fun initial(
+    @Given fun initial(
       @Given key: SystemOverlayBlacklistKey
     ): @Initial SystemOverlayBlacklistModel = SystemOverlayBlacklistModel(
       systemOverlayName = key.systemOverlayName

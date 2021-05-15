@@ -26,8 +26,7 @@ import kotlinx.coroutines.flow.*
 
 object RateKey : DialogKey<Nothing>
 
-@Given
-val rateUi: ModelKeyUi<RateKey, RateModel> = {
+@Given val rateUi: ModelKeyUi<RateKey, RateModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -107,15 +106,13 @@ val rateUi: ModelKeyUi<RateKey, RateModel> = {
   val confirmEnabled: Boolean get() = rating != 0
 
   companion object {
-    @Given
-    fun initial(@Given buildInfo: BuildInfo): @Initial RateModel = RateModel(
+    @Given fun initial(@Given buildInfo: BuildInfo): @Initial RateModel = RateModel(
       packageName = buildInfo.packageName
     )
   }
 }
 
-@Given
-fun rateModel(
+@Given fun rateModel(
   @Given initial: @Initial RateModel,
   @Given displayShowNever: DisplayShowNeverUseCase,
   @Given navigator: Navigator,

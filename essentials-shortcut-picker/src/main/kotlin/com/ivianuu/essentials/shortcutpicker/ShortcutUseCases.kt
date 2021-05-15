@@ -30,8 +30,7 @@ import kotlinx.coroutines.*
 
 typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
 
-@Given
-fun getAllShortcutsUseCase(
+@Given fun getAllShortcutsUseCase(
   @Given dispatcher: IODispatcher,
   @Given packageManager: PackageManager
 ): GetAllShortcutsUseCase = {
@@ -60,8 +59,7 @@ fun getAllShortcutsUseCase(
 
 typealias ExtractShortcutUseCase = (Intent) -> Shortcut
 
-@Given
-fun extractShortcutUseCase(
+@Given fun extractShortcutUseCase(
   @Given packageManager: PackageManager
 ): ExtractShortcutUseCase = { shortcutRequestResult ->
   val intent =

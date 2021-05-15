@@ -45,8 +45,7 @@ class AndroidSettingModule<T : S, S>(
   }
 
   @Suppress("UNCHECKED_CAST")
-  @Given
-  fun adapter(
+  @Given fun adapter(
     @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingAdapter<S>,
     @Given initial: @Initial T
   ): AndroidSettingAdapter<T> = adapterFactory(name, type, initial) as AndroidSettingAdapter<T>

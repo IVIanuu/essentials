@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.*
 
 object RateOnPlayKey : DialogKey<Nothing>
 
-@Given
-val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
+@Given val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(stringResource(R.string.es_rate_on_play_title)) },
@@ -48,8 +47,7 @@ val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
   val showNever: () -> Unit = {},
 )
 
-@Given
-fun rateOnPlayModel(
+@Given fun rateOnPlayModel(
   @Given displayShowNever: DisplayShowNeverUseCase,
   @Given key: RateOnPlayKey,
   @Given navigator: Navigator,

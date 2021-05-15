@@ -45,11 +45,7 @@ data class PopupKey(
   val content: @Composable () -> Unit,
 ) : Key<Nothing>
 
-@Given
-fun popupUi(
-  @Given key: PopupKey,
-  @Given navigator: Navigator,
-): KeyUi<PopupKey> = {
+@Given fun popupUi(@Given key: PopupKey, @Given navigator: Navigator): KeyUi<PopupKey> = {
   val configuration = LocalConfiguration.current
   val initialConfiguration = remember { configuration }
   val scope = rememberCoroutineScope()
@@ -88,8 +84,7 @@ fun popupUi(
   }
 }
 
-@Given
-val popupKeyOptionsFactory: KeyUiOptionsFactory<PopupKey> = {
+@Given val popupKeyOptionsFactory: KeyUiOptionsFactory<PopupKey> = {
   KeyUiOptions(opaque = true, transition = PopupStackTransition)
 }
 
