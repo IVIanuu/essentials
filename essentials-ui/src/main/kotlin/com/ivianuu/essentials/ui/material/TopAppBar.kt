@@ -131,9 +131,7 @@ private val DefaultAppBarElevation = 4.dp
     component.navigator.state.value.backStack.indexOf(component.key) > 0
   }
   return when {
-    canGoBack -> {
-      { BackButton() }
-    }
+    canGoBack -> ({ BackButton() })
     else -> null
   }
 }
