@@ -14,5 +14,5 @@ interface NullableBinding {
 internal object NullableBindingImpl : NullableBinding {
   override fun <T> T?.bind(): T = this ?: throw ExitException
 
-  object ExitException : Exception()
+  object ExitException : ControlException()
 }

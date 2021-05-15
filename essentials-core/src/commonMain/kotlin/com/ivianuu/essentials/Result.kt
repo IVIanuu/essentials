@@ -42,5 +42,5 @@ internal class ResultBindingImpl<E> : ResultBinding<E> {
     }
   }
 
-  object ExitException : Exception()
+  object ExitException : ControlException()
 }
