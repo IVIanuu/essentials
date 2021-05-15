@@ -23,7 +23,6 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class SecureScreenTest {
-
   @Test fun testIsOnSecureScreen() = runCancellingBlockingTest {
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
     val collector = isOnSecureScreen(
@@ -78,5 +77,4 @@ class SecureScreenTest {
       false
     )
   }
-
 }

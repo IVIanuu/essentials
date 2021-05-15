@@ -17,7 +17,6 @@ class OverlayComposeView(
   LifecycleOwner,
   SavedStateRegistryOwner,
   ViewModelStoreOwner {
-
   private val _lifecycle = LifecycleRegistry(this)
   private val savedStateRegistryController = SavedStateRegistryController.create(this)
   private val viewModelStore = ViewModelStore()

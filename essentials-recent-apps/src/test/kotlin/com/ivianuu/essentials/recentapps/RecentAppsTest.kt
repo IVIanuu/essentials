@@ -29,7 +29,6 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class RecentAppsTest {
-
   @Test fun testRecentApps() = runCancellingBlockingTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
