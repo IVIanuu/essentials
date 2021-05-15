@@ -30,8 +30,7 @@ import org.robolectric.annotation.*
 @Config(sdk = [24])
 class RecentAppsTest {
 
-  @Test
-  fun testRecentApps() = runCancellingBlockingTest {
+  @Test fun testRecentApps() = runCancellingBlockingTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
@@ -94,8 +93,7 @@ class RecentAppsTest {
     )
   }
 
-  @Test
-  fun testCurrentApp() = runCancellingBlockingTest {
+  @Test fun testCurrentApp() = runCancellingBlockingTest {
     val recentApps = EventFlow<List<String>>()
     val collector = currentApp(recentApps).testCollect(this)
 

@@ -24,8 +24,7 @@ import org.junit.*
 
 class SecureScreenTest {
 
-  @Test
-  fun testIsOnSecureScreen() = runCancellingBlockingTest {
+  @Test fun testIsOnSecureScreen() = runCancellingBlockingTest {
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
     val collector = isOnSecureScreen(
       accessibilityEvents,

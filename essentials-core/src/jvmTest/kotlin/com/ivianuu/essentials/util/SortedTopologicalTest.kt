@@ -21,8 +21,7 @@ import io.kotest.matchers.collections.*
 import org.junit.*
 
 class SortedTopologicalTest {
-  @Test
-  fun testSortedTopologial() {
+  @Test fun testSortedTopologial() {
     val unsorted = listOf(
       Item(
         key = "c",

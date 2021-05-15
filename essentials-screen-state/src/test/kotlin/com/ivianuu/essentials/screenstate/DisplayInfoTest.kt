@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.*
 import org.junit.*
 
 class DisplayInfoTest {
-  @Test
-  fun testDisplayInfo() = runCancellingBlockingTest {
+  @Test fun testDisplayInfo() = runCancellingBlockingTest {
     val configChanges = EventFlow<ConfigChange>()
     val rotation = MutableStateFlow(DisplayRotation.PORTRAIT_UP)
     var currentWidth = 0

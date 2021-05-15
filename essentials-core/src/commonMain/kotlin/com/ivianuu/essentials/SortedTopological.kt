@@ -22,8 +22,7 @@ import com.ivianuu.essentials.TreeDescriptor.Companion.key
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Extension
-interface TreeDescriptor<in T> {
+@Extension interface TreeDescriptor<in T> {
   fun T.key(): Any
   fun T.dependents(): Set<Any>
   fun T.dependencies(): Set<Any>

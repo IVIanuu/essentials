@@ -26,8 +26,7 @@ import kotlinx.coroutines.test.*
 import org.junit.*
 
 class StateTest {
-  @Test
-  fun testUpdate() = runCancellingBlockingTest {
+  @Test fun testUpdate() = runCancellingBlockingTest {
     val state = state(0) {
       update { inc() }
     }
@@ -36,16 +35,14 @@ class StateTest {
       .shouldContainExactly(1)
   }
 
-  @Test
-  fun testEmitsInitialState() = runCancellingBlockingTest {
+  @Test fun testEmitsInitialState() = runCancellingBlockingTest {
     val state = state(0) {}
     state.testCollect(this)
       .values
       .shouldContainExactly(0)
   }
 
-  @Test
-  fun testFlowUpdate() = runCancellingBlockingTest {
+  @Test fun testFlowUpdate() = runCancellingBlockingTest {
     val actions = EventFlow<Int>()
     val state = state(0) {
       actions
@@ -61,8 +58,7 @@ class StateTest {
       .shouldContainExactly(0, 1, 0)
   }
 
-  @Test
-  fun testCancelsStateScope() = runCancellingBlockingTest {
+  @Test fun testCancelsStateScope() = runCancellingBlockingTest {
     val actions = EventFlow<Unit>()
     val collector = TestCollector<Unit>()
     val stateScope = TestCoroutineScope(childJob())

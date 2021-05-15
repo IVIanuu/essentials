@@ -30,8 +30,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class AndroidAppForegroundStateTest {
-  @Test
-  fun testAndroidAppForegroundState() = runCancellingBlockingTest {
+  @Test fun testAndroidAppForegroundState() = runCancellingBlockingTest {
     val activities = MutableStateFlow<ComponentActivity?>(null)
     val collector = androidAppForegroundState(activities).testCollect(this)
 

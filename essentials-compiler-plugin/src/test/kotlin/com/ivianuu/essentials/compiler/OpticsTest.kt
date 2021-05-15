@@ -4,8 +4,7 @@ import io.kotest.matchers.*
 import org.junit.*
 
 class OpticsTest {
-  @Test
-  fun testOptics() = codegen(
+  @Test fun testOptics() = codegen(
     """
             import com.ivianuu.essentials.optics.*
             @Optics data class MyClass(val value: String)
@@ -20,8 +19,7 @@ class OpticsTest {
     invokeSingleFile() shouldBe "hello world"
   }
 
-  @Test
-  fun testOpticsWithGenerics() = codegen(
+  @Test fun testOpticsWithGenerics() = codegen(
     """
             import com.ivianuu.essentials.optics.*
             @Optics data class MyClass<A>(val value: A)

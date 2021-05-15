@@ -31,8 +31,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ScreenStateTest {
-  @Test
-  fun testScreenState() = runCancellingBlockingTest {
+  @Test fun testScreenState() = runCancellingBlockingTest {
     val broadcasts = EventFlow<Intent>()
     var currentScreenState = ScreenState.OFF
     val globalScopeDispatcher = TestCoroutineDispatcher()
@@ -56,8 +55,7 @@ class ScreenStateTest {
       .shouldContainExactly(ScreenState.OFF, ScreenState.LOCKED, ScreenState.UNLOCKED)
   }
 
-  @Test
-  fun testCurrentScreenStateProviderWithScreenOff() = runCancellingBlockingTest {
+  @Test fun testCurrentScreenStateProviderWithScreenOff() = runCancellingBlockingTest {
     val screenState = currentScreenStateProvider(
       TestCoroutineDispatcher(),
       mockk(),
@@ -68,8 +66,7 @@ class ScreenStateTest {
     screenState shouldBe ScreenState.OFF
   }
 
-  @Test
-  fun testCurrentScreenStateProviderWithLockedScreen() = runCancellingBlockingTest {
+  @Test fun testCurrentScreenStateProviderWithLockedScreen() = runCancellingBlockingTest {
     val screenState = currentScreenStateProvider(
       TestCoroutineDispatcher(),
       mockk {
@@ -82,8 +79,7 @@ class ScreenStateTest {
     screenState shouldBe ScreenState.LOCKED
   }
 
-  @Test
-  fun testCurrentScreenStateProviderWithUnlockedScreen() = runCancellingBlockingTest {
+  @Test fun testCurrentScreenStateProviderWithUnlockedScreen() = runCancellingBlockingTest {
     val screenState = currentScreenStateProvider(
       TestCoroutineDispatcher(),
       mockk {

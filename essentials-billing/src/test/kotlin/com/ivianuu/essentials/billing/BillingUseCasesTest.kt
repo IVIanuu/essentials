@@ -12,8 +12,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class BillingUseCasesTest {
-  @Test
-  fun testPurchaseUseCase() = runCancellingBlockingTest {
+  @Test fun testPurchaseUseCase() = runCancellingBlockingTest {
     @Given val context = TestBillingContext(this).apply {
       billingClient.withTestSku()
     }

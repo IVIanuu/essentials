@@ -28,8 +28,7 @@ import org.junit.runner.*
 
 @RunWith(AndroidJUnit4::class)
 class ContentChangesTest {
-  @Test
-  fun testContentChanges() = runCancellingBlockingTest {
+  @Test fun testContentChanges() = runCancellingBlockingTest {
     lateinit var observer: ContentObserver
     val contentResolver = mockk<ContentResolver> {
       every { registerContentObserver(any(), any(), any()) } answers {

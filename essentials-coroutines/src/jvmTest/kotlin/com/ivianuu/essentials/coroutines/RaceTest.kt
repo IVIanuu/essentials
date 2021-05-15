@@ -22,8 +22,7 @@ import kotlinx.coroutines.*
 import org.junit.*
 
 class RaceTest {
-  @Test
-  fun testFirstOneWins() = runCancellingBlockingTest {
+  @Test fun testFirstOneWins() = runCancellingBlockingTest {
     val result = race {
       launchRacer {
         delay(1)
@@ -34,8 +33,7 @@ class RaceTest {
     result shouldBe "b"
   }
 
-  @Test
-  fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
+  @Test fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
     var bCancelled = false
     race {
       launchRacer {
@@ -55,8 +53,7 @@ class RaceTest {
     bCancelled shouldBe true
   }
 
-  @Test
-  fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
+  @Test fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
     var thrown = false
     try {
       race<String> {
@@ -71,8 +68,7 @@ class RaceTest {
     thrown shouldBe true
   }
 
-  @Test
-  fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
+  @Test fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
     var blockCancelled = false
     race {
       launchRacer {

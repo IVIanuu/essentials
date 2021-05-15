@@ -28,8 +28,7 @@ class NavigationStateTest {
   object KeyB : Key<Nothing>
   object KeyC : Key<Nothing>
 
-  @Test
-  fun testNavigationState() = runCancellingBlockingTest {
+  @Test fun testNavigationState() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
       logger = NoopLogger,
@@ -56,8 +55,7 @@ class NavigationStateTest {
 
   object KeyWithResult : Key<String>
 
-  @Test
-  fun testReturnsResultOnPop() = runCancellingBlockingTest {
+  @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
       logger = NoopLogger,
@@ -68,8 +66,7 @@ class NavigationStateTest {
     result.await() shouldBe "b"
   }
 
-  @Test
-  fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
+  @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
       logger = NoopLogger,

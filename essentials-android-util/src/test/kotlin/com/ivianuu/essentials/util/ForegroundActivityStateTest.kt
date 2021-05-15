@@ -27,8 +27,7 @@ import org.junit.runner.*
 
 @RunWith(AndroidJUnit4::class)
 class ForegroundActivityStateTest {
-  @Test
-  fun testForegroundActivityState() = runCancellingBlockingTest {
+  @Test fun testForegroundActivityState() = runCancellingBlockingTest {
     val foregroundState = foregroundActivityState
     lateinit var lifecycle: LifecycleRegistry
     val activity = object : ComponentActivity(), ForegroundActivityMarker {

@@ -29,8 +29,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ConfigChangesTest {
-  @Test
-  fun testConfigChanges() = runCancellingBlockingTest {
+  @Test fun testConfigChanges() = runCancellingBlockingTest {
     lateinit var callback: ComponentCallbacks
     val appContext = mockk<AppContext> {
       every { registerComponentCallbacks(any()) } answers {

@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.*
 import org.junit.*
 
 class OnCancelTest {
-  @Test
-  fun testOnCancel() = runCancellingBlockingTest {
+  @Test fun testOnCancel() = runCancellingBlockingTest {
     val sender = EventFlow<String>()
     val received = mutableListOf<String>()
     val job = launch {
@@ -39,8 +38,7 @@ class OnCancelTest {
     received.shouldContainExactly("a", "b")
   }
 
-  @Test
-  fun testOnCancelDoesNotRunIfTheCollectorThrows() = runCancellingBlockingTest {
+  @Test fun testOnCancelDoesNotRunIfTheCollectorThrows() = runCancellingBlockingTest {
     val sender = EventFlow<String>()
     val received = mutableListOf<String>()
     val job = launch {

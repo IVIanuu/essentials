@@ -13,8 +13,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class AndroidSettingsStateTest {
-  @Test
-  fun testAndroidSettingsState() = runCancellingBlockingTest {
+  @Test fun testAndroidSettingsState() = runCancellingBlockingTest {
     var value = 0
     val contentChanges = EventFlow<Unit>()
     val adapter = object : AndroidSettingAdapter<Int> {

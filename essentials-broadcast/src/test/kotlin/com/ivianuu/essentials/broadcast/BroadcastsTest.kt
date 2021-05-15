@@ -29,8 +29,7 @@ import org.robolectric.annotation.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class BroadcastsTest {
-  @Test
-  fun testBroadcasts() = runCancellingBlockingTest {
+  @Test fun testBroadcasts() = runCancellingBlockingTest {
     lateinit var receiver: BroadcastReceiver
     val appContext = mockk<AppContext> {
       every { registerReceiver(any(), any()) } answers {
