@@ -24,7 +24,7 @@ typealias DataDir = File
 
 typealias PrefsDir = File
 
-object DataGivens {
+@Given object DataGivens {
   @Given fun dataDir(@Given context: AppContext): DataDir =
     File(context.applicationInfo.dataDir)
 
