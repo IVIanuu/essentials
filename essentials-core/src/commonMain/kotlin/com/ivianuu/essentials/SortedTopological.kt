@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.essentials.TreeDescriptor.Companion.dependencies
-import com.ivianuu.essentials.TreeDescriptor.Companion.dependents
-import com.ivianuu.essentials.TreeDescriptor.Companion.key
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Extension interface TreeDescriptor<in T> {
-  fun T.key(): Any
-  fun T.dependents(): Set<Any>
-  fun T.dependencies(): Set<Any>
+interface TreeDescriptor<in T> {
+  fun key(value: T): Any
+  fun dependencies(value: T): Set<Any>
+  fun dependents(value: T): Set<Any>
 }
 
 fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): List<T> {
@@ -34,9 +31,10 @@ fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): L
   var lastItems = emptyList<T>()
   val realDependencies = mutableMapOf<Any, MutableSet<Any>>()
   forEach { item ->
-    realDependencies.getOrPut(item.key()) { mutableSetOf() }.addAll(item.dependencies())
-    item.dependents().forEach { dependent ->
-      realDependencies.getOrPut(dependent) { mutableSetOf() } += item.key()
+    realDependencies.getOrPut(descriptor.key(item)) { mutableSetOf() }
+      .addAll(descriptor.dependencies(item))
+    descriptor.dependents(item).forEach { dependent ->
+      realDependencies.getOrPut(dependent) { mutableSetOf() } += descriptor.key(item)
     }
   }
   while (true) {
@@ -49,8 +47,8 @@ fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): L
     lastItems = unprocessedItems
     sortedItems += unprocessedItems
       .filter { item ->
-        realDependencies.getValue(item.key()).all { dependency ->
-          sortedItems.any { it.key() == dependency }
+        realDependencies.getValue(descriptor.key(item)).all { dependency ->
+          sortedItems.any { descriptor.key(it) == dependency }
         }
       }
   }

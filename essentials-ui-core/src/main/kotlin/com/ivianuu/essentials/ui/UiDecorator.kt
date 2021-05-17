@@ -47,9 +47,9 @@ data class UiDecoratorElement(
 )
 
 @Given object UiDecoratorElementTreeDescriptor : TreeDescriptor<UiDecoratorElement> {
-  override fun UiDecoratorElement.key(): Any = key
-  override fun UiDecoratorElement.dependencies(): Set<Any> = config.dependencies
-  override fun UiDecoratorElement.dependents(): Set<Any> = config.dependents
+  override fun key(value: UiDecoratorElement): Any = value.key
+  override fun dependencies(value: UiDecoratorElement): Set<Any> = value.config.dependencies
+  override fun dependents(value: UiDecoratorElement): Set<Any> = value.config.dependents
 }
 
 typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit

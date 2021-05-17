@@ -30,9 +30,9 @@ data class KeyUiDecoratorElement(
 )
 
 @Given object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
-  override fun KeyUiDecoratorElement.key(): Any = key
-  override fun KeyUiDecoratorElement.dependencies(): Set<Any> = config.dependencies
-  override fun KeyUiDecoratorElement.dependents(): Set<Any> = config.dependents
+  override fun key(value: KeyUiDecoratorElement): Any = value.key
+  override fun dependencies(value: KeyUiDecoratorElement): Set<Any> = value.config.dependencies
+  override fun dependents(value: KeyUiDecoratorElement): Set<Any> = value.config.dependents
 }
 
 typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit

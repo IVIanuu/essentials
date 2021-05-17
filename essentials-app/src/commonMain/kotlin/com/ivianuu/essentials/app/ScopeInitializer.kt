@@ -30,9 +30,12 @@ data class ScopeInitializerElement<S>(
 )
 
 @Given object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
-  override fun ScopeInitializerElement<*>.dependencies(): Set<TypeKey<*>> = config.dependencies
-  override fun ScopeInitializerElement<*>.dependents(): Set<TypeKey<*>> = config.dependents
-  override fun ScopeInitializerElement<*>.key(): TypeKey<*> = key
+  override fun key(value: ScopeInitializerElement<*>): TypeKey<*> = value.key
+  override fun dependents(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
+    value.config.dependents
+
+  override fun dependencies(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
+    value.config.dependencies
 }
 
 @Given fun <S : GivenScope> scopeInitializerRunner(
