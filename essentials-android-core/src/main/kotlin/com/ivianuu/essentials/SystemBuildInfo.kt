@@ -19,6 +19,8 @@ package com.ivianuu.essentials
 import android.os.*
 import com.ivianuu.injekt.*
 
-data class SystemBuildInfo(val sdk: Int)
-
-@Given val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)
+data class SystemBuildInfo(val sdk: Int) {
+  companion object {
+    @Given val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)
+  }
+}

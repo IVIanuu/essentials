@@ -19,6 +19,9 @@ package com.ivianuu.essentials
 import android.os.*
 import com.ivianuu.injekt.*
 
-data class DeviceInfo(val model: String, val manufacturer: String)
-
-@Given val androidDeviceInfo = DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+data class DeviceInfo(val model: String, val manufacturer: String) {
+  companion object {
+    @Given val androidDeviceInfo =
+      DeviceInfo(model = Build.MODEL, manufacturer = Build.MANUFACTURER)
+  }
+}

@@ -17,9 +17,7 @@ import kotlin.coroutines.*
 
 typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
 
-@Given fun getSkuDetailsUseCase(
-  @Given context: BillingContext
-): GetSkuDetailsUseCase = { sku ->
+@Given fun getSkuDetailsUseCase(@Given context: BillingContext): GetSkuDetailsUseCase = { sku ->
   context.withConnection {
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
