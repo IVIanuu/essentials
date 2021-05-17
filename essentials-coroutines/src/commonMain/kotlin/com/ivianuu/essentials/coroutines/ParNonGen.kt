@@ -16,19 +16,20 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
-  concurrency: Int = defaultConcurrency
-): List<T> = blocks.asIterable().parMap(concurrency) { it() }
+  @Given concurrency: Concurrency
+): List<T> = blocks.asIterable().parMap { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
-  concurrency: Int = defaultConcurrency,
+  @Given concurrency: Concurrency,
   transform: suspend (T) -> R
 ): List<R> = supervisorScope {
-  val semaphore = Semaphore(concurrency)
+  val semaphore = Semaphore(concurrency.value)
   map { item ->
     async {
       semaphore.acquire()
@@ -42,15 +43,18 @@ suspend fun <T, R> Iterable<T>.parMap(
 }
 
 suspend fun <T> Iterable<T>.parFilter(
-  concurrency: Int = defaultConcurrency,
+  @Given concurrency: Concurrency,
   predicate: suspend (T) -> Boolean
-): List<T> = parMap(concurrency) { if (predicate(it)) it else null }.filterNotNull()
+): List<T> = parMap { if (predicate(it)) it else null }.filterNotNull()
 
 suspend fun <T> Iterable<T>.parForEach(
-  concurrency: Int = defaultConcurrency,
+  @Given concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
-  parMap(concurrency) { action(it) }
+  parMap { action(it) }
 }
 
-internal expect val defaultConcurrency: Int
+inline class Concurrency(val value: Int)
+
+@Given
+internal expect val defaultConcurrency: Concurrency

@@ -3,7 +3,7 @@ package com.ivianuu.essentials.tuples
 data class Tuple1<out A>(val a: A)
 
 inline fun <A> tupleOf(a: A): Tuple1<A> {
-  return Tuple1(a)
+    return Tuple1(a)
 }
 
 data class Tuple2<out A, out B>(val a: A, val b: B)

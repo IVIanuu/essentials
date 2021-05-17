@@ -25,6 +25,7 @@ fun generatePar(genDir: File) {
     appendLine("package com.ivianuu.essentials.coroutines")
     appendLine()
     appendLine("import com.ivianuu.essentials.tuples.tupleOf")
+    appendLine("import com.ivianuu.injekt.Given")
     (2..TUPLES_SIZE).forEach { tuple ->
       appendLine("import com.ivianuu.essentials.tuples.Tuple$tuple")
     }
@@ -41,7 +42,7 @@ fun generatePar(genDir: File) {
         append("block$char: suspend () -> $char")
         if (index != tuple - 1) append(", ")
       }
-      append(", concurrency: Int = defaultConcurrency): Tuple$tuple<")
+      append(", @Given concurrency: Concurrency): Tuple$tuple<")
       (1..tuple).forEachIndexed { index, arg ->
         append("${ALPHABET[index]}")
         if (index != tuple - 1) append(", ")
@@ -52,7 +53,7 @@ fun generatePar(genDir: File) {
         append("block${ALPHABET[index]}")
         if (index != tuple - 1) append(", ")
       }
-      appendLine(", concurrency = concurrency)")
+      appendLine(")")
       appendLine("    @Suppress(\"UNCHECKED_CAST\")")
       append("    return tupleOf(")
       (1..tuple).forEachIndexed { index, arg ->

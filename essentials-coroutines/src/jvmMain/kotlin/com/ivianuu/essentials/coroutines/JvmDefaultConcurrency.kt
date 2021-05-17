@@ -1,5 +1,8 @@
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.*
+
+@Given
 actual val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
-  Runtime.getRuntime().availableProcessors().coerceAtLeast(3)
+  Concurrency(Runtime.getRuntime().availableProcessors().coerceAtLeast(3))
 }

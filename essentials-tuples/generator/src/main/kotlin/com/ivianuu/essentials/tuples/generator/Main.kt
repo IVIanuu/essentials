@@ -21,7 +21,7 @@ import java.io.*
 fun main() {
   val tuplesGenDir = File("essentials-tuples/src/commonMain/kotlin/com/ivianuu/essentials/tuples/")
   val coroutinesGenDir =
-    File("essentials-coroutines/src/main/kotlin/com/ivianuu/essentials/coroutines/")
+    File("essentials-coroutines/src/commonMain/kotlin/com/ivianuu/essentials/coroutines/")
   tuplesGenDir.mkdirs()
   generateTuples(tuplesGenDir)
   generateFlowCombine(coroutinesGenDir)
