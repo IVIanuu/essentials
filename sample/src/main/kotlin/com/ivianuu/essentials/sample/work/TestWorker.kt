@@ -26,10 +26,10 @@ import kotlinx.coroutines.*
 
 @Given object TestWorkerId : WorkerId("test")
 
-@Given fun testWorker(@Given logger: Logger): Worker<TestWorkerId> = {
-  logger.d { "start work" }
+@Given fun testWorker(@Given _: Logger): Worker<TestWorkerId> = {
+  d { "start work" }
   delay(5000)
-  logger.d { "finish work" }
+  d { "finish work" }
   ListenableWorker.Result.success()
 }
 

@@ -44,11 +44,13 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
       .element<FunTileServiceComponent>()
   }
 
+  @Given private val logger get() = component.logger
+
   private var tileModelComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    component.logger.d { "$tileKey on start listening" }
+    d { "$tileKey on start listening" }
     val tileModelComponent = component.tileGivenScopeFactory(tileKey)
       .element<TileModelComponent>()
       .also { this.tileModelComponent = it }
@@ -59,14 +61,14 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
 
   override fun onClick() {
     super.onClick()
-    component.logger.d { "$tileKey on click" }
+    d { "$tileKey on click" }
     tileModelComponent!!.tileModel.value.onTileClicked()
   }
 
   override fun onStopListening() {
     tileModelComponent?.tileGivenScope?.dispose()
     tileModelComponent = null
-    component.logger.d { "$tileKey on stop listening" }
+    d { "$tileKey on stop listening" }
     super.onStopListening()
   }
 

@@ -33,7 +33,7 @@ typealias ScreenUnlocker = suspend () -> Boolean
 @Given fun screenUnlocker(
   @Given appContext: AppContext,
   @Given dispatcher: DefaultDispatcher,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given keyguardManager: @SystemService KeyguardManager,
 ): ScreenUnlocker = {
   withContext(dispatcher) {
@@ -43,12 +43,12 @@ typealias ScreenUnlocker = suspend () -> Boolean
     val requestId = UUID.randomUUID().toString()
     requestsById[requestId] = result
 
-    logger.d { "unlock screen $requestId" }
+    d { "unlock screen $requestId" }
 
     UnlockScreenActivity.unlock(appContext, requestId)
 
     return@withContext result.await().also {
-      logger.d { "unlock result $requestId -> $it" }
+      d { "unlock result $requestId -> $it" }
     }
   }
 }

@@ -39,15 +39,15 @@ data class ScopeInitializerElement<S>(
 }
 
 @Given fun <S : GivenScope> scopeInitializerRunner(
+  @Given _: Logger,
   @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
-  @Given logger: Logger,
   @Given scopeKey: TypeKey<S>,
   @Given workerRunner: ScopeWorkerRunner<S>
 ): GivenScopeInitializer<S> = {
   initializers
     .sortedTopological()
     .forEach {
-      logger.d { "$scopeKey initialize ${it.key}" }
+      d { "$scopeKey initialize ${it.key}" }
       it.instance()()
     }
   workerRunner()

@@ -14,7 +14,7 @@ enum class SystemOverlayBlacklistState {
 typealias SystemOverlayEnabled = Boolean
 
 @Given fun systemOverlayBlacklistState(
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given mainSwitchState: Flow<SystemOverlayEnabled>,
   @Given keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
   @Given lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
@@ -27,33 +27,33 @@ typealias SystemOverlayEnabled = Boolean
     else SystemOverlayBlacklistState.DISABLED
   }
   .distinctUntilChanged()
-  .onEach { logger.d { "system overlay enabled $it" } }
+  .onEach { d { "system overlay enabled $it" } }
   // after that check the lock screen setting
   .switchIfStillEnabled { lockScreenState }
-  .onEach { logger.d { "lock screen state $it" } }
+  .onEach { d { "lock screen state $it" } }
   // check permission screens
   .switchIfStillEnabled { secureScreenState }
-  .onEach { logger.d { "secure screen state $it" } }
+  .onEach { d { "secure screen state $it" } }
   // check the user specified blacklist
   .switchIfStillEnabled { userBlacklistState }
-  .onEach { logger.d { "user blacklist state $it" } }
+  .onEach { d { "user blacklist state $it" } }
   // finally check the keyboard state
   .switchIfStillEnabled { keyboardState }
-  .onEach { logger.d { "keyboard state $it" } }
+  .onEach { d { "keyboard state $it" } }
   // distinct
   .distinctUntilChanged()
-  .onEach { logger.d { "overlay state changed: $it" } }
+  .onEach { d { "overlay state changed: $it" } }
   .onCompletion {
     it?.printStackTrace()
-    logger.d { "lol $it" }
+    d { "lol $it" }
   }
 
 private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
 @Given fun lockScreenSystemOverlayEnabledState(
   @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
-  @Given logger: Logger,
   @Given screenState: Flow<ScreenState>,
+  @Given _: Logger,
 ): @Private Flow<LockScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
@@ -61,9 +61,9 @@ private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklist
     if (disableOnLockScreen) {
       screenState
         .map {
-          logger.d { "screen state $it disable on lock $disableOnLockScreen" }
+          d { "screen state $it disable on lock $disableOnLockScreen" }
           if (it != ScreenState.UNLOCKED) {
-            logger.d { "hide: on lock screen" }
+            d { "hide: on lock screen" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED
@@ -79,23 +79,23 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
 @Given fun secureScreenSystemOverlayBlacklistState(
   @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
   @Given isOnSecureScreen: Flow<IsOnSecureScreen>,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given screenState: Flow<ScreenState>
 ): @Private Flow<SecureScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
-  .onEach { logger.d { "disable on secure screens $it" } }
+  .onEach { d { "disable on secure screens $it" } }
   .flatMapLatest { disableOnSecureScreen ->
     if (disableOnSecureScreen) {
       screenState
-        .onEach { logger.d { "screen state $it" } }
+        .onEach { d { "screen state $it" } }
         .flatMapLatest { screenState ->
           if (screenState == ScreenState.UNLOCKED) {
             isOnSecureScreen
-              .onEach { logger.d { "is on secure screen $it" } }
+              .onEach { d { "is on secure screen $it" } }
               .map {
                 if (it) {
-                  logger.d { "hide: secure screen" }
+                  d { "hide: secure screen" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -115,24 +115,24 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
 @Given fun userBlacklistSystemOverlayBlacklistState(
   @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
   @Given currentApp: Flow<CurrentApp>,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given screenState: Flow<ScreenState>,
 ): @Private Flow<UserBlacklistSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.appBlacklist }
   .distinctUntilChanged()
-  .onEach { logger.d { "blacklist $it" } }
+  .onEach { d { "blacklist $it" } }
   .flatMapLatest { blacklist ->
     if (blacklist.isNotEmpty()) {
       screenState
-        .onEach { logger.d { "screen state $it" } }
+        .onEach { d { "screen state $it" } }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
           if (screenState == ScreenState.UNLOCKED) {
             currentApp
-              .onEach { logger.d { "current app $it" } }
+              .onEach { d { "current app $it" } }
               .map { currentApp ->
                 if (currentApp in blacklist) {
-                  logger.d { "hide: user blacklist" }
+                  d { "hide: user blacklist" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -152,7 +152,7 @@ private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistSt
 @Given fun keyboardSystemOverlayBlacklistState(
   @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
   @Given keyboardVisible: Flow<KeyboardVisible>,
-  @Given logger: Logger,
+  @Given _: Logger,
 ): @Private Flow<KeyboardSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()
@@ -161,7 +161,7 @@ private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistSt
       keyboardVisible
         .map {
           if (it) {
-            logger.d { "hide: keyboard" }
+            d { "hide: keyboard" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED

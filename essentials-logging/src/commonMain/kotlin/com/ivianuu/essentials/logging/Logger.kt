@@ -35,69 +35,77 @@ interface Logger {
   }
 }
 
-inline fun Logger.v(
+inline fun v(
   tag: String? = null,
   throwable: Throwable? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(VERBOSE, throwable, tag, message)
+  log(kind = VERBOSE, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.d(
+inline fun d(
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(DEBUG, throwable, tag, message)
+  log(kind = DEBUG, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.i(
+inline fun i(
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(INFO, throwable, tag, message)
+  log(kind = INFO, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.w(
+inline fun w(
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(WARN, throwable, tag, message)
+  log(kind = WARN, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.e(
+inline fun e(
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(ERROR, throwable, tag, message)
+  log(kind = ERROR, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.wtf(
+inline fun wtf(
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given _: Logger,
   message: () -> String? = { null },
 ) {
-  log(WTF, throwable, tag, message)
+  log(kind = WTF, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun Logger.log(
+inline fun warn(
+  tag: String? = null,
+  throwable: Throwable? = null,
+  @Given _: Logger,
+  message: () -> String? = { null },
+) {
+  log(kind = WARN, throwable = throwable, tag = tag, message = message)
+}
+
+inline fun log(
   kind: Logger.Kind,
   throwable: Throwable? = null,
   tag: String? = null,
+  @Given logger: Logger,
   message: () -> String? = { null },
 ) {
-  if (isEnabled) log(kind, message(), throwable, tag)
-}
-
-inline fun Logger.warn(
-  tag: String? = null,
-  throwable: Throwable? = null,
-  message: () -> String? = { null },
-) {
-  log(WARN, throwable, tag, message)
+  if (logger.isEnabled) logger.log(kind, message(), throwable, tag)
 }
 
 @Given @Factory object NoopLogger : Logger {

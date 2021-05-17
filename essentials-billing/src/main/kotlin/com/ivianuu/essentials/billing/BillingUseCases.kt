@@ -24,7 +24,7 @@ typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
-      .also { logger.d { "got sku details $it for $sku" } }
+      .also { d { "got sku details $it for $sku" } }
   }
 }
 
@@ -38,7 +38,7 @@ typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
   @Given getSkuDetails: GetSkuDetailsUseCase
 ): PurchaseUseCase = { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
   context.withConnection {
-    logger.d {
+    d {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
     if (consumeOldPurchaseIfUnspecified) {
@@ -83,7 +83,7 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 
     val result = billingClient.consumePurchase(consumeParams)
 
-    logger.d {
+    d {
       "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
     }
 
@@ -109,9 +109,7 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 
       val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-      logger.d {
-        "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
-      }
+      d { "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}" }
 
       val success = result.responseCode == BillingClient.BillingResponseCode.OK
       if (success) refreshes.emit(Unit)
@@ -133,12 +131,12 @@ typealias IsPurchased = Boolean
   .onStart { emit(Unit) }
   .map { context.getIsPurchased(sku) }
   .distinctUntilChanged()
-  .onEach { context.logger.d { "is purchased flow for $sku -> $it" } }
+  .onEach { d { "is purchased flow for $sku -> $it" } }
 
 private fun BillingContext.getIsPurchased(sku: Sku): Boolean {
   val purchase = getPurchase(sku) ?: return false
   val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-  logger.d { "get is purchased for $sku result is $isPurchased for $purchase" }
+  d { "get is purchased for $sku result is $isPurchased for $purchase" }
   return isPurchased
 }
 
@@ -146,4 +144,4 @@ private fun BillingContext.getPurchase(sku: Sku): Purchase? =
   billingClient.queryPurchases(sku.type.value)
     .purchasesList
     ?.firstOrNull { it.sku == sku.skuString }
-    .also { logger.d { "got purchase $it for $sku" } }
+    .also { d { "got purchase $it for $sku" } }

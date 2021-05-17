@@ -103,22 +103,20 @@ typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
 @Given fun permissionRequester(
   @Given appUiStarter: AppUiStarter,
   @Given dispatcher: DefaultDispatcher,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given navigator: Navigator,
   @Given permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
   withContext(dispatcher) {
-    logger.d { "request permissions $requestedPermissions" }
+    d { "request permissions $requestedPermissions" }
 
     if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
       return@withContext true
 
     appUiStarter()
 
-    val result = navigator.push(
-      PermissionRequestKey(requestedPermissions)
-    ) == true
-    logger.d { "request permissions result $requestedPermissions -> $result" }
+    val result = navigator.push(PermissionRequestKey(requestedPermissions)) == true
+    d { "request permissions result $requestedPermissions -> $result" }
     return@withContext result
   }
 }

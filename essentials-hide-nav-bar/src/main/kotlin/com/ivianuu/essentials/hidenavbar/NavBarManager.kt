@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.*
   @Given displayRotation: Flow<DisplayRotation>,
   @Given forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   @Given navBarFeatureSupported: NavBarFeatureSupported,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   @Given permissionState: Flow<PermissionState<NavBarPermission>>,
   @Given prefs: Flow<NavBarPrefs>,
@@ -59,7 +59,7 @@ import kotlinx.coroutines.flow.*
       }
     }
     .flatMapLatest { currentPrefs ->
-      logger.d { "current prefs $currentPrefs" }
+      d { "current prefs $currentPrefs" }
       if (currentPrefs.hideNavBar) {
         displayRotation
           .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
@@ -70,7 +70,7 @@ import kotlinx.coroutines.flow.*
           .onEach { wasNavBarHiddenPref.updateData { false } }
       }
     }
-    .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
+    .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, setOverscan) }
 }
 
 private sealed class NavBarState {
@@ -83,10 +83,10 @@ private sealed class NavBarState {
 private suspend fun NavBarState.apply(
   context: Context,
   disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
-  logger: Logger,
-  setOverscan: OverscanUpdater
+  setOverscan: OverscanUpdater,
+  @Given _: Logger
 ) {
-  logger.d { "apply nav bar state $this" }
+  d { "apply nav bar state $this" }
   catch {
     catch {
       // ensure that we can access non sdk interfaces
@@ -101,7 +101,7 @@ private suspend fun NavBarState.apply(
     }
     setOverscan(rect)
   }.onFailure {
-    logger.e(it) { "Failed to apply nav bar state $this" }
+    e(it) { "Failed to apply nav bar state $this" }
   }
 }
 

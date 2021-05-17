@@ -20,6 +20,4 @@ import com.ivianuu.essentials.boot.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 
-@Given fun bootLogger(@Given logger: Logger): BootListener = {
-  logger.d { "booted!" }
-}
+@Given fun bootLogger(@Given _: Logger): BootListener = { d { "booted!" } }

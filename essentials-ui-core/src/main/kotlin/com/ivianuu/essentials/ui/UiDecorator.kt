@@ -55,8 +55,8 @@ data class UiDecoratorElement(
 typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 @Given fun decorateUi(
-  @Given elements: Set<UiDecoratorElement> = emptySet(),
-  @Given logger: Logger
+  @Given _: Logger,
+  @Given elements: Set<UiDecoratorElement> = emptySet()
 ): DecorateUi = { content ->
   remember {
     elements
@@ -64,7 +64,7 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
       .reversed()
       .fold(content) { acc, element ->
         {
-          logger.d { "Decorate ui ${element.key}" }
+          d { "Decorate ui ${element.key}" }
           element.decorator(acc)
         }
       }

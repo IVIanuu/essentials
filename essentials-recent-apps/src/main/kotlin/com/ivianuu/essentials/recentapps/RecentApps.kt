@@ -29,7 +29,7 @@ typealias RecentApps = List<String>
 
 @Given fun recentApps(
   @Given accessibilityEvents: Flow<AccessibilityEvent>,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
@@ -61,7 +61,7 @@ typealias RecentApps = List<String>
     newRecentApps
   }
   .distinctUntilChanged()
-  .onEach { logger.d { "recent apps changed $it" } }
+  .onEach { d { "recent apps changed $it" } }
   .shareIn(scope, SharingStarted.Eagerly, 1)
   .distinctUntilChanged()
 

@@ -27,7 +27,7 @@ typealias IsOnSecureScreen = Boolean
 
 @Given fun isOnSecureScreen(
   @Given accessibilityEvents: Flow<AccessibilityEvent>,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
@@ -43,7 +43,7 @@ typealias IsOnSecureScreen = Boolean
     isOnSecureScreen
   }
   .distinctUntilChanged()
-  .onEach { logger.d { "on secure screen changed: $it" } }
+  .onEach { d { "on secure screen changed: $it" } }
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
 @Given val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {

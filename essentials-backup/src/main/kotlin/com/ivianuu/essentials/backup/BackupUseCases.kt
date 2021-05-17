@@ -26,7 +26,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   @Given buildInfo: BuildInfo,
   @Given dataDir: DataDir,
   @Given dispatcher: IODispatcher,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given navigator: Navigator,
   @Given scope: GivenCoroutineScope<AppGivenScope>
 ): CreateBackupUseCase = {
@@ -50,7 +50,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
         .filterNot { it.absolutePath in BACKUP_BLACKLIST }
         .filter { it.exists() }
         .forEach { file ->
-          logger.d { "backup file $file" }
+          d { "backup file $file" }
           val entry = ZipEntry(file.relativeTo(dataDir).toString())
           zipOutputStream.putNextEntry(entry)
           file.inputStream().copyTo(zipOutputStream)
@@ -70,7 +70,7 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
   @Given contentResolver: ContentResolver,
   @Given dataDir: DataDir,
   @Given dispatcher: IODispatcher,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given navigator: Navigator,
   @Given processRestarter: ProcessRestarter,
   @Given scope: GivenCoroutineScope<AppGivenScope>
@@ -91,7 +91,7 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
       generateSequence { zipInputStream.nextEntry }
         .forEach { entry ->
           val file = dataDir.resolve(entry.name)
-          logger.d { "restore file $file" }
+          d { "restore file $file" }
           if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()

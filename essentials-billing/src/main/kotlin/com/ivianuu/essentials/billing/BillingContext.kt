@@ -18,7 +18,7 @@ import kotlin.coroutines.*
 
 interface BillingContext {
   val billingClient: BillingClient
-  val logger: Logger
+  @Given val logger: Logger
   val refreshes: MutableSharedFlow<BillingRefresh>
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R
 }
@@ -44,22 +44,22 @@ class BillingContextImpl(
   private suspend fun ensureConnected() = connectionMutex.withLock {
     if (isConnected) return@withLock
     suspendCoroutine { continuation ->
-      logger.d { "start connection" }
+      d { "start connection" }
       billingClient.startConnection(
         object : BillingClientStateListener {
           override fun onBillingSetupFinished(result: BillingResult) {
             if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-              logger.d { "connected" }
+              d { "connected" }
               isConnected = true
               continuation.resume(Unit)
             } else {
-              logger.d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
+              d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
               continuation.resumeWithException(IllegalStateException("Could not connect ${result.responseCode}"))
             }
           }
 
           override fun onBillingServiceDisconnected() {
-            logger.d { "on billing service disconnected" }
+            d { "on billing service disconnected" }
           }
         }
       )

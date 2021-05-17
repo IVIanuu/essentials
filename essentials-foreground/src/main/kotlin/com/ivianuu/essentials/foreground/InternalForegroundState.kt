@@ -14,7 +14,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 
 @Given fun internalForegroundState(
   @Given foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
 ): @Scoped<AppGivenScope> Flow<InternalForegroundState> = combine(
   foregroundStates
@@ -25,8 +25,6 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
         .distinctUntilChanged()
     }
 ) { currentForegroundStates -> InternalForegroundState(currentForegroundStates.toList()) }
-  .onEach { current ->
-    logger.d { "Internal foreground state changed $current" }
-  }
+  .onEach { current -> d { "Internal foreground state changed $current" } }
   .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
   .distinctUntilChanged()

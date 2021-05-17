@@ -24,9 +24,9 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 
 @Given fun <S : GivenScope> scopeLogger(
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given scopeKey: TypeKey<S>
 ): ScopeWorker<S> = {
-  logger.d { "$scopeKey created" }
-  runOnCancellation { logger.d { "$scopeKey disposed" } }
+  d { "$scopeKey created" }
+  runOnCancellation { d { "$scopeKey disposed" } }
 }

@@ -30,16 +30,18 @@ class EsAccessibilityService : AccessibilityService() {
       .element<EsAccessibilityServiceComponent>()
   }
 
+  @Given private val logger get() = component.logger
+
   private var accessibilityGivenScope: AccessibilityGivenScope? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    component.logger.d { "connected" }
+    d { "connected" }
     accessibilityGivenScope = component.accessibilityGivenScopeFactory()
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
-    component.logger.d { "on accessibility event $event" }
+    d { "on accessibility event $event" }
     component.accessibilityEvents.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -54,7 +56,8 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    component.logger.d { "disconnected" }
+
+    d { "disconnected" }
     accessibilityGivenScope?.dispose()
     accessibilityGivenScope = null
     component.serviceGivenScope.dispose()

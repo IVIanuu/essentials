@@ -45,7 +45,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 @Given fun displayRotation(
   @Given configChanges: () -> Flow<ConfigChange>,
   @Given dispatcher: IODispatcher,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given rotationChanges: () -> Flow<RotationChange>,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
   @Given screenState: () -> Flow<ScreenState>,
@@ -55,10 +55,10 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     .flatMapLatest { currentScreenState ->
       if (currentScreenState.isOn) {
         merge(rotationChanges(), configChanges())
-          .onStart { logger.d { "sub for rotation" } }
-          .onCompletion { logger.d { "dispose rotation" } }
+          .onStart { d { "sub for rotation" } }
+          .onCompletion { d { "dispose rotation" } }
       } else {
-        logger.d { "do not observe rotation while screen is off" }
+        d { "do not observe rotation while screen is off" }
         emptyFlow()
       }
     }

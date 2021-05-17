@@ -34,7 +34,7 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Given fun screenState(
   @Given broadcastsFactory: BroadcastsFactory,
-  @Given logger: Logger,
+  @Given _: Logger,
   @Given scope: GivenCoroutineScope<AppGivenScope>,
   @Given screenStateProvider: CurrentScreenStateProvider
 ): @Scoped<AppGivenScope> Flow<ScreenState> = merge(
@@ -42,8 +42,8 @@ enum class ScreenState(val isOn: Boolean) {
   broadcastsFactory(Intent.ACTION_SCREEN_ON),
   broadcastsFactory(Intent.ACTION_USER_PRESENT)
 )
-  .onStart { logger.d { "sub for screen state" } }
-  .onCompletion { logger.d { "dispose screen state" } }
+  .onStart { d { "sub for screen state" } }
+  .onCompletion { d { "dispose screen state" } }
   .map { Unit }
   .onStart { emit(Unit) }
   .map { screenStateProvider() }

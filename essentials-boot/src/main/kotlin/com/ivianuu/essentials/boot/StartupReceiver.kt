@@ -27,7 +27,7 @@ class StartupReceiver : BroadcastReceiver() {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     val component = createReceiverGivenScope(context, intent)
       .element<StartupReceiverComponent>()
-    component.logger.d { "on system boot" }
+    d(logger = component.logger) { "on system boot" }
     component.bootListeners.forEach { it() }
     component.receiverGivenScope.dispose()
   }

@@ -35,8 +35,7 @@ interface Navigator {
 
 data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
-@Given
-@Scoped<AppGivenScope>
+@Given @Scoped<AppGivenScope>
 class NavigatorImpl(
   @Given private val intentKeyHandler: IntentKeyHandler,
   @Given private val logger: Logger,
@@ -54,9 +53,7 @@ class NavigatorImpl(
       _state
         .map { it.backStack }
         .distinctUntilChanged()
-        .onEach {
-          logger.d { "back stack changed -> $it" }
-        }
+        .onEach { d { "back stack changed -> $it" } }
         .launchIn(scope)
     }
   }
@@ -64,7 +61,7 @@ class NavigatorImpl(
   override suspend fun <R> push(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     actor.act {
-      logger.d { "push $key" }
+      d { "push $key" }
       _state.value.results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
@@ -87,7 +84,7 @@ class NavigatorImpl(
   override suspend fun <R> replaceTop(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     actor.act {
-      logger.d { "replace top $key" }
+      d { "replace top $key" }
       _state.value.results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
@@ -117,7 +114,7 @@ class NavigatorImpl(
 
   override suspend fun <R> pop(key: Key<R>, result: R?) {
     actor.act {
-      logger.d { "pop $key" }
+      d { "pop $key" }
       _state.update { popKey(key, result) }
     }
   }
@@ -125,7 +122,7 @@ class NavigatorImpl(
   override suspend fun popTop() {
     actor.act {
       val topKey = state.first().backStack.last()
-      logger.d { "pop top $topKey" }
+      d { "pop top $topKey" }
       _state.update {
         @Suppress("UNCHECKED_CAST")
         popKey(topKey as Key<Any>, null)

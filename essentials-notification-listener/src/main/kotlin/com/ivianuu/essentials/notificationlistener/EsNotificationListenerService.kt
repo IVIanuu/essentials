@@ -34,35 +34,37 @@ class EsNotificationListenerService : NotificationListenerService() {
       .element<EsNotificationListenerServiceComponent>()
   }
 
+  @Given private val logger get() = component.logger
+
   private var notificationGivenScope: NotificationGivenScope? = null
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    component.logger.d { "listener connected" }
+    d { "listener connected" }
     notificationGivenScope = component.notificationGivenScopeFactory()
     updateNotifications()
   }
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    component.logger.d { "notification posted $sbn" }
+    d { "notification posted $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    component.logger.d { "notification removed $sbn" }
+    d { "notification removed $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    component.logger.d { "ranking update $rankingMap" }
+    d { "ranking update $rankingMap" }
     updateNotifications()
   }
 
   override fun onListenerDisconnected() {
-    component.logger.d { "listener disconnected" }
+    d { "listener disconnected" }
     notificationGivenScope?.dispose()
     notificationGivenScope = null
     component.serviceGivenScope.dispose()

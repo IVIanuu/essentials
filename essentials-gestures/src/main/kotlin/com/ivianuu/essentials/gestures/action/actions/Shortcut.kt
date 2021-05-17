@@ -40,7 +40,7 @@ import java.io.*
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
   override suspend fun createAction(id: String): Action<*> {
-    logger.d { "create action from $id" }
+    d { "create action from $id" }
     val tmp = id.split(DELIMITER)
     val label = tmp[1]
 

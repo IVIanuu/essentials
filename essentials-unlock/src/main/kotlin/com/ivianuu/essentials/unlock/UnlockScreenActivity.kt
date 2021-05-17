@@ -50,12 +50,12 @@ class UnlockScreenActivity : ComponentActivity() {
 
     requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-    val component = activityGivenScope.element<UnlockScreenComponent>()
+    @Given val component = activityGivenScope.element<UnlockScreenComponent>()
 
-    component.logger.d { "unlock screen for $requestId" }
+    d(logger = component.logger) { "unlock screen for $requestId" }
 
     fun finishWithResult(success: Boolean) {
-      component.logger.d { "finish with result $success" }
+      d(logger = component.logger) { "finish with result $success" }
       hasResult = true
       onUnlockScreenResult(requestId, success)
       finish()

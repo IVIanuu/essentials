@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.*
 @Given fun foregroundWorker(
   @Given internalForegroundState: Flow<InternalForegroundState>,
   @Given notificationManager: @SystemService NotificationManager,
-  @Given logger: Logger
+  @Given _: Logger
 ): Worker<ForegroundWorkerId> = {
-  logger.d { "start foreground worker" }
+  d { "start foreground worker" }
 
   suspend fun applyState(infos: List<ForegroundInfo>) {
-    logger.d { "apply infos: $infos" }
+    d { "apply infos: $infos" }
 
     infos
       .filter { it.state is ForegroundState.Background }
@@ -66,7 +66,7 @@ import kotlinx.coroutines.flow.*
     }
   )
 
-  logger.d { "stop foreground worker" }
+  d { "stop foreground worker" }
 
   ListenableWorker.Result.success()
 }

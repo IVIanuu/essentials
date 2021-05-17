@@ -38,22 +38,20 @@ internal typealias ShouldShowRateDialogUseCase = suspend () -> Boolean
 ): ShouldShowRateDialogUseCase = useCase@{
   val prefs = pref.data.first()
   if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-    return@useCase false.also {
-      logger.d { "show not: already completed" }
-    }
+    return@useCase false.also { d { "show not: already completed" } }
   if (prefs.launchTimes < schedule.minLaunchTimes)
     return@useCase false.also {
-      logger.d { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
+      d { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
     }
   val now = timestampProvider()
   val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
   if (installedDuration <= schedule.minInstallDuration)
     return@useCase false.also {
-      logger.d { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
+      d { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
     }
 
   return@useCase true
-    .also { logger.d { "show" } }
+    .also { d { "show" } }
 }
 
 data class RateUiSchedule(
