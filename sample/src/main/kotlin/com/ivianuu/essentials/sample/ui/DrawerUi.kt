@@ -27,11 +27,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given val drawerHomeItem = HomeItem("Drawer") { DrawerKey }
+@Provide val drawerHomeItem = HomeItem("Drawer") { DrawerKey }
 
 object DrawerKey : Key<Nothing>
 
-@Given val drawerUi: KeyUi<DrawerKey> = {
+@Provide val drawerUi: KeyUi<DrawerKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Drawer") }) },
     drawerContent = {

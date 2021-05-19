@@ -29,14 +29,14 @@ import com.ivianuu.injekt.android.*
 
 interface PackageUsageStatsPermission : Permission
 
-@Given fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
+@Provide fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = true
 
 @Suppress("DEPRECATION")
-@Given
+@Provide
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
-  @Given appOpsManager: @SystemService AppOpsManager,
-  @Given buildInfo: BuildInfo,
+  appOpsManager: @SystemService AppOpsManager,
+  buildInfo: BuildInfo,
 ): PermissionStateProvider<P> = {
   appOpsManager.checkOpNoThrow(
     AppOpsManager.OPSTR_GET_USAGE_STATS,
@@ -45,8 +45,8 @@ fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
   ) == AppOpsManager.MODE_ALLOWED
 }
 
-@Given fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
-  @Given buildInfo: BuildInfo
+@Provide fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
+  buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
   Intent(
     Settings.ACTION_USAGE_ACCESS_SETTINGS,

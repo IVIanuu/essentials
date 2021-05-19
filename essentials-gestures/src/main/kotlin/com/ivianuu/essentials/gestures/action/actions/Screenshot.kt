@@ -27,11 +27,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
-@Given object ScreenshotActionId : ActionId("screenshot")
+@Provide object ScreenshotActionId : ActionId("screenshot")
 
-@Given fun screenshotAction(
-  @Given stringResource: StringResourceProvider,
-  @Given systemBuildInfo: SystemBuildInfo,
+@Provide fun screenshotAction(
+  stringResource: StringResourceProvider,
+  systemBuildInfo: SystemBuildInfo,
 ) = Action<ScreenshotActionId>(
   id = "screenshot",
   title = stringResource(R.string.es_action_screenshot, emptyList()),
@@ -43,11 +43,11 @@ import kotlinx.coroutines.*
 )
 
 @SuppressLint("InlinedApi")
-@Given
+@Provide
 fun screenshotActionExecutor(
-  @Given globalActionExecutor: GlobalActionExecutor,
-  @Given runShellCommand: RunShellCommandUseCase,
-  @Given systemBuildInfo: SystemBuildInfo,
+  globalActionExecutor: GlobalActionExecutor,
+  runShellCommand: RunShellCommandUseCase,
+  systemBuildInfo: SystemBuildInfo,
 ): ActionExecutor<ScreenshotActionId> = {
   delay(500)
   if (systemBuildInfo.sdk >= 28) {

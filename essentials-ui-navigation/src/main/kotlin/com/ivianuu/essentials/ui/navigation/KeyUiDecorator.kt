@@ -6,10 +6,10 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given fun <@Given T : KeyUiDecorator> keyUiDecoratorElement(
-  @Given instance: T,
-  @Given key: TypeKey<T>,
-  @Given config: KeyUiDecoratorConfig<T> = KeyUiDecoratorConfig.DEFAULT
+@Provide fun <@Spread T : KeyUiDecorator> keyUiDecoratorElement(
+  instance: T,
+  key: TypeKey<T>,
+  config: KeyUiDecoratorConfig<T> = KeyUiDecoratorConfig.DEFAULT
 ): KeyUiDecoratorElement = KeyUiDecoratorElement(key, instance as KeyUiDecorator, config)
 
 class KeyUiDecoratorConfig<out T : KeyUiDecorator>(
@@ -29,7 +29,7 @@ data class KeyUiDecoratorElement(
   val config: KeyUiDecoratorConfig<*>
 )
 
-@Given object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
+@Provide object KeyUiDecoratorElementTreeDescriptor : TreeDescriptor<KeyUiDecoratorElement> {
   override fun key(value: KeyUiDecoratorElement): Any = value.key
   override fun dependencies(value: KeyUiDecoratorElement): Set<Any> = value.config.dependencies
   override fun dependents(value: KeyUiDecoratorElement): Set<Any> = value.config.dependents
@@ -37,9 +37,9 @@ data class KeyUiDecoratorElement(
 
 typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
 
-@Given fun decorateKeyUi(
-  @Given _: Logger,
-  @Given elements: Set<KeyUiDecoratorElement> = emptySet()
+@Provide fun decorateKeyUi(
+  elements: Set<KeyUiDecoratorElement> = emptySet(),
+  _: Logger
 ): DecorateKeyUi = { content ->
   remember {
     elements

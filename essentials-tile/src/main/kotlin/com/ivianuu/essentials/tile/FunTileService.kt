@@ -40,18 +40,18 @@ class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
 abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) :
   TileService() {
   private val component by lazy {
-    createServiceGivenScope()
+    createServiceScope()
       .element<FunTileServiceComponent>()
   }
 
-  @Given private val logger get() = component.logger
+  @Provide private val logger get() = component.logger
 
   private var tileModelComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
     d { "$tileKey on start listening" }
-    val tileModelComponent = component.tileGivenScopeFactory(tileKey)
+    val tileModelComponent = component.tileScopeFactory(tileKey)
       .element<TileModelComponent>()
       .also { this.tileModelComponent = it }
     tileModelComponent.tileModel
@@ -66,14 +66,14 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
   }
 
   override fun onStopListening() {
-    tileModelComponent?.tileGivenScope?.dispose()
+    tileModelComponent?.tileScope?.dispose()
     tileModelComponent = null
     d { "$tileKey on stop listening" }
     super.onStopListening()
   }
 
   override fun onDestroy() {
-    component.serviceGivenScope.dispose()
+    component.serviceScope.dispose()
     super.onDestroy()
   }
 
@@ -104,22 +104,20 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
   }
 }
 
-@InstallElement<ServiceGivenScope>
-@Given
+@Provide @InstallElement<ServiceScope>
 class FunTileServiceComponent(
-  @Given val logger: Logger,
-  @Given val serviceGivenScope: ServiceGivenScope,
-  @Given val stringResource: StringResourceProvider,
-  @Given val tileGivenScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileGivenScope
+  val logger: Logger,
+  val serviceScope: ServiceScope,
+  val stringResource: StringResourceProvider,
+  val tileScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileScope
 )
 
-@InstallElement<TileGivenScope>
-@Given
+@Provide @InstallElement<TileScope>
 class TileModelComponent(
-  @Given tileKey: TypeKey<AbstractFunTileService>,
-  @Given tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
-  @Given val scope: GivenCoroutineScope<TileGivenScope>,
-  @Given val tileGivenScope: TileGivenScope
+  tileKey: TypeKey<AbstractFunTileService>,
+  tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
+  val scope: InjectCoroutineScope<TileScope>,
+  val tileScope: TileScope
 ) {
   val tileModel = tileModelElements.toMap()[tileKey]
     ?.invoke()

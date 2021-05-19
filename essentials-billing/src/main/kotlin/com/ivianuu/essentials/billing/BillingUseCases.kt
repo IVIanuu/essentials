@@ -17,7 +17,7 @@ import kotlin.coroutines.*
 
 typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
 
-@Given fun getSkuDetailsUseCase(@Given context: BillingContext): GetSkuDetailsUseCase = { sku ->
+@Provide fun getSkuDetailsUseCase(context: BillingContext): GetSkuDetailsUseCase = { sku ->
   context.withConnection {
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
@@ -28,12 +28,12 @@ typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
 
 typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
 
-@Given fun purchaseUseCase(
-  @Given acknowledgePurchase: AcknowledgePurchaseUseCase,
-  @Given appUiStarter: AppUiStarter,
-  @Given context: BillingContext,
-  @Given consumePurchase: ConsumePurchaseUseCase,
-  @Given getSkuDetails: GetSkuDetailsUseCase
+@Provide fun purchaseUseCase(
+  acknowledgePurchase: AcknowledgePurchaseUseCase,
+  appUiStarter: AppUiStarter,
+  context: BillingContext,
+  consumePurchase: ConsumePurchaseUseCase,
+  getSkuDetails: GetSkuDetailsUseCase
 ): PurchaseUseCase = { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
   context.withConnection {
     d {
@@ -71,7 +71,7 @@ typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
 
 typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 
-@Given fun consumePurchaseUseCase(@Given context: BillingContext): ConsumePurchaseUseCase = { sku ->
+@Provide fun consumePurchaseUseCase(context: BillingContext): ConsumePurchaseUseCase = { sku ->
   context.withConnection {
     val purchase = getPurchase(sku) ?: return@withConnection false
 
@@ -93,7 +93,7 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 
 typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 
-@Given fun acknowledgePurchaseUseCase(@Given context: BillingContext): AcknowledgePurchaseUseCase =
+@Provide fun acknowledgePurchaseUseCase(context: BillingContext): AcknowledgePurchaseUseCase =
   { sku ->
     context.withConnection {
       val purchase = getPurchase(sku)
@@ -117,10 +117,10 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 
 typealias IsPurchased = Boolean
 
-@Given fun isPurchased(
-  @Given appForegroundState: Flow<AppForegroundState>,
-  @Given context: BillingContext,
-  @Given sku: Sku
+@Provide fun isPurchased(
+  appForegroundState: Flow<AppForegroundState>,
+  context: BillingContext,
+  sku: Sku
 ): Flow<IsPurchased> = merge(
   appForegroundState
     .filter { it == AppForegroundState.FOREGROUND },

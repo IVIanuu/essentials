@@ -22,9 +22,9 @@ import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given fun defaultAppUi(
-  @Given navigator: Navigator,
-  @Given navigationStateContent: NavigationStateContent,
+@Provide fun defaultAppUi(
+  navigator: Navigator,
+  navigationStateContent: NavigationStateContent,
 ): AppUi = {
   navigationStateContent(navigator.state.collectAsState().value, Modifier)
 }

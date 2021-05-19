@@ -30,11 +30,11 @@ import java.util.concurrent.*
 
 typealias ScreenUnlocker = suspend () -> Boolean
 
-@Given fun screenUnlocker(
-  @Given appContext: AppContext,
-  @Given dispatcher: DefaultDispatcher,
-  @Given _: Logger,
-  @Given keyguardManager: @SystemService KeyguardManager,
+@Provide fun screenUnlocker(
+  appContext: AppContext,
+  dispatcher: DefaultDispatcher,
+  keyguardManager: @SystemService KeyguardManager,
+  _: Logger,
 ): ScreenUnlocker = {
   withContext(dispatcher) {
     if (!keyguardManager.isKeyguardLocked) return@withContext true

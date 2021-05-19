@@ -25,11 +25,11 @@ import kotlinx.coroutines.flow.*
 
 typealias IsOnSecureScreen = Boolean
 
-@Given fun isOnSecureScreen(
-  @Given accessibilityEvents: Flow<AccessibilityEvent>,
-  @Given _: Logger,
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-): @Scoped<AppGivenScope> Flow<IsOnSecureScreen> = accessibilityEvents
+@Provide fun isOnSecureScreen(
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  scope: InjectCoroutineScope<AppScope>,
+  _: Logger,
+): @Scoped<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .map { it.packageName to it.className }
   .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
@@ -46,7 +46,7 @@ typealias IsOnSecureScreen = Boolean
   .onEach { d { "on secure screen changed: $it" } }
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
-@Given val isOnSecureScreenAccessibilityConfig: Flow<AccessibilityConfig> = flow {
+@Provide val isOnSecureScreenAccessibilityConfig = flow {
   emit(
     AccessibilityConfig(
       eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED

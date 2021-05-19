@@ -27,26 +27,25 @@ import com.ivianuu.injekt.android.*
 
 typealias BitmapResourceProvider = (Int) -> ImageBitmap
 
-@Given fun bitmapResourceProvider(@Given context: AppContext): BitmapResourceProvider = { id ->
+@Provide fun bitmapResourceProvider(context: AppContext): BitmapResourceProvider = { id ->
   context.getDrawable(id)!!.toBitmap().toImageBitmap()
 }
 
 typealias BooleanResourceProvider = (Int) -> Boolean
 
-@Given fun booleanResourceProvider(@Given context: AppContext): BooleanResourceProvider = { id ->
+@Provide fun booleanResourceProvider(context: AppContext): BooleanResourceProvider = { id ->
   context.resources.getBoolean(id)
 }
 
 typealias ColorResourceProvider = (Int) -> Color
 
-@Given fun colorResourceProvider(@Given context: AppContext): ColorResourceProvider = { id ->
+@Provide fun colorResourceProvider(context: AppContext): ColorResourceProvider = { id ->
   Color(context.getColor(id))
 }
 
 typealias DimensionResourceProvider = (Int) -> Dp
 
-@Given
-fun dimensionResourceProvider(@Given context: AppContext): DimensionResourceProvider = { id ->
+@Provide fun dimensionResourceProvider(context: AppContext): DimensionResourceProvider = { id ->
   with(Density(context)) {
     context.resources.getDimension(id).toInt().toDp()
   }
@@ -54,41 +53,39 @@ fun dimensionResourceProvider(@Given context: AppContext): DimensionResourceProv
 
 typealias DrawableResourceProvider = (Int) -> ImageBitmap
 
-@Given inline val BitmapResourceProvider.drawableResourceProvider: DrawableResourceProvider
+@Provide inline val BitmapResourceProvider.drawableResourceProvider: DrawableResourceProvider
   get() = this
 
 typealias FloatResourceProvider = (Int) -> Float
 
-@Given fun floatResourceProvider(@Given context: AppContext): FloatResourceProvider = { id ->
+@Provide fun floatResourceProvider(context: AppContext): FloatResourceProvider = { id ->
   ResourcesCompat.getFloat(context.resources, id)
 }
 
 typealias FontResourceProvider = (Int) -> Font
 
-@Given val fontResourceProvider: FontResourceProvider = { id -> Font(id) }
+@Provide val fontResourceProvider: FontResourceProvider = { id -> Font(id) }
 
 typealias IntResourceProvider = (Int) -> Int
 
-@Given fun intResourceProvider(@Given context: AppContext): IntResourceProvider = { id ->
+@Provide fun intResourceProvider(context: AppContext): IntResourceProvider = { id ->
   context.resources.getInteger(id)
 }
 
 typealias IntArrayResourceProvider = (Int) -> IntArray
 
-@Given fun intArrayResourceProvider(@Given context: AppContext): IntArrayResourceProvider = { id ->
+@Provide fun intArrayResourceProvider(context: AppContext): IntArrayResourceProvider = { id ->
   context.resources.getIntArray(id)
 }
 
 typealias StringResourceProvider = (Int, List<Any?>) -> String
 
-@Given
-fun stringResourceProvider(@Given context: AppContext): StringResourceProvider = { id, args ->
+@Provide fun stringResourceProvider(context: AppContext): StringResourceProvider = { id, args ->
   context.getString(id, *args.toTypedArray())
 }
 
 typealias StringArrayResourceProvider = (Int) -> Array<String>
 
-@Given
-fun stringArrayResourceProvider(@Given context: AppContext): StringArrayResourceProvider = { id ->
+@Provide fun stringArrayResourceProvider(context: AppContext): StringArrayResourceProvider = { id ->
   context.resources.getStringArray(id)
 }

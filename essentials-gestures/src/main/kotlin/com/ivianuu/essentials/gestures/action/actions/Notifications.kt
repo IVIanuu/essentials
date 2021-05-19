@@ -25,10 +25,10 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given object NotificationsActionId : ActionId("notifications")
+@Provide object NotificationsActionId : ActionId("notifications")
 
-@Given fun notificationsAction(
-  @Given stringResource: StringResourceProvider
+@Provide fun notificationsAction(
+  stringResource: StringResourceProvider
 ) = Action<NotificationsActionId>(
   id = NotificationsActionId,
   title = stringResource(R.string.es_action_notifications, emptyList()),
@@ -36,8 +36,8 @@ import com.ivianuu.injekt.*
   icon = singleActionIcon(Icons.Default.Notifications)
 )
 
-@Given fun notificationsActionExecutor(
-  @Given globalActionExecutor: GlobalActionExecutor
+@Provide fun notificationsActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<NotificationsActionId> = {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
 }

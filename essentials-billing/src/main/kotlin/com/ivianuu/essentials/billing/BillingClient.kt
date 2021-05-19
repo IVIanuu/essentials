@@ -7,10 +7,10 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given fun billingClient(
-  @Given appContext: AppContext,
-  @Given refreshes: MutableSharedFlow<BillingRefresh>
-): @Scoped<AppGivenScope> BillingClient = BillingClient
+@Provide fun billingClient(
+  appContext: AppContext,
+  refreshes: MutableSharedFlow<BillingRefresh>
+): @Scoped<AppScope> BillingClient = BillingClient
   .newBuilder(appContext)
   .enablePendingPurchases()
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
@@ -18,5 +18,5 @@ import kotlinx.coroutines.flow.*
 
 typealias BillingRefresh = Unit
 
-@Given val billingRefreshes: @Scoped<AppGivenScope> MutableSharedFlow<BillingRefresh>
+@Provide val billingRefreshes: @Scoped<AppScope> MutableSharedFlow<BillingRefresh>
   get() = EventFlow()

@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given fun sampleTheme(@Given twilightState: StateFlow<TwilightState>): AppTheme = { content ->
+@Provide fun sampleTheme(twilightState: StateFlow<TwilightState>): AppTheme = { content ->
   TwilightTheme(
     shapes = Shapes(
       medium = RoundedCornerShape(12.dp)

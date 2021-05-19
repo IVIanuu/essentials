@@ -18,19 +18,21 @@ import kotlin.coroutines.*
 
 interface BillingContext {
   val billingClient: BillingClient
-  @Given val logger: Logger
+  @Provide val logger: Logger
   val refreshes: MutableSharedFlow<BillingRefresh>
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R
 }
 
-@Given @Scoped<AppGivenScope>
+@Provide @Scoped<AppScope>
 class BillingContextImpl(
-  @Given override val billingClient: BillingClient,
-  @Given private val dispatcher: IODispatcher,
-  @Given override val logger: Logger,
-  @Given override val refreshes: MutableSharedFlow<BillingRefresh>,
-  @Given private val scope: GivenCoroutineScope<AppGivenScope>
+  override val billingClient: BillingClient,
+  private val dispatcher: IODispatcher,
+  logger: Logger,
+  override val refreshes: MutableSharedFlow<BillingRefresh>,
+  private val scope: InjectCoroutineScope<AppScope>
 ) : BillingContext {
+  @Provide override val logger: Logger = logger
+
   private var isConnected = false
   private val connectionMutex = Mutex()
 

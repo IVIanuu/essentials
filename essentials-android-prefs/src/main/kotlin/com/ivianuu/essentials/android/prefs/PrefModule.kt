@@ -16,13 +16,13 @@ import kotlinx.serialization.json.*
 import java.io.*
 
 class PrefModule<T : Any>(private val name: String, private val initial: () -> T) {
-  @Given fun dataStore(
-    @Given dispatcher: IODispatcher,
-    @Given jsonFactory: () -> Json,
-    @Given serializerFactory: () -> KSerializer<T>,
-    @Given prefsDir: () -> PrefsDir,
-    @Given scope: GivenCoroutineScope<AppGivenScope>
-  ): @Scoped<AppGivenScope> DataStore<T> {
+  @Provide fun dataStore(
+    dispatcher: IODispatcher,
+    jsonFactory: () -> Json,
+    serializerFactory: () -> KSerializer<T>,
+    prefsDir: () -> PrefsDir,
+    scope: InjectCoroutineScope<AppScope>
+  ): @Scoped<AppScope> DataStore<T> {
     val dataStore = DataStoreFactory.create(
       produceFile = { prefsDir().resolve(name) },
       serializer = object : Serializer<T> {

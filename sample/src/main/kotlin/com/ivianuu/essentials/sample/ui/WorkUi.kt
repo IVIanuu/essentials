@@ -26,11 +26,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given val workHomeItem = HomeItem("Work") { WorkKey }
+@Provide val workHomeItem = HomeItem("Work") { WorkKey }
 
 object WorkKey : Key<Nothing>
 
-@Given fun workUi(@Given testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {
+@Provide fun workUi(testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {

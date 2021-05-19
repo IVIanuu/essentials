@@ -27,9 +27,9 @@ import kotlinx.coroutines.*
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 
-@Given fun getInstalledAppsUseCase(
-  @Given dispatcher: IODispatcher,
-  @Given packageManager: PackageManager
+@Provide fun getInstalledAppsUseCase(
+  dispatcher: IODispatcher,
+  packageManager: PackageManager
 ): GetInstalledAppsUseCase = {
   withContext(dispatcher) {
     packageManager.getInstalledApplications(0)
@@ -47,9 +47,9 @@ typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 
 typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
 
-@Given fun getAppInfoUseCase(
-  @Given dispatcher: IODispatcher,
-  @Given packageManager: PackageManager
+@Provide fun getAppInfoUseCase(
+  dispatcher: IODispatcher,
+  packageManager: PackageManager
 ): GetAppInfoUseCase = { packageName ->
   withContext(dispatcher) {
     val applicationInfo = catch {

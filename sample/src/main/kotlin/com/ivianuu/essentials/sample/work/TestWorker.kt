@@ -24,9 +24,9 @@ import com.ivianuu.essentials.work.Worker
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given object TestWorkerId : WorkerId("test")
+@Provide object TestWorkerId : WorkerId("test")
 
-@Given fun testWorker(@Given _: Logger): Worker<TestWorkerId> = {
+@Provide fun testWorker(_: Logger): Worker<TestWorkerId> = {
   d { "start work" }
   delay(5000)
   d { "finish work" }
@@ -35,6 +35,6 @@ import kotlinx.coroutines.*
 
 typealias TestWorkScheduler = () -> Unit
 
-@Given fun testWorkScheduler(@Given workManager: WorkManager): TestWorkScheduler = {
+@Provide fun testWorkScheduler(workManager: WorkManager): TestWorkScheduler = {
   workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
 }

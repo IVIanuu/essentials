@@ -16,4 +16,4 @@ import kotlinx.serialization.*
   }
 }
 
-@Given val ratePrefsModule = PrefModule("feedback_prefs") { RatePrefs() }
+@Provide val ratePrefsModule = PrefModule("feedback_prefs") { RatePrefs() }

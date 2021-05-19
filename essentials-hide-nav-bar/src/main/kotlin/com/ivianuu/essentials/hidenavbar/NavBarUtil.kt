@@ -29,12 +29,12 @@ import com.ivianuu.injekt.*
 
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 
-@Given fun nonSdkInterfaceDetectionDisabler(
-  @Given _: Logger,
-  @Given systemBuildInfo: SystemBuildInfo,
-  @Given hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
-  @Given hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
-  @Given hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>,
+@Provide fun nonSdkInterfaceDetectionDisabler(
+  systemBuildInfo: SystemBuildInfo,
+  hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
+  hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
+  hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>,
+  _: Logger,
 ): NonSdkInterfaceDetectionDisabler = {
   if (systemBuildInfo.sdk >= 29) {
     d { "disable non sdk on 29" }
@@ -50,35 +50,35 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 
 internal typealias HiddenApiPolicy = Int
 
-@Given val hiddenApiPolicyModule =
+@Provide val hiddenApiPolicyModule =
   AndroidSettingModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
 
-@Given val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
+@Provide val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
 
 internal typealias HiddenApiPolicyPrePieApps = Int
 
-@Given val hiddenApiPolicyPrePieAppsModule =
+@Provide val hiddenApiPolicyPrePieAppsModule =
   AndroidSettingModule<HiddenApiPolicyPrePieApps, Int>(
     "hidden_api_policy_pre_p_apps",
     AndroidSettingsType.GLOBAL
   )
 
-@Given val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
+@Provide val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
 
 internal typealias HiddenApiPolicyPieApps = Int
 
-@Given val hiddenApiPolicyPieAppsModule = AndroidSettingModule<HiddenApiPolicyPieApps, Int>(
+@Provide val hiddenApiPolicyPieAppsModule = AndroidSettingModule<HiddenApiPolicyPieApps, Int>(
   "hidden_api_policy_p_apps",
   AndroidSettingsType.GLOBAL
 )
 
-@Given val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
+@Provide val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
 typealias OverscanUpdater = (Rect) -> Unit
 
 @SuppressLint("PrivateApi")
-@Given
-fun overscanUpdater(@Given logger: Logger): OverscanUpdater = { rect ->
+@Provide
+fun overscanUpdater(logger: Logger): OverscanUpdater = { rect ->
   d { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")

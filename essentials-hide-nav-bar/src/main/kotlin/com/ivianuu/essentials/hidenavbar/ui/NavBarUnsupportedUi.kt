@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
 
 object NavBarUnsupportedKey : DialogKey<Nothing>
 
-@Given val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
+@Provide val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
   DialogScaffold {
     Dialog(
       title = {
@@ -41,11 +41,11 @@ object NavBarUnsupportedKey : DialogKey<Nothing>
   val close: () -> Unit = {}
 )
 
-@Given fun navBarUnsupportedModel(
-  @Given key: NavBarUnsupportedKey,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<NavBarUnsupportedModel> = scope.state(
+@Provide fun navBarUnsupportedModel(
+  key: NavBarUnsupportedKey,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<NavBarUnsupportedModel> = scope.state(
   NavBarUnsupportedModel()
 ) {
   action(NavBarUnsupportedModel.openMoreInfos()) {

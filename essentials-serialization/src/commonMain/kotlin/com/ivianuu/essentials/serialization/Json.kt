@@ -22,12 +22,12 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import kotlinx.serialization.modules.*
 
-@Given val json: @Scoped<AppGivenScope> Json
+@Provide val json: @Scoped<AppScope> Json
   get() = Json {
     ignoreUnknownKeys = true
     serializersModule = SerializersModule {
     }
   }
 
-@Given inline fun <reified T> kSerializer(@Given json: Json): KSerializer<T> =
+@Provide inline fun <reified T> kSerializer(json: Json): KSerializer<T> =
   json.serializersModule.serializer()

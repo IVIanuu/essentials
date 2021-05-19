@@ -27,7 +27,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.8.1"
+    private const val version = "0.10.0"
     const val coil = "com.google.accompanist:accompanist-coil:$version"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
@@ -39,7 +39,7 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.3.0-alpha06"
+      private const val version = "1.3.0-alpha08"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -47,7 +47,7 @@ object Deps {
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
     object Compose {
-      const val version = "1.0.0-beta04"
+      const val version = "1.0.0-beta07"
       const val compiler = "androidx.compose.compiler:compiler:$version"
       const val core = "androidx.compose.ui:ui:$version"
       const val material = "androidx.compose.material:material:$version"
@@ -56,7 +56,7 @@ object Deps {
     }
 
     object ConstraintLayout {
-      const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha03"
+      const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
     }
 
     const val dataStore = "androidx.datastore:datastore:1.0.0-alpha08"
@@ -97,12 +97,12 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev856"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev858"
 
   const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
   object Injekt {
-    private const val version = "0.0.1-dev556"
+    private const val version = "0.0.1-dev557"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"

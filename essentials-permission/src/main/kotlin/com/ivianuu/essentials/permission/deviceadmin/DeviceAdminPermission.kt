@@ -29,15 +29,15 @@ interface DeviceAdminPermission : Permission {
   val explanation: String
 }
 
-@Given fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
-  @Given context: AppContext,
-  @Given devicePolicyManager: @SystemService DevicePolicyManager
+@Provide fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
+  context: AppContext,
+  devicePolicyManager: @SystemService DevicePolicyManager
 ): PermissionStateProvider<P> = { permission ->
   devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
 }
 
-@Given fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
-  @Given context: AppContext
+@Provide fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
+  context: AppContext
 ): PermissionIntentFactory<P> = { permission ->
   Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
     putExtra(

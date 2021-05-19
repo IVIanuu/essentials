@@ -26,24 +26,24 @@ import com.ivianuu.essentials.torch.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given object TorchActionId : ActionId("torch")
+@Provide object TorchActionId : ActionId("torch")
 
-@Given fun torchAction(
-  @Given stringResource: StringResourceProvider,
-  @Given torchIcon: Flow<TorchIcon>,
+@Provide fun torchAction(
+  stringResource: StringResourceProvider,
+  torchIcon: Flow<TorchIcon>,
 ) = Action<TorchActionId>(
   id = TorchActionId,
   title = stringResource(R.string.es_action_torch, emptyList()),
   icon = torchIcon
 )
 
-@Given fun torchActionExecutor(
-  @Given torch: MutableStateFlow<TorchState>
+@Provide fun torchActionExecutor(
+  torch: MutableStateFlow<TorchState>
 ): ActionExecutor<TorchActionId> = { torch.update { not() } }
 
 private typealias TorchIcon = ActionIcon
 
-@Given fun torchIcon(@Given torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
+@Provide fun torchIcon(torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
   .map {
     if (it) R.drawable.es_ic_flash_on
     else R.drawable.es_ic_flash_off

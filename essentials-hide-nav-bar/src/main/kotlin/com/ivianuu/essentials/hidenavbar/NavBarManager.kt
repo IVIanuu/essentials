@@ -33,18 +33,18 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given fun navBarManager(
-  @Given appContext: AppContext,
-  @Given displayRotation: Flow<DisplayRotation>,
-  @Given forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
-  @Given navBarFeatureSupported: NavBarFeatureSupported,
-  @Given _: Logger,
-  @Given nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-  @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-  @Given prefs: Flow<NavBarPrefs>,
-  @Given setOverscan: OverscanUpdater,
-  @Given wasNavBarHiddenPref: DataStore<WasNavBarHidden>
-): ScopeWorker<AppGivenScope> = worker@{
+@Provide fun navBarManager(
+  appContext: AppContext,
+  displayRotation: Flow<DisplayRotation>,
+  forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
+  navBarFeatureSupported: NavBarFeatureSupported,
+  nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
+  permissionState: Flow<PermissionState<NavBarPermission>>,
+  prefs: Flow<NavBarPrefs>,
+  setOverscan: OverscanUpdater,
+  wasNavBarHiddenPref: DataStore<WasNavBarHidden>,
+  _: Logger
+): ScopeWorker<AppScope> = worker@{
   if (!navBarFeatureSupported) return@worker
   permissionState
     .flatMapLatest { hasPermission ->
@@ -84,7 +84,7 @@ private suspend fun NavBarState.apply(
   context: Context,
   disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
   setOverscan: OverscanUpdater,
-  @Given _: Logger
+  @Inject _: Logger
 ) {
   d { "apply nav bar state $this" }
   catch {

@@ -45,7 +45,7 @@ data class AppPickerKey(
   val title: String? = null,
 ) : Key<AppInfo>
 
-@Given val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
+@Provide val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
   Scaffold(
     topBar = {
       TopAppBar(
@@ -81,12 +81,12 @@ data class AppPickerKey(
     .map { it.filter(appPredicate) }
 }
 
-@Given fun appPickerModel(
-  @Given key: AppPickerKey,
-  @Given getInstalledApps: GetInstalledAppsUseCase,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<AppPickerModel> = scope.state(
+@Provide fun appPickerModel(
+  key: AppPickerKey,
+  getInstalledApps: GetInstalledAppsUseCase,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<AppPickerModel> = scope.state(
   AppPickerModel(
     appPredicate = key.appPredicate,
     title = key.title

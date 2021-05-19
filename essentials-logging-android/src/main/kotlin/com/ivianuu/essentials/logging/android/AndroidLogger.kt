@@ -24,7 +24,7 @@ import com.ivianuu.essentials.logging.Logger.Kind.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-@Given @Factory class AndroidLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
+@Provide @Factory class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
   override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
     when (kind) {
       VERBOSE -> Log.v(tag ?: stackTraceTag, message, throwable)
@@ -37,11 +37,11 @@ import com.ivianuu.injekt.scope.*
   }
 }
 
-@Given inline fun androidLogger(
-  @Given buildInfo: BuildInfo,
-  @Given androidLoggerFactory: () -> @Factory AndroidLogger,
-  @Given noopLoggerFactory: () -> @Factory NoopLogger
-): @Scoped<AppGivenScope> Logger =
+@Provide inline fun androidLogger(
+  buildInfo: BuildInfo,
+  androidLoggerFactory: () -> @Factory AndroidLogger,
+  noopLoggerFactory: () -> @Factory NoopLogger
+): @Scoped<AppScope> Logger =
   if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
 
-@Given fun defaultLoggingEnabled(@Given buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug
+@Provide fun defaultLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug

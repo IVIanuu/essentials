@@ -23,18 +23,18 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-@Given object VolumeActionId : ActionId("volume")
+@Provide object VolumeActionId : ActionId("volume")
 
-@Given fun volumeAction(
-  @Given stringResource: StringResourceProvider
+@Provide fun volumeAction(
+  stringResource: StringResourceProvider
 ) = Action<VolumeActionId>(
   id = VolumeActionId,
   title = stringResource(R.string.es_action_volume, emptyList()),
   icon = singleActionIcon(R.drawable.es_ic_volume_up)
 )
 
-@Given fun volumeActionExecutor(
-  @Given audioManager: @SystemService AudioManager
+@Provide fun volumeActionExecutor(
+  audioManager: @SystemService AudioManager
 ): ActionExecutor<VolumeActionId> = {
   audioManager.adjustStreamVolume(
     AudioManager.STREAM_MUSIC,

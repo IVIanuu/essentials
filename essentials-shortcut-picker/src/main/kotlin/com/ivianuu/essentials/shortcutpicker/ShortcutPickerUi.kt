@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.*
 
 object ShortcutPickerKey : Key<Shortcut>
 
-@Given val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
+@Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
   Scaffold(
     topBar = {
       TopAppBar(
@@ -71,15 +71,15 @@ object ShortcutPickerKey : Key<Shortcut>
   val pickShortcut: (Shortcut) -> Unit = {}
 )
 
-@Given fun shortcutPickerModel(
-  @Given getAllShortcuts: GetAllShortcutsUseCase,
-  @Given extractShortcut: ExtractShortcutUseCase,
-  @Given key: ShortcutPickerKey,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
+@Provide fun shortcutPickerModel(
+  getAllShortcuts: GetAllShortcutsUseCase,
+  extractShortcut: ExtractShortcutUseCase,
+  key: ShortcutPickerKey,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
+): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
   resourceFlow { emit(getAllShortcuts()) }
     .update { copy(shortcuts = it) }
   action(ShortcutPickerModel.pickShortcut()) { shortcut ->

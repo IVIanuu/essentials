@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.*
 
 typealias BroadcastsFactory = (String) -> Flow<Intent>
 
-@Given fun broadcastsFactory(
-  @Given appContext: AppContext,
-  @Given mainDispatcher: MainDispatcher
+@Provide fun broadcastsFactory(
+  appContext: AppContext,
+  mainDispatcher: MainDispatcher
 ): BroadcastsFactory = { action ->
   callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {

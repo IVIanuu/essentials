@@ -35,17 +35,17 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val uiGivenScope = activityGivenScope.element<@ChildScopeFactory () -> UiGivenScope>()()
+    val uiScope = activityScope.element<@ChildScopeFactory () -> UiScope>()()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       runOnCancellation {
-        uiGivenScope.dispose()
+        uiScope.dispose()
       }
     }
 
-    val component = uiGivenScope.element<EsActivityComponent>()
+    val component = uiScope.element<EsActivityComponent>()
 
     setContent {
-      CompositionLocalProvider(LocalGivenScope provides uiGivenScope) {
+      CompositionLocalProvider(LocalScope provides uiScope) {
         component.decorateUi {
           component.appUi()
         }
@@ -54,9 +54,5 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   }
 }
 
-@InstallElement<UiGivenScope>
-@Given
-class EsActivityComponent(
-  @Given val appUi: AppUi,
-  @Given val decorateUi: DecorateUi
-)
+@Provide @InstallElement<UiScope>
+class EsActivityComponent(val appUi: AppUi, val decorateUi: DecorateUi)

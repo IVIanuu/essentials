@@ -35,9 +35,9 @@ import kotlin.reflect.*
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
-@Given fun <@Given T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
-  @Given intentFactory: T,
-  @Given keyClass: KClass<K>
+@Provide fun <@Spread T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
+  intentFactory: T,
+  keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
 typealias KeyIntentFactory<T> = (T) -> Intent
@@ -46,11 +46,11 @@ typealias IntentAppUiStarter = suspend () -> ComponentActivity
 
 typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Unit)?) -> Boolean
 
-@Given fun intentKeyHandler(
-  @Given appUiStarter: IntentAppUiStarter,
-  @Given dispatcher: MainDispatcher,
-  @Given intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  @Given scope: GivenCoroutineScope<AppGivenScope>
+@Provide fun intentKeyHandler(
+  appUiStarter: IntentAppUiStarter,
+  dispatcher: MainDispatcher,
+  intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
+  scope: InjectCoroutineScope<AppScope>
 ): IntentKeyHandler = handler@{ key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories[key::class]

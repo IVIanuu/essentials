@@ -42,13 +42,13 @@ import kotlinx.coroutines.flow.*
 
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
-@Given fun <@Given T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
-  @Given serviceKey: TypeKey<S>,
-  @Given provider: () -> T
+@Provide fun <@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
+  serviceKey: TypeKey<S>,
+  provider: () -> T
 ): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> =
   serviceKey to provider.cast()
 
-typealias TileGivenScope = GivenScope
+typealias TileScope = Scope
 
-@Given val tileGivenScopeModule =
-  ChildScopeModule1<ServiceGivenScope, TypeKey<AbstractFunTileService>, TileGivenScope>()
+@Provide val tileScopeModule =
+  ChildScopeModule1<ServiceScope, TypeKey<AbstractFunTileService>, TileScope>()

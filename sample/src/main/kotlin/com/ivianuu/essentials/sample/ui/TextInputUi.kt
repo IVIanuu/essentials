@@ -36,11 +36,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given val textInputHomeItem = HomeItem("Text input") { TextInputKey }
+@Provide val textInputHomeItem = HomeItem("Text input") { TextInputKey }
 
 object TextInputKey : Key<Nothing>
 
-@Given val textInputUi: KeyUi<TextInputKey> = {
+@Provide val textInputUi: KeyUi<TextInputKey> = {
   val state = remember { TextInputState() }
 
   if (!state.searchVisible) {

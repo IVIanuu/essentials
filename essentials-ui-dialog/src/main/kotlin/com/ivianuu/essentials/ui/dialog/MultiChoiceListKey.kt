@@ -15,9 +15,9 @@ data class MultiChoiceListKey<T : Any>(
   data class Item<T>(val value: T, val title: String)
 }
 
-@Given fun multiChoiceListUi(
-  @Given key: MultiChoiceListKey<Any>,
-  @Given navigator: Navigator
+@Provide fun multiChoiceListUi(
+  key: MultiChoiceListKey<Any>,
+  navigator: Navigator
 ): KeyUi<MultiChoiceListKey<Any>> = {
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(key.selectedItems) }

@@ -47,17 +47,17 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Given val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
+@Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
 object AppTrackerKey : Key<Nothing>
 
-@Given fun appTrackerUi(
-  @Given currentApp: Flow<CurrentApp>,
-  @Given foregroundState: AppTrackerForegroundState,
-  @Given createNotification: (@Given CurrentApp) -> AppTrackerNotification,
-  @Given permissionRequester: PermissionRequester,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given toaster: Toaster,
+@Provide fun appTrackerUi(
+  currentApp: Flow<CurrentApp>,
+  foregroundState: AppTrackerForegroundState,
+  createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
+  permissionRequester: PermissionRequester,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
   val currentForegroundState by foregroundState.collectAsState()
 
@@ -98,18 +98,18 @@ object AppTrackerKey : Key<Nothing>
 
 typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
 
-@Given val appTrackerForegroundState: @Scoped<AppGivenScope> AppTrackerForegroundState
+@Provide val appTrackerForegroundState: @Scoped<AppScope> AppTrackerForegroundState
   get() = MutableStateFlow(Background)
 
 typealias AppTrackerNotification = Notification
 
 @SuppressLint("NewApi")
-@Given
+@Provide
 fun appTrackerNotification(
-  @Given appContext: AppContext,
-  @Given currentApp: CurrentApp,
-  @Given notificationManager: @SystemService NotificationManager,
-  @Given systemBuildInfo: SystemBuildInfo
+  appContext: AppContext,
+  currentApp: CurrentApp,
+  notificationManager: @SystemService NotificationManager,
+  systemBuildInfo: SystemBuildInfo
 ): AppTrackerNotification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(
@@ -128,7 +128,7 @@ fun appTrackerNotification(
     .build()
 }
 
-@Given object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
+@Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
   override val title: String = "Accessibility"

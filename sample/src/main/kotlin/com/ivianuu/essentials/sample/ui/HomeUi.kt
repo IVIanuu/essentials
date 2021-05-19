@@ -38,12 +38,12 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given class HomeKey : RootKey
+@Provide class HomeKey : RootKey
 
-@Given fun homeUi(
-  @Given navigator: Navigator,
-  @Given itemsFactory: () -> Set<HomeItem>,
-  @Given toaster: Toaster,
+@Provide fun homeUi(
+  navigator: Navigator,
+  itemsFactory: () -> Set<HomeItem>,
+  toaster: Toaster,
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   Scaffold(

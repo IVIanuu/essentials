@@ -37,11 +37,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
+@Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
 
 object BottomNavigationKey : Key<Nothing>
 
-@Given val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
+@Provide val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
   Scaffold(

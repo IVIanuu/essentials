@@ -25,11 +25,11 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given object LockScreenActionId : ActionId("lock_screen")
+@Provide object LockScreenActionId : ActionId("lock_screen")
 
-@Given fun lockScreenAction(
-  @Given stringResource: StringResourceProvider,
-  @Given systemBuildInfo: SystemBuildInfo,
+@Provide fun lockScreenAction(
+  stringResource: StringResourceProvider,
+  systemBuildInfo: SystemBuildInfo,
 ) = Action<LockScreenActionId>(
   id = LockScreenActionId,
   title = stringResource(R.string.es_action_lock_screen, emptyList()),
@@ -41,11 +41,11 @@ import com.ivianuu.injekt.common.*
 )
 
 @SuppressLint("InlinedApi")
-@Given
+@Provide
 fun lockScreenActionExecutor(
-  @Given actionRootCommandRunner: ActionRootCommandRunner,
-  @Given globalActionExecutor: GlobalActionExecutor,
-  @Given systemBuildInfo: SystemBuildInfo,
+  actionRootCommandRunner: ActionRootCommandRunner,
+  globalActionExecutor: GlobalActionExecutor,
+  systemBuildInfo: SystemBuildInfo,
 ): ActionExecutor<LockScreenActionId> = {
   if (systemBuildInfo.sdk >= 28) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)

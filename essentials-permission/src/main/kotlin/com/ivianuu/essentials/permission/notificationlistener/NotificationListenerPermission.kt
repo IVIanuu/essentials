@@ -32,19 +32,19 @@ interface NotificationListenerPermission : Permission {
   val serviceClass: KClass<out NotificationListenerService>
 }
 
-@Given fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
+@Provide fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = true
 
-@Given fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
-  @Given context: AppContext,
-  @Given buildInfo: BuildInfo
+@Provide fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
+  context: AppContext,
+  buildInfo: BuildInfo
 ): PermissionStateProvider<P> = {
   NotificationManagerCompat.getEnabledListenerPackages(context)
     .any { it == buildInfo.packageName }
 }
 
-@Given fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
-  @Given buildInfo: BuildInfo
+@Provide fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
+  buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = { permission ->
   Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
     val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"

@@ -31,11 +31,11 @@ import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given class AppActionFactory(
-  @Given private val actionIntentSender: ActionIntentSender,
-  @Given private val getAppInfo: GetAppInfoUseCase,
-  @Given private val packageManager: PackageManager,
-  @Given private val stringResource: StringResourceProvider
+@Provide class AppActionFactory(
+  private val actionIntentSender: ActionIntentSender,
+  private val getAppInfo: GetAppInfoUseCase,
+  private val packageManager: PackageManager,
+  private val stringResource: StringResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
@@ -63,10 +63,10 @@ import com.ivianuu.injekt.*
   }
 }
 
-@Given class AppActionPickerDelegate(
-  @Given private val launchableAppPredicate: LaunchableAppPredicate,
-  @Given private val navigator: Navigator,
-  @Given private val stringResource: StringResourceProvider,
+@Provide class AppActionPickerDelegate(
+  private val launchableAppPredicate: LaunchableAppPredicate,
+  private val navigator: Navigator,
+  private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = stringResource(R.string.es_action_app, emptyList())

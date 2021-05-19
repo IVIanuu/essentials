@@ -29,11 +29,11 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-@Given val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }
+@Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }
 
 object DynamicSystemBarsKey : Key<Nothing>
 
-@Given val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
+@Provide val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
   Box {
     val colors: List<Color> = rememberSaveable {
       com.ivianuu.essentials.colorpicker.ColorPickerPalette.values()

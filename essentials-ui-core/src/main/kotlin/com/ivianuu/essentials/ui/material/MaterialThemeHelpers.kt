@@ -21,23 +21,21 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.*
 import com.ivianuu.essentials.ui.core.*
 
-inline fun Typography.editEach(edit: TextStyle.() -> TextStyle): Typography {
-  return Typography(
-    h1 = edit(h1),
-    h2 = edit(h2),
-    h3 = edit(h3),
-    h4 = edit(h4),
-    h5 = edit(h5),
-    h6 = edit(h6),
-    subtitle1 = edit(subtitle1),
-    subtitle2 = edit(subtitle2),
-    body1 = edit(body1),
-    body2 = edit(body2),
-    button = edit(button),
-    caption = edit(caption),
-    overline = edit(overline)
-  )
-}
+inline fun Typography.editEach(edit: TextStyle.() -> TextStyle) = Typography(
+  h1 = edit(h1),
+  h2 = edit(h2),
+  h3 = edit(h3),
+  h4 = edit(h4),
+  h5 = edit(h5),
+  h6 = edit(h6),
+  subtitle1 = edit(subtitle1),
+  subtitle2 = edit(subtitle2),
+  body1 = edit(body1),
+  body2 = edit(body2),
+  button = edit(button),
+  caption = edit(caption),
+  overline = edit(overline)
+)
 
 fun blackColors() = darkColors().copy(
   background = Color.Black,
@@ -58,7 +56,7 @@ fun colors(
   onBackground: Color = if (background.isDark) Color.White else Color.Black,
   onSurface: Color = if (surface.isDark) Color.White else Color.Black,
   onError: Color = if (error.isDark) Color.White else Color.Black,
-): Colors = if (isLight) {
+) = if (isLight) {
   lightColors(
     primary = primary,
     primaryVariant = primaryVariant,
@@ -122,7 +120,7 @@ fun lerp(
   start: Colors,
   end: Colors,
   fraction: Float
-): Colors = Colors(
+) = Colors(
   isLight = if (fraction < 0.5) start.isLight else end.isLight,
   primary = lerp(start.primary, end.primary, fraction),
   primaryVariant = lerp(start.primaryVariant, end.primaryVariant, fraction),

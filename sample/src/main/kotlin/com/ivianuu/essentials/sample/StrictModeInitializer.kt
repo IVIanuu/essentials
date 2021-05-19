@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.sample
 
 import android.os.*
-import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-@Given val strictModeInitializer: ScopeInitializer<AppGivenScope> = {
+@Provide val strictModeInitializer: ScopeInitializer<AppScope> = {
   StrictMode.setThreadPolicy(
     StrictMode.ThreadPolicy.Builder()
       .detectAll()

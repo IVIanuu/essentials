@@ -19,13 +19,13 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
+@Provide val sharedElementsHomeItem = HomeItem("Shared element") { SharedElementKey(it) }
 
 data class SharedElementKey(val color: Color) : Key<Nothing>
 
-@Given fun sharedElementKeyUi(
-  @Given key: SharedElementKey,
-  @Given navigator: Navigator
+@Provide fun sharedElementKeyUi(
+  key: SharedElementKey,
+  navigator: Navigator
 ): KeyUi<SharedElementKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Shared Elements") }) }
@@ -89,7 +89,7 @@ val cities = listOf(
   City("Tokyo", R.drawable.tokyo)
 )
 
-@Given val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
+@Provide val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
   KeyUiOptions(
     transition = SharedElementStackTransition(
       "title Shared element" to "title",

@@ -29,18 +29,15 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import java.util.*
 
-data class TwilightState(
-  val isDark: Boolean = false,
-  val useBlack: Boolean = false,
-)
+data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = false)
 
-@Given fun twilightState(
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-  @Given batteryTwilightState: () -> Flow<BatteryTwilightState>,
-  @Given systemTwilightState: () -> Flow<SystemTwilightState>,
-  @Given timeTwilightState: () -> Flow<TimeTwilightState>,
-  @Given twilightPrefs: Flow<TwilightPrefs>,
-): @Eager<AppGivenScope> StateFlow<TwilightState> = twilightPrefs
+@Provide fun twilightState(
+  scope: InjectCoroutineScope<AppScope>,
+  batteryTwilightState: () -> Flow<BatteryTwilightState>,
+  systemTwilightState: () -> Flow<SystemTwilightState>,
+  timeTwilightState: () -> Flow<TimeTwilightState>,
+  twilightPrefs: Flow<TwilightPrefs>,
+): @Eager<AppScope> StateFlow<TwilightState> = twilightPrefs
   .flatMapLatest { (mode, useBlack) ->
     (when (mode) {
       TwilightMode.SYSTEM -> systemTwilightState()
@@ -55,9 +52,9 @@ data class TwilightState(
 
 typealias BatteryTwilightState = Boolean
 
-@Given fun batteryTwilightState(
-  @Given broadcastsFactory: BroadcastsFactory,
-  @Given powerManager: @SystemService PowerManager,
+@Provide fun batteryTwilightState(
+  broadcastsFactory: BroadcastsFactory,
+  powerManager: @SystemService PowerManager,
 ): Flow<BatteryTwilightState> = broadcastsFactory(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
   .map { Unit }
   .onStart { emit(Unit) }
@@ -65,9 +62,9 @@ typealias BatteryTwilightState = Boolean
 
 typealias SystemTwilightState = Boolean
 
-@Given fun systemTwilightState(
-  @Given configChanges: Flow<ConfigChange>,
-  @Given resources: AppResources,
+@Provide fun systemTwilightState(
+  configChanges: Flow<ConfigChange>,
+  resources: AppResources,
 ): Flow<SystemTwilightState> = configChanges
   .onStart { emit(ConfigChange) }
   .map {
@@ -77,8 +74,8 @@ typealias SystemTwilightState = Boolean
 
 typealias TimeTwilightState = Boolean
 
-@Given fun timeTwilightState(
-  @Given broadcastsFactory: BroadcastsFactory,
+@Provide fun timeTwilightState(
+  broadcastsFactory: BroadcastsFactory,
 ): Flow<TimeTwilightState> = broadcastsFactory(Intent.ACTION_TIME_TICK)
   .map { Unit }
   .onStart { emit(Unit) }

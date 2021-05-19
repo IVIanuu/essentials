@@ -29,9 +29,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
-enum class AppBarStyle {
-  PRIMARY, SURFACE
-}
+enum class AppBarStyle { PRIMARY, SURFACE }
 
 val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 
@@ -136,9 +134,5 @@ private val DefaultAppBarElevation = 4.dp
   }
 }
 
-@InstallElement<KeyUiGivenScope>
-@Given
-class AutoTopAppBarComponent(
-  @Given val key: Key<*>,
-  @Given val navigator: Navigator
-)
+@Provide @InstallElement<KeyUiScope>
+class AutoTopAppBarComponent(val key: Key<*>, val navigator: Navigator)

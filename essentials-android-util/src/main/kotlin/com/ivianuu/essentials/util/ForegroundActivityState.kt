@@ -31,14 +31,14 @@ typealias ForegroundActivity = ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Given val foregroundActivityState: @Scoped<AppGivenScope> MutableStateFlow<ForegroundActivity>
+@Provide val foregroundActivityState: @Scoped<AppScope> MutableStateFlow<ForegroundActivity>
   get() = MutableStateFlow(null)
 
-@Given fun foregroundActivityStateWorker(
-  @Given activity: ComponentActivity,
-  @Given dispatcher: MainDispatcher,
-  @Given state: MutableStateFlow<ForegroundActivity>
-): ScopeWorker<ActivityGivenScope> = worker@{
+@Provide fun foregroundActivityStateWorker(
+  activity: ComponentActivity,
+  dispatcher: MainDispatcher,
+  state: MutableStateFlow<ForegroundActivity>
+): ScopeWorker<ActivityScope> = worker@{
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))

@@ -27,9 +27,7 @@ val DefaultAppPredicate: AppPredicate = { true }
 
 typealias LaunchableAppPredicate = AppPredicate
 
-@Given fun launchableAppPredicate(
-  @Given packageManager: PackageManager
-): LaunchableAppPredicate {
+@Provide fun launchableAppPredicate(packageManager: PackageManager): LaunchableAppPredicate {
   val cache = mutableMapOf<String, Boolean>()
   return { app ->
     cache.getOrPut(app.packageName) {
@@ -40,9 +38,9 @@ typealias LaunchableAppPredicate = AppPredicate
 
 typealias IntentAppPredicate = AppPredicate
 
-@Given fun intentAppPredicate(
-  @Given packageManager: PackageManager,
-  @Given intent: Intent
+@Provide fun intentAppPredicate(
+  packageManager: PackageManager,
+  intent: Intent
 ): IntentAppPredicate {
   val apps by lazy {
     packageManager.queryIntentActivities(intent, 0)

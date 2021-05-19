@@ -20,9 +20,9 @@ abstract class WorkerId(val value: String)
 
 typealias WorkerElement = Pair<WorkerId, () -> Worker<*>>
 
-@Given fun <@Given T : Worker<I>, I : WorkerId> workerElement(
-  @Given id: I,
-  @Given factory: () -> T
+@Provide fun <@Spread T : Worker<I>, I : WorkerId> workerElement(
+  id: I,
+  factory: () -> T
 ): WorkerElement = id to factory
 
 fun WorkerId.toFunctionalWorkerTag() = WORKER_ID_TAG_PREFIX + value

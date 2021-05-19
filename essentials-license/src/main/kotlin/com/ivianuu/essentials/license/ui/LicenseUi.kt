@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.*
 
 object LicenseKey : Key<Nothing>
 
-@Given val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
+@Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_licenses_title)) }) }) {
     ResourceLazyColumnFor(model.projects) { project ->
       Project(
@@ -32,10 +32,7 @@ object LicenseKey : Key<Nothing>
   }
 }
 
-@Composable private fun Project(
-  onClick: () -> Unit,
-  project: Project
-) {
+@Composable private fun Project(onClick: () -> Unit, project: Project) {
   ListItem(
     title = { Text(project.project) },
     onClick = onClick
@@ -46,10 +43,10 @@ object LicenseKey : Key<Nothing>
   val projects: Resource<List<Project>> = Idle
 )
 
-@Given fun licenseModel(
-  @Given getProjects: GetLicenseProjectsUseCase,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
+@Provide fun licenseModel(
+  getProjects: GetLicenseProjectsUseCase,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
   flow { emit(getProjects()) }
     .flowResultAsResource()
     .update { copy(projects = it) }

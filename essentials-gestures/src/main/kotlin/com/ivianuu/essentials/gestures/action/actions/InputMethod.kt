@@ -23,18 +23,17 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-@Given object InputMethodActionId : ActionId("input_method")
+@Provide object InputMethodActionId : ActionId("input_method")
 
-@Given fun inputMethodAction(
-  @Given stringResource: StringResourceProvider
-) = Action<InputMethodActionId>(
-  id = "input_method",
-  title = stringResource(R.string.es_action_input_method, emptyList()),
-  icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
-)
+@Provide fun inputMethodAction(stringResource: StringResourceProvider) =
+  Action<InputMethodActionId>(
+    id = "input_method",
+    title = stringResource(R.string.es_action_input_method, emptyList()),
+    icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
+  )
 
-@Given fun inputMethodActionExecutor(
-  @Given inputMethodManager: @SystemService InputMethodManager
+@Provide fun inputMethodActionExecutor(
+  inputMethodManager: @SystemService InputMethodManager
 ): ActionExecutor<InputMethodActionId> = {
   inputMethodManager.showInputMethodPicker()
 }

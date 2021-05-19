@@ -30,9 +30,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given class KeycodeActionFactory(
-  @Given private val actionRootCommandRunner: ActionRootCommandRunner,
-  @Given private val stringResource: StringResourceProvider,
+@Provide class KeycodeActionFactory(
+  private val actionRootCommandRunner: ActionRootCommandRunner,
+  private val stringResource: StringResourceProvider,
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
   override suspend fun createAction(id: String): Action<*> {
@@ -53,9 +53,9 @@ import com.ivianuu.injekt.common.*
   }
 }
 
-@Given class KeycodeActionPickerDelegate(
-  @Given private val navigator: Navigator,
-  @Given private val stringResource: StringResourceProvider,
+@Provide class KeycodeActionPickerDelegate(
+  private val navigator: Navigator,
+  private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = stringResource(R.string.es_action_keycode, emptyList())

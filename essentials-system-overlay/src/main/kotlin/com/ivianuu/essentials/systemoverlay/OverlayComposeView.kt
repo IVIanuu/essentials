@@ -9,10 +9,10 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
 @SuppressLint("ViewConstructor")
-@Given
+@Provide
 class OverlayComposeView(
-  @Given appContext: AppContext,
-  @Given private val content: @Composable () -> Unit,
+  appContext: AppContext,
+  private val content: @Composable () -> Unit,
 ) : AbstractComposeView(appContext),
   LifecycleOwner,
   SavedStateRegistryOwner,

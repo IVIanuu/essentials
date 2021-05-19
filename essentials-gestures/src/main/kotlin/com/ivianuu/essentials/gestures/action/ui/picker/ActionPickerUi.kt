@@ -53,7 +53,7 @@ data class ActionPickerKey(
   }
 }
 
-@Given val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
+@Provide val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
   ) {
@@ -131,14 +131,14 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Given fun actionPickerModel(
-  @Given getAction: GetActionUseCase,
-  @Given getActionPickerItems: GetActionPickerItemsUseCase,
-  @Given key: ActionPickerKey,
-  @Given navigator: Navigator,
-  @Given permissionRequester: PermissionRequester,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
+@Provide fun actionPickerModel(
+  getAction: GetActionUseCase,
+  getActionPickerItems: GetActionPickerItemsUseCase,
+  key: ActionPickerKey,
+  navigator: Navigator,
+  permissionRequester: PermissionRequester,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
   action(ActionPickerModel.pickAction()) { item ->
@@ -154,12 +154,12 @@ sealed class ActionPickerItem {
 
 private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerItem>
 
-@Given fun getActionPickerItemsUseCase(
-  @Given getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-  @Given getAllActions: GetAllActionsUseCase,
-  @Given getActionSettingsKey: GetActionSettingsKeyUseCase,
-  @Given key: ActionPickerKey,
-  @Given stringResource: StringResourceProvider
+@Provide fun getActionPickerItemsUseCase(
+  getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+  getAllActions: GetAllActionsUseCase,
+  getActionSettingsKey: GetActionSettingsKeyUseCase,
+  key: ActionPickerKey,
+  stringResource: StringResourceProvider
 ): GetActionPickerItemsUseCase = {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

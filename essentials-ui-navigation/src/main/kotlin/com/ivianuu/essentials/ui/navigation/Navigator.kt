@@ -35,12 +35,12 @@ interface Navigator {
 
 data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
-@Given @Scoped<AppGivenScope>
+@Provide @Scoped<AppScope>
 class NavigatorImpl(
-  @Given private val intentKeyHandler: IntentKeyHandler,
-  @Given private val logger: Logger,
-  @Given rootKey: RootKey? = null,
-  @Given private val scope: GivenCoroutineScope<AppGivenScope>
+  private val intentKeyHandler: IntentKeyHandler,
+  private val logger: Logger,
+  rootKey: RootKey? = null,
+  private val scope: InjectCoroutineScope<AppScope>
 ) : Navigator {
   private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
   override val state: StateFlow<NavigationState>

@@ -27,9 +27,9 @@ import com.ivianuu.injekt.android.*
 
 data class AppIcon(val packageName: String)
 
-@Given class AppIconFetcher(
-  @Given private val packageManager: PackageManager,
-  @Given private val resources: AppResources
+@Provide class AppIconFetcher(
+  private val packageManager: PackageManager,
+  private val resources: AppResources
 ) : Fetcher<AppIcon> {
   override fun key(data: AppIcon): String = data.packageName
   override suspend fun fetch(

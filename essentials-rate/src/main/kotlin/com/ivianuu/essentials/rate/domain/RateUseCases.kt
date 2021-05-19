@@ -14,10 +14,10 @@ import kotlin.coroutines.*
 
 typealias RateOnPlayUseCase = suspend () -> Unit
 
-@Given
+@Provide
 fun rateOnPlayUseCase(
-  @Given activity: ComponentActivity,
-  @Given pref: DataStore<RatePrefs>
+  activity: ComponentActivity,
+  pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {
   catch {
     val reviewManagerFactory = ReviewManagerFactory.create(activity)
@@ -37,18 +37,16 @@ fun rateOnPlayUseCase(
 
 internal typealias DisplayShowNeverUseCase = suspend () -> Boolean
 
-@Given fun displayShowNeverUseCase(
-  @Given pref: DataStore<RatePrefs>
-): DisplayShowNeverUseCase = {
+@Provide fun displayShowNeverUseCase(pref: DataStore<RatePrefs>): DisplayShowNeverUseCase = {
   pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
 }
 
 internal typealias ShowNeverUseCase = suspend () -> Unit
 
-@Given fun showNeverUseCase(
-  @Given key: Key<*>,
-  @Given navigator: Navigator,
-  @Given pref: DataStore<RatePrefs>
+@Provide fun showNeverUseCase(
+  key: Key<*>,
+  navigator: Navigator,
+  pref: DataStore<RatePrefs>
 ): ShowNeverUseCase = {
   pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
   navigator.pop(key)
@@ -56,11 +54,11 @@ internal typealias ShowNeverUseCase = suspend () -> Unit
 
 internal typealias ShowLaterUseCase = suspend () -> Unit
 
-@Given fun showLaterUseCase(
-  @Given key: Key<*>,
-  @Given navigator: Navigator,
-  @Given pref: DataStore<RatePrefs>,
-  @Given timestampProvider: TimestampProvider
+@Provide fun showLaterUseCase(
+  key: Key<*>,
+  navigator: Navigator,
+  pref: DataStore<RatePrefs>,
+  timestampProvider: TimestampProvider
 ): ShowLaterUseCase = {
   pref.updateData {
     copy(

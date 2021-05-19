@@ -50,13 +50,13 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlin.reflect.*
 
-@Given val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
+@Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
 
 object PermissionsKey : Key<Nothing>
 
-@Given fun permissionUi(
-  @Given permissionRequester: PermissionRequester,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Provide fun permissionUi(
+  permissionRequester: PermissionRequester,
+  scope: InjectCoroutineScope<KeyUiScope>
 ): KeyUi<PermissionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
@@ -88,7 +88,7 @@ object PermissionsKey : Key<Nothing>
   }
 }
 
-@Given object SampleCameraPermission : RuntimePermission {
+@Provide object SampleCameraPermission : RuntimePermission {
   override val permissionName: String
     get() = android.Manifest.permission.CAMERA
   override val title: String = "Camera"
@@ -96,7 +96,7 @@ object PermissionsKey : Key<Nothing>
   override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SamplePhonePermission : RuntimePermission {
+@Provide object SamplePhonePermission : RuntimePermission {
   override val permissionName: String
     get() = android.Manifest.permission.CALL_PHONE
   override val title: String = "Call phone"
@@ -104,7 +104,7 @@ object PermissionsKey : Key<Nothing>
   override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleAccessibilityPermission : AccessibilityServicePermission {
+@Provide object SampleAccessibilityPermission : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
   override val title: String = "Accessibility"
@@ -112,7 +112,7 @@ object PermissionsKey : Key<Nothing>
   override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleDeviceAdminPermission : DeviceAdminPermission {
+@Provide object SampleDeviceAdminPermission : DeviceAdminPermission {
   override val deviceAdminClass: KClass<out DeviceAdminReceiver>
     get() = SampleDeviceAdmin::class
   override val explanation: String
@@ -125,7 +125,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
+@Provide object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
   override val title: String
     get() = "Ignore battery optimizations"
   override val desc: String
@@ -134,7 +134,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
+@Provide object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
   override val title: String
     get() = "Install unknown apps"
   override val desc: String
@@ -143,7 +143,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
+@Provide object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
   override val title: String
     get() = "Package usage stats"
   override val desc: String
@@ -152,7 +152,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleNotificationListenerPermission : NotificationListenerPermission {
+@Provide object SampleNotificationListenerPermission : NotificationListenerPermission {
   override val serviceClass: KClass<out NotificationListenerService>
     get() = EsNotificationListenerService::class
   override val title: String
@@ -163,7 +163,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleSystemOverlayPermission : SystemOverlayPermission {
+@Provide object SampleSystemOverlayPermission : SystemOverlayPermission {
   override val title: String
     get() = "System overlay"
   override val desc: String
@@ -172,7 +172,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
+@Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
   override val title: String
     get() = "Write secure settings"
   override val desc: String
@@ -181,7 +181,7 @@ object PermissionsKey : Key<Nothing>
     get() = { Icon(Icons.Default.Menu, null) }
 }
 
-@Given object SampleWriteSettingsPermission : WriteSettingsPermission {
+@Provide object SampleWriteSettingsPermission : WriteSettingsPermission {
   override val title: String
     get() = "Write settings"
   override val desc: String

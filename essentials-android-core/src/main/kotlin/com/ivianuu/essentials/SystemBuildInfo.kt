@@ -21,6 +21,6 @@ import com.ivianuu.injekt.*
 
 data class SystemBuildInfo(val sdk: Int) {
   companion object {
-    @Given val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)
+    @Provide val androidSystemBuildInfo = SystemBuildInfo(Build.VERSION.SDK_INT)
   }
 }

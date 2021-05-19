@@ -20,6 +20,6 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias UiGivenScope = GivenScope
+typealias UiScope = Scope
 
-@Given val uiGivenScopeModule = ChildScopeModule0<ActivityGivenScope, UiGivenScope>()
+@Provide val uiScopeModule = ChildScopeModule0<ActivityScope, UiScope>()

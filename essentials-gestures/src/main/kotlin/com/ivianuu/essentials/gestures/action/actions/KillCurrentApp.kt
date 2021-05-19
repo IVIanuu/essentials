@@ -28,10 +28,10 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
-@Given object KillCurrentAppActionId : ActionId("kill_current_app")
+@Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
-@Given fun killCurrentAppAction(
-  @Given stringResource: StringResourceProvider,
+@Provide fun killCurrentAppAction(
+  stringResource: StringResourceProvider,
 ) = Action<KillCurrentAppActionId>(
   id = KillCurrentAppActionId,
   title = stringResource(R.string.es_action_kill_current_app, emptyList()),
@@ -39,11 +39,11 @@ import kotlinx.coroutines.flow.*
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-@Given fun killCurrentAppActionExecutor(
-  @Given actionRootCommandRunner: ActionRootCommandRunner,
-  @Given buildInfo: BuildInfo,
-  @Given currentAppFlow: Flow<CurrentApp>,
-  @Given packageManager: PackageManager
+@Provide fun killCurrentAppActionExecutor(
+  actionRootCommandRunner: ActionRootCommandRunner,
+  buildInfo: BuildInfo,
+  currentAppFlow: Flow<CurrentApp>,
+  packageManager: PackageManager
 ): ActionExecutor<KillCurrentAppActionId> = {
   val currentApp = currentAppFlow.first()
   if (currentApp != "android" &&

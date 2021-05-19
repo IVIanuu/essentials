@@ -21,4 +21,4 @@ import kotlin.time.*
 
 typealias TimestampProvider = () -> Duration
 
-@Given expect val timestampProvider: TimestampProvider
+@Provide expect val timestampProvider: TimestampProvider

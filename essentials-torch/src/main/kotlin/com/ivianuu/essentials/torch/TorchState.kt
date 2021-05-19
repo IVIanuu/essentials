@@ -22,5 +22,5 @@ import kotlinx.coroutines.flow.*
 
 typealias TorchState = Boolean
 
-@Given val torchState: @Scoped<AppGivenScope> MutableStateFlow<TorchState>
+@Provide val torchState: @Scoped<AppScope> MutableStateFlow<TorchState>
   get() = MutableStateFlow(false)

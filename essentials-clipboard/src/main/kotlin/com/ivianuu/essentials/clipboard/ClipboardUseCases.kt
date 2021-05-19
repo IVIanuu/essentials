@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.*
 
 typealias ClipboardText = String?
 
-@Given fun clipboardText(
-  @Given clipboardManager: @SystemService ClipboardManager,
-  @Given scope: GivenCoroutineScope<AppGivenScope>
+@Provide fun clipboardText(
+  clipboardManager: @SystemService ClipboardManager,
+  scope: InjectCoroutineScope<AppScope>
 ) = callbackFlow<ClipboardText> {
   val listener = ClipboardManager.OnPrimaryClipChangedListener {
     val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
@@ -39,8 +39,8 @@ typealias ClipboardText = String?
 
 typealias UpdateClipboardTextUseCase = suspend (String) -> Unit
 
-@Given fun updateClipboardTextUseCase(
-  @Given clipboardManager: @SystemService ClipboardManager
+@Provide fun updateClipboardTextUseCase(
+  clipboardManager: @SystemService ClipboardManager
 ): UpdateClipboardTextUseCase = { value ->
   clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
 }

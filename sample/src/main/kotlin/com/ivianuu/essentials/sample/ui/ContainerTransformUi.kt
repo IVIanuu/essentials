@@ -22,11 +22,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
 import kotlinx.coroutines.*
 
-@Given val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
+@Provide val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
 
 object ContainerTransformKey : Key<Nothing>
 
-@Given fun containerTransformUi(@Given navigator: Navigator): KeyUi<ContainerTransformKey> = {
+@Provide fun containerTransformUi(navigator: Navigator): KeyUi<ContainerTransformKey> = {
   var listInfo by rememberScopedValue(key = "list_state") {
     mutableStateOf(0 to 0)
   }

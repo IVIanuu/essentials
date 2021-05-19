@@ -26,18 +26,18 @@ import com.ivianuu.injekt.scope.*
 
 class EsAccessibilityService : AccessibilityService() {
   private val component by lazy {
-    createServiceGivenScope()
+    createServiceScope()
       .element<EsAccessibilityServiceComponent>()
   }
 
-  @Given private val logger get() = component.logger
+  @Provide private val logger get() = component.logger
 
-  private var accessibilityGivenScope: AccessibilityGivenScope? = null
+  private var accessibilityScope: AccessibilityScope? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
     d { "connected" }
-    accessibilityGivenScope = component.accessibilityGivenScopeFactory()
+    accessibilityScope = component.accessibilityScopeFactory()
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -58,18 +58,17 @@ class EsAccessibilityService : AccessibilityService() {
   override fun onUnbind(intent: Intent?): Boolean {
 
     d { "disconnected" }
-    accessibilityGivenScope?.dispose()
-    accessibilityGivenScope = null
-    component.serviceGivenScope.dispose()
+    accessibilityScope?.dispose()
+    accessibilityScope = null
+    component.serviceScope.dispose()
     return super.onUnbind(intent)
   }
 }
 
-@InstallElement<ServiceGivenScope>
-@Given
+@Provide @InstallElement<ServiceScope>
 class EsAccessibilityServiceComponent(
-  @Given val accessibilityEvents: MutableAccessibilityEvents,
-  @Given val accessibilityGivenScopeFactory: () -> AccessibilityGivenScope,
-  @Given val logger: Logger,
-  @Given val serviceGivenScope: ServiceGivenScope
+  val accessibilityEvents: MutableAccessibilityEvents,
+  val accessibilityScopeFactory: () -> AccessibilityScope,
+  val logger: Logger,
+  val serviceScope: ServiceScope
 )

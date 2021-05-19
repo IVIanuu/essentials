@@ -21,7 +21,7 @@ import kotlin.time.*
 
 data class CityDetailKey(val city: City) : Key<Nothing>
 
-@Given fun cityDetailUi(@Given key: CityDetailKey): KeyUi<CityDetailKey> = {
+@Provide fun cityDetailUi(key: CityDetailKey): KeyUi<CityDetailKey> = {
   LazyColumn {
     item {
       TopAppBar(
@@ -56,7 +56,7 @@ data class CityDetailKey(val city: City) : Key<Nothing>
   }
 }
 
-@Given val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
+@Provide val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
   val spec = defaultAnimationSpec(400.milliseconds, easing = FastOutSlowInEasing)
   KeyUiOptions(
     enterTransition = SharedElementStackTransition(

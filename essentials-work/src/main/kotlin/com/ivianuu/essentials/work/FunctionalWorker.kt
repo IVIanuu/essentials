@@ -6,10 +6,10 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*
 import java.util.*
 
-@Given @InstallWorker class FunctionalWorker(
-  @Given private val workers: Set<WorkerElement> = emptySet(),
-  @Given context: AppContext,
-  @Given workerParams: WorkerParameters,
+@Provide @InstallWorker class FunctionalWorker(
+  private val workers: Set<WorkerElement> = emptySet(),
+  context: AppContext,
+  workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
   override suspend fun doWork(): Result {
     val workers = workers

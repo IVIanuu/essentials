@@ -24,10 +24,10 @@ typealias BackupFile = File
 
 typealias BackupDir = File
 
-@Given fun backupDir(@Given dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+@Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 
-@Given fun backupPrefs(@Given prefsDir: PrefsDir): BackupFile = prefsDir
+@Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
 
-@Given fun backupDatabases(@Given dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+@Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
 
-@Given fun backupSharedPrefs(@Given dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
+@Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")

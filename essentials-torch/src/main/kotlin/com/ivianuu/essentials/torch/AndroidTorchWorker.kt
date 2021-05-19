@@ -27,12 +27,12 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given fun androidTorchWorker(
-  @Given cameraManager: @SystemService CameraManager,
-  @Given stringResource: StringResourceProvider,
-  @Given torchStore: MutableStateFlow<TorchState>,
-  @Given toaster: Toaster
-): ScopeWorker<AppGivenScope> = {
+@Provide fun androidTorchWorker(
+  cameraManager: @SystemService CameraManager,
+  stringResource: StringResourceProvider,
+  torchStore: MutableStateFlow<TorchState>,
+  toaster: Toaster
+): ScopeWorker<AppScope> = {
   torchStore.collect { torchState ->
     catch {
       val cameraId = cameraManager.cameraIdList[0]

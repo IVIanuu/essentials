@@ -57,10 +57,10 @@ internal fun singleActionIcon(id: Int) = singleActionIcon {
 
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 
-@Given fun actionRootCommandRunner(
-  @Given runShellCommand: RunShellCommandUseCase,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
+@Provide fun actionRootCommandRunner(
+  runShellCommand: RunShellCommandUseCase,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
 ): ActionRootCommandRunner = { command ->
   catch { runShellCommand(listOf(command)) }
     .onFailure {
@@ -71,10 +71,10 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
 
 typealias ActionIntentSender = (Intent) -> Unit
 
-@Given fun actionIntentSender(
-  @Given appContext: AppContext,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
+@Provide fun actionIntentSender(
+  appContext: AppContext,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
 ): ActionIntentSender = { intent ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {

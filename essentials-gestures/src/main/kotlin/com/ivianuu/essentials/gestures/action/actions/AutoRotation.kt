@@ -29,11 +29,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
-@Given object AutoRotationActionId : ActionId("auto_rotation")
+@Provide object AutoRotationActionId : ActionId("auto_rotation")
 
-@Given fun autoRotationAction(
-  @Given autoRotationIcon: Flow<AutoRotationIcon>,
-  @Given stringResource: StringResourceProvider,
+@Provide fun autoRotationAction(
+  autoRotationIcon: Flow<AutoRotationIcon>,
+  stringResource: StringResourceProvider,
 ) = Action<AutoRotationActionId>(
   id = AutoRotationActionId,
   title = stringResource(R.string.es_action_auto_rotation, emptyList()),
@@ -42,15 +42,15 @@ import kotlinx.coroutines.flow.*
   icon = autoRotationIcon
 )
 
-@Given fun autoRotationActionExecutor(
-  @Given rotationSetting: DataStore<AutoRotation>,
+@Provide fun autoRotationActionExecutor(
+  rotationSetting: DataStore<AutoRotation>,
 ): ActionExecutor<AutoRotationActionId> = {
   rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 
 internal typealias AutoRotationIcon = ActionIcon
 
-@Given fun autoRotationIcon(@Given autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> =
+@Provide fun autoRotationIcon(autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> =
   autoRotation
     .map { it == 1 }
     .map {
@@ -61,8 +61,8 @@ internal typealias AutoRotationIcon = ActionIcon
 
 internal typealias AutoRotation = Int
 
-@Given val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
+@Provide val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
   Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM
 )
 
-@Given val defaultAutoRotation: @Initial AutoRotation = 1
+@Provide val defaultAutoRotation: @Initial AutoRotation = 1

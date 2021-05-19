@@ -37,14 +37,14 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 
-@Given val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
+@Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
 
 object PrefsKey : Key<Nothing>
 
-@Given fun prefsUi(
-  @Given navigator: Navigator,
-  @Given prefStore: DataStore<SamplePrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Provide fun prefsUi(
+  navigator: Navigator,
+  prefStore: DataStore<SamplePrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
 ): KeyUi<PrefsKey> = {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   Scaffold(
@@ -221,4 +221,4 @@ object PrefsKey : Key<Nothing>
   val singleChoice: String = "C",
 )
 
-@Given val samplePrefsModule = PrefModule("sample_prefs") { SamplePrefs() }
+@Provide val samplePrefsModule = PrefModule("sample_prefs") { SamplePrefs() }

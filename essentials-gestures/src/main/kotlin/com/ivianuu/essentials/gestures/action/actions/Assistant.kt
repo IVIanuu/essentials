@@ -25,11 +25,9 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-@Given object AssistantActionId : ActionId("assistant")
+@Provide object AssistantActionId : ActionId("assistant")
 
-@Given fun assistantAction(
-  @Given stringResource: StringResourceProvider
-) = Action<AssistantActionId>(
+@Provide fun assistantAction(stringResource: StringResourceProvider) = Action<AssistantActionId>(
   id = AssistantActionId,
   title = stringResource(R.string.es_action_assistant, emptyList()),
   unlockScreen = true,
@@ -37,8 +35,8 @@ import com.ivianuu.injekt.android.*
 )
 
 @SuppressLint("DiscouragedPrivateApi")
-@Given fun assistantActionExecutor(
-  @Given searchManager: @SystemService SearchManager
+@Provide fun assistantActionExecutor(
+  searchManager: @SystemService SearchManager
 ): ActionExecutor<AssistantActionId> = {
   val launchAssist = searchManager.javaClass
     .getDeclaredMethod("launchAssist", Bundle::class.java)

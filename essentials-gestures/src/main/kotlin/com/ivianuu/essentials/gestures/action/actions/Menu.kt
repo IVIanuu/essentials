@@ -24,10 +24,10 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given object MenuActionId : ActionId("menu")
+@Provide object MenuActionId : ActionId("menu")
 
-@Given fun menuAction(
-  @Given stringResource: StringResourceProvider
+@Provide fun menuAction(
+  stringResource: StringResourceProvider
 ) = Action<MenuActionId>(
   id = "menu",
   title = stringResource(R.string.es_action_menu, emptyList()),
@@ -35,8 +35,8 @@ import com.ivianuu.injekt.common.*
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
-@Given fun menuActionExecutor(
-  @Given actionRootCommandRunner: ActionRootCommandRunner
+@Provide fun menuActionExecutor(
+  actionRootCommandRunner: ActionRootCommandRunner
 ): ActionExecutor<MenuActionId> = {
   actionRootCommandRunner("input keyevent 82")
 }

@@ -60,11 +60,11 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Given val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
+@Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
 object NotificationsKey : Key<Nothing>
 
-@Given val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
+@Provide val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {
@@ -159,15 +159,15 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Given fun notificationsModel(
-  @Given appContext: AppContext,
-  @Given dismissNotification: DismissNotificationUseCase,
-  @Given notifications: Flow<Notifications>,
-  @Given openNotification: OpenNotificationUseCase,
-  @Given permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
-  @Given permissionRequester: PermissionRequester,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
+@Provide fun notificationsModel(
+  appContext: AppContext,
+  dismissNotification: DismissNotificationUseCase,
+  notifications: Flow<Notifications>,
+  openNotification: OpenNotificationUseCase,
+  permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
+  permissionRequester: PermissionRequester,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
   notifications
     .map { notifications ->
       notifications
@@ -223,7 +223,7 @@ private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiN
   sbn = this
 )
 
-@Given object SampleNotificationsPermission : NotificationListenerPermission {
+@Provide object SampleNotificationsPermission : NotificationListenerPermission {
   override val serviceClass: KClass<out NotificationListenerService>
     get() = EsNotificationListenerService::class
   override val title: String = "Notifications"

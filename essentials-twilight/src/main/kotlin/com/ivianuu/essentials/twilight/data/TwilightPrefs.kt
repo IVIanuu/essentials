@@ -26,8 +26,8 @@ import kotlinx.serialization.*
   @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 )
 
-@Given fun twilightPrefsModule(
-  @Given initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
+@Provide fun twilightPrefsModule(
+  initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
 ) = PrefModule<TwilightPrefs>("twilight_prefs") {
   initialTwilightPrefs?.invoke() ?: TwilightPrefs()
 }

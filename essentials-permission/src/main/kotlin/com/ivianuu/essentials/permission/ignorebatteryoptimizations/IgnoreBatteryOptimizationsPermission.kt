@@ -29,18 +29,18 @@ import com.ivianuu.injekt.android.*
 
 interface IgnoreBatteryOptimizationsPermission : Permission
 
-@Given
+@Provide
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
-  @Given buildInfo: BuildInfo,
-  @Given powerManager: @SystemService PowerManager
+  buildInfo: BuildInfo,
+  powerManager: @SystemService PowerManager
 ): PermissionStateProvider<P> = {
   powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 }
 
 @SuppressLint("BatteryLife")
-@Given
+@Provide
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
-  @Given buildInfo: BuildInfo
+  buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
   Intent(
     Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,

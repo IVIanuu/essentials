@@ -46,9 +46,9 @@ import kotlinx.serialization.*
 
 typealias MediaActionSender = suspend (Int) -> Unit
 
-@Given fun mediaActionSender(
-  @Given appContext: AppContext,
-  @Given prefs: Flow<MediaActionPrefs>
+@Provide fun mediaActionSender(
+  appContext: AppContext,
+  prefs: Flow<MediaActionPrefs>
 ): MediaActionSender = { keycode ->
   val currentPrefs = prefs.first()
   appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
@@ -75,11 +75,11 @@ private fun mediaIntentFor(
   @SerialName("media_app") val mediaApp: String? = null,
 )
 
-@Given val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
+@Provide val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
 
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
-@Given
+@Provide
 val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
   Scaffold(topBar = {
     TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
@@ -109,13 +109,13 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   val updateMediaApp: () -> Unit = {}
 )
 
-@Given fun mediaActionSettingsModel(
-  @Given getAppInfo: GetAppInfoUseCase,
-  @Given intentAppPredicateFactory: (@Given Intent) -> IntentAppPredicate,
-  @Given navigator: Navigator,
-  @Given pref: DataStore<MediaActionPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<MediaActionSettingsModel> = scope.state(
+@Provide fun mediaActionSettingsModel(
+  getAppInfo: GetAppInfoUseCase,
+  intentAppPredicateFactory: (@Provide Intent) -> IntentAppPredicate,
+  navigator: Navigator,
+  pref: DataStore<MediaActionPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<MediaActionSettingsModel> = scope.state(
   MediaActionSettingsModel()
 ) {
   pref.data

@@ -4,6 +4,6 @@ import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-typealias KeyUiGivenScope = GivenScope
+typealias KeyUiScope = Scope
 
-@Given val keyUiGivenScopeModule = ChildScopeModule1<UiGivenScope, Key<*>, KeyUiGivenScope>()
+@Provide val keyUiScopeModule = ChildScopeModule1<UiScope, Key<*>, KeyUiScope>()

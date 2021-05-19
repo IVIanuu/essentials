@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
+@Provide val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
 
 enum class TransitionKey(
   val title: String,
@@ -71,9 +71,9 @@ enum class TransitionKey(
   )
 }
 
-@Given fun transitionUi(
-  @Given key: TransitionKey,
-  @Given navigator: Navigator
+@Provide fun transitionUi(
+  key: TransitionKey,
+  navigator: Navigator
 ): KeyUi<TransitionKey> = {
   Scaffold(
     topBar = {
@@ -130,7 +130,7 @@ enum class TransitionKey(
   }
 }
 
-@Given val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
+@Provide val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
   val (enterTransition, exitTransition) = when (key) {
     TransitionKey.VERTICAL -> VerticalStackTransition() to VerticalStackTransition()
     TransitionKey.CIRCULAR -> CircularRevealStackTransition("fab") to

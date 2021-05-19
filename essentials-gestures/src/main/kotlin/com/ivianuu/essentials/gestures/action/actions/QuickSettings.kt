@@ -25,10 +25,10 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given object QuickSettingsActionId : ActionId("quick_settings")
+@Provide object QuickSettingsActionId : ActionId("quick_settings")
 
-@Given fun quickSettingsAction(
-  @Given stringResource: StringResourceProvider
+@Provide fun quickSettingsAction(
+  stringResource: StringResourceProvider
 ) = Action<QuickSettingsActionId>(
   id = QuickSettingsActionId,
   title = stringResource(R.string.es_action_quick_settings, emptyList()),
@@ -36,8 +36,8 @@ import com.ivianuu.injekt.*
   icon = singleActionIcon(Icons.Default.Settings)
 )
 
-@Given fun quickSettingsActionExecutor(
-  @Given globalActionExecutor: GlobalActionExecutor
+@Provide fun quickSettingsActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<QuickSettingsActionId> = {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
 }

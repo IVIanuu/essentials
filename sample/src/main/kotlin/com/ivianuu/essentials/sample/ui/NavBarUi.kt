@@ -37,17 +37,17 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
+@Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 
 object NavBarKey : Key<Nothing>
 
-@Given fun navBarUi(
-  @Given forceNavBarVisibleState: SampleForceNavBarVisibleState,
-  @Given navBarPref: DataStore<NavBarPrefs>,
-  @Given navigator: Navigator,
-  @Given permissionState: Flow<PermissionState<NavBarPermission>>,
-  @Given permissionRequester: PermissionRequester,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
+@Provide fun navBarUi(
+  forceNavBarVisibleState: SampleForceNavBarVisibleState,
+  navBarPref: DataStore<NavBarPrefs>,
+  navigator: Navigator,
+  permissionState: Flow<PermissionState<NavBarPermission>>,
+  permissionRequester: PermissionRequester,
+  scope: InjectCoroutineScope<KeyUiScope>,
 ): KeyUi<NavBarKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -132,5 +132,5 @@ object NavBarKey : Key<Nothing>
 
 typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
 
-@Given val sampleForceNavBarVisibleState: @Scoped<AppGivenScope> SampleForceNavBarVisibleState
+@Provide val sampleForceNavBarVisibleState: @Scoped<AppScope> SampleForceNavBarVisibleState
   get() = MutableStateFlow(false)

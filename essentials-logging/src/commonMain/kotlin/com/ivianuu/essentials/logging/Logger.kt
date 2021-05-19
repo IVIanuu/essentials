@@ -38,7 +38,7 @@ interface Logger {
 inline fun v(
   tag: String? = null,
   throwable: Throwable? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = VERBOSE, throwable = throwable, tag = tag, message = message)
@@ -47,7 +47,7 @@ inline fun v(
 inline fun d(
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = DEBUG, throwable = throwable, tag = tag, message = message)
@@ -56,7 +56,7 @@ inline fun d(
 inline fun i(
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = INFO, throwable = throwable, tag = tag, message = message)
@@ -65,7 +65,7 @@ inline fun i(
 inline fun w(
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = WARN, throwable = throwable, tag = tag, message = message)
@@ -74,7 +74,7 @@ inline fun w(
 inline fun e(
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = ERROR, throwable = throwable, tag = tag, message = message)
@@ -83,7 +83,7 @@ inline fun e(
 inline fun wtf(
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = WTF, throwable = throwable, tag = tag, message = message)
@@ -92,7 +92,7 @@ inline fun wtf(
 inline fun warn(
   tag: String? = null,
   throwable: Throwable? = null,
-  @Given _: Logger,
+  @Inject _: Logger,
   message: () -> String? = { null },
 ) {
   log(kind = WARN, throwable = throwable, tag = tag, message = message)
@@ -102,13 +102,13 @@ inline fun log(
   kind: Logger.Kind,
   throwable: Throwable? = null,
   tag: String? = null,
-  @Given logger: Logger,
+  @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
   if (logger.isEnabled) logger.log(kind, message(), throwable, tag)
 }
 
-@Given @Factory object NoopLogger : Logger {
+@Provide @Factory object NoopLogger : Logger {
   override val isEnabled: Boolean
     get() = false
 
@@ -116,7 +116,7 @@ inline fun log(
   }
 }
 
-@Given @Factory class PrintingLogger(@Given override val isEnabled: LoggingEnabled) : Logger {
+@Provide @Factory class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
   override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
     println("[${kind.name}] ${tag ?: stackTraceTag} ${render(message, throwable)}")
   }

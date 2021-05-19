@@ -25,10 +25,10 @@ import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given fun testTileModel(
-  @Given scope: GivenCoroutineScope<TileGivenScope>,
-  @Given twilightPref: DataStore<TwilightPrefs>
-): @Scoped<TileGivenScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
+@Provide fun testTileModel(
+  scope: InjectCoroutineScope<TileScope>,
+  twilightPref: DataStore<TwilightPrefs>
+): @Scoped<TileScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
   twilightPref.data.update {
     copy(
       label = it.twilightMode.name,

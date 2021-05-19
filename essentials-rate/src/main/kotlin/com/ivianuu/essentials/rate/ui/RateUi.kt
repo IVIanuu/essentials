@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.*
 
 object RateKey : DialogKey<Nothing>
 
-@Given val rateUi: ModelKeyUi<RateKey, RateModel> = {
+@Provide val rateUi: ModelKeyUi<RateKey, RateModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -106,20 +106,20 @@ object RateKey : DialogKey<Nothing>
   val confirmEnabled: Boolean get() = rating != 0
 
   companion object {
-    @Given fun initial(@Given buildInfo: BuildInfo): @Initial RateModel = RateModel(
+    @Provide fun initial(buildInfo: BuildInfo): @Initial RateModel = RateModel(
       packageName = buildInfo.packageName
     )
   }
 }
 
-@Given fun rateModel(
-  @Given initial: @Initial RateModel,
-  @Given displayShowNever: DisplayShowNeverUseCase,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given showLater: ShowLaterUseCase,
-  @Given showNever: ShowNeverUseCase
-): @Scoped<KeyUiGivenScope> StateFlow<RateModel> = scope.state(initial) {
+@Provide fun rateModel(
+  initial: @Initial RateModel,
+  displayShowNever: DisplayShowNeverUseCase,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  showLater: ShowLaterUseCase,
+  showNever: ShowNeverUseCase
+): @Scoped<KeyUiScope> StateFlow<RateModel> = scope.state(initial) {
   launch {
     val showDoNotShowAgain = displayShowNever()
     update { copy(displayShowNever = showDoNotShowAgain) }

@@ -20,7 +20,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias NotificationGivenScope = GivenScope
+typealias NotificationScope = Scope
 
-@Given
-val notificationGivenScopeModule = ChildScopeModule0<ServiceGivenScope, NotificationGivenScope>()
+@Provide
+val notificationScopeModule = ChildScopeModule0<ServiceScope, NotificationScope>()

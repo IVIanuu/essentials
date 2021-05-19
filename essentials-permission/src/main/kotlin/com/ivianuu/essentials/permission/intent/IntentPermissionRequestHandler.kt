@@ -32,14 +32,14 @@ typealias PermissionIntentFactory<P> = (P) -> Intent
 
 typealias ShowFindPermissionHint<P> = Boolean
 
-@Given fun <P : Permission> permissionIntentRequestHandler(
-  @Given buildInfo: BuildInfo,
-  @Given intentFactory: PermissionIntentFactory<P>,
-  @Given navigator: Navigator,
-  @Given showFindPermissionHint: ShowFindPermissionHint<P> = false,
-  @Given state: Flow<PermissionState<P>>,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
+@Provide fun <P : Permission> permissionIntentRequestHandler(
+  buildInfo: BuildInfo,
+  intentFactory: PermissionIntentFactory<P>,
+  navigator: Navigator,
+  showFindPermissionHint: ShowFindPermissionHint<P> = false,
+  state: Flow<PermissionState<P>>,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
   raceOf(
     {

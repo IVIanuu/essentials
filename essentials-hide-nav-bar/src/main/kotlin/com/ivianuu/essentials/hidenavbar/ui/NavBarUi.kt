@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.*
 
 object NavBarKey : Key<Nothing>
 
-@Given val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
+@Provide val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
   ) {
@@ -77,13 +77,13 @@ object NavBarKey : Key<Nothing>
     get() = hideNavBar
 }
 
-@Given fun navBarModel(
-  @Given navigator: Navigator,
-  @Given permissionRequester: PermissionRequester,
-  @Given pref: DataStore<NavBarPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given stringResource: StringResourceProvider,
-): @Scoped<KeyUiGivenScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
+@Provide fun navBarModel(
+  navigator: Navigator,
+  permissionRequester: PermissionRequester,
+  pref: DataStore<NavBarPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  stringResource: StringResourceProvider,
+): @Scoped<KeyUiScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
   }

@@ -42,11 +42,11 @@ import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
-@Given val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
+@Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
 
 object DialogsKey : Key<Nothing>
 
-@Given val dialogsUi: KeyUi<DialogsKey> = {
+@Provide val dialogsUi: KeyUi<DialogsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -289,10 +289,9 @@ data class DialogLauncherKey(
   val dialog: @Composable () -> Unit
 ) : DialogKey<Nothing>
 
-@Given fun dialogLauncherUi(@Given key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
+@Provide fun dialogLauncherUi(key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
-@InstallElement<UiGivenScope>
-@Given
-class DialogLauncherComponent(@Given val navigator: Navigator)
+@Provide @InstallElement<UiScope>
+class DialogLauncherComponent(val navigator: Navigator)

@@ -9,9 +9,9 @@ import com.ivianuu.injekt.android.*
 
 object FeedbackMailKey : IntentKey
 
-@Given fun feedbackMailKeyIntentFactory(
-  @Given appContext: AppContext,
-  @Given stringResource: StringResourceProvider
+@Provide fun feedbackMailKeyIntentFactory(
+  appContext: AppContext,
+  stringResource: StringResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")

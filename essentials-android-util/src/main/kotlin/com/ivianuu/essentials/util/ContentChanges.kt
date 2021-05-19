@@ -30,9 +30,9 @@ import kotlinx.coroutines.flow.*
 
 typealias ContentChangesFactory = (Uri) -> Flow<Unit>
 
-@Given fun contentChangesFactory(
-  @Given contentResolver: ContentResolver,
-  @Given mainDispatcher: MainDispatcher,
+@Provide fun contentChangesFactory(
+  contentResolver: ContentResolver,
+  mainDispatcher: MainDispatcher,
 ): ContentChangesFactory = { uri ->
   callbackFlow<Unit> {
     val observer = withContext(mainDispatcher) {
@@ -48,5 +48,5 @@ typealias ContentChangesFactory = (Uri) -> Flow<Unit>
   }.flowOn(mainDispatcher)
 }
 
-@Given inline val Application.bindContentResolver: ContentResolver
+@Provide inline val Application.bindContentResolver: ContentResolver
   get() = contentResolver

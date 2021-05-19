@@ -27,11 +27,9 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-@Given object HomeActionId : ActionId("home")
+@Provide object HomeActionId : ActionId("home")
 
-@Given fun homeAction(
-  @Given stringResource: StringResourceProvider
-) = Action<HomeActionId>(
+@Provide fun homeAction(stringResource: StringResourceProvider) = Action<HomeActionId>(
   id = HomeActionId,
   title = stringResource(R.string.es_action_home, emptyList()),
   permissions = if (needsHomeIntentWorkaround) emptyList()
@@ -39,10 +37,10 @@ import com.ivianuu.injekt.android.*
   icon = singleActionIcon(R.drawable.es_ic_action_home)
 )
 
-@Given fun homeActionExecutor(
-  @Given actionIntentSender: ActionIntentSender,
-  @Given appContext: AppContext,
-  @Given globalActionExecutor: GlobalActionExecutor,
+@Provide fun homeActionExecutor(
+  actionIntentSender: ActionIntentSender,
+  appContext: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
 ): ActionExecutor<HomeActionId> = {
   if (!needsHomeIntentWorkaround) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)

@@ -25,11 +25,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given fun androidForegroundWorkerStarter(
-  @Given _: Logger,
-  @Given state: Flow<InternalForegroundState>,
-  @Given workManager: WorkManager
-): ScopeWorker<AppGivenScope> = {
+@Provide fun androidForegroundWorkerStarter(
+  state: Flow<InternalForegroundState>,
+  workManager: WorkManager,
+  _: Logger
+): ScopeWorker<AppScope> = {
   state
     .filter { it.isForeground }
     .filter {

@@ -29,7 +29,7 @@ object DonationKey : DialogKey<Nothing>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
-@Given val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
+@Provide val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
@@ -90,17 +90,17 @@ data class UiDonation(
   val details: SkuDetails
 )
 
-@Given fun donationModel(
-  @Given consumePurchase: ConsumePurchaseUseCase,
-  @Given donations: Set<Donation>,
-  @Given getSkuDetails: GetSkuDetailsUseCase,
-  @Given key: DonationKey,
-  @Given navigator: Navigator,
-  @Given purchase: PurchaseUseCase,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
+@Provide fun donationModel(
+  consumePurchase: ConsumePurchaseUseCase,
+  donations: Set<Donation>,
+  getSkuDetails: GetSkuDetailsUseCase,
+  key: DonationKey,
+  navigator: Navigator,
+  purchase: PurchaseUseCase,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
+): @Scoped<KeyUiScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
   resourceFlow {
     emit(
       donations

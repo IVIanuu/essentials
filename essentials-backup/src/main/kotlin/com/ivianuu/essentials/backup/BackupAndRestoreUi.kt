@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.*
 
 object BackupAndRestoreKey : Key<Nothing>
 
-@Given val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
+@Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
   ) {
@@ -66,13 +66,13 @@ object BackupAndRestoreKey : Key<Nothing>
   val restoreData: () -> Unit = {}
 )
 
-@Given fun backupAndRestoreModel(
-  @Given createBackupUseCase: CreateBackupUseCase,
-  @Given restoreBackupUseCase: RestoreBackupUseCase,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster,
-): @Scoped<KeyUiGivenScope> StateFlow<BackupAndRestoreModel> =
+@Provide fun backupAndRestoreModel(
+  createBackupUseCase: CreateBackupUseCase,
+  restoreBackupUseCase: RestoreBackupUseCase,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  stringResource: StringResourceProvider,
+  toaster: Toaster,
+): @Scoped<KeyUiScope> StateFlow<BackupAndRestoreModel> =
   scope.state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
       createBackupUseCase()

@@ -26,8 +26,8 @@ typealias ForceNavBarVisibleState = Boolean
 /**
  * We always wanna show the nav bar on system shut down
  */
-@Given fun systemShutdownForceNavBarVisibleState(
-  @Given broadcastsFactory: BroadcastsFactory
+@Provide fun systemShutdownForceNavBarVisibleState(
+  broadcastsFactory: BroadcastsFactory
 ): Flow<ForceNavBarVisibleState> = flow {
   broadcastsFactory(Intent.ACTION_SHUTDOWN)
     .onStart { emit(false) }
@@ -36,8 +36,8 @@ typealias ForceNavBarVisibleState = Boolean
 
 internal typealias CombinedForceNavBarVisibleState = Boolean
 
-@Given fun combinedForceNavBarVisibleState(
-  @Given forceNavbarVisibleStates: Set<Flow<ForceNavBarVisibleState>>
+@Provide fun combinedForceNavBarVisibleState(
+  forceNavbarVisibleStates: Set<Flow<ForceNavBarVisibleState>>
 ): Flow<CombinedForceNavBarVisibleState> = combine(
   forceNavbarVisibleStates
     .map { state ->

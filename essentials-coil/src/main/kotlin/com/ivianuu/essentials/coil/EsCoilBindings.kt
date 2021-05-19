@@ -26,13 +26,13 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*
 
-@Given fun imageLoader(
-  @Given appContext: AppContext,
-  @Given decoders: Set<Decoder> = emptySet(),
-  @Given fetchers: Set<FetcherPair<Any>> = emptySet(),
-  @Given interceptors: Set<Interceptor> = emptySet(),
-  @Given mappers: Set<MapperPair<Any>> = emptySet(),
-): @Scoped<AppGivenScope> ImageLoader = ImageLoader.Builder(appContext)
+@Provide fun imageLoader(
+  appContext: AppContext,
+  decoders: Set<Decoder> = emptySet(),
+  fetchers: Set<FetcherPair<Any>> = emptySet(),
+  interceptors: Set<Interceptor> = emptySet(),
+  mappers: Set<MapperPair<Any>> = emptySet(),
+): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
   .componentRegistry {
     decoders.forEach { add(it) }
     interceptors.forEach { add(it) }
@@ -47,9 +47,9 @@ import kotlin.reflect.*
   }
   .build()
 
-@Given fun <@Given F : Fetcher<T>, T : Any> fetcherPair(
-  @Given instance: F,
-  @Given typeClass: KClass<T>
+@Provide fun <@Spread F : Fetcher<T>, T : Any> fetcherPair(
+  instance: F,
+  typeClass: KClass<T>
 ): FetcherPair<Any> = FetcherPair(instance, typeClass) as FetcherPair<Any>
 
 data class FetcherPair<T : Any>(
@@ -57,9 +57,9 @@ data class FetcherPair<T : Any>(
   val type: KClass<T>
 )
 
-@Given fun <@Given M : Mapper<T, V>, T : Any, V : Any> mapperPair(
-  @Given instance: M,
-  @Given typeClass: KClass<T>
+@Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperPair(
+  instance: M,
+  typeClass: KClass<T>
 ): MapperPair<Any> = MapperPair(instance, typeClass) as MapperPair<Any>
 
 data class MapperPair<T : Any>(

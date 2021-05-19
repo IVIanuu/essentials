@@ -32,11 +32,11 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given val torchHomeItem = HomeItem("Torch") { TorchKey }
+@Provide val torchHomeItem = HomeItem("Torch") { TorchKey }
 
 object TorchKey : Key<Nothing>
 
-@Given fun torchUi(@Given torchState: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
+@Provide fun torchUi(torchState: MutableStateFlow<TorchState>): KeyUi<TorchKey> = {
   val torchEnabled by torchState.collectAsState()
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(

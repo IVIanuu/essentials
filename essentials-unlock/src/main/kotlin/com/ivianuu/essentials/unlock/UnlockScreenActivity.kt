@@ -50,7 +50,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
     requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-    @Given val component = activityGivenScope.element<UnlockScreenComponent>()
+    @Provide val component = activityScope.element<UnlockScreenComponent>()
 
     d(logger = component.logger) { "unlock screen for $requestId" }
 
@@ -118,11 +118,10 @@ class UnlockScreenActivity : ComponentActivity() {
   }
 }
 
-@InstallElement<ActivityGivenScope>
-@Given
+@Provide @InstallElement<ActivityScope>
 class UnlockScreenComponent(
-  @Given val broadcastsFactory: BroadcastsFactory,
-  @Given val keyguardManager: @SystemService KeyguardManager,
-  @Given val logger: Logger,
-  @Given val systemBuildInfo: SystemBuildInfo
+  val broadcastsFactory: BroadcastsFactory,
+  val keyguardManager: @SystemService KeyguardManager,
+  val logger: Logger,
+  val systemBuildInfo: SystemBuildInfo
 )

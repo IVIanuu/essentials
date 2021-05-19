@@ -28,15 +28,15 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
-@Given val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
+@Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 
 object CheckAppsKey : Key<Nothing>
 
-@Given fun checkAppsUi(
-  @Given checkableAppsScreen: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-  @Given launchableAppPredicate: LaunchableAppPredicate,
-  @Given pref: DataStore<CheckAppsPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Provide fun checkAppsUi(
+  checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
+  launchableAppPredicate: LaunchableAppPredicate,
+  pref: DataStore<CheckAppsPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(
@@ -60,4 +60,4 @@ object CheckAppsKey : Key<Nothing>
   @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
 )
 
-@Given val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }
+@Provide val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }

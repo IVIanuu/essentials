@@ -20,15 +20,15 @@ import java.util.zip.*
 
 typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
 
-@Given fun createBackupUseCase(
-  @Given backupDir: BackupDir,
-  @Given backupFiles: Set<BackupFile>,
-  @Given buildInfo: BuildInfo,
-  @Given dataDir: DataDir,
-  @Given dispatcher: IODispatcher,
-  @Given _: Logger,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<AppGivenScope>
+@Provide fun createBackupUseCase(
+  backupDir: BackupDir,
+  backupFiles: Set<BackupFile>,
+  buildInfo: BuildInfo,
+  dataDir: DataDir,
+  dispatcher: IODispatcher,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<AppScope>,
+  _: Logger
 ): CreateBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
@@ -66,14 +66,14 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
 
 typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
 
-@Given fun restoreBackupUseCase(
-  @Given contentResolver: ContentResolver,
-  @Given dataDir: DataDir,
-  @Given dispatcher: IODispatcher,
-  @Given _: Logger,
-  @Given navigator: Navigator,
-  @Given processRestarter: ProcessRestarter,
-  @Given scope: GivenCoroutineScope<AppGivenScope>
+@Provide fun restoreBackupUseCase(
+  contentResolver: ContentResolver,
+  dataDir: DataDir,
+  dispatcher: IODispatcher,
+  navigator: Navigator,
+  processRestarter: ProcessRestarter,
+  scope: InjectCoroutineScope<AppScope>,
+  _: Logger
 ): RestoreBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {

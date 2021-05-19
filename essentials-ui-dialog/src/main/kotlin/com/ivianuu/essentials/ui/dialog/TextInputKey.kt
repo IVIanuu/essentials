@@ -32,9 +32,9 @@ data class TextInputKey(
   val allowEmpty: Boolean = true,
 ) : DialogKey<String>
 
-@Given fun textInputUi(
-  @Given key: TextInputKey,
-  @Given navigator: Navigator
+@Provide fun textInputUi(
+  key: TextInputKey,
+  navigator: Navigator
 ): KeyUi<TextInputKey> = {
   DialogScaffold {
     var currentValue by remember { mutableStateOf(key.initial) }

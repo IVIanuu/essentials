@@ -23,10 +23,10 @@ import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-@Given fun <@Given T : UiDecorator> uiDecoratorElement(
-  @Given instance: T,
-  @Given key: TypeKey<T>,
-  @Given config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
+@Provide fun <@Spread T : UiDecorator> uiDecoratorElement(
+  instance: T,
+  key: TypeKey<T>,
+  config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
 ): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator, config)
 
 class UiDecoratorConfig<out T : UiDecorator>(
@@ -46,7 +46,7 @@ data class UiDecoratorElement(
   val config: UiDecoratorConfig<*>
 )
 
-@Given object UiDecoratorElementTreeDescriptor : TreeDescriptor<UiDecoratorElement> {
+@Provide object UiDecoratorElementTreeDescriptor : TreeDescriptor<UiDecoratorElement> {
   override fun key(value: UiDecoratorElement): Any = value.key
   override fun dependencies(value: UiDecoratorElement): Set<Any> = value.config.dependencies
   override fun dependents(value: UiDecoratorElement): Set<Any> = value.config.dependents
@@ -54,9 +54,9 @@ data class UiDecoratorElement(
 
 typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
-@Given fun decorateUi(
-  @Given _: Logger,
-  @Given elements: Set<UiDecoratorElement> = emptySet()
+@Provide fun decorateUi(
+  elements: Set<UiDecoratorElement> = emptySet(),
+  _: Logger
 ): DecorateUi = { content ->
   remember {
     elements
@@ -73,6 +73,6 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 typealias AppTheme = UiDecorator
 
-@Given val appThemeConfig = UiDecoratorConfig<AppTheme>(
+@Provide val appThemeConfig = UiDecoratorConfig<AppTheme>(
   dependencies = setOf(typeKeyOf<SystemBarManagerProvider>())
 )

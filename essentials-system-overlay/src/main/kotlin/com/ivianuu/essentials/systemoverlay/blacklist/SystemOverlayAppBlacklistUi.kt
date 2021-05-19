@@ -17,9 +17,9 @@ import kotlinx.coroutines.flow.*
 
 object SystemOverlayAppBlacklistKey : Key<Nothing>
 
-@Given fun systemOverlayAppBlacklistUi(
-  @Given checkableAppsPageFactory: (@Given CheckableAppsParams) -> CheckableAppsScreen,
-  @Given stringResource: StringResourceProvider
+@Provide fun systemOverlayAppBlacklistUi(
+  checkableAppsPageFactory: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
+  stringResource: StringResourceProvider
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {
     checkableAppsPageFactory(
@@ -38,10 +38,10 @@ object SystemOverlayAppBlacklistKey : Key<Nothing>
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Given fun systemOverlayAppBlacklistModel(
-  @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayAppBlacklistModel> =
+@Provide fun systemOverlayAppBlacklistModel(
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<SystemOverlayAppBlacklistModel> =
   scope.state(SystemOverlayAppBlacklistModel()) {
     update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
     action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->

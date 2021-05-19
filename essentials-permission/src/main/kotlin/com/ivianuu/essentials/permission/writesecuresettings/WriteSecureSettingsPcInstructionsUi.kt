@@ -43,7 +43,7 @@ data class WriteSecureSettingsPcInstructionsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Nothing>
 
-@Given val writeSecureSettingsPcInstructionsUi: ModelKeyUi<WriteSecureSettingsPcInstructionsKey,
+@Provide val writeSecureSettingsPcInstructionsUi: ModelKeyUi<WriteSecureSettingsPcInstructionsKey,
     WriteSecureSettingsPcInstructionsModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings_pc_instructions)) }) }
@@ -122,20 +122,19 @@ data class WriteSecureSettingsPcInstructionsKey(
     "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
 
   companion object {
-    @Given
-    fun initial(@Given buildInfo: BuildInfo): @Initial WriteSecureSettingsPcInstructionsModel =
+    @Provide fun initial(buildInfo: BuildInfo): @Initial WriteSecureSettingsPcInstructionsModel =
       WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)
   }
 }
 
-@Given fun writeSecureSettingsPcInstructionsModel(
-  @Given initial: @Initial WriteSecureSettingsPcInstructionsModel,
-  @Given key: WriteSecureSettingsPcInstructionsKey,
-  @Given navigator: Navigator,
-  @Given permissionStateFactory: PermissionStateFactory,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given updateClipboardText: UpdateClipboardTextUseCase
-): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
+@Provide fun writeSecureSettingsPcInstructionsModel(
+  initial: @Initial WriteSecureSettingsPcInstructionsModel,
+  key: WriteSecureSettingsPcInstructionsKey,
+  navigator: Navigator,
+  permissionStateFactory: PermissionStateFactory,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  updateClipboardText: UpdateClipboardTextUseCase
+): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
   initial
 ) {
   timer(200.milliseconds)

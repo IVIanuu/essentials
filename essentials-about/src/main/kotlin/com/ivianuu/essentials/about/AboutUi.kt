@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
 
 object AboutKey : Key<Nothing>
 
-@Given val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
+@Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
@@ -149,10 +149,10 @@ object AboutKey : Key<Nothing>
   val sendMail: () -> Unit = {}
 ) {
   companion object {
-    @Given fun initial(
-      @Given buildInfo: BuildInfo,
-      @Given privacyPolicyUrl: PrivacyPolicyUrl? = null,
-      @Given donations: (() -> Set<Donation>)? = null,
+    @Provide fun initial(
+      buildInfo: BuildInfo,
+      privacyPolicyUrl: PrivacyPolicyUrl? = null,
+      donations: (() -> Set<Donation>)? = null,
     ): @Initial AboutModel = AboutModel(
       version = buildInfo.versionName,
       privacyPolicyUrl = privacyPolicyUrl,
@@ -161,13 +161,13 @@ object AboutKey : Key<Nothing>
   }
 }
 
-@Given fun aboutModel(
-  @Given initial: @Initial AboutModel,
-  @Given navigator: Navigator,
-  @Given rateOnPlayUseCase: RateOnPlayUseCase,
-  @Given stringResource: StringResourceProvider,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<AboutModel> = scope.state(initial) {
+@Provide fun aboutModel(
+  initial: @Initial AboutModel,
+  navigator: Navigator,
+  rateOnPlayUseCase: RateOnPlayUseCase,
+  stringResource: StringResourceProvider,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
   action(AboutModel.rate()) { rateOnPlayUseCase() }

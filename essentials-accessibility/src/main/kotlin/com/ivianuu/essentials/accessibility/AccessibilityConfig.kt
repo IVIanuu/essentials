@@ -32,10 +32,10 @@ data class AccessibilityConfig(
   val notificationTimeout: Long = 0L,
 )
 
-@Given fun accessibilityConfigWorker(
-  @Given configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
-  @Given ref: Flow<EsAccessibilityService?>,
-): ScopeWorker<AccessibilityGivenScope> = {
+@Provide fun accessibilityConfigWorker(
+  configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
+  ref: Flow<EsAccessibilityService?>,
+): ScopeWorker<AccessibilityScope> = {
   coroutineScope {
     ref
       .flatMapLatest { service ->

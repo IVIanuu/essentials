@@ -24,11 +24,9 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given object LastAppActionId : ActionId("last_app")
+@Provide object LastAppActionId : ActionId("last_app")
 
-@Given fun lastAppAction(
-  @Given stringResource: StringResourceProvider,
-) = Action<LastAppActionId>(
+@Provide fun lastAppAction(stringResource: StringResourceProvider) = Action<LastAppActionId>(
   id = "last_app",
   title = stringResource(R.string.es_action_last_app, emptyList()),
   permissions = accessibilityActionPermissions,
@@ -36,8 +34,8 @@ import kotlinx.coroutines.*
   icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
-@Given fun lastAppActionExecutor(
-  @Given globalActionExecutor: GlobalActionExecutor
+@Provide fun lastAppActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
 ): ActionExecutor<LastAppActionId> = {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
   delay(250)

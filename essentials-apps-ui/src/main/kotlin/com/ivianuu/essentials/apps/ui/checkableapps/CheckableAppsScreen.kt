@@ -52,8 +52,8 @@ data class CheckableAppsParams(
   val appBarTitle: String
 )
 
-@Given
-fun checkableAppsScreen(@Given modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
+@Provide
+fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
   val state by modelFlow.collectAsState()
   Scaffold(
     topBar = {
@@ -98,12 +98,11 @@ fun checkableAppsScreen(@Given modelFlow: StateFlow<CheckableAppsModel>): Checka
 
 internal typealias CheckedApps = Set<String>
 
-@Given
-fun checkedAppsSource(@Given params: CheckableAppsParams): Flow<CheckedApps> = params.checkedApps
+@Provide fun checkedAppsSource(params: CheckableAppsParams): Flow<CheckedApps> = params.checkedApps
 
 internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
 
-@Given fun onCheckedAppsChanged(@Given params: CheckableAppsParams): OnCheckedAppsChanged =
+@Provide fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged =
   params.onCheckedAppsChanged
 
 @Optics data class CheckableAppsModel(
@@ -127,7 +126,7 @@ internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
     }
 
   companion object {
-    @Given fun initial(@Given params: CheckableAppsParams): @Initial CheckableAppsModel =
+    @Provide fun initial(params: CheckableAppsParams): @Initial CheckableAppsModel =
       CheckableAppsModel(
         appPredicate = params.appPredicate,
         appBarTitle = params.appBarTitle
@@ -140,13 +139,13 @@ data class CheckableApp(
   val isChecked: Boolean
 )
 
-@Given fun checkableAppsModel(
-  @Given checkedApps: Flow<CheckedApps>,
-  @Given initial: @Initial CheckableAppsModel,
-  @Given getInstalledApps: GetInstalledAppsUseCase,
-  @Given onCheckedAppsChanged: OnCheckedAppsChanged,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<CheckableAppsModel> = scope.state(initial) {
+@Provide fun checkableAppsModel(
+  checkedApps: Flow<CheckedApps>,
+  initial: @Initial CheckableAppsModel,
+  getInstalledApps: GetInstalledAppsUseCase,
+  onCheckedAppsChanged: OnCheckedAppsChanged,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state(initial) {
   checkedApps.update { copy(checkedApps = it) }
   resourceFlow { emit(getInstalledApps()) }
     .update { copy(allApps = it) }

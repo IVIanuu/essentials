@@ -27,11 +27,11 @@ import kotlinx.coroutines.flow.*
 
 typealias RecentApps = List<String>
 
-@Given fun recentApps(
-  @Given accessibilityEvents: Flow<AccessibilityEvent>,
-  @Given _: Logger,
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-): @Scoped<AppGivenScope> Flow<RecentApps> = accessibilityEvents
+@Provide fun recentApps(
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  scope: InjectCoroutineScope<AppScope>,
+  _: Logger,
+): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }
   .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
@@ -65,7 +65,7 @@ typealias RecentApps = List<String>
   .shareIn(scope, SharingStarted.Eagerly, 1)
   .distinctUntilChanged()
 
-@Given val recentAppsAccessibilityConfig = flow {
+@Provide val recentAppsAccessibilityConfig = flow {
   emit(
     AccessibilityConfig(
       eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -75,7 +75,7 @@ typealias RecentApps = List<String>
 
 typealias CurrentApp = String?
 
-@Given fun currentApp(@Given recentApps: Flow<RecentApps>): Flow<CurrentApp> =
+@Provide fun currentApp(recentApps: Flow<RecentApps>): Flow<CurrentApp> =
   recentApps
     .map { it.firstOrNull() }
     .distinctUntilChanged()

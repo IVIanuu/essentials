@@ -34,11 +34,11 @@ import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Given val counterHomeItem = HomeItem("Counter") { CounterKey }
+@Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
 
 object CounterKey : Key<Nothing>
 
-@Given val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
+@Provide val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Counter") }) }
   ) {
@@ -75,10 +75,10 @@ object CounterKey : Key<Nothing>
   val dec: () -> Unit = {}
 )
 
-@Given fun counterModel(
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given toaster: Toaster
-): @Scoped<KeyUiGivenScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
+@Provide fun counterModel(
+  scope: InjectCoroutineScope<KeyUiScope>,
+  toaster: Toaster
+): @Scoped<KeyUiScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {
     if (state.first().count > 0) update { copy(count = count.dec()) }

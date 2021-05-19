@@ -17,7 +17,7 @@ class StacktraceTagTest {
 
   @Test fun testLoggingTag() {
     val logger = TestLogger()
-    logger.d { "msg" }
+    d(logger = logger) { "msg" }
     logger.lastTag shouldBe "StacktraceTagTest"
   }
 }

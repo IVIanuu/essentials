@@ -27,9 +27,9 @@ import kotlinx.coroutines.flow.*
 
 typealias ConfigChange = Unit
 
-@Given fun configChanges(
-  @Given appContext: AppContext,
-  @Given mainDispatcher: MainDispatcher,
+@Provide fun configChanges(
+  appContext: AppContext,
+  mainDispatcher: MainDispatcher,
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {

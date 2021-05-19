@@ -13,7 +13,7 @@ import org.robolectric.annotation.*
 @Config(sdk = [24])
 class BillingUseCasesTest {
   @Test fun testPurchaseUseCase() = runCancellingBlockingTest {
-    @Given val context = TestBillingContext(this).apply {
+    @Provide val context = TestBillingContext(this).apply {
       billingClient.withTestSku()
     }
     val useCase = purchaseUseCase(appUiStarter = { mockk() })

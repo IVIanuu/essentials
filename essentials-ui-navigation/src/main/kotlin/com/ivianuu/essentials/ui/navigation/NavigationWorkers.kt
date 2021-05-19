@@ -9,10 +9,10 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
 /* Pops the top key on back presses */
-@Given fun androidBackPressHandler(
-  @Given activity: ComponentActivity,
-  @Given navigator: Navigator
-): ScopeWorker<UiGivenScope> = {
+@Provide fun androidBackPressHandler(
+  activity: ComponentActivity,
+  navigator: Navigator
+): ScopeWorker<UiScope> = {
   navigator.state
     .map { it.backStack.size > 1 }
     .distinctUntilChanged()
@@ -31,8 +31,7 @@ private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {
 }
 
 /* Pops to root on activity destroy */
-@Given
-fun popToRootOnActivityDestroyWorker(@Given navigator: Navigator): ScopeWorker<UiGivenScope> = {
+@Provide fun popToRootOnActivityDestroyWorker(navigator: Navigator): ScopeWorker<UiScope> = {
   runOnCancellation {
     navigator.state
       .first()

@@ -30,8 +30,8 @@ import com.ivianuu.essentials.permission.writesettings.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
-@Given class ActionAccessibilityPermission(
-  @Given private val stringResource: StringResourceProvider
+@Provide class ActionAccessibilityPermission(
+  private val stringResource: StringResourceProvider
 ) : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
@@ -45,8 +45,8 @@ import kotlin.reflect.*
     }
 }
 
-@Given class ActionRootPermission(
-  @Given private val stringResource: StringResourceProvider
+@Provide class ActionRootPermission(
+  private val stringResource: StringResourceProvider
 ) : RootPermission {
   override val title: String
     get() = stringResource(R.string.es_action_root_permission_title, emptyList())
@@ -56,8 +56,8 @@ import kotlin.reflect.*
     }
 }
 
-@Given class ActionWriteSecureSettingsPermission(
-  @Given private val stringResource: StringResourceProvider
+@Provide class ActionWriteSecureSettingsPermission(
+  private val stringResource: StringResourceProvider
 ) : WriteSecureSettingsPermission {
   override val title: String
     get() = stringResource(R.string.es_action_write_secure_settings_permission_title, emptyList())
@@ -67,8 +67,8 @@ import kotlin.reflect.*
     get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }
 
-@Given class ActionWriteSettingsPermission(
-  @Given private val stringResource: StringResourceProvider
+@Provide class ActionWriteSettingsPermission(
+  private val stringResource: StringResourceProvider
 ) : WriteSettingsPermission {
   override val title: String
     get() = stringResource(R.string.es_action_write_settings_permission_title, emptyList())

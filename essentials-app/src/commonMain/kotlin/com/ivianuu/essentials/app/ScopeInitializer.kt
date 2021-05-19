@@ -8,10 +8,10 @@ import com.ivianuu.injekt.scope.*
 
 typealias ScopeInitializer<S> = () -> Unit
 
-@Given fun <@Given T : ScopeInitializer<S>, S : GivenScope> scopeInitializerElement(
-  @Given instance: () -> T,
-  @Given key: TypeKey<T>,
-  @Given config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT
+@Provide fun <@Spread T : ScopeInitializer<S>, S : Scope> scopeInitializerElement(
+  instance: () -> T,
+  key: TypeKey<T>,
+  config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT
 ): ScopeInitializerElement<S> = ScopeInitializerElement(key, instance, config)
 
 class ScopeInitializerConfig<out T : ScopeInitializer<*>>(
@@ -29,7 +29,7 @@ data class ScopeInitializerElement<S>(
   val config: ScopeInitializerConfig<ScopeInitializer<S>>
 )
 
-@Given object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
+@Provide object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
   override fun key(value: ScopeInitializerElement<*>): TypeKey<*> = value.key
   override fun dependents(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
     value.config.dependents
@@ -38,12 +38,12 @@ data class ScopeInitializerElement<S>(
     value.config.dependencies
 }
 
-@Given fun <S : GivenScope> scopeInitializerRunner(
-  @Given _: Logger,
-  @Given initializers: Set<ScopeInitializerElement<S>> = emptySet(),
-  @Given scopeKey: TypeKey<S>,
-  @Given workerRunner: ScopeWorkerRunner<S>
-): GivenScopeInitializer<S> = {
+@Provide fun <S : Scope> scopeInitializerRunner(
+  initializers: Set<ScopeInitializerElement<S>> = emptySet(),
+  scopeKey: TypeKey<S>,
+  workerRunner: ScopeWorkerRunner<S>,
+  _: Logger
+): ScopeInitializer<S> = {
   initializers
     .sortedTopological()
     .forEach {

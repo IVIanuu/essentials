@@ -30,12 +30,12 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
-@Given val tabsHomeItem = HomeItem("Tabs") { TabsKey }
+@Provide val tabsHomeItem = HomeItem("Tabs") { TabsKey }
 
 object TabsKey : Key<Nothing>
 
 @OptIn(ExperimentalPagerApi::class)
-@Given
+@Provide
 val tabsUi: KeyUi<TabsKey> = {
   val pagerState = rememberPagerState(TabItems.size)
   val scope = rememberCoroutineScope()

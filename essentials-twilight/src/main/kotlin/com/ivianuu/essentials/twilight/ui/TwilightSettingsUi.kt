@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
 
 object TwilightSettingsKey : Key<Nothing>
 
-@Given val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
+@Provide val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
   ) {
@@ -115,10 +115,10 @@ object TwilightSettingsKey : Key<Nothing>
   val updateUseBlackInDarkMode: (Boolean) -> Unit = {}
 )
 
-@Given fun twilightSettingsModel(
-  @Given pref: DataStore<TwilightPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<TwilightSettingsModel> =
+@Provide fun twilightSettingsModel(
+  pref: DataStore<TwilightPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<TwilightSettingsModel> =
   scope.state(TwilightSettingsModel()) {
     pref.data.update {
       copy(

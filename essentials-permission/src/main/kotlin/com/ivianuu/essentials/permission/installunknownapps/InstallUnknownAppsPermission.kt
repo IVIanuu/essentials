@@ -28,16 +28,16 @@ import com.ivianuu.injekt.*
 interface InstallUnknownAppsPermission : Permission
 
 @SuppressLint("NewApi")
-@Given
+@Provide
 fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider(
-  @Given packageManager: PackageManager,
-  @Given systemBuildInfo: SystemBuildInfo
+  packageManager: PackageManager,
+  systemBuildInfo: SystemBuildInfo
 ): PermissionStateProvider<P> = {
   systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
 }
 
-@Given fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
-  @Given buildInfo: BuildInfo
+@Provide fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
+  buildInfo: BuildInfo
 ): PermissionIntentFactory<P> = {
   Intent(
     "android.settings.MANAGE_UNKNOWN_APP_SOURCES",

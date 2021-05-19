@@ -28,13 +28,13 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-@Given val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }
+@Provide val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }
 
 object RestartProcessKey : Key<Nothing>
 
-@Given fun restartProcessUi(
-  @Given processRestarter: ProcessRestarter,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
+@Provide fun restartProcessUi(
+  processRestarter: ProcessRestarter,
+  scope: InjectCoroutineScope<KeyUiScope>
 ): KeyUi<RestartProcessKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Restart process") }) }

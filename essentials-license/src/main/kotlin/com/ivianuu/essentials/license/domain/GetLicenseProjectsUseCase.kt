@@ -10,9 +10,9 @@ import kotlinx.serialization.json.*
 
 typealias GetLicenseProjectsUseCase = suspend () -> Result<List<Project>, Throwable>
 
-@Given fun getLicenseProjectsUseCase(
-  @Given json: Json,
-  @Given resources: AppResources
+@Provide fun getLicenseProjectsUseCase(
+  json: Json,
+  resources: AppResources
 ): GetLicenseProjectsUseCase = {
   catch {
     resources.assets.open(LICENSE_JSON_FILE_NAME)

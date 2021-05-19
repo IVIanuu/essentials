@@ -5,7 +5,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-@GivenImports(
+@Providers(
   "com.ivianuu.essentials.*",
   "com.ivianuu.essentials.about.*",
   "com.ivianuu.essentials.accessibility.*",
@@ -81,11 +81,11 @@ import com.ivianuu.injekt.scope.*
   "com.ivianuu.essentials.work.*",
   "com.ivianuu.injekt.android.*",
   "com.ivianuu.injekt.android.work.*",
-  "com.ivianuu.injekt.android.work.WorkerInitializerGivens.*",
+  "com.ivianuu.injekt.android.work.WorkerInitializerModule.*",
   "com.ivianuu.injekt.common.*",
   "com.ivianuu.injekt.coroutines.*",
   "com.ivianuu.injekt.scope.*"
 )
 class SampleApp : EsApp() {
-  override fun buildAppGivenScope(): AppGivenScope = createAppGivenScope()
+  override fun buildAppScope(): AppScope = createAppScope()
 }

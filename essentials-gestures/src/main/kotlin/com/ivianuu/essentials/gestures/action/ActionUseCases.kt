@@ -32,15 +32,15 @@ import kotlinx.coroutines.*
 
 typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
-@Given fun executeActionUseCase(
-  @Given dispatcher: DefaultDispatcher,
-  @Given getAction: GetActionUseCase,
-  @Given getActionExecutor: GetActionExecutorUseCase,
-  @Given _: Logger,
-  @Given permissionRequester: PermissionRequester,
-  @Given screenUnlocker: ScreenUnlocker,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
+@Provide fun executeActionUseCase(
+  dispatcher: DefaultDispatcher,
+  getAction: GetActionUseCase,
+  getActionExecutor: GetActionExecutorUseCase,
+  permissionRequester: PermissionRequester,
+  screenUnlocker: ScreenUnlocker,
+  stringResource: StringResourceProvider,
+  toaster: Toaster,
+  _: Logger
 ): ExecuteActionUseCase = { key ->
   withContext(dispatcher) {
     catch {
@@ -73,19 +73,19 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
 typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 
-@Given fun getAllActionsUseCase(
-  @Given actions: Map<String, () -> Action<*>>,
-  @Given dispatcher: DefaultDispatcher
+@Provide fun getAllActionsUseCase(
+  actions: Map<String, () -> Action<*>>,
+  dispatcher: DefaultDispatcher
 ): GetAllActionsUseCase = {
   withContext(dispatcher) { actions.values.map { it() } }
 }
 
 typealias GetActionUseCase = suspend (String) -> Action<*>?
 
-@Given fun getActionUseCase(
-  @Given actions: Map<String, () -> Action<*>>,
-  @Given actionFactories: () -> Set<() -> ActionFactory>,
-  @Given dispatcher: DefaultDispatcher
+@Provide fun getActionUseCase(
+  actions: Map<String, () -> Action<*>>,
+  actionFactories: () -> Set<() -> ActionFactory>,
+  dispatcher: DefaultDispatcher
 ): GetActionUseCase = { key ->
   withContext(dispatcher) {
     actions[key]
@@ -100,10 +100,10 @@ typealias GetActionUseCase = suspend (String) -> Action<*>?
 
 typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
 
-@Given fun getActionExecutorUseCase(
-  @Given actionsExecutors: Map<String, () -> ActionExecutor<*>>,
-  @Given actionFactories: () -> Set<() -> ActionFactory>,
-  @Given dispatcher: DefaultDispatcher
+@Provide fun getActionExecutorUseCase(
+  actionsExecutors: Map<String, () -> ActionExecutor<*>>,
+  actionFactories: () -> Set<() -> ActionFactory>,
+  dispatcher: DefaultDispatcher
 ): GetActionExecutorUseCase = { key ->
   withContext(dispatcher) {
     actionsExecutors[key]
@@ -119,18 +119,18 @@ typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
 
 typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
 
-@Given fun getActionSettingsKeyUseCase(
-  @Given actionSettings: Map<String, () -> ActionSettingsKey<*>>,
-  @Given dispatcher: DefaultDispatcher
+@Provide fun getActionSettingsKeyUseCase(
+  actionSettings: Map<String, () -> ActionSettingsKey<*>>,
+  dispatcher: DefaultDispatcher
 ): GetActionSettingsKeyUseCase = { key ->
   withContext(dispatcher) { actionSettings[key]?.invoke() }
 }
 
 typealias GetActionPickerDelegatesUseCase = suspend () -> List<ActionPickerDelegate>
 
-@Given fun getActionPickerDelegatesUseCase(
-  @Given actionPickerDelegates: Set<() -> ActionPickerDelegate>,
-  @Given dispatcher: DefaultDispatcher
+@Provide fun getActionPickerDelegatesUseCase(
+  actionPickerDelegates: Set<() -> ActionPickerDelegate>,
+  dispatcher: DefaultDispatcher
 ): GetActionPickerDelegatesUseCase = {
   withContext(dispatcher) { actionPickerDelegates.map { it() } }
 }

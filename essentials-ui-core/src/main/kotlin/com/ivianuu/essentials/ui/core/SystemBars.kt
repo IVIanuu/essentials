@@ -61,7 +61,7 @@ import com.ivianuu.injekt.common.*
 
 typealias SystemBarManagerProvider = UiDecorator
 
-@Given val systemBarManagerProvider: SystemBarManagerProvider = { content ->
+@Provide val systemBarManagerProvider: SystemBarManagerProvider = { content ->
   val systemBarManager = remember { SystemBarManager() }
   systemBarManager.Apply()
   CompositionLocalProvider(
@@ -72,7 +72,7 @@ typealias SystemBarManagerProvider = UiDecorator
 
 typealias RootSystemBarsStyle = UiDecorator
 
-@Given val rootSystemBarsStyle: RootSystemBarsStyle = { content ->
+@Provide val rootSystemBarsStyle: RootSystemBarsStyle = { content ->
   Surface {
     Box(
       modifier = Modifier
@@ -84,7 +84,7 @@ typealias RootSystemBarsStyle = UiDecorator
   }
 }
 
-@Given val rootSystemBarsStyleConfig = UiDecoratorConfig<RootSystemBarsStyle>(
+@Provide val rootSystemBarsStyleConfig = UiDecoratorConfig<RootSystemBarsStyle>(
   dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
 )
 

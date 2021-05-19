@@ -28,11 +28,11 @@ import kotlinx.coroutines.flow.*
 
 typealias KeyboardVisible = Boolean
 
-@Given fun keyboardVisible(
-  @Given accessibilityEvents: Flow<AccessibilityEvent>,
-  @Given keyboardHeightProvider: KeyboardHeightProvider,
-  @Given scope: GivenCoroutineScope<AppGivenScope>
-): @Scoped<AppGivenScope> Flow<KeyboardVisible> = accessibilityEvents
+@Provide fun keyboardVisible(
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  keyboardHeightProvider: KeyboardHeightProvider,
+  scope: InjectCoroutineScope<AppScope>
+): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&
         it.className == "android.inputmethodservice.SoftInputWindow"
@@ -50,7 +50,7 @@ typealias KeyboardVisible = Boolean
   .distinctUntilChanged()
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
-@Given val keyboardVisibilityAccessibilityConfig = flow {
+@Provide val keyboardVisibilityAccessibilityConfig = flow {
   emit(
     AccessibilityConfig(
       eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
@@ -60,8 +60,8 @@ typealias KeyboardVisible = Boolean
 
 private typealias KeyboardHeightProvider = () -> Int?
 
-@Given fun keyboardHeightProvider(
-  @Given inputMethodManager: @SystemService InputMethodManager
+@Provide fun keyboardHeightProvider(
+  inputMethodManager: @SystemService InputMethodManager
 ): KeyboardHeightProvider = {
   catch {
     val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")

@@ -20,7 +20,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-typealias AccessibilityGivenScope = GivenScope
+typealias AccessibilityScope = Scope
 
-@Given val accessibilityGivenScopeModule =
-  ChildScopeModule0<ServiceGivenScope, AccessibilityGivenScope>()
+@Provide val accessibilityScopeModule =
+  ChildScopeModule0<ServiceScope, AccessibilityScope>()

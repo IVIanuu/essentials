@@ -15,12 +15,12 @@ class AndroidSettingModule<T : S, S>(
   private val name: String,
   private val type: AndroidSettingsType
 ) {
-  @Given fun dataStore(
-    @Given adapter: AndroidSettingAdapter<T>,
-    @Given contentChangesFactory: ContentChangesFactory,
-    @Given dispatcher: IODispatcher,
-    @Given scope: GivenCoroutineScope<AppGivenScope>
-  ): @Scoped<AppGivenScope> DataStore<T> = object : DataStore<T> {
+  @Provide fun dataStore(
+    adapter: AndroidSettingAdapter<T>,
+    contentChangesFactory: ContentChangesFactory,
+    dispatcher: IODispatcher,
+    scope: InjectCoroutineScope<AppScope>
+  ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
@@ -45,9 +45,9 @@ class AndroidSettingModule<T : S, S>(
   }
 
   @Suppress("UNCHECKED_CAST")
-  @Given fun adapter(
-    @Given adapterFactory: (@Given String, @Given AndroidSettingsType, @Given S) -> AndroidSettingAdapter<S>,
-    @Given initial: @Initial T
+  @Provide fun adapter(
+    adapterFactory: (@Provide String, @Provide AndroidSettingsType, @Provide S) -> AndroidSettingAdapter<S>,
+    initial: @Initial T
   ): AndroidSettingAdapter<T> = adapterFactory(name, type, initial) as AndroidSettingAdapter<T>
 }
 

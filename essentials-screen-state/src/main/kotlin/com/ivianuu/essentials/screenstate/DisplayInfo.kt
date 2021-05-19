@@ -15,12 +15,12 @@ data class DisplayInfo(
   val screenHeight: Int = 0
 )
 
-@Given fun displayInfo(
-  @Given configChanges: () -> Flow<ConfigChange>,
-  @Given displayRotation: () -> Flow<DisplayRotation>,
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-  @Given windowManager: @SystemService WindowManager
-): @Scoped<AppGivenScope> Flow<DisplayInfo> = flow {
+@Provide fun displayInfo(
+  configChanges: () -> Flow<ConfigChange>,
+  displayRotation: () -> Flow<DisplayRotation>,
+  scope: InjectCoroutineScope<AppScope>,
+  windowManager: @SystemService WindowManager
+): @Scoped<AppScope> Flow<DisplayInfo> = flow {
   combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->
     metricsMutex.withLock {
       windowManager.defaultDisplay.getRealMetrics(metrics)

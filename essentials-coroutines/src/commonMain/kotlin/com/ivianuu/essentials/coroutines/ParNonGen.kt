@@ -22,11 +22,11 @@ import kotlinx.coroutines.sync.*
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
-  @Given concurrency: Concurrency
+  @Inject concurrency: Concurrency
 ): List<T> = blocks.asIterable().parMap { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
-  @Given concurrency: Concurrency,
+  @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
 ): List<R> = supervisorScope {
   val semaphore = Semaphore(concurrency.value)
@@ -43,12 +43,12 @@ suspend fun <T, R> Iterable<T>.parMap(
 }
 
 suspend fun <T> Iterable<T>.parFilter(
-  @Given concurrency: Concurrency,
+  @Inject concurrency: Concurrency,
   predicate: suspend (T) -> Boolean
 ): List<T> = parMap { if (predicate(it)) it else null }.filterNotNull()
 
 suspend fun <T> Iterable<T>.parForEach(
-  @Given concurrency: Concurrency,
+  @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
   parMap { action(it) }
@@ -56,5 +56,4 @@ suspend fun <T> Iterable<T>.parForEach(
 
 inline class Concurrency(val value: Int)
 
-@Given
-internal expect val defaultConcurrency: Concurrency
+@Provide internal expect val defaultConcurrency: Concurrency

@@ -11,6 +11,6 @@ import kotlinx.serialization.*
   @SerialName("disable_on_secure_screens") val disableOnSecureScreens: Boolean = true
 )
 
-@Given val systemOverlayBlacklistPrefsModule = PrefModule("system_overlay_blacklist_prefs") {
+@Provide val systemOverlayBlacklistPrefsModule = PrefModule("system_overlay_blacklist_prefs") {
   SystemOverlayBlacklistPrefs()
 }

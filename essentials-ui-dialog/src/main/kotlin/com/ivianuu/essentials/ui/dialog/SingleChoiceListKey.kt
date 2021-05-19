@@ -15,9 +15,9 @@ data class SingleChoiceListKey<T : Any>(
   data class Item<T : Any>(val value: T, val title: String)
 }
 
-@Given fun singleChoiceListUi(
-  @Given key: SingleChoiceListKey<Any>,
-  @Given navigator: Navigator
+@Provide fun singleChoiceListUi(
+  key: SingleChoiceListKey<Any>,
+  navigator: Navigator
 ): KeyUi<SingleChoiceListKey<Any>> = {
   DialogScaffold {
     val scope = rememberCoroutineScope()

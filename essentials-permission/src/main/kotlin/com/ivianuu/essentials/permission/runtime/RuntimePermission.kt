@@ -27,15 +27,15 @@ interface RuntimePermission : Permission {
   val permissionName: String
 }
 
-@Given fun <P : RuntimePermission> runtimePermissionStateProvider(
-  @Given context: AppContext
+@Provide fun <P : RuntimePermission> runtimePermissionStateProvider(
+  context: AppContext
 ): PermissionStateProvider<P> = { permission ->
   context.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
 }
 
-@Given fun <P : RuntimePermission> runtimePermissionRequestHandler(
-  @Given context: AppContext,
-  @Given navigator: Navigator
+@Provide fun <P : RuntimePermission> runtimePermissionRequestHandler(
+  context: AppContext,
+  navigator: Navigator
 ): PermissionRequestHandler<P> = { permission ->
   val contract = ActivityResultContracts.RequestPermission()
   navigator.push(contract.createIntent(context, permission.permissionName).toIntentKey())

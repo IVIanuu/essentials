@@ -40,15 +40,15 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
+@Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 
 object ForegroundKey : Key<Nothing>
 
 @SuppressLint("NewApi")
-@Given
+@Provide
 fun foregroundUi(
-  @Given createNotification: (@Given Int, @Given Color) -> ForegroundNotification,
-  @Given foregroundState: ForegroundScreenState
+  createNotification: (@Provide Int, @Provide Color) -> ForegroundNotification,
+  foregroundState: ForegroundScreenState
 ): KeyUi<ForegroundKey> = {
   val currentForegroundState by foregroundState.collectAsState()
 
@@ -109,19 +109,19 @@ fun foregroundUi(
 
 typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 
-@Given val foregroundScreenState: @Scoped<AppGivenScope> ForegroundScreenState
+@Provide val foregroundScreenState: @Scoped<AppScope> ForegroundScreenState
   get() = MutableStateFlow(Background)
 
 typealias ForegroundNotification = Notification
 
 @SuppressLint("NewApi")
-@Given
+@Provide
 fun foregroundNotification(
-  @Given appContext: AppContext,
-  @Given count: Int,
-  @Given color: Color,
-  @Given notificationManager: @SystemService NotificationManager,
-  @Given systemBuildInfo: SystemBuildInfo
+  appContext: AppContext,
+  count: Int,
+  color: Color,
+  notificationManager: @SystemService NotificationManager,
+  systemBuildInfo: SystemBuildInfo
 ): ForegroundNotification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(

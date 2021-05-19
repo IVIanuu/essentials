@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.*
 import kotlin.time.*
 
-@Given fun rateUiLauncher(
-  @Given navigator: Navigator,
-  @Given pref: DataStore<RatePrefs>,
-  @Given shouldShowRateDialog: ShouldShowRateDialogUseCase,
-  @Given timestampProvider: TimestampProvider
-): ScopeWorker<UiGivenScope> = {
+@Provide fun rateUiLauncher(
+  navigator: Navigator,
+  pref: DataStore<RatePrefs>,
+  shouldShowRateDialog: ShouldShowRateDialogUseCase,
+  timestampProvider: TimestampProvider
+): ScopeWorker<UiScope> = {
   if (pref.data.first().installTime == 0L) {
     pref.updateData { copy(installTime = timestampProvider().toLongMilliseconds()) }
   }
@@ -30,11 +30,11 @@ import kotlin.time.*
 
 internal typealias ShouldShowRateDialogUseCase = suspend () -> Boolean
 
-@Given fun shouldShowRateDialogUseCase(
-  @Given logger: Logger,
-  @Given pref: DataStore<RatePrefs>,
-  @Given schedule: RateUiSchedule = RateUiSchedule(),
-  @Given timestampProvider: TimestampProvider
+@Provide fun shouldShowRateDialogUseCase(
+  logger: Logger,
+  pref: DataStore<RatePrefs>,
+  schedule: RateUiSchedule = RateUiSchedule(),
+  timestampProvider: TimestampProvider
 ): ShouldShowRateDialogUseCase = useCase@{
   val prefs = pref.data.first()
   if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)

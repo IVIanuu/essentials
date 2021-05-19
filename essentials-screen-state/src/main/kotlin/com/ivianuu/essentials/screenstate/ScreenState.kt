@@ -32,12 +32,12 @@ enum class ScreenState(val isOn: Boolean) {
   OFF(false), LOCKED(true), UNLOCKED(true)
 }
 
-@Given fun screenState(
-  @Given broadcastsFactory: BroadcastsFactory,
-  @Given _: Logger,
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-  @Given screenStateProvider: CurrentScreenStateProvider
-): @Scoped<AppGivenScope> Flow<ScreenState> = merge(
+@Provide fun screenState(
+  broadcastsFactory: BroadcastsFactory,
+  scope: InjectCoroutineScope<AppScope>,
+  screenStateProvider: CurrentScreenStateProvider,
+  _: Logger
+): @Scoped<AppScope> Flow<ScreenState> = merge(
   broadcastsFactory(Intent.ACTION_SCREEN_OFF),
   broadcastsFactory(Intent.ACTION_SCREEN_ON),
   broadcastsFactory(Intent.ACTION_USER_PRESENT)
@@ -52,10 +52,10 @@ enum class ScreenState(val isOn: Boolean) {
 
 private typealias CurrentScreenStateProvider = suspend () -> ScreenState
 
-@Given fun currentScreenStateProvider(
-  @Given dispatcher: DefaultDispatcher,
-  @Given keyguardManager: @SystemService KeyguardManager,
-  @Given powerManager: @SystemService PowerManager,
+@Provide fun currentScreenStateProvider(
+  dispatcher: DefaultDispatcher,
+  keyguardManager: @SystemService KeyguardManager,
+  powerManager: @SystemService PowerManager,
 ): CurrentScreenStateProvider = {
   withContext(dispatcher) {
     if (powerManager.isInteractive) {

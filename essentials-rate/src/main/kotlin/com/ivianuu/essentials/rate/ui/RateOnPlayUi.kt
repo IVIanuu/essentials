@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.*
 
 object RateOnPlayKey : DialogKey<Nothing>
 
-@Given val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
+@Provide val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(stringResource(R.string.es_rate_on_play_title)) },
@@ -47,15 +47,15 @@ object RateOnPlayKey : DialogKey<Nothing>
   val showNever: () -> Unit = {},
 )
 
-@Given fun rateOnPlayModel(
-  @Given displayShowNever: DisplayShowNeverUseCase,
-  @Given key: RateOnPlayKey,
-  @Given navigator: Navigator,
-  @Given rateOnPlay: RateOnPlayUseCase,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given showLater: ShowLaterUseCase,
-  @Given showNever: ShowNeverUseCase
-): @Scoped<KeyUiGivenScope> StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {
+@Provide fun rateOnPlayModel(
+  displayShowNever: DisplayShowNeverUseCase,
+  key: RateOnPlayKey,
+  navigator: Navigator,
+  rateOnPlay: RateOnPlayUseCase,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  showLater: ShowLaterUseCase,
+  showNever: ShowNeverUseCase
+): @Scoped<KeyUiScope> StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {
   launch {
     val showDoNotShowAgain = displayShowNever()
     update { copy(displayShowNever = showDoNotShowAgain) }

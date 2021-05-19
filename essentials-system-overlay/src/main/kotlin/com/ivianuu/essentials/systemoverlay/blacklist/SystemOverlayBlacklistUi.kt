@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.*
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Nothing>
 
-@Given
+@Provide
 val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }
@@ -102,20 +102,20 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   val updateDisableOnSecureScreens: (Boolean) -> Unit = {}
 ) {
   companion object {
-    @Given fun initial(
-      @Given key: SystemOverlayBlacklistKey
+    @Provide fun initial(
+      key: SystemOverlayBlacklistKey
     ): @Initial SystemOverlayBlacklistModel = SystemOverlayBlacklistModel(
       systemOverlayName = key.systemOverlayName
     )
   }
 }
 
-@Given fun systemOverlayBlacklistModel(
-  @Given initial: @Initial SystemOverlayBlacklistModel,
-  @Given navigator: Navigator,
-  @Given pref: DataStore<SystemOverlayBlacklistPrefs>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
+@Provide fun systemOverlayBlacklistModel(
+  initial: @Initial SystemOverlayBlacklistModel,
+  navigator: Navigator,
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

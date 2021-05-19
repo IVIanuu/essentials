@@ -27,11 +27,11 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }
+@Provide val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }
 
 object DisplayRotationKey : Key<Nothing>
 
-@Given fun displayRotationUi(@Given displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {
+@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {
   Box(
     modifier = Modifier.fillMaxSize()
       .background(MaterialTheme.colors.primary)

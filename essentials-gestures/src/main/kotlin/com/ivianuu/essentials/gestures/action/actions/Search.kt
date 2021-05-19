@@ -24,18 +24,18 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given object SearchActionId : ActionId("search")
+@Provide object SearchActionId : ActionId("search")
 
-@Given fun searchAction(
-  @Given stringResource: StringResourceProvider
+@Provide fun searchAction(
+  stringResource: StringResourceProvider
 ) = Action<ScreenshotActionId>(
   id = "search",
   title = stringResource(R.string.es_action_search, emptyList()),
   icon = singleActionIcon(Icons.Default.Search)
 )
 
-@Given fun searchActionExecutor(
-  @Given intentSender: ActionIntentSender
+@Provide fun searchActionExecutor(
+  intentSender: ActionIntentSender
 ): ActionExecutor<ScreenshotActionId> = {
   intentSender(
     Intent(Intent.ACTION_MAIN).apply {

@@ -25,7 +25,7 @@ interface TreeDescriptor<in T> {
   fun dependents(value: T): Set<Any>
 }
 
-fun <T> Collection<T>.sortedTopological(@Given descriptor: TreeDescriptor<T>): List<T> {
+fun <T> Collection<T>.sortedTopological(@Inject descriptor: TreeDescriptor<T>): List<T> {
   if (isEmpty()) return emptyList()
   val sortedItems = mutableListOf<T>()
   var lastItems = emptyList<T>()

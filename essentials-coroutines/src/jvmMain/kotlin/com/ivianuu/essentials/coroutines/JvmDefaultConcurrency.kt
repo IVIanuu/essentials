@@ -2,7 +2,6 @@ package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.*
 
-@Given
-actual val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
+@Provide actual val defaultConcurrency by lazy(LazyThreadSafetyMode.NONE) {
   Concurrency(Runtime.getRuntime().availableProcessors().coerceAtLeast(3))
 }

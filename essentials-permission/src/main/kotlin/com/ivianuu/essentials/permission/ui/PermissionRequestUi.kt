@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
-@Given val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
+@Provide val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
   Scaffold(
     topBar = {
       TopAppBar(title = { Text(stringResource(R.string.es_request_permission_title)) })
@@ -77,15 +77,15 @@ data class UiPermission<P : Permission>(
   val permission: P
 )
 
-@Given fun permissionRequestModel(
-  @Given appUiStarter: AppUiStarter,
-  @Given key: PermissionRequestKey,
-  @Given navigator: Navigator,
-  @Given permissions: Map<TypeKey<Permission>, Permission>,
-  @Given permissionStateFactory: PermissionStateFactory,
-  @Given requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>
-): @Scoped<KeyUiGivenScope> StateFlow<PermissionRequestModel> =
+@Provide fun permissionRequestModel(
+  appUiStarter: AppUiStarter,
+  key: PermissionRequestKey,
+  navigator: Navigator,
+  permissions: Map<TypeKey<Permission>, Permission>,
+  permissionStateFactory: PermissionStateFactory,
+  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
+  scope: InjectCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<PermissionRequestModel> =
   scope.state(PermissionRequestModel()) {
     state
       .filter {

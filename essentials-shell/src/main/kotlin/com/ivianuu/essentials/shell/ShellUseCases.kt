@@ -25,7 +25,7 @@ import kotlinx.coroutines.*
 
 typealias IsShellAvailableUseCase = suspend () -> Boolean
 
-@Given fun isShellAvailableUseCase(@Given dispatcher: IODispatcher): IsShellAvailableUseCase = {
+@Provide fun isShellAvailableUseCase(dispatcher: IODispatcher): IsShellAvailableUseCase = {
   withContext(dispatcher) {
     catch { SU.available() }.getOrElse { false }
   }
@@ -33,7 +33,7 @@ typealias IsShellAvailableUseCase = suspend () -> Boolean
 
 typealias RunShellCommandUseCase = suspend (List<String>) -> Result<List<String>, Throwable>
 
-@Given
-fun runShellCommandUseCase(@Given dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
+@Provide
+fun runShellCommandUseCase(dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
   withContext(dispatcher) { catch { SU.run(commands)!! } }
 }

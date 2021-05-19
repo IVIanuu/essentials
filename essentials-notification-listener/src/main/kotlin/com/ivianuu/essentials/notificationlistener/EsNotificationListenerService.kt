@@ -30,18 +30,18 @@ class EsNotificationListenerService : NotificationListenerService() {
   internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
   private val component by lazy {
-    createServiceGivenScope()
+    createServiceScope()
       .element<EsNotificationListenerServiceComponent>()
   }
 
-  @Given private val logger get() = component.logger
+  @Provide private val logger get() = component.logger
 
-  private var notificationGivenScope: NotificationGivenScope? = null
+  private var notificationScope: NotificationScope? = null
 
   override fun onListenerConnected() {
     super.onListenerConnected()
     d { "listener connected" }
-    notificationGivenScope = component.notificationGivenScopeFactory()
+    notificationScope = component.notificationScopeFactory()
     updateNotifications()
   }
 
@@ -65,9 +65,9 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerDisconnected() {
     d { "listener disconnected" }
-    notificationGivenScope?.dispose()
-    notificationGivenScope = null
-    component.serviceGivenScope.dispose()
+    notificationScope?.dispose()
+    notificationScope = null
+    component.serviceScope.dispose()
     super.onListenerDisconnected()
   }
 
@@ -77,10 +77,9 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 }
 
-@InstallElement<ServiceGivenScope>
-@Given
+@Provide @InstallElement<ServiceScope>
 class EsNotificationListenerServiceComponent(
-  @Given val logger: Logger,
-  @Given val notificationGivenScopeFactory: () -> NotificationGivenScope,
-  @Given val serviceGivenScope: ServiceGivenScope
+  val logger: Logger,
+  val notificationScopeFactory: () -> NotificationScope,
+  val serviceScope: ServiceScope
 )

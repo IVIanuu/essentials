@@ -28,10 +28,10 @@ import kotlin.reflect.*
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
 
-@Given val navigationStateContent: NavigationStateContent = { state, modifier ->
-  val keyUiGivenScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiGivenScope>()
+@Provide val navigationStateContent: NavigationStateContent = { state, modifier ->
+  val keyUiScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiScope>()
   val contentState = remember {
-    NavigationContentState(keyUiGivenScopeFactory = keyUiGivenScopeFactory)
+    NavigationContentState(keyUiScopeFactory = keyUiScopeFactory)
   }
   contentState.updateBackStack(state.backStack.cast())
   DisposableEffect(true) {
@@ -42,15 +42,14 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-@Given
-@InstallElement<KeyUiGivenScope>
+@Provide @InstallElement<KeyUiScope>
 class KeyUiComponent(
-  @Given val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
-  @Given val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
-  @Given val decorateUi: DecorateKeyUi,
+  val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
+  val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
+  val decorateUi: DecorateKeyUi,
 )
 
-private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> KeyUiGivenScope) {
+private class NavigationContentState(var keyUiScopeFactory: (Key<*>) -> KeyUiScope) {
   private var children by mutableStateOf(emptyList<Child>())
 
   val stackChildren: List<AnimatedStackChild<Key<Any>>>
@@ -67,7 +66,7 @@ private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> Key
   @Suppress("UNCHECKED_CAST")
   private fun getOrCreateEntry(key: Key<Any>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
-    val scope = keyUiGivenScopeFactory(key)
+    val scope = keyUiScopeFactory(key)
     val component = scope.element<KeyUiComponent>()
     val content = component.uiFactories[key::class]?.invoke(key, scope)
     checkNotNull(content) { "No factory found for $key" }
@@ -80,7 +79,7 @@ private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> Key
     val key: Key<Any>,
     options: KeyUiOptions? = null,
     val content: @Composable () -> Unit,
-    val givenScope: KeyUiGivenScope
+    val scope: KeyUiScope
   ) {
     val stackChild = AnimatedStackChild(
       key = key,
@@ -97,7 +96,7 @@ private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> Key
         )
       }
       CompositionLocalProvider(
-        LocalGivenScope provides givenScope,
+        LocalScope provides scope,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {
         content()
@@ -128,7 +127,7 @@ private class NavigationContentState(var keyUiGivenScopeFactory: (Key<*>) -> Key
       if (isFinalized) return
       if (isComposing || !isDetached) return
       isFinalized = true
-      givenScope.dispose()
+      scope.dispose()
     }
   }
 }

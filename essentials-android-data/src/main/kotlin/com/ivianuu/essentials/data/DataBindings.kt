@@ -22,13 +22,11 @@ import java.io.*
 
 typealias DataDir = File
 
+@Provide fun dataDir(context: AppContext): DataDir =
+  File(context.applicationInfo.dataDir)
+
 typealias PrefsDir = File
 
-@Given object DataGivens {
-  @Given fun dataDir(@Given context: AppContext): DataDir =
-    File(context.applicationInfo.dataDir)
+@Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
-  @Given fun prefsDir(@Given dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
-
-  @Given inline fun packageManager(@Given context: AppContext) = context.packageManager!!
-}
+@Provide inline fun packageManager(context: AppContext) = context.packageManager!!

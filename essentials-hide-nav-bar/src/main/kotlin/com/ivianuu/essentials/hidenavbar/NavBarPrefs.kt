@@ -27,8 +27,8 @@ import kotlinx.serialization.*
   @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
 ) {
   companion object {
-    @Given
-    fun initial(@Given systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
+    @Provide
+    fun initial(systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
       hideNavBar = false,
       navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
         NavBarRotationMode.NOUGAT
@@ -39,10 +39,10 @@ import kotlinx.serialization.*
   }
 }
 
-@Given fun navBarPrefsModule(
-  @Given initialFactory: () -> @Initial NavBarPrefs
+@Provide fun navBarPrefsModule(
+  initialFactory: () -> @Initial NavBarPrefs
 ) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
 
 internal typealias WasNavBarHidden = Boolean
 
-@Given val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }
+@Provide val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }

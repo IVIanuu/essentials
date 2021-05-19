@@ -12,12 +12,12 @@ import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Given object ForegroundWorkerId : WorkerId("foreground")
+@Provide object ForegroundWorkerId : WorkerId("foreground")
 
-@Given fun foregroundWorker(
-  @Given internalForegroundState: Flow<InternalForegroundState>,
-  @Given notificationManager: @SystemService NotificationManager,
-  @Given _: Logger
+@Provide fun foregroundWorker(
+  internalForegroundState: Flow<InternalForegroundState>,
+  notificationManager: @SystemService NotificationManager,
+  _: Logger
 ): Worker<ForegroundWorkerId> = {
   d { "start foreground worker" }
 

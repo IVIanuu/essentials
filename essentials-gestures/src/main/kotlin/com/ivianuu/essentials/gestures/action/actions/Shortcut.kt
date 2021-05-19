@@ -34,9 +34,9 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import java.io.*
 
-@Given class ShortcutActionFactory(
-  @Given private val actionIntentSender: ActionIntentSender,
-  @Given private val logger: Logger
+@Provide class ShortcutActionFactory(
+  private val actionIntentSender: ActionIntentSender,
+  private val logger: Logger
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
   override suspend fun createAction(id: String): Action<*> {
@@ -63,9 +63,9 @@ import java.io.*
   }
 }
 
-@Given class ShortcutActionPickerDelegate(
-  @Given private val navigator: Navigator,
-  @Given private val stringResource: StringResourceProvider,
+@Provide class ShortcutActionPickerDelegate(
+  private val navigator: Navigator,
+  private val stringResource: StringResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = stringResource(R.string.es_action_shortcut, emptyList())

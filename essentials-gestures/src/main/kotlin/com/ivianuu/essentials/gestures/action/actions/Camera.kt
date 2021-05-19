@@ -23,19 +23,17 @@ import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 
-@Given object CameraActionId : ActionId("camera")
+@Provide object CameraActionId : ActionId("camera")
 
-@Given fun cameraAction(
-  @Given stringResource: StringResourceProvider
-) = Action<CameraActionId>(
+@Provide fun cameraAction(stringResource: StringResourceProvider) = Action<CameraActionId>(
   id = CameraActionId,
   title = stringResource(R.string.es_action_camera, emptyList()),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
   unlockScreen = true
 )
 
-@Given fun cameraActionExecutor(
-  @Given actionIntentSender: ActionIntentSender
+@Provide fun cameraActionExecutor(
+  actionIntentSender: ActionIntentSender
 ): ActionExecutor<CameraActionId> = {
   actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
 }

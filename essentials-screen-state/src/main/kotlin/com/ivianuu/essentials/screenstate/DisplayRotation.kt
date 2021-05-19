@@ -42,15 +42,15 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Given fun displayRotation(
-  @Given configChanges: () -> Flow<ConfigChange>,
-  @Given dispatcher: IODispatcher,
-  @Given _: Logger,
-  @Given rotationChanges: () -> Flow<RotationChange>,
-  @Given scope: GivenCoroutineScope<AppGivenScope>,
-  @Given screenState: () -> Flow<ScreenState>,
-  @Given windowManager: @SystemService WindowManager
-): @Scoped<AppGivenScope> Flow<DisplayRotation> = flow {
+@Provide fun displayRotation(
+  configChanges: () -> Flow<ConfigChange>,
+  dispatcher: IODispatcher,
+  rotationChanges: () -> Flow<RotationChange>,
+  scope: InjectCoroutineScope<AppScope>,
+  screenState: () -> Flow<ScreenState>,
+  windowManager: @SystemService WindowManager,
+  _: Logger
+): @Scoped<AppScope> Flow<DisplayRotation> = flow {
   screenState()
     .flatMapLatest { currentScreenState ->
       if (currentScreenState.isOn) {
@@ -84,9 +84,9 @@ private suspend fun getCurrentDisplayRotation(
 
 typealias RotationChange = Unit
 
-@Given fun rotationChanges(
-  @Given appContext: AppContext,
-  @Given mainDispatcher: MainDispatcher,
+@Provide fun rotationChanges(
+  appContext: AppContext,
+  mainDispatcher: MainDispatcher,
 ): Flow<RotationChange> = callbackFlow<RotationChange> {
   val listener = object :
     OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {

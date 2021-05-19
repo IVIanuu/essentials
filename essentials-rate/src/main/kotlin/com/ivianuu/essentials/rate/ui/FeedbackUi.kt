@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.*
 
 object FeedbackKey : DialogKey<Nothing>
 
-@Given val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
+@Provide val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(stringResource(R.string.es_feedback_title)) },
@@ -50,14 +50,14 @@ object FeedbackKey : DialogKey<Nothing>
   val sendMail: () -> Unit = {},
 )
 
-@Given fun feedbackModel(
-  @Given displayShowNever: DisplayShowNeverUseCase,
-  @Given key: FeedbackKey,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given showLater: ShowLaterUseCase,
-  @Given showNever: ShowNeverUseCase
-): @Scoped<KeyUiGivenScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {
+@Provide fun feedbackModel(
+  displayShowNever: DisplayShowNeverUseCase,
+  key: FeedbackKey,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  showLater: ShowLaterUseCase,
+  showNever: ShowNeverUseCase
+): @Scoped<KeyUiScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {
   launch {
     val showDoNotShowAgain = displayShowNever()
     update { copy(displayShowNever = showDoNotShowAgain) }

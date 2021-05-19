@@ -7,19 +7,17 @@ import com.ivianuu.essentials.systemoverlay.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-enum class SystemOverlayBlacklistState {
-  DISABLED, ENABLED, HIDDEN
-}
+enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 typealias SystemOverlayEnabled = Boolean
 
-@Given fun systemOverlayBlacklistState(
-  @Given _: Logger,
-  @Given mainSwitchState: Flow<SystemOverlayEnabled>,
-  @Given keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
-  @Given lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
-  @Given secureScreenState: @Private Flow<SecureScreenSystemOverlayBlacklistState>,
-  @Given userBlacklistState: @Private Flow<UserBlacklistSystemOverlayBlacklistState>,
+@Provide fun systemOverlayBlacklistState(
+  mainSwitchState: Flow<SystemOverlayEnabled>,
+  keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
+  lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
+  secureScreenState: @Private Flow<SecureScreenSystemOverlayBlacklistState>,
+  userBlacklistState: @Private Flow<UserBlacklistSystemOverlayBlacklistState>,
+  _: Logger
 ): Flow<SystemOverlayBlacklistState> = mainSwitchState
   // check the main state of the overlay
   .map {
@@ -50,10 +48,10 @@ typealias SystemOverlayEnabled = Boolean
 
 private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
-@Given fun lockScreenSystemOverlayEnabledState(
-  @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
-  @Given screenState: Flow<ScreenState>,
-  @Given _: Logger,
+@Provide fun lockScreenSystemOverlayEnabledState(
+  blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  screenState: Flow<ScreenState>,
+  _: Logger,
 ): @Private Flow<LockScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
@@ -76,11 +74,11 @@ private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklist
 
 private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
-@Given fun secureScreenSystemOverlayBlacklistState(
-  @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
-  @Given isOnSecureScreen: Flow<IsOnSecureScreen>,
-  @Given _: Logger,
-  @Given screenState: Flow<ScreenState>
+@Provide fun secureScreenSystemOverlayBlacklistState(
+  blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  isOnSecureScreen: Flow<IsOnSecureScreen>,
+  screenState: Flow<ScreenState>,
+  _: Logger
 ): @Private Flow<SecureScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
@@ -112,11 +110,11 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
 
 private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
-@Given fun userBlacklistSystemOverlayBlacklistState(
-  @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
-  @Given currentApp: Flow<CurrentApp>,
-  @Given _: Logger,
-  @Given screenState: Flow<ScreenState>,
+@Provide fun userBlacklistSystemOverlayBlacklistState(
+  blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  currentApp: Flow<CurrentApp>,
+  screenState: Flow<ScreenState>,
+  _: Logger,
 ): @Private Flow<UserBlacklistSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.appBlacklist }
   .distinctUntilChanged()
@@ -149,10 +147,10 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
 
 private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistState
 
-@Given fun keyboardSystemOverlayBlacklistState(
-  @Given blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
-  @Given keyboardVisible: Flow<KeyboardVisible>,
-  @Given _: Logger,
+@Provide fun keyboardSystemOverlayBlacklistState(
+  blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  keyboardVisible: Flow<KeyboardVisible>,
+  _: Logger,
 ): @Private Flow<KeyboardSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()

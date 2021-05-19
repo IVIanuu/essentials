@@ -8,16 +8,16 @@ import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import org.json.*
 
-@Given val donationHomeItem = HomeItem("Donation") { DonationKey }
+@Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
 
-@Given val sampleDonations = setOf(
+@Provide val sampleDonations = setOf(
   Donation(Sku("crossaint"), R.drawable.es_ic_bakery_dining),
   Donation(Sku("coffee"), R.drawable.es_ic_free_breakfast),
   Donation(Sku("burger_menu"), R.drawable.es_ic_lunch_dining),
   Donation(Sku("movie"), R.drawable.es_ic_popcorn)
 )
 
-@Given val sampleGetSkuDetailsUseCase: GetSkuDetailsUseCase = {
+@Provide val sampleGetSkuDetailsUseCase: GetSkuDetailsUseCase = {
   delay(2000)
   when (it.skuString) {
     "crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
@@ -28,12 +28,12 @@ import org.json.*
   }
 }
 
-@Given val samplePurchaseUseCase: PurchaseUseCase = { _, _, _ ->
+@Provide val samplePurchaseUseCase: PurchaseUseCase = { _, _, _ ->
   delay(3000)
   true
 }
 
-@Given val sampleConsumePurchaseUseCase: ConsumePurchaseUseCase = { true }
+@Provide val sampleConsumePurchaseUseCase: ConsumePurchaseUseCase = { true }
 
 private fun SkuDetails(
   sku: Sku,

@@ -73,7 +73,7 @@ fun lerp(
   start: Insets,
   end: Insets,
   fraction: Float
-): Insets = Insets(
+) = Insets(
   left = lerp(start.left, end.left, fraction),
   top = lerp(start.top, end.top, fraction),
   right = lerp(start.right, end.right, fraction),
@@ -110,7 +110,7 @@ val LocalInsets = compositionLocalOf { Insets() }
 
 typealias WindowInsetsProvider = UiDecorator
 
-@Given val windowInsetsProvider: WindowInsetsProvider = { content ->
+@Provide val windowInsetsProvider: WindowInsetsProvider = { content ->
   val ownerView = LocalView.current
   val density = LocalDensity.current
   var insets by remember { mutableStateOf(Insets()) }

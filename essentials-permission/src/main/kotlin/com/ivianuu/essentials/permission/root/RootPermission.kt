@@ -25,14 +25,14 @@ import com.ivianuu.injekt.*
 
 interface RootPermission : Permission
 
-@Given fun <P : RootPermission> rootPermissionStateProvider(
-  @Given isShellAvailable: IsShellAvailableUseCase
+@Provide fun <P : RootPermission> rootPermissionStateProvider(
+  isShellAvailable: IsShellAvailableUseCase
 ): PermissionStateProvider<P> = { isShellAvailable() }
 
-@Given fun <P : RootPermission> rootPermissionRequestHandler(
-  @Given isShellAvailable: IsShellAvailableUseCase,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster
+@Provide fun <P : RootPermission> rootPermissionRequestHandler(
+  isShellAvailable: IsShellAvailableUseCase,
+  stringResource: StringResourceProvider,
+  toaster: Toaster
 ): PermissionRequestHandler<P> = {
   val isOk = isShellAvailable()
   if (!isOk) toaster(stringResource(R.string.es_no_root, emptyList()))

@@ -44,7 +44,7 @@ data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Given val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
+@Provide val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings)) }) }
   ) {
@@ -77,16 +77,16 @@ data class WriteSecureSettingsKey(
   val grantPermissionsViaRoot: () -> Unit = {}
 )
 
-@Given fun writeSecureSettingsModel(
-  @Given buildInfo: BuildInfo,
-  @Given key: WriteSecureSettingsKey,
-  @Given navigator: Navigator,
-  @Given permissionStateFactory: PermissionStateFactory,
-  @Given runShellCommand: RunShellCommandUseCase,
-  @Given scope: GivenCoroutineScope<KeyUiGivenScope>,
-  @Given stringResource: StringResourceProvider,
-  @Given toaster: Toaster,
-): @Scoped<KeyUiGivenScope> StateFlow<WriteSecureSettingsModel> = scope.state(
+@Provide fun writeSecureSettingsModel(
+  buildInfo: BuildInfo,
+  key: WriteSecureSettingsKey,
+  navigator: Navigator,
+  permissionStateFactory: PermissionStateFactory,
+  runShellCommand: RunShellCommandUseCase,
+  scope: InjectCoroutineScope<KeyUiScope>,
+  stringResource: StringResourceProvider,
+  toaster: Toaster,
+): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsModel> = scope.state(
   WriteSecureSettingsModel()
 ) {
   timer(200.milliseconds)

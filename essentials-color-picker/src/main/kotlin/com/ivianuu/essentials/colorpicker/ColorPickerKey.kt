@@ -32,9 +32,9 @@ data class ColorPickerKey(
   val showAlphaSelector: Boolean = false,
 ) : DialogKey<Color>
 
-@Given fun colorPickerUi(
-  @Given key: ColorPickerKey,
-  @Given navigator: Navigator,
+@Provide fun colorPickerUi(
+  key: ColorPickerKey,
+  navigator: Navigator,
 ): KeyUi<ColorPickerKey> = {
   DialogScaffold {
     val scope = rememberCoroutineScope()

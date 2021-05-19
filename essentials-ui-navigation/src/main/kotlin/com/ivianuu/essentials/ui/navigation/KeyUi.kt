@@ -24,18 +24,18 @@ import kotlin.reflect.*
 
 typealias KeyUi<K> = @Composable () -> Unit
 
-typealias KeyUiFactory<K> = (K, KeyUiGivenScope) -> KeyUi<K>
+typealias KeyUiFactory<K> = (K, KeyUiScope) -> KeyUi<K>
 
-@Given class KeyUiModule<@Given T : KeyUi<K>, K : Key<*>> {
-  @Given fun keyUi(
-    @Given keyClass: KClass<K>,
-    @Given keyUiFactory: (@Given K, @Given KeyUiGivenScope) -> KeyUi<K>
+@Provide class KeyUiModule_<@Spread T : KeyUi<K>, K : Key<*>> {
+  @Provide fun keyUi(
+    keyClass: KClass<K>,
+    keyUiFactory: (@Provide K, @Provide KeyUiScope) -> KeyUi<K>
   ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
     (keyClass to keyUiFactory).cast()
 
-  @Given fun keyUiOptionFactory(
-    @Given keyClass: KClass<K>,
-    @Given keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
+  @Provide fun keyUiOptionFactory(
+    keyClass: KClass<K>,
+    keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
     (keyClass to keyUiOptionsFactory).cast()
 }
@@ -55,9 +55,9 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   val model: S
 }
 
-@Given fun <@Given U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
-  @Given uiFactory: () -> U,
-  @Given model: StateFlow<S>
+@Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
+  uiFactory: () -> U,
+  model: StateFlow<S>
 ): KeyUi<K> = {
   val currentModel by model.collectAsState()
   val scope = remember {

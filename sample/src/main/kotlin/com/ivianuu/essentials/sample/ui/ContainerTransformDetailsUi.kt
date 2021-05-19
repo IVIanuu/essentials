@@ -20,7 +20,7 @@ import com.ivianuu.injekt.compose.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
-@Given val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
+@Provide val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
   var listInfo by rememberScopedValue(key = "list_state") {
     mutableStateOf(0 to 0)
   }
@@ -72,7 +72,7 @@ data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
   }
 }
 
-@Given
+@Provide
 val containerTransformDetailsOptionsFactory: KeyUiOptionsFactory<ContainerTransformDetailsKey> = {
   KeyUiOptions(ContainerTransformStackTransition(it.closedKey, "opened"))
 }

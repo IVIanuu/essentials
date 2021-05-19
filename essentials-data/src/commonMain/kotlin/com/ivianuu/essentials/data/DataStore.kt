@@ -8,4 +8,4 @@ interface DataStore<T> {
   suspend fun updateData(transform: T.() -> T): T
 }
 
-@Given fun <@Given T : DataStore<D>, D> dataStoreFlow(@Given dataStore: T): Flow<D> = dataStore.data
+@Provide fun <@Spread T : DataStore<D>, D> dataStoreFlow(dataStore: T): Flow<D> = dataStore.data

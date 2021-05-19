@@ -26,11 +26,11 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
-@Given object BluetoothActionId : ActionId("bluetooth")
+@Provide object BluetoothActionId : ActionId("bluetooth")
 
-@Given fun bluetoothAction(
-  @Given bluetoothIcon: Flow<BluetoothIcon>,
-  @Given stringResource: StringResourceProvider,
+@Provide fun bluetoothAction(
+  bluetoothIcon: Flow<BluetoothIcon>,
+  stringResource: StringResourceProvider,
 ) = Action<BluetoothActionId>(
   id = BluetoothActionId,
   title = stringResource(R.string.es_action_bluetooth, emptyList()),
@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.*
   enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-@Given val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
+@Provide val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
   BluetoothAdapter.getDefaultAdapter()?.let {
     if (it.isEnabled) {
       it.disable()
@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.*
 
 internal typealias BluetoothIcon = ActionIcon
 
-@Given fun bluetoothIcon(@Given broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> =
+@Provide fun bluetoothIcon(broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> =
   broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
     .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
     .onStart {

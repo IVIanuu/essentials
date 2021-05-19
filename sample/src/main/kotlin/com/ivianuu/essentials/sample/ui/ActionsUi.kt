@@ -31,14 +31,14 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-@Given val actionsHomeItem = HomeItem("Actions") { ActionsKey }
+@Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
 object ActionsKey : Key<Nothing>
 
-@Given fun actionsUi(
-  @Given executeAction: ExecuteActionUseCase,
-  @Given navigator: Navigator,
-  @Given scope: GivenCoroutineScope<UiGivenScope>
+@Provide fun actionsUi(
+  executeAction: ExecuteActionUseCase,
+  navigator: Navigator,
+  scope: InjectCoroutineScope<UiScope>
 ): KeyUi<ActionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
