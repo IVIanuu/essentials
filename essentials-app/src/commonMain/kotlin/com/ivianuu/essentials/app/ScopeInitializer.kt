@@ -27,15 +27,17 @@ data class ScopeInitializerElement<S>(
   val key: TypeKey<ScopeInitializer<S>>,
   val instance: () -> ScopeInitializer<S>,
   val config: ScopeInitializerConfig<ScopeInitializer<S>>
-)
+) {
+  companion object {
+    @Provide val treeDescriptor = object : TreeDescriptor<ScopeInitializerElement<*>> {
+      override fun key(value: ScopeInitializerElement<*>): TypeKey<*> = value.key
+      override fun dependents(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
+        value.config.dependents
 
-@Provide object ScopeInitializerElementTreeDescriptor : TreeDescriptor<ScopeInitializerElement<*>> {
-  override fun key(value: ScopeInitializerElement<*>): TypeKey<*> = value.key
-  override fun dependents(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
-    value.config.dependents
-
-  override fun dependencies(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
-    value.config.dependencies
+      override fun dependencies(value: ScopeInitializerElement<*>): Set<TypeKey<*>> =
+        value.config.dependencies
+    }
+  }
 }
 
 @Provide fun <S : Scope> scopeInitializerRunner(
@@ -43,7 +45,7 @@ data class ScopeInitializerElement<S>(
   scopeKey: TypeKey<S>,
   workerRunner: ScopeWorkerRunner<S>,
   _: Logger
-): ScopeInitializer<S> = {
+): com.ivianuu.injekt.scope.ScopeInitializer<S> = {
   initializers
     .sortedTopological()
     .forEach {

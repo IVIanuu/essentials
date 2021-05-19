@@ -44,12 +44,14 @@ data class UiDecoratorElement(
   val key: TypeKey<UiDecorator>,
   val decorator: UiDecorator,
   val config: UiDecoratorConfig<*>
-)
-
-@Provide object UiDecoratorElementTreeDescriptor : TreeDescriptor<UiDecoratorElement> {
-  override fun key(value: UiDecoratorElement): Any = value.key
-  override fun dependencies(value: UiDecoratorElement): Set<Any> = value.config.dependencies
-  override fun dependents(value: UiDecoratorElement): Set<Any> = value.config.dependents
+) {
+  companion object {
+    @Provide val treeDescriptor = object : TreeDescriptor<UiDecoratorElement> {
+      override fun key(value: UiDecoratorElement): Any = value.key
+      override fun dependencies(value: UiDecoratorElement): Set<Any> = value.config.dependencies
+      override fun dependents(value: UiDecoratorElement): Set<Any> = value.config.dependents
+    }
+  }
 }
 
 typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
