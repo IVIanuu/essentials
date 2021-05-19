@@ -27,12 +27,10 @@ interface BillingContext {
 class BillingContextImpl(
   override val billingClient: BillingClient,
   private val dispatcher: IODispatcher,
-  logger: Logger,
+  @Provide override val logger: Logger,
   override val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: InjectCoroutineScope<AppScope>
 ) : BillingContext {
-  @Provide override val logger: Logger = logger
-
   private var isConnected = false
   private val connectionMutex = Mutex()
 
