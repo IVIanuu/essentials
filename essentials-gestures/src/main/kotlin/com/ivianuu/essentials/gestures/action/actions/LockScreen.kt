@@ -28,11 +28,11 @@ import com.ivianuu.injekt.common.*
 @Provide object LockScreenActionId : ActionId("lock_screen")
 
 @Provide fun lockScreenAction(
-  stringResource: StringResourceProvider,
+  resourceProvider: ResourceProvider,
   systemBuildInfo: SystemBuildInfo,
-) = Action<LockScreenActionId>(
+): Action<LockScreenActionId> = Action(
   id = LockScreenActionId,
-  title = stringResource(R.string.es_action_lock_screen, emptyList()),
+  title = resourceProvider(R.string.es_action_lock_screen),
   icon = singleActionIcon(R.drawable.es_ic_power_settings),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()

@@ -25,10 +25,10 @@ import com.ivianuu.injekt.android.*
 
 @Provide object InputMethodActionId : ActionId("input_method")
 
-@Provide fun inputMethodAction(stringResource: StringResourceProvider) =
-  Action<InputMethodActionId>(
-    id = "input_method",
-    title = stringResource(R.string.es_action_input_method, emptyList()),
+@Provide fun inputMethodAction(resourceProvider: ResourceProvider): Action<InputMethodActionId> =
+  Action(
+    id = InputMethodActionId,
+    title = resourceProvider(R.string.es_action_input_method),
     icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
   )
 

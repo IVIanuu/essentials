@@ -106,7 +106,7 @@ typealias AppTrackerNotification = Notification
 @SuppressLint("NewApi")
 @Provide
 fun appTrackerNotification(
-  appContext: AppContext,
+  context: AppContext,
   currentApp: CurrentApp,
   notificationManager: @SystemService NotificationManager,
   systemBuildInfo: SystemBuildInfo
@@ -120,7 +120,7 @@ fun appTrackerNotification(
       )
     )
   }
-  return NotificationCompat.Builder(appContext, "app_tracker")
+  return NotificationCompat.Builder(context, "app_tracker")
     .apply {
       setSmallIcon(R.mipmap.ic_launcher)
       setContentTitle("Current app: $currentApp")

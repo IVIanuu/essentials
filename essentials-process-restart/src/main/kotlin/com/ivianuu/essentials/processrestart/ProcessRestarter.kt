@@ -26,14 +26,14 @@ import com.ivianuu.injekt.android.*
 typealias ProcessRestarter = suspend () -> Unit
 
 @Provide fun processRestarter(
-  appContext: AppContext,
   buildInfo: BuildInfo,
+  context: AppContext,
   packageManager: PackageManager,
   _: Logger,
 ): ProcessRestarter = {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
   d { "restart process $intent" }
-  ProcessRestartActivity.launch(appContext, intent)
+  ProcessRestartActivity.launch(context, intent)
   Runtime.getRuntime().exit(0)
 }

@@ -31,7 +31,7 @@ import java.util.concurrent.*
 typealias ScreenUnlocker = suspend () -> Boolean
 
 @Provide fun screenUnlocker(
-  appContext: AppContext,
+  context: AppContext,
   dispatcher: DefaultDispatcher,
   keyguardManager: @SystemService KeyguardManager,
   _: Logger,
@@ -45,7 +45,7 @@ typealias ScreenUnlocker = suspend () -> Boolean
 
     d { "unlock screen $requestId" }
 
-    UnlockScreenActivity.unlock(appContext, requestId)
+    UnlockScreenActivity.unlock(context, requestId)
 
     return@withContext result.await().also {
       d { "unlock result $requestId -> $it" }

@@ -36,19 +36,19 @@ typealias ShowFindPermissionHint<P> = Boolean
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
+  resourceProvider: ResourceProvider,
   showFindPermissionHint: ShowFindPermissionHint<P> = false,
   state: Flow<PermissionState<P>>,
-  stringResource: StringResourceProvider,
   toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
   raceOf(
     {
       if (showFindPermissionHint)
-        toaster(stringResource(R.string.es_find_app_here, listOf(buildInfo.appName)))
+        toaster(resourceProvider(R.string.es_find_app_here, buildInfo.appName))
       // wait until user navigates back from the permission screen
       catch { navigator.push(intentFactory(permission).toIntentKey()) }
         .onFailure {
-          toaster(stringResource(R.string.es_grant_permission_manually, emptyList()))
+          toaster(resourceProvider(R.string.es_grant_permission_manually))
         }
     },
     {

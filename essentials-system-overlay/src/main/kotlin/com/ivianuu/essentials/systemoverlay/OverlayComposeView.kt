@@ -11,9 +11,9 @@ import com.ivianuu.injekt.android.*
 @SuppressLint("ViewConstructor")
 @Provide
 class OverlayComposeView(
-  appContext: AppContext,
+  context: AppContext,
   private val content: @Composable () -> Unit,
-) : AbstractComposeView(appContext),
+) : AbstractComposeView(context),
   LifecycleOwner,
   SavedStateRegistryOwner,
   ViewModelStoreOwner {

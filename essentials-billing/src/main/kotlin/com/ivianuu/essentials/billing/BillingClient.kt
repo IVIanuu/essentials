@@ -8,10 +8,10 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun billingClient(
-  appContext: AppContext,
+  context: AppContext,
   refreshes: MutableSharedFlow<BillingRefresh>
 ): @Scoped<AppScope> BillingClient = BillingClient
-  .newBuilder(appContext)
+  .newBuilder(context)
   .enablePendingPurchases()
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
   .build()

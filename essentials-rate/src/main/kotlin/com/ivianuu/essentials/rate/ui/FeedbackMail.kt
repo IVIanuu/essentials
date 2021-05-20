@@ -10,16 +10,15 @@ import com.ivianuu.injekt.android.*
 object FeedbackMailKey : IntentKey
 
 @Provide fun feedbackMailKeyIntentFactory(
-  appContext: AppContext,
-  stringResource: StringResourceProvider
+  context: AppContext,
+  resourceProvider: ResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
     putExtra(Intent.EXTRA_EMAIL, arrayOf("ivianuu@gmail.com"))
     putExtra(
-      Intent.EXTRA_SUBJECT, "Feedback for ${
-        stringResource(appContext.applicationInfo.labelRes, emptyList())
-      }"
+      Intent.EXTRA_SUBJECT,
+      "Feedback for ${resourceProvider<String>(context.applicationInfo.labelRes)}"
     )
   }
 }

@@ -37,8 +37,8 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   getAction: GetActionUseCase,
   getActionExecutor: GetActionExecutorUseCase,
   permissionRequester: PermissionRequester,
+  resourceProvider: ResourceProvider,
   screenUnlocker: ScreenUnlocker,
-  stringResource: StringResourceProvider,
   toaster: Toaster,
   _: Logger
 ): ExecuteActionUseCase = { key ->
@@ -66,7 +66,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
       return@catch true
     }.onFailure {
       it.printStackTrace()
-      toaster(stringResource(R.string.es_action_execution_failed, listOf(key)))
+      toaster(resourceProvider(R.string.es_action_execution_failed, key))
     }
   }
 }

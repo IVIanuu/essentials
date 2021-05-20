@@ -27,9 +27,9 @@ import com.ivianuu.injekt.common.*
 interface WriteSecureSettingsPermission : Permission
 
 @Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
-  appContext: AppContext
+  context: AppContext
 ): PermissionStateProvider<P> = {
-  appContext.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
+  context.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
       PackageManager.PERMISSION_GRANTED
 }
 

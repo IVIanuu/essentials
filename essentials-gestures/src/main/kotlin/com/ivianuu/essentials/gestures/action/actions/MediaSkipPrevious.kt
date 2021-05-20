@@ -25,10 +25,10 @@ import com.ivianuu.injekt.*
 @Provide object SkipPreviousActionId : ActionId("media_skip_previous")
 
 @Provide fun skipPreviousMediaAction(
-  stringResource: StringResourceProvider
-) = Action<SkipPreviousActionId>(
+  resourceProvider: ResourceProvider
+): Action<SkipPreviousActionId> = Action(
   id = SkipPreviousActionId,
-  title = stringResource(R.string.es_action_media_skip_previous, emptyList()),
+  title = resourceProvider(R.string.es_action_media_skip_previous),
   icon = singleActionIcon(R.drawable.es_ic_skip_previous)
 )
 

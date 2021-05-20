@@ -30,11 +30,11 @@ import kotlinx.coroutines.*
 @Provide object ScreenshotActionId : ActionId("screenshot")
 
 @Provide fun screenshotAction(
-  stringResource: StringResourceProvider,
+  resourceProvider: ResourceProvider,
   systemBuildInfo: SystemBuildInfo,
-) = Action<ScreenshotActionId>(
-  id = "screenshot",
-  title = stringResource(R.string.es_action_screenshot, emptyList()),
+): Action<ScreenshotActionId> = Action(
+  id = ScreenshotActionId,
+  title = resourceProvider(R.string.es_action_screenshot),
   icon = singleActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()

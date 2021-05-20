@@ -28,10 +28,10 @@ import com.ivianuu.injekt.*
 @Provide object NotificationsActionId : ActionId("notifications")
 
 @Provide fun notificationsAction(
-  stringResource: StringResourceProvider
-) = Action<NotificationsActionId>(
+  resourceProvider: ResourceProvider
+): Action<NotificationsActionId> = Action(
   id = NotificationsActionId,
-  title = stringResource(R.string.es_action_notifications, emptyList()),
+  title = resourceProvider(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon(Icons.Default.Notifications)
 )

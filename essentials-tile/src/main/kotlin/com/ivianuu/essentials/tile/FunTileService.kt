@@ -92,12 +92,12 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
     }
     qsTile.label = when {
       model.label != null -> model.label
-      model.labelRes != null -> component.stringResource(model.labelRes, emptyList())
+      model.labelRes != null -> component.resourceProvider<String>(model.labelRes)
       else -> null
     }
     qsTile.contentDescription = when {
       model.description != null -> model.description
-      model.descriptionRes != null -> component.stringResource(model.descriptionRes, emptyList())
+      model.descriptionRes != null -> component.resourceProvider<String>(model.descriptionRes)
       else -> null
     }
     qsTile.updateTile()
@@ -107,8 +107,8 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
 @Provide @InstallElement<ServiceScope>
 class FunTileServiceComponent(
   val logger: Logger,
+  val resourceProvider: ResourceProvider,
   val serviceScope: ServiceScope,
-  val stringResource: StringResourceProvider,
   val tileScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileScope
 )
 

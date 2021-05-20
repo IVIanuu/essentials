@@ -117,9 +117,9 @@ typealias ForegroundNotification = Notification
 @SuppressLint("NewApi")
 @Provide
 fun foregroundNotification(
-  appContext: AppContext,
-  count: Int,
   color: Color,
+  context: AppContext,
+  count: Int,
   notificationManager: @SystemService NotificationManager,
   systemBuildInfo: SystemBuildInfo
 ): ForegroundNotification {
@@ -131,7 +131,7 @@ fun foregroundNotification(
       )
     )
   }
-  return NotificationCompat.Builder(appContext, "foreground")
+  return NotificationCompat.Builder(context, "foreground")
     .setSmallIcon(R.drawable.ic_home)
     .setContentTitle("Foreground")
     .setContentText("Current progress $count")

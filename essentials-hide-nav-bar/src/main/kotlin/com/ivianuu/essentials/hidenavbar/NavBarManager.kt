@@ -34,7 +34,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun navBarManager(
-  appContext: AppContext,
+  context: AppContext,
   displayRotation: Flow<DisplayRotation>,
   forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   navBarFeatureSupported: NavBarFeatureSupported,
@@ -70,7 +70,7 @@ import kotlinx.coroutines.flow.*
           .onEach { wasNavBarHiddenPref.updateData { false } }
       }
     }
-    .collect { it.apply(appContext, nonSdkInterfaceDetectionDisabler, setOverscan) }
+    .collect { it.apply(context, nonSdkInterfaceDetectionDisabler, setOverscan) }
 }
 
 private sealed class NavBarState {

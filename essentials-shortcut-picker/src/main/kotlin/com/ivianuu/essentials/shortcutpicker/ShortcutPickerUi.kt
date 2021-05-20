@@ -76,8 +76,8 @@ object ShortcutPickerKey : Key<Shortcut>
   extractShortcut: ExtractShortcutUseCase,
   key: ShortcutPickerKey,
   navigator: Navigator,
+  resourceProvider: ResourceProvider,
   scope: InjectCoroutineScope<KeyUiScope>,
-  stringResource: StringResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
   resourceFlow { emit(getAllShortcuts()) }
@@ -91,7 +91,7 @@ object ShortcutPickerKey : Key<Shortcut>
       navigator.pop(key, finalShortcut)
     }.onFailure {
       it.printStackTrace()
-      toaster(stringResource(R.string.es_failed_to_pick_shortcut, emptyList()))
+      toaster(resourceProvider(R.string.es_failed_to_pick_shortcut))
     }
   }
 }

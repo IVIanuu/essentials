@@ -26,9 +26,9 @@ import kotlinx.coroutines.*
 
 @Provide object LastAppActionId : ActionId("last_app")
 
-@Provide fun lastAppAction(stringResource: StringResourceProvider) = Action<LastAppActionId>(
-  id = "last_app",
-  title = stringResource(R.string.es_action_last_app, emptyList()),
+@Provide fun lastAppAction(resourceProvider: ResourceProvider): Action<LastAppActionId> = Action(
+  id = LastAppActionId,
+  title = resourceProvider(R.string.es_action_last_app),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
   icon = singleActionIcon(R.drawable.es_ic_repeat)

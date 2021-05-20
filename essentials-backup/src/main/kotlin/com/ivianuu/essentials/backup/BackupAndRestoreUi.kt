@@ -68,9 +68,9 @@ object BackupAndRestoreKey : Key<Nothing>
 
 @Provide fun backupAndRestoreModel(
   createBackupUseCase: CreateBackupUseCase,
+  resourceProvider: ResourceProvider,
   restoreBackupUseCase: RestoreBackupUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  stringResource: StringResourceProvider,
   toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<BackupAndRestoreModel> =
   scope.state(BackupAndRestoreModel()) {
@@ -78,14 +78,14 @@ object BackupAndRestoreKey : Key<Nothing>
       createBackupUseCase()
         .onFailure {
           it.printStackTrace()
-          toaster(stringResource(R.string.es_backup_error, emptyList()))
+          toaster(resourceProvider(R.string.es_backup_error))
         }
     }
     action(BackupAndRestoreModel.restoreData()) {
       restoreBackupUseCase()
         .onFailure {
           it.printStackTrace()
-          toaster(stringResource(R.string.es_restore_error, emptyList()))
+          toaster(resourceProvider(R.string.es_restore_error))
         }
     }
   }

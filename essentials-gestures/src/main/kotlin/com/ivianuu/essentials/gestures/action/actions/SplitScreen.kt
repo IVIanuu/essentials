@@ -26,10 +26,10 @@ import com.ivianuu.injekt.*
 @Provide object SplitScreenActionId : ActionId("split_screen")
 
 @Provide fun splitScreenAction(
-  stringResource: StringResourceProvider
-) = Action<SplitScreenActionId>(
+  resourceProvider: ResourceProvider
+): Action<SplitScreenActionId> = Action(
   id = SplitScreenActionId,
-  title = stringResource(R.string.es_action_split_screen, emptyList()),
+  title = resourceProvider(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon(R.drawable.es_ic_view_agenda)
 )

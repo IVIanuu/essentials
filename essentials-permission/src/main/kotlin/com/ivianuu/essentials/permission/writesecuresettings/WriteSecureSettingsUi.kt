@@ -82,9 +82,9 @@ data class WriteSecureSettingsKey(
   key: WriteSecureSettingsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
+  resourceProvider: ResourceProvider,
   runShellCommand: RunShellCommandUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  stringResource: StringResourceProvider,
   toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsModel> = scope.state(
   WriteSecureSettingsModel()
@@ -94,7 +94,7 @@ data class WriteSecureSettingsKey(
     .filter { it }
     .take(1)
     .onEach {
-      toaster(stringResource(R.string.es_secure_settings_permission_granted, emptyList()))
+      toaster(resourceProvider(R.string.es_secure_settings_permission_granted))
       navigator.pop(key, true)
     }
     .launchIn(this)
@@ -105,7 +105,7 @@ data class WriteSecureSettingsKey(
     runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
       .onFailure {
         it.printStackTrace()
-        toaster(stringResource(R.string.es_secure_settings_no_root, emptyList()))
+        toaster(resourceProvider(R.string.es_secure_settings_no_root))
       }
   }
 }

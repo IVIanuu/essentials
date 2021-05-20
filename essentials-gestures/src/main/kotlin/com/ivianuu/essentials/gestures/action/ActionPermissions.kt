@@ -31,14 +31,14 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Provide class ActionAccessibilityPermission(
-  private val stringResource: StringResourceProvider
+  private val resourceProvider: ResourceProvider
 ) : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
   override val title: String
-    get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+    get() = resourceProvider(R.string.es_action_accessibility_permission_title)
   override val desc: String
-    get() = stringResource(R.string.es_action_accessibility_permission_title, emptyList())
+    get() = resourceProvider(R.string.es_action_accessibility_permission_title)
   override val icon: @Composable () -> Unit
     get() = {
       Icon(painterResource(R.drawable.es_ic_accessibility), null)
@@ -46,34 +46,32 @@ import kotlin.reflect.*
 }
 
 @Provide class ActionRootPermission(
-  private val stringResource: StringResourceProvider
+  private val resourceProvider: ResourceProvider
 ) : RootPermission {
   override val title: String
-    get() = stringResource(R.string.es_action_root_permission_title, emptyList())
+    get() = resourceProvider(R.string.es_action_root_permission_title)
   override val icon: @Composable () -> Unit
-    get() = {
-      Icon(painterResource(R.drawable.es_ic_adb), null)
-    }
+    get() = { Icon(painterResource(R.drawable.es_ic_adb), null) }
 }
 
 @Provide class ActionWriteSecureSettingsPermission(
-  private val stringResource: StringResourceProvider
+  private val resourceProvider: ResourceProvider
 ) : WriteSecureSettingsPermission {
   override val title: String
-    get() = stringResource(R.string.es_action_write_secure_settings_permission_title, emptyList())
+    get() = resourceProvider(R.string.es_action_write_secure_settings_permission_title)
   override val desc: String
-    get() = stringResource(R.string.es_action_write_secure_settings_permission_desc, emptyList())
+    get() = resourceProvider(R.string.es_action_write_secure_settings_permission_desc)
   override val icon: @Composable () -> Unit
     get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }
 
 @Provide class ActionWriteSettingsPermission(
-  private val stringResource: StringResourceProvider
+  private val resourceProvider: ResourceProvider
 ) : WriteSettingsPermission {
   override val title: String
-    get() = stringResource(R.string.es_action_write_settings_permission_title, emptyList())
+    get() = resourceProvider(R.string.es_action_write_settings_permission_title)
   override val desc: String
-    get() = stringResource(R.string.es_action_write_settings_permission_desc, emptyList())
+    get() = resourceProvider(R.string.es_action_write_settings_permission_desc)
   override val icon: @Composable () -> Unit
     get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }

@@ -35,7 +35,7 @@ import com.ivianuu.injekt.*
   private val actionIntentSender: ActionIntentSender,
   private val getAppInfo: GetAppInfoUseCase,
   private val packageManager: PackageManager,
-  private val stringResource: StringResourceProvider
+  private val resourceProvider: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
@@ -44,7 +44,7 @@ import com.ivianuu.injekt.*
     return Action<ActionId>(
       id = id,
       title = getAppInfo(packageName)?.appName
-        ?: stringResource(R.string.es_unknown_action_name, emptyList()),
+        ?: resourceProvider(R.string.es_unknown_action_name),
       unlockScreen = true,
       enabled = true,
       icon = coilActionIcon(AppIcon(packageName))
@@ -66,10 +66,10 @@ import com.ivianuu.injekt.*
 @Provide class AppActionPickerDelegate(
   private val launchableAppPredicate: LaunchableAppPredicate,
   private val navigator: Navigator,
-  private val stringResource: StringResourceProvider,
+  private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
-    get() = stringResource(R.string.es_action_app, emptyList())
+    get() = resourceProvider(R.string.es_action_app)
 
   override val icon: @Composable () -> Unit = {
     Icon(painterResource(R.drawable.es_ic_apps), null)

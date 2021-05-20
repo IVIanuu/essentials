@@ -31,9 +31,9 @@ interface RootPermission : Permission
 
 @Provide fun <P : RootPermission> rootPermissionRequestHandler(
   isShellAvailable: IsShellAvailableUseCase,
-  stringResource: StringResourceProvider,
+  resourceProvider: ResourceProvider,
   toaster: Toaster
 ): PermissionRequestHandler<P> = {
   val isOk = isShellAvailable()
-  if (!isOk) toaster(stringResource(R.string.es_no_root, emptyList()))
+  if (!isOk) toaster(resourceProvider(R.string.es_no_root))
 }

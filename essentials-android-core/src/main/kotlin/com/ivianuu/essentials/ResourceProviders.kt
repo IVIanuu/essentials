@@ -25,69 +25,59 @@ import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
-typealias BitmapResourceProvider = (Int) -> ImageBitmap
+interface ResourceProvider {
+  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
 
-@Provide fun bitmapResourceProvider(context: AppContext): BitmapResourceProvider = { id ->
-  context.getDrawable(id)!!.toBitmap().toImageBitmap()
+  operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
 }
 
-typealias BooleanResourceProvider = (Int) -> Boolean
+@Provide class ResourceProviderImpl(private val context: AppContext) : ResourceProvider {
+  override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T =
+    loader(context, id)
 
-@Provide fun booleanResourceProvider(context: AppContext): BooleanResourceProvider = { id ->
-  context.resources.getBoolean(id)
+  override fun <T> invoke(
+    id: Int,
+    vararg args: Any?,
+    @Inject loader: ResourceLoaderWithArgs<T>
+  ): T =
+    loader(context, id, *args)
 }
 
-typealias ColorResourceProvider = (Int) -> Color
+fun interface ResourceLoaderWithArgs<T> {
+  operator fun invoke(context: AppContext, id: Int, vararg args: Any?): T
 
-@Provide fun colorResourceProvider(context: AppContext): ColorResourceProvider = { id ->
-  Color(context.getColor(id))
-}
-
-typealias DimensionResourceProvider = (Int) -> Dp
-
-@Provide fun dimensionResourceProvider(context: AppContext): DimensionResourceProvider = { id ->
-  with(Density(context)) {
-    context.resources.getDimension(id).toInt().toDp()
+  companion object {
+    @Provide val string = ResourceLoaderWithArgs { context, id, args ->
+      context.getString(id, *args)
+    }
   }
 }
 
-typealias DrawableResourceProvider = (Int) -> ImageBitmap
+fun interface ResourceLoader<T> {
+  operator fun invoke(context: AppContext, id: Int): T
 
-@Provide inline val BitmapResourceProvider.drawableResourceProvider: DrawableResourceProvider
-  get() = this
-
-typealias FloatResourceProvider = (Int) -> Float
-
-@Provide fun floatResourceProvider(context: AppContext): FloatResourceProvider = { id ->
-  ResourcesCompat.getFloat(context.resources, id)
-}
-
-typealias TypefaceResourceProvider = (Int) -> Typeface
-
-@Provide fun typefaceResourceProvider(context: AppContext): TypefaceResourceProvider = { id ->
-  Typeface(ResourcesCompat.getFont(context, id)!!)
-}
-
-typealias IntResourceProvider = (Int) -> Int
-
-@Provide fun intResourceProvider(context: AppContext): IntResourceProvider = { id ->
-  context.resources.getInteger(id)
-}
-
-typealias IntArrayResourceProvider = (Int) -> IntArray
-
-@Provide fun intArrayResourceProvider(context: AppContext): IntArrayResourceProvider = { id ->
-  context.resources.getIntArray(id)
-}
-
-typealias StringResourceProvider = (Int, List<Any?>) -> String
-
-@Provide fun stringResourceProvider(context: AppContext): StringResourceProvider = { id, args ->
-  context.getString(id, *args.toTypedArray())
-}
-
-typealias StringArrayResourceProvider = (Int) -> Array<String>
-
-@Provide fun stringArrayResourceProvider(context: AppContext): StringArrayResourceProvider = { id ->
-  context.resources.getStringArray(id)
+  companion object {
+    @Provide val boolean = ResourceLoader { context, id -> context.resources.getBoolean(id) }
+    @Provide val color = ResourceLoader { context, id -> Color(context.getColor(id)) }
+    @Provide val dimension = ResourceLoader { context, id ->
+      with(Density(context)) {
+        context.resources.getDimension(id).toInt().toDp()
+      }
+    }
+    @Provide val float = ResourceLoader { context, id ->
+      ResourcesCompat.getFloat(context.resources, id)
+    }
+    @Provide val imageBitmap = ResourceLoader { context, id ->
+      context.getDrawable(id)!!.toBitmap().toImageBitmap()
+    }
+    @Provide val typeface = ResourceLoader { context, id ->
+      Typeface(ResourcesCompat.getFont(context, id)!!)
+    }
+    @Provide val int = ResourceLoader { context, id -> context.resources.getInteger(id) }
+    @Provide val intArray = ResourceLoader { context, id -> context.resources.getIntArray(id) }
+    @Provide val string = ResourceLoader { context, id -> context.getString(id) }
+    @Provide val stringArray = ResourceLoader { context, id ->
+      context.resources.getStringArray(id)
+    }
+  }
 }

@@ -28,10 +28,10 @@ import com.ivianuu.injekt.*
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 
 @Provide fun quickSettingsAction(
-  stringResource: StringResourceProvider
-) = Action<QuickSettingsActionId>(
+  resourceProvider: ResourceProvider
+): Action<QuickSettingsActionId> = Action(
   id = QuickSettingsActionId,
-  title = stringResource(R.string.es_action_quick_settings, emptyList()),
+  title = resourceProvider(R.string.es_action_quick_settings),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon(Icons.Default.Settings)
 )

@@ -28,12 +28,12 @@ import java.io.*
 data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
 
 @Provide fun shareBackupFileKeyIntentFactory(
-  appContext: AppContext,
+  context: AppContext,
   buildInfo: BuildInfo,
   packageManager: PackageManager
 ): KeyIntentFactory<ShareBackupFileKey> = { key ->
   val uri = FileProvider.getUriForFile(
-    appContext,
+    context,
     "${buildInfo.packageName}.backupprovider",
     File(key.backupFilePath)
   )
@@ -48,7 +48,7 @@ data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
     .map { it.activityInfo.packageName }
     .distinct()
     .forEach {
-      appContext.grantUriPermission(
+      context.grantUriPermission(
         it,
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION

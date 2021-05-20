@@ -85,11 +85,11 @@ private suspend fun getCurrentDisplayRotation(
 typealias RotationChange = Unit
 
 @Provide fun rotationChanges(
-  appContext: AppContext,
+  context: AppContext,
   mainDispatcher: MainDispatcher,
 ): Flow<RotationChange> = callbackFlow<RotationChange> {
   val listener = object :
-    OrientationEventListener(appContext, SensorManager.SENSOR_DELAY_NORMAL) {
+    OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
     override fun onOrientationChanged(orientation: Int) {
       catch { offer(RotationChange) }
     }

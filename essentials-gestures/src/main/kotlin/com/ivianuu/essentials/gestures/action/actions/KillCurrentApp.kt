@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.*
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
 @Provide fun killCurrentAppAction(
-  stringResource: StringResourceProvider,
-) = Action<KillCurrentAppActionId>(
+  resourceProvider: ResourceProvider,
+): Action<KillCurrentAppActionId> = Action(
   id = KillCurrentAppActionId,
-  title = stringResource(R.string.es_action_kill_current_app, emptyList()),
+  title = resourceProvider(R.string.es_action_kill_current_app),
   icon = singleActionIcon(Icons.Default.Clear),
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )

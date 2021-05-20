@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.*
 typealias ConfigChange = Unit
 
 @Provide fun configChanges(
-  appContext: AppContext,
+  context: AppContext,
   mainDispatcher: MainDispatcher,
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
   val callbacks = object : ComponentCallbacks2 {
@@ -42,6 +42,6 @@ typealias ConfigChange = Unit
     override fun onTrimMemory(level: Int) {
     }
   }
-  appContext.registerComponentCallbacks(callbacks)
-  awaitClose { appContext.unregisterComponentCallbacks(callbacks) }
+  context.registerComponentCallbacks(callbacks)
+  awaitClose { context.unregisterComponentCallbacks(callbacks) }
 }.flowOn(mainDispatcher)

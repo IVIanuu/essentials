@@ -26,10 +26,10 @@ import com.ivianuu.injekt.*
 @Provide object PowerDialogActionId : ActionId("power_dialog")
 
 @Provide fun powerDialogAction(
-  stringResource: StringResourceProvider
-) = Action<PowerDialogActionId>(
+  resourceProvider: ResourceProvider
+): Action<PowerDialogActionId> = Action(
   id = PowerDialogActionId,
-  title = stringResource(R.string.es_action_power_dialog, emptyList()),
+  title = resourceProvider(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
 )

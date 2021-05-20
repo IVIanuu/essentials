@@ -27,10 +27,10 @@ import com.ivianuu.injekt.common.*
 @Provide object MenuActionId : ActionId("menu")
 
 @Provide fun menuAction(
-  stringResource: StringResourceProvider
-) = Action<MenuActionId>(
-  id = "menu",
-  title = stringResource(R.string.es_action_menu, emptyList()),
+  resourceProvider: ResourceProvider
+): Action<MenuActionId> = Action(
+  id = MenuActionId,
+  title = resourceProvider(R.string.es_action_menu),
   icon = singleActionIcon(Icons.Default.MoreVert),
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )

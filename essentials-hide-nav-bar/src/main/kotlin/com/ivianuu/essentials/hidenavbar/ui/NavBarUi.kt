@@ -81,8 +81,8 @@ object NavBarKey : Key<Nothing>
   navigator: Navigator,
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
+  resourceProvider: ResourceProvider,
   scope: InjectCoroutineScope<KeyUiScope>,
-  stringResource: StringResourceProvider,
 ): @Scoped<KeyUiScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
@@ -100,12 +100,12 @@ object NavBarKey : Key<Nothing>
         items = NavBarRotationMode.values()
           .map { mode ->
             SingleChoiceListKey.Item(
-              title = stringResource(mode.titleRes, emptyList()),
+              title = resourceProvider(mode.titleRes),
               value = mode
             )
           },
         selectedItem = state.first().navBarRotationMode,
-        title = stringResource(R.string.es_pref_nav_bar_rotation_mode, emptyList())
+        title = resourceProvider(R.string.es_pref_nav_bar_rotation_mode)
       )
     )?.let { newRotationMode ->
       pref.updateData { copy(navBarRotationMode = newRotationMode) }

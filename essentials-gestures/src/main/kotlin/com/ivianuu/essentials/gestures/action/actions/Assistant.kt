@@ -27,12 +27,13 @@ import com.ivianuu.injekt.android.*
 
 @Provide object AssistantActionId : ActionId("assistant")
 
-@Provide fun assistantAction(stringResource: StringResourceProvider) = Action<AssistantActionId>(
-  id = AssistantActionId,
-  title = stringResource(R.string.es_action_assistant, emptyList()),
-  unlockScreen = true,
-  icon = singleActionIcon(R.drawable.es_ic_google)
-)
+@Provide fun assistantAction(resourceProvider: ResourceProvider): Action<AssistantActionId> =
+  Action(
+    id = AssistantActionId,
+    title = resourceProvider(R.string.es_action_assistant),
+    unlockScreen = true,
+    icon = singleActionIcon(R.drawable.es_ic_google)
+  )
 
 @SuppressLint("DiscouragedPrivateApi")
 @Provide fun assistantActionExecutor(

@@ -85,10 +85,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   val purchase: (UiDonation) -> Unit = {}
 )
 
-data class UiDonation(
-  val donation: Donation,
-  val details: SkuDetails
-)
+data class UiDonation(val donation: Donation, val details: SkuDetails)
 
 @Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
@@ -97,8 +94,8 @@ data class UiDonation(
   key: DonationKey,
   navigator: Navigator,
   purchase: PurchaseUseCase,
+  resourceProvider: ResourceProvider,
   scope: InjectCoroutineScope<KeyUiScope>,
-  stringResource: StringResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
   resourceFlow {
@@ -116,6 +113,6 @@ data class UiDonation(
   action(DonationModel.purchase()) { donation ->
     purchase(donation.donation.sku, true, true)
     consumePurchase(donation.donation.sku)
-    toaster(stringResource(R.string.es_donation_thanks, emptyList()))
+    toaster(resourceProvider(R.string.es_donation_thanks))
   }
 }

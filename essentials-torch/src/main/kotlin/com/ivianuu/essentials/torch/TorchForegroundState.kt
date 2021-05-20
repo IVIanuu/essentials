@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.*
 @Provide fun torchForegroundState(
   _: AppContext,
   _: @SystemService NotificationManager,
-  _: StringResourceProvider,
+  _: ResourceProvider,
   _: SystemBuildInfo,
   state: Flow<TorchState>
 ): Flow<ForegroundState> = state
@@ -39,30 +39,30 @@ import kotlinx.coroutines.flow.*
   }
 
 private fun createTorchNotification(
-  @Inject appContext: AppContext,
+  @Inject context: AppContext,
   @Inject notificationManager: @SystemService NotificationManager,
-  @Inject stringResource: StringResourceProvider,
+  @Inject resourceProvider: ResourceProvider,
   @Inject systemBuildInfo: SystemBuildInfo,
 ): Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(
       NotificationChannel(
         NOTIFICATION_CHANNEL_ID,
-        stringResource(R.string.es_notif_channel_torch, emptyList()),
+        resourceProvider<String>(R.string.es_notif_channel_torch),
         NotificationManager.IMPORTANCE_LOW
       )
     )
   }
 
-  return NotificationCompat.Builder(appContext, NOTIFICATION_CHANNEL_ID)
+  return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
     .apply {
       setAutoCancel(true)
       setSmallIcon(R.drawable.es_ic_flash_on)
-      setContentTitle(stringResource(R.string.es_notif_title_torch, emptyList()))
-      setContentText(stringResource(R.string.es_notif_text_torch, emptyList()))
+      setContentTitle(resourceProvider<String>(R.string.es_notif_title_torch))
+      setContentText(resourceProvider<String>(R.string.es_notif_text_torch))
       setContentIntent(
         PendingIntent.getBroadcast(
-          appContext,
+          context,
           1,
           Intent(ACTION_DISABLE_TORCH),
           PendingIntent.FLAG_UPDATE_CURRENT

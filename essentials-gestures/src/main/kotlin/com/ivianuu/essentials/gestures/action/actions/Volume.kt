@@ -26,10 +26,10 @@ import com.ivianuu.injekt.android.*
 @Provide object VolumeActionId : ActionId("volume")
 
 @Provide fun volumeAction(
-  stringResource: StringResourceProvider
-) = Action<VolumeActionId>(
+  resourceProvider: ResourceProvider
+): Action<VolumeActionId> = Action(
   id = VolumeActionId,
-  title = stringResource(R.string.es_action_volume, emptyList()),
+  title = resourceProvider(R.string.es_action_volume),
   icon = singleActionIcon(R.drawable.es_ic_volume_up)
 )
 

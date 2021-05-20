@@ -160,7 +160,7 @@ data class UiNotification(
 )
 
 @Provide fun notificationsModel(
-  appContext: AppContext,
+  context: AppContext,
   dismissNotification: DismissNotificationUseCase,
   notifications: Flow<Notifications>,
   openNotification: OpenNotificationUseCase,
@@ -171,7 +171,7 @@ data class UiNotification(
   notifications
     .map { notifications ->
       notifications
-        .parMap { it.toUiNotification(appContext) }
+        .parMap { it.toUiNotification(context) }
     }
     .flowAsResource()
     .update { copy(notifications = it) }
@@ -189,18 +189,18 @@ data class UiNotification(
   }
 }
 
-private fun StatusBarNotification.toUiNotification(appContext: AppContext) = UiNotification(
+private fun StatusBarNotification.toUiNotification(context: AppContext) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
     ?.toString() ?: "",
   icon = catch {
     notification.smallIcon
-      .loadDrawable(appContext)
+      .loadDrawable(context)
   }.orElse {
     catch {
       notification.getLargeIcon()
-        .loadDrawable(appContext)
+        .loadDrawable(context)
     }
   }
     .map { it.toBitmap().toImageBitmap() }

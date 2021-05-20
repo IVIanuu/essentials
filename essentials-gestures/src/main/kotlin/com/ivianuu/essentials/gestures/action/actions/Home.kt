@@ -19,6 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.*
 import android.content.*
 import android.os.*
+import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
@@ -29,9 +30,9 @@ import com.ivianuu.injekt.android.*
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide fun homeAction(stringResource: StringResourceProvider) = Action<HomeActionId>(
+@Provide fun homeAction(resourceProvider: ResourceProvider): Action<HomeActionId> = Action(
   id = HomeActionId,
-  title = stringResource(R.string.es_action_home, emptyList()),
+  title = resourceProvider(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
   icon = singleActionIcon(R.drawable.es_ic_action_home)
@@ -39,7 +40,7 @@ import com.ivianuu.injekt.android.*
 
 @Provide fun homeActionExecutor(
   actionIntentSender: ActionIntentSender,
-  appContext: AppContext,
+  context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
 ): ActionExecutor<HomeActionId> = {
   if (!needsHomeIntentWorkaround) {
@@ -47,7 +48,7 @@ import com.ivianuu.injekt.android.*
   } else {
     catch {
       val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-      appContext.sendBroadcast(intent)
+      context.sendBroadcast(intent)
     }.onFailure { it.printStackTrace() }
 
     actionIntentSender(

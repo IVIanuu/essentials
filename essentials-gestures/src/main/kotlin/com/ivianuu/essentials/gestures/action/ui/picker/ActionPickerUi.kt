@@ -159,20 +159,20 @@ private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerI
   getAllActions: GetAllActionsUseCase,
   getActionSettingsKey: GetActionSettingsKeyUseCase,
   key: ActionPickerKey,
-  stringResource: StringResourceProvider
+  resourceProvider: ResourceProvider
 ): GetActionPickerItemsUseCase = {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
   if (key.showDefaultOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = stringResource(R.string.es_default, emptyList()),
+      title = resourceProvider(R.string.es_default),
       getResult = { ActionPickerKey.Result.Default }
     )
   }
 
   if (key.showNoneOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = stringResource(R.string.es_none, emptyList()),
+      title = resourceProvider(R.string.es_none),
       getResult = { ActionPickerKey.Result.None }
     )
   }

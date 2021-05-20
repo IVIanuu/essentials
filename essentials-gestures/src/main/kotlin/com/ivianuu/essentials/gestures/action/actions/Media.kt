@@ -47,12 +47,12 @@ import kotlinx.serialization.*
 typealias MediaActionSender = suspend (Int) -> Unit
 
 @Provide fun mediaActionSender(
-  appContext: AppContext,
+  context: AppContext,
   prefs: Flow<MediaActionPrefs>
 ): MediaActionSender = { keycode ->
   val currentPrefs = prefs.first()
-  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
-  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
+  context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+  context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }
 
 private fun mediaIntentFor(

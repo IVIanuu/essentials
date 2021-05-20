@@ -32,14 +32,14 @@ import com.ivianuu.injekt.common.*
 
 @Provide class KeycodeActionFactory(
   private val actionRootCommandRunner: ActionRootCommandRunner,
-  private val stringResource: StringResourceProvider,
+  private val resourceProvider: ResourceProvider,
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
   override suspend fun createAction(id: String): Action<*> {
     val keycode = id.removePrefix(ACTION_KEY_PREFIX)
     return Action<ActionId>(
       id = id,
-      title = stringResource(R.string.es_action_keycode_suffix, listOf(keycode)),
+      title = resourceProvider(R.string.es_action_keycode_suffix, keycode),
       icon = singleActionIcon(R.drawable.es_ic_keyboard),
       permissions = listOf(typeKeyOf<ActionRootPermission>()),
       unlockScreen = false,
@@ -55,18 +55,18 @@ import com.ivianuu.injekt.common.*
 
 @Provide class KeycodeActionPickerDelegate(
   private val navigator: Navigator,
-  private val stringResource: StringResourceProvider,
+  private val resourceProvider: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
-    get() = stringResource(R.string.es_action_keycode, emptyList())
+    get() = resourceProvider(R.string.es_action_keycode)
   override val icon: @Composable () -> Unit =
     { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(
       TextInputKey(
-        title = stringResource(R.string.es_keycode_picker_title, emptyList()),
-        label = stringResource(R.string.es_keycode_input_hint, emptyList()),
+        title = resourceProvider<String>(R.string.es_keycode_picker_title),
+        label = resourceProvider(R.string.es_keycode_input_hint),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         allowEmpty = false
       )

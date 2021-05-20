@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.*
 typealias BroadcastsFactory = (String) -> Flow<Intent>
 
 @Provide fun broadcastsFactory(
-  appContext: AppContext,
+  context: AppContext,
   mainDispatcher: MainDispatcher
 ): BroadcastsFactory = { action ->
   callbackFlow<Intent> {
@@ -36,10 +36,10 @@ typealias BroadcastsFactory = (String) -> Flow<Intent>
         catch { offer(intent) }
       }
     }
-    appContext.registerReceiver(broadcastReceiver, IntentFilter(action))
+    context.registerReceiver(broadcastReceiver, IntentFilter(action))
     awaitClose {
       catch {
-        appContext.unregisterReceiver(broadcastReceiver)
+        context.unregisterReceiver(broadcastReceiver)
       }
     }
   }.flowOn(mainDispatcher)

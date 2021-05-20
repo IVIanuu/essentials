@@ -30,10 +30,10 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun bluetoothAction(
   bluetoothIcon: Flow<BluetoothIcon>,
-  stringResource: StringResourceProvider,
-) = Action<BluetoothActionId>(
+  resourceProvider: ResourceProvider
+): Action<BluetoothActionId> = Action(
   id = BluetoothActionId,
-  title = stringResource(R.string.es_action_bluetooth, emptyList()),
+  title = resourceProvider(R.string.es_action_bluetooth),
   icon = bluetoothIcon,
   enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
