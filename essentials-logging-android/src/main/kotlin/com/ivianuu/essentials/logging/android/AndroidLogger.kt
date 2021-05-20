@@ -35,13 +35,15 @@ import com.ivianuu.injekt.scope.*
       WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
     }
   }
+
+  companion object {
+    @Provide inline fun androidLogger(
+      buildInfo: BuildInfo,
+      androidLoggerFactory: () -> @Factory AndroidLogger,
+      noopLoggerFactory: () -> @Factory NoopLogger
+    ): @Scoped<AppScope> Logger = if (buildInfo.isDebug) androidLoggerFactory()
+    else noopLoggerFactory()
+
+    @Provide fun androidLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug
+  }
 }
-
-@Provide inline fun androidLogger(
-  buildInfo: BuildInfo,
-  androidLoggerFactory: () -> @Factory AndroidLogger,
-  noopLoggerFactory: () -> @Factory NoopLogger
-): @Scoped<AppScope> Logger =
-  if (buildInfo.isDebug) androidLoggerFactory() else noopLoggerFactory()
-
-@Provide fun defaultLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug

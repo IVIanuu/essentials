@@ -62,9 +62,11 @@ typealias FloatResourceProvider = (Int) -> Float
   ResourcesCompat.getFloat(context.resources, id)
 }
 
-typealias FontResourceProvider = (Int) -> Font
+typealias TypefaceResourceProvider = (Int) -> Typeface
 
-@Provide val fontResourceProvider: FontResourceProvider = { id -> Font(id) }
+@Provide fun typefaceResourceProvider(context: AppContext): TypefaceResourceProvider = { id ->
+  Typeface(ResourcesCompat.getFont(context, id)!!)
+}
 
 typealias IntResourceProvider = (Int) -> Int
 
