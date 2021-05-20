@@ -24,16 +24,16 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
-data class Action<i : ActionId>(
+data class Action<I : ActionId>(
   val id: String,
   val title: String,
   val permissions: List<TypeKey<Permission>> = emptyList(),
   val unlockScreen: Boolean = false,
   val enabled: Boolean = true,
-  val icon: Flow<ActionIcon>,
+  val icon: Flow<ActionIcon>
 ) {
   constructor(
-    id: ActionId,
+    id: I,
     title: String,
     permissions: List<TypeKey<Permission>> = emptyList(),
     unlockScreen: Boolean = false,

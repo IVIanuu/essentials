@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.torch
 
+import android.annotation.*
 import android.app.*
 import android.content.*
 import androidx.core.app.*
@@ -27,17 +28,18 @@ import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun torchForegroundState(
+  state: Flow<TorchState>,
   _: AppContext,
   _: @SystemService NotificationManager,
   _: ResourceProvider,
-  _: SystemBuildInfo,
-  state: Flow<TorchState>
+  _: SystemBuildInfo
 ): Flow<ForegroundState> = state
   .map { torchEnabled ->
     if (torchEnabled) Foreground(createTorchNotification())
     else Background
   }
 
+@SuppressLint("NewApi")
 private fun createTorchNotification(
   @Inject context: AppContext,
   @Inject notificationManager: @SystemService NotificationManager,
