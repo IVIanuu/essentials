@@ -19,9 +19,7 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-fun <T> Flow<T>.onCancel(
-  action: suspend FlowCollector<T>.() -> Unit
-) = object : Flow<T> {
+fun <T> Flow<T>.onCancel(action: suspend FlowCollector<T>.() -> Unit): Flow<T> = object : Flow<T> {
   override suspend fun collect(collector: FlowCollector<T>) {
     try {
       this@onCancel.collect { value ->
