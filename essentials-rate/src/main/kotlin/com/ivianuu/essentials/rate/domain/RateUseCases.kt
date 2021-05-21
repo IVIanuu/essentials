@@ -14,8 +14,7 @@ import kotlin.coroutines.*
 
 typealias RateOnPlayUseCase = suspend () -> Unit
 
-@Provide
-fun rateOnPlayUseCase(
+@Provide fun rateOnPlayUseCase(
   activity: ComponentActivity,
   pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {

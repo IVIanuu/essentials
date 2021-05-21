@@ -25,9 +25,9 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun torchBroadcastWorker(
   broadcastsFactory: BroadcastsFactory,
-  torchStore: MutableStateFlow<TorchState>
+  torchState: MutableStateFlow<TorchState>
 ): ScopeWorker<AppScope> = {
-  broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchStore.update { false } }
+  broadcastsFactory(ACTION_DISABLE_TORCH).collect { torchState.update { false } }
 }
 
 const val ACTION_DISABLE_TORCH = "com.ivianuu.essentials.torch.DISABLE_TORCH"
