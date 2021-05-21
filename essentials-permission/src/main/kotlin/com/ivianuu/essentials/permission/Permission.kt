@@ -37,7 +37,7 @@ interface Permission {
   val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-@Provide class PermissionModule_<@Spread T : Permission> {
+@Provide class PermissionModule<@Spread T : Permission> {
   @Provide fun permissionSetElement(
     permissionKey: TypeKey<T>,
     permission: T
