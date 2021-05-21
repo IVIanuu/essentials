@@ -77,11 +77,11 @@ object CounterKey : Key<Nothing>
 
 @Provide fun counterModel(
   scope: InjectCoroutineScope<KeyUiScope>,
-  toaster: Toaster
+  _: Toaster
 ): @Scoped<KeyUiScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {
     if (state.first().count > 0) update { copy(count = count.dec()) }
-    else toaster("Value cannot be less than 0!")
+    else showToast("Value cannot be less than 0!")
   }
 }

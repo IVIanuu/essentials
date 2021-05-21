@@ -57,7 +57,7 @@ object AppTrackerKey : Key<Nothing>
   createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
   permissionRequester: PermissionRequester,
   scope: InjectCoroutineScope<KeyUiScope>,
-  toaster: Toaster,
+  _: Toaster,
 ): KeyUi<AppTrackerKey> = {
   val currentForegroundState by foregroundState.collectAsState()
 
@@ -66,7 +66,7 @@ object AppTrackerKey : Key<Nothing>
       runWithCleanup(
         block = {
           currentApp.collect {
-            toaster("App changed $it")
+            showToast("App changed $it")
             foregroundState.value = Foreground(createNotification(it))
           }
         },

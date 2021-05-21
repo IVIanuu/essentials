@@ -29,11 +29,11 @@ import kotlinx.coroutines.flow.*
 @Provide object TorchActionId : ActionId("torch")
 
 @Provide fun torchAction(
-  resourceProvider: ResourceProvider,
   torchIcon: Flow<TorchIcon>,
+  _: ResourceProvider,
 ): Action<TorchActionId> = Action(
   id = TorchActionId,
-  title = resourceProvider(R.string.es_action_torch),
+  title = loadResource(R.string.es_action_torch),
   icon = torchIcon
 )
 

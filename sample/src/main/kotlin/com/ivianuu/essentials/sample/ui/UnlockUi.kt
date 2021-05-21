@@ -39,7 +39,7 @@ object UnlockKey : Key<Nothing>
   screenState: Flow<ScreenState>,
   screenUnlocker: ScreenUnlocker,
   scope: InjectCoroutineScope<KeyUiScope>,
-  toaster: Toaster,
+  _: Toaster,
 ): KeyUi<UnlockKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
@@ -48,10 +48,10 @@ object UnlockKey : Key<Nothing>
       modifier = Modifier.center(),
       onClick = {
         scope.launch {
-          toaster("Turn the screen off and on")
+          showToast("Turn the screen off and on")
           screenState.first { it == ScreenState.LOCKED }
           val unlocked = screenUnlocker()
-          toaster("Screen unlocked $unlocked")
+          showToast("Screen unlocked $unlocked")
         }
       }
     ) { Text("Unlock") }

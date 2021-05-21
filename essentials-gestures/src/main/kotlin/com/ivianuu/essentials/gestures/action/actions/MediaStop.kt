@@ -24,11 +24,9 @@ import com.ivianuu.injekt.*
 
 @Provide object StopActionId : ActionId("media_stop")
 
-@Provide fun stopMediaAction(
-  resourceProvider: ResourceProvider
-): Action<StopActionId> = Action(
+@Provide fun stopMediaAction(_: ResourceProvider): Action<StopActionId> = Action(
   id = StopActionId,
-  title = resourceProvider(R.string.es_action_media_stop),
+  title = loadResource(R.string.es_action_media_stop),
   icon = singleActionIcon(R.drawable.es_ic_stop)
 )
 

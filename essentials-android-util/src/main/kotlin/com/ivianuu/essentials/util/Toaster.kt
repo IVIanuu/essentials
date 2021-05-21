@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.util
 
 import android.widget.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*
@@ -37,4 +38,16 @@ typealias Toaster = (String) -> Unit
       Toast.LENGTH_SHORT
     ).show()
   }
+}
+
+fun showToast(message: String, @Inject toaster: Toaster) {
+  toaster(message)
+}
+
+fun showToast(messageRes: Int, @Inject _: Toaster, @Inject _: ResourceProvider) {
+  showToast(loadResource<String>(messageRes))
+}
+
+fun showToast(messageRes: Int, vararg args: Any?, @Inject _: Toaster, @Inject _: ResourceProvider) {
+  showToast(loadResource<String>(messageRes, *args))
 }

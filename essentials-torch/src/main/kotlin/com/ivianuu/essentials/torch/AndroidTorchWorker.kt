@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun androidTorchWorker(
   cameraManager: @SystemService CameraManager,
-  resourceProvider: ResourceProvider,
   torchStore: MutableStateFlow<TorchState>,
-  toaster: Toaster
+  _: ResourceProvider,
+  _: Toaster
 ): ScopeWorker<AppScope> = {
   torchStore.collect { torchState ->
     catch {
@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
       cameraManager.setTorchMode(cameraId, torchState)
     }.onFailure {
       it.printStackTrace()
-      toaster(resourceProvider(R.string.es_failed_to_toggle_torch))
+      showToast(R.string.es_failed_to_toggle_torch)
       torchStore.update { false }
     }
   }

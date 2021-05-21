@@ -27,11 +27,9 @@ import com.ivianuu.injekt.*
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
-@Provide fun notificationsAction(
-  resourceProvider: ResourceProvider
-): Action<NotificationsActionId> = Action(
+@Provide fun notificationsAction(_: ResourceProvider): Action<NotificationsActionId> = Action(
   id = NotificationsActionId,
-  title = resourceProvider(R.string.es_action_notifications),
+  title = loadResource(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon(Icons.Default.Notifications)
 )

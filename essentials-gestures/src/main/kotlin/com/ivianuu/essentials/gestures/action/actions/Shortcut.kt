@@ -65,10 +65,10 @@ import java.io.*
 
 @Provide class ShortcutActionPickerDelegate(
   private val navigator: Navigator,
-  private val resourceProvider: ResourceProvider,
+  private val _: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
-    get() = resourceProvider(R.string.es_action_shortcut)
+    get() = loadResource(R.string.es_action_shortcut)
   override val icon: @Composable () -> Unit = {
     Icon(painterResource(R.drawable.es_ic_content_cut), null)
   }

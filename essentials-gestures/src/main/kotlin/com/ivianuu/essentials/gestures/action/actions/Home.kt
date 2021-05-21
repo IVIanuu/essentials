@@ -30,9 +30,9 @@ import com.ivianuu.injekt.android.*
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide fun homeAction(resourceProvider: ResourceProvider): Action<HomeActionId> = Action(
+@Provide fun homeAction(_: ResourceProvider): Action<HomeActionId> = Action(
   id = HomeActionId,
-  title = resourceProvider(R.string.es_action_home),
+  title = loadResource(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
   icon = singleActionIcon(R.drawable.es_ic_action_home)

@@ -27,10 +27,10 @@ import com.ivianuu.injekt.android.*
 
 @Provide object AssistantActionId : ActionId("assistant")
 
-@Provide fun assistantAction(resourceProvider: ResourceProvider): Action<AssistantActionId> =
+@Provide fun assistantAction(_: ResourceProvider): Action<AssistantActionId> =
   Action(
     id = AssistantActionId,
-    title = resourceProvider(R.string.es_action_assistant),
+    title = loadResource(R.string.es_action_assistant),
     unlockScreen = true,
     icon = singleActionIcon(R.drawable.es_ic_google)
   )

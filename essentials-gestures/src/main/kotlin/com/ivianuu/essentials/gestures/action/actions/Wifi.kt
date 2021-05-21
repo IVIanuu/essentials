@@ -29,11 +29,11 @@ import kotlinx.coroutines.flow.*
 @Provide object WifiActionId : ActionId("wifi")
 
 @Provide fun wifiAction(
-  resourceProvider: ResourceProvider,
   wifiIcon: Flow<WifiIcon>,
+  _: ResourceProvider,
 ): Action<WifiActionId> = Action(
   id = WifiActionId,
-  title = resourceProvider(R.string.es_action_wifi),
+  title = loadResource(R.string.es_action_wifi),
   icon = wifiIcon
 )
 

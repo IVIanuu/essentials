@@ -43,14 +43,14 @@ import kotlinx.coroutines.flow.*
 private fun createTorchNotification(
   @Inject context: AppContext,
   @Inject notificationManager: @SystemService NotificationManager,
-  @Inject resourceProvider: ResourceProvider,
   @Inject systemBuildInfo: SystemBuildInfo,
+  @Inject _: ResourceProvider,
 ): Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(
       NotificationChannel(
         NOTIFICATION_CHANNEL_ID,
-        resourceProvider<String>(R.string.es_notif_channel_torch),
+        loadResource<String>(R.string.es_notif_channel_torch),
         NotificationManager.IMPORTANCE_LOW
       )
     )
@@ -60,8 +60,8 @@ private fun createTorchNotification(
     .apply {
       setAutoCancel(true)
       setSmallIcon(R.drawable.es_ic_flash_on)
-      setContentTitle(resourceProvider<String>(R.string.es_notif_title_torch))
-      setContentText(resourceProvider<String>(R.string.es_notif_text_torch))
+      setContentTitle(loadResource<String>(R.string.es_notif_title_torch))
+      setContentText(loadResource<String>(R.string.es_notif_text_torch))
       setContentIntent(
         PendingIntent.getBroadcast(
           context,

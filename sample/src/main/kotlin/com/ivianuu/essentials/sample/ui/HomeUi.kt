@@ -43,7 +43,7 @@ import kotlinx.coroutines.*
 @Provide fun homeUi(
   navigator: Navigator,
   itemsFactory: () -> Set<HomeItem>,
-  toaster: Toaster,
+  _: Toaster,
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   Scaffold(
@@ -52,15 +52,12 @@ import kotlinx.coroutines.*
         title = { Text("Home") },
         actions = {
           PopupMenuButton(
-            items = listOf(
-              "Option 1",
-              "Option 2",
-              "Option 3"
-            ).map { title ->
-              PopupMenu.Item(onSelected = { toaster("Selected $title") }) {
-                Text(title)
+            items = listOf("Option 1", "Option 2", "Option 3")
+              .map { title ->
+                PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
+                  Text(title)
+                }
               }
-            }
           )
         }
       )

@@ -165,8 +165,8 @@ object AboutKey : Key<Nothing>
   initial: @Initial AboutModel,
   navigator: Navigator,
   rateOnPlayUseCase: RateOnPlayUseCase,
-  resourceProvider: ResourceProvider,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjectCoroutineScope<KeyUiScope>,
+  _: ResourceProvider
 ): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
@@ -186,7 +186,7 @@ object AboutKey : Key<Nothing>
   action(AboutModel.openPrivacyPolicy()) {
     navigator.push(
       WebKey(
-        resourceProvider(R.string.es_about_privacy_policy),
+        loadResource(R.string.es_about_privacy_policy),
         state.first().privacyPolicyUrl!!
       )
     )

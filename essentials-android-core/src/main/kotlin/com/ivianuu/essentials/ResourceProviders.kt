@@ -25,6 +25,19 @@ import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
+inline fun <T> loadResource(
+  id: Int,
+  @Inject provider: ResourceProvider,
+  @Inject _: ResourceLoader<T>
+): T = provider(id)
+
+inline fun <T> loadResource(
+  id: Int,
+  vararg args: Any?,
+  @Inject provider: ResourceProvider,
+  @Inject _: ResourceLoaderWithArgs<T>
+): T = provider(id, *args)
+
 interface ResourceProvider {
   operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
 

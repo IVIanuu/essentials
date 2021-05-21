@@ -19,7 +19,7 @@ object SystemOverlayAppBlacklistKey : Key<Nothing>
 
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
-  resourceProvider: ResourceProvider
+  _: ResourceProvider
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {
     checkableAppsPageFactory(
@@ -27,7 +27,7 @@ object SystemOverlayAppBlacklistKey : Key<Nothing>
         checkedApps = model.appBlacklist,
         onCheckedAppsChanged = model.updateAppBlacklist,
         appPredicate = DefaultAppPredicate,
-        appBarTitle = resourceProvider(R.string.es_system_overlay_blacklist_title)
+        appBarTitle = loadResource(R.string.es_system_overlay_blacklist_title)
       )
     )
   }.invoke()

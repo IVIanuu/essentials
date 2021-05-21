@@ -59,13 +59,13 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
 
 @Provide fun actionRootCommandRunner(
   runShellCommand: RunShellCommandUseCase,
-  resourceProvider: ResourceProvider,
-  toaster: Toaster
+  _: ResourceProvider,
+  _: Toaster
 ): ActionRootCommandRunner = { command ->
   catch { runShellCommand(listOf(command)) }
     .onFailure {
       it.printStackTrace()
-      toaster(resourceProvider(R.string.es_no_root))
+      showToast(R.string.es_no_root)
     }
 }
 
@@ -73,8 +73,8 @@ typealias ActionIntentSender = (Intent) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
-  resourceProvider: ResourceProvider,
-  toaster: Toaster
+  _: ResourceProvider,
+  _: Toaster
 ): ActionIntentSender = { intent ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {
@@ -83,6 +83,6 @@ typealias ActionIntentSender = (Intent) -> Unit
     ).send()
   }.onFailure {
     it.printStackTrace()
-    toaster(resourceProvider(R.string.es_activity_not_found))
+    showToast(R.string.es_activity_not_found)
   }
 }

@@ -25,9 +25,9 @@ import com.ivianuu.injekt.*
 
 @Provide object CameraActionId : ActionId("camera")
 
-@Provide fun cameraAction(resourceProvider: ResourceProvider): Action<CameraActionId> = Action(
+@Provide fun cameraAction(_: ResourceProvider): Action<CameraActionId> = Action(
   id = CameraActionId,
-  title = resourceProvider(R.string.es_action_camera),
+  title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
   unlockScreen = true
 )

@@ -26,11 +26,9 @@ import com.ivianuu.injekt.common.*
 
 @Provide object MenuActionId : ActionId("menu")
 
-@Provide fun menuAction(
-  resourceProvider: ResourceProvider
-): Action<MenuActionId> = Action(
+@Provide fun menuAction(_: ResourceProvider): Action<MenuActionId> = Action(
   id = MenuActionId,
-  title = resourceProvider(R.string.es_action_menu),
+  title = loadResource(R.string.es_action_menu),
   icon = singleActionIcon(Icons.Default.MoreVert),
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )

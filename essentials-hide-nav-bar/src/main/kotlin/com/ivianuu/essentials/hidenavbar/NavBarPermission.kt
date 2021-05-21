@@ -12,13 +12,11 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Provide class NavBarPermission(
-  private val resourceProvider: ResourceProvider
-) : WriteSecureSettingsPermission {
+@Provide class NavBarPermission(private val _: ResourceProvider) : WriteSecureSettingsPermission {
   override val title: String
-    get() = resourceProvider(R.string.es_permission_nav_bar)
+    get() = loadResource(R.string.es_permission_nav_bar)
   override val desc: String
-    get() = resourceProvider(R.string.es_permission_nav_bar_desc)
+    get() = loadResource(R.string.es_permission_nav_bar_desc)
   override val icon: @Composable () -> Unit
     get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
 }
