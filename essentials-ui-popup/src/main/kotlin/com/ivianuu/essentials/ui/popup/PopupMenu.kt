@@ -44,7 +44,7 @@ object PopupMenu {
         key(item) {
           PopupMenuItem(
             onSelected = {
-              scope.launch { component.navigator.popTop() }
+              scope.launch { component.navigator.pop(component.key) }
               item.onSelected()
             },
             content = item.content
@@ -56,7 +56,10 @@ object PopupMenu {
 }
 
 @Provide @InstallElement<UiScope>
-class PopupMenuComponent(val navigator: Navigator)
+class PopupMenuComponent(
+  val key: Key<*>,
+  val navigator: Navigator
+)
 
 @Composable private fun PopupMenuItem(
   onSelected: () -> Unit,
