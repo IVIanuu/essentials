@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.clipboard
 
 import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*
@@ -37,10 +39,14 @@ typealias ClipboardText = String?
   awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
-typealias UpdateClipboardTextUseCase = suspend (String) -> Unit
+typealias UpdateClipboardTextUseCase = suspend (String, Boolean) -> Unit
 
 @Provide fun updateClipboardTextUseCase(
-  clipboardManager: @SystemService ClipboardManager
-): UpdateClipboardTextUseCase = { value ->
+  clipboardManager: @SystemService ClipboardManager,
+  _: ResourceProvider,
+  _: Toaster
+): UpdateClipboardTextUseCase = { value, showMessage ->
   clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
+  if (showMessage)
+    showToast(R.string.copied_to_clipboard)
 }

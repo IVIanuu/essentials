@@ -144,7 +144,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     .onEach { navigator.pop(key) }
     .launchIn(this)
   action(WriteSecureSettingsPcInstructionsModel.copyAdbCommand()) {
-    updateClipboardText(state.first().secureSettingsAdbCommand)
+    updateClipboardText(state.first().secureSettingsAdbCommand, true)
   }
   action(WriteSecureSettingsPcInstructionsModel.openGadgetHacksTutorial()) {
     navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
