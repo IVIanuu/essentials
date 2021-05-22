@@ -29,12 +29,12 @@ import kotlinx.coroutines.flow.*
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
 @Provide fun bluetoothAction(
-  bluetoothIcon: Flow<BluetoothIcon>,
+  _: BroadcastsFactory,
   _: ResourceProvider
 ): Action<BluetoothActionId> = Action(
   id = BluetoothActionId,
   title = loadResource(R.string.es_action_bluetooth),
-  icon = bluetoothIcon,
+  icon = bluetoothIcon(),
   enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
@@ -48,9 +48,7 @@ import kotlinx.coroutines.flow.*
   }
 }
 
-internal typealias BluetoothIcon = ActionIcon
-
-@Provide fun bluetoothIcon(broadcastsFactory: BroadcastsFactory): Flow<BluetoothIcon> =
+private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory): Flow<ActionIcon> =
   broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
     .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
     .onStart {

@@ -96,15 +96,6 @@ fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableApps
   }
 }
 
-internal typealias CheckedApps = Set<String>
-
-@Provide fun checkedAppsSource(params: CheckableAppsParams): Flow<CheckedApps> = params.checkedApps
-
-internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
-
-@Provide fun onCheckedAppsChanged(params: CheckableAppsParams): OnCheckedAppsChanged =
-  params.onCheckedAppsChanged
-
 @Optics data class CheckableAppsModel(
   val allApps: Resource<List<AppInfo>> = Idle,
   val checkedApps: Set<String> = emptySet(),
@@ -124,14 +115,6 @@ internal typealias OnCheckedAppsChanged = (Set<String>) -> Unit
         )
       }
     }
-
-  companion object {
-    @Provide fun initial(params: CheckableAppsParams): @Initial CheckableAppsModel =
-      CheckableAppsModel(
-        appPredicate = params.appPredicate,
-        appBarTitle = params.appBarTitle
-      )
-  }
 }
 
 data class CheckableApp(
@@ -140,13 +123,16 @@ data class CheckableApp(
 )
 
 @Provide fun checkableAppsModel(
-  checkedApps: Flow<CheckedApps>,
-  initial: @Initial CheckableAppsModel,
+  params: CheckableAppsParams,
   getInstalledApps: GetInstalledAppsUseCase,
-  onCheckedAppsChanged: OnCheckedAppsChanged,
   scope: InjectCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state(initial) {
-  checkedApps.update { copy(checkedApps = it) }
+): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state(
+  CheckableAppsModel(
+    appPredicate = params.appPredicate,
+    appBarTitle = params.appBarTitle
+  )
+) {
+  params.checkedApps.update { copy(checkedApps = it) }
   resourceFlow { emit(getInstalledApps()) }
     .update { copy(allApps = it) }
   suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
@@ -156,7 +142,7 @@ data class CheckableApp(
       ?.mapTo(mutableSetOf()) { it.info.packageName }
       ?.transform(currentState)
       ?: return
-    onCheckedAppsChanged(newCheckedApps)
+    params.onCheckedAppsChanged(newCheckedApps)
   }
   action(CheckableAppsModel.updateAppCheckedState()) { app, isChecked ->
     pushNewCheckedApps {

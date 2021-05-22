@@ -29,21 +29,19 @@ import kotlinx.coroutines.flow.*
 @Provide object TorchActionId : ActionId("torch")
 
 @Provide fun torchAction(
-  torchIcon: Flow<TorchIcon>,
+  torchState: Flow<TorchState>,
   _: ResourceProvider,
 ): Action<TorchActionId> = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
-  icon = torchIcon
+  icon = torchState.torchIcon()
 )
 
 @Provide fun torchActionExecutor(
   torch: MutableStateFlow<TorchState>
 ): ActionExecutor<TorchActionId> = { torch.update { not() } }
 
-private typealias TorchIcon = ActionIcon
-
-@Provide fun torchIcon(torchState: Flow<TorchState>): Flow<TorchIcon> = torchState
+private fun Flow<TorchState>.torchIcon(): Flow<ActionIcon> = torchState
   .map {
     if (it) R.drawable.es_ic_flash_on
     else R.drawable.es_ic_flash_off

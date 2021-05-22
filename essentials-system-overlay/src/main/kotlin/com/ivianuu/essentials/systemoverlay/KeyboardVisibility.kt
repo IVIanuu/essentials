@@ -30,7 +30,7 @@ typealias KeyboardVisible = Boolean
 
 @Provide fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  keyboardHeightProvider: KeyboardHeightProvider,
+  inputMethodManager: @SystemService InputMethodManager,
   scope: InjectCoroutineScope<AppScope>
 ): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
@@ -41,7 +41,7 @@ typealias KeyboardVisible = Boolean
   .onStart { emit(Unit) }
   .transformLatest {
     emit(true)
-    while ((keyboardHeightProvider() ?: 0) > 0) {
+    while ((inputMethodManager.getCurrentKeyboardHeight() ?: 0) > 0) {
       delay(100)
     }
     emit(false)
@@ -58,13 +58,7 @@ typealias KeyboardVisible = Boolean
   )
 }
 
-private typealias KeyboardHeightProvider = () -> Int?
-
-@Provide fun keyboardHeightProvider(
-  inputMethodManager: @SystemService InputMethodManager
-): KeyboardHeightProvider = {
-  catch {
-    val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
-    method.invoke(inputMethodManager) as Int
-  }.getOrNull()
-}
+private fun InputMethodManager.getCurrentKeyboardHeight() = catch {
+  val method = javaClass.getMethod("getInputMethodWindowVisibleHeight")
+  method.invoke(this) as Int
+}.getOrNull()

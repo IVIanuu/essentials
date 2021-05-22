@@ -133,11 +133,14 @@ sealed class ActionPickerItem {
 
 @Provide fun actionPickerModel(
   getAction: GetActionUseCase,
-  getActionPickerItems: GetActionPickerItemsUseCase,
   key: ActionPickerKey,
   navigator: Navigator,
   permissionRequester: PermissionRequester,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjectCoroutineScope<KeyUiScope>,
+  _: GetActionPickerDelegatesUseCase,
+  _: GetAllActionsUseCase,
+  _: GetActionSettingsKeyUseCase,
+  _: ResourceProvider,
 ): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
@@ -152,15 +155,13 @@ sealed class ActionPickerItem {
   }
 }
 
-private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerItem>
-
-@Provide fun getActionPickerItemsUseCase(
-  getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-  getAllActions: GetAllActionsUseCase,
-  getActionSettingsKey: GetActionSettingsKeyUseCase,
-  key: ActionPickerKey,
-  _: ResourceProvider
-): GetActionPickerItemsUseCase = {
+private suspend fun getActionPickerItems(
+  @Inject getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+  @Inject getAllActions: GetAllActionsUseCase,
+  @Inject getActionSettingsKey: GetActionSettingsKeyUseCase,
+  @Inject key: ActionPickerKey,
+  @Inject _: ResourceProvider
+): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
   if (key.showDefaultOption) {
@@ -189,5 +190,5 @@ private typealias GetActionPickerItemsUseCase = suspend () -> List<ActionPickerI
       )
     .sortedBy { it.title }
 
-  specialOptions + actionsAndDelegates
+  return specialOptions + actionsAndDelegates
 }
