@@ -117,10 +117,7 @@ fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableApps
     }
 }
 
-data class CheckableApp(
-  val info: AppInfo,
-  val isChecked: Boolean
-)
+data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
 @Provide fun checkableAppsModel(
   params: CheckableAppsParams,
