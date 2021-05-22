@@ -32,14 +32,14 @@ import kotlinx.coroutines.flow.*
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
 @Provide fun autoRotationAction(
-  autoRotationIcon: Flow<AutoRotationIcon>,
+  autoRotation: Flow<AutoRotation>,
   _: ResourceProvider,
 ): Action<AutoRotationActionId> = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   unlockScreen = true,
-  icon = autoRotationIcon
+  icon = autoRotation.autoRotationIcon()
 )
 
 @Provide fun autoRotationActionExecutor(
@@ -48,10 +48,8 @@ import kotlinx.coroutines.flow.*
   rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 
-internal typealias AutoRotationIcon = ActionIcon
-
-@Provide fun autoRotationIcon(autoRotation: Flow<AutoRotation>): Flow<AutoRotationIcon> =
-  autoRotation
+private fun Flow<AutoRotation>.autoRotationIcon(): Flow<ActionIcon> =
+  this
     .map { it == 1 }
     .map {
       if (it) R.drawable.es_ic_screen_rotation
@@ -62,7 +60,5 @@ internal typealias AutoRotationIcon = ActionIcon
 internal typealias AutoRotation = Int
 
 @Provide val autoRotationModule = AndroidSettingModule<AutoRotation, Int>(
-  Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM
+  Settings.System.ACCELEROMETER_ROTATION, AndroidSettingsType.SYSTEM, 1
 )
-
-@Provide val defaultAutoRotation: @Initial AutoRotation = 1

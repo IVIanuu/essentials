@@ -51,28 +51,24 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
 internal typealias HiddenApiPolicy = Int
 
 @Provide val hiddenApiPolicyModule =
-  AndroidSettingModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL)
-
-@Provide val defaultHiddenApiPolicy: @Initial HiddenApiPolicy = 0
+  AndroidSettingModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL, 0)
 
 internal typealias HiddenApiPolicyPrePieApps = Int
 
 @Provide val hiddenApiPolicyPrePieAppsModule =
   AndroidSettingModule<HiddenApiPolicyPrePieApps, Int>(
     "hidden_api_policy_pre_p_apps",
-    AndroidSettingsType.GLOBAL
+    AndroidSettingsType.GLOBAL,
+    0
   )
-
-@Provide val defaultHiddenApiPolicyPrePieApps: @Initial HiddenApiPolicyPrePieApps = 0
 
 internal typealias HiddenApiPolicyPieApps = Int
 
 @Provide val hiddenApiPolicyPieAppsModule = AndroidSettingModule<HiddenApiPolicyPieApps, Int>(
   "hidden_api_policy_p_apps",
-  AndroidSettingsType.GLOBAL
+  AndroidSettingsType.GLOBAL,
+  0
 )
-
-@Provide val defaultHiddenApiPolicyPieApps: @Initial HiddenApiPolicyPieApps = 0
 
 typealias OverscanUpdater = (Rect) -> Unit
 

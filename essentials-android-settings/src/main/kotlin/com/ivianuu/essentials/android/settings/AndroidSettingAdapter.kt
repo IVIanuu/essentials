@@ -21,32 +21,34 @@ import android.provider.*
 import com.ivianuu.injekt.*
 
 interface AndroidSettingAdapter<T> {
-  fun get(): T
-  fun set(value: T)
+  fun get(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    defaultValue: T
+  ): T
+
+  fun set(contentResolver: ContentResolver, name: String, type: AndroidSettingsType, value: T)
 }
 
-@Provide class FloatAndroidSettingAdapter(
-  private val contentResolver: ContentResolver,
-  private val defaultValue: Float,
-  private val name: String,
-  private val type: AndroidSettingsType,
-) : AndroidSettingAdapter<Float> {
-  override fun get(): Float = when (type) {
-    AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SECURE -> Settings.Secure.getFloat(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SYSTEM -> Settings.System.getFloat(
-      contentResolver, name,
-      defaultValue
-    )
+@Provide object FloatAndroidSettingAdapter : AndroidSettingAdapter<Float> {
+  override fun get(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    defaultValue: Float
+  ) = when (type) {
+    AndroidSettingsType.GLOBAL -> Settings.Global.getFloat(contentResolver, name, defaultValue)
+    AndroidSettingsType.SECURE -> Settings.Secure.getFloat(contentResolver, name, defaultValue)
+    AndroidSettingsType.SYSTEM -> Settings.System.getFloat(contentResolver, name, defaultValue)
   }
 
-  override fun set(value: Float) {
+  override fun set(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    value: Float
+  ) {
     when (type) {
       AndroidSettingsType.GLOBAL -> Settings.Global.putFloat(contentResolver, name, value)
       AndroidSettingsType.SECURE -> Settings.Secure.putFloat(contentResolver, name, value)
@@ -55,28 +57,24 @@ interface AndroidSettingAdapter<T> {
   }
 }
 
-@Provide class IntAndroidSettingAdapter(
-  private val contentResolver: ContentResolver,
-  private val defaultValue: Int,
-  private val name: String,
-  private val type: AndroidSettingsType,
-) : AndroidSettingAdapter<Int> {
-  override fun get(): Int = when (type) {
-    AndroidSettingsType.GLOBAL -> Settings.Global.getInt(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SECURE -> Settings.Secure.getInt(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SYSTEM -> Settings.System.getInt(
-      contentResolver, name,
-      defaultValue
-    )
+@Provide object IntAndroidSettingAdapter : AndroidSettingAdapter<Int> {
+  override fun get(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    defaultValue: Int
+  ) = when (type) {
+    AndroidSettingsType.GLOBAL -> Settings.Global.getInt(contentResolver, name, defaultValue)
+    AndroidSettingsType.SECURE -> Settings.Secure.getInt(contentResolver, name, defaultValue)
+    AndroidSettingsType.SYSTEM -> Settings.System.getInt(contentResolver, name, defaultValue)
   }
 
-  override fun set(value: Int) {
+  override fun set(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    value: Int
+  ) {
     when (type) {
       AndroidSettingsType.GLOBAL -> Settings.Global.putInt(contentResolver, name, value)
       AndroidSettingsType.SECURE -> Settings.Secure.putInt(contentResolver, name, value)
@@ -85,28 +83,24 @@ interface AndroidSettingAdapter<T> {
   }
 }
 
-@Provide class LongAndroidSettingAdapter(
-  private val contentResolver: ContentResolver,
-  private val defaultValue: Long,
-  private val name: String,
-  private val type: AndroidSettingsType,
-) : AndroidSettingAdapter<Long> {
-  override fun get(): Long = when (type) {
-    AndroidSettingsType.GLOBAL -> Settings.Global.getLong(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SECURE -> Settings.Secure.getLong(
-      contentResolver, name,
-      defaultValue
-    )
-    AndroidSettingsType.SYSTEM -> Settings.System.getLong(
-      contentResolver, name,
-      defaultValue
-    )
+@Provide object LongAndroidSettingAdapter : AndroidSettingAdapter<Long> {
+  override fun get(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    defaultValue: Long
+  ) = when (type) {
+    AndroidSettingsType.GLOBAL -> Settings.Global.getLong(contentResolver, name, defaultValue)
+    AndroidSettingsType.SECURE -> Settings.Secure.getLong(contentResolver, name, defaultValue)
+    AndroidSettingsType.SYSTEM -> Settings.System.getLong(contentResolver, name, defaultValue)
   }
 
-  override fun set(value: Long) {
+  override fun set(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    value: Long
+  ) {
     when (type) {
       AndroidSettingsType.GLOBAL -> Settings.Global.putLong(contentResolver, name, value)
       AndroidSettingsType.SECURE -> Settings.Secure.putLong(contentResolver, name, value)
@@ -115,19 +109,24 @@ interface AndroidSettingAdapter<T> {
   }
 }
 
-@Provide class StringAndroidSettingAdapter(
-  private val contentResolver: ContentResolver,
-  private val defaultValue: String,
-  private val name: String,
-  private val type: AndroidSettingsType,
-) : AndroidSettingAdapter<String> {
-  override fun get(): String = when (type) {
+@Provide object StringAndroidSettingAdapter : AndroidSettingAdapter<String> {
+  override fun get(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    defaultValue: String
+  ) = when (type) {
     AndroidSettingsType.GLOBAL -> Settings.Global.getString(contentResolver, name)
     AndroidSettingsType.SECURE -> Settings.Secure.getString(contentResolver, name)
     AndroidSettingsType.SYSTEM -> Settings.System.getString(contentResolver, name)
   } ?: defaultValue
 
-  override fun set(value: String) {
+  override fun set(
+    contentResolver: ContentResolver,
+    name: String,
+    type: AndroidSettingsType,
+    value: String
+  ) {
     when (type) {
       AndroidSettingsType.GLOBAL -> Settings.Global.putString(contentResolver, name, value)
       AndroidSettingsType.SECURE -> Settings.Secure.putString(contentResolver, name, value)

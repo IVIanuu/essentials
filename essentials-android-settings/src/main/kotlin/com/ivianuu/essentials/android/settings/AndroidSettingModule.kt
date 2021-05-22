@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.android.settings
 
+import android.content.*
 import android.provider.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
@@ -13,14 +14,19 @@ import kotlinx.coroutines.flow.*
 
 class AndroidSettingModule<T : S, S>(
   private val name: String,
-  private val type: AndroidSettingsType
+  private val type: AndroidSettingsType,
+  private val defaultValue: T
 ) {
+  @Suppress("UNCHECKED_CAST")
   @Provide fun dataStore(
-    adapter: AndroidSettingAdapter<T>,
+    adapter: AndroidSettingAdapter<S>,
     contentChangesFactory: ContentChangesFactory,
+    contentResolver: ContentResolver,
     dispatcher: IODispatcher,
     scope: InjectCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
+    private val actor = scope.actor(dispatcher)
+
     override val data: Flow<T> = contentChangesFactory(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
@@ -30,25 +36,21 @@ class AndroidSettingModule<T : S, S>(
     )
       .onStart { emit(Unit) }
       .map {
-        withContext(dispatcher) {
-          adapter.get()
+        actor.actAndReply {
+          adapter.get(contentResolver, name, type, defaultValue) as T
         }
-      }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+      }
+      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
-    private val actor = scope.actor()
+
     override suspend fun updateData(transform: T.() -> T) = actor.actAndReply {
-      val currentValue = adapter.get()
+      val currentValue = adapter.get(contentResolver, name, type, defaultValue) as T
       val newValue = transform(currentValue)
-      if (currentValue != newValue) adapter.set(newValue)
+      if (currentValue != newValue)
+        adapter.set(contentResolver, name, type, newValue)
       newValue
     }
   }
-
-  @Suppress("UNCHECKED_CAST")
-  @Provide fun adapter(
-    adapterFactory: (@Provide String, @Provide AndroidSettingsType, @Provide S) -> AndroidSettingAdapter<S>,
-    initial: @Initial T
-  ): AndroidSettingAdapter<T> = adapterFactory(name, type, initial) as AndroidSettingAdapter<T>
 }
 
 enum class AndroidSettingsType {

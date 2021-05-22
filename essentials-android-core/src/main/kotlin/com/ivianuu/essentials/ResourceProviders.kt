@@ -52,8 +52,7 @@ interface ResourceProvider {
     id: Int,
     vararg args: Any?,
     @Inject loader: ResourceLoaderWithArgs<T>
-  ): T =
-    loader(context, id, *args)
+  ): T = loader(context, id, *args)
 }
 
 fun interface ResourceLoaderWithArgs<T> {
