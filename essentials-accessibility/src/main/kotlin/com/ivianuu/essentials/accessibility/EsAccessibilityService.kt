@@ -56,7 +56,6 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-
     d { "disconnected" }
     accessibilityScope?.dispose()
     accessibilityScope = null
