@@ -89,15 +89,6 @@ inline fun wtf(
   log(kind = WTF, throwable = throwable, tag = tag, message = message)
 }
 
-inline fun warn(
-  tag: String? = null,
-  throwable: Throwable? = null,
-  @Inject _: Logger,
-  message: () -> String? = { null },
-) {
-  log(kind = WARN, throwable = throwable, tag = tag, message = message)
-}
-
 inline fun log(
   kind: Logger.Kind,
   throwable: Throwable? = null,
