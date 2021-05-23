@@ -25,8 +25,7 @@ import kotlinx.coroutines.flow.*
 
 typealias Notifications = List<StatusBarNotification>
 
-@Provide
-fun notifications(ref: Flow<EsNotificationListenerService?>): Flow<Notifications> = ref
+@Provide fun notifications(ref: Flow<EsNotificationListenerService?>): Flow<Notifications> = ref
   .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
 typealias OpenNotificationUseCase = suspend (Notification) -> Result<Unit, Throwable>
