@@ -54,12 +54,8 @@ import kotlinx.coroutines.flow.*
     block = {
       internalForegroundState
         .map { it.infos }
-        .collect { infos ->
-          if (infos.none { it.state is ForegroundState.Foreground }) {
-            throw CancellationException()
-          }
-          applyState(infos)
-        }
+        .takeWhile { infos -> infos.any { info -> info.state is ForegroundState.Foreground } }
+        .collect { applyState(it) }
     },
     cleanup = {
       applyState(emptyList())
