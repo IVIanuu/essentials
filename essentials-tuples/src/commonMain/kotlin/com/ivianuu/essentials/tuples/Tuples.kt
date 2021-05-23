@@ -15,7 +15,7 @@ inline fun <A, B> tupleOf(a: A, b: B): Tuple2<A, B> {
 data class Tuple3<out A, out B, out C>(val a: A, val b: B, val c: C)
 
 inline fun <A, B, C> tupleOf(a: A, b: B, c: C): Tuple3<A, B, C> {
-  return Tuple3(a, b, c)
+    return Tuple3(a, b, c)
 }
 
 data class Tuple4<out A, out B, out C, out D>(val a: A, val b: B, val c: C, val d: D)
