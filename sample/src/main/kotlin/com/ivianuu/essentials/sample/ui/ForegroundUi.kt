@@ -47,8 +47,10 @@ object ForegroundKey : Key<Nothing>
 @SuppressLint("NewApi")
 @Provide
 fun foregroundUi(
-  createNotification: (@Provide Int, @Provide Color) -> ForegroundNotification,
-  foregroundState: ForegroundScreenState
+  foregroundState: ForegroundScreenState,
+  _: AppContext,
+  _: @SystemService NotificationManager,
+  _: SystemBuildInfo
 ): KeyUi<ForegroundKey> = {
   val currentForegroundState by foregroundState.collectAsState()
 
@@ -69,9 +71,7 @@ fun foregroundUi(
       LaunchedEffect(true) {
         while (isActive) {
           count++
-          foregroundState.value = Foreground(
-            createNotification(count, primaryColor)
-          )
+          foregroundState.value = Foreground(createForegroundNotification(primaryColor, count))
           delay(1000)
         }
       }
@@ -92,7 +92,7 @@ fun foregroundUi(
       Button(
         onClick = {
           foregroundState.value = (if (currentForegroundState is Foreground) Background
-          else Foreground(createNotification(count, primaryColor)))
+          else Foreground(createForegroundNotification(primaryColor, count)))
         }
       ) {
         Text(
@@ -112,17 +112,13 @@ typealias ForegroundScreenState = MutableStateFlow<ForegroundState>
 @Provide val foregroundScreenState: @Scoped<AppScope> ForegroundScreenState
   get() = MutableStateFlow(Background)
 
-typealias ForegroundNotification = Notification
-
-@SuppressLint("NewApi")
-@Provide
-fun foregroundNotification(
+@SuppressLint("NewApi") private fun createForegroundNotification(
   color: Color,
-  context: AppContext,
   count: Int,
-  notificationManager: @SystemService NotificationManager,
-  systemBuildInfo: SystemBuildInfo
-): ForegroundNotification {
+  @Inject context: AppContext,
+  @Inject notificationManager: @SystemService NotificationManager,
+  @Inject systemBuildInfo: SystemBuildInfo
+): Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(
       NotificationChannel(
