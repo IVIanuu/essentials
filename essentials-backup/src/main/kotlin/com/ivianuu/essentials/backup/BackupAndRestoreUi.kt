@@ -46,7 +46,7 @@ object BackupAndRestoreKey : Key<Nothing>
           leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
           title = { Text(stringResource(R.string.es_pref_backup)) },
           subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
-          onClick = { model.backupData() }
+          onClick = model.backupData
         )
       }
       item {
@@ -54,7 +54,7 @@ object BackupAndRestoreKey : Key<Nothing>
           leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
           title = { Text(stringResource(R.string.es_pref_restore)) },
           subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
-          onClick = { model.restoreData() }
+          onClick = model.restoreData
         )
       }
     }
