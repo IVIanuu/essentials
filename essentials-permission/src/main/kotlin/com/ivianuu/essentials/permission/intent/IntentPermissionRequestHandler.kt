@@ -41,7 +41,7 @@ typealias ShowFindPermissionHint<P> = Boolean
   _: ResourceProvider,
   _: Toaster
 ): PermissionRequestHandler<P> = { permission ->
-  raceOf(
+  par(
     {
       if (showFindPermissionHint)
         showToast(R.string.es_find_app_here, buildInfo.appName)

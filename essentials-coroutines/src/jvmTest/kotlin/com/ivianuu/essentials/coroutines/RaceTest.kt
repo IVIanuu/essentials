@@ -23,24 +23,24 @@ import org.junit.*
 
 class RaceTest {
   @Test fun testFirstOneWins() = runCancellingBlockingTest {
-    val result = race {
-      launchRacer {
+    val result = race(
+      {
         delay(1)
         "a"
-      }
-      launchRacer { "b" }
-    }
+      },
+      { "b" }
+    )
     result shouldBe "b"
   }
 
   @Test fun testFinishedRacerCancelsOtherRacers() = runCancellingBlockingTest {
     var bCancelled = false
-    race {
-      launchRacer {
+    race(
+      {
         delay(1)
         "a"
-      }
-      launchRacer {
+      },
+      {
         try {
           awaitCancellation()
         } catch (e: CancellationException) {
@@ -48,7 +48,7 @@ class RaceTest {
           throw e
         }
       }
-    }
+    )
 
     bCancelled shouldBe true
   }
@@ -56,31 +56,13 @@ class RaceTest {
   @Test fun testErrorInRacerPropagatesException() = runCancellingBlockingTest {
     var thrown = false
     try {
-      race<String> {
-        launchRacer {
-          throw RuntimeException()
-        }
-      }
+      race<String>(
+        { throw RuntimeException() }
+      )
     } catch (e: Throwable) {
       thrown = true
     }
 
     thrown shouldBe true
-  }
-
-  @Test fun testFinishedRacerCancelsBlock() = runCancellingBlockingTest {
-    var blockCancelled = false
-    race {
-      launchRacer {
-        delay(1)
-      }
-      try {
-        awaitCancellation()
-      } catch (e: CancellationException) {
-        blockCancelled = true
-      }
-    }
-
-    blockCancelled shouldBe true
   }
 }

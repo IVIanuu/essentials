@@ -229,7 +229,7 @@ import kotlin.time.*
       LaunchedEffect(internalValueResetNotifier) {
         internalValueResetNotifier
           .collectLatest {
-            raceOf(
+            race(
               {
                 delay(1000)
                 internalValue = toFloat(value)

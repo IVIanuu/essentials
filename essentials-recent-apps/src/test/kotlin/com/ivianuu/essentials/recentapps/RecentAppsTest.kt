@@ -19,6 +19,7 @@ package com.ivianuu.essentials.recentapps
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.collections.*
 import kotlinx.coroutines.test.*
@@ -33,10 +34,7 @@ class RecentAppsTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = recentApps(
-      accessibilityEvents,
-      com.ivianuu.essentials.logging.NoopLogger, recentAppsScope
-    )
+    val collector = recentApps(accessibilityEvents, recentAppsScope, NoopLogger)
       .testCollect(this)
 
     accessibilityEvents.emit(

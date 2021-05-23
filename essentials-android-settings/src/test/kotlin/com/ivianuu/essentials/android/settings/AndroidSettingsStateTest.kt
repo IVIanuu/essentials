@@ -1,10 +1,12 @@
 package com.ivianuu.essentials.android.settings
 
+import android.content.*
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
+import io.mockk.*
 import kotlinx.coroutines.*
 import org.junit.*
 import org.junit.runner.*
@@ -17,21 +19,34 @@ class AndroidSettingsStateTest {
     var value = 0
     val contentChanges = EventFlow<Unit>()
     val adapter = object : AndroidSettingAdapter<Int> {
-      override fun get(): Int = value
-      override fun set(_value: Int) {
+      override fun get(
+        contentResolver: ContentResolver,
+        name: String,
+        type: AndroidSettingsType,
+        defaultValue: Int
+      ): Int = value
+
+      override fun set(
+        contentResolver: ContentResolver,
+        name: String,
+        type: AndroidSettingsType,
+        _value: Int
+      ) {
         value = _value
         contentChanges.tryEmit(Unit)
       }
     }
     val module = AndroidSettingModule<Int, Int>(
       "name",
-      AndroidSettingsType.GLOBAL
+      AndroidSettingsType.GLOBAL,
+      value
     )
     val setting = module.dataStore(
       scope = this,
       adapter = adapter,
       dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
-      contentChangesFactory = { contentChanges }
+      contentChangesFactory = { contentChanges },
+      contentResolver = mockk()
     )
 
     value shouldBe 0

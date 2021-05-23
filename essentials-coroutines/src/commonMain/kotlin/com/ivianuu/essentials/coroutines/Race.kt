@@ -18,53 +18,25 @@ package com.ivianuu.essentials.coroutines
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.*
+import kotlin.coroutines.*
 
-suspend fun <T> raceOf(vararg racers: suspend () -> T): T {
-  require(racers.isNotEmpty()) { "A race needs racers." }
-  return race {
-    racers.forEach {
-      launchRacer { it() }
+@Deprecated(message = "A race needs racers", level = DeprecationLevel.ERROR)
+suspend fun <T> race(context: CoroutineContext = EmptyCoroutineContext) {
+}
+
+suspend fun <T> race(
+  vararg racers: suspend CoroutineScope.() -> T,
+  context: CoroutineContext = EmptyCoroutineContext
+): T = coroutineScope {
+  select {
+    val allRacers = racers.map { racer ->
+      async(context = context, block = racer)
     }
-  }
-}
-
-suspend fun <T> Iterable<suspend () -> T>.race(): T = race {
-  forEach {
-    launchRacer { it() }
-  }
-}
-
-suspend fun <T> race(@BuilderInference block: suspend RacingScope<T>.() -> Unit): T =
-  coroutineScope {
-    val racers = mutableListOf<Deferred<T>>()
-    select {
-      val scopeBlockJob = childJob()
-      val racingScope = object : RacingScope<T>, CoroutineScope by this@coroutineScope {
-        var finished = false
-        override fun launchRacer(block: suspend CoroutineScope.() -> T) {
-          if (finished) return
-          synchronized(this@coroutineScope) {
-            if (finished) return
-            async { block() }.also { racers += it }
-          }.onAwait { result ->
-            result.also {
-              synchronized(this@coroutineScope) {
-                if (!finished) {
-                  finished = true
-                  scopeBlockJob.cancel()
-                  racers.forEach { it.cancel() }
-                }
-              }
-            }
-          }
-        }
-      }
-      launch(context = scopeBlockJob, start = CoroutineStart.UNDISPATCHED) {
-        racingScope.block()
+    allRacers.forEach { deferredRacer ->
+      deferredRacer.onAwait { result ->
+        allRacers.forEach { it.cancel() }
+        result
       }
     }
   }
-
-interface RacingScope<in T> : CoroutineScope {
-  fun launchRacer(block: suspend CoroutineScope.() -> T)
 }

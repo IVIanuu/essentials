@@ -19,19 +19,22 @@ package com.ivianuu.essentials.coroutines
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
+  context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency
-): List<T> = blocks.asIterable().parMap { it() }
+): List<T> = blocks.asIterable().parMap(context) { it() }
 
 suspend fun <T, R> Iterable<T>.parMap(
+  context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
 ): List<R> = supervisorScope {
   val semaphore = Semaphore(concurrency.value)
   map { item ->
-    async {
+    async(context) {
       semaphore.acquire()
       try {
         transform(item)
@@ -43,15 +46,17 @@ suspend fun <T, R> Iterable<T>.parMap(
 }
 
 suspend fun <T> Iterable<T>.parFilter(
+  context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   predicate: suspend (T) -> Boolean
-): List<T> = parMap { if (predicate(it)) it else null }.filterNotNull()
+): List<T> = parMap(context) { if (predicate(it)) it else null }.filterNotNull()
 
 suspend fun <T> Iterable<T>.parForEach(
+  context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
-  parMap { action(it) }
+  parMap(context) { action(it) }
 }
 
 inline class Concurrency(val value: Int)
