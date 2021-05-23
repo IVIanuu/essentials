@@ -69,4 +69,3 @@ private typealias CurrentScreenStateProvider = suspend () -> ScreenState
     }
   }
 }
-

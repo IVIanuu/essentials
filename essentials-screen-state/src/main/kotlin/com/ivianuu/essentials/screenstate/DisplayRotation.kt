@@ -16,16 +16,13 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.hardware.*
 import android.view.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
 enum class DisplayRotation(val isPortrait: Boolean) {
@@ -44,11 +41,11 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   configChanges: () -> Flow<ConfigChange>,
-  dispatcher: IODispatcher,
   rotationChanges: () -> Flow<RotationChange>,
   scope: InjectCoroutineScope<AppScope>,
   screenState: () -> Flow<ScreenState>,
-  windowManager: @SystemService WindowManager,
+  _: IODispatcher,
+  _: @SystemService WindowManager,
   _: Logger
 ): @Scoped<AppScope> Flow<DisplayRotation> = flow {
   screenState()
@@ -63,15 +60,15 @@ enum class DisplayRotation(val isPortrait: Boolean) {
       }
     }
     .onStart { emit(Unit) }
-    .map { getCurrentDisplayRotation(dispatcher, windowManager) }
+    .map { getCurrentDisplayRotation() }
     .distinctUntilChanged()
     .let { emitAll(it) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
   .distinctUntilChanged()
 
 private suspend fun getCurrentDisplayRotation(
-  dispatcher: IODispatcher,
-  windowManager: WindowManager,
+  @Inject dispatcher: IODispatcher,
+  @Inject windowManager: @SystemService WindowManager,
 ) = withContext(dispatcher) {
   when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
@@ -81,19 +78,3 @@ private suspend fun getCurrentDisplayRotation(
     else -> error("unexpected rotation")
   }
 }
-
-typealias RotationChange = Unit
-
-@Provide fun rotationChanges(
-  context: AppContext,
-  mainDispatcher: MainDispatcher,
-): Flow<RotationChange> = callbackFlow<RotationChange> {
-  val listener = object :
-    OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
-    override fun onOrientationChanged(orientation: Int) {
-      catch { offer(RotationChange) }
-    }
-  }
-  listener.enable()
-  awaitClose { listener.disable() }
-}.flowOn(mainDispatcher)
