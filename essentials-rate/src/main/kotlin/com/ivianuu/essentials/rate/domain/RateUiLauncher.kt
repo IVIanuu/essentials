@@ -21,7 +21,8 @@ import kotlin.time.*
   _: Logger
 ): ScopeWorker<UiScope> = {
   if (pref.data.first().installTime == 0L) {
-    pref.updateData { copy(installTime = timestampProvider().toLongMilliseconds()) }
+    val now = timestampProvider().toLongMilliseconds()
+    pref.updateData { copy(installTime = now) }
   }
 
   pref.updateData { copy(launchTimes = launchTimes.inc()) }

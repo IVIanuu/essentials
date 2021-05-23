@@ -59,10 +59,11 @@ internal typealias ShowLaterUseCase = suspend () -> Unit
   pref: DataStore<RatePrefs>,
   timestampProvider: TimestampProvider
 ): ShowLaterUseCase = {
+  val now = timestampProvider().toLongMilliseconds()
   pref.updateData {
     copy(
       launchTimes = 0,
-      installTime = timestampProvider().toLongMilliseconds(),
+      installTime = now,
       feedbackState = RatePrefs.FeedbackState.LATER
     )
   }
