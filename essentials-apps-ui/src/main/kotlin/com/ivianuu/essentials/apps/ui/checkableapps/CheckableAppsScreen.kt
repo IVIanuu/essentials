@@ -52,20 +52,19 @@ data class CheckableAppsParams(
   val appBarTitle: String
 )
 
-@Provide
-fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
-  val state by modelFlow.collectAsState()
+@Provide fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
+  val model by modelFlow.collectAsState()
   Scaffold(
     topBar = {
       TopAppBar(
-        title = { Text(state.appBarTitle) },
+        title = { Text(model.appBarTitle) },
         actions = {
           PopupMenuButton(
             items = listOf(
-              PopupMenu.Item(onSelected = state.selectAll) {
+              PopupMenu.Item(onSelected = model.selectAll) {
                 Text(stringResource(R.string.es_select_all))
               },
-              PopupMenu.Item(onSelected = state.deselectAll) {
+              PopupMenu.Item(onSelected = model.deselectAll) {
                 Text(stringResource(R.string.es_deselect_all))
               }
             )
@@ -74,7 +73,7 @@ fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableApps
       )
     }
   ) {
-    ResourceLazyColumnFor(state.checkableApps) { app ->
+    ResourceLazyColumnFor(model.checkableApps) { app ->
       ListItem(
         title = { Text(app.info.appName) },
         leading = {
@@ -90,7 +89,7 @@ fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableApps
             onCheckedChange = null
           )
         },
-        onClick = { state.updateAppCheckedState(app, !app.isChecked) }
+        onClick = { model.updateAppCheckedState(app, !app.isChecked) }
       )
     }
   }
