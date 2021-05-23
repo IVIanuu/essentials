@@ -23,12 +23,7 @@ import com.ivianuu.injekt.*
 interface Logger {
   val isEnabled: Boolean
 
-  fun log(
-    kind: Kind,
-    message: String? = null,
-    throwable: Throwable? = null,
-    tag: String? = null,
-  )
+  fun log(kind: Kind, message: String? = null, throwable: Throwable? = null, tag: String? = null)
 
   enum class Kind {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
