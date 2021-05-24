@@ -84,9 +84,10 @@ typealias RootSystemBarsStyle = UiDecorator
   }
 }
 
-@Provide val rootSystemBarsStyleConfig = UiDecoratorConfig<RootSystemBarsStyle>(
-  dependencies = setOf(typeKeyOf<AppTheme>(), typeKeyOf<SystemBarManagerProvider>())
-)
+@Provide val rootSystemBarsStyleConfig: UiDecoratorConfig<RootSystemBarsStyle> =
+  UiDecoratorConfig(
+    dependencies = setOf(inject<TypeKey<AppTheme>>(), inject<TypeKey<SystemBarManagerProvider>>())
+  )
 
 private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.*
 ): Action<AutoRotationActionId> = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
-  permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
+  permissions = listOf(inject<TypeKey<ActionWriteSettingsPermission>>()),
   unlockScreen = true,
   icon = autoRotation.autoRotationIcon()
 )

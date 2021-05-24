@@ -29,9 +29,8 @@ class EsNotificationListenerService : NotificationListenerService() {
   private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
   internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
-  private val component by lazy {
-    createServiceScope()
-      .element<EsNotificationListenerServiceComponent>()
+  private val component: EsNotificationListenerServiceComponent by lazy {
+    createServiceScope().element()
   }
 
   @Provide private val logger get() = component.logger

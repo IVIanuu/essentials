@@ -75,6 +75,6 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 typealias AppTheme = UiDecorator
 
-@Provide val appThemeConfig = UiDecoratorConfig<AppTheme>(
-  dependencies = setOf(typeKeyOf<SystemBarManagerProvider>())
+@Provide val appThemeConfig: UiDecoratorConfig<AppTheme> = UiDecoratorConfig(
+  dependencies = setOf(inject<TypeKey<SystemBarManagerProvider>>())
 )

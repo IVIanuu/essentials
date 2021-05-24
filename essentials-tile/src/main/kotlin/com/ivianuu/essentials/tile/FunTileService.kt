@@ -27,21 +27,20 @@ import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-class FunTileService1 : AbstractFunTileService(typeKeyOf<FunTileService1>())
-class FunTileService2 : AbstractFunTileService(typeKeyOf<FunTileService2>())
-class FunTileService3 : AbstractFunTileService(typeKeyOf<FunTileService3>())
-class FunTileService4 : AbstractFunTileService(typeKeyOf<FunTileService4>())
-class FunTileService5 : AbstractFunTileService(typeKeyOf<FunTileService5>())
-class FunTileService6 : AbstractFunTileService(typeKeyOf<FunTileService6>())
-class FunTileService7 : AbstractFunTileService(typeKeyOf<FunTileService7>())
-class FunTileService8 : AbstractFunTileService(typeKeyOf<FunTileService8>())
-class FunTileService9 : AbstractFunTileService(typeKeyOf<FunTileService9>())
+class FunTileService1 : AbstractFunTileService(inject<TypeKey<FunTileService1>>())
+class FunTileService2 : AbstractFunTileService(inject<TypeKey<FunTileService2>>())
+class FunTileService3 : AbstractFunTileService(inject<TypeKey<FunTileService3>>())
+class FunTileService4 : AbstractFunTileService(inject<TypeKey<FunTileService4>>())
+class FunTileService5 : AbstractFunTileService(inject<TypeKey<FunTileService5>>())
+class FunTileService6 : AbstractFunTileService(inject<TypeKey<FunTileService6>>())
+class FunTileService7 : AbstractFunTileService(inject<TypeKey<FunTileService7>>())
+class FunTileService8 : AbstractFunTileService(inject<TypeKey<FunTileService8>>())
+class FunTileService9 : AbstractFunTileService(inject<TypeKey<FunTileService9>>())
 
 abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) :
   TileService() {
-  private val component by lazy {
-    createServiceScope()
-      .element<FunTileServiceComponent>()
+  private val component: FunTileServiceComponent by lazy {
+    createServiceScope().element()
   }
 
   @Provide private val logger get() = component.logger
@@ -51,7 +50,7 @@ abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTi
   override fun onStartListening() {
     super.onStartListening()
     d { "$tileKey on start listening" }
-    val tileModelComponent = component.tileScopeFactory(tileKey)
+    val tileModelComponent = component.tileScopeFactory(TileId(tileKey))
       .element<TileModelComponent>()
       .also { this.tileModelComponent = it }
     tileModelComponent.tileModel
@@ -109,17 +108,17 @@ class FunTileServiceComponent(
   val logger: Logger,
   val resourceProvider: ResourceProvider,
   val serviceScope: ServiceScope,
-  val tileScopeFactory: @ChildScopeFactory (TypeKey<AbstractFunTileService>) -> TileScope
+  val tileScopeFactory: @ChildScopeFactory (TileId) -> TileScope
 )
 
 @Provide @InstallElement<TileScope>
 class TileModelComponent(
-  tileKey: TypeKey<AbstractFunTileService>,
-  tileModelElements: Set<Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>>> = emptySet(),
+  tileId: TileId,
+  tileModelElements: Set<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptySet(),
   val scope: InjectCoroutineScope<TileScope>,
   val tileScope: TileScope
 ) {
-  val tileModel = tileModelElements.toMap()[tileKey]
+  val tileModel = tileModelElements.toMap()[tileId]
     ?.invoke()
-    ?: error("No tile found for $tileKey in ${tileModelElements.toMap()}")
+    ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
 }

@@ -45,10 +45,11 @@ fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.St
 @Provide fun <@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
   serviceKey: TypeKey<S>,
   provider: () -> T
-): Pair<TypeKey<AbstractFunTileService>, () -> StateFlow<TileModel<*>>> =
-  serviceKey to provider.cast()
+): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceKey) to provider.cast()
 
 typealias TileScope = Scope
 
 @Provide val tileScopeModule =
-  ChildScopeModule1<ServiceScope, TypeKey<AbstractFunTileService>, TileScope>()
+  ChildScopeModule1<ServiceScope, TileId, TileScope>()
+
+inline class TileId(val typeKey: TypeKey<AbstractFunTileService>)

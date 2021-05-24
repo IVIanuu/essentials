@@ -84,7 +84,7 @@ object AppTrackerKey : Key<Nothing>
       modifier = Modifier.center(),
       onClick = {
         scope.launch {
-          if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
+          if (permissionRequester(listOf(inject<TypeKey<SampleAccessibilityPermission>>()))) {
             foregroundState.value = if (currentForegroundState is Foreground) Background
             else Foreground(createNotification(null))
           }

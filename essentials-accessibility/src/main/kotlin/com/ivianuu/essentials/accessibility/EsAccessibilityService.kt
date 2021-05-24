@@ -25,9 +25,9 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 class EsAccessibilityService : AccessibilityService() {
-  private val component by lazy {
+  private val component: EsAccessibilityServiceComponent by lazy {
     createServiceScope()
-      .element<EsAccessibilityServiceComponent>()
+      .element()
   }
 
   @Provide private val logger get() = component.logger
