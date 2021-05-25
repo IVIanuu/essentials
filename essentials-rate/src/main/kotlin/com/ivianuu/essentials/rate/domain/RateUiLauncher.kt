@@ -18,7 +18,7 @@ import kotlin.time.*
   pref: DataStore<RatePrefs>,
   timestampProvider: TimestampProvider,
   _: Logger,
-  _: RateUiSchedule
+  _: RateUiSchedule = RateUiSchedule()
 ): ScopeWorker<UiScope> = {
   if (pref.data.first().installTime == 0L) {
     val now = timestampProvider().toLongMilliseconds()
