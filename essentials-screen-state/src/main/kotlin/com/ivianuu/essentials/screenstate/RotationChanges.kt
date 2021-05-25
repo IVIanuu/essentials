@@ -14,7 +14,7 @@ typealias RotationChange = Unit
 @Provide fun rotationChanges(
   context: AppContext,
   mainDispatcher: MainDispatcher,
-): Flow<RotationChange> = kotlinx.coroutines.flow.callbackFlow<RotationChange> {
+): Flow<RotationChange> = callbackFlow<RotationChange> {
   val listener = object :
     OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
     override fun onOrientationChanged(orientation: Int) {
