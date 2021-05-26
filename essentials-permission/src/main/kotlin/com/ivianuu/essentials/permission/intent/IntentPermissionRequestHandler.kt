@@ -32,7 +32,7 @@ typealias PermissionIntentFactory<P> = (P) -> Intent
 
 typealias ShowFindPermissionHint<P> = Boolean
 
-@Provide fun <P : Permission> permissionIntentRequestHandler(
+@Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
@@ -41,7 +41,7 @@ typealias ShowFindPermissionHint<P> = Boolean
   _: ResourceProvider,
   _: Toaster
 ): PermissionRequestHandler<P> = { permission ->
-  par(
+  race(
     {
       if (showFindPermissionHint)
         showToast(R.string.es_find_app_here, buildInfo.appName)
