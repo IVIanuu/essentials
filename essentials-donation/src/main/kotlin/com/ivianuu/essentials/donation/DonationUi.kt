@@ -95,8 +95,8 @@ data class UiDonation(val donation: Donation, val details: SkuDetails)
   navigator: Navigator,
   purchase: PurchaseUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
   resourceFlow {
     emit(

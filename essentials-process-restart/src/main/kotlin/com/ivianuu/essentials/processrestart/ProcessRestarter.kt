@@ -28,8 +28,8 @@ typealias ProcessRestarter = suspend () -> Unit
 @Provide fun processRestarter(
   buildInfo: BuildInfo,
   context: AppContext,
+  logger: Logger,
   packageManager: PackageManager,
-  _: Logger,
 ): ProcessRestarter = {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)

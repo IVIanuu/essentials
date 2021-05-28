@@ -29,10 +29,10 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun torchForegroundState(
   state: Flow<TorchState>,
-  _: AppContext,
-  _: @SystemService NotificationManager,
-  _: ResourceProvider,
-  _: SystemBuildInfo
+  context: AppContext,
+  notificationManager: @SystemService NotificationManager,
+  rp: ResourceProvider,
+  systemBuildInfo: SystemBuildInfo
 ): Flow<ForegroundState> = state
   .map { torchEnabled ->
     if (torchEnabled) Foreground(createTorchNotification())
@@ -44,7 +44,7 @@ private fun createTorchNotification(
   @Inject context: AppContext,
   @Inject notificationManager: @SystemService NotificationManager,
   @Inject systemBuildInfo: SystemBuildInfo,
-  @Inject _: ResourceProvider,
+  @Inject rp: ResourceProvider,
 ): Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(

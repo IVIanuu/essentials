@@ -28,10 +28,10 @@ typealias ScopeWorker<S> = suspend () -> Unit
 typealias ScopeWorkerRunner<S> = () -> Unit
 
 @Provide fun <S : Scope> scopeWorkerRunner(
+  logger: Logger,
   scope: InjectCoroutineScope<S>,
   typeKey: TypeKey<S>,
-  workers: Set<() -> ScopeWorker<S>> = emptySet(),
-  _: Logger
+  workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {
   d { "$typeKey run scope workers" }
   workers

@@ -133,14 +133,14 @@ sealed class ActionPickerItem {
 
 @Provide fun actionPickerModel(
   getAction: GetActionUseCase,
+  getActionPickerDelegates: GetActionPickerDelegatesUseCase,
+  getAllActions: GetAllActionsUseCase,
+  getActionSettings: GetActionSettingsKeyUseCase,
   key: ActionPickerKey,
   navigator: Navigator,
   permissionRequester: PermissionRequester,
+  rp: ResourceProvider,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: GetActionPickerDelegatesUseCase,
-  _: GetAllActionsUseCase,
-  _: GetActionSettingsKeyUseCase,
-  _: ResourceProvider,
 ): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
@@ -160,7 +160,7 @@ private suspend fun getActionPickerItems(
   @Inject getAllActions: GetAllActionsUseCase,
   @Inject getActionSettingsKey: GetActionSettingsKeyUseCase,
   @Inject key: ActionPickerKey,
-  @Inject _: ResourceProvider
+  @Inject rp: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

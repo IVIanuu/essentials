@@ -31,7 +31,7 @@ import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Provide class ActionAccessibilityPermission(
-  private val _: ResourceProvider
+  private val rp: ResourceProvider
 ) : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
@@ -46,7 +46,7 @@ import kotlin.reflect.*
 }
 
 @Provide class ActionRootPermission(
-  private val _: ResourceProvider
+  private val rp: ResourceProvider
 ) : RootPermission {
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
@@ -55,7 +55,7 @@ import kotlin.reflect.*
 }
 
 @Provide class ActionWriteSecureSettingsPermission(
-  private val _: ResourceProvider
+  private val rp: ResourceProvider
 ) : WriteSecureSettingsPermission {
   override val title: String
     get() = loadResource(R.string.es_action_write_secure_settings_permission_title)
@@ -66,7 +66,7 @@ import kotlin.reflect.*
 }
 
 @Provide class ActionWriteSettingsPermission(
-  private val _: ResourceProvider
+  private val rp: ResourceProvider
 ) : WriteSettingsPermission {
   override val title: String
     get() = loadResource(R.string.es_action_write_settings_permission_title)

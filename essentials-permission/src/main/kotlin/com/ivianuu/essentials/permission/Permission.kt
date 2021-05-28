@@ -103,9 +103,9 @@ typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
 @Provide fun permissionRequester(
   appUiStarter: AppUiStarter,
   dispatcher: DefaultDispatcher,
+  logger: Logger,
   navigator: Navigator,
-  permissionStateFactory: PermissionStateFactory,
-  _: Logger
+  permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
   withContext(dispatcher) {
     d { "request permissions $requestedPermissions" }

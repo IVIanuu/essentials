@@ -84,8 +84,8 @@ data class WriteSecureSettingsKey(
   permissionStateFactory: PermissionStateFactory,
   runShellCommand: RunShellCommandUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: ResourceProvider,
-  _: Toaster,
+  rp: ResourceProvider,
+  toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsModel> = scope.state(
   WriteSecureSettingsModel()
 ) {

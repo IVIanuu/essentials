@@ -166,7 +166,7 @@ object AboutKey : Key<Nothing>
   navigator: Navigator,
   rateOnPlayUseCase: RateOnPlayUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: ResourceProvider
+  rp: ResourceProvider
 ): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }

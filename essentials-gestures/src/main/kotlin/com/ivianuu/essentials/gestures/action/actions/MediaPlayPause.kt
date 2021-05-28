@@ -26,7 +26,7 @@ import com.ivianuu.injekt.*
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
 
-@Provide fun playPauseMediaAction(_: ResourceProvider): Action<PlayPauseActionId> = Action(
+@Provide fun playPauseMediaAction(rp: ResourceProvider): Action<PlayPauseActionId> = Action(
   id = PlayPauseActionId,
   title = loadResource(R.string.es_action_media_play_pause),
   icon = singleActionIcon(Icons.Default.PlayArrow)

@@ -26,7 +26,7 @@ import kotlinx.coroutines.*
 
 @Provide object LastAppActionId : ActionId("last_app")
 
-@Provide fun lastAppAction(_: ResourceProvider): Action<LastAppActionId> = Action(
+@Provide fun lastAppAction(rp: ResourceProvider): Action<LastAppActionId> = Action(
   id = LastAppActionId,
   title = loadResource(R.string.es_action_last_app),
   permissions = accessibilityActionPermissions,

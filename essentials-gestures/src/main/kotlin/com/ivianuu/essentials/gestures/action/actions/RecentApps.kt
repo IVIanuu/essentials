@@ -25,7 +25,7 @@ import com.ivianuu.injekt.*
 
 @Provide object RecentAppsActionId : ActionId("recent_apps")
 
-@Provide fun recentAppsAction(_: ResourceProvider): Action<RecentAppsActionId> = Action(
+@Provide fun recentAppsAction(rp: ResourceProvider): Action<RecentAppsActionId> = Action(
   id = RecentAppsActionId,
   title = loadResource(R.string.es_action_recent_apps),
   icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)

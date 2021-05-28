@@ -35,7 +35,7 @@ import com.ivianuu.injekt.*
   private val actionIntentSender: ActionIntentSender,
   private val getAppInfo: GetAppInfoUseCase,
   private val packageManager: PackageManager,
-  private val _: ResourceProvider
+  private val rp: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
 
@@ -66,7 +66,7 @@ import com.ivianuu.injekt.*
 @Provide class AppActionPickerDelegate(
   private val launchableAppPredicate: LaunchableAppPredicate,
   private val navigator: Navigator,
-  private val _: ResourceProvider,
+  private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = loadResource(R.string.es_action_app)

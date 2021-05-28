@@ -58,7 +58,7 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateUi(
   elements: Set<UiDecoratorElement> = emptySet(),
-  _: Logger
+  logger: Logger
 ): DecorateUi = { content ->
   remember {
     elements

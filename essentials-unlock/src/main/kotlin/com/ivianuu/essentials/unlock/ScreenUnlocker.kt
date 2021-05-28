@@ -34,7 +34,7 @@ typealias ScreenUnlocker = suspend () -> Boolean
   context: AppContext,
   dispatcher: DefaultDispatcher,
   keyguardManager: @SystemService KeyguardManager,
-  _: Logger,
+  logger: Logger,
 ): ScreenUnlocker = {
   withContext(dispatcher) {
     if (!keyguardManager.isKeyguardLocked) return@withContext true

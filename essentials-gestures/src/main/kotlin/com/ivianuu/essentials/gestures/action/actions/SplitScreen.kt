@@ -25,7 +25,7 @@ import com.ivianuu.injekt.*
 
 @Provide object SplitScreenActionId : ActionId("split_screen")
 
-@Provide fun splitScreenAction(_: ResourceProvider): Action<SplitScreenActionId> = Action(
+@Provide fun splitScreenAction(rp: ResourceProvider): Action<SplitScreenActionId> = Action(
   id = SplitScreenActionId,
   title = loadResource(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,

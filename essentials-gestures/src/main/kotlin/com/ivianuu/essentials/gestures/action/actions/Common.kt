@@ -59,8 +59,8 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
 
 @Provide fun actionRootCommandRunner(
   runShellCommand: RunShellCommandUseCase,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): ActionRootCommandRunner = { command ->
   catch { runShellCommand(listOf(command)) }
     .onFailure {
@@ -73,8 +73,8 @@ typealias ActionIntentSender = (Intent) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): ActionIntentSender = { intent ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   catch {

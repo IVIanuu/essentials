@@ -42,9 +42,9 @@ data class ScopeInitializerElement<S>(
 
 @Provide fun <S : Scope> scopeInitializerRunner(
   initializers: Set<ScopeInitializerElement<S>> = emptySet(),
+  logger: Logger,
   scopeKey: TypeKey<S>,
-  workerRunner: ScopeWorkerRunner<S>,
-  _: Logger
+  workerRunner: ScopeWorkerRunner<S>
 ): com.ivianuu.injekt.scope.ScopeInitializer<S> = {
   initializers
     .sortedTopological()

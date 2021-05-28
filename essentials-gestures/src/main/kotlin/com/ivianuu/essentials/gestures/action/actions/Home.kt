@@ -30,7 +30,7 @@ import com.ivianuu.injekt.android.*
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide fun homeAction(_: ResourceProvider): Action<HomeActionId> = Action(
+@Provide fun homeAction(rp: ResourceProvider): Action<HomeActionId> = Action(
   id = HomeActionId,
   title = loadResource(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()

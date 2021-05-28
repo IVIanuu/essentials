@@ -11,7 +11,7 @@ object FeedbackMailKey : IntentKey
 
 @Provide fun feedbackMailKeyIntentFactory(
   context: AppContext,
-  _: ResourceProvider
+  rp: ResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")

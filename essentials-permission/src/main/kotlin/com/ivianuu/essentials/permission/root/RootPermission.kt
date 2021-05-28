@@ -31,8 +31,8 @@ interface RootPermission : Permission
 
 @Provide fun <P : RootPermission> rootPermissionRequestHandler(
   isShellAvailable: IsShellAvailableUseCase,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): PermissionRequestHandler<P> = {
   if (!isShellAvailable())
     showToast(R.string.es_no_root)

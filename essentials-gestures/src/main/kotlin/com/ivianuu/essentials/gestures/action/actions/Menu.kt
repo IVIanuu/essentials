@@ -26,7 +26,7 @@ import com.ivianuu.injekt.common.*
 
 @Provide object MenuActionId : ActionId("menu")
 
-@Provide fun menuAction(_: ResourceProvider): Action<MenuActionId> = Action(
+@Provide fun menuAction(rp: ResourceProvider): Action<MenuActionId> = Action(
   id = MenuActionId,
   title = loadResource(R.string.es_action_menu),
   icon = singleActionIcon(Icons.Default.MoreVert),

@@ -25,7 +25,7 @@ import com.ivianuu.injekt.*
 
 @Provide object BackActionId : ActionId("back")
 
-@Provide fun backAction(_: ResourceProvider): Action<BackActionId> = Action(
+@Provide fun backAction(rp: ResourceProvider): Action<BackActionId> = Action(
   id = BackActionId,
   title = loadResource(R.string.es_action_back),
   permissions = accessibilityActionPermissions,

@@ -34,7 +34,7 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
   hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
   hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
   hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>,
-  _: Logger,
+  logger: Logger,
 ): NonSdkInterfaceDetectionDisabler = {
   if (systemBuildInfo.sdk >= 29) {
     d { "disable non sdk on 29" }

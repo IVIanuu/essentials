@@ -41,12 +41,12 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   configChanges: () -> Flow<ConfigChange>,
+  dispatcher: IODispatcher,
   rotationChanges: () -> Flow<RotationChange>,
+  logger: Logger,
   scope: InjectCoroutineScope<AppScope>,
   screenState: () -> Flow<ScreenState>,
-  _: IODispatcher,
-  _: @SystemService WindowManager,
-  _: Logger
+  windowManager: @SystemService WindowManager
 ): @Scoped<AppScope> Flow<DisplayRotation> = flow {
   screenState()
     .flatMapLatest { currentScreenState ->

@@ -29,8 +29,8 @@ typealias RecentApps = List<String>
 
 @Provide fun recentApps(
   accessibilityEvents: Flow<AccessibilityEvent>,
+  logger: Logger,
   scope: InjectCoroutineScope<AppScope>,
-  _: Logger,
 ): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }

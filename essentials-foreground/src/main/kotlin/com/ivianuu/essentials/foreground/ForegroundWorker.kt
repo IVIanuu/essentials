@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun foregroundWorker(
   internalForegroundState: Flow<InternalForegroundState>,
-  notificationManager: @SystemService NotificationManager,
-  _: Logger
+  logger: Logger,
+  notificationManager: @SystemService NotificationManager
 ): Worker<ForegroundWorkerId> = {
   d { "start foreground worker" }
 

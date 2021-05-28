@@ -77,8 +77,8 @@ object ShortcutPickerKey : Key<Shortcut>
   key: ShortcutPickerKey,
   navigator: Navigator,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
   resourceFlow { emit(getAllShortcuts()) }
     .update { copy(shortcuts = it) }

@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
-@Provide fun killCurrentAppAction(_: ResourceProvider): Action<KillCurrentAppActionId> = Action(
+@Provide fun killCurrentAppAction(rp: ResourceProvider): Action<KillCurrentAppActionId> = Action(
   id = KillCurrentAppActionId,
   title = loadResource(R.string.es_action_kill_current_app),
   icon = singleActionIcon(Icons.Default.Clear),

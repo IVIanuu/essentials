@@ -38,8 +38,8 @@ typealias ShowFindPermissionHint<P> = Boolean
   navigator: Navigator,
   showFindPermissionHint: ShowFindPermissionHint<P> = false,
   state: Flow<PermissionState<P>>,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
   race(
     {

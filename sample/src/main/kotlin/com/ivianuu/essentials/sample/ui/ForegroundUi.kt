@@ -48,9 +48,9 @@ object ForegroundKey : Key<Nothing>
 @Provide
 fun foregroundUi(
   foregroundState: ForegroundScreenState,
-  _: AppContext,
-  _: @SystemService NotificationManager,
-  _: SystemBuildInfo
+  context: AppContext,
+  notificationManager: @SystemService NotificationManager,
+  systemBuildInfo: SystemBuildInfo
 ): KeyUi<ForegroundKey> = {
   val currentForegroundState by foregroundState.collectAsState()
 

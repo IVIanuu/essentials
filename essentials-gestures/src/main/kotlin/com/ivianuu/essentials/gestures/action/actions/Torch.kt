@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun torchAction(
   torchState: Flow<TorchState>,
-  _: ResourceProvider,
+  rp: ResourceProvider,
 ): Action<TorchActionId> = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),

@@ -32,7 +32,7 @@ import com.ivianuu.injekt.common.*
 
 @Provide class KeycodeActionFactory(
   private val actionRootCommandRunner: ActionRootCommandRunner,
-  private val _: ResourceProvider,
+  private val rp: ResourceProvider,
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
   override suspend fun createAction(id: String): Action<*> {
@@ -55,7 +55,7 @@ import com.ivianuu.injekt.common.*
 
 @Provide class KeycodeActionPickerDelegate(
   private val navigator: Navigator,
-  private val _: ResourceProvider,
+  private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = loadResource(R.string.es_action_keycode)

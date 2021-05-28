@@ -17,7 +17,7 @@ typealias SystemOverlayEnabled = Boolean
   lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
   secureScreenState: @Private Flow<SecureScreenSystemOverlayBlacklistState>,
   userBlacklistState: @Private Flow<UserBlacklistSystemOverlayBlacklistState>,
-  _: Logger
+  logger: Logger
 ): Flow<SystemOverlayBlacklistState> = mainSwitchState
   // check the main state of the overlay
   .map {
@@ -50,8 +50,8 @@ private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklist
 
 @Provide fun lockScreenSystemOverlayEnabledState(
   blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  logger: Logger,
   screenState: Flow<ScreenState>,
-  _: Logger,
 ): @Private Flow<LockScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
@@ -77,8 +77,8 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
 @Provide fun secureScreenSystemOverlayBlacklistState(
   blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
   isOnSecureScreen: Flow<IsOnSecureScreen>,
-  screenState: Flow<ScreenState>,
-  _: Logger
+  logger: Logger,
+  screenState: Flow<ScreenState>
 ): @Private Flow<SecureScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
@@ -113,8 +113,8 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
 @Provide fun userBlacklistSystemOverlayBlacklistState(
   blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
   currentApp: Flow<CurrentApp>,
+  logger: Logger,
   screenState: Flow<ScreenState>,
-  _: Logger,
 ): @Private Flow<UserBlacklistSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.appBlacklist }
   .distinctUntilChanged()
@@ -149,8 +149,8 @@ private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistSt
 
 @Provide fun keyboardSystemOverlayBlacklistState(
   blacklistPrefs: Flow<SystemOverlayBlacklistPrefs>,
+  logger: Logger,
   keyboardVisible: Flow<KeyboardVisible>,
-  _: Logger,
 ): @Private Flow<KeyboardSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()

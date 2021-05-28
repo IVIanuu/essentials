@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.*
 @Provide object LockScreenActionId : ActionId("lock_screen")
 
 @Provide fun lockScreenAction(
-  _: ResourceProvider,
+  rp: ResourceProvider,
   systemBuildInfo: SystemBuildInfo,
 ): Action<LockScreenActionId> = Action(
   id = LockScreenActionId,

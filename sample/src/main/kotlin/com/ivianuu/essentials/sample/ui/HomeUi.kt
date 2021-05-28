@@ -43,7 +43,7 @@ import kotlinx.coroutines.*
 @Provide fun homeUi(
   navigator: Navigator,
   itemsFactory: () -> Set<HomeItem>,
-  _: Toaster,
+  toaster: Toaster,
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   Scaffold(

@@ -36,11 +36,11 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   dispatcher: DefaultDispatcher,
   getAction: GetActionUseCase,
   getActionExecutor: GetActionExecutorUseCase,
+  logger: Logger,
   permissionRequester: PermissionRequester,
   screenUnlocker: ScreenUnlocker,
-  _: Logger,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): ExecuteActionUseCase = { key ->
   withContext(dispatcher) {
     catch {

@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun autoRotationAction(
   autoRotation: Flow<AutoRotation>,
-  _: ResourceProvider,
+  rp: ResourceProvider,
 ): Action<AutoRotationActionId> = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),

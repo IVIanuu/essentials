@@ -25,7 +25,7 @@ import com.ivianuu.injekt.*
 
 @Provide object PowerDialogActionId : ActionId("power_dialog")
 
-@Provide fun powerDialogAction(_: ResourceProvider): Action<PowerDialogActionId> = Action(
+@Provide fun powerDialogAction(rp: ResourceProvider): Action<PowerDialogActionId> = Action(
   id = PowerDialogActionId,
   title = loadResource(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,

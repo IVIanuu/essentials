@@ -27,7 +27,7 @@ import com.ivianuu.injekt.*
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 
-@Provide fun quickSettingsAction(_: ResourceProvider): Action<QuickSettingsActionId> = Action(
+@Provide fun quickSettingsAction(rp: ResourceProvider): Action<QuickSettingsActionId> = Action(
   id = QuickSettingsActionId,
   title = loadResource(R.string.es_action_quick_settings),
   permissions = accessibilityActionPermissions,

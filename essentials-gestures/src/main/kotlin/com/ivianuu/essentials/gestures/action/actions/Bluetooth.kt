@@ -29,8 +29,8 @@ import kotlinx.coroutines.flow.*
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
 @Provide fun bluetoothAction(
-  _: BroadcastsFactory,
-  _: ResourceProvider
+  broadcastsFactory: BroadcastsFactory,
+  rp: ResourceProvider
 ): Action<BluetoothActionId> = Action(
   id = BluetoothActionId,
   title = loadResource(R.string.es_action_bluetooth),

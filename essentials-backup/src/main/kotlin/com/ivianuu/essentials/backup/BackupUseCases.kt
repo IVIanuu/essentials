@@ -26,9 +26,9 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   buildInfo: BuildInfo,
   dataDir: DataDir,
   dispatcher: IODispatcher,
+  logger: Logger,
   navigator: Navigator,
-  scope: InjectCoroutineScope<AppScope>,
-  _: Logger
+  scope: InjectCoroutineScope<AppScope>
 ): CreateBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
@@ -70,10 +70,10 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
   contentResolver: ContentResolver,
   dataDir: DataDir,
   dispatcher: IODispatcher,
+  logger: Logger,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: InjectCoroutineScope<AppScope>,
-  _: Logger
+  scope: InjectCoroutineScope<AppScope>
 ): RestoreBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {

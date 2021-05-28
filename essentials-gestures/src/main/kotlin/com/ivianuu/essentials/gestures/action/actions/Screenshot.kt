@@ -31,7 +31,7 @@ import kotlinx.coroutines.*
 
 @Provide fun screenshotAction(
   systemBuildInfo: SystemBuildInfo,
-  _: ResourceProvider,
+  rp: ResourceProvider,
 ): Action<ScreenshotActionId> = Action(
   id = ScreenshotActionId,
   title = loadResource(R.string.es_action_screenshot),

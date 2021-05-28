@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.ivianuu.essentials
 
 import androidx.compose.ui.graphics.*
@@ -27,15 +29,15 @@ import com.ivianuu.injekt.android.*
 
 inline fun <T> loadResource(
   id: Int,
-  @Inject provider: ResourceProvider,
-  @Inject _: ResourceLoader<T>
+  @Inject loader: ResourceLoader<T>,
+  @Inject provider: ResourceProvider
 ): T = provider(id)
 
 inline fun <T> loadResource(
   id: Int,
   vararg args: Any?,
-  @Inject provider: ResourceProvider,
-  @Inject _: ResourceLoaderWithArgs<T>
+  @Inject loader: ResourceLoaderWithArgs<T>,
+  @Inject provider: ResourceProvider
 ): T = provider(id, *args)
 
 interface ResourceProvider {

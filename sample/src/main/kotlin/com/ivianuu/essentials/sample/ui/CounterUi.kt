@@ -77,7 +77,7 @@ object CounterKey : Key<Nothing>
 
 @Provide fun counterModel(
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: Toaster
+  toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {

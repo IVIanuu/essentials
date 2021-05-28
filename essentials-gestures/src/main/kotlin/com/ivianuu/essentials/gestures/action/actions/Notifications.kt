@@ -27,7 +27,7 @@ import com.ivianuu.injekt.*
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
-@Provide fun notificationsAction(_: ResourceProvider): Action<NotificationsActionId> = Action(
+@Provide fun notificationsAction(rp: ResourceProvider): Action<NotificationsActionId> = Action(
   id = NotificationsActionId,
   title = loadResource(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,

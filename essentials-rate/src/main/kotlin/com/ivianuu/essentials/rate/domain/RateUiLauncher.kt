@@ -14,11 +14,11 @@ import java.util.concurrent.*
 import kotlin.time.*
 
 @Provide fun rateUiLauncher(
+  logger: Logger,
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
-  timestampProvider: TimestampProvider,
-  _: Logger,
-  _: RateUiSchedule = RateUiSchedule()
+  schedule: RateUiSchedule = RateUiSchedule(),
+  timestampProvider: TimestampProvider
 ): ScopeWorker<UiScope> = {
   if (pref.data.first().installTime == 0L) {
     val now = timestampProvider().toLongMilliseconds()
@@ -32,10 +32,10 @@ import kotlin.time.*
 }
 
 private suspend fun shouldShowRateDialog(
+  @Inject logger: Logger,
   @Inject pref: DataStore<RatePrefs>,
   @Inject schedule: RateUiSchedule,
-  @Inject timestampProvider: TimestampProvider,
-  @Inject _: Logger
+  @Inject timestampProvider: TimestampProvider
 ): Boolean {
   val prefs = pref.data.first()
 

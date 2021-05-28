@@ -12,7 +12,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
-@Provide class NavBarPermission(private val _: ResourceProvider) : WriteSecureSettingsPermission {
+@Provide class NavBarPermission(private val rp: ResourceProvider) : WriteSecureSettingsPermission {
   override val title: String
     get() = loadResource(R.string.es_permission_nav_bar)
   override val desc: String

@@ -26,7 +26,7 @@ import com.ivianuu.injekt.*
 
 @Provide object SearchActionId : ActionId("search")
 
-@Provide fun searchAction(_: ResourceProvider): Action<SearchActionId> = Action(
+@Provide fun searchAction(rp: ResourceProvider): Action<SearchActionId> = Action(
   id = SearchActionId,
   title = loadResource(R.string.es_action_search),
   icon = singleActionIcon(Icons.Default.Search)

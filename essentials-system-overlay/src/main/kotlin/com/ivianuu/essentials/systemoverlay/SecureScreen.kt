@@ -27,8 +27,8 @@ typealias IsOnSecureScreen = Boolean
 
 @Provide fun isOnSecureScreen(
   accessibilityEvents: Flow<AccessibilityEvent>,
+  logger: Logger,
   scope: InjectCoroutineScope<AppScope>,
-  _: Logger,
 ): @Scoped<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .map { it.packageName to it.className }

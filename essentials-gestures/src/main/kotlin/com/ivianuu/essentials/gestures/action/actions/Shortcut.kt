@@ -65,7 +65,7 @@ import java.io.*
 
 @Provide class ShortcutActionPickerDelegate(
   private val navigator: Navigator,
-  private val _: ResourceProvider,
+  private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)

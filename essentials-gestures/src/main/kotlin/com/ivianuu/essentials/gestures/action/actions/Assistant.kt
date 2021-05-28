@@ -27,7 +27,7 @@ import com.ivianuu.injekt.android.*
 
 @Provide object AssistantActionId : ActionId("assistant")
 
-@Provide fun assistantAction(_: ResourceProvider): Action<AssistantActionId> =
+@Provide fun assistantAction(rp: ResourceProvider): Action<AssistantActionId> =
   Action(
     id = AssistantActionId,
     title = loadResource(R.string.es_action_assistant),

@@ -70,8 +70,8 @@ object BackupAndRestoreKey : Key<Nothing>
   createBackupUseCase: CreateBackupUseCase,
   restoreBackupUseCase: RestoreBackupUseCase,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: ResourceProvider,
-  _: Toaster,
+  rp: ResourceProvider,
+  toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<BackupAndRestoreModel> =
   scope.state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {

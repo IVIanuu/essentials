@@ -25,7 +25,7 @@ import com.ivianuu.injekt.android.*
 
 @Provide object InputMethodActionId : ActionId("input_method")
 
-@Provide fun inputMethodAction(_: ResourceProvider): Action<InputMethodActionId> =
+@Provide fun inputMethodAction(rp: ResourceProvider): Action<InputMethodActionId> =
   Action(
     id = InputMethodActionId,
     title = loadResource(R.string.es_action_input_method),

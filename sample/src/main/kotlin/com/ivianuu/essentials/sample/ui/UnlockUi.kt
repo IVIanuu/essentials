@@ -39,7 +39,7 @@ object UnlockKey : Key<Nothing>
   screenState: Flow<ScreenState>,
   screenUnlocker: ScreenUnlocker,
   scope: InjectCoroutineScope<KeyUiScope>,
-  _: Toaster,
+  toaster: Toaster,
 ): KeyUi<UnlockKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }

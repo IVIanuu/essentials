@@ -19,7 +19,7 @@ object SystemOverlayAppBlacklistKey : Key<Nothing>
 
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
-  _: ResourceProvider
+  rp: ResourceProvider
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {
     checkableAppsPageFactory(

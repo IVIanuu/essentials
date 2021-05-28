@@ -26,7 +26,7 @@ import kotlinx.coroutines.*
 
 @Provide object TestWorkerId : WorkerId("test")
 
-@Provide fun testWorker(_: Logger): Worker<TestWorkerId> = {
+@Provide fun testWorker(logger: Logger): Worker<TestWorkerId> = {
   d { "start work" }
   delay(5000)
   d { "finish work" }

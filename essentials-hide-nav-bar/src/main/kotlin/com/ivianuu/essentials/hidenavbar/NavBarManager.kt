@@ -37,13 +37,13 @@ import kotlinx.coroutines.flow.*
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
   forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
+  logger: Logger,
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   prefs: Flow<NavBarPrefs>,
   setOverscan: OverscanUpdater,
-  wasNavBarHiddenPref: DataStore<WasNavBarHidden>,
-  _: Logger
+  wasNavBarHiddenPref: DataStore<WasNavBarHidden>
 ): ScopeWorker<AppScope> = worker@{
   if (!navBarFeatureSupported) return@worker
   permissionState
@@ -84,7 +84,7 @@ private suspend fun NavBarState.apply(
   context: Context,
   disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
   setOverscan: OverscanUpdater,
-  @Inject _: Logger
+  @Inject logger: Logger
 ) {
   d { "apply nav bar state $this" }
   catch {

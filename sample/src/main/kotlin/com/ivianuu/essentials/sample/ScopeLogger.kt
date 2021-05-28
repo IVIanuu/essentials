@@ -25,7 +25,7 @@ import com.ivianuu.injekt.scope.*
 
 @Provide fun <S : Scope> scopeLogger(
   scopeKey: TypeKey<S>,
-  _: Logger
+  logger: Logger
 ): ScopeWorker<S> = {
   d { "$scopeKey created" }
   runOnCancellation { d { "$scopeKey disposed" } }

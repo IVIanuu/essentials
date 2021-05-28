@@ -34,9 +34,9 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Provide fun screenState(
   broadcastsFactory: BroadcastsFactory,
+  logger: Logger,
   scope: InjectCoroutineScope<AppScope>,
-  screenStateProvider: CurrentScreenStateProvider,
-  _: Logger
+  screenStateProvider: CurrentScreenStateProvider
 ): @Scoped<AppScope> Flow<ScreenState> = merge(
   broadcastsFactory(Intent.ACTION_SCREEN_OFF),
   broadcastsFactory(Intent.ACTION_SCREEN_ON),

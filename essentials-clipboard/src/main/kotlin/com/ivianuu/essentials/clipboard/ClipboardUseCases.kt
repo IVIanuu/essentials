@@ -43,8 +43,8 @@ typealias UpdateClipboardTextUseCase = suspend (String, Boolean) -> Unit
 
 @Provide fun updateClipboardTextUseCase(
   clipboardManager: @SystemService ClipboardManager,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): UpdateClipboardTextUseCase = { value, showMessage ->
   clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
   if (showMessage)

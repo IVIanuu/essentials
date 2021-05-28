@@ -30,8 +30,8 @@ import kotlinx.coroutines.flow.*
 @Provide fun androidTorchWorker(
   cameraManager: @SystemService CameraManager,
   torchStore: MutableStateFlow<TorchState>,
-  _: ResourceProvider,
-  _: Toaster
+  rp: ResourceProvider,
+  toaster: Toaster
 ): ScopeWorker<AppScope> = {
   torchStore.collect { torchState ->
     catch {
