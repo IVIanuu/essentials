@@ -50,7 +50,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
     requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-    @Provide val component = activityScope.element<UnlockScreenComponent>()
+    @Provide val component: UnlockScreenComponent = activityScope.element()
 
     d(logger = component.logger) { "unlock screen for $requestId" }
 
