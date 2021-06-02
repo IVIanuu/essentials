@@ -18,6 +18,6 @@ package com.ivianuu.essentials.time
 
 import kotlin.time.*
 
-expect fun Double.toDuration(): Duration
+expect fun Long.toDuration(): Duration
 
-expect fun Duration.toDouble(): Double
+expect fun Duration.toLong(): Long

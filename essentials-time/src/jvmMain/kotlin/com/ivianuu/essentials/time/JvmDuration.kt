@@ -2,12 +2,12 @@ package com.ivianuu.essentials.time
 
 import kotlin.time.*
 
-actual fun Double.toDuration(): Duration =
-  Duration::class.java.getDeclaredConstructor(Double::class.java)
+actual fun Long.toDuration(): Duration =
+  Duration::class.java.getDeclaredConstructor(Long::class.java)
     .also { it.isAccessible = true }
     .newInstance(this)
 
-actual fun Duration.toDouble(): Double = javaClass.declaredFields
-  .first { it.type == Double::class.java }
+actual fun Duration.toLong(): Long = javaClass.declaredFields
+  .first { it.type == Long::class.java }
   .also { it.isAccessible = true }
-  .get(this)!! as Double
+  .get(this)!! as Long
