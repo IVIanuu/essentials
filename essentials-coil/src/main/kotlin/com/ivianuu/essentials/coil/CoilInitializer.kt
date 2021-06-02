@@ -17,10 +17,11 @@
 package com.ivianuu.essentials.coil
 
 import coil.*
-import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-@Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader): ScopeInitializer<AppScope> =
+typealias CoilInitializer = ScopeInitializer<AppScope>
+
+@Provide fun coilInitializer(imageLoaderFactory: () -> ImageLoader): CoilInitializer =
   { Coil.setImageLoader(imageLoaderFactory) }
