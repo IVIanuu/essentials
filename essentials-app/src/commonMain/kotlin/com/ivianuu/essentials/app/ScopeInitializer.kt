@@ -11,7 +11,9 @@ typealias ScopeInitializer<S> = () -> Unit
 @Provide fun <@Spread T : ScopeInitializer<S>, S : Scope> scopeInitializerElement(
   instance: () -> T,
   key: TypeKey<T>,
-  config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT
+  config: ScopeInitializerConfig<T> = ScopeInitializerConfig.DEFAULT,
+  proof: IsSubType<T, ScopeInitializer<S>>,
+  proof2: IsNotSubType<ScopeInitializer<S>, T>
 ): ScopeInitializerElement<S> = ScopeInitializerElement(key, instance, config)
 
 class ScopeInitializerConfig<out T : ScopeInitializer<*>>(

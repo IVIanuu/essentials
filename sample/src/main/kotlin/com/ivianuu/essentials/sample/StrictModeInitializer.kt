@@ -21,7 +21,9 @@ import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
-@Provide val strictModeInitializer: ScopeInitializer<AppScope> = {
+typealias StrictModeInitializer = ScopeInitializer<AppScope>
+
+@Provide val strictModeInitializer: StrictModeInitializer = {
   StrictMode.setThreadPolicy(
     StrictMode.ThreadPolicy.Builder()
       .detectAll()
