@@ -30,9 +30,9 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import androidx.core.view.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Composable fun overlaySystemBarBgColor(color: Color) =
   if (color.isLight) Color.White.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.2f)
@@ -84,10 +84,10 @@ typealias RootSystemBarsStyle = UiDecorator
   }
 }
 
-@Provide val rootSystemBarsStyleConfig: UiDecoratorConfig<RootSystemBarsStyle> =
-  UiDecoratorConfig(
-    dependencies = setOf(inject<TypeKey<AppTheme>>(), inject<TypeKey<SystemBarManagerProvider>>())
-  )
+@Provide val rootSystemBarsStyleLoadingOrder: LoadingOrder<RootSystemBarsStyle> =
+  LoadingOrder<RootSystemBarsStyle>()
+    .after<AppTheme>()
+    .after<SystemBarManagerProvider>()
 
 private val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

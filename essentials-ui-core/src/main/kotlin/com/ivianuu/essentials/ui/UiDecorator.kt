@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.injekt.*
@@ -26,30 +27,20 @@ import com.ivianuu.injekt.common.*
 @Provide fun <@Spread T : UiDecorator> uiDecoratorElement(
   instance: T,
   key: TypeKey<T>,
-  config: UiDecoratorConfig<T> = UiDecoratorConfig.DEFAULT
-): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator, config)
-
-class UiDecoratorConfig<out T : UiDecorator>(
-  val dependencies: Set<TypeKey<UiDecorator>> = emptySet(),
-  val dependents: Set<TypeKey<UiDecorator>> = emptySet(),
-) {
-  companion object {
-    val DEFAULT = UiDecoratorConfig<Nothing>(emptySet(), emptySet())
-  }
-}
+  loadingOrder: LoadingOrder<T> = LoadingOrder()
+): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator, loadingOrder.cast())
 
 typealias UiDecorator = @Composable (@Composable () -> Unit) -> Unit
 
 data class UiDecoratorElement(
   val key: TypeKey<UiDecorator>,
   val decorator: UiDecorator,
-  val config: UiDecoratorConfig<*>
+  val loadingOrder: LoadingOrder<UiDecorator>
 ) {
   companion object {
-    @Provide val treeDescriptor = object : TreeDescriptor<UiDecoratorElement> {
-      override fun key(value: UiDecoratorElement): Any = value.key
-      override fun dependencies(value: UiDecoratorElement): Set<Any> = value.config.dependencies
-      override fun dependents(value: UiDecoratorElement): Set<Any> = value.config.dependents
+    @Provide val treeDescriptor = object : LoadingOrder.Descriptor<UiDecoratorElement> {
+      override fun key(item: UiDecoratorElement) = item.key
+      override fun loadingOrder(item: UiDecoratorElement) = item.loadingOrder
     }
   }
 }
@@ -62,7 +53,7 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 ): DecorateUi = { content ->
   remember {
     elements
-      .sortedTopological()
+      .sortedWithLoadingOrder()
       .reversed()
       .fold(content) { acc, element ->
         {
@@ -75,6 +66,5 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
 
 typealias AppTheme = UiDecorator
 
-@Provide val appThemeConfig: UiDecoratorConfig<AppTheme> = UiDecoratorConfig(
-  dependencies = setOf(inject<TypeKey<SystemBarManagerProvider>>())
-)
+@Provide val appThemeConfig: LoadingOrder<AppTheme> = LoadingOrder<AppTheme>()
+  .after<SystemBarManagerProvider>()
