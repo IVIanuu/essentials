@@ -36,12 +36,12 @@ import kotlinx.serialization.*
         NavBarRotationMode.MARSHMALLOW
       }
     )
+
+    @Provide fun prefModule(
+      initialFactory: () -> @Initial NavBarPrefs
+    ) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
   }
 }
-
-@Provide fun navBarPrefsModule(
-  initialFactory: () -> @Initial NavBarPrefs
-) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
 
 internal typealias WasNavBarHidden = Boolean
 

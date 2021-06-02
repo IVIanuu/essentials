@@ -73,9 +73,11 @@ private fun mediaIntentFor(
 
 @Serializable data class MediaActionPrefs(
   @SerialName("media_app") val mediaApp: String? = null,
-)
-
-@Provide val mediaActionPrefsModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
+) {
+  companion object {
+    @Provide val prefModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
+  }
+}
 
 class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 

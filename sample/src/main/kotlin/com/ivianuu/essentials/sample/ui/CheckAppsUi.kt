@@ -58,6 +58,8 @@ object CheckAppsKey : Key<Nothing>
 
 @Serializable data class CheckAppsPrefs(
   @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
-)
-
-@Provide val checkAppsPrefsModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }
+) {
+  companion object {
+    @Provide val prefModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }
+  }
+}

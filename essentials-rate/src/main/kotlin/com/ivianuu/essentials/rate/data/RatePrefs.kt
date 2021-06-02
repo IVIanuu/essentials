@@ -14,6 +14,8 @@ import kotlinx.serialization.*
     LATER,
     NEVER
   }
-}
 
-@Provide val ratePrefsModule = PrefModule("feedback_prefs") { RatePrefs() }
+  companion object {
+    @Provide val prefModule = PrefModule("feedback_prefs") { RatePrefs() }
+  }
+}

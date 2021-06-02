@@ -24,10 +24,13 @@ import kotlinx.serialization.*
 @Serializable data class TwilightPrefs(
   @SerialName("twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,
   @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
-)
-
-@Provide fun twilightPrefsModule(
-  initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
-) = PrefModule<TwilightPrefs>("twilight_prefs") {
-  initialTwilightPrefs?.invoke() ?: TwilightPrefs()
+) {
+  companion object {
+    @Provide fun prefModule(
+      initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
+    ) = PrefModule<TwilightPrefs>("twilight_prefs") {
+      initialTwilightPrefs?.invoke() ?: TwilightPrefs()
+    }
+  }
 }
+

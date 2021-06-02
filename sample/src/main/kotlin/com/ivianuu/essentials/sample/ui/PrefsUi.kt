@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.android.prefs.*
+import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.common.*
@@ -141,7 +142,7 @@ object PrefsKey : Key<Nothing>
           onValueChangeRequest = {
             scope.launch {
               val newColor = navigator.push(
-                com.ivianuu.essentials.colorpicker.ColorPickerKey(
+                ColorPickerKey(
                   initialColor = Color(prefs.color),
                   title = "Color"
                 )
@@ -219,6 +220,8 @@ object PrefsKey : Key<Nothing>
   val color: Int = Color.Red.toArgb(),
   val multiChoice: Set<String> = setOf("A", "B", "C"),
   val singleChoice: String = "C",
-)
-
-@Provide val samplePrefsModule = PrefModule("sample_prefs") { SamplePrefs() }
+) {
+  companion object {
+    @Provide val prefModule = PrefModule("sample_prefs") { SamplePrefs() }
+  }
+}

@@ -9,8 +9,11 @@ import kotlinx.serialization.*
   @SerialName("disable_on_keyboard") val disableOnKeyboard: Boolean = false,
   @SerialName("disable_on_lock_screen") val disableOnLockScreen: Boolean = true,
   @SerialName("disable_on_secure_screens") val disableOnSecureScreens: Boolean = true
-)
-
-@Provide val systemOverlayBlacklistPrefsModule = PrefModule("system_overlay_blacklist_prefs") {
-  SystemOverlayBlacklistPrefs()
+) {
+  companion object {
+    @Provide val prefModule = PrefModule("system_overlay_blacklist_prefs") {
+      SystemOverlayBlacklistPrefs()
+    }
+  }
 }
+
