@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -34,10 +35,21 @@ typealias ScopeWorkerRunner<S> = () -> Unit
   workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {
   d { "$typeKey run scope workers" }
-  workers
-    .forEach { worker ->
-      scope.launch {
-        worker()()
+  scope.launch {
+    runWithCleanup(
+      block = {
+        supervisorScope {
+          workers
+            .forEach { worker ->
+              launch {
+                worker()()
+              }
+            }
+        }
+      },
+      cleanup = {
+        d { "$typeKey cancel scope workers" }
       }
-    }
+    )
+  }
 }
