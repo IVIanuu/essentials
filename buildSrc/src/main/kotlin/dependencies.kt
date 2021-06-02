@@ -27,7 +27,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.10.0"
+    private const val version = "0.11.0"
     const val coil = "com.google.accompanist:accompanist-coil:$version"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
@@ -39,7 +39,7 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.3.0-alpha08"
+      private const val version = "1.3.0-beta01"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -47,7 +47,7 @@ object Deps {
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
     object Compose {
-      const val version = "1.0.0-beta07"
+      const val version = "1.0.0-beta08"
       const val compiler = "androidx.compose.compiler:compiler:$version"
       const val core = "androidx.compose.ui:ui:$version"
       const val material = "androidx.compose.material:material:$version"
@@ -86,7 +86,7 @@ object Deps {
   const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
 
   object Coroutines {
-    private const val version = "1.4.3"
+    private const val version = "1.5.0"
     const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
     const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -97,12 +97,12 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev876"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev879"
 
   const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
   object Injekt {
-    private const val version = "0.0.1-dev566"
+    private const val version = "0.0.1-dev567"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"
@@ -120,7 +120,7 @@ object Deps {
   const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
 
   object Kotlin {
-    const val version = "1.4.32"
+    const val version = "1.5.10"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -130,7 +130,7 @@ object Deps {
 
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
-    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
+    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
   }
 
   const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
