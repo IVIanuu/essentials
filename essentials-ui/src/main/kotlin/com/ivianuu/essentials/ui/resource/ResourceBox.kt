@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.layout.*
+import kotlin.reflect.*
 import kotlin.time.*
 
 @Composable fun <T> ResourceLazyColumnFor(
@@ -97,22 +98,44 @@ import kotlin.time.*
   success: @Composable (T) -> Unit
 ) {
   // we only wanna animate if the resource type has changed
-  val resourceState = remember(resource::class) { mutableStateOf(resource) }
+  var currentItem by remember(resource::class) {
+    mutableStateOf(ResourceBoxItem(resource::class, resource))
+  }
   SideEffect {
-    resourceState.value = resource
+    currentItem = ResourceBoxItem(resource::class, resource)
   }
 
   AnimatedBox(
-    current = resourceState,
+    current = currentItem,
     modifier = modifier,
     transition = transition
-  ) { currentState ->
-    when (val currentValue = currentState.value) {
+  ) { itemToRender ->
+    when (val valueToRender = itemToRender.value) {
       is Idle -> idle()
       is Loading -> loading()
-      is Success -> success(currentValue.value)
-      is Error -> error(currentValue.error)
+      is Success -> success(valueToRender.value)
+      is Error -> error(valueToRender.error)
     }
+  }
+}
+
+private class ResourceBoxItem<T>(
+  val clazz: KClass<out Resource<T>>,
+  val value: Resource<T>
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as ResourceBoxItem<*>
+
+    if (clazz != other.clazz) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    return clazz.hashCode()
   }
 }
 
