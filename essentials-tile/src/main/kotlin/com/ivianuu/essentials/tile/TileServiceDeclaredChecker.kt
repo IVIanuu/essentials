@@ -7,8 +7,7 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
-@Provide
-fun tileServiceDeclaredChecker(
+@Provide fun tileServiceDeclaredChecker(
   context: AppContext,
   packageManager: PackageManager,
   tileIds: Set<TileId> = emptySet()

@@ -25,8 +25,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
-@Optics
-data class TileModel<out T : AbstractFunTileService<*>>(
+@Optics data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,
   val iconRes: Int? = null,
   val label: String? = null,
@@ -57,8 +56,7 @@ class TileModuleElementModule<@Spread T : StateFlow<TileModel<S>>, S : AbstractF
 
 typealias TileScope = Scope
 
-@Provide
-val tileScopeModule =
+@Provide val tileScopeModule =
   ChildScopeModule1<ServiceScope, TileId, TileScope>()
 
 inline class TileId(val clazz: KClass<*>)

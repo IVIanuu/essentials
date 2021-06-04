@@ -47,8 +47,7 @@ abstract class AbstractFunTileService<T : Any>(
     createServiceScope().element()
   }
 
-  @Provide
-  private val logger
+  @Provide private val logger
     get() = component.logger
 
   private var tileModelComponent: TileModelComponent? = null
