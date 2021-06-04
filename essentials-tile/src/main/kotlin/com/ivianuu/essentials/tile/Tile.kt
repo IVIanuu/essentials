@@ -27,14 +27,14 @@ import kotlin.reflect.*
 
 @Optics
 data class TileModel<out T : AbstractFunTileService<*>>(
-        val icon: Icon? = null,
-        val iconRes: Int? = null,
-        val label: String? = null,
-        val labelRes: Int? = null,
-        val description: String? = null,
-        val descriptionRes: Int? = null,
-        val status: Status = Status.UNAVAILABLE,
-        val onTileClicked: () -> Unit = {}
+  val icon: Icon? = null,
+  val iconRes: Int? = null,
+  val label: String? = null,
+  val labelRes: Int? = null,
+  val description: String? = null,
+  val descriptionRes: Int? = null,
+  val status: Status = Status.UNAVAILABLE,
+  val onTileClicked: () -> Unit = {}
 ) {
   enum class Status {
     UNAVAILABLE, ACTIVE, INACTIVE
@@ -47,8 +47,8 @@ fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.St
 class TileModuleElementModule<@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
   @Provide
   fun element(
-          serviceClass: KClass<S>,
-          provider: () -> T
+    serviceClass: KClass<S>,
+    provider: () -> T
   ): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceClass) to provider.cast()
 
   @Provide
@@ -59,6 +59,6 @@ typealias TileScope = Scope
 
 @Provide
 val tileScopeModule =
-        ChildScopeModule1<ServiceScope, TileId, TileScope>()
+  ChildScopeModule1<ServiceScope, TileId, TileScope>()
 
 inline class TileId(val clazz: KClass<*>)

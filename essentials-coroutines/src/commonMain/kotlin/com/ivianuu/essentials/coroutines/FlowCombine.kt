@@ -1,35 +1,14 @@
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import com.ivianuu.essentials.tuples.tupleOf
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.Tuple3
-import com.ivianuu.essentials.tuples.Tuple4
-import com.ivianuu.essentials.tuples.Tuple5
-import com.ivianuu.essentials.tuples.Tuple6
-import com.ivianuu.essentials.tuples.Tuple7
-import com.ivianuu.essentials.tuples.Tuple8
-import com.ivianuu.essentials.tuples.Tuple9
-import com.ivianuu.essentials.tuples.Tuple10
-import com.ivianuu.essentials.tuples.Tuple11
-import com.ivianuu.essentials.tuples.Tuple12
-import com.ivianuu.essentials.tuples.Tuple13
-import com.ivianuu.essentials.tuples.Tuple14
-import com.ivianuu.essentials.tuples.Tuple15
-import com.ivianuu.essentials.tuples.Tuple16
-import com.ivianuu.essentials.tuples.Tuple17
-import com.ivianuu.essentials.tuples.Tuple18
-import com.ivianuu.essentials.tuples.Tuple19
-import com.ivianuu.essentials.tuples.Tuple20
-import com.ivianuu.essentials.tuples.Tuple21
+import com.ivianuu.essentials.tuples.*
+import kotlinx.coroutines.flow.*
 
 fun <A, B> combine(flowA: Flow<A>, flowB: Flow<B>): Flow<Tuple2<A, B>> {
-    return combine(flowA, flowB) { a, b -> tupleOf(a, b) }
+  return combine(flowA, flowB) { a, b -> tupleOf(a, b) }
 }
 
 fun <A, B, C> combine(flowA: Flow<A>, flowB: Flow<B>, flowC: Flow<C>): Flow<Tuple3<A, B, C>> {
-    return combine(flowA, flowB, flowC) { a, b, c -> tupleOf(a, b, c) }
+  return combine(flowA, flowB, flowC) { a, b, c -> tupleOf(a, b, c) }
 }
 
 fun <A, B, C, D> combine(

@@ -18,26 +18,17 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.Icon
-import android.service.quicksettings.Tile
-import android.service.quicksettings.TileService
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.common.lazy
-import com.ivianuu.injekt.coroutines.InjectCoroutineScope
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.InstallElement
-import com.ivianuu.injekt.scope.element
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlin.reflect.KClass
+import android.graphics.drawable.*
+import android.service.quicksettings.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import com.ivianuu.injekt.scope.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 class FunTileService1 : AbstractFunTileService<FunTileService1>()
 class FunTileService2 : AbstractFunTileService<FunTileService2>()
@@ -50,7 +41,7 @@ class FunTileService8 : AbstractFunTileService<FunTileService8>()
 class FunTileService9 : AbstractFunTileService<FunTileService9>()
 
 abstract class AbstractFunTileService<T : Any>(
-        @Inject private val serviceClass: KClass<T>
+  @Inject private val serviceClass: KClass<T>
 ) : TileService() {
   private val component: FunTileServiceComponent by lazy {
     createServiceScope().element()
@@ -66,11 +57,11 @@ abstract class AbstractFunTileService<T : Any>(
     super.onStartListening()
     d { "$serviceClass on start listening" }
     val tileModelComponent = component.tileScopeFactory(TileId(serviceClass))
-            .element<TileModelComponent>()
-            .also { this.tileModelComponent = it }
+      .element<TileModelComponent>()
+      .also { this.tileModelComponent = it }
     tileModelComponent.tileModel
-            .onEach { applyModel(it) }
-            .launchIn(tileModelComponent.scope)
+      .onEach { applyModel(it) }
+      .launchIn(tileModelComponent.scope)
   }
 
   override fun onClick() {
