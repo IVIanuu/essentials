@@ -251,9 +251,8 @@ val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
     props.absoluteElevation = absoluteElevation
   }
   Surface(
-    Modifier
-      .animationElement(key, ContainerTransformPropsKey to props)
-      .then(modifier),
+    modifier = modifier
+      .animationElement(key, ContainerTransformPropsKey to props),
     color = color,
     shape = RoundedCornerShape(cornerSize),
     border = if (borderWidth > 0.dp) BorderStroke(borderWidth, borderColor) else null,

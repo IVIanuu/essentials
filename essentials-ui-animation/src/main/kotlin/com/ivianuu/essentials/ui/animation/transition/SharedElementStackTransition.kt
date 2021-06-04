@@ -222,9 +222,8 @@ private val SharedElementPropsKey = AnimationElementPropKey<SharedElementProps>(
     props.content = content
   }
   Box(
-    modifier = Modifier
+    modifier = modifier
       .animationElement(key, SharedElementPropsKey to props)
-      .then(modifier)
   ) {
     CompositionLocalProvider(
       LocalSharedElementTransitionFraction provides if (isStart) 0f else 1f,
