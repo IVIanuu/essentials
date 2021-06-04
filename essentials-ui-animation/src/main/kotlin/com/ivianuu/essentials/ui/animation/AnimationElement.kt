@@ -4,8 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 
-@Stable
-class AnimationElement(val key: Any) {
+@Stable class AnimationElement(val key: Any) {
   internal val modifiers = mutableStateListOf<State<Modifier>>()
   internal val refs = mutableSetOf<Any>()
   private val props = mutableStateMapOf<AnimationElementPropKey<*>, Any?>()
@@ -20,9 +19,9 @@ object ContentAnimationElementKey
 
 class AnimationElementPropKey<T>
 
-@Stable
-class AnimationElementStore {
+@Stable class AnimationElementStore {
   private val elements = mutableMapOf<Any, AnimationElement>()
+
   fun referenceElement(elementKey: Any, refKey: Any): AnimationElement {
     val element = elements.getOrPut(elementKey) { AnimationElement(elementKey) }
     element.refs += refKey

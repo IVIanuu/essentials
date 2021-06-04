@@ -33,7 +33,7 @@ typealias BroadcastsFactory = (String) -> Flow<Intent>
   callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
       override fun onReceive(context: Context, intent: Intent) {
-        catch { offer(intent) }
+        trySend(intent)
       }
     }
     context.registerReceiver(broadcastReceiver, IntentFilter(action))

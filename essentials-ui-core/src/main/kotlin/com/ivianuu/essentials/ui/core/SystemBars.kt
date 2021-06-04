@@ -42,9 +42,7 @@ import com.ivianuu.injekt.*
   lightIcons: Boolean = bgColor.isLight,
   elevation: Dp = 0.dp,
 ): Modifier = composed {
-  val style = remember {
-    SystemBarStyle(bgColor, lightIcons, elevation)
-  }
+  val style = remember { SystemBarStyle(bgColor, lightIcons, elevation) }
   SideEffect {
     style.barColor = bgColor
     style.lightIcons = lightIcons

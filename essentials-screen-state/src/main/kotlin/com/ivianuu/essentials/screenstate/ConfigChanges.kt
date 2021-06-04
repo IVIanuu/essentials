@@ -33,7 +33,7 @@ typealias ConfigChange = Unit
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
-      catch { offer(ConfigChange) }
+      trySend(ConfigChange)
     }
 
     override fun onLowMemory() {

@@ -31,31 +31,35 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
 @Provide val navigationStateContent: NavigationStateContent = { state, modifier ->
   val keyUiScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiScope>()
   val contentState = remember {
-    NavigationContentState(keyUiScopeFactory = keyUiScopeFactory)
+    NavigationContentState(keyUiScopeFactory, state.backStack)
   }
-  contentState.updateBackStack(state.backStack.cast())
-  DisposableEffect(true) {
-    onDispose {
-      contentState.updateBackStack(emptyList())
-    }
+  SideEffect {
+    contentState.updateBackStack(state.backStack)
   }
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
 @Provide @InstallElement<KeyUiScope>
 class KeyUiComponent(
-  val optionFactories: Map<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>>,
-  val uiFactories: Map<KClass<Key<Any>>, KeyUiFactory<Key<Any>>>,
+  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
+  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val decorateUi: DecorateKeyUi,
 )
 
-private class NavigationContentState(var keyUiScopeFactory: (Key<*>) -> KeyUiScope) {
+private class NavigationContentState(
+  var keyUiScopeFactory: (Key<*>) -> KeyUiScope,
+  initialBackStack: List<Key<*>>
+) {
   private var children by mutableStateOf(emptyList<Child>())
 
-  val stackChildren: List<AnimatedStackChild<Key<Any>>>
+  val stackChildren: List<AnimatedStackChild<Key<*>>>
     get() = children.map { it.stackChild }
 
-  fun updateBackStack(backStack: List<Key<Any>>) {
+  init {
+    updateBackStack(initialBackStack)
+  }
+
+  fun updateBackStack(backStack: List<Key<*>>) {
     val removedChildren = children
       .filter { it.key !in backStack }
     children = backStack
@@ -64,7 +68,7 @@ private class NavigationContentState(var keyUiScopeFactory: (Key<*>) -> KeyUiSco
   }
 
   @Suppress("UNCHECKED_CAST")
-  private fun getOrCreateEntry(key: Key<Any>): Child {
+  private fun getOrCreateEntry(key: Key<*>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
     val scope = keyUiScopeFactory(key)
     val component = scope.element<KeyUiComponent>()
@@ -76,7 +80,7 @@ private class NavigationContentState(var keyUiScopeFactory: (Key<*>) -> KeyUiSco
   }
 
   private class Child(
-    val key: Key<Any>,
+    val key: Key<*>,
     options: KeyUiOptions? = null,
     val content: @Composable () -> Unit,
     val scope: KeyUiScope

@@ -18,7 +18,7 @@ typealias RotationChange = Unit
   val listener = object :
     OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
     override fun onOrientationChanged(orientation: Int) {
-      com.ivianuu.essentials.catch { offer(RotationChange) }
+      trySend(RotationChange)
     }
   }
   listener.enable()

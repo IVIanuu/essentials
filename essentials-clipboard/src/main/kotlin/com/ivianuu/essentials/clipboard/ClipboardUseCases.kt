@@ -34,7 +34,7 @@ typealias ClipboardText = String?
 ) = callbackFlow<ClipboardText> {
   val listener = ClipboardManager.OnPrimaryClipChangedListener {
     val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
-    offer(current)
+    trySend(current)
   }
   awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)

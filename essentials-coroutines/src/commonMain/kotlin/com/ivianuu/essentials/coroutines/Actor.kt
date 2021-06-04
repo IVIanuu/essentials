@@ -6,7 +6,7 @@ import kotlin.coroutines.*
 
 interface Actor<T> {
   suspend fun act(message: T)
-  fun tryAct(message: T): Boolean
+  fun tryAct(message: T): ChannelResult<Unit>
 }
 
 fun <T> CoroutineScope.actor(
@@ -32,9 +32,9 @@ private class ActorImpl<T>(
     mailbox.send(message)
   }
 
-  override fun tryAct(message: T): Boolean {
+  override fun tryAct(message: T): ChannelResult<Unit> {
     job.start()
-    return mailbox.offer(message)
+    return mailbox.trySend(message)
   }
 }
 

@@ -30,13 +30,13 @@ typealias KeyUiFactory<K> = (K, KeyUiScope) -> KeyUi<K>
   @Provide fun keyUi(
     keyClass: KClass<K>,
     keyUiFactory: (@Provide K, @Provide KeyUiScope) -> KeyUi<K>
-  ): Pair<KClass<Key<Any>>, KeyUiFactory<Key<Any>>> =
+  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
     (keyClass to keyUiFactory).cast()
 
   @Provide fun keyUiOptionFactory(
     keyClass: KClass<K>,
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
-  ): Pair<KClass<Key<Any>>, KeyUiOptionsFactory<Key<Any>>> =
+  ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
     (keyClass to keyUiOptionsFactory).cast()
 }
 

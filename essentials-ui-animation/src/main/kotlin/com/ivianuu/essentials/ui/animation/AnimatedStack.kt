@@ -46,14 +46,24 @@ import kotlinx.coroutines.*
   transition: StackTransition = LocalStackTransition.current,
   itemContent: @Composable (T) -> Unit
 ) {
-  val state = remember { AnimatedStackWithItemsState<T>() }
-  state.update(transition, itemContent, items)
+  val state = remember { AnimatedStackWithItemsState(transition, itemContent, items) }
+  SideEffect {
+    state.update(transition, itemContent, items)
+  }
   AnimatedStack(modifier = modifier, children = state.children)
 }
 
-private class AnimatedStackWithItemsState<T> {
+private class AnimatedStackWithItemsState<T>(
+  transition: StackTransition,
+  itemContent: @Composable (T) -> Unit,
+  items: List<T>
+) {
   var children by mutableStateOf(emptyList<AnimatedStackChild<T>>())
     private set
+
+  init {
+    update(transition, itemContent, items)
+  }
 
   fun update(transition: StackTransition, itemContent: @Composable (T) -> Unit, items: List<T>) {
     children = items.map { getOrCreateChild(it, transition, itemContent) }
@@ -84,8 +94,10 @@ private class AnimatedStackWithItemsState<T> {
   val scope = rememberCoroutineScope()
   val defaultTransition = LocalStackTransition.current
   val state = remember { AnimatedStackState(scope, children, defaultTransition) }
-  state.defaultTransition = defaultTransition
-  state.updateChildren(children)
+  SideEffect {
+    state.defaultTransition = defaultTransition
+    state.updateChildren(children)
+  }
   Box(modifier = modifier, propagateMinConstraints = true) {
     state.visibleChildren.toList().forEach { child ->
       key(child.key) { child.Content() }
@@ -96,8 +108,7 @@ private class AnimatedStackWithItemsState<T> {
   }
 }
 
-@Stable
-class AnimatedStackChild<T>(
+@Stable class AnimatedStackChild<T>(
   val key: T,
   opaque: Boolean = false,
   enterTransition: StackTransition? = null,
@@ -130,8 +141,7 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
   error("No stack child provided")
 }
 
-@Stable
-class AnimatedStackState<T>(
+@Stable class AnimatedStackState<T>(
   val scope: CoroutineScope,
   private var children: List<AnimatedStackChild<T>>,
   var defaultTransition: StackTransition,

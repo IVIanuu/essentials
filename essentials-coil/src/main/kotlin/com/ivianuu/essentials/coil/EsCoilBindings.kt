@@ -29,9 +29,9 @@ import kotlin.reflect.*
 @Provide fun imageLoader(
   context: AppContext,
   decoders: Set<Decoder> = emptySet(),
-  fetchers: Set<FetcherPair<Any>> = emptySet(),
+  fetchers: Set<FetcherPair<*>> = emptySet(),
   interceptors: Set<Interceptor> = emptySet(),
-  mappers: Set<MapperPair<Any>> = emptySet(),
+  mappers: Set<MapperPair<*>> = emptySet(),
 ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }
@@ -50,7 +50,7 @@ import kotlin.reflect.*
 @Provide fun <@Spread F : Fetcher<T>, T : Any> fetcherPair(
   instance: F,
   typeClass: KClass<T>
-): FetcherPair<Any> = FetcherPair(instance, typeClass) as FetcherPair<Any>
+): FetcherPair<*> = FetcherPair(instance, typeClass)
 
 data class FetcherPair<T : Any>(
   val fetcher: Fetcher<T>,
@@ -60,7 +60,7 @@ data class FetcherPair<T : Any>(
 @Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperPair(
   instance: M,
   typeClass: KClass<T>
-): MapperPair<Any> = MapperPair(instance, typeClass) as MapperPair<Any>
+): MapperPair<*> = MapperPair(instance, typeClass)
 
 data class MapperPair<T : Any>(
   val mapper: Mapper<T, *>,

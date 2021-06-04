@@ -39,7 +39,7 @@ typealias ContentChangesFactory = (Uri) -> Flow<Unit>
       object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
           super.onChange(selfChange)
-          catch { offer(Unit) }
+          trySend(Unit)
         }
       }
     }

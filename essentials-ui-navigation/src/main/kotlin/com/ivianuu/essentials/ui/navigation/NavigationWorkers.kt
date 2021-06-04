@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.*
 private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {
   val callback = object : OnBackPressedCallback(true) {
     override fun handleOnBackPressed() {
-      offer(Unit)
+      trySend(Unit)
     }
   }
   onBackPressedDispatcher.addCallback(callback)
@@ -37,7 +37,6 @@ private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {
       .first()
       .backStack
       .drop(1)
-      .filterIsInstance<Key<Any>>()
       .forEach { navigator.pop(it) }
   }
 }

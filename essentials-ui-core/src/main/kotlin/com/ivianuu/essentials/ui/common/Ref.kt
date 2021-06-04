@@ -24,8 +24,7 @@ fun <T> refOf(
   policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy()
 ): Ref<T> = RefImpl(value, policy)
 
-@Stable
-interface Ref<T> {
+@Stable interface Ref<T> {
   var value: T
 }
 

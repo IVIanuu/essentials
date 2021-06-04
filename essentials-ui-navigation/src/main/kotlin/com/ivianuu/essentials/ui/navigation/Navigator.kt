@@ -125,7 +125,7 @@ class NavigatorImpl(
       d { "pop top $topKey" }
       _state.update {
         @Suppress("UNCHECKED_CAST")
-        popKey(topKey as Key<Any>, null)
+        popKey(topKey, null)
       }
     }
   }
