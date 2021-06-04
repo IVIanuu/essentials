@@ -44,14 +44,12 @@ fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.St
 
 @Provide
 class TileModuleElementModule<@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
-  @Provide
-  fun element(
+  @Provide fun element(
     serviceClass: KClass<S>,
     provider: () -> T
   ): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceClass) to provider.cast()
 
-  @Provide
-  fun clazz(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+  @Provide fun clazz(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 }
 
 typealias TileScope = Scope
