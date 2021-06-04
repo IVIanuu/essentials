@@ -221,15 +221,17 @@ private sealed class ColorGridItem {
   isSelected: Boolean
 ) {
   BaseColorGridItem(onClick = onClick) {
-    Surface(
-      modifier = Modifier.fillMaxSize(),
-      color = color,
-      shape = RoundedCornerShape(50),
-      border = BorderStroke(
-        width = 1.dp,
-        color = MaterialTheme.colors.onSurface
-      ),
-      elevation = 0.dp
+    val shape = RoundedCornerShape(50)
+    Box(
+      modifier = Modifier.fillMaxSize()
+        .background(color, shape)
+        .border(
+          BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colors.onSurface
+          ),
+          shape
+        )
     ) {
       if (isSelected) {
         Icon(
