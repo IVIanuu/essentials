@@ -98,7 +98,9 @@ import kotlin.time.*
 ) {
   // we only wanna animate if the resource type has changed
   val resourceState = remember(resource::class) { mutableStateOf(resource) }
-  resourceState.value = resource
+  SideEffect {
+    resourceState.value = resource
+  }
 
   AnimatedBox(
     current = resourceState,
