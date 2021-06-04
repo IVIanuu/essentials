@@ -241,13 +241,15 @@ val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
       cornerSize, borderWidth, borderColor, elevation, absoluteElevation
     )
   }
-  props.content = content
-  props.cornerSize = cornerSize
-  props.color = color
-  props.borderWidth = borderWidth
-  props.borderColor = borderColor
-  props.elevation = elevation
-  props.absoluteElevation = absoluteElevation
+  SideEffect {
+    props.content = content
+    props.cornerSize = cornerSize
+    props.color = color
+    props.borderWidth = borderWidth
+    props.borderColor = borderColor
+    props.elevation = elevation
+    props.absoluteElevation = absoluteElevation
+  }
   Surface(
     Modifier
       .animationElement(key, ContainerTransformPropsKey to props)
@@ -260,7 +262,10 @@ val LocalContainerTransformTransitionFraction = compositionLocalOf { 0f }
     CompositionLocalProvider(
       LocalContainerTransformTransitionFraction provides if (isOpened) 1f else 0f
     ) {
-      props.compositionContext = rememberCompositionContext()
+      val compositionContext = rememberCompositionContext()
+      SideEffect {
+        props.compositionContext = compositionContext
+      }
       content()
     }
   }
