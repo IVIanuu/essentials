@@ -94,14 +94,17 @@ private class AnimatedStackWithItemsState<T>(
   val scope = rememberCoroutineScope()
   val defaultTransition = LocalStackTransition.current
   val state = remember { AnimatedStackState(scope, children, defaultTransition) }
+
   SideEffect {
     state.defaultTransition = defaultTransition
     state.updateChildren(children)
   }
+
   Box(modifier = modifier, propagateMinConstraints = true) {
     state.visibleChildren.toList().forEach { child ->
       key(child.key) { child.Content() }
     }
+
     state.animationOverlays.toList().forEach { overlay ->
       key(overlay) { overlay() }
     }

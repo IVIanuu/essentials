@@ -98,11 +98,11 @@ import kotlin.time.*
   success: @Composable (T) -> Unit
 ) {
   // we only wanna animate if the resource type has changed
-  var currentItem by remember(resource::class) {
+  val currentItem by remember(resource::class) {
     mutableStateOf(ResourceBoxItem(resource::class, resource))
   }
   SideEffect {
-    currentItem = ResourceBoxItem(resource::class, resource)
+    currentItem.value = resource
   }
 
   AnimatedBox(
@@ -121,8 +121,10 @@ import kotlin.time.*
 
 private class ResourceBoxItem<T>(
   val clazz: KClass<out Resource<T>>,
-  val value: Resource<T>
+  value: Resource<T>
 ) {
+  var value by mutableStateOf(value)
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
