@@ -217,8 +217,10 @@ private val SharedElementPropsKey = AnimationElementPropKey<SharedElementProps>(
 ) {
   val compositionContext = rememberCompositionContext()
   val props = remember { SharedElementProps(compositionContext, content) }
-  props.compositionContext = compositionContext
-  props.content = content
+  SideEffect {
+    props.compositionContext = compositionContext
+    props.content = content
+  }
   Box(
     modifier = Modifier
       .animationElement(key, SharedElementPropsKey to props)
