@@ -48,6 +48,7 @@ import com.ivianuu.injekt.*
     style.lightIcons = lightIcons
     style.elevation = elevation
   }
+
   val systemBarManager = LocalSystemBarManager.current
   DisposableEffect(systemBarManager, style) {
     systemBarManager.styles += style

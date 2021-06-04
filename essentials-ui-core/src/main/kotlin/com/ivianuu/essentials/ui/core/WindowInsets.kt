@@ -41,6 +41,7 @@ import kotlin.math.*
   content: @Composable () -> Unit
 ) {
   val targetInsets = LocalInsets.current
+
   val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
     LaunchedEffect(animation) {
@@ -48,8 +49,11 @@ import kotlin.math.*
     }
     var lastInsets by remember { refOf(targetInsets) }
     remember(animation.value) { lerp(lastInsets, targetInsets, animation.value) }
-      .also { lastInsets = it }
+      .also { newInsets ->
+        SideEffect { lastInsets = newInsets }
+      }
   }
+
   Box(
     modifier = Modifier.absolutePadding(
       if (left) animatedInsets.left else 0.dp,

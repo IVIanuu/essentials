@@ -58,8 +58,10 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
     ColorPickerTab.EDITOR -> ColorPickerTab.COLORS
   }
 
-  if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
-    currentScreen = ColorPickerTab.COLORS
+  SideEffect {
+    if (!allowCustomArgb && currentScreen == ColorPickerTab.EDITOR) {
+      currentScreen = ColorPickerTab.COLORS
+    }
   }
 
   Dialog(

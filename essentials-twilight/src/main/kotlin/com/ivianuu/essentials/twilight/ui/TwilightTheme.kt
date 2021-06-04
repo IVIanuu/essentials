@@ -53,7 +53,7 @@ import com.ivianuu.essentials.ui.material.lerp
       animation.value
     )
   }
-  lastColors = animatedColors
+  SideEffect { lastColors = animatedColors }
 
   MaterialTheme(
     colors = animatedColors,
