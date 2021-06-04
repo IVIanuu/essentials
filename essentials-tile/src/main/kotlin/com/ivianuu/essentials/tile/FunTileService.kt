@@ -14,60 +14,75 @@
  * limitations under the License.
  */
 
+@file:Providers("com.ivianuu.injekt.common.kClass")
+
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.*
-import android.service.quicksettings.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import android.graphics.drawable.Icon
+import android.service.quicksettings.Tile
+import android.service.quicksettings.TileService
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Providers
+import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.android.createServiceScope
+import com.ivianuu.injekt.common.lazy
+import com.ivianuu.injekt.coroutines.InjectCoroutineScope
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.InstallElement
+import com.ivianuu.injekt.scope.element
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlin.reflect.KClass
 
-class FunTileService1 : AbstractFunTileService(inject<TypeKey<FunTileService1>>())
-class FunTileService2 : AbstractFunTileService(inject<TypeKey<FunTileService2>>())
-class FunTileService3 : AbstractFunTileService(inject<TypeKey<FunTileService3>>())
-class FunTileService4 : AbstractFunTileService(inject<TypeKey<FunTileService4>>())
-class FunTileService5 : AbstractFunTileService(inject<TypeKey<FunTileService5>>())
-class FunTileService6 : AbstractFunTileService(inject<TypeKey<FunTileService6>>())
-class FunTileService7 : AbstractFunTileService(inject<TypeKey<FunTileService7>>())
-class FunTileService8 : AbstractFunTileService(inject<TypeKey<FunTileService8>>())
-class FunTileService9 : AbstractFunTileService(inject<TypeKey<FunTileService9>>())
+class FunTileService1 : AbstractFunTileService<FunTileService1>()
+class FunTileService2 : AbstractFunTileService<FunTileService2>()
+class FunTileService3 : AbstractFunTileService<FunTileService3>()
+class FunTileService4 : AbstractFunTileService<FunTileService4>()
+class FunTileService5 : AbstractFunTileService<FunTileService5>()
+class FunTileService6 : AbstractFunTileService<FunTileService6>()
+class FunTileService7 : AbstractFunTileService<FunTileService7>()
+class FunTileService8 : AbstractFunTileService<FunTileService8>()
+class FunTileService9 : AbstractFunTileService<FunTileService9>()
 
-abstract class AbstractFunTileService(private val tileKey: TypeKey<AbstractFunTileService>) :
-  TileService() {
+abstract class AbstractFunTileService<T : Any>(
+        @Inject private val serviceClass: KClass<T>
+) : TileService() {
   private val component: FunTileServiceComponent by lazy {
     createServiceScope().element()
   }
 
-  @Provide private val logger get() = component.logger
+  @Provide
+  private val logger
+    get() = component.logger
 
   private var tileModelComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    d { "$tileKey on start listening" }
-    val tileModelComponent = component.tileScopeFactory(TileId(tileKey))
-      .element<TileModelComponent>()
-      .also { this.tileModelComponent = it }
+    d { "$serviceClass on start listening" }
+    val tileModelComponent = component.tileScopeFactory(TileId(serviceClass))
+            .element<TileModelComponent>()
+            .also { this.tileModelComponent = it }
     tileModelComponent.tileModel
-      .onEach { applyModel(it) }
-      .launchIn(tileModelComponent.scope)
+            .onEach { applyModel(it) }
+            .launchIn(tileModelComponent.scope)
   }
 
   override fun onClick() {
     super.onClick()
-    d { "$tileKey on click" }
+    d { "$serviceClass on click" }
     tileModelComponent!!.tileModel.value.onTileClicked()
   }
 
   override fun onStopListening() {
     tileModelComponent?.tileScope?.dispose()
     tileModelComponent = null
-    d { "$tileKey on stop listening" }
+    d { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 

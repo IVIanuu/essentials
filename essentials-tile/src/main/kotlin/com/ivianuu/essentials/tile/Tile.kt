@@ -21,19 +21,20 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
-@Optics data class TileModel<out T : AbstractFunTileService>(
-  val icon: Icon? = null,
-  val iconRes: Int? = null,
-  val label: String? = null,
-  val labelRes: Int? = null,
-  val description: String? = null,
-  val descriptionRes: Int? = null,
-  val status: Status = Status.UNAVAILABLE,
-  val onTileClicked: () -> Unit = {}
+@Optics
+data class TileModel<out T : AbstractFunTileService<*>>(
+        val icon: Icon? = null,
+        val iconRes: Int? = null,
+        val label: String? = null,
+        val labelRes: Int? = null,
+        val description: String? = null,
+        val descriptionRes: Int? = null,
+        val status: Status = Status.UNAVAILABLE,
+        val onTileClicked: () -> Unit = {}
 ) {
   enum class Status {
     UNAVAILABLE, ACTIVE, INACTIVE
@@ -42,14 +43,22 @@ import kotlinx.coroutines.flow.*
 
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
-@Provide fun <@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService> tileModelElement(
-  serviceKey: TypeKey<S>,
-  provider: () -> T
-): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceKey) to provider.cast()
+@Provide
+class TileModuleElementModule<@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
+  @Provide
+  fun element(
+          serviceClass: KClass<S>,
+          provider: () -> T
+  ): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceClass) to provider.cast()
+
+  @Provide
+  fun clazz(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+}
 
 typealias TileScope = Scope
 
-@Provide val tileScopeModule =
-  ChildScopeModule1<ServiceScope, TileId, TileScope>()
+@Provide
+val tileScopeModule =
+        ChildScopeModule1<ServiceScope, TileId, TileScope>()
 
-inline class TileId(val typeKey: TypeKey<AbstractFunTileService>)
+inline class TileId(val clazz: KClass<*>)
