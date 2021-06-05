@@ -17,6 +17,7 @@ import com.ivianuu.injekt.scope.*
   "com.ivianuu.essentials.apps.ui.apppicker.*",
   "com.ivianuu.essentials.apps.ui.checkableapps.*",
   "com.ivianuu.essentials.backup.*",
+  "com.ivianuu.essentials.billing.*",
   "com.ivianuu.essentials.boot.*",
   "com.ivianuu.essentials.broadcast.*",
   "com.ivianuu.essentials.clipboard.*",
