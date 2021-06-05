@@ -19,11 +19,17 @@ package com.ivianuu.essentials.logging
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.Logger.Kind.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 interface Logger {
   val isEnabled: Boolean
 
-  fun log(kind: Kind, message: String? = null, throwable: Throwable? = null, tag: String? = null)
+  fun log(
+    kind: Kind,
+    tag: LoggingTag,
+    message: String? = null,
+    throwable: Throwable? = null
+  )
 
   enum class Kind {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
@@ -31,80 +37,81 @@ interface Logger {
 }
 
 inline fun v(
-  tag: String? = null,
   throwable: Throwable? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = VERBOSE, throwable = throwable, tag = tag, message = message)
+  log(kind = VERBOSE, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun d(
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = DEBUG, throwable = throwable, tag = tag, message = message)
+  log(kind = DEBUG, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun i(
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = INFO, throwable = throwable, tag = tag, message = message)
+  log(kind = INFO, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun w(
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = WARN, throwable = throwable, tag = tag, message = message)
+  log(kind = WARN, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun e(
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = ERROR, throwable = throwable, tag = tag, message = message)
+  log(kind = ERROR, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun wtf(
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = WTF, throwable = throwable, tag = tag, message = message)
+  log(kind = WTF, tag = tag, throwable = throwable, message = message)
 }
 
 inline fun log(
   kind: Logger.Kind,
   throwable: Throwable? = null,
-  tag: String? = null,
+  @Inject tag: LoggingTag,
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  if (logger.isEnabled) logger.log(kind, message(), throwable, tag)
+  if (logger.isEnabled) logger.log(kind, tag, message(), throwable)
+  else println("heloooo")
 }
 
 @Provide @Factory object NoopLogger : Logger {
   override val isEnabled: Boolean
     get() = false
 
-  override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
+  override fun log(kind: Logger.Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
   }
 }
 
 @Provide @Factory class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
-  override fun log(kind: Logger.Kind, message: String?, throwable: Throwable?, tag: String?) {
-    println("[${kind.name}] ${tag ?: stackTraceTag} ${render(message, throwable)}")
+  override fun log(kind: Logger.Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
+    println("[${kind.name}] $tag ${render(message, throwable)}")
   }
 
   private fun render(message: String?, throwable: Throwable?) = buildString {
@@ -116,6 +123,8 @@ inline fun log(
   }
 }
 
-expect val Logger.stackTraceTag: String
+typealias LoggingTag = String
+
+@Provide fun loggingTag(sourceKey: SourceKey): LoggingTag = sourceKey.value
 
 typealias LoggingEnabled = Boolean

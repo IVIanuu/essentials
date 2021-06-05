@@ -58,6 +58,7 @@ import kotlinx.coroutines.flow.*
         infiniteEmptyFlow()
       }
     }
+    .distinctUntilChanged()
     .flatMapLatest { currentPrefs ->
       d { "current prefs $currentPrefs" }
       if (currentPrefs.hideNavBar) {
@@ -70,6 +71,7 @@ import kotlinx.coroutines.flow.*
           .onEach { wasNavBarHiddenPref.updateData { false } }
       }
     }
+    .distinctUntilChanged()
     .collect { it.apply(context, nonSdkInterfaceDetectionDisabler, setOverscan) }
 }
 

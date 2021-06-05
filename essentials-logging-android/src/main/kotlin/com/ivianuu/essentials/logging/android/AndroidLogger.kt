@@ -25,14 +25,14 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 
 @Provide @Factory class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
-  override fun log(kind: Kind, message: String?, throwable: Throwable?, tag: String?) {
+  override fun log(kind: Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
     when (kind) {
-      VERBOSE -> Log.v(tag ?: stackTraceTag, message, throwable)
-      DEBUG -> Log.d(tag ?: stackTraceTag, message, throwable)
-      INFO -> Log.i(tag ?: stackTraceTag, message, throwable)
-      WARN -> Log.w(tag ?: stackTraceTag, message, throwable)
-      ERROR -> Log.e(tag ?: stackTraceTag, message, throwable)
-      WTF -> Log.wtf(tag ?: stackTraceTag, message, throwable)
+      VERBOSE -> Log.v(tag, message, throwable)
+      DEBUG -> Log.d(tag, message, throwable)
+      INFO -> Log.i(tag, message, throwable)
+      WARN -> Log.w(tag, message, throwable)
+      ERROR -> Log.e(tag, message, throwable)
+      WTF -> Log.wtf(tag, message, throwable)
     }
   }
 
