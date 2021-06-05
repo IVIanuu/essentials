@@ -98,7 +98,6 @@ inline fun log(
   message: () -> String? = { null },
 ) {
   if (logger.isEnabled) logger.log(kind, tag, message(), throwable)
-  else println("heloooo")
 }
 
 @Provide @Factory object NoopLogger : Logger {
