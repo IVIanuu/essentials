@@ -129,7 +129,11 @@ typealias IsPurchased = Boolean
   context.refreshes
 )
   .onStart { emit(Unit) }
-  .map { context.getIsPurchased(sku) }
+  .map {
+    context.withConnection {
+      getIsPurchased(sku)
+    }
+  }
   .distinctUntilChanged()
   .onEach { d(logger = context.logger) { "is purchased flow for $sku -> $it" } }
 
