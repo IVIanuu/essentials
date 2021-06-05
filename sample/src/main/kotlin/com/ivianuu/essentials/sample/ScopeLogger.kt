@@ -27,6 +27,6 @@ import com.ivianuu.injekt.scope.*
   scopeKey: TypeKey<S>,
   logger: Logger
 ): ScopeWorker<S> = {
-  d { "$scopeKey created" }
-  runOnCancellation { d { "$scopeKey disposed" } }
+  d { "${scopeKey.value} created" }
+  runOnCancellation { d { "${scopeKey.value} disposed" } }
 }

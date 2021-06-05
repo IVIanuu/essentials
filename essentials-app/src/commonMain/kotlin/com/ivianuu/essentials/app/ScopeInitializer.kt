@@ -36,7 +36,7 @@ data class ScopeInitializerElement<S>(
   initializers
     .sortedWithLoadingOrder()
     .forEach {
-      d { "$scopeKey initialize ${it.key}" }
+      d { "${scopeKey.value} initialize ${it.key.value}" }
       it.factory()()
     }
   workerRunner()

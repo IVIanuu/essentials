@@ -31,10 +31,10 @@ typealias ScopeWorkerRunner<S> = () -> Unit
 @Provide fun <S : Scope> scopeWorkerRunner(
   logger: Logger,
   scope: InjectCoroutineScope<S>,
-  typeKey: TypeKey<S>,
+  scopeKey: TypeKey<S>,
   workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {
-  d { "$typeKey run scope workers" }
+  d { "${scopeKey.value} run scope workers" }
   scope.launch {
     runWithCleanup(
       block = {
@@ -48,7 +48,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
         }
       },
       cleanup = {
-        d { "$typeKey cancel scope workers" }
+        d { "${scopeKey.value} cancel scope workers" }
       }
     )
   }

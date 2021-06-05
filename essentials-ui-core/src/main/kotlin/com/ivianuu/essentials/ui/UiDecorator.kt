@@ -57,7 +57,7 @@ typealias DecorateUi = @Composable (@Composable () -> Unit) -> Unit
       .reversed()
       .fold(content) { acc, element ->
         {
-          d { "Decorate ui ${element.key}" }
+          d { "Decorate ui ${element.key.value}" }
           element.decorator(acc)
         }
       }
