@@ -42,7 +42,7 @@ inline fun v(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = VERBOSE, tag = tag, throwable = throwable, message = message)
+  log(kind = VERBOSE, throwable = throwable, message = message)
 }
 
 inline fun d(
@@ -51,7 +51,7 @@ inline fun d(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = DEBUG, tag = tag, throwable = throwable, message = message)
+  log(kind = DEBUG, throwable = throwable, message = message)
 }
 
 inline fun i(
@@ -60,7 +60,7 @@ inline fun i(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = INFO, tag = tag, throwable = throwable, message = message)
+  log(kind = INFO, throwable = throwable, message = message)
 }
 
 inline fun w(
@@ -69,7 +69,7 @@ inline fun w(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = WARN, tag = tag, throwable = throwable, message = message)
+  log(kind = WARN, throwable = throwable, message = message)
 }
 
 inline fun e(
@@ -78,7 +78,7 @@ inline fun e(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = ERROR, tag = tag, throwable = throwable, message = message)
+  log(kind = ERROR, throwable = throwable, message = message)
 }
 
 inline fun wtf(
@@ -87,7 +87,7 @@ inline fun wtf(
   @Inject logger: Logger,
   message: () -> String? = { null },
 ) {
-  log(kind = WTF, tag = tag, throwable = throwable, message = message)
+  log(kind = WTF, throwable = throwable, message = message)
 }
 
 inline fun log(
