@@ -64,7 +64,7 @@ class EsAccessibilityService : AccessibilityService() {
   }
 }
 
-@Provide @InstallElement<ServiceScope>
+@Provide @ScopeElement<ServiceScope>
 class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableAccessibilityEvents,
   val accessibilityScopeFactory: () -> AccessibilityScope,

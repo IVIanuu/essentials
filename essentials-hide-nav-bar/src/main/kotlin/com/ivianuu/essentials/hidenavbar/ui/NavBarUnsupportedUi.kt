@@ -44,7 +44,7 @@ object NavBarUnsupportedKey : DialogKey<Nothing>
 @Provide fun navBarUnsupportedModel(
   key: NavBarUnsupportedKey,
   navigator: Navigator,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<NavBarUnsupportedModel> = scope.state(
   NavBarUnsupportedModel()
 ) {

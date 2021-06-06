@@ -56,7 +56,7 @@ object AppTrackerKey : Key<Nothing>
   foregroundState: AppTrackerForegroundState,
   createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
   permissionRequester: PermissionRequester,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
   val currentForegroundState by foregroundState.collectAsState()

@@ -132,7 +132,7 @@ data class WriteSecureSettingsPcInstructionsKey(
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   updateClipboardText: UpdateClipboardTextUseCase
 ): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
   initial

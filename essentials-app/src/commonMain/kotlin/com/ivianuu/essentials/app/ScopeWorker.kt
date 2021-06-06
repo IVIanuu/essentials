@@ -30,7 +30,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
 
 @Provide fun <S : Scope> scopeWorkerRunner(
   logger: Logger,
-  scope: InjectCoroutineScope<S>,
+  scope: InjektCoroutineScope<S>,
   scopeKey: TypeKey<S>,
   workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {

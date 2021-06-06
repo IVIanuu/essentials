@@ -84,7 +84,7 @@ data class UiPermission<P : Permission>(
   permissions: Map<TypeKey<Permission>, Permission>,
   permissionStateFactory: PermissionStateFactory,
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<PermissionRequestModel> =
   scope.state(PermissionRequestModel()) {
     state

@@ -15,7 +15,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 @Provide fun internalForegroundState(
   foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
   logger: Logger,
-  scope: InjectCoroutineScope<AppScope>,
+  scope: InjektCoroutineScope<AppScope>,
 ): @Scoped<AppScope> Flow<InternalForegroundState> = combine(
   foregroundStates
     .mapIndexed { index, foregroundState ->

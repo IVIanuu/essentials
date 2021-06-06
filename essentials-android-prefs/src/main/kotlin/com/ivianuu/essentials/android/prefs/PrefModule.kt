@@ -21,7 +21,7 @@ class PrefModule<T : Any>(private val name: String, private val initial: () -> T
     jsonFactory: () -> Json,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
-    scope: InjectCoroutineScope<AppScope>
+    scope: InjektCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
     val dataStore = DataStoreFactory.create(
       produceFile = { prefsDir().resolve(name) },

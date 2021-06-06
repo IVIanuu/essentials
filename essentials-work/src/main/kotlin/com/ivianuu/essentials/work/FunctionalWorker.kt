@@ -6,7 +6,7 @@ import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*
 import java.util.*
 
-@Provide @InstallWorker class FunctionalWorker(
+@Provide @InjektWorker class FunctionalWorker(
   private val workers: Set<WorkerElement> = emptySet(),
   context: AppContext,
   workerParams: WorkerParameters,

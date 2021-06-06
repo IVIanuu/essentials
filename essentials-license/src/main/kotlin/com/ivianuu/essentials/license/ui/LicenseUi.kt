@@ -45,7 +45,7 @@ object LicenseKey : Key<Nothing>
 
 @Provide fun licenseModel(
   getProjects: GetLicenseProjectsUseCase,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
   flow { emit(getProjects()) }
     .flowResultAsResource()

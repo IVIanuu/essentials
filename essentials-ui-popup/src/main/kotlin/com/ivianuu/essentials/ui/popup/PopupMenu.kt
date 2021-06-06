@@ -56,7 +56,7 @@ object PopupMenu {
   }
 }
 
-@Provide @InstallElement<UiScope>
+@Provide @ScopeElement<UiScope>
 class PopupMenuComponent(val navigator: Navigator)
 
 @Composable private fun PopupMenuItem(

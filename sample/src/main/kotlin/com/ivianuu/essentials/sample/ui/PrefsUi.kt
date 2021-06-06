@@ -45,7 +45,7 @@ object PrefsKey : Key<Nothing>
 @Provide fun prefsUi(
   navigator: Navigator,
   prefStore: DataStore<SamplePrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): KeyUi<PrefsKey> = {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   Scaffold(

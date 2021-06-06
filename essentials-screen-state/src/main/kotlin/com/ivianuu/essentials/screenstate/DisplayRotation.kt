@@ -44,7 +44,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   dispatcher: IODispatcher,
   rotationChanges: () -> Flow<RotationChange>,
   logger: Logger,
-  scope: InjectCoroutineScope<AppScope>,
+  scope: InjektCoroutineScope<AppScope>,
   screenState: () -> Flow<ScreenState>,
   windowManager: @SystemService WindowManager
 ): @Scoped<AppScope> Flow<DisplayRotation> = flow {

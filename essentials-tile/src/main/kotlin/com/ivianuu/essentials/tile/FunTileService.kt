@@ -108,7 +108,7 @@ abstract class AbstractFunTileService<T : Any>(
   }
 }
 
-@Provide @InstallElement<ServiceScope>
+@Provide @ScopeElement<ServiceScope>
 class FunTileServiceComponent(
   val logger: Logger,
   val resourceProvider: ResourceProvider,
@@ -116,11 +116,11 @@ class FunTileServiceComponent(
   val tileScopeFactory: @ChildScopeFactory (TileId) -> TileScope
 )
 
-@Provide @InstallElement<TileScope>
+@Provide @ScopeElement<TileScope>
 class TileModelComponent(
   tileId: TileId,
   tileModelElements: Set<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptySet(),
-  val scope: InjectCoroutineScope<TileScope>,
+  val scope: InjektCoroutineScope<TileScope>,
   val tileScope: TileScope
 ) {
   val tileModel = tileModelElements.toMap()[tileId]

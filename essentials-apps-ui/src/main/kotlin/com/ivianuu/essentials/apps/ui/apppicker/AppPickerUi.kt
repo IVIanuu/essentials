@@ -85,7 +85,7 @@ data class AppPickerKey(
   key: AppPickerKey,
   getInstalledApps: GetInstalledAppsUseCase,
   navigator: Navigator,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<AppPickerModel> = scope.state(
   AppPickerModel(
     appPredicate = key.appPredicate,

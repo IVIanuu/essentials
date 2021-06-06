@@ -35,10 +35,7 @@ import androidx.core.graphics.drawable.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
-import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.Notifications
-import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
+import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.notificationlistener.*
@@ -166,7 +163,7 @@ data class UiNotification(
   openNotification: OpenNotificationUseCase,
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
   notifications
     .map { notifications ->

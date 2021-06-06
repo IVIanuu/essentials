@@ -54,7 +54,7 @@ object FeedbackKey : DialogKey<Nothing>
   displayShowNever: DisplayShowNeverUseCase,
   key: FeedbackKey,
   navigator: Navigator,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): @Scoped<KeyUiScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {

@@ -54,5 +54,5 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   }
 }
 
-@Provide @InstallElement<UiScope>
+@Provide @ScopeElement<UiScope>
 class EsActivityComponent(val appUi: AppUi, val decorateUi: DecorateUi)

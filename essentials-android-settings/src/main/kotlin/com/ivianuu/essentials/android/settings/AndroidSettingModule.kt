@@ -4,12 +4,10 @@ import android.content.*
 import android.provider.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.store.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class AndroidSettingModule<T : S, S>(
@@ -23,7 +21,7 @@ class AndroidSettingModule<T : S, S>(
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
     dispatcher: IODispatcher,
-    scope: InjectCoroutineScope<AppScope>
+    scope: InjektCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
     private val actor = scope.actor(dispatcher)
 

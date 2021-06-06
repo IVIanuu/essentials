@@ -118,7 +118,7 @@ class UnlockScreenActivity : ComponentActivity() {
   }
 }
 
-@Provide @InstallElement<ActivityScope>
+@Provide @ScopeElement<ActivityScope>
 class UnlockScreenComponent(
   val broadcastsFactory: BroadcastsFactory,
   val keyguardManager: @SystemService KeyguardManager,

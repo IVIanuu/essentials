@@ -32,7 +32,7 @@ import java.util.*
 data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = false)
 
 @Provide fun twilightState(
-  scope: InjectCoroutineScope<AppScope>,
+  scope: InjektCoroutineScope<AppScope>,
   batteryTwilightState: () -> Flow<BatteryTwilightState>,
   systemTwilightState: () -> Flow<SystemTwilightState>,
   timeTwilightState: () -> Flow<TimeTwilightState>,

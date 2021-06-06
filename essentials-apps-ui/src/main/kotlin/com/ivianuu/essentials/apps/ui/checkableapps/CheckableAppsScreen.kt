@@ -121,7 +121,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 @Provide fun checkableAppsModel(
   params: CheckableAppsParams,
   getInstalledApps: GetInstalledAppsUseCase,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state(
   CheckableAppsModel(
     appPredicate = params.appPredicate,

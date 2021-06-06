@@ -114,7 +114,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   initial: @Initial SystemOverlayBlacklistModel,
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
   pref.data.update {
     copy(

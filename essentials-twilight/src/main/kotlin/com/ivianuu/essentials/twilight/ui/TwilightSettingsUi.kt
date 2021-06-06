@@ -117,7 +117,7 @@ object TwilightSettingsKey : Key<Nothing>
 
 @Provide fun twilightSettingsModel(
   pref: DataStore<TwilightPrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<TwilightSettingsModel> =
   scope.state(TwilightSettingsModel()) {
     pref.data.update {

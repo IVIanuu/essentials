@@ -19,7 +19,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.compose.*
@@ -39,7 +38,7 @@ typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Un
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-@Provide @InstallElement<KeyUiScope>
+@Provide @ScopeElement<KeyUiScope>
 class KeyUiComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,

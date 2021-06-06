@@ -76,7 +76,7 @@ object ShortcutPickerKey : Key<Shortcut>
   extractShortcut: ExtractShortcutUseCase,
   key: ShortcutPickerKey,
   navigator: Navigator,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {

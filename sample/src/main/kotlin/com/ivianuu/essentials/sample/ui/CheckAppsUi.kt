@@ -36,7 +36,7 @@ object CheckAppsKey : Key<Nothing>
   checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
   launchableAppPredicate: LaunchableAppPredicate,
   pref: DataStore<CheckAppsPrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(

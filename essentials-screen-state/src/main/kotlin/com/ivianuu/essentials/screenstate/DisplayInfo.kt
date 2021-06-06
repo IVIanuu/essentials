@@ -18,7 +18,7 @@ data class DisplayInfo(
 @Provide fun displayInfo(
   configChanges: () -> Flow<ConfigChange>,
   displayRotation: () -> Flow<DisplayRotation>,
-  scope: InjectCoroutineScope<AppScope>,
+  scope: InjektCoroutineScope<AppScope>,
   windowManager: @SystemService WindowManager
 ): @Scoped<AppScope> Flow<DisplayInfo> = flow {
   combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->

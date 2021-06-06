@@ -116,7 +116,7 @@ object RateKey : DialogKey<Nothing>
   initial: @Initial RateModel,
   displayShowNever: DisplayShowNeverUseCase,
   navigator: Navigator,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): @Scoped<KeyUiScope> StateFlow<RateModel> = scope.state(initial) {

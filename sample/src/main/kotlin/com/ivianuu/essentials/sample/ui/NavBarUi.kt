@@ -47,7 +47,7 @@ object NavBarKey : Key<Nothing>
   navigator: Navigator,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
 ): KeyUi<NavBarKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }

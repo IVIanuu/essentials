@@ -52,7 +52,7 @@ object RateOnPlayKey : DialogKey<Nothing>
   key: RateOnPlayKey,
   navigator: Navigator,
   rateOnPlay: RateOnPlayUseCase,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): @Scoped<KeyUiScope> StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {

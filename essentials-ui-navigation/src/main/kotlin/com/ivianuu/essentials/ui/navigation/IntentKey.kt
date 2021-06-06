@@ -50,7 +50,7 @@ typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Un
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ): IntentKeyHandler = handler@{ key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories[key::class]

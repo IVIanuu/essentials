@@ -140,7 +140,7 @@ sealed class ActionPickerItem {
   navigator: Navigator,
   permissionRequester: PermissionRequester,
   rp: ResourceProvider,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
 ): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }

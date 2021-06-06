@@ -26,7 +26,7 @@ import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun testTileModel(
-  scope: InjectCoroutineScope<TileScope>,
+  scope: InjektCoroutineScope<TileScope>,
   twilightPref: DataStore<TwilightPrefs>
 ): @Scoped<TileScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
   twilightPref.data.update {

@@ -31,7 +31,7 @@ typealias KeyboardVisible = Boolean
 @Provide fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
   keyboardHeightProvider: KeyboardHeightProvider,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&

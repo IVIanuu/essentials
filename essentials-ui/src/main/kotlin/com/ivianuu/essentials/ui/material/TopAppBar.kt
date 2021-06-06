@@ -134,5 +134,5 @@ private val DefaultAppBarElevation = 4.dp
   }
 }
 
-@Provide @InstallElement<KeyUiScope>
+@Provide @ScopeElement<KeyUiScope>
 class AutoTopAppBarComponent(val key: Key<*>, val navigator: Navigator)

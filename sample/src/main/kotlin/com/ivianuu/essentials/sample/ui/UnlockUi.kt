@@ -38,7 +38,7 @@ object UnlockKey : Key<Nothing>
 @Provide fun unlockUi(
   screenState: Flow<ScreenState>,
   screenUnlocker: ScreenUnlocker,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   toaster: Toaster,
 ): KeyUi<UnlockKey> = {
   Scaffold(

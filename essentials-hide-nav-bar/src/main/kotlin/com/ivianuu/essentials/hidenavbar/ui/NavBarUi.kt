@@ -82,7 +82,7 @@ object NavBarKey : Key<Nothing>
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
   rp: ResourceProvider,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
 ): @Scoped<KeyUiScope> StateFlow<NavBarModel> = scope.state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)

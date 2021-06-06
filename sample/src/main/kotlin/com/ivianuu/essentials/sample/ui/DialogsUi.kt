@@ -293,5 +293,5 @@ data class DialogLauncherKey(
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
-@Provide @InstallElement<UiScope>
+@Provide @ScopeElement<UiScope>
 class DialogLauncherComponent(val navigator: Navigator)

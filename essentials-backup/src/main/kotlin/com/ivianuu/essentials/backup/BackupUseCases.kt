@@ -28,7 +28,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   dispatcher: IODispatcher,
   logger: Logger,
   navigator: Navigator,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ): CreateBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
@@ -73,7 +73,7 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
   logger: Logger,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ): RestoreBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {

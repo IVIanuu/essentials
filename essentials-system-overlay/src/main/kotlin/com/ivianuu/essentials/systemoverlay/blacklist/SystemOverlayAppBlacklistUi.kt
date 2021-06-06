@@ -3,8 +3,7 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.apps.ui.checkableapps.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.store.*
@@ -40,7 +39,7 @@ object SystemOverlayAppBlacklistKey : Key<Nothing>
 
 @Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<SystemOverlayAppBlacklistModel> =
   scope.state(SystemOverlayAppBlacklistModel()) {
     update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }

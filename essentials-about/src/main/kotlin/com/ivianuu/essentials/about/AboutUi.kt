@@ -165,7 +165,7 @@ object AboutKey : Key<Nothing>
   initial: @Initial AboutModel,
   navigator: Navigator,
   rateOnPlayUseCase: RateOnPlayUseCase,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   rp: ResourceProvider
 ): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }

@@ -30,7 +30,7 @@ typealias ClipboardText = String?
 
 @Provide fun clipboardText(
   clipboardManager: @SystemService ClipboardManager,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ) = callbackFlow<ClipboardText> {
   val listener = ClipboardManager.OnPrimaryClipChangedListener {
     val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()

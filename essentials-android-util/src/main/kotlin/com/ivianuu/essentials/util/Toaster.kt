@@ -29,7 +29,7 @@ typealias Toaster = (String) -> Unit
 @Provide fun toaster(
   context: AppContext,
   mainDispatcher: MainDispatcher,
-  scope: InjectCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ): Toaster = { message ->
   scope.launch(mainDispatcher) {
     Toast.makeText(

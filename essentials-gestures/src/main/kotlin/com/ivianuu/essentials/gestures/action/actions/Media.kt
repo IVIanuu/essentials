@@ -116,7 +116,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   intentAppPredicateFactory: (@Provide Intent) -> IntentAppPredicate,
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<MediaActionSettingsModel> = scope.state(
   MediaActionSettingsModel()
 ) {

@@ -69,7 +69,7 @@ object BackupAndRestoreKey : Key<Nothing>
 @Provide fun backupAndRestoreModel(
   createBackupUseCase: CreateBackupUseCase,
   restoreBackupUseCase: RestoreBackupUseCase,
-  scope: InjectCoroutineScope<KeyUiScope>,
+  scope: InjektCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<BackupAndRestoreModel> =

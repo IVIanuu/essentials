@@ -56,7 +56,7 @@ object PermissionsKey : Key<Nothing>
 
 @Provide fun permissionUi(
   permissionRequester: PermissionRequester,
-  scope: InjectCoroutineScope<KeyUiScope>
+  scope: InjektCoroutineScope<KeyUiScope>
 ): KeyUi<PermissionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }

@@ -29,7 +29,7 @@ class BillingContextImpl(
   private val dispatcher: IODispatcher,
   override val logger: Logger,
   override val refreshes: MutableSharedFlow<BillingRefresh>,
-  private val scope: InjectCoroutineScope<AppScope>
+  private val scope: InjektCoroutineScope<AppScope>
 ) : BillingContext {
   private var isConnected = false
   private val connectionMutex = Mutex()

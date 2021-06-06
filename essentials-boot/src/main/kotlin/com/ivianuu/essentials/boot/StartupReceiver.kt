@@ -33,7 +33,7 @@ class StartupReceiver : BroadcastReceiver() {
   }
 }
 
-@Provide @InstallElement<ReceiverScope>
+@Provide @ScopeElement<ReceiverScope>
 class StartupReceiverComponent(
   val bootListeners: Set<BootListener> = emptySet(),
   val logger: Logger,

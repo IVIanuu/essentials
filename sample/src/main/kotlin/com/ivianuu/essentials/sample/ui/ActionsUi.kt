@@ -38,7 +38,7 @@ object ActionsKey : Key<Nothing>
 @Provide fun actionsUi(
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  scope: InjectCoroutineScope<UiScope>
+  scope: InjektCoroutineScope<UiScope>
 ): KeyUi<ActionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
