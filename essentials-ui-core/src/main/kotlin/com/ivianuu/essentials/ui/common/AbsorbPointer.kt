@@ -28,7 +28,7 @@ fun Modifier.absorbPointer(enabled: Boolean = true): Modifier = composed {
           while (true) {
             awaitPointerEvent(PointerEventPass.Initial)
               .changes
-              .forEach { it.consumeAllChanges() }
+              .forEach { it.consumeDownChange() }
           }
         }
       }
