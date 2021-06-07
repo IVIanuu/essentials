@@ -125,7 +125,6 @@ object Deps {
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
-    const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
   }
 
   object KotlinSerialization {

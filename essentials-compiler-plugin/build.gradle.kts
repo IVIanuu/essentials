@@ -41,18 +41,17 @@ val shadowJar = tasks.getByName<ShadowJar>("shadowJar") {
 
 artifacts {
   archives(shadowJar)
-}
+} R
 
-dependencies {
-  api(Deps.Kotlin.compilerEmbeddable)
-  implementation(Deps.Kotlin.stdlib)
-  implementation(Deps.autoService)
-  kapt(Deps.autoService)
-  testImplementation(Deps.compileTesting)
-  testImplementation(Deps.junit)
-  testImplementation(Deps.Kotlin.compilerEmbeddable)
-  testImplementation(Deps.kotestAssertions)
-  testImplementation(project(":essentials-optics"))
+    dependencies {
+      api(Deps.Kotlin.compilerEmbeddable)
+      implementation(Deps.autoService)
+      kapt(Deps.autoService)
+      testImplementation(Deps.compileTesting)
+      testImplementation(Deps.junit)
+      testImplementation(Deps.Kotlin.compilerEmbeddable)
+      testImplementation(Deps.kotestAssertions)
+      testImplementation(project(":essentials-optics"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

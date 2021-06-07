@@ -24,5 +24,4 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   testCompile(project(":essentials-test"))
-  compile(Deps.Kotlin.stdlib)
 }
