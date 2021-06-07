@@ -6,7 +6,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -41,17 +41,17 @@ val shadowJar = tasks.getByName<ShadowJar>("shadowJar") {
 
 artifacts {
   archives(shadowJar)
-} R
+}
 
-    dependencies {
-      api(Deps.Kotlin.compilerEmbeddable)
-      implementation(Deps.autoService)
-      kapt(Deps.autoService)
-      testImplementation(Deps.compileTesting)
-      testImplementation(Deps.junit)
-      testImplementation(Deps.Kotlin.compilerEmbeddable)
-      testImplementation(Deps.kotestAssertions)
-      testImplementation(project(":essentials-optics"))
+dependencies {
+  api(Deps.Kotlin.compilerEmbeddable)
+  implementation(Deps.autoService)
+  kapt(Deps.autoService)
+  testImplementation(Deps.compileTesting)
+  testImplementation(Deps.junit)
+  testImplementation(Deps.Kotlin.compilerEmbeddable)
+  testImplementation(Deps.kotestAssertions)
+  testImplementation(project(":essentials-optics"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")
