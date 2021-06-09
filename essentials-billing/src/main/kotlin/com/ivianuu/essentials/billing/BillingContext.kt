@@ -31,6 +31,8 @@ class BillingContextImpl(
   override val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: InjektCoroutineScope<AppScope>
 ) : BillingContext {
+  // todo crashes on exit
+// todo crashes caused by double billing init
   private var isConnected = false
   private val connectionMutex = Mutex()
 
@@ -46,14 +48,22 @@ class BillingContextImpl(
       d { "start connection" }
       billingClient.startConnection(
         object : BillingClientStateListener {
+          private var completed = false
           override fun onBillingSetupFinished(result: BillingResult) {
-            if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-              d { "connected" }
-              isConnected = true
-              continuation.resume(Unit)
-            } else {
-              d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
-              continuation.resumeWithException(IllegalStateException("Could not connect ${result.responseCode}"))
+            // for some reason on billing setup finished is sometimes called multiple times
+            // we ensure that we we only resume once
+            if (!completed) {
+              completed = true
+              if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                d { "connected" }
+                isConnected = true
+                continuation.resume(Unit)
+              } else {
+                d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
+                continuation.resumeWithException(
+                  IllegalStateException("Could not connect ${result.responseCode}")
+                )
+              }
             }
           }
 

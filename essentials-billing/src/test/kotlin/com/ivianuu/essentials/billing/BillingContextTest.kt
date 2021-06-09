@@ -2,6 +2,7 @@ package com.ivianuu.essentials.billing
 
 import androidx.test.ext.junit.runners.*
 import com.android.billingclient.api.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.booleans.*
 import io.mockk.*
@@ -26,7 +27,34 @@ class BillingContextTest {
         }
       },
       dispatcher = dispatcher,
-      logger = com.ivianuu.essentials.logging.NoopLogger,
+      logger = NoopLogger,
+      refreshes = MutableSharedFlow(),
+      scope = this
+    )
+    var ran = false
+    context.withConnection { ran = true }
+    ran.shouldBeTrue()
+  }
+
+  @Test fun testWithConnectionWithMultipleCallsToFinish() = runCancellingBlockingTest {
+    val context = BillingContextImpl(
+      billingClient = mockk {
+        every { startConnection(any()) } answers {
+          val listener = arg<BillingClientStateListener>(0)
+          listener.onBillingSetupFinished(
+            BillingResult.newBuilder()
+              .setResponseCode(BillingClient.BillingResponseCode.OK)
+              .build()
+          )
+          listener.onBillingSetupFinished(
+            BillingResult.newBuilder()
+              .setResponseCode(BillingClient.BillingResponseCode.OK)
+              .build()
+          )
+        }
+      },
+      dispatcher = dispatcher,
+      logger = NoopLogger,
       refreshes = MutableSharedFlow(),
       scope = this
     )
