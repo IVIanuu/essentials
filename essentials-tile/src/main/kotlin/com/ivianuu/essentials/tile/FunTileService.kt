@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Providers("com.ivianuu.injekt.common.kClass")
-
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
@@ -24,7 +22,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
