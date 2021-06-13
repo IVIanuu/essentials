@@ -74,9 +74,7 @@ fun interface ResourceLoader<T> {
     @Provide val boolean = ResourceLoader { context, id -> context.resources.getBoolean(id) }
     @Provide val color = ResourceLoader { context, id -> Color(context.getColor(id)) }
     @Provide val dimension = ResourceLoader { context, id ->
-      with(Density(context)) {
-        context.resources.getDimension(id).toInt().toDp()
-      }
+      (context.resources.getDimensionPixelOffset(id) / context.resources.displayMetrics.density).dp
     }
     @Provide val float = ResourceLoader { context, id ->
       ResourcesCompat.getFloat(context.resources, id)
