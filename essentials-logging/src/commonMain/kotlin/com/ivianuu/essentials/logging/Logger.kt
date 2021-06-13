@@ -117,8 +117,8 @@ inline fun log(
     append(message.orEmpty())
     if (throwable != null) {
       append(" ")
+      append(throwable)
     }
-    append(throwable?.toString().orEmpty())
   }
 }
 
