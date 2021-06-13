@@ -31,8 +31,6 @@ class BillingContextImpl(
   override val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: InjektCoroutineScope<AppScope>
 ) : BillingContext {
-  // todo crashes on exit
-// todo crashes caused by double billing init
   private var isConnected = false
   private val connectionMutex = Mutex()
 
