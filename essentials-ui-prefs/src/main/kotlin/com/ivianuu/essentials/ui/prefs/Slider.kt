@@ -229,7 +229,10 @@ import kotlin.time.*
         interactionSource.interactions
           .distinctUntilChanged()
           .collectLatest { interaction ->
-            if (interaction is DragInteraction.Stop) {
+            if (interaction is DragInteraction.Stop || interaction is DragInteraction.Cancel) {
+              if (internalValue != value)
+                onValueChange(fromFloat(internalValue))
+
               delay(1000)
               internalValue = toFloat(value)
             }
@@ -239,7 +242,6 @@ import kotlin.time.*
       Slider(
         value = internalValue,
         onValueChange = { internalValue = it },
-        onValueChangeEnd = { onValueChange(fromFloat(internalValue)) },
         valueRange = floatRange,
         stepPolicy = remember(stepPolicy) {
           { valueRange ->
