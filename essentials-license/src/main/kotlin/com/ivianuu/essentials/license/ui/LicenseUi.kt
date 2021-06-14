@@ -26,7 +26,7 @@ object LicenseKey : Key<Nothing>
     ResourceLazyColumnFor(model.projects) { project ->
       Project(
         project = project,
-        onClick = {}
+        onClick = { model.openProject(project) }
       )
     }
   }
@@ -40,14 +40,21 @@ object LicenseKey : Key<Nothing>
 }
 
 @Optics data class LicenseModel(
-  val projects: Resource<List<Project>> = Idle
+  val projects: Resource<List<Project>> = Idle,
+  val openProject: (Project) -> Unit = {}
 )
 
 @Provide fun licenseModel(
   getProjects: GetLicenseProjectsUseCase,
+  navigator: Navigator,
   scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
   flow { emit(getProjects()) }
     .flowResultAsResource()
     .update { copy(projects = it) }
+
+  action(LicenseModel.openProject()) { project ->
+    if (project.url != null)
+      navigator.push(UrlKey(project.url))
+  }
 }
