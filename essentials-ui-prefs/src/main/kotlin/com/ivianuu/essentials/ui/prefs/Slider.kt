@@ -16,13 +16,13 @@
 
 package com.ivianuu.essentials.ui.prefs
 
+import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.material.*
 import kotlinx.coroutines.*
@@ -224,39 +224,29 @@ import kotlin.time.*
       }
 
       // workaround to reset the internal value if the value doesn't change
-      val internalValueResetNotifier = remember { EventFlow<Unit>() }
-      val valueChanges = remember { EventFlow<Unit>() }
-      LaunchedEffect(internalValueResetNotifier) {
-        internalValueResetNotifier
-          .collectLatest {
-            race(
-              {
-                delay(1000)
-                internalValue = toFloat(value)
-              },
-              {
-                valueChanges.first()
-              }
-            )
+      val interactionSource = remember { MutableInteractionSource() }
+      LaunchedEffect(interactionSource) {
+        interactionSource.interactions
+          .distinctUntilChanged()
+          .collectLatest { interaction ->
+            if (interaction is DragInteraction.Stop) {
+              delay(1000)
+              internalValue = toFloat(value)
+            }
           }
       }
 
       Slider(
         value = internalValue,
-        onValueChange = {
-          internalValue = it
-          valueChanges.tryEmit(Unit)
-        },
-        onValueChangeEnd = {
-          onValueChange(fromFloat(internalValue))
-          internalValueResetNotifier.tryEmit(Unit)
-        },
+        onValueChange = { internalValue = it },
+        onValueChangeEnd = { onValueChange(fromFloat(internalValue)) },
         valueRange = floatRange,
         stepPolicy = remember(stepPolicy) {
           { valueRange ->
             stepPolicy(fromFloat(valueRange.start)..fromFloat(valueRange.endInclusive))
           }
         },
+        interactionSource = interactionSource,
         modifier = Modifier.weight(1f)
       )
 
