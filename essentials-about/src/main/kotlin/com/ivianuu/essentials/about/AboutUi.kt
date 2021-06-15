@@ -169,20 +169,27 @@ object AboutKey : Key<Nothing>
   rp: ResourceProvider
 ): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
+
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
+
   action(AboutModel.rate()) { rateOnPlayUseCase() }
+
   action(AboutModel.openMoreApps()) {
     navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
   }
+
   action(AboutModel.openRedditPage()) {
     navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
   }
+
   action(AboutModel.openGithubPage()) {
     navigator.push(UrlKey("https://github.com/IVIanuu"))
   }
+
   action(AboutModel.openTwitterPage()) {
     navigator.push(UrlKey("https://twitter.com/IVIanuu"))
   }
+
   action(AboutModel.openPrivacyPolicy()) {
     navigator.push(
       WebKey(
@@ -191,6 +198,7 @@ object AboutKey : Key<Nothing>
       )
     )
   }
+
   action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
 }
 

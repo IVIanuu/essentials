@@ -36,7 +36,7 @@ interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
-  dispatcher: MainDispatcher,
+  mainDispatcher: MainDispatcher,
   state: MutableStateFlow<ForegroundActivity>
 ): ScopeWorker<ActivityScope> = worker@{
   if (activity !is ForegroundActivityMarker) return@worker
@@ -44,7 +44,7 @@ interface ForegroundActivityMarker
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
       activity else null
   }
-  withContext(dispatcher) {
+  withContext(mainDispatcher) {
     activity.lifecycle.addObserver(observer)
     runOnCancellation { activity.lifecycle.removeObserver(observer) }
   }
