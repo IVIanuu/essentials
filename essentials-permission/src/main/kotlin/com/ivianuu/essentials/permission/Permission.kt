@@ -77,7 +77,7 @@ typealias PermissionState<P> = Boolean
 typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
 @Provide fun permissionStateFactory(
-  permissionStates: Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>
+  permissionStates: Map<TypeKey<Permission>, Flow<PermissionState<Permission>>> = emptyMap()
 ): PermissionStateFactory = { permissions ->
   combine(
     *permissions

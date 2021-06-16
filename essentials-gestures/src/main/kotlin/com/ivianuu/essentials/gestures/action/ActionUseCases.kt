@@ -74,7 +74,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 
 @Provide fun getAllActionsUseCase(
-  actions: Map<String, () -> Action<*>>,
+  actions: Map<String, () -> Action<*>> = emptyMap(),
   dispatcher: DefaultDispatcher
 ): GetAllActionsUseCase = {
   withContext(dispatcher) { actions.values.map { it() } }
@@ -83,8 +83,8 @@ typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
 typealias GetActionUseCase = suspend (String) -> Action<*>?
 
 @Provide fun getActionUseCase(
-  actions: Map<String, () -> Action<*>>,
-  actionFactories: () -> Set<() -> ActionFactory>,
+  actions: Map<String, () -> Action<*>> = emptyMap(),
+  actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
   dispatcher: DefaultDispatcher
 ): GetActionUseCase = { key ->
   withContext(dispatcher) {
@@ -101,8 +101,8 @@ typealias GetActionUseCase = suspend (String) -> Action<*>?
 typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
 
 @Provide fun getActionExecutorUseCase(
-  actionsExecutors: Map<String, () -> ActionExecutor<*>>,
-  actionFactories: () -> Set<() -> ActionFactory>,
+  actionsExecutors: Map<String, () -> ActionExecutor<*>> = emptyMap(),
+  actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
   dispatcher: DefaultDispatcher
 ): GetActionExecutorUseCase = { key ->
   withContext(dispatcher) {
@@ -120,7 +120,7 @@ typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
 typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
 
 @Provide fun getActionSettingsKeyUseCase(
-  actionSettings: Map<String, () -> ActionSettingsKey<*>>,
+  actionSettings: Map<String, () -> ActionSettingsKey<*>> = emptyMap(),
   dispatcher: DefaultDispatcher
 ): GetActionSettingsKeyUseCase = { key ->
   withContext(dispatcher) { actionSettings[key]?.invoke() }
@@ -129,7 +129,7 @@ typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
 typealias GetActionPickerDelegatesUseCase = suspend () -> List<ActionPickerDelegate>
 
 @Provide fun getActionPickerDelegatesUseCase(
-  actionPickerDelegates: Set<() -> ActionPickerDelegate>,
+  actionPickerDelegates: Set<() -> ActionPickerDelegate> = emptySet(),
   dispatcher: DefaultDispatcher
 ): GetActionPickerDelegatesUseCase = {
   withContext(dispatcher) { actionPickerDelegates.map { it() } }

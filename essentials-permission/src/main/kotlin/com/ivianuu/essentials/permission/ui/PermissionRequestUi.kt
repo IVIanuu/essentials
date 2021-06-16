@@ -81,9 +81,9 @@ data class UiPermission<P : Permission>(
   appUiStarter: AppUiStarter,
   key: PermissionRequestKey,
   navigator: Navigator,
-  permissions: Map<TypeKey<Permission>, Permission>,
+  permissions: Map<TypeKey<Permission>, Permission> = emptyMap(),
   permissionStateFactory: PermissionStateFactory,
-  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
+  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
   scope: InjektCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<PermissionRequestModel> =
   scope.state(PermissionRequestModel()) {
