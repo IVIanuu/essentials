@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.coroutines.*
@@ -66,11 +65,11 @@ data class Donation(val sku: Sku, val iconRes: Int)
   ListItem(
     modifier = Modifier
       .padding(horizontal = 8.dp),
-    title = { Text(donation.details.title) },
+    title = { Text(donation.title) },
     leading = { Icon(painterResource(donation.donation.iconRes), null) },
     trailing = {
       Text(
-        text = donation.details.price,
+        text = donation.price,
         style = MaterialTheme.typography.body2,
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
       )
@@ -85,7 +84,11 @@ data class Donation(val sku: Sku, val iconRes: Int)
   val purchase: (UiDonation) -> Unit = {}
 )
 
-data class UiDonation(val donation: Donation, val details: SkuDetails)
+data class UiDonation(
+  val donation: Donation,
+  val title: String,
+  val price: String
+)
 
 @Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
@@ -101,15 +104,21 @@ data class UiDonation(val donation: Donation, val details: SkuDetails)
   resourceFlow {
     emit(
       donations
-        .parMap {
+        .parMap { donation ->
+          val details = getSkuDetails(donation.sku)!!
           UiDonation(
-            it,
-            getSkuDetails(it.sku)!!
+            donation,
+            details.title
+              .replaceAfterLast("(", "")
+              .removeSuffix("("),
+            details.price
           )
         }
     )
   }.update { copy(skus = it) }
+
   action(DonationModel.close()) { navigator.pop(key) }
+
   action(DonationModel.purchase()) { donation ->
     purchase(donation.donation.sku, true, true)
     consumePurchase(donation.donation.sku)
