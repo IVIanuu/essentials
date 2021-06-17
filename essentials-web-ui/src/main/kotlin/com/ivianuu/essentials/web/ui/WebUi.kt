@@ -54,7 +54,7 @@ data class WebKey(val title: String, val url: String) : Key<Nothing>
             val scope = rememberCoroutineScope()
             IconButton(onClick = {
               scope.launch {
-                navigator.push(UrlKey(webViewRef!!.url))
+                navigator.push(UrlKey(webViewRef!!.url!!))
               }
             }) {
               Icon(painterResource(R.drawable.es_ic_open_in_browser), null)
