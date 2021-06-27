@@ -22,11 +22,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 
 enum class AppBarStyle { PRIMARY, SURFACE }
@@ -124,8 +124,8 @@ private val DefaultAppBarHeight = 56.dp
 private val DefaultAppBarElevation = 4.dp
 
 @Composable private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-  val component = rememberElement<AutoTopAppBarComponent>()
-  val canGoBack = rememberScopedValue(key = "can_go_back") {
+  val component = LocalScope.current.element<AutoTopAppBarComponent>()
+  val canGoBack = scoped("can_go_back", LocalScope.current) {
     component.navigator.state.value.backStack.indexOf(component.key) > 0
   }
   return when {

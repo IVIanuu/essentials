@@ -19,16 +19,17 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
+import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*
 
 typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
 
-@Provide val navigationStateContent: NavigationStateContent = { state, modifier ->
-  val keyUiScopeFactory = rememberElement<@ChildScopeFactory (Key<*>) -> KeyUiScope>()
+@Provide fun navigationStateContent(
+  keyUiScopeFactory: @ChildScopeFactory (Key<*>) -> KeyUiScope
+): NavigationStateContent = { state, modifier ->
   val contentState = remember {
     NavigationContentState(keyUiScopeFactory, state.backStack)
   }
@@ -130,7 +131,7 @@ private class NavigationContentState(
       if (isFinalized) return
       if (isComposing || !isDetached) return
       isFinalized = true
-      scope.dispose()
+      (scope as DisposableScope).dispose()
     }
   }
 }

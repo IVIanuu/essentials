@@ -21,13 +21,13 @@ import androidx.activity.*
 import androidx.activity.compose.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
@@ -38,7 +38,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     val uiScope = activityScope.element<@ChildScopeFactory () -> UiScope>()()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       runOnCancellation {
-        uiScope.dispose()
+        uiScope.cast<DisposableScope>().dispose()
       }
     }
 

@@ -35,7 +35,7 @@ data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = fa
   scope: InjektCoroutineScope<AppScope>,
   statesForModes: Map<TwilightMode, Flow<Boolean>>,
   twilightPrefs: Flow<TwilightPrefs>,
-): @Eager<AppScope> StateFlow<TwilightState> = twilightPrefs
+): @Scoped<AppScope> StateFlow<TwilightState> = twilightPrefs
   .flatMapLatest { (mode, useBlack) ->
     statesForModes[mode]!!
       .map { TwilightState(it, useBlack) }

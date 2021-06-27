@@ -32,12 +32,14 @@ data class ScopeInitializerElement<S>(
   logger: Logger,
   scopeKey: TypeKey<S>,
   workerRunner: ScopeWorkerRunner<S>
-): com.ivianuu.injekt.scope.ScopeInitializer<S> = {
-  initializers
-    .sortedWithLoadingOrder()
-    .forEach {
-      d { "${scopeKey.value} initialize ${it.key.value}" }
-      it.factory()()
-    }
-  workerRunner()
+): ScopeObserver<S> = object : ScopeObserver<S> {
+  override fun onInit() {
+    initializers
+      .sortedWithLoadingOrder()
+      .forEach {
+        d { "${scopeKey.value} initialize ${it.key.value}" }
+        it.factory()()
+      }
+    workerRunner()
+  }
 }

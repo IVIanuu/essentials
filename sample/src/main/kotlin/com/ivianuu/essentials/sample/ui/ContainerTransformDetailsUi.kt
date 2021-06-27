@@ -10,18 +10,19 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.compose.*
+import com.ivianuu.injekt.scope.*
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Nothing>
 
 @Provide val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
-  var listInfo by rememberScopedValue(key = "list_state") {
+  var listInfo by scoped("list_state", LocalScope.current) {
     mutableStateOf(0 to 0)
   }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {

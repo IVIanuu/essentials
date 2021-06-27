@@ -36,7 +36,6 @@ dependencies {
   api(Deps.AndroidX.Compose.material)
   api(Deps.AndroidX.ConstraintLayout.compose)
   api(Deps.Injekt.android)
-  api(Deps.Injekt.compose)
   api(project(":essentials-app"))
   api(project(":essentials-logging"))
   api(project(":essentials-optics"))

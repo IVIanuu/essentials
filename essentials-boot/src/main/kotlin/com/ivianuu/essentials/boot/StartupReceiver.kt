@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.boot
 
 import android.content.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
@@ -29,7 +30,7 @@ class StartupReceiver : BroadcastReceiver() {
       .element<StartupReceiverComponent>()
     d(logger = component.logger) { "on system boot" }
     component.bootListeners.forEach { it() }
-    component.receiverScope.dispose()
+    component.receiverScope.cast<DisposableScope>().dispose()
   }
 }
 

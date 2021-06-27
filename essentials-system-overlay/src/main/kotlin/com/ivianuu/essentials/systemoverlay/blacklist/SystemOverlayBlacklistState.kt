@@ -180,5 +180,5 @@ private fun Flow<SystemOverlayBlacklistState>.switchIfStillEnabled(
   }
 }
 
-@Qualifier private annotation class Private
+@Tag private annotation class Private
 

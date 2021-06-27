@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.*
@@ -19,7 +20,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.compose.*
+import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
 @Provide val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
@@ -27,7 +28,7 @@ import kotlinx.coroutines.*
 object ContainerTransformKey : Key<Nothing>
 
 @Provide fun containerTransformUi(navigator: Navigator): KeyUi<ContainerTransformKey> = {
-  var listInfo by rememberScopedValue(key = "list_state") {
+  var listInfo by scoped("list_state", LocalScope.current) {
     mutableStateOf(0 to 0)
   }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = true) {

@@ -67,14 +67,14 @@ abstract class AbstractFunTileService<T : Any>(
   }
 
   override fun onStopListening() {
-    tileModelComponent?.tileScope?.dispose()
+    tileModelComponent?.tileScope?.cast<DisposableScope>()?.dispose()
     tileModelComponent = null
     d { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
   override fun onDestroy() {
-    component.serviceScope.dispose()
+    component.serviceScope.cast<DisposableScope>().dispose()
     super.onDestroy()
   }
 

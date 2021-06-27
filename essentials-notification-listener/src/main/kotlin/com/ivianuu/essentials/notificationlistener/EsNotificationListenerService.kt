@@ -64,9 +64,9 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerDisconnected() {
     d { "listener disconnected" }
-    notificationScope?.dispose()
+    notificationScope?.cast<DisposableScope>()?.dispose()
     notificationScope = null
-    component.serviceScope.dispose()
+    component.serviceScope.cast<DisposableScope>().dispose()
     super.onListenerDisconnected()
   }
 

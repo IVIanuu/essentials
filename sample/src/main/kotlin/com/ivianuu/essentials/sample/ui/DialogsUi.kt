@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.compose.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.*
 
@@ -244,7 +243,7 @@ object DialogsKey : Key<Nothing>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = rememberElement<DialogLauncherComponent>()
+  val component = LocalScope.current.element<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -265,7 +264,7 @@ object DialogsKey : Key<Nothing>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = rememberElement<DialogLauncherComponent>()
+  val component = LocalScope.current.element<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {

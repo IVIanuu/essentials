@@ -27,7 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.injekt.compose.*
+import com.ivianuu.essentials.ui.*
 import kotlinx.coroutines.*
 
 @Composable fun PopupMenuButton(
@@ -55,7 +55,7 @@ import kotlinx.coroutines.*
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = rememberElement<PopupMenuComponent>()
+  val component = LocalScope.current.element<PopupMenuComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
