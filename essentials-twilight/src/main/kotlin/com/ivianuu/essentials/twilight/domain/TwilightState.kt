@@ -44,10 +44,10 @@ data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = fa
   .stateIn(scope, SharingStarted.Eagerly, TwilightState(false, false))
 
 @Provide fun darkTwilightState(): Pair<TwilightMode, Flow<Boolean>> =
-  TwilightMode.DARK to flowOf(false)
+  TwilightMode.DARK to flowOf(true)
 
 @Provide fun lightTwilightState(): Pair<TwilightMode, Flow<Boolean>> =
-  TwilightMode.LIGHT to flowOf(true)
+  TwilightMode.LIGHT to flowOf(false)
 
 @Provide fun batteryTwilightState(
   broadcastsFactory: BroadcastsFactory,
