@@ -34,7 +34,7 @@ import com.ivianuu.injekt.*
 
 @Provide fun searchActionExecutor(
   intentSender: ActionIntentSender
-): ActionExecutor<ScreenshotActionId> = {
+): ActionExecutor<SearchActionId> = {
   intentSender(
     Intent(Intent.ACTION_MAIN).apply {
       component = ComponentName(
