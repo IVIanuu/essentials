@@ -20,6 +20,7 @@ interface BillingContext {
   val billingClient: BillingClient
   val logger: Logger
   val refreshes: MutableSharedFlow<BillingRefresh>
+
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R
 }
 
