@@ -129,8 +129,10 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   )
 ) {
   params.checkedApps.update { copy(checkedApps = it) }
+
   resourceFlow { emit(getInstalledApps()) }
     .update { copy(allApps = it) }
+
   suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
     val currentState = state.first()
     val newCheckedApps = currentState.checkableApps.get()
@@ -140,17 +142,20 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
       ?: return
     params.onCheckedAppsChanged(newCheckedApps)
   }
+
   action(CheckableAppsModel.updateAppCheckedState()) { app, isChecked ->
     pushNewCheckedApps {
       if (isChecked) this + app.info.packageName
       else this - app.info.packageName
     }
   }
+
   action(CheckableAppsModel.selectAll()) {
     pushNewCheckedApps { currentState ->
       currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
     }
   }
+
   action(CheckableAppsModel.deselectAll()) {
     pushNewCheckedApps { emptySet() }
   }
