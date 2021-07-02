@@ -126,7 +126,12 @@ sealed class ActionPickerItem {
   abstract val title: String
   abstract val settingsKey: Key<Nothing>?
 
-  @Composable abstract fun Icon(modifier: Modifier = Modifier)
+  // todo remove overload once compose supports abstract params with default value
+  @Composable fun Icon() {
+    Icon(Modifier)
+  }
+
+  @Composable abstract fun Icon(modifier: Modifier)
 
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
