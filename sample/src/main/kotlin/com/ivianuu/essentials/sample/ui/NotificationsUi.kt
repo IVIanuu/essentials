@@ -176,7 +176,7 @@ data class UiNotification(
     .flowAsResource()
     .update { copy(hasPermissions = it) }
   action(NotificationsModel.requestPermissions()) {
-    permissionRequester(listOf(inject<TypeKey<SampleNotificationsPermission>>()))
+    permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
   }
   action(NotificationsModel.openNotification()) { notification ->
     openNotification(notification.sbn.notification)

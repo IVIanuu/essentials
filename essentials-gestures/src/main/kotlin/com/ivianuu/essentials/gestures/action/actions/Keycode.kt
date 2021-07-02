@@ -41,7 +41,7 @@ import com.ivianuu.injekt.common.*
       id = id,
       title = loadResource(R.string.es_action_keycode_suffix, keycode),
       icon = singleActionIcon(R.drawable.es_ic_keyboard),
-      permissions = listOf(inject<TypeKey<ActionRootPermission>>()),
+      permissions = listOf(typeKeyOf<ActionRootPermission>()),
       unlockScreen = false,
       enabled = true
     )

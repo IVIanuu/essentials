@@ -90,7 +90,7 @@ object NavBarKey : Key<Nothing>
   action(NavBarModel.updateHideNavBar()) { value ->
     if (!value) {
       pref.updateData { copy(hideNavBar = false) }
-    } else if (permissionRequester(listOf(inject<TypeKey<NavBarPermission>>()))) {
+    } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
       pref.updateData { copy(hideNavBar = value) }
     }
   }

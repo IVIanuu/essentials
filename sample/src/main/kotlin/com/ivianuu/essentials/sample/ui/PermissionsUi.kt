@@ -67,17 +67,17 @@ object PermissionsKey : Key<Nothing>
         scope.launch {
           permissionRequester(
             listOf(
-              inject<TypeKey<SampleCameraPermission>>(),
-              inject<TypeKey<SampleDeviceAdminPermission>>(),
-              inject<TypeKey<SamplePhonePermission>>(),
-              inject<TypeKey<SampleAccessibilityPermission>>(),
-              inject<TypeKey<SampleNotificationListenerPermission>>(),
-              inject<TypeKey<SampleIgnoreBatteryOptimizationsPermission>>(),
-              inject<TypeKey<SampleInstallUnknownAppsPermission>>(),
-              inject<TypeKey<SamplePackageUsageStatsPermission>>(),
-              inject<TypeKey<SampleSystemOverlayPermission>>(),
-              inject<TypeKey<SampleWriteSecureSettingsPermission>>(),
-              inject<TypeKey<SampleWriteSettingsPermission>>()
+              typeKeyOf<SampleCameraPermission>(),
+              typeKeyOf<SampleDeviceAdminPermission>(),
+              typeKeyOf<SamplePhonePermission>(),
+              typeKeyOf<SampleAccessibilityPermission>(),
+              typeKeyOf<SampleNotificationListenerPermission>(),
+              typeKeyOf<SampleIgnoreBatteryOptimizationsPermission>(),
+              typeKeyOf<SampleInstallUnknownAppsPermission>(),
+              typeKeyOf<SamplePackageUsageStatsPermission>(),
+              typeKeyOf<SampleSystemOverlayPermission>(),
+              typeKeyOf<SampleWriteSecureSettingsPermission>(),
+              typeKeyOf<SampleWriteSettingsPermission>()
             )
           )
         }

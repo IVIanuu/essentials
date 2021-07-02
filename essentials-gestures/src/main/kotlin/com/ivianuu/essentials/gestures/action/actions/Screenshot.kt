@@ -37,8 +37,8 @@ import kotlinx.coroutines.*
   title = loadResource(R.string.es_action_screenshot),
   icon = singleActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
-    if (systemBuildInfo.sdk >= 28) inject<TypeKey<ActionAccessibilityPermission>>()
-    else inject<TypeKey<ActionRootPermission>>()
+    if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
+    else typeKeyOf<ActionRootPermission>()
   )
 )
 

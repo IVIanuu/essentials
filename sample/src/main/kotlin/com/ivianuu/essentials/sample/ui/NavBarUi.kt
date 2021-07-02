@@ -103,7 +103,7 @@ object NavBarKey : Key<Nothing>
             }
           } else {
             scope.launch {
-              permissionRequester(listOf(inject<TypeKey<NavBarPermission>>()))
+              permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
         }

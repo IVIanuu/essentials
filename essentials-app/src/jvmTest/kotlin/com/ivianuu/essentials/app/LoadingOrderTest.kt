@@ -99,9 +99,9 @@ class LoadingOrderTest {
   }
 }
 
-private val aKey = inject<TypeKey<A>>()
-private val bKey = inject<TypeKey<B>>()
-private val cKey = inject<TypeKey<C>>()
+private val aKey = typeKeyOf<A> > ()
+private val bKey = typeKeyOf<B> > ()
+private val cKey = typeKeyOf<C> > ()
 
 private typealias A = Item
 private typealias B = Item

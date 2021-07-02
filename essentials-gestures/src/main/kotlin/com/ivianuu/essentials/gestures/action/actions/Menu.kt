@@ -30,7 +30,7 @@ import com.ivianuu.injekt.common.*
   id = MenuActionId,
   title = loadResource(R.string.es_action_menu),
   icon = singleActionIcon(Icons.Default.MoreVert),
-  permissions = listOf(inject<TypeKey<ActionRootPermission>>())
+  permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
 @Provide fun menuActionExecutor(

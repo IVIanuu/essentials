@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
@@ -36,8 +37,8 @@ object DynamicSystemBarsKey : Key<Nothing>
 @Provide val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
   Box {
     val colors: List<Color> = rememberSaveable {
-      com.ivianuu.essentials.colorpicker.ColorPickerPalette.values()
-        .filter { it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.BLACK && it != com.ivianuu.essentials.colorpicker.ColorPickerPalette.WHITE }
+      ColorPickerPalette.values()
+        .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
         .flatMap { it.colors }
         .shuffled()
     }

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.android.settings.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
@@ -37,7 +36,7 @@ import kotlinx.coroutines.flow.*
 ): Action<AutoRotationActionId> = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
-  permissions = listOf(inject<TypeKey<ActionWriteSettingsPermission>>()),
+  permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   unlockScreen = true,
   icon = autoRotation.autoRotationIcon()
 )
