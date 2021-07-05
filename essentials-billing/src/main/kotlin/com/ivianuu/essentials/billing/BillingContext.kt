@@ -21,7 +21,7 @@ interface BillingContext {
   val logger: Logger
   val refreshes: MutableSharedFlow<BillingRefresh>
 
-  suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R
+  suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R?
 }
 
 @Provide @Scoped<AppScope>
@@ -35,15 +35,15 @@ class BillingContextImpl(
   private var isConnected = false
   private val connectionMutex = Mutex()
 
-  override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R =
+  override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
     withContext(scope.coroutineContext + dispatcher) {
       ensureConnected()
-      block()
+        ?.let { block() }
     }
 
-  private suspend fun ensureConnected() = connectionMutex.withLock {
+  private suspend fun ensureConnected(): Unit? = connectionMutex.withLock {
     if (isConnected) return@withLock
-    suspendCoroutine { continuation ->
+    suspendCoroutine<Unit?> { continuation ->
       d { "start connection" }
       billingClient.startConnection(
         object : BillingClientStateListener {
@@ -59,9 +59,7 @@ class BillingContextImpl(
                 continuation.resume(Unit)
               } else {
                 d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
-                continuation.resumeWithException(
-                  IllegalStateException("Could not connect ${result.responseCode}")
-                )
+                continuation.resume(null)
               }
             }
           }

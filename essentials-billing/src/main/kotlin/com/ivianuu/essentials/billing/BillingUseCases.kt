@@ -66,7 +66,7 @@ typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
     val success = getIsPurchased(sku)
 
     return@withConnection if (success && acknowledge) acknowledgePurchase(sku) else success
-  }
+  } ?: false
 }
 
 typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
@@ -88,7 +88,7 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
     val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
     if (success) refreshes.emit(Unit)
     return@withConnection success
-  }
+  } ?: false
 }
 
 typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
@@ -114,7 +114,7 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
       val success = result.responseCode == BillingClient.BillingResponseCode.OK
       if (success) refreshes.emit(Unit)
       return@withConnection success
-    }
+    } ?: false
   }
 
 typealias IsPurchased = Boolean
@@ -132,7 +132,7 @@ typealias IsPurchased = Boolean
   .map {
     context.withConnection {
       getIsPurchased(sku)
-    }
+    } ?: false
   }
   .distinctUntilChanged()
   .onEach { d(logger = context.logger) { "is purchased flow for $sku -> $it" } }
