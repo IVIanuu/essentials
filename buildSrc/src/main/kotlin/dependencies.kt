@@ -59,7 +59,7 @@ object Deps {
       const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
     }
 
-    const val dataStore = "androidx.datastore:datastore:1.0.0-alpha08"
+    const val dataStore = "androidx.datastore:datastore:1.0.0-rc01"
 
     object Lifecycle {
       private const val version = "2.3.1"

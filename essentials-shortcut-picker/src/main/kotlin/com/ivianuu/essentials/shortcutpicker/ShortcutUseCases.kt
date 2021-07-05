@@ -20,7 +20,6 @@ import android.content.*
 import android.content.pm.*
 import android.graphics.*
 import androidx.core.graphics.drawable.*
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.image.*
@@ -79,7 +78,7 @@ typealias ExtractShortcutUseCase = (Intent) -> Shortcut
         resources.getIdentifier(iconResource.resourceName, null, null)
       resources.getDrawable(id).toBitmap().toImageBitmap()
     }
-    else -> error("no icon provided $shortcutRequestResult")
+    else -> error("No icon provided $shortcutRequestResult")
   }
 
   Shortcut(intent, name, icon)

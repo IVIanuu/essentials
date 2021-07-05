@@ -75,6 +75,6 @@ private suspend fun getCurrentDisplayRotation(
     Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
     Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN
     Surface.ROTATION_270 -> DisplayRotation.LANDSCAPE_RIGHT
-    else -> error("unexpected rotation")
+    else -> error("Unexpected rotation")
   }
 }

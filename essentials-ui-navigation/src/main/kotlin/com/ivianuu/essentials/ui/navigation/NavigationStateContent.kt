@@ -73,7 +73,7 @@ private class NavigationContentState(
     val scope = keyUiScopeFactory(key)
     val component = scope.element<KeyUiComponent>()
     val content = component.uiFactories[key::class]?.invoke(key, scope)
-    checkNotNull(content) { "No factory found for $key" }
+    checkNotNull(content) { "No ui factory found for $key" }
     val decoratedContent: @Composable () -> Unit = { component.decorateUi(content) }
     val options = component.optionFactories[key::class]?.invoke(key)
     return Child(key, options, decoratedContent, scope)
