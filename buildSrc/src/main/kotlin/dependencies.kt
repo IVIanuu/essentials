@@ -143,7 +143,6 @@ object Deps {
 
   object Play {
     const val billing = "com.android.billingclient:billing-ktx:3.0.2"
-    const val core = "com.google.android.play:core:1.8.2"
   }
 
   const val roboelectric = "org.robolectric:robolectric:4.4"

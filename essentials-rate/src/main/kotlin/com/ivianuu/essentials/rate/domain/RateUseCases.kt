@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.rate.domain
 
-import androidx.activity.*
 import com.github.michaelbull.result.*
-import com.google.android.play.core.review.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.rate.data.*
@@ -10,26 +8,18 @@ import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
-import kotlin.coroutines.*
 
 typealias RateOnPlayUseCase = suspend () -> Unit
 
 @Provide fun rateOnPlayUseCase(
-  activity: ComponentActivity,
+  buildInfo: BuildInfo,
+  navigator: Navigator,
   pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {
   catch {
-    val reviewManagerFactory = ReviewManagerFactory.create(activity)
-    val reviewInfo = suspendCoroutine<ReviewInfo> { cont ->
-      reviewManagerFactory.requestReviewFlow()
-        .addOnSuccessListener { cont.resume(it) }
-        .addOnFailureListener { cont.resumeWithException(it) }
-    }
-    suspendCoroutine<Unit> { cont ->
-      reviewManagerFactory.launchReviewFlow(activity, reviewInfo)
-        .addOnSuccessListener { cont.resume(Unit) }
-        .addOnFailureListener { cont.resumeWithException(it) }
-    }
+    navigator.push(
+      UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
+    )
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
 }

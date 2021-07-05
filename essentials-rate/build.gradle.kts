@@ -26,7 +26,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(Deps.Play.core)
   api(project(":essentials-android-prefs"))
   api(project(":essentials-apps-coil"))
   api(project(":essentials-ui"))
