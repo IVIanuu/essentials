@@ -63,7 +63,7 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onClick() {
     super.onClick()
     d { "$serviceClass on click" }
-    tileModelComponent!!.tileModel.value.onTileClicked()
+    tileModelComponent?.tileModel?.value?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
