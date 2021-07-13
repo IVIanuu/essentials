@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.*
   torch: MutableStateFlow<TorchState>
 ): ActionExecutor<TorchActionId> = { torch.update { not() } }
 
-private fun Flow<TorchState>.torchIcon(): Flow<ActionIcon> = torchState
+private fun Flow<TorchState>.torchIcon(): Flow<ActionIcon> = this
   .map {
     if (it) R.drawable.es_ic_flash_on
     else R.drawable.es_ic_flash_off
