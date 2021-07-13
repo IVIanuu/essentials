@@ -79,6 +79,6 @@ class EsNotificationListenerService : NotificationListenerService() {
 @Provide @ScopeElement<ServiceScope>
 class EsNotificationListenerServiceComponent(
   val logger: Logger,
-  val notificationScopeFactory: () -> NotificationScope,
+  val notificationScopeFactory: () -> @ChildScopeFactory NotificationScope,
   val serviceScope: ServiceScope
 )
