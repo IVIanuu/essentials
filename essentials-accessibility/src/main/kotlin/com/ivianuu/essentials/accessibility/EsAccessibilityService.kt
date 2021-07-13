@@ -37,7 +37,7 @@ class EsAccessibilityService : AccessibilityService() {
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    d { "connected" }
+    d { "service connected" }
     accessibilityScope = component.accessibilityScopeFactory()
   }
 
@@ -57,7 +57,7 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    d { "disconnected" }
+    d { "service disconnected" }
     accessibilityScope?.cast<DisposableScope>()?.dispose()
     accessibilityScope = null
     component.serviceScope.cast<DisposableScope>().dispose()
