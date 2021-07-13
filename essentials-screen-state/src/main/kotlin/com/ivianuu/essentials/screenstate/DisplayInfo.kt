@@ -21,7 +21,11 @@ data class DisplayInfo(
   scope: InjektCoroutineScope<AppScope>,
   windowManager: @SystemService WindowManager
 ): @Scoped<AppScope> Flow<DisplayInfo> = flow {
-  combine(configChanges().onStart { emit(Unit) }, displayRotation()) { _, rotation ->
+  combine(
+    configChanges()
+      .onStart { emit(Unit) },
+    displayRotation()
+  ) { _, rotation ->
     metricsMutex.withLock {
       windowManager.defaultDisplay.getRealMetrics(metrics)
       DisplayInfo(
