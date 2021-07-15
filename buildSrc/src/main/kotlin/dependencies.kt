@@ -39,7 +39,7 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.3.0-rc01"
+      private const val version = "1.3.0-rc02"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -47,7 +47,7 @@ object Deps {
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
     object Compose {
-      const val version = "1.0.0-rc01"
+      const val version = "1.0.0-rc02"
       const val compiler = "androidx.compose.compiler:compiler:$version"
       const val core = "androidx.compose.ui:ui:$version"
       const val material = "androidx.compose.material:material:$version"
@@ -102,7 +102,7 @@ object Deps {
   const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
   object Injekt {
-    private const val version = "0.0.1-dev588"
+    private const val version = "0.0.1-dev590"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"
