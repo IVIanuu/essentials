@@ -29,7 +29,7 @@ import kotlin.time.*
   enabled: Boolean = true,
   valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
   stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
-  onValueChangeEnd: () -> Unit = {},
+  onValueChangeFinished: (() -> Unit)? = null,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   colors: SliderColors = SliderDefaults.colors()
 ) {
@@ -40,7 +40,7 @@ import kotlin.time.*
     enabled,
     valueRange,
     remember(valueRange) { stepPolicy(valueRange) },
-    onValueChangeEnd,
+    onValueChangeFinished,
     interactionSource,
     colors
   )
