@@ -40,7 +40,7 @@ class NavigatorImpl(
   private val intentKeyHandler: IntentKeyHandler,
   private val logger: Logger,
   rootKey: RootKey? = null,
-  private val scope: InjektCoroutineScope<AppScope>
+  scope: InjektCoroutineScope<AppScope>
 ) : Navigator {
   private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
   override val state: StateFlow<NavigationState>
