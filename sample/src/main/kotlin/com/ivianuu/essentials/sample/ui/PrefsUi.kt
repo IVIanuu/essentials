@@ -104,6 +104,21 @@ object PrefsKey : Key<Nothing>
           modifier = Modifier.interactive(prefs.switch),
           title = { Text("Slider") },
           subtitle = { Text("This is a slider preference") },
+          valueRange = 0..100,
+          valueText = { Text(it.toString()) }
+        )
+      }
+      item {
+        IntSliderListItem(
+          value = prefs.slider,
+          onValueChange = {
+            scope.launch {
+              prefStore.updateData { copy(slider = it) }
+            }
+          },
+          modifier = Modifier.interactive(prefs.switch),
+          title = { Text("Stepped slider") },
+          subtitle = { Text("This is a stepped slider preference") },
           stepPolicy = incrementingStepPolicy(5),
           valueRange = 0..100,
           valueText = { Text(it.toString()) }
