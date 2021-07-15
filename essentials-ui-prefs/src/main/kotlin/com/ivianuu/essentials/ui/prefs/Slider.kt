@@ -229,7 +229,11 @@ import kotlin.time.*
         interactionSource.interactions
           .distinctUntilChanged()
           .collectLatest { interaction ->
-            if (interaction is DragInteraction.Stop || interaction is DragInteraction.Cancel) {
+            if (interaction is DragInteraction.Stop ||
+              interaction is DragInteraction.Cancel ||
+              interaction is PressInteraction.Release ||
+              interaction is PressInteraction.Cancel
+            ) {
               if (internalValue != value)
                 onValueChange(fromFloat(internalValue))
 
