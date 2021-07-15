@@ -110,10 +110,10 @@ object PrefsKey : Key<Nothing>
       }
       item {
         IntSliderListItem(
-          value = prefs.slider,
+          value = prefs.steppedSlider,
           onValueChange = {
             scope.launch {
-              prefStore.updateData { copy(slider = it) }
+              prefStore.updateData { copy(steppedSlider = it) }
             }
           },
           modifier = Modifier.interactive(prefs.switch),
@@ -231,6 +231,7 @@ object PrefsKey : Key<Nothing>
   val checkbox: Boolean = false,
   val radioButton: Boolean = false,
   val slider: Int = 50,
+  val steppedSlider: Int = 50,
   val textInput: String = "",
   val color: Int = Color.Red.toArgb(),
   val multiChoice: Set<String> = setOf("A", "B", "C"),

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -24,9 +23,9 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import kotlin.time.*
 
 @Composable fun DoubleSliderListItem(
@@ -198,7 +197,7 @@ import kotlin.time.*
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
 ) {
-  Box(modifier = modifier) {
+  androidx.compose.foundation.layout.Box(modifier = modifier) {
     ListItem(
       modifier = Modifier.align(Alignment.BottomCenter)
         .padding(bottom = 32.dp),
@@ -208,7 +207,7 @@ import kotlin.time.*
       onClick = {}
     )
 
-    Row(
+    androidx.compose.foundation.layout.Row(
       modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(
@@ -223,36 +222,28 @@ import kotlin.time.*
         toFloat(valueRange.start)..toFloat(valueRange.endInclusive)
       }
 
-      // workaround to reset the internal value if the value doesn't change
-      val interactionSource = remember { MutableInteractionSource() }
-      LaunchedEffect(interactionSource) {
-        interactionSource.interactions
-          .distinctUntilChanged()
-          .collectLatest { interaction ->
-            if (interaction is DragInteraction.Stop ||
-              interaction is DragInteraction.Cancel ||
-              interaction is PressInteraction.Release ||
-              interaction is PressInteraction.Cancel
-            ) {
-              if (internalValue != value)
-                onValueChange(fromFloat(internalValue))
-
-              delay(1000)
-              internalValue = toFloat(value)
-            }
-          }
-      }
-
+      var valueChangeJob: Job? by remember { refOf(null) }
+      val scope = rememberCoroutineScope()
       Slider(
         value = internalValue,
-        onValueChange = { internalValue = it },
+        onValueChange = { newValue ->
+          internalValue = newValue
+          valueChangeJob?.cancel()
+          valueChangeJob = scope.launch {
+            delay(200)
+            if (newValue != value)
+              onValueChange(fromFloat(newValue))
+
+            delay(800)
+            internalValue = toFloat(value)
+          }
+        },
         valueRange = floatRange,
         stepPolicy = remember(stepPolicy) {
           { valueRange ->
             stepPolicy(fromFloat(valueRange.start)..fromFloat(valueRange.endInclusive))
           }
         },
-        interactionSource = interactionSource,
         modifier = Modifier.weight(1f)
       )
 
