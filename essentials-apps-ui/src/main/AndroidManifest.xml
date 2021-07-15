@@ -14,11 +14,4 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:tools="http://schemas.android.com/tools"
-    package="com.ivianuu.essentials.apps.ui"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-</manifest>
+<manifest package="com.ivianuu.essentials.apps.ui" />
