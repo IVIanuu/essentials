@@ -58,6 +58,6 @@ private suspend fun shouldShowRateDialog(
 }
 
 data class RateUiSchedule(
-  val minInstallDuration: Duration = 7.days,
+  val minInstallDuration: Duration = 14.days,
   val minLaunchTimes: Int = 10
 )
