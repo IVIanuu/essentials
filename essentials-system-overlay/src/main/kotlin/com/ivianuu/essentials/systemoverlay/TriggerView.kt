@@ -21,6 +21,7 @@ class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
     )
     // compose crashes in some situations
     return catch { delegate.dispatchTouchEvent(ev) }
+      .onFailure { it.printStackTrace() }
       .getOrElse { false }
   }
 }
