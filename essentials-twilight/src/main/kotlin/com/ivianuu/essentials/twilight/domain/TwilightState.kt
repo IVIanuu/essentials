@@ -60,11 +60,11 @@ data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = fa
 
 @Provide fun systemTwilightState(
   configChanges: Flow<ConfigChange>,
-  resources: AppResources,
+  context: AppContext,
 ): Pair<TwilightMode, Flow<Boolean>> = TwilightMode.SYSTEM to configChanges
   .onStart { emit(ConfigChange) }
   .map {
-    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
+    (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration
       .UI_MODE_NIGHT_YES
   }
 

@@ -13,13 +13,13 @@ import kotlinx.serialization.json.*
 typealias GetLicenseProjectsUseCase = suspend () -> Result<List<Project>, Throwable>
 
 @Provide fun getLicenseProjectsUseCase(
+  context: AppContext,
   dispatcher: IODispatcher,
-  json: Json,
-  resources: AppResources
+  json: Json
 ): GetLicenseProjectsUseCase = {
   withContext(dispatcher) {
     catch {
-      resources.assets.open(LICENSE_JSON_FILE_NAME)
+      context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()
         .let { String(it) }
         .let { json.decodeFromString(it) }

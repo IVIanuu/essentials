@@ -28,8 +28,8 @@ import com.ivianuu.injekt.android.*
 data class AppIcon(val packageName: String)
 
 @Provide class AppIconFetcher(
-  private val packageManager: PackageManager,
-  private val resources: AppResources
+  private val context: AppContext,
+  private val packageManager: PackageManager
 ) : Fetcher<AppIcon> {
   override fun key(data: AppIcon): String = data.packageName
   override suspend fun fetch(
@@ -42,7 +42,7 @@ data class AppIcon(val packageName: String)
     val finalDrawable = when (size) {
       OriginalSize -> rawDrawable
       is PixelSize -> rawDrawable.toBitmap(width = size.width, height = size.height)
-        .toDrawable(resources)
+        .toDrawable(context.resources)
     }
     return DrawableResult(finalDrawable, false, DataSource.DISK)
   }
