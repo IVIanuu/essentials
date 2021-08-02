@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Manuel Wrage
+ * Copyright 2021 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.*
 import android.content.*
 import android.os.*
-import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*

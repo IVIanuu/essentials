@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Manuel Wrage
+ * Copyright 2021 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.coil
 
 import coil.*
-import com.ivianuu.essentials.app.ScopeInitializer
+import com.ivianuu.essentials.app.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
 

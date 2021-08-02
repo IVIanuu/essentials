@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Manuel Wrage
+ * Copyright 2021 Manuel Wrage
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.collections.*
-import io.mockk.*
 import org.junit.*
 
 class KeyboardVisibilityTest {
