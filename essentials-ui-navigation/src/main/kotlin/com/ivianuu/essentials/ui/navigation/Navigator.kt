@@ -69,7 +69,7 @@ class NavigatorImpl(
           @Suppress("UNCHECKED_CAST")
           result.complete(it as R)
         }) {
-        _state.update {
+        _state.update2 {
           copy(
             backStack = backStack
               .filter { it != key } + key,
@@ -92,14 +92,14 @@ class NavigatorImpl(
           @Suppress("UNCHECKED_CAST")
           result.complete(it as R)
         }) {
-        _state.update {
+        _state.update2 {
           copy(
             backStack = backStack.dropLast(1),
             results = results - key
           )
         }
       } else {
-        _state.update {
+        _state.update2 {
           copy(
             backStack = backStack
               .filter { it != key }
@@ -115,7 +115,7 @@ class NavigatorImpl(
   override suspend fun <R> pop(key: Key<R>, result: R?) {
     actor.act {
       d { "pop $key" }
-      _state.update { popKey(key, result) }
+      _state.update2 { popKey(key, result) }
     }
   }
 
@@ -123,7 +123,7 @@ class NavigatorImpl(
     actor.act {
       val topKey = state.first().backStack.last()
       d { "pop top $topKey" }
-      _state.update {
+      _state.update2 {
         @Suppress("UNCHECKED_CAST")
         popKey(topKey, null)
       }

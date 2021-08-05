@@ -32,7 +32,7 @@ fun <S> CoroutineScope.state(
     override val state: Flow<S>
       get() = state
 
-    override suspend fun update(transform: S.() -> S): S = state.update(transform)
+    override suspend fun update(transform: S.() -> S): S = state.update2(transform)
   }
   stateScope.launch(start = CoroutineStart.UNDISPATCHED) { stateScope.block() }
   return state

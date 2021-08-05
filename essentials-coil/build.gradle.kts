@@ -26,8 +26,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(Deps.Accompanist.coil)
-  api(Deps.coil)
+  api(Deps.Coil.coil)
+  api(Deps.Coil.coilCompose)
   api(project(":essentials-android-core"))
 }
 

@@ -22,7 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.google.accompanist.coil.*
+import coil.compose.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
@@ -60,7 +60,7 @@ data class AppPickerKey(
         title = { Text(app.appName) },
         leading = {
           Image(
-            painter = rememberCoilPainter(AppIcon(packageName = app.packageName)),
+            painter = rememberImagePainter(AppIcon(packageName = app.packageName)),
             modifier = Modifier.size(40.dp),
             contentDescription = null
           )

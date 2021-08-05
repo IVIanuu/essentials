@@ -24,7 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.google.accompanist.coil.*
+import coil.compose.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.apps.ui.*
@@ -78,7 +78,7 @@ data class CheckableAppsParams(
         title = { Text(app.info.appName) },
         leading = {
           Image(
-            painter = rememberCoilPainter(AppIcon(packageName = app.info.packageName)),
+            painter = rememberImagePainter(AppIcon(packageName = app.info.packageName)),
             modifier = Modifier.size(40.dp),
             contentDescription = null
           )

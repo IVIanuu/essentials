@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
 
 @Provide fun torchActionExecutor(
   torch: MutableStateFlow<TorchState>
-): ActionExecutor<TorchActionId> = { torch.update { not() } }
+): ActionExecutor<TorchActionId> = { torch.update2 { not() } }
 
 private fun Flow<TorchState>.torchIcon(): Flow<ActionIcon> = this
   .map {

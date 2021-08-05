@@ -26,8 +26,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.vector.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
+import coil.compose.*
 import com.github.michaelbull.result.*
-import com.google.accompanist.coil.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.*
 
 internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
   Image(
-    painter = rememberCoilPainter(data),
+    painter = rememberImagePainter(data),
     modifier = Modifier.size(40.dp),
     contentDescription = null
   )

@@ -25,7 +25,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import com.google.accompanist.coil.*
+import coil.compose.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.coil.*
 import com.ivianuu.essentials.optics.*
@@ -52,7 +52,7 @@ object RateKey : DialogKey<Nothing>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberCoilPainter(AppIcon(model.packageName)),
+            painter = rememberImagePainter(AppIcon(model.packageName)),
             modifier = Modifier.size(96.dp),
             contentDescription = null
           )
