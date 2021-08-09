@@ -26,7 +26,6 @@ buildscript {
 
   dependencies {
     classpath(Deps.androidGradlePlugin)
-    classpath(Deps.buildConfigGradlePlugin)
     classpath(Deps.dexcountGradlePlugin)
     classpath(Deps.dokkaGradlePlugin)
     classpath(Deps.essentialsGradlePlugin)

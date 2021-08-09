@@ -34,7 +34,7 @@ object Deps {
     const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.1"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0"
 
   object AndroidX {
     object Activity {
@@ -77,9 +77,6 @@ object Deps {
 
   const val autoService = "com.google.auto.service:auto-service:1.0-rc7"
 
-  const val buildConfigGradlePlugin =
-    "gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8"
-
   object Coil {
     private const val version = "1.3.2"
     const val coil = "io.coil-kt:coil:$version"
@@ -119,7 +116,7 @@ object Deps {
 
   const val kotestAssertions = "io.kotest:kotest-assertions-core:4.4.3"
 
-  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
+  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.4.2"
 
   object Kotlin {
     const val version = "1.5.21"

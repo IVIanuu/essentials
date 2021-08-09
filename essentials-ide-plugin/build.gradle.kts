@@ -16,20 +16,32 @@
 
 plugins {
   kotlin("jvm")
-  id("org.jetbrains.intellij") version "0.7.2"
+  id("org.jetbrains.intellij") version "1.1.4"
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 intellij {
-  version = "2020.3.1"
-  pluginName = "Essentials ide plugin"
-  updateSinceUntilBuild = false
-  setPlugins("org.jetbrains.kotlin:202-1.4.32-release-AS8194.7", "gradle", "gradle-java", "java")
-  localPath = "/home/manu/android-studio"
+  version.set("2020.3.1")
+  pluginName.set("Injekt ide plugin")
+  updateSinceUntilBuild.set(false)
+  plugins.addAll("org.jetbrains.kotlin:203-1.5.21-release-328-AS7717.8", "gradle", "gradle-java", "java")
+  //localPath.set("/home/manu/android-studio")
+}
+
+tasks {
+  instrumentCode {
+    compilerVersion.set("201.7846.76")
+  }
+  runIde {
+    jbrVersion.set("11_0_3b360.2")
+  }
+  buildSearchableOptions {
+    jbrVersion.set("11_0_3b360.2")
+  }
 }
 
 dependencies {
-  compile(project(":essentials-compiler-plugin", "shadow"))
+  api(project(":essentials-compiler-plugin", "shadow"))
 }

@@ -26,8 +26,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  compile(project(":essentials-test"))
-  compile(Deps.roboelectric)
+  api(project(":essentials-test"))
+  api(Deps.roboelectric)
 }
 
 plugins.apply("com.vanniktech.maven.publish")

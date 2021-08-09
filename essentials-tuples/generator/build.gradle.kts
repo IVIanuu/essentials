@@ -23,5 +23,5 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 dependencies {
-  testCompile(project(":essentials-test"))
+  testApi(project(":essentials-test"))
 }

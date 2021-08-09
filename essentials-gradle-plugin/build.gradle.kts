@@ -18,10 +18,11 @@ plugins {
   id("java-gradle-plugin")
   kotlin("jvm")
   kotlin("kapt")
-  id("de.fuerstenau.buildconfig")
+  id("com.github.gmazzo.buildconfig") version "3.0.2"
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
+
 gradlePlugin {
   plugins {
     create("essentialsPlugin") {
@@ -38,6 +39,7 @@ gradlePlugin {
 }
 
 buildConfig {
+  /*
   clsName = "BuildConfig"
   packageName = "com.ivianuu.essentials.gradle"
 
@@ -47,7 +49,7 @@ buildConfig {
 
   buildConfigField("String", "COMPOSE_GROUP_ID", "androidx.compose.compiler")
   buildConfigField("String", "COMPOSE_ARTIFACT_ID", "compiler")
-  buildConfigField("String", "COMPOSE_VERSION", Deps.AndroidX.Compose.version)
+  buildConfigField("String", "COMPOSE_VERSION", Deps.AndroidX.Compose.version)*/
 }
 
 dependencies {
