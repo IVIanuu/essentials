@@ -16,15 +16,23 @@
 
 package com.ivianuu.essentials.clipboard
 
-import android.content.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.shareIn
 
 typealias ClipboardText = String?
 
@@ -39,14 +47,24 @@ typealias ClipboardText = String?
   awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
 }.shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
-typealias UpdateClipboardTextUseCase = suspend (String, Boolean) -> Unit
+typealias UpdateClipboardTextUseCase = suspend (String, Boolean) -> Result<Unit, Throwable>
 
 @Provide fun updateClipboardTextUseCase(
   clipboardManager: @SystemService ClipboardManager,
   rp: ResourceProvider,
   toaster: Toaster
 ): UpdateClipboardTextUseCase = { value, showMessage ->
-  clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
-  if (showMessage)
-    showToast(R.string.copied_to_clipboard)
+  catch {
+    clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
+  }
+    .also { result ->
+      if (showMessage) {
+        showToast(
+          when (result) {
+            is Ok -> R.string.copied_to_clipboard
+            is Err -> R.string.copy_to_clipboard_failed
+          }
+        )
+      }
+    }
 }
