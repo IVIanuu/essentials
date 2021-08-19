@@ -33,14 +33,17 @@ import kotlinx.coroutines.flow.*
   rp: ResourceProvider,
   toaster: Toaster
 ): ScopeWorker<AppScope> = {
+  var wasEverEnabled = false
   torchStore.collect { torchState ->
     catch {
       val cameraId = cameraManager.cameraIdList[0]
       cameraManager.setTorchMode(cameraId, torchState)
+      wasEverEnabled = wasEverEnabled || torchState
     }.onFailure {
-      it.printStackTrace()
-      showToast(R.string.es_failed_to_toggle_torch)
       torchStore.update { false }
+      it.printStackTrace()
+      if (wasEverEnabled)
+        showToast(R.string.es_failed_to_toggle_torch)
     }
   }
 }
