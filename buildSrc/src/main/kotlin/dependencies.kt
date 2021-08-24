@@ -34,7 +34,7 @@ object Deps {
     const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
 
   object AndroidX {
     object Activity {
