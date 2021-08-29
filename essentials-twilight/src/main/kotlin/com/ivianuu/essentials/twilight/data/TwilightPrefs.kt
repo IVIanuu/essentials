@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.twilight.data
 
 import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.store.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
@@ -26,10 +25,6 @@ import kotlinx.serialization.*
   @SerialName("use_black_in_dark_mode") val useBlackInDarkMode: Boolean = false,
 ) {
   companion object {
-    @Provide fun prefModule(
-      initialTwilightPrefs: (() -> @Initial TwilightPrefs)? = null,
-    ) = PrefModule<TwilightPrefs>("twilight_prefs") {
-      initialTwilightPrefs?.invoke() ?: TwilightPrefs()
-    }
+    @Provide val prefModule = PrefModule("twilight_prefs") { TwilightPrefs() }
   }
 }
