@@ -36,7 +36,7 @@ class PrefModule<T : Any>(private val name: String, private val default: () -> T
   @Provide fun dataStore(
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
-    initial: (() -> @Initial T)?,
+    initial: (() -> @Initial T)? = null,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
     scope: InjektCoroutineScope<AppScope>
