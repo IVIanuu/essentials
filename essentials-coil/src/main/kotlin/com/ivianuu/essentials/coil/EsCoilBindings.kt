@@ -21,8 +21,8 @@ import coil.decode.*
 import coil.fetch.*
 import coil.intercept.*
 import coil.map.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlin.reflect.*
 

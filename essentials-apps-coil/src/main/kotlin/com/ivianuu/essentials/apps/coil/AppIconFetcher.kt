@@ -22,8 +22,8 @@ import coil.bitmap.*
 import coil.decode.*
 import coil.fetch.*
 import coil.size.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 
 data class AppIcon(val packageName: String)
 

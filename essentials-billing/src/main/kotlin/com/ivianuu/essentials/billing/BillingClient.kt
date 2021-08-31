@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*
 

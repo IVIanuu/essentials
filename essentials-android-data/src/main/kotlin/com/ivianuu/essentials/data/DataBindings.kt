@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.data
 
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 import java.io.*
 
 typealias DataDir = File

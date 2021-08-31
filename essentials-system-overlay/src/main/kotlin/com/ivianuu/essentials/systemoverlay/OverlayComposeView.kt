@@ -21,8 +21,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.*
 import androidx.lifecycle.*
 import androidx.savedstate.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 
 @SuppressLint("ViewConstructor")
 @Provide

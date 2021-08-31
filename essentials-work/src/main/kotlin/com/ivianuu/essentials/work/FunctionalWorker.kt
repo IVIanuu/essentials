@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.work
 
 import androidx.work.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.android.work.*

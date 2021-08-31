@@ -18,6 +18,7 @@ package com.ivianuu.essentials.permission.deviceadmin
 
 import android.app.admin.*
 import android.content.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
 import com.ivianuu.injekt.*

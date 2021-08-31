@@ -22,6 +22,7 @@ import android.view.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.ui.res.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.apps.*
 import com.ivianuu.essentials.apps.ui.*
@@ -38,7 +39,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
 import kotlinx.coroutines.flow.*

@@ -18,9 +18,9 @@ package com.ivianuu.essentials.tile
 
 import android.content.*
 import android.content.pm.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
 
 @Provide fun tileServiceDeclarationChecker(
