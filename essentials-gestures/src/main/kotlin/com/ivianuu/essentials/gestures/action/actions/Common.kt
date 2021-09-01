@@ -16,28 +16,33 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.app.*
-import android.content.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.vector.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
+import android.app.PendingIntent
+import android.content.Intent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.shell.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.shell.RunShellCommandUseCase
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
+fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
   Image(
     painter = rememberImagePainter(data),
     modifier = Modifier.size(40.dp),
@@ -45,15 +50,17 @@ internal fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
   )
 }
 
-internal fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
+fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
-internal fun singleActionIcon(icon: ImageVector) = singleActionIcon {
+fun singleActionIcon(icon: ImageVector) = singleActionIcon {
   Icon(icon, null)
 }
 
-internal fun singleActionIcon(id: Int) = singleActionIcon {
+fun singleActionIcon(id: Int) = singleActionIcon {
   Icon(painterResource(id), null)
 }
+
+operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 
