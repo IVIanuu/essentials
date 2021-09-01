@@ -16,27 +16,33 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.foundation.text.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.text.input.*
-import com.ivianuu.essentials.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.gestures.action.ui.picker.*
-import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionRootPermission
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.ui.dialog.TextInputKey
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide class KeycodeActionFactory(
   private val actionRootCommandRunner: ActionRootCommandRunner,
   private val rp: ResourceProvider,
 ) : ActionFactory {
-  override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+  override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
   override suspend fun createAction(id: String): Action<*> {
-    val keycode = id.removePrefix(ACTION_KEY_PREFIX)
+    val keycode = id.removePrefix(BASE_ID)
     return Action<ActionId>(
       id = id,
       title = loadResource(R.string.es_action_keycode_suffix, keycode),
@@ -48,7 +54,7 @@ import com.ivianuu.injekt.common.*
   }
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
-    val keycode = id.removePrefix(ACTION_KEY_PREFIX)
+    val keycode = id.removePrefix(BASE_ID)
     return { actionRootCommandRunner("input keyevent $keycode") }
   }
 }
@@ -57,6 +63,9 @@ import com.ivianuu.injekt.common.*
   private val navigator: Navigator,
   private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
+  override val baseId: String
+    get() = BASE_ID
+
   override val title: String
     get() = loadResource(R.string.es_action_keycode)
   override val icon: @Composable () -> Unit =
@@ -72,8 +81,8 @@ import com.ivianuu.injekt.common.*
       )
     )?.toIntOrNull() ?: return null
 
-    return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX$keycode")
+    return ActionPickerKey.Result.Action("$BASE_ID$keycode")
   }
 }
 
-private const val ACTION_KEY_PREFIX = "keycode=:="
+private const val BASE_ID = "keycode=:="

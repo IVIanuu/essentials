@@ -16,29 +16,37 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.*
-import android.graphics.*
-import android.util.*
-import androidx.compose.foundation.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.foundation.Image
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.gestures.action.ui.picker.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.shortcutpicker.*
-import com.ivianuu.essentials.ui.image.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import java.io.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
+import com.ivianuu.essentials.ui.image.toBitmap
+import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import java.io.ByteArrayOutputStream
 
 @Provide class ShortcutActionFactory(
   private val actionIntentSender: ActionIntentSender,
   private val logger: Logger
 ) : ActionFactory {
-  override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+  override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
   override suspend fun createAction(id: String): Action<*> {
     d { "create action from $id" }
     val tmp = id.split(DELIMITER)
@@ -67,6 +75,9 @@ import java.io.*
   private val navigator: Navigator,
   private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
+  override val baseId: String
+    get() = BASE_ID
+
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
   override val icon: @Composable () -> Unit = {
@@ -81,7 +92,7 @@ import java.io.*
     icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
     val iconBytes = stream.toByteArray()
     val key =
-      "$ACTION_KEY_PREFIX$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
+      "$BASE_ID$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
         Base64.encodeToString(
           iconBytes,
           0
@@ -91,5 +102,5 @@ import java.io.*
   }
 }
 
-private const val ACTION_KEY_PREFIX = "shortcut"
+private const val BASE_ID = "shortcut"
 private const val DELIMITER = "=:="

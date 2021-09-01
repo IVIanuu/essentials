@@ -73,6 +73,7 @@ typealias ActionSettingsKey<I> = Key<Nothing>
 ): Pair<String, () -> ActionSettingsKey<*>> = id.value to provider
 
 interface ActionPickerDelegate {
+  val baseId: String
   val title: String
   val icon: @Composable () -> Unit
   val settingsKey: Key<Nothing>? get() = null

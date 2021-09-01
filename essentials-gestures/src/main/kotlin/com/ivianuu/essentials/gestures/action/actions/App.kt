@@ -16,20 +16,25 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.apps.coil.*
-import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.apppicker.*
+import android.content.pm.PackageManager
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.apps.GetAppInfoUseCase
+import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.gestures.action.ui.picker.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
 
 @Provide class AppActionFactory(
   private val actionIntentSender: ActionIntentSender,
@@ -37,10 +42,10 @@ import com.ivianuu.injekt.*
   private val packageManager: PackageManager,
   private val rp: ResourceProvider
 ) : ActionFactory {
-  override suspend fun handles(id: String): Boolean = id.startsWith(ACTION_KEY_PREFIX)
+  override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
-    val packageName = id.removePrefix(ACTION_KEY_PREFIX)
+    val packageName = id.removePrefix(BASE_ID)
     return Action<ActionId>(
       id = id,
       title = getAppInfo(packageName)?.appName
@@ -52,7 +57,7 @@ import com.ivianuu.injekt.*
   }
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
-    val packageName = id.removePrefix(ACTION_KEY_PREFIX)
+    val packageName = id.removePrefix(BASE_ID)
     return {
       actionIntentSender(
         packageManager.getLaunchIntentForPackage(
@@ -68,6 +73,9 @@ import com.ivianuu.injekt.*
   private val navigator: Navigator,
   private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
+  override val baseId: String
+    get() = BASE_ID
+
   override val title: String
     get() = loadResource(R.string.es_action_app)
 
@@ -77,8 +85,8 @@ import com.ivianuu.injekt.*
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
-    return ActionPickerKey.Result.Action("$ACTION_KEY_PREFIX${app.packageName}")
+    return ActionPickerKey.Result.Action("$BASE_ID${app.packageName}")
   }
 }
 
-private const val ACTION_KEY_PREFIX = "app=:="
+private const val BASE_ID = "app=:="

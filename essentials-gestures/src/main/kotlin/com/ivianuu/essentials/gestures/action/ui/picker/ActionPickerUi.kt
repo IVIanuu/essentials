@@ -137,6 +137,7 @@ sealed class ActionPickerItem {
 }
 
 @Provide fun actionPickerModel(
+  filter: ActionFilter,
   getAction: GetActionUseCase,
   getActionPickerDelegates: GetActionPickerDelegatesUseCase,
   getAllActions: GetAllActionsUseCase,
@@ -161,6 +162,7 @@ sealed class ActionPickerItem {
 }
 
 private suspend fun getActionPickerItems(
+  @Inject filter: ActionFilter,
   @Inject getActionPickerDelegates: GetActionPickerDelegatesUseCase,
   @Inject getAllActions: GetAllActionsUseCase,
   @Inject getActionSettingsKey: GetActionSettingsKeyUseCase,
@@ -185,7 +187,9 @@ private suspend fun getActionPickerItems(
 
   val actionsAndDelegates = (
       (getActionPickerDelegates()
+        .filter { filter(it.baseId) }
         .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+        .filter { filter(it.id) }
         .map {
           ActionPickerItem.ActionItem(
             it,
