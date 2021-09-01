@@ -19,14 +19,14 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
+import kotlinx.coroutines.flow.*
 
 typealias KeyUi<K> = @Composable () -> Unit
 
 typealias KeyUiFactory<K> = (K, KeyUiScope) -> KeyUi<K>
 
-@Provide class KeyUiModule_<@Spread T : KeyUi<K>, K : Key<*>> {
+@Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
     keyClass: KClass<K>,
     keyUiFactory: (@Provide K, @Provide KeyUiScope) -> KeyUi<K>
