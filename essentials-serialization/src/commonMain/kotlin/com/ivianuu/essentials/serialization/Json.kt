@@ -16,11 +16,11 @@
 
 package com.ivianuu.essentials.serialization
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import kotlinx.serialization.modules.*
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 
 @Provide val json: @Scoped<AppScope> Json
   get() = Json {
@@ -28,6 +28,3 @@ import kotlinx.serialization.modules.*
     serializersModule = SerializersModule {
     }
   }
-
-@Provide inline fun <reified T> kSerializer(json: Json): KSerializer<T> =
-  json.serializersModule.serializer()
