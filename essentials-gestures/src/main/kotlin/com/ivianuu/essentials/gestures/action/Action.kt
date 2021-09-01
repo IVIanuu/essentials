@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.gestures.action.ui.picker.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.flow.*
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.TypeKey
+import kotlinx.coroutines.flow.Flow
 
 data class Action<I : ActionId>(
   val id: String,
@@ -57,8 +58,6 @@ typealias ActionExecutor<I> = suspend () -> Unit
   id: I,
   provider: () -> T
 ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
-
-internal operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 interface ActionFactory {
   suspend fun handles(id: String): Boolean
