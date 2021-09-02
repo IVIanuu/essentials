@@ -77,8 +77,8 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
   override fun getCompilerPluginId(): String = "com.ivianuu.essentials"
 
   override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-    groupId = BuildConfig.GROUP_ID,
-    artifactId = BuildConfig.ARTIFACT_ID,
+    groupId = "com.ivianuu.essentials",
+    artifactId = "essentials-compiler-plugin",
     version = BuildConfig.VERSION
   )
 }

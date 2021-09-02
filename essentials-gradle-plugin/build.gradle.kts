@@ -41,13 +41,7 @@ gradlePlugin {
 buildConfig {
   className("BuildConfig")
   packageName("com.ivianuu.essentials.gradle")
-
-  buildConfigField("String", "GROUP_ID", "\"${property("GROUP")}\"")
-  buildConfigField("String", "ARTIFACT_ID", "\"essentials-compiler-plugin\"")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
-
-  buildConfigField("String", "COMPOSE_GROUP_ID", "\"androidx.compose.compiler\"")
-  buildConfigField("String", "COMPOSE_ARTIFACT_ID", "\"compiler\"")
   buildConfigField("String", "COMPOSE_VERSION", "\"${Deps.AndroidX.Compose.version}\"")
 }
 

@@ -35,8 +35,8 @@ open class ComposePlugin : KotlinCompilerPluginSupportPlugin {
   override fun getCompilerPluginId(): String = "androidx.compose"
 
   override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
-    groupId = BuildConfig.COMPOSE_GROUP_ID,
-    artifactId = BuildConfig.COMPOSE_ARTIFACT_ID,
+    groupId = "androidx.compose.compiler",
+    artifactId = "compiler",
     version = BuildConfig.COMPOSE_VERSION
   )
 }
