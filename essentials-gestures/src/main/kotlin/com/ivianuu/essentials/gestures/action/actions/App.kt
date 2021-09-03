@@ -49,6 +49,7 @@ import com.ivianuu.injekt.Provide
 
   override suspend fun createAction(id: String): Action<*> {
     val packageName = id.removePrefix(BASE_ID)
+      .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
       title = getAppInfo(packageName)?.appName

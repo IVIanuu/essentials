@@ -16,16 +16,19 @@
 
 package com.ivianuu.essentials.torch
 
-import android.hardware.camera2.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import android.hardware.camera2.CameraManager
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 
 @Provide fun androidTorchWorker(
   cameraManager: @SystemService CameraManager,
