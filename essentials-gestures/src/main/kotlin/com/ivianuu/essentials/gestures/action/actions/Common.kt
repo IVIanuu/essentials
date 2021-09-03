@@ -31,6 +31,7 @@ import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.permission.Permission
@@ -76,14 +77,16 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
     }
 }
 
-typealias ActionIntentSender = (Intent) -> Unit
+typealias ActionIntentSender = (Intent, Boolean) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
   rp: ResourceProvider,
   toaster: Toaster
-): ActionIntentSender = { intent ->
+): ActionIntentSender = { intent, isFloating ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  if (isFloating)
+    intent.addFlags(FLOATING_WINDOW_FLAG)
   catch {
     PendingIntent.getActivity(
       context, 99, intent, 0, null

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright 2021 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,4 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- Dialogs -->
-    <string name="es_cancel">Cancel</string>
-    <string name="es_close">Close</string>
-    <string name="es_ok">OK</string>
-    <string name="es_yes">Yes</string>
-    <string name="es_no">No</string>
-
-    <!-- Color picker -->
-    <string name="es_color_picker_title">Pick a color</string>
-</resources>
+<manifest package="com.ivianuu.essentials.floatingwindows"/>

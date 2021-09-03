@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.*
-import android.provider.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.*
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import android.content.Intent
+import android.provider.MediaStore
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
 
 @Provide object CameraActionId : ActionId("camera")
 
@@ -35,5 +38,5 @@ import com.ivianuu.injekt.*
 @Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender
 ): ActionExecutor<CameraActionId> = {
-  actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA))
+  actionIntentSender(Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA), false)
 }

@@ -26,11 +26,14 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
+import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -57,18 +60,20 @@ import com.ivianuu.injekt.Provide
   }
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
-    val packageName = id.removePrefix(BASE_ID)
+    val (packageName, isFloating) = id.removePrefix(BASE_ID)
+      .split(ACTION_DELIMITER)
+      .let { it[0] to it[1].toBoolean() }
     return {
       actionIntentSender(
-        packageManager.getLaunchIntentForPackage(
-          packageName
-        )!!
+        packageManager.getLaunchIntentForPackage(packageName)!!,
+        isFloating
       )
     }
   }
 }
 
 @Provide class AppActionPickerDelegate(
+  private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
   private val navigator: Navigator,
   private val rp: ResourceProvider,
@@ -85,8 +90,10 @@ import com.ivianuu.injekt.Provide
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
-    return ActionPickerKey.Result.Action("$BASE_ID${app.packageName}")
+    val isFloating = floatingWindowActionsEnabled &&
+        navigator.push(FloatingWindowsPickerKey(app.appName)) ?: return null
+    return ActionPickerKey.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER$isFloating")
   }
 }
 
-private const val BASE_ID = "app=:="
+private const val BASE_ID = "app$ACTION_DELIMITER"

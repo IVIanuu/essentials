@@ -79,3 +79,8 @@ interface ActionPickerDelegate {
   val settingsKey: Key<Nothing>? get() = null
   suspend fun pickAction(): ActionPickerKey.Result?
 }
+
+typealias FloatingWindowActionsEnabled = Boolean
+@Provide val floatingWindowActionsEnabled: FloatingWindowActionsEnabled = true
+
+const val ACTION_DELIMITER = "=:="

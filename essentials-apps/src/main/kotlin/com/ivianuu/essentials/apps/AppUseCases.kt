@@ -16,14 +16,21 @@
 
 package com.ivianuu.essentials.apps
 
+import android.content.Intent
 import android.content.pm.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 
@@ -60,3 +67,26 @@ typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
 }
 
 data class AppInfo(val packageName: String, val appName: String)
+
+typealias IsAppInstalled = Boolean
+
+typealias PackageName = String
+
+@Provide fun isAppInstalled(
+  broadcastsFactory: BroadcastsFactory,
+  dispatcher: IODispatcher,
+  packageManager: PackageManager,
+  packageName: PackageName
+): Flow<IsAppInstalled> = merge(
+  broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED)
+)
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map {
+    withContext(dispatcher) {
+      catch { packageManager.getApplicationInfo(packageName, 0) }
+        .fold(success = { true }, failure = { false })
+    }
+  }
+  .distinctUntilChanged()

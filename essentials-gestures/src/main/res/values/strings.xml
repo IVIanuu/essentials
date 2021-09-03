@@ -52,6 +52,11 @@
     <string name="es_action_volume">Volume</string>
     <string name="es_action_wifi">WiFi</string>
 
+    <!-- Floating windows -->
+    <string name="es_floating_window_picker_title">Floating window</string>
+    <string name="es_floating_window_picker_content">Would you like to open \"%s\" in a floating window? This is can only be done if the Xposed Framework module \"Floating Windows\" is installed.</string>
+    <string name="es_floating_windows_not_installed">Floating Windows app not installed! Please install and try again.</string>
+
     <!-- Media -->
     <string name="es_media_app_settings_ui_title">Media action settings</string>
     <string name="es_pref_media_app">Media app</string>

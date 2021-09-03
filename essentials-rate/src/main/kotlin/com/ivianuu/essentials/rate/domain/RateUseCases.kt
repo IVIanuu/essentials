@@ -16,14 +16,17 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.rate.data.*
-import com.ivianuu.essentials.time.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.rate.data.RatePrefs
+import com.ivianuu.essentials.time.TimestampProvider
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.first
 
 typealias RateOnPlayUseCase = suspend () -> Unit
 
@@ -33,9 +36,7 @@ typealias RateOnPlayUseCase = suspend () -> Unit
   pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {
   catch {
-    navigator.push(
-      UrlKey("https://play.google.com/store/apps/details?id=${buildInfo.packageName}")
-    )
+    navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
 }

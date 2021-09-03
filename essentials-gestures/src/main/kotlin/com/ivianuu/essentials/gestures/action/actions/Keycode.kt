@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
@@ -85,4 +86,4 @@ import com.ivianuu.injekt.common.typeKeyOf
   }
 }
 
-private const val BASE_ID = "keycode=:="
+private const val BASE_ID = "keycode$ACTION_DELIMITER"

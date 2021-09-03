@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.essentials.app.EsApp
+import com.ivianuu.injekt.Providers
+import com.ivianuu.injekt.android.createAppScope
+import com.ivianuu.injekt.scope.AppScope
 
 @Providers(
   "com.ivianuu.essentials.*",
@@ -43,6 +43,7 @@ import com.ivianuu.injekt.scope.*
   "com.ivianuu.essentials.foreground.*",
   "com.ivianuu.essentials.gestures.action.*",
   "com.ivianuu.essentials.gestures.action.actions.*",
+  "com.ivianuu.essentials.gestures.action.ui.*",
   "com.ivianuu.essentials.gestures.action.ui.picker.*",
   "com.ivianuu.essentials.hidenavbar.*",
   "com.ivianuu.essentials.hidenavbar.ui.*",

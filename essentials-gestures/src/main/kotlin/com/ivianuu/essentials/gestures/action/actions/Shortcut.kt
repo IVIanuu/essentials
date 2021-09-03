@@ -26,11 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
+import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
@@ -49,7 +52,7 @@ import java.io.ByteArrayOutputStream
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
   override suspend fun createAction(id: String): Action<*> {
     d { "create action from $id" }
-    val tmp = id.split(DELIMITER)
+    val tmp = id.split(ACTION_DELIMITER)
     val label = tmp[1]
 
     val iconBytes = Base64.decode(tmp[3], 0)
@@ -65,13 +68,15 @@ import java.io.ByteArrayOutputStream
 
   @Suppress("DEPRECATION")
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
-    val tmp = id.split(DELIMITER)
+    val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
-    return { actionIntentSender(intent) }
+    val isFloating = tmp[4].toBoolean()
+    return { actionIntentSender(intent, isFloating) }
   }
 }
 
 @Provide class ShortcutActionPickerDelegate(
+  private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val navigator: Navigator,
   private val rp: ResourceProvider,
 ) : ActionPickerDelegate {
@@ -80,27 +85,30 @@ import java.io.ByteArrayOutputStream
 
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
+
   override val icon: @Composable () -> Unit = {
     Icon(painterResource(R.drawable.es_ic_content_cut), null)
   }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val shortcut = navigator.push(ShortcutPickerKey) ?: return null
-    val label = shortcut.name
+    val name = shortcut.name
     val icon = shortcut.icon.toBitmap()
     val stream = ByteArrayOutputStream()
     icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
     val iconBytes = stream.toByteArray()
-    val key =
-      "$BASE_ID$DELIMITER$label$DELIMITER${shortcut.intent.toUri(0)}$DELIMITER${
-        Base64.encodeToString(
-          iconBytes,
-          0
-        )
-      }"
+
+    val isFloating = floatingWindowActionsEnabled &&
+        navigator.push(FloatingWindowsPickerKey(name)) ?: return null
+
+    val key = "$BASE_ID$ACTION_DELIMITER" +
+        "$name$ACTION_DELIMITER" +
+        "${shortcut.intent.toUri(0)}$ACTION_DELIMITER" +
+        "${Base64.encodeToString(iconBytes, 0)}$ACTION_DELIMITER" +
+        "$isFloating"
+
     return ActionPickerKey.Result.Action(key)
   }
 }
 
 private const val BASE_ID = "shortcut"
-private const val DELIMITER = "=:="
