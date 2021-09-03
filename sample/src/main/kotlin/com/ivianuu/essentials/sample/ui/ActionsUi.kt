@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
@@ -37,6 +38,7 @@ object ActionsKey : Key<Nothing>
 
 @Provide fun actionsUi(
   executeAction: ExecuteActionUseCase,
+  getAction: GetActionUseCase,
   navigator: Navigator,
   scope: InjektCoroutineScope<UiScope>
 ): KeyUi<ActionsKey> = {
@@ -47,11 +49,15 @@ object ActionsKey : Key<Nothing>
       modifier = Modifier.center(),
       onClick = {
         scope.launch {
-          val action = navigator.push(ActionPickerKey())
+          val actionId = navigator.push(ActionPickerKey())
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch
 
-          executeAction(action)
+          val action = getAction(actionId)!!
+
+          showToast("Execute action \$${action.title}\$")
+
+          executeAction(actionId)
         }
       }
     ) { Text("Pick action") }
