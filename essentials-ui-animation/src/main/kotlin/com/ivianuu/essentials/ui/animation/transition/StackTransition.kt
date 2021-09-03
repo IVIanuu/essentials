@@ -24,8 +24,8 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.node.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
-import kotlinx.coroutines.*
 import kotlin.time.*
+import kotlinx.coroutines.*
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
 
@@ -47,7 +47,10 @@ fun ContentAnimationStackTransition(
   val toModifier = toElementModifier(ContentAnimationElementKey)
   if (isPush) toModifier?.value = Modifier.alpha(0f)
   attachTo()
-  animate(spec) { block(fromModifier, toModifier, it) }
+  runWithCleanup(
+    block = { animate(spec) { block(fromModifier, toModifier, it) } },
+    cleanup = { fromModifier?.value = Modifier; toModifier?.value = Modifier }
+  )
 }
 
 suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {

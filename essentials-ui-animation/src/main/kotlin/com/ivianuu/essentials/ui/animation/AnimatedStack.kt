@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -167,6 +167,8 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
   }
 
   internal fun updateChildren(newChildren: List<AnimatedStackChild<T>>) {
+    if (newChildren == children) return
+
     // do not allow pushing the same child twice
     newChildren
       .groupBy { it }
@@ -189,7 +191,8 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
     val newTopChild = newVisibleChildren.lastOrNull()
 
     // check if we should animate the top children
-    val replacingTopChildren = newTopChild != null && oldTopChild != newTopChild
+    val replacingTopChildren = newTopChild != null && oldTopChild != newTopChild &&
+        newVisibleChildren.count { it !in oldVisibleChildren } == 1
 
     // Remove all visible children which shouldn't be visible anymore
     // from top to bottom
@@ -259,7 +262,7 @@ val LocalAnimatedStackChild = staticCompositionLocalOf<AnimatedStackChild<*>> {
     from?.let { runningTransactions[it.key]?.cancel() }
     val transaction = AnimatedStackTransaction(
       from, to, isPush, transition, this,
-      from !in children
+      from != null && from !in children
     )
     runningTransactions[transaction.transactionKey] = transaction
     transaction.execute()
