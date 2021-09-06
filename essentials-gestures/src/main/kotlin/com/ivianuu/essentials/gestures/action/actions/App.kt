@@ -56,7 +56,7 @@ import com.ivianuu.injekt.Provide
         ?: loadResource(R.string.es_unknown_action_name),
       unlockScreen = true,
       enabled = true,
-      icon = coilActionIcon(AppIcon(packageName))
+      icon = singleActionImage(AppIcon(packageName))
     )
   }
 

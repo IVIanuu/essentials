@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
@@ -40,7 +41,8 @@ object ActionsKey : Key<Nothing>
   executeAction: ExecuteActionUseCase,
   getAction: GetActionUseCase,
   navigator: Navigator,
-  scope: InjektCoroutineScope<UiScope>
+  scope: InjektCoroutineScope<UiScope>,
+  toaster: Toaster
 ): KeyUi<ActionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }

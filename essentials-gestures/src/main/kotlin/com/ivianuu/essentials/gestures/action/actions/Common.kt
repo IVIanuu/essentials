@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,10 +43,10 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
+fun singleActionImage(data: Any): Flow<ActionIcon> = flowOf {
   Image(
     painter = rememberImagePainter(data),
-    modifier = Modifier.size(40.dp),
+    modifier = Modifier.defaultMinSize(40.dp),
     contentDescription = null
   )
 }
@@ -54,11 +54,19 @@ fun coilActionIcon(data: Any): Flow<ActionIcon> = flowOf {
 fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
 
 fun singleActionIcon(icon: ImageVector) = singleActionIcon {
-  Icon(icon, null)
+  Icon(
+    imageVector = icon,
+    modifier = Modifier.defaultMinSize(24.dp),
+    contentDescription = null
+  )
 }
 
 fun singleActionIcon(id: Int) = singleActionIcon {
-  Icon(painterResource(id), null)
+  Icon(
+    painter = painterResource(id = id),
+    modifier = Modifier.defaultMinSize(24.dp),
+    contentDescription = null
+  )
 }
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
