@@ -19,13 +19,10 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
@@ -34,6 +31,8 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
+import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.essentials.util.Toaster
@@ -46,7 +45,7 @@ import kotlinx.coroutines.flow.flowOf
 fun singleActionImage(data: Any): Flow<ActionIcon> = flowOf {
   Image(
     painter = rememberImagePainter(data),
-    modifier = Modifier.defaultMinSize(40.dp),
+    modifier = LocalActionImageSizeModifier.current,
     contentDescription = null
   )
 }
@@ -56,7 +55,7 @@ fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(ic
 fun singleActionIcon(icon: ImageVector) = singleActionIcon {
   Icon(
     imageVector = icon,
-    modifier = Modifier.defaultMinSize(24.dp),
+    modifier = LocalActionIconSizeModifier.current,
     contentDescription = null
   )
 }
@@ -64,7 +63,7 @@ fun singleActionIcon(icon: ImageVector) = singleActionIcon {
 fun singleActionIcon(id: Int) = singleActionIcon {
   Icon(
     painter = painterResource(id = id),
-    modifier = Modifier.defaultMinSize(24.dp),
+    modifier = LocalActionIconSizeModifier.current,
     contentDescription = null
   )
 }

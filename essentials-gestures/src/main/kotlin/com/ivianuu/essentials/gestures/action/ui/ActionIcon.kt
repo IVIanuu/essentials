@@ -16,10 +16,15 @@
 
 package com.ivianuu.essentials.gestures.action.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.gestures.action.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.gestures.action.Action
 
 @Composable fun ActionIcon(action: Action<*>, modifier: Modifier = Modifier) {
   Box(
@@ -30,3 +35,6 @@ import com.ivianuu.essentials.gestures.action.*
     action.icon.collectAsState(null).value?.invoke()
   }
 }
+
+val LocalActionIconSizeModifier = staticCompositionLocalOf { Modifier.size(24.dp) }
+val LocalActionImageSizeModifier = staticCompositionLocalOf { Modifier.size(40.dp) }
