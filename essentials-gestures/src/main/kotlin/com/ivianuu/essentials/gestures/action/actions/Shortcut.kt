@@ -34,6 +34,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
+import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
@@ -62,7 +63,13 @@ import java.io.ByteArrayOutputStream
       title = label,
       unlockScreen = true,
       enabled = true,
-      icon = singleActionIcon { Image(icon, null) }
+      icon = singleActionIcon {
+        Image(
+          modifier = LocalActionImageSizeModifier.current,
+          bitmap = icon,
+          contentDescription = null
+        )
+      }
     )
   }
 
