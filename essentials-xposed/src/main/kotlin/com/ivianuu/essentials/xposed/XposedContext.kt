@@ -14,11 +14,15 @@ interface XposedContext {
   @Provide val appInfo: ApplicationInfo
 }
 
+typealias ModulePackageName = String
+
 typealias PackageName = String
 
 typealias ProcessName = String
 
-class XposedContextImpl(private val params: XC_LoadPackage.LoadPackageParam) : XposedContext {
+class XposedContextImpl(
+  private val params: XC_LoadPackage.LoadPackageParam
+) : XposedContext {
   @Provide override val packageName: PackageName
     get() = params.packageName
 
