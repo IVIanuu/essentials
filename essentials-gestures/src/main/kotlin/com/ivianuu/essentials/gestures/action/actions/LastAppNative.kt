@@ -16,31 +16,31 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.provider.MediaStore
+import android.accessibilityservice.AccessibilityService
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.delay
 
-@Provide object CameraActionId : ActionId("camera")
+@Provide object LastAppNativeActionId : ActionId("last_app_native")
 
-@Provide fun cameraAction(rp: ResourceProvider): Action<CameraActionId> = Action(
-  id = CameraActionId,
-  title = loadResource(R.string.es_action_camera),
-  icon = singleActionIcon(R.drawable.es_ic_photo_camera),
-  unlockScreen = true
+@Provide fun lastAppNativeAction(rp: ResourceProvider): Action<LastAppNativeActionId> = Action(
+  id = LastAppNativeActionId,
+  title = loadResource(R.string.es_action_last_app_native),
+  permissions = accessibilityActionPermissions,
+  unlockScreen = true,
+  icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
-@Provide fun cameraActionExecutor(
-  actionIntentSender: ActionIntentSender
-): ActionExecutor<CameraActionId> = {
-  actionIntentSender(
-    Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA),
-    false,
-    null
-  )
+@Provide fun lastAppNativeActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
+): ActionExecutor<LastAppNativeActionId> = {
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  delay(250)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

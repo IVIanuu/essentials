@@ -60,7 +60,8 @@ import com.ivianuu.injekt.Provide
           Intent.CATEGORY_HOME
         )
       },
-      false
+      false,
+      null
     )
   }
 }

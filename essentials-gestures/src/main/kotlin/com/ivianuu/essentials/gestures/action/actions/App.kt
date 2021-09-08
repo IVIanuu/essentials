@@ -67,7 +67,8 @@ import com.ivianuu.injekt.Provide
     return {
       actionIntentSender(
         packageManager.getLaunchIntentForPackage(packageName)!!,
-        isFloating
+        isFloating,
+        null
       )
     }
   }

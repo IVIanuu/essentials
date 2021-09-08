@@ -57,7 +57,7 @@ object ActionsKey : Key<Nothing>
 
           val action = getAction(actionId)!!
 
-          showToast("Execute action \$${action.title}\$")
+          showToast("Execute action ${action.title}")
 
           executeAction(actionId)
         }

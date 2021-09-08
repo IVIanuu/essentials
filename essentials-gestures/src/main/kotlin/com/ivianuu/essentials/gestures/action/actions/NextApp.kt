@@ -10,22 +10,22 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 
-@Provide object LastAppActionId : ActionId("last_app")
+@Provide object NextAppActionId : ActionId("next_app")
 
-@Provide fun lastAppAction(rp: ResourceProvider): Action<LastAppActionId> = Action(
-  id = LastAppActionId,
-  title = loadResource(R.string.es_action_last_app),
+@Provide fun nextAppAction(rp: ResourceProvider): Action<NextAppActionId> = Action(
+  id = NextAppActionId,
+  title = loadResource(R.string.es_action_next_app),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
-  icon = singleActionIcon(R.drawable.es_ic_arrow_back)
+  icon = singleActionIcon(R.drawable.es_ic_arrow_forward)
 )
 
-@Provide fun lastAppActionExecutor(
-  actionIntentSender: ActionIntentSender,
+@Provide fun nextAppActionExecutor(
   appSwitchManager: AppSwitchManager,
+  actionIntentSender: ActionIntentSender,
   context: AppContext,
   packageManager: PackageManager
-): ActionExecutor<LastAppActionId> = {
-  appSwitchManager.lastApp()
-    ?.let { switchToApp(it, R.anim.es_slide_in_right, R.anim.es_slide_out_right) }
+): ActionExecutor<NextAppActionId> = {
+  appSwitchManager.nextApp()
+    ?.let { switchToApp(it, R.anim.es_slide_in_left, R.anim.es_slide_out_left) }
 }

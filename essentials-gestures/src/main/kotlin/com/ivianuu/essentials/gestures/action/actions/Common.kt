@@ -18,6 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -84,19 +85,19 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
     }
 }
 
-typealias ActionIntentSender = (Intent, Boolean) -> Unit
+typealias ActionIntentSender = (Intent, Boolean, Bundle?) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
   rp: ResourceProvider,
   toaster: Toaster
-): ActionIntentSender = { intent, isFloating ->
+): ActionIntentSender = { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)
   catch {
     PendingIntent.getActivity(
-      context, 99, intent, 0, null
+      context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT, options
     ).send()
   }.onFailure {
     it.printStackTrace()

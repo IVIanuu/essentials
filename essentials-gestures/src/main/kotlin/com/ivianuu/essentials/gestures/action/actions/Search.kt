@@ -47,6 +47,7 @@ import com.ivianuu.injekt.Provide
       )
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     },
-    false
+    false,
+    null
   )
 }
