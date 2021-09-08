@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityOptionsCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.app.Eager
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.d
@@ -13,7 +13,6 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.InjektCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -46,7 +45,7 @@ fun switchToApp(
   }
 }
 
-@Provide @Scoped<AppScope> class AppSwitchManager(
+@Provide @Eager<AppScope> class AppSwitchManager(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   private val packageManager: PackageManager,
@@ -93,7 +92,4 @@ fun switchToApp(
       PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""
   }
-}
-
-@Provide fun appSwitchManagerStarter(manager: AppSwitchManager): ScopeWorker<AppScope> = {
 }

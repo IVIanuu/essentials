@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.*
   prefs: Flow<NavBarPrefs>,
   setOverscan: OverscanUpdater,
   wasNavBarHiddenPref: DataStore<WasNavBarHidden>
-): ScopeWorker<AppScope> = worker@{
+): ScopeWorker<AppScope> = worker@ {
   if (!navBarFeatureSupported) return@worker
   permissionState
     .flatMapLatest { hasPermission ->
