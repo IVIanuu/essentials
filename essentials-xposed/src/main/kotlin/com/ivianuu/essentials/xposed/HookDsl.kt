@@ -98,6 +98,10 @@ inline fun <reified T> MethodHookScope.arg(index: Int): T = args[index].cast()
 
 inline fun <reified T> MethodHookScope.`this`(): T = `this`().cast()
 
+inline fun <reified T> MethodHookScope.result(): T = result.cast()
+
+inline fun <reified T : Throwable> MethodHookScope.throwable(): T = throwable.cast()
+
 inline fun hookMethod(
   method: Method,
   block: MethodHookBuilder.() -> Unit
