@@ -50,12 +50,14 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.xposed.IsXposedRunning
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
 @Provide class HomeKey : RootKey
 
 @Provide fun homeUi(
+  isXposedRunning: IsXposedRunning,
   navigator: Navigator,
   itemsFactory: () -> Set<HomeItem>,
   toaster: Toaster,
@@ -100,6 +102,17 @@ import kotlinx.coroutines.launch
         if (finalItems.indexOf(item) != finalItems.lastIndex) {
           HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
         }
+      }
+
+      item {
+        ListItem(
+          title = {
+            Text(
+              if (isXposedRunning) "Xposed is running"
+              else "Xposed is NOT running"
+            )
+          }
+        )
       }
     }
   }

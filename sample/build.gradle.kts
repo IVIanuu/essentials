@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import com.ivianuu.essentials.gradle.*
+import com.ivianuu.essentials.gradle.withLicenses
 
 /*
  * Copyright 2020 Manuel Wrage
@@ -88,6 +88,8 @@ dependencies {
   implementation(project(":essentials-unlock"))
   implementation(project(":essentials-web-ui"))
   implementation(project(":essentials-work"))
+  implementation(project(":essentials-xposed"))
+  compileOnly(project(":essentials-xposed-provided"))
 
   testImplementation(project(":essentials-android-test"))
   testImplementation(project(":essentials-test"))

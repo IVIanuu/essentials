@@ -96,6 +96,7 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.essentials.util.*",
   "com.ivianuu.essentials.web.ui.*",
   "com.ivianuu.essentials.work.*",
+  "com.ivianuu.essentials.xposed.*",
   "com.ivianuu.injekt.android.*",
   "com.ivianuu.injekt.android.work.*",
   "com.ivianuu.injekt.coroutines.*",
