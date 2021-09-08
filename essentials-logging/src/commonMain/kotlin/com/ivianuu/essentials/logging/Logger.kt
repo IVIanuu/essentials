@@ -105,7 +105,7 @@ inline fun log(
   if (logger.isEnabled) logger.log(kind, tag, message(), throwable)
 }
 
-@Provide object NoopLogger : Logger {
+object NoopLogger : Logger {
   override val isEnabled: Boolean
     get() = false
 

@@ -44,10 +44,9 @@ import com.ivianuu.injekt.scope.Scoped
   companion object {
     @Provide inline fun androidLogger(
       loggingEnabled: LoggingEnabled,
-      androidLoggerFactory: () -> AndroidLogger,
-      noopLoggerFactory: () -> NoopLogger
+      androidLoggerFactory: () -> AndroidLogger
     ): Logger = if (loggingEnabled) androidLoggerFactory()
-    else noopLoggerFactory()
+    else NoopLogger
   }
 }
 
