@@ -81,7 +81,7 @@ data class ActionPickerKey(
 sealed class ActionPickerItem {
   data class ActionItem(
     val action: Action<*>,
-    override val settingsKey: Key<Nothing>?,
+    override val settingsKey: Key<Unit>?,
   ) : ActionPickerItem() {
     override val title: String
       get() = action.title
@@ -97,7 +97,7 @@ sealed class ActionPickerItem {
     override val title: String
       get() = delegate.title
 
-    override val settingsKey: Key<Nothing>?
+    override val settingsKey: Key<Unit>?
       get() = delegate.settingsKey
 
     @Composable override fun Icon(modifier: Modifier) {
@@ -113,7 +113,7 @@ sealed class ActionPickerItem {
     override val title: String,
     val getResult: () -> ActionPickerKey.Result?
   ) : ActionPickerItem() {
-    override val settingsKey: Key<Nothing>?
+    override val settingsKey: Key<Unit>?
       get() = null
 
     @Composable override fun Icon(modifier: Modifier) {
@@ -124,7 +124,7 @@ sealed class ActionPickerItem {
   }
 
   abstract val title: String
-  abstract val settingsKey: Key<Nothing>?
+  abstract val settingsKey: Key<Unit>?
 
   // todo remove overload once compose supports abstract params with default value
   @Composable fun Icon() {

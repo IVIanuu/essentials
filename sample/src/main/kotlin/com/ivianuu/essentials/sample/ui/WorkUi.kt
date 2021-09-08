@@ -18,17 +18,18 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.ui.*
-import com.ivianuu.essentials.sample.work.*
-import com.ivianuu.essentials.ui.layout.*
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.sample.work.TestWorkScheduler
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.injekt.Provide
 
 @Provide val workHomeItem = HomeItem("Work") { WorkKey }
 
-object WorkKey : Key<Nothing>
+object WorkKey : Key<Unit>
 
 @Provide fun workUi(testWorkScheduler: TestWorkScheduler): KeyUi<WorkKey> = {
   Scaffold(

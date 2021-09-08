@@ -16,24 +16,40 @@
 
 package com.ivianuu.essentials.web.ui
 
-import android.webkit.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import androidx.compose.ui.viewinterop.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.material.*
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.material.AppBarStyle
+import com.ivianuu.essentials.ui.material.LocalAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.launch
 
-data class WebKey(val title: String, val url: String) : Key<Nothing>
+data class WebKey(val title: String, val url: String) : Key<Unit>
 
 @Provide fun webUi(key: WebKey, navigator: Navigator): KeyUi<WebKey> = {
   var webViewRef: WebView? by remember { refOf(null) }

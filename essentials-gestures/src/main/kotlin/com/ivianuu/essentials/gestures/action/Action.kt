@@ -65,7 +65,7 @@ interface ActionFactory {
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
-typealias ActionSettingsKey<I> = Key<Nothing>
+typealias ActionSettingsKey<I> = Key<Unit>
 
 @Provide fun <@Spread T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
   id: I,
@@ -76,7 +76,7 @@ interface ActionPickerDelegate {
   val baseId: String
   val title: String
   val icon: @Composable () -> Unit
-  val settingsKey: Key<Nothing>? get() = null
+  val settingsKey: Key<Unit>? get() = null
   suspend fun pickAction(): ActionPickerKey.Result?
 }
 

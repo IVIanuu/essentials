@@ -16,50 +16,74 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.*
-import android.service.notification.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
+import android.app.Notification
+import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import androidx.core.graphics.drawable.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.notificationlistener.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.notificationlistener.*
-import com.ivianuu.essentials.resource.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.map
+import com.github.michaelbull.result.orElse
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
+import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
+import com.ivianuu.essentials.notificationlistener.Notifications
+import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.image.*
-import com.ivianuu.essentials.ui.layout.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.resource.ResourceBox
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
-object NotificationsKey : Key<Nothing>
+object NotificationsKey : Key<Unit>
 
 @Provide val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {

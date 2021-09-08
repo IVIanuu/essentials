@@ -16,17 +16,19 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import kotlinx.coroutines.*
-import org.junit.*
+import com.ivianuu.essentials.logging.NoopLogger
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.junit.Test
 
 class NavigationStateTest {
-  object KeyA : Key<Nothing>
-  object KeyB : Key<Nothing>
-  object KeyC : Key<Nothing>
+  object KeyA : Key<Unit>
+  object KeyB : Key<Unit>
+  object KeyC : Key<Unit>
 
   @Test fun testNavigationState() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(

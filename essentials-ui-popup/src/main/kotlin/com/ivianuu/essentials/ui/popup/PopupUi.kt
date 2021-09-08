@@ -35,15 +35,15 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
 import kotlin.concurrent.*
 import kotlin.time.*
+import kotlinx.coroutines.*
 
 data class PopupKey(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : Key<Nothing>
+) : Key<Unit>
 
 @Provide fun popupUi(key: PopupKey, navigator: Navigator): KeyUi<PopupKey> = {
   val configuration = LocalConfiguration.current

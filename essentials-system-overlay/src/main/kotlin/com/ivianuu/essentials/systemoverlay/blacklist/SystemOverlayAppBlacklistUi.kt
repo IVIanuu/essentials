@@ -16,21 +16,29 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.checkableapps.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.store.*
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 
-object SystemOverlayAppBlacklistKey : Key<Nothing>
+object SystemOverlayAppBlacklistKey : Key<Unit>
 
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (@Provide CheckableAppsParams) -> CheckableAppsScreen,

@@ -16,19 +16,26 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
-import androidx.compose.material.*
-import androidx.compose.ui.res.*
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogKey
+import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
 
-object NavBarUnsupportedKey : DialogKey<Nothing>
+object NavBarUnsupportedKey : DialogKey<Unit>
 
 @Provide val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
   DialogScaffold {

@@ -16,31 +16,53 @@
 
 package com.ivianuu.essentials.rate.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.ripple.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.coil.*
-import com.ivianuu.essentials.optics.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
-import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
+import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
+import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogKey
+import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-object RateKey : DialogKey<Nothing>
+object RateKey : DialogKey<Unit>
 
 @Provide val rateUi: ModelKeyUi<RateKey, RateModel> = {
   DialogScaffold(dismissible = false) {

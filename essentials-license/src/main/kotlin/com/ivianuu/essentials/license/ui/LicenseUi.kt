@@ -16,26 +16,34 @@
 
 package com.ivianuu.essentials.license.ui
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.license.R
-import com.ivianuu.essentials.license.data.*
-import com.ivianuu.essentials.license.domain.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.license.data.Project
+import com.ivianuu.essentials.license.domain.GetLicenseProjectsUseCase
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowResultAsResource
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 
-object LicenseKey : Key<Nothing>
+object LicenseKey : Key<Unit>
 
 @Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_licenses_title)) }) }) {

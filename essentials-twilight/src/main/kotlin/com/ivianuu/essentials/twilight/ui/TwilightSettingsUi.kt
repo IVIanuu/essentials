@@ -16,28 +16,34 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.store.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.twilight.R
-import com.ivianuu.essentials.twilight.data.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.twilight.data.TwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefs
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
 
-object TwilightSettingsKey : Key<Nothing>
+object TwilightSettingsKey : Key<Unit>
 
 @Provide val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
   Scaffold(

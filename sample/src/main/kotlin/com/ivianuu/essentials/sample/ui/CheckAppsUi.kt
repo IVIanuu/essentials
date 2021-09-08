@@ -16,21 +16,25 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.checkableapps.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 
-object CheckAppsKey : Key<Nothing>
+object CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
   checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,

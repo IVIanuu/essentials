@@ -117,7 +117,7 @@ typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
   }
 }
 
-typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Nothing>?
+typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Unit>?
 
 @Provide fun getActionSettingsKeyUseCase(
   actionSettings: Map<String, () -> ActionSettingsKey<*>> = emptyMap(),

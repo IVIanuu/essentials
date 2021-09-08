@@ -29,8 +29,6 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.core.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
@@ -40,7 +38,7 @@ import kotlinx.serialization.*
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
 
-object PrefsKey : Key<Nothing>
+object PrefsKey : Key<Unit>
 
 @Provide fun prefsUi(
   navigator: Navigator,

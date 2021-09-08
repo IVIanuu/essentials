@@ -18,4 +18,4 @@ package com.ivianuu.essentials.ui.navigation
 
 interface Key<T>
 
-interface RootKey : Key<Nothing>
+interface RootKey : Key<Unit>

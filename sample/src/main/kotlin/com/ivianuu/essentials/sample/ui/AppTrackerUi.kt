@@ -16,40 +16,53 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.accessibilityservice.*
-import android.annotation.*
-import android.app.*
+import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.core.app.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.foreground.*
-import com.ivianuu.essentials.foreground.ForegroundState.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.recentapps.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.core.app.NotificationCompat
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundState.Background
+import com.ivianuu.essentials.foreground.ForegroundState.Foreground
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
-object AppTrackerKey : Key<Nothing>
+object AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp>,

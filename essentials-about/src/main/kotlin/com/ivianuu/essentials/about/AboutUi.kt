@@ -16,28 +16,40 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.donation.*
-import com.ivianuu.essentials.license.ui.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.rate.ui.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.material.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.donation.Donation
+import com.ivianuu.essentials.donation.DonationKey
+import com.ivianuu.essentials.license.ui.LicenseKey
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
+import com.ivianuu.essentials.rate.ui.FeedbackMailKey
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.web.ui.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.web.ui.WebKey
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 
-object AboutKey : Key<Nothing>
+object AboutKey : Key<Unit>
 
 @Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {

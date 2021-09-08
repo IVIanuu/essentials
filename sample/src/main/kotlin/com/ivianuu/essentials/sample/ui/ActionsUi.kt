@@ -35,7 +35,7 @@ import kotlinx.coroutines.*
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
-object ActionsKey : Key<Nothing>
+object ActionsKey : Key<Unit>
 
 @Provide fun actionsUi(
   executeAction: ExecuteActionUseCase,
