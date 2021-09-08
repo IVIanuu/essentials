@@ -80,6 +80,7 @@ dependencies {
   implementation(project(":essentials-permission"))
   implementation(project(":essentials-process-restart"))
   implementation(project(":essentials-rate"))
+  implementation(project(":essentials-roboto-mono"))
   implementation(project(":essentials-shell"))
   implementation(project(":essentials-shortcut-picker"))
   implementation(project(":essentials-tile"))
