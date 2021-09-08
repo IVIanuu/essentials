@@ -16,18 +16,22 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.rate.data.*
-import com.ivianuu.essentials.rate.ui.*
-import com.ivianuu.essentials.time.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
-import java.util.concurrent.*
-import kotlin.time.*
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.rate.data.RatePrefs
+import com.ivianuu.essentials.rate.ui.RateKey
+import com.ivianuu.essentials.time.TimestampProvider
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
+import kotlin.time.days
+import kotlin.time.toDuration
+import kotlinx.coroutines.flow.first
 
 @Provide fun rateUiLauncher(
   logger: Logger,
@@ -57,6 +61,9 @@ private suspend fun shouldShowRateDialog(
 
   if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
     return false.also { d { "show not: already completed" } }
+
+  if (prefs.feedbackState == RatePrefs.FeedbackState.NEVER)
+    return false.also { d { "show not: user selected never" } }
 
   if (prefs.launchTimes < schedule.minLaunchTimes)
     return false.also {
