@@ -18,6 +18,7 @@ package com.ivianuu.essentials.recentapps
 
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
+import com.ivianuu.essentials.app.Eager
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
@@ -31,7 +32,7 @@ typealias RecentApps = List<String>
   accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   scope: InjektCoroutineScope<AppScope>,
-): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
+): @Eager<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }
   .filter { it.className != "android.inputmethodservice.SoftInputWindow" }

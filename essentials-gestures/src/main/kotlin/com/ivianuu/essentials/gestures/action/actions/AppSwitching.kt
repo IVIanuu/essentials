@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityOptionsCompat
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.app.Eager
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
@@ -16,6 +18,7 @@ import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -45,12 +48,17 @@ fun switchToApp(
   }
 }
 
-@Provide @Eager<AppScope> class AppSwitchManager(
+interface AppSwitchManager {
+  fun lastApp(): String?
+  fun nextApp(): String?
+}
+
+@Provide @Eager<AppScope> class AppSwitchManagerImpl(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   private val packageManager: PackageManager,
   private val scope: InjektCoroutineScope<AppScope>
-) {
+) : AppSwitchManager {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
 
@@ -79,9 +87,9 @@ fun switchToApp(
       .launchIn(scope)
   }
 
-  fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
+  override fun lastApp(): String? = recentApps.getOrNull(currentIndex - 1)
 
-  fun lastApp(): String? = recentApps.getOrNull(currentIndex - 1)
+  override fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
 
   private fun PackageManager.getHomePackage(): String {
     val intent = Intent(Intent.ACTION_MAIN).apply {
@@ -92,4 +100,12 @@ fun switchToApp(
       PackageManager.MATCH_DEFAULT_ONLY
     )?.activityInfo?.packageName ?: ""
   }
+}
+
+@Provide val appSwitchingAccessibilityConfig = flow {
+  emit(
+    AccessibilityConfig(
+      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
+    )
+  )
 }

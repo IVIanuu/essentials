@@ -16,12 +16,23 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.app.Eager
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 
 typealias IsOnSecureScreen = Boolean
 
@@ -29,7 +40,7 @@ typealias IsOnSecureScreen = Boolean
   accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   scope: InjektCoroutineScope<AppScope>,
-): @Scoped<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
+): @Eager<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .map { it.packageName to it.className }
   .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
