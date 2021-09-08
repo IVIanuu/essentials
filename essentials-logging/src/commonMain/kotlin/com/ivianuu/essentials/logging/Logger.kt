@@ -16,10 +16,15 @@
 
 package com.ivianuu.essentials.logging
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.Logger.Kind.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.logging.Logger.Kind.DEBUG
+import com.ivianuu.essentials.logging.Logger.Kind.ERROR
+import com.ivianuu.essentials.logging.Logger.Kind.INFO
+import com.ivianuu.essentials.logging.Logger.Kind.VERBOSE
+import com.ivianuu.essentials.logging.Logger.Kind.WARN
+import com.ivianuu.essentials.logging.Logger.Kind.WTF
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.SourceKey
 
 interface Logger {
   val isEnabled: Boolean
@@ -100,7 +105,7 @@ inline fun log(
   if (logger.isEnabled) logger.log(kind, tag, message(), throwable)
 }
 
-@Provide @Factory object NoopLogger : Logger {
+@Provide object NoopLogger : Logger {
   override val isEnabled: Boolean
     get() = false
 
@@ -108,7 +113,7 @@ inline fun log(
   }
 }
 
-@Provide @Factory class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
+@Provide class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
   override fun log(kind: Logger.Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
     println("[${kind.name}] $tag ${render(message, throwable)}")
   }
@@ -124,6 +129,6 @@ inline fun log(
 
 typealias LoggingTag = String
 
-@Provide fun loggingTag(sourceKey: SourceKey): LoggingTag = sourceKey.value
+@Provide inline fun loggingTag(sourceKey: SourceKey): LoggingTag = sourceKey.value
 
 typealias LoggingEnabled = Boolean

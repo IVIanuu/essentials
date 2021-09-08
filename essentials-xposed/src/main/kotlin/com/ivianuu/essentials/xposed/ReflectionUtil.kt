@@ -62,4 +62,3 @@ fun <T> KClass<*>.invokeStaticMethod(
   parameterTypes: Array<KClass<*>>? = null
 ): T = (if (parameterTypes == null) XposedHelpers.callStaticMethod(java, methodName, *args)
 else XposedHelpers.callStaticMethod(java, methodName, parameterTypes, *args)) as T
-T

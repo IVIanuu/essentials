@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.logging.android
+package com.ivianuu.essentials.logging
 
-import android.util.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.logging.Logger.*
-import com.ivianuu.essentials.logging.Logger.Kind.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
+import android.util.Log
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.logging.Logger.Kind
+import com.ivianuu.essentials.logging.Logger.Kind.DEBUG
+import com.ivianuu.essentials.logging.Logger.Kind.ERROR
+import com.ivianuu.essentials.logging.Logger.Kind.INFO
+import com.ivianuu.essentials.logging.Logger.Kind.VERBOSE
+import com.ivianuu.essentials.logging.Logger.Kind.WARN
+import com.ivianuu.essentials.logging.Logger.Kind.WTF
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
 
-@Provide @Factory class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
+@Provide @Scoped<AppScope> class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
   override fun log(kind: Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
     when (kind) {
       VERBOSE -> Log.v(tag, message, throwable)
@@ -38,12 +43,12 @@ import com.ivianuu.injekt.scope.*
 
   companion object {
     @Provide inline fun androidLogger(
-      buildInfo: BuildInfo,
-      androidLoggerFactory: () -> @Factory AndroidLogger,
-      noopLoggerFactory: () -> @Factory NoopLogger
-    ): @Scoped<AppScope> Logger = if (buildInfo.isDebug) androidLoggerFactory()
+      loggingEnabled: LoggingEnabled,
+      androidLoggerFactory: () -> AndroidLogger,
+      noopLoggerFactory: () -> NoopLogger
+    ): Logger = if (loggingEnabled) androidLoggerFactory()
     else noopLoggerFactory()
-
-    @Provide fun androidLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug
   }
 }
+
+@Provide fun androidLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug

@@ -1,14 +1,13 @@
-package com.ivianuu.essentials.xposed
+package com.ivianuu.essentials.logging
 
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.LoggingTag
+import com.ivianuu.injekt.Provide
 
-class XposedLogger(private val appName: String) : Logger {
+@Provide class XposedLogger(private val logTag: XposedLogTag) : Logger {
   override val isEnabled: Boolean
     get() = true
 
   override fun log(kind: Logger.Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
-    println("$appName: [${kind.name}] $tag ${render(message, throwable)}")
+    println("$logTag: [${kind.name}] $tag ${render(message, throwable)}")
   }
 
   private fun render(message: String?, throwable: Throwable?) = buildString {
@@ -19,3 +18,5 @@ class XposedLogger(private val appName: String) : Logger {
     }
   }
 }
+
+typealias XposedLogTag = String
