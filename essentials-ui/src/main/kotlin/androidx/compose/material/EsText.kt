@@ -36,3 +36,27 @@ import androidx.compose.ui.unit.TextUnit
     fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
     softWrap, maxLines, onTextLayout, style)
 }
+
+@Composable inline fun Text(
+  textResId: Int,
+  vararg textFormatArgs: Any,
+  modifier: Modifier = Modifier,
+  color: Color = Color.Unspecified,
+  fontSize: TextUnit = TextUnit.Unspecified,
+  fontStyle: FontStyle? = null,
+  fontWeight: FontWeight? = null,
+  fontFamily: FontFamily? = null,
+  letterSpacing: TextUnit = TextUnit.Unspecified,
+  textDecoration: TextDecoration? = null,
+  textAlign: TextAlign? = null,
+  lineHeight: TextUnit = TextUnit.Unspecified,
+  overflow: TextOverflow = TextOverflow.Clip,
+  softWrap: Boolean = true,
+  maxLines: Int = Int.MAX_VALUE,
+  noinline onTextLayout: (TextLayoutResult) -> Unit = {},
+  style: TextStyle = LocalTextStyle.current
+) {
+  Text(stringResource(textResId, *textFormatArgs), modifier, color, fontSize, fontStyle, fontWeight,
+    fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
+    softWrap, maxLines, onTextLayout, style)
+}
