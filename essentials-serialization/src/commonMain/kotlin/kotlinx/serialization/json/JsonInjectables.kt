@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.serialization
+package kotlinx.serialization.json
 
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
 
-@Provide val json: @Scoped<AppScope> Json
-  get() = Json {
-    ignoreUnknownKeys = true
-    serializersModule = SerializersModule {
-    }
-  }
+@Provide val json: Json
+  get() = Json { ignoreUnknownKeys = true }

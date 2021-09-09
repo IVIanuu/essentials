@@ -75,7 +75,6 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.essentials.sample.ui.*",
   "com.ivianuu.essentials.sample.work.*",
   "com.ivianuu.essentials.screenstate.*",
-  "com.ivianuu.essentials.serialization.*",
   "com.ivianuu.essentials.shell.*",
   "com.ivianuu.essentials.shortcutpicker.*",
   "com.ivianuu.essentials.systemoverlay.blacklist.*",
@@ -99,6 +98,7 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.injekt.android.*",
   "com.ivianuu.injekt.android.work.*",
   "com.ivianuu.injekt.coroutines.*",
+
   "com.ivianuu.injekt.scope.*"
 )
 class SampleApp : EsApp() {
