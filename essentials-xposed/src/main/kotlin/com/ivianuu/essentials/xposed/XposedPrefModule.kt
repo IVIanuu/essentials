@@ -10,6 +10,7 @@ import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.InitialOrDefault
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.InjektCoroutineScope
@@ -39,7 +40,7 @@ class XposedPrefModule<T : Any>(
     context: AppContext,
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
-    initial: (() -> @Initial T)? = null,
+    initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     scope: InjektCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
@@ -55,7 +56,7 @@ class XposedPrefModule<T : Any>(
       return serialized?.let {
         catch { json.decodeFromString(serializer, serialized) }
           .getOrNull()
-      } ?: initial?.invoke() ?: default()
+      } ?: initial()
     }
 
     val data = callbackFlow<T> {
@@ -95,7 +96,7 @@ class XposedPrefModule<T : Any>(
   @Provide fun xposedPrefFlow(
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
-    initial: (() -> @Initial T)? = null,
+    initial: () -> @Initial T = default,
     scope: AppScope,
     serializerFactory: () -> KSerializer<T>,
     coroutineScope: InjektCoroutineScope<AppScope>
@@ -111,7 +112,7 @@ class XposedPrefModule<T : Any>(
       return serialized?.let {
         catch { json.decodeFromString(serializer, serialized) }
           .getOrNull()
-      } ?: initial?.invoke() ?: default()
+      } ?: initial()
     }
 
     return callbackFlow<T> {
@@ -130,6 +131,9 @@ class XposedPrefModule<T : Any>(
       .distinctUntilChanged()
       .shareIn(coroutineScope, SharingStarted.Lazily, 1)
   }
+
+  @Provide
+  fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 }
 
 typealias XposedPrefFlow<T> = Flow<T>

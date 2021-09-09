@@ -16,27 +16,36 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import androidx.datastore.core.*
-import androidx.datastore.core.handlers.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.data.*
+import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.Serializer
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import com.github.michaelbull.result.fold
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.actAndReply
+import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.store.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.store.InitialOrDefault
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IODispatcher
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import java.io.InputStream
+import java.io.OutputStream
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.*
-import java.io.*
+import kotlinx.serialization.json.Json
 
 class PrefModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
-    initial: (() -> @Initial T)? = null,
+    initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
     scope: InjektCoroutineScope<AppScope>
@@ -45,7 +54,7 @@ class PrefModule<T : Any>(private val name: String, private val default: () -> T
       produceFile = { prefsDir().resolve(name) },
       serializer = object : Serializer<T> {
         override val defaultValue: T
-          get() = initial?.invoke() ?: default()
+          get() = initial()
         private val json by lazy(jsonFactory)
         private val serializer by lazy(serializerFactory)
         override suspend fun readFrom(input: InputStream): T = catch {
@@ -62,7 +71,7 @@ class PrefModule<T : Any>(private val name: String, private val default: () -> T
       scope = scope.childCoroutineScope(dispatcher),
       corruptionHandler = ReplaceFileCorruptionHandler {
         it.printStackTrace()
-        initial?.invoke() ?: default()
+        initial()
       }
     )
     val actor = scope.actor()
@@ -76,4 +85,7 @@ class PrefModule<T : Any>(private val name: String, private val default: () -> T
       }
     }
   }
+
+  @Provide
+  fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 }
