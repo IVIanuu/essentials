@@ -48,57 +48,67 @@ fun switchToApp(
   }
 }
 
-interface AppSwitchManager {
-  fun lastApp(): String?
-  fun nextApp(): String?
-}
-
-@Provide @Eager<AppScope> class AppSwitchManagerImpl(
+@Provide @Eager<AppScope> class AppSwitchManager(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   private val packageManager: PackageManager,
   private val scope: InjektCoroutineScope<AppScope>
-) : AppSwitchManager {
+) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
+  private var isOnHomeScreen = false
 
   init {
     accessibilityEvents
       .filter {
         it.isFullScreen &&
-            it.type == android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-      }
-      .filter {
-        it.className != "android.inputmethodservice.SoftInputWindow" &&
-            it.packageName != packageManager.getHomePackage()
+            it.type == android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED &&
+            it.className != "android.inputmethodservice.SoftInputWindow" &&
+            (it.packageName !in getHomePackages(defaultOnly = false) ||
+                it.packageName in getHomePackages(defaultOnly = true))
       }
       .mapNotNull { it.packageName }
       .distinctUntilChanged()
-      .onEach { currentApp ->
-        if (currentApp !in recentApps) {
-          recentApps += currentApp
+      .onEach { topApp ->
+        val wasOnHomeScreen = isOnHomeScreen
+        if (topApp in getHomePackages(defaultOnly = true)) {
+          d { "moved to home screen" }
+          isOnHomeScreen = true
+          return@onEach
+        } else isOnHomeScreen = false
+
+        if (topApp !in recentApps) {
+          recentApps += topApp
           currentIndex = recentApps.lastIndex
-          d { "new app launched $currentApp $recentApps $currentIndex" }
+          d { "launched new app $topApp $recentApps $currentIndex" }
+        } else if (wasOnHomeScreen) {
+          val indexOfTopApp = recentApps.indexOf(topApp)
+          recentApps.removeAt(indexOfTopApp)
+          recentApps.add(topApp)
+          currentIndex = recentApps.lastIndex
+          d { "relaunched app from home screen $topApp $recentApps $currentIndex" }
         } else {
-          currentIndex = recentApps.indexOf(currentApp)
-          d { "relaunched recent app $currentApp $recentApps $currentIndex" }
+          currentIndex = recentApps.indexOf(topApp)
+          d { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
       .launchIn(scope)
   }
 
-  override fun lastApp(): String? = recentApps.getOrNull(currentIndex - 1)
+  fun lastApp(): String? = if (isOnHomeScreen) recentApps.lastOrNull()
+  else recentApps.getOrNull(currentIndex - 1)
 
-  override fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
+  fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
 
-  private fun PackageManager.getHomePackage(): String {
-    val intent = Intent(Intent.ACTION_MAIN).apply {
-      addCategory(Intent.CATEGORY_HOME)
-    }
-    return resolveActivity(
-      intent,
-      PackageManager.MATCH_DEFAULT_ONLY
-    )?.activityInfo?.packageName ?: ""
+  private fun getHomePackages(defaultOnly: Boolean = true): List<String> =
+    packageManager.queryIntentActivities(
+      homeIntent(),
+      if (defaultOnly) PackageManager.MATCH_DEFAULT_ONLY
+      else PackageManager.MATCH_ALL
+    ).map { it.activityInfo.packageName }
+
+  private fun homeIntent() = Intent(Intent.ACTION_MAIN).apply {
+    addCategory(Intent.CATEGORY_HOME)
   }
 }
 
