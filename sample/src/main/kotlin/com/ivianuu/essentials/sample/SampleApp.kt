@@ -38,6 +38,7 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.essentials.clipboard.*",
   "com.ivianuu.essentials.coil.*",
   "com.ivianuu.essentials.colorpicker.*",
+  "com.ivianuu.essentials.coroutines.*",
   "com.ivianuu.essentials.data.*",
   "com.ivianuu.essentials.donation.*",
   "com.ivianuu.essentials.foreground.*",
@@ -98,7 +99,6 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.injekt.android.*",
   "com.ivianuu.injekt.android.work.*",
   "com.ivianuu.injekt.coroutines.*",
-
   "com.ivianuu.injekt.scope.*"
 )
 class SampleApp : EsApp() {
