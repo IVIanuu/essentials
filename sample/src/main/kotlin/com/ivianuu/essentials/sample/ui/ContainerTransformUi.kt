@@ -45,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.LocalScope
@@ -91,10 +90,7 @@ object ContainerTransformKey : Key<Unit>
               },
             contentAlignment = Alignment.Center
           ) {
-            Icon(
-              imageVector = Icons.Default.Add,
-              contentDescription = null
-            )
+            Icon(Icons.Default.Add)
           }
         }
       }
@@ -150,8 +146,7 @@ object ContainerTransformKey : Key<Unit>
       ) {
         Image(
           modifier = Modifier.size(100.dp),
-          painter = painterResource(R.drawable.placeholder_image),
-          contentDescription = null
+          painterResId = R.drawable.placeholder_image
         )
       }
       ListItem(
@@ -203,8 +198,7 @@ object ContainerTransformKey : Key<Unit>
       ) {
         Image(
           modifier = Modifier.padding(16.dp),
-          painter = painterResource(R.drawable.placeholder_image),
-          contentDescription = null
+          painterResId = R.drawable.placeholder_image
         )
       }
       Column(modifier = Modifier.padding(16.dp)) {
@@ -256,8 +250,7 @@ object ContainerTransformKey : Key<Unit>
       ) {
         Image(
           modifier = Modifier.padding(16.dp),
-          painter = painterResource(R.drawable.placeholder_image),
-          contentDescription = null
+          painterResId = R.drawable.placeholder_image
         )
       }
 
@@ -296,8 +289,7 @@ object ContainerTransformKey : Key<Unit>
       leading = {
         Image(
           modifier = Modifier.size(40.dp),
-          painter = painterResource(R.drawable.avatar_logo),
-          contentDescription = null
+          painterResId = R.drawable.avatar_logo
         )
       },
       title = { Text("List item $index") },

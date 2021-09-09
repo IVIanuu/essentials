@@ -23,7 +23,6 @@ import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
@@ -66,8 +65,7 @@ import java.io.ByteArrayOutputStream
       icon = singleActionIcon {
         Image(
           modifier = LocalActionImageSizeModifier.current,
-          bitmap = icon,
-          contentDescription = null
+          bitmap = icon
         )
       }
     )
@@ -94,7 +92,7 @@ import java.io.ByteArrayOutputStream
     get() = loadResource(R.string.es_action_shortcut)
 
   override val icon: @Composable () -> Unit = {
-    Icon(painterResource(R.drawable.es_ic_content_cut), null)
+    Icon(R.drawable.es_ic_content_cut)
   }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {

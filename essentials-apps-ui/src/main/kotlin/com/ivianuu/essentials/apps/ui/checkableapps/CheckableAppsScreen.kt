@@ -16,32 +16,43 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.apps.coil.*
-import com.ivianuu.essentials.apps.ui.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
+import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.ui.AppPredicate
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.popup.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 
 typealias CheckableAppsScreen = @Composable () -> Unit
 
@@ -62,10 +73,10 @@ data class CheckableAppsParams(
           PopupMenuButton(
             items = listOf(
               PopupMenu.Item(onSelected = model.selectAll) {
-                Text(stringResource(R.string.es_select_all))
+                Text(R.string.es_select_all)
               },
               PopupMenu.Item(onSelected = model.deselectAll) {
-                Text(stringResource(R.string.es_deselect_all))
+                Text(R.string.es_deselect_all)
               }
             )
           )
@@ -79,8 +90,7 @@ data class CheckableAppsParams(
         leading = {
           Image(
             painter = rememberImagePainter(AppIcon(packageName = app.info.packageName)),
-            modifier = Modifier.size(40.dp),
-            contentDescription = null
+            modifier = Modifier.size(40.dp)
           )
         },
         trailing = {

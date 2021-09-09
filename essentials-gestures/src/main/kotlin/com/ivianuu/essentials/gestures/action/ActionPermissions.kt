@@ -16,19 +16,19 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import android.accessibilityservice.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
+import android.accessibilityservice.AccessibilityService
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.permission.root.*
-import com.ivianuu.essentials.permission.writesecuresettings.*
-import com.ivianuu.essentials.permission.writesettings.*
-import com.ivianuu.injekt.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.root.RootPermission
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
+import com.ivianuu.injekt.Provide
+import kotlin.reflect.KClass
 
 @Provide class ActionAccessibilityPermission(
   private val rp: ResourceProvider
@@ -41,7 +41,7 @@ import kotlin.reflect.*
     get() = loadResource(R.string.es_action_accessibility_permission_title)
   override val icon: @Composable () -> Unit
     get() = {
-      Icon(painterResource(R.drawable.es_ic_accessibility), null)
+      Icon(R.drawable.es_ic_accessibility)
     }
 }
 
@@ -51,7 +51,7 @@ import kotlin.reflect.*
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_adb), null) }
+    get() = { Icon(R.drawable.es_ic_adb) }
 }
 
 @Provide class ActionWriteSecureSettingsPermission(
@@ -62,7 +62,7 @@ import kotlin.reflect.*
   override val desc: String
     get() = loadResource(R.string.es_action_write_secure_settings_permission_desc)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
+    get() = { Icon(R.drawable.es_ic_settings) }
 }
 
 @Provide class ActionWriteSettingsPermission(
@@ -73,5 +73,5 @@ import kotlin.reflect.*
   override val desc: String
     get() = loadResource(R.string.es_action_write_settings_permission_desc)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
+    get() = { Icon(R.drawable.es_ic_settings) }
 }

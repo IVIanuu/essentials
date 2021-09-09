@@ -55,14 +55,14 @@ data class ActionPickerKey(
 
 @Provide val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_action_picker_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {
     ResourceLazyColumnFor(model.items) { item ->
       ListItem(
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
           IconButton(onClick = { model.openActionSettings(item) }) {
-            Icon(painterResource(R.drawable.es_ic_settings), null)
+            Icon(R.drawable.es_ic_settings)
           }
         }) else null,
         title = { Text(item.title) },

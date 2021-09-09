@@ -16,33 +16,46 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.*
-import android.provider.*
-import android.view.*
-import androidx.compose.foundation.lazy.*
+import android.content.Intent
+import android.provider.MediaStore
+import android.view.KeyEvent
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.apppicker.*
-import com.ivianuu.essentials.data.*
+import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.GetAppInfoUseCase
+import com.ivianuu.essentials.apps.ui.IntentAppPredicate
+import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSettingsKey
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 typealias MediaActionSender = suspend (Int) -> Unit
 
@@ -84,12 +97,12 @@ class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 @Provide
 val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
   Scaffold(topBar = {
-    TopAppBar(title = { Text(stringResource(R.string.es_media_app_settings_ui_title)) })
+    TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) })
   }) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_media_app)) },
+          title = { Text(R.string.es_pref_media_app) },
           subtitle = {
             Text(
               stringResource(

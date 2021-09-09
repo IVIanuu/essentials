@@ -44,7 +44,7 @@ data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 @Provide
 val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_system_overlay_blacklist_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_system_overlay_blacklist_title) }) }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
@@ -65,7 +65,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
         CheckboxListItem(
           value = model.disableOnKeyboard,
           onValueChange = model.updateDisableOnKeyboard,
-          title = { Text(stringResource(R.string.es_pref_disable_on_keyboard)) },
+          title = { Text(R.string.es_pref_disable_on_keyboard) },
           subtitle = {
             Text(
               stringResource(
@@ -81,7 +81,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
         CheckboxListItem(
           value = model.disableOnLockScreen,
           onValueChange = model.updateDisableOnLockScreen,
-          title = { Text(stringResource(R.string.es_pref_disable_on_lock_screen)) },
+          title = { Text(R.string.es_pref_disable_on_lock_screen) },
           subtitle = {
             Text(
               stringResource(
@@ -97,7 +97,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
         CheckboxListItem(
           value = model.disableOnSecureScreens,
           onValueChange = model.updateDisableOnSecureScreens,
-          title = { Text(stringResource(R.string.es_pref_disable_on_secure_screens)) },
+          title = { Text(R.string.es_pref_disable_on_secure_screens) },
           subtitle = {
             Text(
               stringResource(

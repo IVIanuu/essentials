@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.transition.SharedElement
@@ -94,8 +93,7 @@ data class SharedElementKey(val color: Color) : Key<Unit>
               Image(
                 modifier = Modifier
                   .size(width = 200.dp, height = 100.dp),
-                painter = painterResource(city.imageRes),
-                contentDescription = null,
+                painterResId = city.imageRes,
                 contentScale = ContentScale.FillBounds
               )
             }

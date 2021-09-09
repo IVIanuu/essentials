@@ -111,7 +111,7 @@ object DialogsKey : Key<Unit>
         DialogLauncherButton(text = "With icon") {
           Dialog(
             title = { Text("With icon") },
-            icon = { Icon(Icons.Default.Settings, null) },
+            icon = { Icon(Icons.Default.Settings) },
             buttons = {
               DialogCloseButton(text = "OK")
             }

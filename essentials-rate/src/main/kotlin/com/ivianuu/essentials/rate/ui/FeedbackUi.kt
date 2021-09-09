@@ -18,7 +18,6 @@ package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
@@ -44,23 +43,23 @@ object FeedbackKey : DialogKey<Unit>
 @Provide val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(stringResource(R.string.es_feedback_title)) },
-      content = { Text(stringResource(R.string.es_feedback_content)) },
+      title = { Text(R.string.es_feedback_title) },
+      content = { Text(R.string.es_feedback_content) },
       buttons = {
         if (model.displayShowNever) {
           TextButton(onClick = model.showNever) {
-            Text(stringResource(R.string.es_never))
+            Text(R.string.es_never)
           }
         }
         TextButton(onClick = model.showLater) {
-          Text(stringResource(R.string.es_later))
+          Text(R.string.es_later)
         }
 
         TextButton(onClick = model.openReddit) {
-          Text(stringResource(R.string.es_open_reddit))
+          Text(R.string.es_open_reddit)
         }
         TextButton(onClick = model.sendMail) {
-          Text(stringResource(R.string.es_send_mail))
+          Text(R.string.es_send_mail)
         }
       }
     )

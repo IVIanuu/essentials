@@ -54,14 +54,14 @@ data class MultiChoiceListKey<T : Any>(
         TextButton(onClick = {
           scope.launch { navigator.pop(key, null) }
         }) {
-          Text(stringResource(R.string.es_cancel))
+          Text(R.string.es_cancel)
         }
 
         TextButton(
           onClick = {
             scope.launch { navigator.pop(key, selectedItems) }
           }
-        ) { Text(stringResource(R.string.es_ok)) }
+        ) { Text(R.string.es_ok) }
       }
     )
   }

@@ -95,7 +95,7 @@ object PermissionsKey : Key<Unit>
     get() = android.Manifest.permission.CAMERA
   override val title: String = "Camera"
   override val desc: String = "This is a desc"
-  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SamplePhonePermission : RuntimePermission {
@@ -103,7 +103,7 @@ object PermissionsKey : Key<Unit>
     get() = android.Manifest.permission.CALL_PHONE
   override val title: String = "Call phone"
   override val desc: String = "This is a desc"
-  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleAccessibilityPermission : AccessibilityServicePermission {
@@ -111,7 +111,7 @@ object PermissionsKey : Key<Unit>
     get() = EsAccessibilityService::class
   override val title: String = "Accessibility"
   override val desc: String = "This is a desc"
-  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu, null) }
+  override val icon: @Composable () -> Unit = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleDeviceAdminPermission : DeviceAdminPermission {
@@ -124,7 +124,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleIgnoreBatteryOptimizationsPermission : IgnoreBatteryOptimizationsPermission {
@@ -133,7 +133,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleInstallUnknownAppsPermission : InstallUnknownAppsPermission {
@@ -142,7 +142,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SamplePackageUsageStatsPermission : PackageUsageStatsPermission {
@@ -151,7 +151,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleNotificationListenerPermission : NotificationListenerPermission {
@@ -162,7 +162,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleSystemOverlayPermission : SystemOverlayPermission {
@@ -171,7 +171,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission {
@@ -180,7 +180,7 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }
 
 @Provide object SampleWriteSettingsPermission : WriteSettingsPermission {
@@ -189,5 +189,5 @@ object PermissionsKey : Key<Unit>
   override val desc: String
     get() = "This is a desc"
   override val icon: @Composable () -> Unit
-    get() = { Icon(Icons.Default.Menu, null) }
+    get() = { Icon(Icons.Default.Menu) }
 }

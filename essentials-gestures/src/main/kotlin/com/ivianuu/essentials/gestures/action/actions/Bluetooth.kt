@@ -16,15 +16,21 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.bluetooth.*
-import androidx.compose.material.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.broadcast.*
+import android.bluetooth.BluetoothAdapter
+import androidx.compose.material.Icon
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
@@ -61,4 +67,4 @@ private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory): Flow<Ac
       if (it) R.drawable.es_ic_bluetooth
       else R.drawable.es_ic_bluetooth_disabled
     }
-    .map { { Icon(painterResource(it), null) } }
+    .map { { Icon(it) } }

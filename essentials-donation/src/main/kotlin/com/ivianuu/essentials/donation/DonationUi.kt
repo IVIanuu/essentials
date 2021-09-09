@@ -28,8 +28,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
@@ -67,7 +65,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
-      title = { Text(stringResource(R.string.es_donation_title)) },
+      title = { Text(R.string.es_donation_title) },
       content = {
         ResourceLazyColumnFor(
           modifier = Modifier.animateContentSize(),
@@ -89,7 +87,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       },
       buttons = {
         TextButton(onClick = model.close) {
-          Text(stringResource(R.string.es_cancel))
+          Text(R.string.es_cancel)
         }
       }
     )
@@ -101,7 +99,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
     modifier = Modifier
       .padding(horizontal = 8.dp),
     title = { Text(donation.title) },
-    leading = { Icon(painterResource(donation.donation.iconRes), null) },
+    leading = { Icon(donation.donation.iconRes) },
     trailing = {
       Text(
         text = donation.price,

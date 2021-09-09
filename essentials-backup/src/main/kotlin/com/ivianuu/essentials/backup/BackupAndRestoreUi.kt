@@ -19,8 +19,6 @@ package com.ivianuu.essentials.backup
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.optics.Optics
@@ -44,22 +42,22 @@ object BackupAndRestoreKey : Key<Unit>
 
 @Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_backup_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_save), null) },
-          title = { Text(stringResource(R.string.es_pref_backup)) },
-          subtitle = { Text(stringResource(R.string.es_pref_backup_summary)) },
+          leading = { Icon(R.drawable.es_ic_save) },
+          title = { Text(R.string.es_pref_backup) },
+          subtitle = { Text(R.string.es_pref_backup_summary) },
           onClick = model.backupData
         )
       }
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_restore), null) },
-          title = { Text(stringResource(R.string.es_pref_restore)) },
-          subtitle = { Text(stringResource(R.string.es_pref_restore_summary)) },
+          leading = { Icon(R.drawable.es_ic_restore) },
+          title = { Text(R.string.es_pref_restore) },
+          subtitle = { Text(R.string.es_pref_restore_summary) },
           onClick = model.restoreData
         )
       }

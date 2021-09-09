@@ -47,7 +47,7 @@ object TwilightSettingsKey : Key<Unit>
 
 @Provide val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_twilight_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       items(TwilightMode.values()) { mode ->
@@ -58,13 +58,13 @@ object TwilightSettingsKey : Key<Unit>
         )
       }
       item {
-        Subheader { Text(stringResource(R.string.es_twilight_pref_category_more)) }
+        Subheader { Text(R.string.es_twilight_pref_category_more) }
       }
       item {
         CheckboxListItem(
           value = model.useBlackInDarkMode,
           onValueChange = model.updateUseBlackInDarkMode,
-          title = { Text(stringResource(R.string.es_twilight_use_black)) }
+          title = { Text(R.string.es_twilight_use_black) }
         )
       }
     }

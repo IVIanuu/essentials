@@ -54,7 +54,7 @@ data class SingleChoiceListKey<T : Any>(
         TextButton(onClick = {
           scope.launch { navigator.pop(key, null) }
         }) {
-          Text(stringResource(R.string.es_cancel))
+          Text(R.string.es_cancel)
         }
       }
     )

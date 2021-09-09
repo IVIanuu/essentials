@@ -35,8 +35,6 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.BuildInfo
@@ -75,14 +73,13 @@ object RateKey : DialogKey<Unit>
         ) {
           Image(
             painter = rememberImagePainter(AppIcon(model.packageName)),
-            modifier = Modifier.size(96.dp),
-            contentDescription = null
+            modifier = Modifier.size(96.dp)
           )
 
           Spacer(Modifier.height(16.dp))
 
           Text(
-            text = stringResource(R.string.es_rate_title),
+            textResId = R.string.es_rate_title,
             style = MaterialTheme.typography.h6,
             color = MaterialTheme.colors.onSurface
               .copy(alpha = ContentAlpha.high)
@@ -103,8 +100,7 @@ object RateKey : DialogKey<Unit>
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
                   ) { model.updateRating(rating) },
-                painter = painterResource(R.drawable.es_ic_star),
-                contentDescription = null,
+                painterResId = R.drawable.es_ic_star,
                 tint = if (rating <= model.rating) MaterialTheme.colors.secondary
                 else MaterialTheme.colors.onSurface
                   .copy(alpha = 0.12f)
@@ -116,16 +112,16 @@ object RateKey : DialogKey<Unit>
       buttons = {
         if (model.displayShowNever) {
           TextButton(onClick = model.showNever) {
-            Text(stringResource(R.string.es_never))
+            Text(R.string.es_never)
           }
         }
 
         TextButton(onClick = model.showLater) {
-          Text(stringResource(R.string.es_later))
+          Text(R.string.es_later)
         }
 
         TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
-          Text(stringResource(R.string.es_confirm))
+          Text(R.string.es_confirm)
         }
       }
     )

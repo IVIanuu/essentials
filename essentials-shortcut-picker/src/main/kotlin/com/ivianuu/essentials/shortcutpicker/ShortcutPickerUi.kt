@@ -43,20 +43,13 @@ import kotlinx.coroutines.flow.*
 object ShortcutPickerKey : Key<Shortcut>
 
 @Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = { Text(stringResource(R.string.es_title_shortcut_picker)) }
-      )
-    }
-  ) {
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
     ResourceLazyColumnFor(model.shortcuts) { shortcut ->
       ListItem(
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
-            painter = BitmapPainter(shortcut.icon),
-            contentDescription = null
+            painter = BitmapPainter(shortcut.icon)
           )
         },
         title = { Text(shortcut.name) },

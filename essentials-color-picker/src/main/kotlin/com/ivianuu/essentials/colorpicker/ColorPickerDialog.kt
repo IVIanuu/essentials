@@ -104,11 +104,11 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
             contentColor = currentColor
           )
         ) {
-          Text(stringResource(otherScreen.titleRes))
+          Text(otherScreen.titleRes)
         }
       }
 
-      TextButton(onClick = onCancel) { Text(stringResource(R.string.es_cancel)) }
+      TextButton(onClick = onCancel) { Text(R.string.es_cancel) }
 
       TextButton(
         onClick = { onColorSelected(currentColor) },
@@ -116,7 +116,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
           contentColor = currentColor
         )
       ) {
-        Text(stringResource(R.string.es_ok))
+        Text(R.string.es_ok)
       }
     }
   )
@@ -236,7 +236,6 @@ private sealed class ColorGridItem {
       if (isSelected) {
         Icon(
           imageVector = Icons.Default.Check,
-          contentDescription = null,
           modifier = Modifier
             .center()
             .size(size = 36.dp)
@@ -250,7 +249,6 @@ private sealed class ColorGridItem {
   BaseColorGridItem(onClick = onClick) {
     Icon(
       imageVector = Icons.Default.ArrowBack,
-      contentDescription = null,
       modifier = Modifier.size(size = 36.dp)
     )
   }

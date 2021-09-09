@@ -155,8 +155,7 @@ enum class TransitionKey(
         ) {
           Icon(
             imageVector = Icons.Default.ArrowBack,
-            modifier = Modifier.rotate(180f),
-            contentDescription = null
+            modifier = Modifier.rotate(180f)
           )
         }
       }

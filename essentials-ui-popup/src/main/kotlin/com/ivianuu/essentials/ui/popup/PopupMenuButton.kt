@@ -46,7 +46,7 @@ import kotlinx.coroutines.*
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
-    Icon(Icons.Default.MoreVert, null)
+    Icon(Icons.Default.MoreVert)
   }
 }
 

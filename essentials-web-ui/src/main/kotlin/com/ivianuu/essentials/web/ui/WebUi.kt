@@ -30,7 +30,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.ivianuu.essentials.ui.common.getValue
@@ -78,10 +77,10 @@ data class WebKey(val title: String, val url: String) : Key<Unit>
             backgroundColor = backgroundColor
           ) {
             IconButton(onClick = { webViewRef!!.goBack() }) {
-              Icon(painterResource(R.drawable.es_ic_arrow_back_ios_new), null)
+              Icon(R.drawable.es_ic_arrow_back_ios_new)
             }
             IconButton(onClick = { webViewRef!!.reload() }) {
-              Icon(painterResource(R.drawable.es_ic_refresh), null)
+              Icon(R.drawable.es_ic_refresh)
             }
             val scope = rememberCoroutineScope()
             IconButton(onClick = {
@@ -89,7 +88,7 @@ data class WebKey(val title: String, val url: String) : Key<Unit>
                 navigator.push(UrlKey(webViewRef!!.url!!))
               }
             }) {
-              Icon(painterResource(R.drawable.es_ic_open_in_browser), null)
+              Icon(R.drawable.es_ic_open_in_browser)
             }
           }
         }

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
@@ -53,20 +52,20 @@ object NavBarKey : Key<Unit>
 
 @Provide val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_nav_bar_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_title) }) }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
         SwitchListItem(
           value = model.hideNavBar,
           onValueChange = model.updateHideNavBar,
-          title = { Text(stringResource(R.string.es_pref_hide_nav_bar)) }
+          title = { Text(R.string.es_pref_hide_nav_bar) }
         )
       }
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode)) },
-          subtitle = { Text(stringResource(R.string.es_pref_nav_bar_rotation_mode_summary)) },
+          title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
+          subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) },
           modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
           onClick = model.updateNavBarRotationMode
         )

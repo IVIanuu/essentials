@@ -16,17 +16,19 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.writesecuresettings.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 @Provide class NavBarPermission(private val rp: ResourceProvider) : WriteSecureSettingsPermission {
   override val title: String
@@ -34,7 +36,7 @@ import kotlinx.coroutines.flow.*
   override val desc: String
     get() = loadResource(R.string.es_permission_nav_bar_desc)
   override val icon: @Composable () -> Unit
-    get() = { Icon(painterResource(R.drawable.es_ic_settings), null) }
+    get() = { Icon(R.drawable.es_ic_settings) }
 }
 
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(

@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -87,7 +86,7 @@ import com.ivianuu.injekt.Provide
     get() = loadResource(R.string.es_action_app)
 
   override val icon: @Composable () -> Unit = {
-    Icon(painterResource(R.drawable.es_ic_apps), null)
+    Icon(R.drawable.es_ic_apps)
   }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {

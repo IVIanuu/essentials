@@ -23,7 +23,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
@@ -46,8 +45,7 @@ import kotlinx.coroutines.flow.flowOf
 fun singleActionImage(data: Any): Flow<ActionIcon> = flowOf {
   Image(
     painter = rememberImagePainter(data),
-    modifier = LocalActionImageSizeModifier.current,
-    contentDescription = null
+    modifier = LocalActionImageSizeModifier.current
   )
 }
 
@@ -56,16 +54,14 @@ fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(ic
 fun singleActionIcon(icon: ImageVector) = singleActionIcon {
   Icon(
     imageVector = icon,
-    modifier = LocalActionIconSizeModifier.current,
-    contentDescription = null
+    modifier = LocalActionIconSizeModifier.current
   )
 }
 
 fun singleActionIcon(id: Int) = singleActionIcon {
   Icon(
-    painter = painterResource(id = id),
-    modifier = LocalActionIconSizeModifier.current,
-    contentDescription = null
+    painterResId = id = id,
+    modifier = LocalActionIconSizeModifier.current
   )
 }
 

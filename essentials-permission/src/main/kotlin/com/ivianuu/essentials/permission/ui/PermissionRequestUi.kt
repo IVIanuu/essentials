@@ -16,33 +16,44 @@
 
 package com.ivianuu.essentials.permission.ui
 
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppUiStarter
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
 @Provide val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
   Scaffold(
     topBar = {
-      TopAppBar(title = { Text(stringResource(R.string.es_request_permission_title)) })
+      TopAppBar(title = { Text(R.string.es_request_permission_title) })
     }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
@@ -57,7 +68,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
           leading = permission.permission.icon,
           trailing = {
             Button(onClick = { model.grantPermission(permission) }) {
-              Text(stringResource(R.string.es_grant))
+              Text(R.string.es_grant)
             }
           },
           onClick = { model.grantPermission(permission) }

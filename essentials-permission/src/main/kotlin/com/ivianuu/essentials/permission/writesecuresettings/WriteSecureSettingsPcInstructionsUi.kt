@@ -19,7 +19,6 @@ package com.ivianuu.essentials.permission.writesecuresettings
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
@@ -59,7 +58,7 @@ data class WriteSecureSettingsPcInstructionsKey(
 @Provide val writeSecureSettingsPcInstructionsUi: ModelKeyUi<WriteSecureSettingsPcInstructionsKey,
     WriteSecureSettingsPcInstructionsModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_title_secure_settings_pc_instructions)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_title_secure_settings_pc_instructions) }) }
   ) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
@@ -69,46 +68,46 @@ data class WriteSecureSettingsPcInstructionsKey(
       }
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_secure_settings_step_1)) },
-          subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_1_summary)) }
+          title = { Text(R.string.es_pref_secure_settings_step_1) },
+          subtitle = { Text(R.string.es_pref_secure_settings_step_1_summary) }
         )
       }
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_secure_settings_step_2)) },
-          subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_2_summary)) }
+          title = { Text(R.string.es_pref_secure_settings_step_2) },
+          subtitle = { Text(R.string.es_pref_secure_settings_step_2_summary) }
         )
       }
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_secure_settings_step_3)) },
-          subtitle = { Text(stringResource(R.string.es_pref_secure_settings_step_3_summary)) }
+          title = { Text(R.string.es_pref_secure_settings_step_3) },
+          subtitle = { Text(R.string.es_pref_secure_settings_step_3_summary) }
         )
       }
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
-          title = { Text(stringResource(R.string.es_pref_secure_settings_link_gadget_hacks_summary)) },
+          leading = { Icon(R.drawable.es_ic_link) },
+          title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
           onClick = model.openGadgetHacksTutorial
         )
       }
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
-          title = { Text(stringResource(R.string.es_pref_secure_settings_link_lifehacker_summary)) },
+          leading = { Icon(R.drawable.es_ic_link) },
+          title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
           onClick = model.openLifehackerTutorial
         )
       }
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_link), null) },
-          title = { Text(stringResource(R.string.es_pref_secure_settings_link_xda_summary)) },
+          leading = { Icon(R.drawable.es_ic_link) },
+          title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
           onClick = model.openXdaTutorial
         )
       }
       item {
         ListItem(
-          title = { Text(stringResource(R.string.es_pref_secure_settings_step_4)) },
+          title = { Text(R.string.es_pref_secure_settings_step_4) },
           subtitle = {
             Text(
               stringResource(

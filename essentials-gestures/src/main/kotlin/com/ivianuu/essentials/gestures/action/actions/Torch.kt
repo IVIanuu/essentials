@@ -16,15 +16,20 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.material.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
+import androidx.compose.material.Icon
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.torch.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.torch.TorchState
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 
 @Provide object TorchActionId : ActionId("torch")
 
@@ -48,6 +53,6 @@ private fun Flow<TorchState>.torchIcon(): Flow<ActionIcon> = this
   }
   .map {
     {
-      Icon(painterResource(it), null)
+      Icon(it)
     }
   }

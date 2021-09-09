@@ -18,7 +18,6 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
@@ -41,18 +40,18 @@ object NavBarUnsupportedKey : DialogKey<Unit>
   DialogScaffold {
     Dialog(
       title = {
-        Text(stringResource(R.string.es_nav_bar_unsupported_title))
+        Text(R.string.es_nav_bar_unsupported_title)
       },
       content = {
-        Text(stringResource(R.string.es_nav_bar_unsupported_content))
+        Text(R.string.es_nav_bar_unsupported_content)
       },
       buttons = {
         TextButton(onClick = model.openMoreInfos) {
-          Text(stringResource(R.string.es_more_infos))
+          Text(R.string.es_more_infos)
         }
 
         TextButton(onClick = model.close) {
-          Text(stringResource(R.string.es_close))
+          Text(R.string.es_close)
         }
       }
     )

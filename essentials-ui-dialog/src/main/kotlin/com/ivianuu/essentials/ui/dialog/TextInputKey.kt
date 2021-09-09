@@ -49,7 +49,7 @@ data class TextInputKey(
         TextButton(onClick = {
           scope.launch { navigator.pop(key, null) }
         }) {
-          Text(stringResource(R.string.es_cancel))
+          Text(R.string.es_cancel)
         }
 
         TextButton(
@@ -57,7 +57,7 @@ data class TextInputKey(
           onClick = {
             scope.launch { navigator.pop(key, currentValue) }
           }
-        ) { Text(stringResource(R.string.es_ok)) }
+        ) { Text(R.string.es_ok) }
       }
     )
   }

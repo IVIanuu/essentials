@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedBox
@@ -74,7 +73,7 @@ object BottomNavigationKey : Key<Unit>
                 alwaysShowLabel = false,
                 selected = item == selectedItem,
                 onClick = { selectedItem = item },
-                icon = { Icon(painterResource(item.icon), null) },
+                icon = { Icon(item.icon) },
                 label = { Text(item.title) }
               )
             }

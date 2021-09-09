@@ -16,17 +16,23 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.provider.*
-import androidx.compose.material.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.settings.*
-import com.ivianuu.essentials.data.*
+import android.provider.Settings
+import androidx.compose.material.Icon
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.android.settings.AndroidSettingModule
+import com.ivianuu.essentials.android.settings.AndroidSettingsType
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
@@ -54,7 +60,7 @@ private fun Flow<AutoRotation>.autoRotationIcon(): Flow<ActionIcon> =
       if (it) R.drawable.es_ic_screen_rotation
       else R.drawable.es_ic_screen_lock_rotation
     }
-    .map { { Icon(painterResource(it), null) } }
+    .map { { Icon(it) } }
 
 internal typealias AutoRotation = Int
 

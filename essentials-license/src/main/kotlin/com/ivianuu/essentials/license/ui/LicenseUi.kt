@@ -18,7 +18,6 @@ package com.ivianuu.essentials.license.ui
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.GetLicenseProjectsUseCase
@@ -46,7 +45,7 @@ import kotlinx.coroutines.flow.flow
 object LicenseKey : Key<Unit>
 
 @Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
-  Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_licenses_title)) }) }) {
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
     ResourceLazyColumnFor(model.projects) { project ->
       Project(
         project = project,

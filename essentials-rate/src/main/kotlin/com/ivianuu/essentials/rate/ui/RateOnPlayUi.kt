@@ -18,7 +18,6 @@ package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
@@ -44,21 +43,21 @@ object RateOnPlayKey : DialogKey<Unit>
 @Provide val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
-      title = { Text(stringResource(R.string.es_rate_on_play_title)) },
-      content = { Text(stringResource(R.string.es_rate_on_play_content)) },
+      title = { Text(R.string.es_rate_on_play_title) },
+      content = { Text(R.string.es_rate_on_play_content) },
       buttons = {
         if (model.displayShowNever) {
           TextButton(onClick = model.showNever) {
-            Text(stringResource(R.string.es_never))
+            Text(R.string.es_never)
           }
         }
 
         TextButton(onClick = model.showLater) {
-          Text(stringResource(R.string.es_later))
+          Text(R.string.es_later)
         }
 
         TextButton(onClick = model.rate) {
-          Text(stringResource(R.string.es_rate))
+          Text(R.string.es_rate)
         }
       }
     )

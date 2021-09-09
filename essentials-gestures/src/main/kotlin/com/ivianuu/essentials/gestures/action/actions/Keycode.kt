@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
@@ -70,7 +69,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   override val title: String
     get() = loadResource(R.string.es_action_keycode)
   override val icon: @Composable () -> Unit =
-    { Icon(painterResource(R.drawable.es_ic_keyboard), null) }
+    { Icon(R.drawable.es_ic_keyboard) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(

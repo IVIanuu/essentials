@@ -42,7 +42,7 @@ data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 @Provide
 val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
   Scaffold(
-    topBar = { TopAppBar(title = { Text(stringResource(R.string.es_floating_window_picker_title)) }) }
+    topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {
     Column {
       Text(
@@ -60,7 +60,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
           .clickable(onClick = model.openFloatingWindow)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
-        text = stringResource(R.string.es_yes),
+        textResId = R.string.es_yes,
         style = MaterialTheme.typography.button
       )
 
@@ -73,7 +73,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
           .clickable(onClick = model.openFullScreen)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
-        text = stringResource(R.string.es_no),
+        textResId = R.string.es_no,
         style = MaterialTheme.typography.button
       )
 

@@ -19,8 +19,6 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
@@ -52,73 +50,73 @@ import kotlinx.coroutines.flow.first
 object AboutKey : Key<Unit>
 
 @Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
-  Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.es_about_title)) }) }) {
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_about_title) }) }) {
     LazyColumn(contentPadding = localVerticalInsetsPadding()) {
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_info), null) },
-          title = { Text(stringResource(R.string.es_about_version)) },
+          leading = { Icon(R.drawable.es_ic_info) },
+          title = { Text(R.string.es_about_version) },
           subtitle = { Text(model.version) }
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_star), null) },
-          title = { Text(stringResource(R.string.es_about_rate)) },
-          subtitle = { Text(stringResource(R.string.es_about_rate_desc)) },
+          leading = { Icon(R.drawable.es_ic_star) },
+          title = { Text(R.string.es_about_rate) },
+          subtitle = { Text(R.string.es_about_rate_desc) },
           onClick = model.rate
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_favorite), null) },
-          title = { Text(stringResource(R.string.es_about_donate)) },
+          leading = { Icon(R.drawable.es_ic_favorite) },
+          title = { Text(R.string.es_about_donate) },
           onClick = model.donate
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_google_play), null) },
-          title = { Text(stringResource(R.string.es_about_more_apps)) },
-          subtitle = { Text(stringResource(R.string.es_about_more_apps_desc)) },
+          leading = { Icon(R.drawable.es_ic_google_play) },
+          title = { Text(R.string.es_about_more_apps) },
+          subtitle = { Text(R.string.es_about_more_apps_desc) },
           onClick = model.openMoreApps
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_reddit), null) },
-          title = { Text(stringResource(R.string.es_about_reddit)) },
-          subtitle = { Text(stringResource(R.string.es_about_reddit_desc)) },
+          leading = { Icon(R.drawable.es_ic_reddit) },
+          title = { Text(R.string.es_about_reddit) },
+          subtitle = { Text(R.string.es_about_reddit_desc) },
           onClick = model.openRedditPage
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_github), null) },
-          title = { Text(stringResource(R.string.es_about_github)) },
-          subtitle = { Text(stringResource(R.string.es_about_github_desc)) },
+          leading = { Icon(R.drawable.es_ic_github) },
+          title = { Text(R.string.es_about_github) },
+          subtitle = { Text(R.string.es_about_github_desc) },
           onClick = model.openGithubPage
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_twitter), null) },
-          title = { Text(stringResource(R.string.es_about_twitter)) },
-          subtitle = { Text(stringResource(R.string.es_about_twitter_desc)) },
+          leading = { Icon(R.drawable.es_ic_twitter) },
+          title = { Text(R.string.es_about_twitter) },
+          subtitle = { Text(R.string.es_about_twitter_desc) },
           onClick = model.openTwitterPage
         )
       }
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_email), null) },
-          title = { Text(stringResource(R.string.es_about_feedback)) },
+          leading = { Icon(R.drawable.es_ic_email) },
+          title = { Text(R.string.es_about_feedback) },
           subtitle = { Text(model.email) },
           onClick = model.sendMail
         )
@@ -126,8 +124,8 @@ object AboutKey : Key<Unit>
 
       item {
         ListItem(
-          leading = { Icon(painterResource(R.drawable.es_ic_assignment), null) },
-          title = { Text(stringResource(R.string.es_licenses_title)) },
+          leading = { Icon(R.drawable.es_ic_assignment) },
+          title = { Text(R.string.es_licenses_title) },
           onClick = model.openLicenses
         )
       }
@@ -135,8 +133,8 @@ object AboutKey : Key<Unit>
       if (model.privacyPolicyUrl != null) {
         item {
           ListItem(
-            leading = { Icon(painterResource(R.drawable.es_ic_policy), null) },
-            title = { Text(stringResource(R.string.es_about_privacy_policy)) },
+            leading = { Icon(R.drawable.es_ic_policy) },
+            title = { Text(R.string.es_about_privacy_policy) },
             onClick = model.openPrivacyPolicy
           )
         }

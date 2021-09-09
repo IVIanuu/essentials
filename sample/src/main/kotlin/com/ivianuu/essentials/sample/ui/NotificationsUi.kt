@@ -39,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.github.michaelbull.result.fold
@@ -135,7 +134,7 @@ object NotificationsKey : Key<Unit>
         trailing = if (notification.isClearable) {
           {
             IconButton(onClick = { onDismissNotificationClick(notification) }) {
-              Icon(painterResource(R.drawable.es_ic_clear), null)
+              Icon(R.drawable.es_ic_clear)
             }
           }
         } else null
@@ -230,13 +229,12 @@ private fun StatusBarNotification.toUiNotification(context: AppContext) = UiNoti
         {
           Image(
             modifier = Modifier.size(24.dp),
-            bitmap = bitmap,
-            contentDescription = null
+            bitmap = bitmap
           )
         }
       },
       failure = {
-        { Icon(painterResource(R.drawable.es_ic_error), null) }
+        { Icon(R.drawable.es_ic_error) }
       }
     ),
   color = Color(notification.color),

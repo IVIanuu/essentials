@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.LocalScope
@@ -71,8 +70,7 @@ data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Unit>
           ) {
             Image(
               modifier = Modifier.padding(70.dp),
-              painter = painterResource(R.drawable.placeholder_image),
-              contentDescription = null
+              painterResId = R.drawable.placeholder_image
             )
           }
         }
