@@ -16,6 +16,6 @@
 
 package com.ivianuu.essentials.sample.deviceadmin
 
-import android.app.admin.*
+import android.app.admin.DeviceAdminReceiver
 
 class SampleDeviceAdmin : DeviceAdminReceiver()

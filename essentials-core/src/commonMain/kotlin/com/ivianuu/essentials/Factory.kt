@@ -16,6 +16,6 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Tag
 
 @Tag annotation class Factory

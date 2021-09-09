@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import com.ivianuu.essentials.BuildInfo
@@ -31,10 +30,8 @@ import com.ivianuu.essentials.rate.ui.FeedbackMailKey
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -50,94 +47,92 @@ import kotlinx.coroutines.flow.first
 object AboutKey : Key<Unit>
 
 @Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_about_title) }) }) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+  SimpleListScreen(R.string.es_about_title) {
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_info) },
+        title = { Text(R.string.es_about_version) },
+        subtitle = { Text(model.version) }
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_star) },
+        title = { Text(R.string.es_about_rate) },
+        subtitle = { Text(R.string.es_about_rate_desc) },
+        onClick = model.rate
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_favorite) },
+        title = { Text(R.string.es_about_donate) },
+        onClick = model.donate
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_google_play) },
+        title = { Text(R.string.es_about_more_apps) },
+        subtitle = { Text(R.string.es_about_more_apps_desc) },
+        onClick = model.openMoreApps
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_reddit) },
+        title = { Text(R.string.es_about_reddit) },
+        subtitle = { Text(R.string.es_about_reddit_desc) },
+        onClick = model.openRedditPage
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_github) },
+        title = { Text(R.string.es_about_github) },
+        subtitle = { Text(R.string.es_about_github_desc) },
+        onClick = model.openGithubPage
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_twitter) },
+        title = { Text(R.string.es_about_twitter) },
+        subtitle = { Text(R.string.es_about_twitter_desc) },
+        onClick = model.openTwitterPage
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_email) },
+        title = { Text(R.string.es_about_feedback) },
+        subtitle = { Text(model.email) },
+        onClick = model.sendMail
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_assignment) },
+        title = { Text(R.string.es_licenses_title) },
+        onClick = model.openLicenses
+      )
+    }
+
+    if (model.privacyPolicyUrl != null) {
       item {
         ListItem(
-          leading = { Icon(R.drawable.es_ic_info) },
-          title = { Text(R.string.es_about_version) },
-          subtitle = { Text(model.version) }
+          leading = { Icon(R.drawable.es_ic_policy) },
+          title = { Text(R.string.es_about_privacy_policy) },
+          onClick = model.openPrivacyPolicy
         )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_star) },
-          title = { Text(R.string.es_about_rate) },
-          subtitle = { Text(R.string.es_about_rate_desc) },
-          onClick = model.rate
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_favorite) },
-          title = { Text(R.string.es_about_donate) },
-          onClick = model.donate
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_google_play) },
-          title = { Text(R.string.es_about_more_apps) },
-          subtitle = { Text(R.string.es_about_more_apps_desc) },
-          onClick = model.openMoreApps
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_reddit) },
-          title = { Text(R.string.es_about_reddit) },
-          subtitle = { Text(R.string.es_about_reddit_desc) },
-          onClick = model.openRedditPage
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_github) },
-          title = { Text(R.string.es_about_github) },
-          subtitle = { Text(R.string.es_about_github_desc) },
-          onClick = model.openGithubPage
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_twitter) },
-          title = { Text(R.string.es_about_twitter) },
-          subtitle = { Text(R.string.es_about_twitter_desc) },
-          onClick = model.openTwitterPage
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_email) },
-          title = { Text(R.string.es_about_feedback) },
-          subtitle = { Text(model.email) },
-          onClick = model.sendMail
-        )
-      }
-
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_assignment) },
-          title = { Text(R.string.es_licenses_title) },
-          onClick = model.openLicenses
-        )
-      }
-
-      if (model.privacyPolicyUrl != null) {
-        item {
-          ListItem(
-            leading = { Icon(R.drawable.es_ic_policy) },
-            title = { Text(R.string.es_about_privacy_policy) },
-            onClick = model.openPrivacyPolicy
-          )
-        }
       }
     }
   }

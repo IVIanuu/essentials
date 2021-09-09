@@ -16,18 +16,35 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.essentials.ui.common.BackButton
+import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.core.isDark
+import com.ivianuu.essentials.ui.core.isLight
+import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.scoped
 
 enum class AppBarStyle { PRIMARY, SURFACE }
 

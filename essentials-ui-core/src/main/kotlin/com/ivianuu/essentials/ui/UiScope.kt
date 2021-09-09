@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import androidx.compose.runtime.compositionLocalOf
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.scope.ChildScopeModule0
+import com.ivianuu.injekt.scope.Scope
 
 val LocalScope = compositionLocalOf<Scope> { error("No scope provided") }
 

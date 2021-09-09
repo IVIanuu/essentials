@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.backup
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import com.github.michaelbull.result.onFailure
@@ -24,10 +23,8 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -41,26 +38,22 @@ import kotlinx.coroutines.flow.StateFlow
 object BackupAndRestoreKey : Key<Unit>
 
 @Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text(R.string.es_backup_title) }) }
-  ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_save) },
-          title = { Text(R.string.es_pref_backup) },
-          subtitle = { Text(R.string.es_pref_backup_summary) },
-          onClick = model.backupData
-        )
-      }
-      item {
-        ListItem(
-          leading = { Icon(R.drawable.es_ic_restore) },
-          title = { Text(R.string.es_pref_restore) },
-          subtitle = { Text(R.string.es_pref_restore_summary) },
-          onClick = model.restoreData
-        )
-      }
+  SimpleListScreen(R.string.es_backup_and_restore_title) {
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_save) },
+        title = { Text(R.string.es_pref_backup) },
+        subtitle = { Text(R.string.es_pref_backup_summary) },
+        onClick = model.backupData
+      )
+    }
+    item {
+      ListItem(
+        leading = { Icon(R.drawable.es_ic_restore) },
+        title = { Text(R.string.es_pref_restore) },
+        subtitle = { Text(R.string.es_pref_restore_summary) },
+        onClick = model.restoreData
+      )
     }
   }
 }

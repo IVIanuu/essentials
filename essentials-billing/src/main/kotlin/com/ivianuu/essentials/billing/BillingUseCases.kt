@@ -26,10 +26,10 @@ import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.scope.*
+import kotlin.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
-import kotlin.coroutines.*
 
 typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
 

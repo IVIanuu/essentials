@@ -24,7 +24,7 @@
     <string name="es_grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>
 
     <!-- Secure settings dialog -->
-    <string name="es_title_secure_settings">Permission required</string>
+    <string name="es_secure_settings_title">Permission required</string>
     <string name="es_pref_secure_settings_header_summary">The WRITE_SECURE_SETTINGS permission is required to write system settings</string>
     <string name="es_pref_use_root">Grant using root</string>
     <string name="es_pref_use_root_summary">Use root to grant the permission</string>
@@ -32,7 +32,7 @@
     <string name="es_pref_use_pc_summary">Connect to a PC to grant the permission with ADB.\nNote that ADB simply is a developers tool and it will not void the warranty unlike root.</string>
 
     <!-- Secure settings instructions -->
-    <string name="es_title_secure_settings_pc_instructions">PC instructions</string>
+    <string name="es_secure_settings_pc_instructions_title">PC instructions</string>
     <string name="es_pref_secure_settings_pc_instructions_header_summary">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
 
     <string name="es_pref_secure_settings_step_1">1 - Activate the developer options</string>

@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.ui.core.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.ivianuu.essentials.ui.core.isDark
 
 @Composable fun guessingContentColorFor(color: Color): Color = with(MaterialTheme.colors) {
   when (color) {

@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
@@ -29,11 +28,9 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.twilight.R
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Subheader
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -46,27 +43,23 @@ import kotlinx.coroutines.flow.StateFlow
 object TwilightSettingsKey : Key<Unit>
 
 @Provide val twilightSettingsUi: ModelKeyUi<TwilightSettingsKey, TwilightSettingsModel> = {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text(R.string.es_twilight_title) }) }
-  ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      items(TwilightMode.values()) { mode ->
-        TwilightModeItem(
-          mode = mode,
-          isSelected = model.twilightMode == mode,
-          onClick = { model.updateTwilightMode(mode) }
-        )
-      }
-      item {
-        Subheader { Text(R.string.es_twilight_pref_category_more) }
-      }
-      item {
-        CheckboxListItem(
-          value = model.useBlackInDarkMode,
-          onValueChange = model.updateUseBlackInDarkMode,
-          title = { Text(R.string.es_twilight_use_black) }
-        )
-      }
+  SimpleListScreen(R.string.es_twilight_title) {
+    items(TwilightMode.values()) { mode ->
+      TwilightModeItem(
+        mode = mode,
+        isSelected = model.twilightMode == mode,
+        onClick = { model.updateTwilightMode(mode) }
+      )
+    }
+    item {
+      Subheader { Text(R.string.es_twilight_pref_category_more) }
+    }
+    item {
+      CheckboxListItem(
+        value = model.useBlackInDarkMode,
+        onValueChange = model.updateUseBlackInDarkMode,
+        title = { Text(R.string.es_twilight_use_black) }
+      )
     }
   }
 }

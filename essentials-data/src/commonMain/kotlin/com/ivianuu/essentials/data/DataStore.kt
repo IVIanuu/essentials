@@ -16,8 +16,9 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import kotlinx.coroutines.flow.Flow
 
 interface DataStore<T> {
   val data: Flow<T>

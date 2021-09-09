@@ -16,10 +16,18 @@
 
 package com.ivianuu.essentials.work
 
-import androidx.work.*
-import com.ivianuu.injekt.*
-import java.util.*
-import kotlin.time.*
+import androidx.work.Data
+import androidx.work.ForegroundInfo
+import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import java.util.UUID
+import kotlin.time.Duration
+import kotlin.time.toJavaDuration
 
 typealias Worker<I> = suspend WorkScope.() -> ListenableWorker.Result
 

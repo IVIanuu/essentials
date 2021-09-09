@@ -16,12 +16,17 @@
 
 package com.ivianuu.essentials.boot
 
-import android.content.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ReceiverScope
+import com.ivianuu.injekt.android.createReceiverScope
+import com.ivianuu.injekt.scope.DisposableScope
+import com.ivianuu.injekt.scope.ScopeElement
 
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {

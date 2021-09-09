@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
+import com.ivianuu.injekt.Provide
 
 typealias KeyUiDecoratorLogger = KeyUiDecorator
 

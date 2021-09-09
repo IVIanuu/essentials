@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.Intent
 import android.provider.MediaStore
 import android.view.KeyEvent
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
@@ -39,10 +38,8 @@ import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -96,25 +93,21 @@ class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
 
 @Provide
 val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
-  Scaffold(topBar = {
-    TopAppBar(title = { Text(R.string.es_media_app_settings_ui_title) })
-  }) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      item {
-        ListItem(
-          title = { Text(R.string.es_pref_media_app) },
-          subtitle = {
-            Text(
-              stringResource(
-                R.string.es_pref_media_app_summary,
-                model.mediaApp.get()?.appName
-                  ?: stringResource(R.string.es_none)
-              )
+  SimpleListScreen(R.string.es_media_app_settings_ui_title) {
+    item {
+      ListItem(
+        title = { Text(R.string.es_pref_media_app) },
+        subtitle = {
+          Text(
+            stringResource(
+              R.string.es_pref_media_app_summary,
+              model.mediaApp.get()?.appName
+                ?: stringResource(R.string.es_none)
             )
-          },
-          onClick = model.updateMediaApp
-        )
-      }
+          )
+        },
+        onClick = model.updateMediaApp
+      )
     }
   }
 }

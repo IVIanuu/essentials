@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.interaction.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import kotlin.time.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.SliderColors
+import androidx.compose.material.SliderDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import kotlin.time.Duration
 
 @Composable fun Slider(
   value: Float,

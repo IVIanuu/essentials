@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.*
-import kotlin.time.*
+import com.ivianuu.injekt.Provide
+import kotlin.time.milliseconds
 
 @Provide actual val timestampProvider: TimestampProvider =
   { System.currentTimeMillis().milliseconds }

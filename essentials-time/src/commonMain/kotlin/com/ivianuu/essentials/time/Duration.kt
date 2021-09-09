@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.time
 
-import kotlin.time.*
+import kotlin.time.Duration
 
 expect fun Long.toDuration(): Duration
 

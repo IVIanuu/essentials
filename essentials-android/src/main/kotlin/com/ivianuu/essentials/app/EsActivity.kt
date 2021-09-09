@@ -16,20 +16,25 @@
 
 package com.ivianuu.essentials.app
 
-import android.os.*
-import androidx.activity.*
-import androidx.activity.compose.*
-import androidx.compose.runtime.*
-import androidx.lifecycle.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.ui.DecorateUi
+import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.util.ForegroundActivityMarker
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.activityScope
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.DisposableScope
+import com.ivianuu.injekt.scope.ScopeElement
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 
 class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {

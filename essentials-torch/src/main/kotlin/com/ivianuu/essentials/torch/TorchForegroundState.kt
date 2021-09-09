@@ -16,16 +16,25 @@
 
 package com.ivianuu.essentials.torch
 
-import android.annotation.*
-import android.app.*
-import android.content.*
-import androidx.core.app.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.foreground.*
-import com.ivianuu.essentials.foreground.ForegroundState.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import kotlinx.coroutines.flow.*
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import androidx.core.app.NotificationCompat
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundState.Background
+import com.ivianuu.essentials.foreground.ForegroundState.Foreground
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Provide fun torchForegroundState(
   state: Flow<TorchState>,

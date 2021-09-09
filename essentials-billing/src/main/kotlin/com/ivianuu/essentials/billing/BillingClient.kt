@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.billing
 
-import com.android.billingclient.api.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.android.billingclient.api.BillingClient
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @Provide fun billingClient(
   context: AppContext,

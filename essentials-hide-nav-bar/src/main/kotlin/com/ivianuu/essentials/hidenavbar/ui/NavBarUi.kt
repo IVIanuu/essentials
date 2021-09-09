@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ResourceProvider
@@ -30,12 +29,10 @@ import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -51,25 +48,21 @@ import kotlinx.coroutines.flow.first
 object NavBarKey : Key<Unit>
 
 @Provide val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_title) }) }
-  ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      item {
-        SwitchListItem(
-          value = model.hideNavBar,
-          onValueChange = model.updateHideNavBar,
-          title = { Text(R.string.es_pref_hide_nav_bar) }
-        )
-      }
-      item {
-        ListItem(
-          title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
-          subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) },
-          modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
-          onClick = model.updateNavBarRotationMode
-        )
-      }
+  SimpleListScreen(R.string.es_nav_bar_title) {
+    item {
+      SwitchListItem(
+        value = model.hideNavBar,
+        onValueChange = model.updateHideNavBar,
+        title = { Text(R.string.es_pref_hide_nav_bar) }
+      )
+    }
+    item {
+      ListItem(
+        title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
+        subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) },
+        modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
+        onClick = model.updateNavBarRotationMode
+      )
     }
   }
 }

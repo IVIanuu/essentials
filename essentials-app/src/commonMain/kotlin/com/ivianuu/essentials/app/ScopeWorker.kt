@@ -16,13 +16,15 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.scope.Scope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 typealias ScopeWorker<S> = suspend () -> Unit
 

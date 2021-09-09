@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.work
 
-import androidx.work.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.app.ScopeInitializer
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
 
 typealias WorkInitializer = ScopeInitializer<AppScope>
 

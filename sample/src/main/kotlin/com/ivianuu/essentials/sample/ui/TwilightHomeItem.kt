@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.twilight.ui.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.twilight.ui.TwilightSettingsKey
+import com.ivianuu.injekt.Provide
 
 @Provide val twilightHomeItem = HomeItem("Twilight") { TwilightSettingsKey }

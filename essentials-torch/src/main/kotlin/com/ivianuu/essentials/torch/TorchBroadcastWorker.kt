@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.broadcast.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 
 @Provide fun torchBroadcastWorker(
   broadcastsFactory: BroadcastsFactory,

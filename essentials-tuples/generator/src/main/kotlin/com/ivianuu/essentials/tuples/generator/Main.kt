@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tuples.generator
 
-import java.io.*
+import java.io.File
 
 fun main() {
   val tuplesGenDir = File("essentials-tuples/src/commonMain/kotlin/com/ivianuu/essentials/tuples/")

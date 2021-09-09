@@ -28,8 +28,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
 import kotlin.math.*
+import kotlinx.coroutines.*
 
 @Composable fun InsetsPadding(
   modifier: Modifier = Modifier,

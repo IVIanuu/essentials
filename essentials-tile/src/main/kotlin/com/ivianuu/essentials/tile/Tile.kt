@@ -22,8 +22,8 @@ import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
+import kotlinx.coroutines.flow.*
 
 @Optics data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,

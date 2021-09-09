@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.scope.Scope
 
 @Provide fun <S : Scope> scopeLogger(
   scopeKey: TypeKey<S>,

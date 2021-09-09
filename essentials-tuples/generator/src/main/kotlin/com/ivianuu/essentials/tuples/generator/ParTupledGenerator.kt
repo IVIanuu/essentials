@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tuples.generator
 
-import java.io.*
+import java.io.File
 
 fun generatePar(genDir: File) {
   val file = genDir.resolve("ParTupled.kt")

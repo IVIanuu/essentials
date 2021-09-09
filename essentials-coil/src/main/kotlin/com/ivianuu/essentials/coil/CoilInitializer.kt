@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials.coil
 
-import coil.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
+import coil.Coil
+import coil.ImageLoader
+import com.ivianuu.essentials.app.ScopeInitializer
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
 
 typealias CoilInitializer = ScopeInitializer<AppScope>
 

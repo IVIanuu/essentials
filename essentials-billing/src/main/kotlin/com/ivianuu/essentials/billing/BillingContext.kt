@@ -26,11 +26,11 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import com.ivianuu.injekt.scope.*
+import java.io.*
+import kotlin.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
-import java.io.*
-import kotlin.coroutines.*
 
 interface BillingContext {
   val billingClient: BillingClient

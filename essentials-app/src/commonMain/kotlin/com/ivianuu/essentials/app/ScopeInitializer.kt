@@ -16,10 +16,13 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.scope.Scope
+import com.ivianuu.injekt.scope.ScopeObserver
 
 typealias ScopeInitializer<S> = () -> Unit
 

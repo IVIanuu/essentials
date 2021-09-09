@@ -16,8 +16,11 @@
 
 package com.ivianuu.essentials
 
-import com.github.michaelbull.result.*
-import kotlin.coroutines.cancellation.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.getOrElse
+import kotlin.coroutines.cancellation.CancellationException
 
 inline fun <V> V.ok() = Ok(this)
 

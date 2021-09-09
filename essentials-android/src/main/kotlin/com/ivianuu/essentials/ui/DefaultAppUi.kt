@@ -16,11 +16,12 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.ui.core.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.navigation.NavigationStateContent
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
 
 @Provide fun defaultAppUi(
   navigator: Navigator,

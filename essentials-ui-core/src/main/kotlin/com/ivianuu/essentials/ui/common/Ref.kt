@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.*
-import kotlin.reflect.*
+import androidx.compose.runtime.SnapshotMutationPolicy
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.structuralEqualityPolicy
+import kotlin.reflect.KProperty
 
 fun <T> refOf(
   value: T,

@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.optics
 
-import io.kotest.matchers.*
-import org.junit.*
+import io.kotest.matchers.shouldBe
+import org.junit.Test
 
 class LensTest {
   private data class Foo(val value: Int)

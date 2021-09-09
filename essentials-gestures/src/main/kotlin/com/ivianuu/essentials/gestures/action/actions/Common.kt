@@ -60,7 +60,7 @@ fun singleActionIcon(icon: ImageVector) = singleActionIcon {
 
 fun singleActionIcon(id: Int) = singleActionIcon {
   Icon(
-    painterResId = id = id,
+    painterResId = id,
     modifier = LocalActionIconSizeModifier.current
   )
 }

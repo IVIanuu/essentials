@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.tuples.generator
 
-import java.io.*
+import java.io.File
 
 fun generateFlowCombine(genDir: File) {
   val file = genDir.resolve("FlowCombine.kt")

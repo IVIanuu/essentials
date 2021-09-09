@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -37,11 +36,9 @@ import com.ivianuu.essentials.colorpicker.ColorPickerPalette
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
 import com.ivianuu.essentials.ui.animation.transition.LocalSharedElementTransitionFraction
 import com.ivianuu.essentials.ui.animation.transition.SharedElement
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -63,57 +60,47 @@ import kotlinx.coroutines.launch
   toaster: Toaster,
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = { Text("Home") },
-        actions = {
-          PopupMenuButton(
-            items = listOf("Option 1", "Option 2", "Option 3")
-              .map { title ->
-                PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
-                  Text(title)
-                }
-              }
+  SimpleListScreen(
+    title = "Home",
+    popupMenuItems = listOf("Option 1", "Option 2", "Option 3")
+      .map { title ->
+        PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
+          Text(title)
+        }
+      }
+  ) {
+    items(finalItems) { item ->
+      val color = rememberSaveable(item) {
+        ColorPickerPalette.values()
+          .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
+          .shuffled()
+          .first()
+          .front
+      }
+
+      val scope = rememberCoroutineScope()
+      HomeItem(
+        item = item,
+        color = color,
+        onClick = {
+          scope.launch { navigator.push(item.keyFactory(color)) }
+        }
+      )
+
+      if (finalItems.indexOf(item) != finalItems.lastIndex) {
+        HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
+      }
+    }
+
+    item {
+      ListItem(
+        title = {
+          Text(
+            if (isXposedRunning) "Xposed is running"
+            else "Xposed is NOT running"
           )
         }
       )
-    }
-  ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      items(finalItems) { item ->
-        val color = rememberSaveable(item) {
-          ColorPickerPalette.values()
-            .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
-            .shuffled()
-            .first()
-            .front
-        }
-
-        val scope = rememberCoroutineScope()
-        HomeItem(
-          item = item,
-          color = color,
-          onClick = {
-            scope.launch { navigator.push(item.keyFactory(color)) }
-          }
-        )
-
-        if (finalItems.indexOf(item) != finalItems.lastIndex) {
-          HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
-        }
-      }
-
-      item {
-        ListItem(
-          title = {
-            Text(
-              if (isXposedRunning) "Xposed is running"
-              else "Xposed is NOT running"
-            )
-          }
-        )
-      }
     }
   }
 }

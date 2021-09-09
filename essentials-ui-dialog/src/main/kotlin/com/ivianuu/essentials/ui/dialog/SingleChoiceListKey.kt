@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.launch
 
 data class SingleChoiceListKey<T : Any>(
   val items: List<Item<T>>,
@@ -54,7 +57,7 @@ data class SingleChoiceListKey<T : Any>(
         TextButton(onClick = {
           scope.launch { navigator.pop(key, null) }
         }) {
-          Text(R.string.es_cancel)
+          Text(stringResource(R.string.es_cancel))
         }
       }
     )

@@ -16,19 +16,15 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -43,71 +39,59 @@ data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
 @Provide
 val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
-  Scaffold(
-    topBar = { TopAppBar(title = { Text(R.string.es_system_overlay_blacklist_title) }) }
-  ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding()) {
-      item {
-        ListItem(
-          title = {
-            Text(
-              stringResource(
-                R.string.es_pref_system_overlay_app_blacklist,
-                model.systemOverlayName
-              )
-            )
-          },
-          onClick = model.openAppBlacklistSettings
-        )
-      }
+  SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
+    item {
+      ListItem(
+        title = {
+          Text(
+            R.string.es_pref_system_overlay_app_blacklist,
+            model.systemOverlayName
+          )
+        },
+        onClick = model.openAppBlacklistSettings
+      )
+    }
 
-      item {
-        CheckboxListItem(
-          value = model.disableOnKeyboard,
-          onValueChange = model.updateDisableOnKeyboard,
-          title = { Text(R.string.es_pref_disable_on_keyboard) },
-          subtitle = {
-            Text(
-              stringResource(
-                R.string.es_pref_disable_on_keyboard_summary,
-                model.systemOverlayName
-              )
-            )
-          }
-        )
-      }
+    item {
+      CheckboxListItem(
+        value = model.disableOnKeyboard,
+        onValueChange = model.updateDisableOnKeyboard,
+        title = { Text(R.string.es_pref_disable_on_keyboard) },
+        subtitle = {
+          Text(
+            R.string.es_pref_disable_on_keyboard_summary,
+            model.systemOverlayName
+          )
+        }
+      )
+    }
 
-      item {
-        CheckboxListItem(
-          value = model.disableOnLockScreen,
-          onValueChange = model.updateDisableOnLockScreen,
-          title = { Text(R.string.es_pref_disable_on_lock_screen) },
-          subtitle = {
-            Text(
-              stringResource(
-                R.string.es_pref_disable_on_lock_screen_summary,
-                model.systemOverlayName
-              )
-            )
-          }
-        )
-      }
+    item {
+      CheckboxListItem(
+        value = model.disableOnLockScreen,
+        onValueChange = model.updateDisableOnLockScreen,
+        title = { Text(R.string.es_pref_disable_on_lock_screen) },
+        subtitle = {
+          Text(
+            R.string.es_pref_disable_on_lock_screen_summary,
+            model.systemOverlayName
+          )
+        }
+      )
+    }
 
-      item {
-        CheckboxListItem(
-          value = model.disableOnSecureScreens,
-          onValueChange = model.updateDisableOnSecureScreens,
-          title = { Text(R.string.es_pref_disable_on_secure_screens) },
-          subtitle = {
-            Text(
-              stringResource(
-                R.string.es_pref_disable_on_secure_screens_summary,
-                model.systemOverlayName
-              )
-            )
-          }
-        )
-      }
+    item {
+      CheckboxListItem(
+        value = model.disableOnSecureScreens,
+        onValueChange = model.updateDisableOnSecureScreens,
+        title = { Text(R.string.es_pref_disable_on_secure_screens) },
+        subtitle = {
+          Text(
+            R.string.es_pref_disable_on_secure_screens_summary,
+            model.systemOverlayName
+          )
+        }
+      )
     }
   }
 }

@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.torch
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.MutableStateFlow
 
 typealias TorchState = Boolean
 

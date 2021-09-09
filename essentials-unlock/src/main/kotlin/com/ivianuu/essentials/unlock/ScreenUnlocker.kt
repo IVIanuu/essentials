@@ -24,9 +24,9 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.*
+import kotlinx.coroutines.*
 
 typealias ScreenUnlocker = suspend () -> Boolean
 

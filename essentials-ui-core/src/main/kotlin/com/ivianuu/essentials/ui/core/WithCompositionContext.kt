@@ -16,8 +16,14 @@
 
 package com.ivianuu.essentials.ui.core
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionContext
+import androidx.compose.runtime.CompositionLocal
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.State
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.cast
 
 @Composable
 fun <R> withCompositionContext(context: CompositionContext, block: @Composable () -> R): R {
