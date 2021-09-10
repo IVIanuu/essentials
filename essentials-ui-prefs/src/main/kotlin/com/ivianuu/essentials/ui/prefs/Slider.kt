@@ -16,17 +16,36 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.time.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import kotlinx.coroutines.*
-import kotlin.time.*
+import com.ivianuu.essentials.time.toDuration
+import com.ivianuu.essentials.time.toLong
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
+import com.ivianuu.essentials.ui.material.Slider
+import com.ivianuu.essentials.ui.material.StepPolicy
+import kotlin.math.absoluteValue
+import kotlin.time.Duration
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable fun DoubleSliderListItem(
   value: Double,
@@ -255,7 +274,20 @@ import kotlin.time.*
           CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.body2
           ) {
-            valueText(fromFloat(internalValue))
+            val steppedValue = remember(valueRange, stepPolicy, internalValue) {
+              val steps = stepPolicy(valueRange)
+              val stepFractions = (if (steps == 0) emptyList()
+              else List(steps + 2) { it.toFloat() / (steps + 1) })
+              val stepValues = stepFractions
+                .map { (toFloat(valueRange.endInclusive) - toFloat(valueRange.start)) * it }
+
+              val steppedValue = stepValues
+                .minByOrNull { (it - internalValue).absoluteValue }
+                ?: internalValue
+              fromFloat(steppedValue)
+            }
+
+            valueText(steppedValue)
           }
         }
       }
