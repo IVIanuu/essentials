@@ -16,9 +16,15 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-import kotlin.coroutines.*
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ChannelResult
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.launch
 
 interface Actor<T> {
   suspend fun act(message: T)
@@ -26,11 +32,11 @@ interface Actor<T> {
 }
 
 fun <T> CoroutineScope.actor(
-  coroutineContext: CoroutineContext = this.coroutineContext,
+  context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
   block: suspend ActorScope<T>.() -> Unit
-): Actor<T> = ActorImpl(coroutineContext, capacity, start, block)
+): Actor<T> = ActorImpl(coroutineContext + context, capacity, start, block)
 
 interface ActorScope<T> : CoroutineScope, ReceiveChannel<T>
 
@@ -55,9 +61,9 @@ private class ActorImpl<T>(
 }
 
 fun CoroutineScope.actor(
-  coroutineContext: CoroutineContext = this.coroutineContext,
+  context: CoroutineContext = this.coroutineContext,
   capacity: Int = 64
-): Actor<suspend () -> Unit> = actor(coroutineContext, capacity) {
+): Actor<suspend () -> Unit> = actor(context, capacity) {
   for (block in this) block()
 }
 

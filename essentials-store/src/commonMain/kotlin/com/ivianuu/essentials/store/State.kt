@@ -26,6 +26,8 @@ import com.ivianuu.essentials.tuples.Tuple3
 import com.ivianuu.essentials.tuples.Tuple4
 import com.ivianuu.essentials.tuples.Tuple5
 import com.ivianuu.essentials.tuples.tupleOf
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.jvm.JvmName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -39,6 +41,7 @@ import kotlinx.coroutines.launch
 
 fun <S> CoroutineScope.state(
   initial: S,
+  context: CoroutineContext = EmptyCoroutineContext,
   block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
   val state = MutableStateFlow(initial)
@@ -50,7 +53,7 @@ fun <S> CoroutineScope.state(
     override suspend fun update(transform: S.() -> S): S = state.update2(transform)
   }
 
-  stateScope.launch(start = CoroutineStart.UNDISPATCHED) { stateScope.block() }
+  stateScope.launch(context, CoroutineStart.UNDISPATCHED) { stateScope.block() }
 
   return state
 }
