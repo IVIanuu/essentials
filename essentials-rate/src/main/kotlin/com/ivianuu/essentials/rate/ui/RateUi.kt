@@ -38,13 +38,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
-import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog

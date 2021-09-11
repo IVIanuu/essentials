@@ -21,14 +21,14 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.github.michaelbull.result.fold
+import com.ivianuu.essentials.Initial
+import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.InitialOrDefault
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.InjektCoroutineScope

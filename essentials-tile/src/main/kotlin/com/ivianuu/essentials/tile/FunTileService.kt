@@ -31,6 +31,7 @@ import com.ivianuu.injekt.coroutines.InjektCoroutineScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -50,7 +51,7 @@ abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
   private val component: FunTileServiceComponent by lazy {
-    createServiceScope().element()
+    requireElement(createServiceScope())
   }
 
   @Provide private val logger
@@ -61,8 +62,9 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onStartListening() {
     super.onStartListening()
     d { "$serviceClass on start listening" }
-    val tileModelComponent = component.tileScopeFactory(TileId(serviceClass))
-      .element<TileModelComponent>()
+    val tileModelComponent = requireElement<TileModelComponent>(
+      component.tileScopeFactory(TileId(serviceClass))
+    )
       .also { this.tileModelComponent = it }
     tileModelComponent.tileModel
       .onEach { applyModel(it) }

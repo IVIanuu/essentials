@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.LocalTextStyle
@@ -216,7 +217,7 @@ import kotlinx.coroutines.launch
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
 ) {
-  androidx.compose.foundation.layout.Box(modifier = modifier) {
+  Box(modifier = modifier) {
     ListItem(
       modifier = Modifier.align(Alignment.BottomCenter)
         .padding(bottom = 32.dp),
@@ -226,7 +227,7 @@ import kotlinx.coroutines.launch
       onClick = {}
     )
 
-    androidx.compose.foundation.layout.Row(
+    Row(
       modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(

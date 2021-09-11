@@ -16,25 +16,41 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlin.reflect.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.essentials.ui.animation.AnimatedStack
+import com.ivianuu.essentials.ui.animation.AnimatedStackChild
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.DisposableScope
+import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
+import kotlin.reflect.KClass
 
-typealias NavigationStateContent = @Composable (NavigationState, Modifier) -> Unit
+typealias NavigationStateContent = @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
+  navigator: Navigator,
   keyUiScopeFactory: @ChildScopeFactory (Key<*>) -> KeyUiScope
-): NavigationStateContent = { state, modifier ->
+): NavigationStateContent = { modifier ->
+  val state by navigator.state.collectAsState()
   val contentState = remember {
     NavigationContentState(keyUiScopeFactory, state.backStack)
   }
-  SideEffect {
+  DisposableEffect(state) {
     contentState.updateBackStack(state.backStack)
+    onDispose {  }
   }
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
@@ -70,8 +86,8 @@ private class NavigationContentState(
   @Suppress("UNCHECKED_CAST")
   private fun getOrCreateEntry(key: Key<*>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
-    val scope = keyUiScopeFactory(key)
-    val component = scope.element<KeyUiComponent>()
+    @Provide val scope = keyUiScopeFactory(key)
+    val component = requireElement<KeyUiComponent>()
     val content = component.uiFactories[key::class]?.invoke(key, scope)
     checkNotNull(content) { "No ui factory found for $key" }
     val decoratedContent: @Composable () -> Unit = { component.decorateUi(content) }

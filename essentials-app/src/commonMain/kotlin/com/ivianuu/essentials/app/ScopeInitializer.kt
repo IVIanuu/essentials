@@ -21,8 +21,8 @@ import com.ivianuu.essentials.logging.d
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.scope.NamedScopeObserver
 import com.ivianuu.injekt.scope.Scope
-import com.ivianuu.injekt.scope.ScopeObserver
 
 typealias ScopeInitializer<S> = () -> Unit
 
@@ -51,8 +51,8 @@ data class ScopeInitializerElement<S>(
   logger: Logger,
   scopeKey: TypeKey<S>,
   workerRunner: ScopeWorkerRunner<S>
-): ScopeObserver<S> = object : ScopeObserver<S> {
-  override fun onInit() {
+): NamedScopeObserver<S> = object : NamedScopeObserver<S> {
+  override fun init() {
     initializers
       .sortedWithLoadingOrder()
       .forEach {
@@ -60,5 +60,8 @@ data class ScopeInitializerElement<S>(
         it.factory()()
       }
     workerRunner()
+  }
+
+  override fun dispose() {
   }
 }

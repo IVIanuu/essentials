@@ -30,6 +30,7 @@ dependencies {
   api(project(":essentials-core"))
   api(project(":essentials-ui-core"))
   api(project(":essentials-color-picker"))
+  api(project(":essentials-data"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

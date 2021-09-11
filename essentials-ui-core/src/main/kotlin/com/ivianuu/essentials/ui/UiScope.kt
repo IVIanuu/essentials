@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityScope
@@ -23,6 +24,9 @@ import com.ivianuu.injekt.scope.ChildScopeModule0
 import com.ivianuu.injekt.scope.Scope
 
 val LocalScope = compositionLocalOf<Scope> { error("No scope provided") }
+
+@Provide val composableScope: Scope
+  @Composable get() = LocalScope.current
 
 typealias UiScope = Scope
 

@@ -39,7 +39,8 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.injekt.Providers
+import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.launch
 
 @Composable fun PopupMenuButton(
@@ -67,7 +68,8 @@ import kotlinx.coroutines.launch
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = LocalScope.current.element<PopupMenuComponent>()
+  @Providers("com.ivianuu.essentials.ui.composableScope")
+  val component = requireElement<PopupMenuComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

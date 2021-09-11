@@ -16,19 +16,23 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.*
-import android.content.*
+import android.accessibilityservice.AccessibilityService
+import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.android.createServiceScope
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.DisposableScope
+import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
 
 class EsAccessibilityService : AccessibilityService() {
   private val component: EsAccessibilityServiceComponent by lazy {
-    createServiceScope()
-      .element()
+    requireElement(createServiceScope())
   }
 
   @Provide private val logger get() = component.logger

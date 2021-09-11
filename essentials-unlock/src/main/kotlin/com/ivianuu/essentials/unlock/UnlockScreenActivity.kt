@@ -33,6 +33,7 @@ import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.activityScope
 import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
@@ -57,7 +58,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
     requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
-    @Provide val component: UnlockScreenComponent = activityScope.element()
+    @Provide val component: UnlockScreenComponent = requireElement(activityScope)
 
     d(logger = component.logger) { "unlock screen for $requestId" }
 

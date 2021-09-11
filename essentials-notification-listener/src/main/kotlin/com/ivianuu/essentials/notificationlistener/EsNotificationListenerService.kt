@@ -16,21 +16,29 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.service.notification.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
+import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.android.createServiceScope
+import com.ivianuu.injekt.scope.ChildScopeFactory
+import com.ivianuu.injekt.scope.DisposableScope
+import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
   private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
   internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
 
   private val component: EsNotificationListenerServiceComponent by lazy {
-    createServiceScope().element()
+    requireElement(createServiceScope())
   }
 
   @Provide private val logger get() = component.logger

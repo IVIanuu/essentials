@@ -43,7 +43,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Providers
 import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
 import com.ivianuu.injekt.scope.scoped
 
 enum class AppBarStyle { PRIMARY, SURFACE }
@@ -141,7 +143,8 @@ private val DefaultAppBarHeight = 56.dp
 private val DefaultAppBarElevation = 4.dp
 
 @Composable private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-  val component = LocalScope.current.element<AutoTopAppBarComponent>()
+  @Providers("com.ivianuu.essentials.ui.composableScope")
+  val component = requireElement<AutoTopAppBarComponent>()
   val canGoBack = scoped("can_go_back", LocalScope.current) {
     component.navigator.state.value.backStack.indexOf(component.key) > 0
   }

@@ -20,12 +20,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
 import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen

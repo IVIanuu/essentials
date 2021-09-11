@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Providers("com.ivianuu.essentials.ui.composableScope")
+
 package com.ivianuu.essentials.sample.ui
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -40,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
-import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -56,7 +57,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Providers
 import com.ivianuu.injekt.scope.ScopeElement
+import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.launch
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
@@ -261,7 +264,7 @@ object DialogsKey : Key<Unit>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = LocalScope.current.element<DialogLauncherComponent>()
+  val component = requireElement<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -282,7 +285,7 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = LocalScope.current.element<DialogLauncherComponent>()
+  val component = requireElement<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {

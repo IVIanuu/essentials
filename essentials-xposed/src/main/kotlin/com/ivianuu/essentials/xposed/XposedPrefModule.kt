@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.Initial
+import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.store.Initial
-import com.ivianuu.essentials.store.InitialOrDefault
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.InjektCoroutineScope
@@ -37,6 +37,7 @@ class XposedPrefModule<T : Any>(
 ) {
   @SuppressLint("WorldReadableFiles")
   @Provide fun dataStore(
+    appScope: AppScope,
     context: AppContext,
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,

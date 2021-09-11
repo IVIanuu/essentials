@@ -29,14 +29,19 @@ object FeedbackMailKey : IntentKey
 
 @Provide fun feedbackMailKeyIntentFactory(
   context: AppContext,
+  email: DeveloperEmail,
   rp: ResourceProvider
 ): KeyIntentFactory<FeedbackMailKey> = {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
-    putExtra(Intent.EXTRA_EMAIL, arrayOf("ivianuu@gmail.com"))
+    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
     putExtra(
       Intent.EXTRA_SUBJECT,
       "Feedback for ${loadResource<String>(context.applicationInfo.labelRes)}"
     )
   }
 }
+
+typealias DeveloperEmail = String
+
+@Provide val developerEmail: DeveloperEmail = "ivianuu@gmail.com"

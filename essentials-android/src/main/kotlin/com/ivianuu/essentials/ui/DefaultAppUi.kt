@@ -16,16 +16,11 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 
-@Provide fun defaultAppUi(
-  navigator: Navigator,
-  navigationStateContent: NavigationStateContent,
-): AppUi = {
-  navigationStateContent(navigator.state.collectAsState().value, Modifier)
+@Provide fun defaultAppUi(navigationStateContent: NavigationStateContent): AppUi = {
+  navigationStateContent(Modifier)
 }

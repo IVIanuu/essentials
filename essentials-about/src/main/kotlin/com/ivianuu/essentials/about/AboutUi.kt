@@ -19,6 +19,7 @@ package com.ivianuu.essentials.about
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
@@ -26,8 +27,9 @@ import com.ivianuu.essentials.license.ui.LicenseKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
+import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
-import com.ivianuu.essentials.store.Initial
+import com.ivianuu.essentials.rate.ui.developerEmail
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -140,7 +142,7 @@ object AboutKey : Key<Unit>
 
 @Optics data class AboutModel(
   val version: String = "",
-  val email: String = "ivianuu@gmail.com",
+  val email: DeveloperEmail = "ivianuu@gmail.com",
   val privacyPolicyUrl: PrivacyPolicyUrl? = null,
   val showDonate: Boolean = false,
   val donate: () -> Unit = {},
@@ -158,8 +160,10 @@ object AboutKey : Key<Unit>
       buildInfo: BuildInfo,
       privacyPolicyUrl: PrivacyPolicyUrl? = null,
       donations: (() -> Set<Donation>)? = null,
+      email: DeveloperEmail
     ): @Initial AboutModel = AboutModel(
       version = buildInfo.versionName,
+      email = developerEmail,
       privacyPolicyUrl = privacyPolicyUrl,
       showDonate = donations != null
     )

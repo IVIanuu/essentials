@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.material.Text
+import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.Initial
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.systemoverlay.R
