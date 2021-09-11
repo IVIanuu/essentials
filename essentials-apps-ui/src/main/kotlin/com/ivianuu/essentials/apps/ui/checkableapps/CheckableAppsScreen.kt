@@ -37,8 +37,8 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -140,8 +140,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 ) {
   params.checkedApps.update { copy(checkedApps = it) }
 
-  resourceFlow { emit(getInstalledApps()) }
-    .update { copy(allApps = it) }
+  produceResource({ copy(allApps = it) }) { getInstalledApps() }
 
   suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
     val currentState = state.first()

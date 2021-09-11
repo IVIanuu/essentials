@@ -46,6 +46,7 @@ import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
 import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produce
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -58,7 +59,6 @@ import com.ivianuu.injekt.coroutines.InjektCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 object RateKey : DialogKey<Unit>
 
@@ -154,10 +154,8 @@ object RateKey : DialogKey<Unit>
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): @Scoped<KeyUiScope> StateFlow<RateModel> = scope.state(initial) {
-  launch {
-    val showDoNotShowAgain = displayShowNever()
-    update { copy(displayShowNever = showDoNotShowAgain) }
-  }
+  produce({ copy(displayShowNever = it) }) { displayShowNever() }
+
   action(RateModel.showLater()) { showLater() }
   action(RateModel.showNever()) { showNever() }
   action(RateModel.updateRating()) { value -> update { copy(rating = value) } }

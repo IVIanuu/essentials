@@ -24,6 +24,7 @@ import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
 import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produce
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -36,7 +37,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.InjektCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 object FeedbackKey : DialogKey<Unit>
 
@@ -82,10 +82,8 @@ object FeedbackKey : DialogKey<Unit>
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): @Scoped<KeyUiScope> StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {
-  launch {
-    val showDoNotShowAgain = displayShowNever()
-    update { copy(displayShowNever = showDoNotShowAgain) }
-  }
+  produce({ copy(displayShowNever = it) }) { displayShowNever() }
+
   action(FeedbackModel.showLater()) { showLater() }
   action(FeedbackModel.showNever()) { showNever() }
   action(FeedbackModel.openReddit()) {

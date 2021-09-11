@@ -19,6 +19,8 @@ package com.ivianuu.essentials.store
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.optics.Lens
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.tuples.Tuple2
 import com.ivianuu.essentials.tuples.Tuple3
 import com.ivianuu.essentials.tuples.Tuple4
@@ -40,22 +42,41 @@ fun <S> CoroutineScope.state(
   block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
   val state = MutableStateFlow(initial)
+
   val stateScope = object : StateScope<S>, CoroutineScope by this {
     override val state: Flow<S>
       get() = state
 
     override suspend fun update(transform: S.() -> S): S = state.update2(transform)
   }
+
   stateScope.launch(start = CoroutineStart.UNDISPATCHED) { stateScope.block() }
+
   return state
 }
 
 interface StateScope<S> : CoroutineScope {
   val state: Flow<S>
+
   suspend fun update(transform: S.() -> S): S
+
   fun Flow<S.() -> S>.update(): Job = launch { collect { update(it) } }
+
   fun <T> Flow<T>.update(transform: S.(T) -> S): Job =
     map<T, S.() -> S> { { transform(it) } }.update()
+}
+
+fun <S, T> StateScope<S>.produceResource(
+  transform: S.(Resource<T>) -> S,
+  block: suspend () -> T
+): Job = resourceFlow { emit(block()) }.update(transform)
+
+fun <S, T> StateScope<S>.produce(
+  transform: S.(T) -> S,
+  block: suspend () -> T
+): Job = launch {
+  val value = block()
+  update { transform(value) }
 }
 
 suspend fun <S> StateScope<S>.action(

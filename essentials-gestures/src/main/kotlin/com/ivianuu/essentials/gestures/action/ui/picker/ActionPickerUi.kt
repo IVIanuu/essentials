@@ -148,7 +148,8 @@ sealed class ActionPickerItem {
   rp: ResourceProvider,
   scope: InjektCoroutineScope<KeyUiScope>,
 ): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
-  resourceFlow { emit(getActionPickerItems()) }.update { copy(items = it) }
+  produceResource({ copy(items = it) }) { getActionPickerItems() }
+
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
   action(ActionPickerModel.pickAction()) { item ->
     val result = item.getResult() ?: return@action

@@ -38,8 +38,8 @@ import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -134,21 +134,19 @@ data class UiDonation(
   rp: ResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
-  resourceFlow {
-    emit(
-      donations
-        .parMap { donation ->
-          val details = getSkuDetails(donation.sku)!!
-          UiDonation(
-            donation,
-            details.title
-              .replaceAfterLast("(", "")
-              .removeSuffix("("),
-            details.price
-          )
-        }
-    )
-  }.update { copy(skus = it) }
+  produceResource({ copy(skus = it) }) {
+    donations
+      .parMap { donation ->
+        val details = getSkuDetails(donation.sku)!!
+        UiDonation(
+          donation,
+          details.title
+            .replaceAfterLast("(", "")
+            .removeSuffix("("),
+          details.price
+        )
+      }
+  }
 
   action(DonationModel.close()) { navigator.pop(key) }
 

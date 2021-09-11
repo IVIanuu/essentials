@@ -29,6 +29,7 @@ kotlin {
       dependencies {
         api(project(":essentials-coroutines"))
         api(project(":essentials-optics"))
+        api(project(":essentials-resource"))
         api(Deps.Injekt.common)
       }
     }

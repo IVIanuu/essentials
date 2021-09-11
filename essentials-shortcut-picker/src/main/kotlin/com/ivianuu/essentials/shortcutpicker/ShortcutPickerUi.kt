@@ -73,8 +73,8 @@ object ShortcutPickerKey : Key<Shortcut>
   rp: ResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
-  resourceFlow { emit(getAllShortcuts()) }
-    .update { copy(shortcuts = it) }
+  produceResource({ copy(shortcuts = it) }) { getAllShortcuts() }
+
   action(ShortcutPickerModel.pickShortcut()) { shortcut ->
     catch {
       val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
