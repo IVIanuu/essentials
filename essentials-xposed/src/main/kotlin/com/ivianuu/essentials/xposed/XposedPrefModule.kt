@@ -31,7 +31,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(
-  private val packageName: String,
   private val prefName: String,
   private val default: () -> T
 ) {
@@ -98,6 +97,7 @@ class XposedPrefModule<T : Any>(
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
+    packageName: ModulePackageName,
     scope: AppScope,
     serializerFactory: () -> KSerializer<T>,
     coroutineScope: InjektCoroutineScope<AppScope>
