@@ -3,12 +3,14 @@ package com.ivianuu.essentials.xposed
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
@@ -18,12 +20,15 @@ import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.scoped
 import de.robv.android.xposed.XSharedPreferences
+import kotlin.time.milliseconds
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -31,6 +36,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(
+  private val packageName: String,
   private val prefName: String,
   private val default: () -> T
 ) {
@@ -55,11 +61,12 @@ class XposedPrefModule<T : Any>(
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
         catch { json.decodeFromString(serializer, serialized) }
+          .onFailure { it.printStackTrace() }
           .getOrNull()
       } ?: initial()
     }
 
-    val data = callbackFlow<T> {
+    val data = kotlinx.coroutines.flow.callbackFlow<T> {
       val listener = scoped {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
           scope.launch(dispatcher) {
@@ -97,8 +104,6 @@ class XposedPrefModule<T : Any>(
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
-    packageName: ModulePackageName,
-    scope: AppScope,
     serializerFactory: () -> KSerializer<T>,
     coroutineScope: InjektCoroutineScope<AppScope>
   ): @Scoped<AppScope> XposedPrefFlow<T> {
@@ -116,18 +121,10 @@ class XposedPrefModule<T : Any>(
       } ?: initial()
     }
 
-    return callbackFlow<T> {
-      val listener = scoped {
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-          coroutineScope.launch(dispatcher) {
-            send(readData())
-          }
-        }
-      }
-      sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
-      awaitClose { sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-    }
-      .onStart { emit(readData()) }
+    // todo it's not optimal to use a polling based approach here
+    return timer(1000.milliseconds)
+      .filter { sharedPrefs.hasFileChanged() }
+      .map { readData() }
       .flowOn(dispatcher)
       .distinctUntilChanged()
       .shareIn(coroutineScope, SharingStarted.Lazily, 1)
