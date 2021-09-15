@@ -18,16 +18,12 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.material.Icon
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ui.ActionIconPosition
-import com.ivianuu.essentials.gestures.action.ui.LocalActionIconPosition
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 
@@ -38,14 +34,7 @@ import com.ivianuu.injekt.Provide
   title = loadResource(R.string.es_action_back),
   permissions = accessibilityActionPermissions,
   icon = singleActionIcon {
-    Icon(
-      painterResId = R.drawable.es_ic_action_back,
-      modifier = Modifier
-        .rotate(
-          if (LocalActionIconPosition.current == ActionIconPosition.LEFT) 0f
-          else 180f
-        )
-    )
+    Icon(painterResId = R.drawable.es_ic_action_back)
   }
 )
 

@@ -39,6 +39,7 @@ import com.ivianuu.essentials.gestures.action.Action
 val LocalActionIconSizeModifier = staticCompositionLocalOf { Modifier.size(24.dp) }
 val LocalActionImageSizeModifier = staticCompositionLocalOf { Modifier.size(40.dp) }
 
+val LocalActionIconRotation = staticCompositionLocalOf { 0f }
 val LocalActionIconPosition = staticCompositionLocalOf { ActionIconPosition.LEFT }
 
 enum class ActionIconPosition {
