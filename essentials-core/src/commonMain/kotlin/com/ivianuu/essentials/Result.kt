@@ -22,6 +22,18 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOrElse
 import kotlin.coroutines.cancellation.CancellationException
 
+inline fun <V, E> Result<V, E>.onEither(
+  success: (V) -> Unit,
+  failure: (E) -> Unit
+): Result<V, E> {
+  when (this) {
+    is Ok -> success(value)
+    is Err -> failure(error)
+  }
+
+  return this
+}
+
 inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
