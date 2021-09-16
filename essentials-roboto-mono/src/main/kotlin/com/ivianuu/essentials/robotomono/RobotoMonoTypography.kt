@@ -22,5 +22,5 @@ import com.ivianuu.injekt.Inject
     )
   }
 
-  return remember { Typography().editEach { copy(fontFamily = fontFamily) } }
+  return remember { Typography().editEach { copy(fontFamily = robotoMono) } }
 }
