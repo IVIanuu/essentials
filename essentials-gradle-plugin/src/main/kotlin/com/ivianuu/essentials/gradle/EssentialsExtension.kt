@@ -16,4 +16,6 @@
 
 package com.ivianuu.essentials.gradle
 
+import org.gradle.api.Project
+
 class EssentialsExtension(val project: Project)

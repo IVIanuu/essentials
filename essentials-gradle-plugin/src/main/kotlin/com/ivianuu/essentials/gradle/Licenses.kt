@@ -16,6 +16,9 @@
 
 package com.ivianuu.essentials.gradle
 
+import com.jaredsburrows.license.LicensePlugin
+import com.jaredsburrows.license.LicenseReportExtension
+
 fun EssentialsExtension.withLicenses() {
   project.plugins.apply(LicensePlugin::class.java)
   project.extensions.getByType(LicenseReportExtension::class.java).run {

@@ -16,6 +16,11 @@
 
 package com.ivianuu.essentials.kotlin.compiler.optics
 
+import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
+import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.resolve.extensions.SyntheticResolveExtension
+
 fun MockProject.optics() {
   SyntheticResolveExtension.registerExtension(this, OpticsResolveExtension())
   IrGenerationExtension.registerExtension(this, OpticsIrGenerationExtension())
