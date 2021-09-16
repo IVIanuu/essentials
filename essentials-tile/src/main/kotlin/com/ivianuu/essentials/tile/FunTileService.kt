@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
@@ -128,7 +128,7 @@ class FunTileServiceComponent(
 class TileModelComponent(
   tileId: TileId,
   tileModelElements: Set<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptySet(),
-  val scope: InjektCoroutineScope<TileScope>,
+  val scope: NamedCoroutineScope<TileScope>,
   val tileScope: TileScope
 ) {
   val tileModel = tileModelElements.toMap()[tileId]

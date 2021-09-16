@@ -19,5 +19,4 @@ package com.ivianuu.essentials
 fun Int.setFlag(flag: Int, set: Boolean): Int = if (set) addFlag(flag) else removeFlag(flag)
 fun Int.addFlag(flag: Int): Int = this or flag
 fun Int.removeFlag(flag: Int): Int = this and flag.inv()
-fun Int.containsFlag(flag: Int): Boolean = this and flag == flag
-fun Int.notContainsFlag(flag: Int): Boolean = !containsFlag(flag)
+fun Int.hasFlag(flag: Int): Boolean = this and flag == flag

@@ -16,22 +16,28 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.*
-import android.content.pm.*
-import androidx.activity.*
-import androidx.activity.result.*
-import androidx.activity.result.contract.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import java.util.*
-import kotlin.coroutines.*
-import kotlin.reflect.*
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.err
+import com.ivianuu.essentials.ok
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.coroutines.MainDispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import java.util.UUID
+import kotlin.coroutines.resume
+import kotlin.reflect.KClass
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
@@ -50,7 +56,7 @@ typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Un
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ): IntentKeyHandler = handler@{ key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories[key::class]

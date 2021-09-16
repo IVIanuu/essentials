@@ -16,11 +16,22 @@
 
 package com.ivianuu.essentials.twilight.ui
 
-import androidx.compose.animation.core.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.twilight.domain.*
-import com.ivianuu.essentials.ui.common.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.twilight.domain.TwilightState
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
 import com.ivianuu.essentials.ui.material.blackColors
 import com.ivianuu.essentials.ui.material.lerp
 
@@ -43,7 +54,7 @@ import com.ivianuu.essentials.ui.material.lerp
 
   val animation = remember(targetColors) { Animatable(0f) }
   LaunchedEffect(animation) {
-    animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
+    animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
   }
 
   val animatedColors = remember(animation.value) {

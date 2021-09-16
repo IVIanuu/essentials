@@ -1,8 +1,8 @@
 package com.ivianuu.essentials
 
-import android.app.*
-import android.content.*
-import com.ivianuu.injekt.*
+import android.app.Application
+import android.content.Context
+import com.ivianuu.injekt.Provide
 
 typealias AppContext = Context
 

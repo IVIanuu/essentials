@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
-import kotlin.reflect.*
-import kotlinx.coroutines.flow.*
+import android.graphics.drawable.Icon
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.scope.ChildScopeModule1
+import com.ivianuu.injekt.scope.Scope
+import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.StateFlow
 
 @Optics data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,
@@ -43,7 +44,7 @@ import kotlinx.coroutines.flow.*
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 @Provide
-class TileModuleElementModule<@Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
+class TileModuleElementModule<@com.ivianuu.injekt.Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
   @Provide fun element(
     serviceClass: KClass<S>,
     provider: () -> T

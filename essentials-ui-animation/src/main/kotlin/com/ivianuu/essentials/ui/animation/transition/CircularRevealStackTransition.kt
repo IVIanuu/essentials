@@ -16,18 +16,20 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.geometry.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.animation.*
-import kotlin.math.*
-import kotlin.time.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.layout.boundsInWindow
+import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import kotlin.math.hypot
+import kotlin.time.milliseconds
 
 fun CircularRevealStackTransition(
   centerElementKey: Any,

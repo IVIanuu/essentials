@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 
 inline fun <T> MutableStateFlow<T>.update2(transform: T.() -> T): T = synchronized(this) {
   val currentValue = value

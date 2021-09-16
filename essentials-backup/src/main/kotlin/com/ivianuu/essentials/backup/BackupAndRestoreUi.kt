@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 object BackupAndRestoreKey : Key<Unit>
@@ -65,7 +65,7 @@ object BackupAndRestoreKey : Key<Unit>
 @Provide fun backupAndRestoreModel(
   createBackupUseCase: CreateBackupUseCase,
   restoreBackupUseCase: RestoreBackupUseCase,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster,
 ): StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {

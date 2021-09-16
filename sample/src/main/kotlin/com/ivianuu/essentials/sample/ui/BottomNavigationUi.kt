@@ -91,7 +91,6 @@ object BottomNavigationKey : Key<Unit>
   }
 }
 
-
 private enum class BottomNavItem(
   val title: String,
   val icon: Int,

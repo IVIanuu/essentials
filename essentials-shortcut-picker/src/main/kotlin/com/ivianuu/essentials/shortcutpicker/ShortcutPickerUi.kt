@@ -16,29 +16,37 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.painter.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.material.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.unit.dp
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produceResource
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.toIntentKey
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
 
 object ShortcutPickerKey : Key<Shortcut>
 
@@ -69,7 +77,7 @@ object ShortcutPickerKey : Key<Shortcut>
   extractShortcut: ExtractShortcutUseCase,
   key: ShortcutPickerKey,
   navigator: Navigator,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {

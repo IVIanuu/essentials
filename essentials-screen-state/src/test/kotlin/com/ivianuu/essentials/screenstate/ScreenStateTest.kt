@@ -16,18 +16,6 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.content.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.runner.*
-import org.robolectric.annotation.*
-
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class ScreenStateTest {

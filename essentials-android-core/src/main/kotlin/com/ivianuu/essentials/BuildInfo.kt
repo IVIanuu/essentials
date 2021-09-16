@@ -16,10 +16,11 @@
 
 package com.ivianuu.essentials
 
-import android.content.pm.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
 
 data class BuildInfo(
   val isDebug: Boolean,
@@ -35,7 +36,7 @@ data class BuildInfo(
       val packageInfo = packageManager
         .getPackageInfo(appInfo.packageName, 0)
       return BuildInfo(
-        isDebug = appInfo.flags.containsFlag(ApplicationInfo.FLAG_DEBUGGABLE),
+        isDebug = appInfo.flags.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
         appName = appInfo.loadLabel(packageManager).toString(),
         packageName = appInfo.packageName,
         versionName = packageInfo.versionName,

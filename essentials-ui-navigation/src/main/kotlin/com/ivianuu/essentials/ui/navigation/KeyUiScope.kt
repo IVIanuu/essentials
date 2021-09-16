@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.ChildScopeModule1
+import com.ivianuu.injekt.scope.Scope
 
 typealias KeyUiScope = Scope
 

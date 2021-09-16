@@ -38,7 +38,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.time.milliseconds
 import kotlinx.coroutines.flow.StateFlow
@@ -87,7 +87,7 @@ data class WriteSecureSettingsKey(
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   runShellCommand: RunShellCommandUseCase,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster,
 ): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsModel> = scope.state(

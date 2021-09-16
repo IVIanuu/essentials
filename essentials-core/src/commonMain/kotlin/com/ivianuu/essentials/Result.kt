@@ -51,8 +51,7 @@ interface ResultBinding<in A> {
   fun <T> Result<T, A>.bind(): T
 }
 
-@PublishedApi
-internal object ResultBindingImpl : ResultBinding<Nothing> {
+@PublishedApi internal object ResultBindingImpl : ResultBinding<Nothing> {
   override fun <T> Result<T, Nothing>.bind(): T = when (this) {
     is Ok -> value
     is Err -> throw ShortCircuitException(this)

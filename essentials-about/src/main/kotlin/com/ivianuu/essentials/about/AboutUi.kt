@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -173,7 +173,7 @@ object AboutKey : Key<Unit>
   initial: @Initial AboutModel,
   navigator: Navigator,
   rateOnPlayUseCase: RateOnPlayUseCase,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider
 ): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }

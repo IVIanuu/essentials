@@ -16,18 +16,6 @@
 
 package com.ivianuu.essentials.kotlin.compiler.serializationfix
 
-import com.ivianuu.essentials.kotlin.compiler.*
-import org.jetbrains.kotlin.backend.common.extensions.*
-import org.jetbrains.kotlin.com.intellij.mock.*
-import org.jetbrains.kotlin.com.intellij.openapi.extensions.*
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.ir.*
-import org.jetbrains.kotlin.ir.declarations.*
-import org.jetbrains.kotlin.ir.types.*
-import org.jetbrains.kotlin.ir.util.*
-import org.jetbrains.kotlin.ir.visitors.*
-import org.jetbrains.kotlin.name.*
-
 fun MockProject.serializationFix() {
   IrGenerationExtension.registerExtensionWithLoadingOrder(
     this,

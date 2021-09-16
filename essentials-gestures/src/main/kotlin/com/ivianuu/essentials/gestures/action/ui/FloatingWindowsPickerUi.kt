@@ -31,7 +31,7 @@ import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -94,7 +94,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   navigator: Navigator,
   rp: ResourceProvider,
   toaster: Toaster,
-  scope: InjektCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<FloatingWindowsPickerModel> = scope.state(
   FloatingWindowsPickerModel(key.actionTitle)
 ) {

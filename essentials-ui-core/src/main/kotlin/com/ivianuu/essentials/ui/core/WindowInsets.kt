@@ -16,20 +16,35 @@
 
 package com.ivianuu.essentials.ui.core
 
-import android.view.*
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.unit.*
+import android.view.View
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.injekt.*
-import kotlin.math.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.injekt.Provide
+import kotlin.math.max
 
 @Composable fun InsetsPadding(
   modifier: Modifier = Modifier,
@@ -45,7 +60,7 @@ import kotlinx.coroutines.*
   val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
     LaunchedEffect(animation) {
-      animation.animateTo(1f, animationSpec = TweenSpec(durationMillis = 150))
+      animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
     }
     var lastInsets by remember { refOf(targetInsets) }
     remember(animation.value) { lerp(lastInsets, targetInsets, animation.value) }

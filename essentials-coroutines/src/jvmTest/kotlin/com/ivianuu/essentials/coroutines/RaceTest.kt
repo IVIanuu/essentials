@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import kotlinx.coroutines.*
-import org.junit.*
-
 class RaceTest {
   @Test fun testFirstOneWins() = runCancellingBlockingTest {
     val result = race(

@@ -16,12 +16,15 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.animation.util.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
+import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import com.ivianuu.essentials.ui.animation.util.interval
 
 fun FadeThroughStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec()

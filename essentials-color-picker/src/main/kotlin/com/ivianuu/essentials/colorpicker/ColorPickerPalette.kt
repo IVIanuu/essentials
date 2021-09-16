@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
 
 enum class ColorPickerPalette(
   val front: Color,

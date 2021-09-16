@@ -16,11 +16,13 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.*
+import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlin.coroutines.coroutineContext
-import kotlin.time.*
+import kotlinx.coroutines.isActive
 
 @OptIn(ExperimentalTime::class)
 fun timer(duration: Duration): Flow<Long> = flow {

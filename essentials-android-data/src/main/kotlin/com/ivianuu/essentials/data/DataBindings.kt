@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import java.io.*
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.injekt.Provide
+import java.io.File
 
 typealias DataDir = File
 

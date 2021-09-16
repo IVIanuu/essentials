@@ -16,14 +16,23 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.util.*
-import android.view.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 data class DisplayInfo(
   val rotation: DisplayRotation = DisplayRotation.PORTRAIT_UP,
@@ -34,7 +43,7 @@ data class DisplayInfo(
 @Provide fun displayInfo(
   configChanges: () -> Flow<ConfigChange>,
   displayRotation: () -> Flow<DisplayRotation>,
-  scope: InjektCoroutineScope<AppScope>,
+  scope: NamedCoroutineScope<AppScope>,
   windowManager: @SystemService WindowManager
 ): @Scoped<AppScope> Flow<DisplayInfo> = flow {
   combine(

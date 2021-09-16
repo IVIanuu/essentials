@@ -16,14 +16,17 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.*
-import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
+import android.accessibilityservice.AccessibilityService
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
 
 @Provide object NotificationsActionId : ActionId("notifications")
 

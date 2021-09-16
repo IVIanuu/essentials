@@ -16,12 +16,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.collections.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.junit.*
-
 class OnCancelTest {
   @Test fun testOnCancel() = runCancellingBlockingTest {
     val sender = EventFlow<String>()

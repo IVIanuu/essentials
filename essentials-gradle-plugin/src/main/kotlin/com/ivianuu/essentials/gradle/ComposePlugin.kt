@@ -16,11 +16,6 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.google.auto.service.*
-import org.gradle.api.*
-import org.gradle.api.provider.*
-import org.jetbrains.kotlin.gradle.plugin.*
-
 @AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class ComposePlugin : KotlinCompilerPluginSupportPlugin {
   override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =

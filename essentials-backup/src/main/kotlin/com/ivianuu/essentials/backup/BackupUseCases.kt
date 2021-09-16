@@ -16,23 +16,28 @@
 
 package com.ivianuu.essentials.backup
 
-import android.content.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.processrestart.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import java.text.*
-import java.util.*
-import java.util.zip.*
-import kotlinx.coroutines.*
+import android.content.ContentResolver
+import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import com.github.michaelbull.result.Result
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.data.DataDir
+import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.toIntentKey
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IODispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import java.util.Date
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+import kotlinx.coroutines.withContext
 
 typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
 
@@ -44,7 +49,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   dispatcher: IODispatcher,
   logger: Logger,
   navigator: Navigator,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ): CreateBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
@@ -80,7 +85,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   }
 }
 
-typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
+typealias RestoreBackupUseCase = suspend () -> com.github.michaelbull.result.Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
@@ -89,7 +94,7 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
   logger: Logger,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ): RestoreBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {

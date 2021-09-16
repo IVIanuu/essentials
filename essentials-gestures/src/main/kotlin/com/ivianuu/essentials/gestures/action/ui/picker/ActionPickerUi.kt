@@ -16,31 +16,46 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.gestures.action.ui.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.store.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.GetActionPickerDelegatesUseCase
+import com.ivianuu.essentials.gestures.action.GetActionSettingsKeyUseCase
+import com.ivianuu.essentials.gestures.action.GetActionUseCase
+import com.ivianuu.essentials.gestures.action.GetAllActionsUseCase
+import com.ivianuu.essentials.gestures.action.ui.ActionIcon
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.produceResource
+import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.StateFlow
 
 data class ActionPickerKey(
   val showDefaultOption: Boolean = false,
@@ -146,7 +161,7 @@ sealed class ActionPickerItem {
   navigator: Navigator,
   permissionRequester: PermissionRequester,
   rp: ResourceProvider,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
 ): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 

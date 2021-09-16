@@ -73,7 +73,7 @@ import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
@@ -186,7 +186,7 @@ data class UiNotification(
   openNotification: OpenNotificationUseCase,
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
-  scope: InjektCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
   notifications
     .map { notifications ->

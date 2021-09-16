@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.scope.*
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.scope.ChildScopeModule0
+import com.ivianuu.injekt.scope.Scope
 
 typealias AccessibilityScope = Scope
 

@@ -16,15 +16,23 @@
 
 package com.ivianuu.essentials.android.settings
 
-import android.content.*
-import android.provider.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import android.content.ContentResolver
+import android.provider.Settings
+import com.ivianuu.essentials.coroutines.actAndReply
+import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.util.ContentChangesFactory
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IODispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 
 class AndroidSettingModule<T : S, S>(
   private val name: String,
@@ -37,7 +45,7 @@ class AndroidSettingModule<T : S, S>(
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
     dispatcher: IODispatcher,
-    scope: InjektCoroutineScope<AppScope>
+    scope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
     private val actor = scope.actor(dispatcher)
 

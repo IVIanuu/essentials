@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Provide fun androidAppForegroundState(
   foregroundActivity: Flow<ForegroundActivity>

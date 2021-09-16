@@ -16,14 +16,19 @@
 
 package com.ivianuu.essentials.foreground
 
-import androidx.work.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.await
+import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.work.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
+import com.ivianuu.essentials.work.toFunctionalWorkerTag
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 
 @Provide fun androidForegroundWorkerStarter(
   logger: Logger,

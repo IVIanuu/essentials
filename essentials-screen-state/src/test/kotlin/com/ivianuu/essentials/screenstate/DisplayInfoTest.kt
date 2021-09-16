@@ -16,16 +16,6 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.util.*
-import android.view.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.flow.*
-import org.junit.*
-
 class DisplayInfoTest {
   @Test fun testDisplayInfo() = runCancellingBlockingTest {
     val configChanges = EventFlow<ConfigChange>()

@@ -16,9 +16,10 @@
 
 package com.ivianuu.essentials.twilight.data
 
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.injekt.*
-import kotlinx.serialization.*
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.injekt.Provide
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable data class TwilightPrefs(
   @SerialName("twilight_mode") val twilightMode: TwilightMode = TwilightMode.SYSTEM,

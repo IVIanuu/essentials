@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -85,7 +85,7 @@ object CounterKey : Key<Unit>
 )
 
 @Provide fun counterModel(
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   toaster: Toaster
 ): @Scoped<KeyUiScope> StateFlow<CounterModel> = scope.state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }

@@ -16,16 +16,6 @@
 
 package com.ivianuu.essentials.compiler
 
-import com.ivianuu.essentials.kotlin.compiler.*
-import com.tschuchort.compiletesting.*
-import io.kotest.matchers.*
-import io.kotest.matchers.string.*
-import org.intellij.lang.annotations.*
-import org.jetbrains.kotlin.name.*
-import java.net.*
-import java.nio.file.*
-import kotlin.reflect.*
-
 var fileIndex = 0
 
 fun source(

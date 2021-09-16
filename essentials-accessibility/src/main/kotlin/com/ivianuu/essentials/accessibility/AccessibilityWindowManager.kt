@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.app.*
-import android.view.*
-import androidx.core.content.*
-import com.ivianuu.injekt.*
+import android.app.Service
+import android.view.WindowManager
+import androidx.core.content.getSystemService
+import com.ivianuu.injekt.Provide
 
 typealias AccessibilityWindowManager = WindowManager
 

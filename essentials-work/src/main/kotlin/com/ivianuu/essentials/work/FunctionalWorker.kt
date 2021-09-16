@@ -16,12 +16,14 @@
 
 package com.ivianuu.essentials.work
 
-import androidx.work.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.android.work.*
-import java.util.*
+import androidx.work.CoroutineWorker
+import androidx.work.Data
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.work.InjektWorker
+import java.util.UUID
 
 @Provide @InjektWorker class FunctionalWorker(
   private val workers: Set<WorkerElement> = emptySet(),

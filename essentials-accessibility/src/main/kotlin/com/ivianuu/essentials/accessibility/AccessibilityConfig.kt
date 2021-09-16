@@ -16,13 +16,19 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.essentials.addFlag
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 data class AccessibilityConfig(
   val eventTypes: Int = 0,

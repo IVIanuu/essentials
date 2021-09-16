@@ -16,24 +16,34 @@
 
 package com.ivianuu.essentials.twilight.domain
 
-import android.content.*
-import android.content.res.*
-import android.os.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.broadcast.*
-import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.essentials.twilight.data.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
-import java.util.*
+import android.content.Intent
+import android.content.res.Configuration
+import android.os.PowerManager
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
+import com.ivianuu.essentials.screenstate.ConfigChange
+import com.ivianuu.essentials.twilight.data.TwilightMode
+import com.ivianuu.essentials.twilight.data.TwilightPrefs
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import java.util.Calendar
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
 data class TwilightState(val isDark: Boolean = false, val useBlack: Boolean = false)
 
 @Provide fun twilightState(
-  scope: InjektCoroutineScope<AppScope>,
+  scope: NamedCoroutineScope<AppScope>,
   statesForModes: Map<TwilightMode, Flow<Boolean>>,
   twilightPrefs: Flow<TwilightPrefs>,
 ): @Scoped<AppScope> StateFlow<TwilightState> = twilightPrefs

@@ -16,16 +16,18 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import android.content.*
-import android.content.pm.*
-import android.graphics.*
-import androidx.core.graphics.drawable.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.image.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
+import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import androidx.core.graphics.drawable.toBitmap
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IODispatcher
+import kotlinx.coroutines.withContext
 
 typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
 

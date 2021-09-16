@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlin.time.milliseconds
 import kotlinx.coroutines.flow.StateFlow
@@ -137,7 +137,7 @@ data class WriteSecureSettingsPcInstructionsKey(
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   updateClipboardText: UpdateClipboardTextUseCase
 ): @Scoped<KeyUiScope> StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
   initial

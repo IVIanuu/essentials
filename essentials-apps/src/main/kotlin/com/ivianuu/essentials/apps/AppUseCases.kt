@@ -17,20 +17,20 @@
 package com.ivianuu.essentials.apps
 
 import android.content.Intent
-import android.content.pm.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
+import android.content.pm.PackageManager
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.get
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
 

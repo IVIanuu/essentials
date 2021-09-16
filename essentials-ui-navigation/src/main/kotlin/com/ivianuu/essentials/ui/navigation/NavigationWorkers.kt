@@ -16,13 +16,21 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.activity.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcherOwner
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
+import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 
 /* Pops the top key on back presses */
 @Provide fun androidBackPressHandler(

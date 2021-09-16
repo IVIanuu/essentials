@@ -16,20 +16,23 @@
 
 package com.ivianuu.essentials.util
 
-import android.widget.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
+import android.widget.Toast
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.MainDispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import kotlinx.coroutines.launch
 
 typealias Toaster = (String) -> Unit
 
 @Provide fun toaster(
   context: AppContext,
   mainDispatcher: MainDispatcher,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ): Toaster = { message ->
   scope.launch(mainDispatcher) {
     Toast.makeText(

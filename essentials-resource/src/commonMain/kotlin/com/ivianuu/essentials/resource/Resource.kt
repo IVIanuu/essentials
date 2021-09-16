@@ -18,11 +18,15 @@
 
 package com.ivianuu.essentials.resource
 
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.optics.*
-import kotlinx.coroutines.flow.*
-import kotlin.jvm.*
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.catch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 sealed class Resource<out T>
 

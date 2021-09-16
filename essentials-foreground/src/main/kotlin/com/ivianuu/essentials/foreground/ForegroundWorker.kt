@@ -16,16 +16,19 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.*
-import androidx.work.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
+import android.app.NotificationManager
+import androidx.work.ListenableWorker
+import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.work.*
+import com.ivianuu.essentials.logging.d
 import com.ivianuu.essentials.work.Worker
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.work.WorkerId
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.takeWhile
 
 @Provide object ForegroundWorkerId : WorkerId("foreground")
 
@@ -53,7 +56,7 @@ import kotlinx.coroutines.flow.*
         .forEachIndexed { index, (id, notification) ->
           if (index == 0) {
             setForeground(
-              ForegroundInfo(
+              androidx.work.ForegroundInfo(
                 id,
                 notification
               )

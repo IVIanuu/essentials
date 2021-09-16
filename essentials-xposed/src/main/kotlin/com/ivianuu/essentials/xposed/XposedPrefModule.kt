@@ -15,7 +15,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.scoped
@@ -48,7 +48,7 @@ class XposedPrefModule<T : Any>(
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
-    scope: InjektCoroutineScope<AppScope>
+    scope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
     val sharedPrefs by lazy {
       context.getSharedPreferences(prefName, Context.MODE_WORLD_READABLE)
@@ -105,7 +105,7 @@ class XposedPrefModule<T : Any>(
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
-    coroutineScope: InjektCoroutineScope<AppScope>
+    coroutineScope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> XposedPrefFlow<T> {
     val sharedPrefs by lazy { XSharedPreferences(packageName, prefName) }
 

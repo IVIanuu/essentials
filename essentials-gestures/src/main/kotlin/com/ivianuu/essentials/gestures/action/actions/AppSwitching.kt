@@ -13,7 +13,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.d
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,7 +52,7 @@ fun switchToApp(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   private val packageManager: PackageManager,
-  private val scope: InjektCoroutineScope<AppScope>
+  private val scope: NamedCoroutineScope<AppScope>
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0

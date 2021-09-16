@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
@@ -40,7 +40,7 @@ object CheckAppsKey : Key<Unit>
   checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
   launchableAppPredicate: LaunchableAppPredicate,
   pref: DataStore<CheckAppsPrefs>,
-  scope: InjektCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(

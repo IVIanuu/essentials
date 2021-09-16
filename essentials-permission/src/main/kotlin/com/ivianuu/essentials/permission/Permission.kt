@@ -16,20 +16,26 @@
 
 package com.ivianuu.essentials.permission
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.permission.ui.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.permission.ui.PermissionRequestKey
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.AppUiStarter
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.coroutines.DefaultDispatcher
+import com.ivianuu.injekt.scope.Scope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 interface Permission {
   val title: String
@@ -37,7 +43,7 @@ interface Permission {
   val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
 }
 
-@Provide class PermissionModule<@Spread T : Permission> {
+@Provide class PermissionModule<@com.ivianuu.injekt.Spread T : Permission> {
   @Provide fun permissionSetElement(
     permissionKey: TypeKey<T>,
     permission: T

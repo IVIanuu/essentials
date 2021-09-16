@@ -16,11 +16,20 @@
 
 package com.ivianuu.essentials.foreground
 
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 
 data class ForegroundInfo(val id: Int, val state: ForegroundState)
 
@@ -31,7 +40,7 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
 @Provide fun internalForegroundState(
   foregroundStates: Set<Flow<ForegroundState>> = emptySet(),
   logger: Logger,
-  scope: InjektCoroutineScope<AppScope>,
+  scope: NamedCoroutineScope<AppScope>,
 ): @Scoped<AppScope> Flow<InternalForegroundState> = combine(
   foregroundStates
     .mapIndexed { index, foregroundState ->

@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
@@ -63,7 +63,7 @@ object NavBarKey : Key<Unit>
   navigator: Navigator,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
 ): KeyUi<NavBarKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }

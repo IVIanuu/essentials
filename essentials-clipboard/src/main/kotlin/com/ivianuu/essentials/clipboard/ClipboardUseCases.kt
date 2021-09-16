@@ -27,7 +27,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,7 +38,7 @@ typealias ClipboardText = String?
 
 @Provide fun clipboardText(
   clipboardManager: @SystemService ClipboardManager,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ) = callbackFlow<ClipboardText> {
   val listener = ClipboardManager.OnPrimaryClipChangedListener {
     val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()

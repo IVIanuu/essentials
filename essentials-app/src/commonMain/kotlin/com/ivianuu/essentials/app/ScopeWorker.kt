@@ -21,7 +21,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.d
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -32,7 +32,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
 
 @Provide fun <S : Scope> scopeWorkerRunner(
   logger: Logger,
-  scope: InjektCoroutineScope<S>,
+  scope: NamedCoroutineScope<S>,
   scopeKey: TypeKey<S>,
   workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {

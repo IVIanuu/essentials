@@ -16,20 +16,6 @@
 
 package com.ivianuu.essentials.kotlin.compiler.optics
 
-import org.jetbrains.kotlin.backend.common.extensions.*
-import org.jetbrains.kotlin.backend.common.ir.*
-import org.jetbrains.kotlin.backend.common.lower.*
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.ir.*
-import org.jetbrains.kotlin.ir.builders.*
-import org.jetbrains.kotlin.ir.builders.declarations.*
-import org.jetbrains.kotlin.ir.declarations.*
-import org.jetbrains.kotlin.ir.declarations.impl.*
-import org.jetbrains.kotlin.ir.expressions.impl.*
-import org.jetbrains.kotlin.ir.util.*
-import org.jetbrains.kotlin.ir.visitors.*
-import org.jetbrains.kotlin.name.*
-
 class OpticsIrGenerationExtension : IrGenerationExtension {
   override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
     val lens = pluginContext.referenceClass(Lens) ?: return

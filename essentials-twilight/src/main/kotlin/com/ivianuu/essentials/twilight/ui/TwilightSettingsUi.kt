@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
@@ -106,7 +106,6 @@ object TwilightSettingsKey : Key<Unit>
   )
 }
 
-
 @Optics data class TwilightSettingsModel(
   val twilightMode: TwilightMode = TwilightMode.SYSTEM,
   val useBlackInDarkMode: Boolean = false,
@@ -116,7 +115,7 @@ object TwilightSettingsKey : Key<Unit>
 
 @Provide fun twilightSettingsModel(
   pref: DataStore<TwilightPrefs>,
-  scope: InjektCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<TwilightSettingsModel> =
   scope.state(TwilightSettingsModel()) {
     pref.data.update {

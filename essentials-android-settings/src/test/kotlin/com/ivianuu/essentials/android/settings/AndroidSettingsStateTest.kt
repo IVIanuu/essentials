@@ -16,17 +16,17 @@
 
 package com.ivianuu.essentials.android.settings
 
-import android.content.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.*
-import org.junit.*
-import org.junit.runner.*
-import org.robolectric.annotation.*
+import android.content.ContentResolver
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.CoroutineDispatcher
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])

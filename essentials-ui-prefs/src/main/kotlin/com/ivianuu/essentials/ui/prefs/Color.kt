@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.material.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable fun ColorListItem(
   value: Color,

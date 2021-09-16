@@ -16,14 +16,24 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import com.ivianuu.injekt.scope.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.coroutines.mapState
+import com.ivianuu.essentials.coroutines.update2
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.safeAs
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 interface Navigator {
   val state: StateFlow<NavigationState>
@@ -40,7 +50,7 @@ class NavigatorImpl(
   private val intentKeyHandler: IntentKeyHandler,
   private val logger: Logger,
   rootKey: RootKey? = null,
-  scope: InjektCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ) : Navigator {
   private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
   override val state: StateFlow<NavigationState>

@@ -26,8 +26,7 @@ interface NullableBinding {
   fun <T> T?.bind(): T
 }
 
-@PublishedApi
-internal object NullableBindingImpl : NullableBinding {
+@PublishedApi internal object NullableBindingImpl : NullableBinding {
   override fun <T> T?.bind(): T = this ?: throw ShortCircuitException
 
   object ShortCircuitException : ControlException()

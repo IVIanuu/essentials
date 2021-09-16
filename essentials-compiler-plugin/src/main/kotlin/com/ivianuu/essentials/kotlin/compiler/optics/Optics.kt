@@ -16,21 +16,6 @@
 
 package com.ivianuu.essentials.kotlin.compiler.optics
 
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.descriptors.annotations.*
-import org.jetbrains.kotlin.descriptors.impl.*
-import org.jetbrains.kotlin.name.*
-import org.jetbrains.kotlin.resolve.*
-import org.jetbrains.kotlin.resolve.descriptorUtil.*
-import org.jetbrains.kotlin.resolve.extensions.*
-import org.jetbrains.kotlin.resolve.lazy.*
-import org.jetbrains.kotlin.resolve.lazy.declarations.*
-import org.jetbrains.kotlin.storage.*
-import org.jetbrains.kotlin.types.*
-import org.jetbrains.kotlin.types.typeUtil.*
-import org.jetbrains.kotlin.utils.addToStdlib.*
-import java.util.ArrayList
-
 class OpticsResolveExtension : SyntheticResolveExtension {
   override fun getSyntheticCompanionObjectNameIfNeeded(thisDescriptor: ClassDescriptor): Name? =
     if (thisDescriptor.annotations.hasAnnotation(OpticsAnnotation))

@@ -16,16 +16,34 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.node.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.animation.*
-import kotlin.time.*
-import kotlinx.coroutines.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import com.ivianuu.essentials.coroutines.par
+import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.ui.animation.AnimatedStackChild
+import com.ivianuu.essentials.ui.animation.AnimatedStackState
+import com.ivianuu.essentials.ui.animation.AnimationElement
+import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import kotlin.time.Duration
+import kotlin.time.milliseconds
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
 
@@ -87,9 +105,9 @@ fun defaultAnimationSpec(
   duration: Duration = 300.milliseconds,
   delay: Duration = 0.milliseconds,
   easing: Easing = LinearEasing
-) = TweenSpec<Float>(
+) = tween<Float>(
   durationMillis = duration.toLongMilliseconds().toInt(),
-  delay = delay.toLongMilliseconds().toInt(),
+  delayMillis = delay.toLongMilliseconds().toInt(),
   easing = easing
 )
 

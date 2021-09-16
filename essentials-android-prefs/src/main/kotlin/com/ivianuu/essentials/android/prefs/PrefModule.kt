@@ -31,7 +31,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import java.io.InputStream
@@ -48,7 +48,7 @@ class PrefModule<T : Any>(private val name: String, private val default: () -> T
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
-    scope: InjektCoroutineScope<AppScope>
+    scope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
     val dataStore = DataStoreFactory.create(
       produceFile = { prefsDir().resolve(name) },

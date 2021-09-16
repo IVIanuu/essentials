@@ -25,13 +25,13 @@ import com.ivianuu.essentials.tile.TileScope
 import com.ivianuu.essentials.twilight.data.TwilightMode
 import com.ivianuu.essentials.twilight.data.TwilightPrefs
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 @Provide fun testTileModel(
-  scope: InjektCoroutineScope<TileScope>,
+  scope: NamedCoroutineScope<TileScope>,
   twilightPref: DataStore<TwilightPrefs>
 ): @Scoped<TileScope> StateFlow<TileModel<FunTileService1>> = scope.state(TileModel()) {
   twilightPref.data.update {

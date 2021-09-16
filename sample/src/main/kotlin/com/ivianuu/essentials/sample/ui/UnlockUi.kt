@@ -30,7 +30,7 @@ import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.InjektCoroutineScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -42,7 +42,7 @@ object UnlockKey : Key<Unit>
 @Provide fun unlockUi(
   screenState: Flow<ScreenState>,
   screenUnlocker: ScreenUnlocker,
-  scope: InjektCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   toaster: Toaster,
 ): KeyUi<UnlockKey> = {
   Scaffold(
