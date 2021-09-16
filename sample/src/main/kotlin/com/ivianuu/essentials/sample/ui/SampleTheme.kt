@@ -18,47 +18,21 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
-import androidx.compose.material.Typography
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.twilight.domain.TwilightState
-import com.ivianuu.essentials.twilight.ui.TwilightTheme
+import com.ivianuu.essentials.robotomono.robotoMonoTypography
 import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
-import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
-import com.ivianuu.essentials.ui.material.editEach
+import com.ivianuu.essentials.ui.material.EsTheme
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.StateFlow
 
-@Provide fun sampleTheme(
-  rp: ResourceProvider,
-  twilightState: StateFlow<TwilightState>
-): AppTheme = { content ->
-  val robotoMono = remember {
-    FontFamily(
-      catch { loadResource<Typeface>(R.font.roboto_mono) }
-        .getOrElse { Typeface(android.graphics.Typeface.DEFAULT) }
-    )
-  }
-  TwilightTheme(
+@Provide fun sampleTheme(rp: ResourceProvider): AppTheme = { content ->
+  EsTheme(
     shapes = Shapes(
       medium = RoundedCornerShape(12.dp)
     ),
-    typography = Typography().editEach { copy(fontFamily = robotoMono) },
-    twilightState = twilightState.collectAsState().value
-  ) {
-    CompositionLocalProvider(
-      LocalStackTransition provides HorizontalStackTransition(),
-      content = content
-    )
-  }
+    typography = robotoMonoTypography(),
+    transition = HorizontalStackTransition(),
+    content = content
+  )
 }

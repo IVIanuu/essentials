@@ -55,15 +55,5 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name="com.ivianuu.essentials.tile.FunTileService1"
-            android:icon="@drawable/ic_email"
-            android:label="@string/es_about_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>
