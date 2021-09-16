@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
-import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R

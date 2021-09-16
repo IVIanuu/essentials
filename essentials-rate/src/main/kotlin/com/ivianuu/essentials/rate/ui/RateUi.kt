@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.apps.coil.AppIcon
+import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase

@@ -22,6 +22,7 @@
 
     <!-- Actions -->
     <string name="es_action_app">App</string>
+    <string name="es_action_app_shortcut">App shortcut</string>
     <string name="es_action_assistant">Assistant</string>
     <string name="es_action_auto_rotation">Auto rotation</string>
     <string name="es_action_back">Back</string>

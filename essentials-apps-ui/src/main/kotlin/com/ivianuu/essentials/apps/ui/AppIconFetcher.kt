@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.apps.coil
+package com.ivianuu.essentials.apps.ui
 
 import android.content.pm.PackageManager
 import androidx.core.graphics.drawable.toBitmap
@@ -38,6 +38,7 @@ data class AppIcon(val packageName: String)
   private val packageManager: PackageManager
 ) : Fetcher<AppIcon> {
   override fun key(data: AppIcon): String = data.packageName
+
   override suspend fun fetch(
     pool: BitmapPool,
     data: AppIcon,

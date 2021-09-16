@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.shortcutpicker
+package com.ivianuu.essentials.apps.shortcuts
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -42,62 +42,54 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
-object ShortcutPickerKey : Key<Shortcut>
+object AppShortcutPickerKey : Key<AppShortcut>
 
-@Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
-  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
-    ResourceLazyColumnFor(model.shortcuts) { shortcut ->
+@Provide val shortcutPickerUi: ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> = {
+  Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
+    ResourceLazyColumnFor(model.appShortcuts) { appShortcut ->
       ListItem(
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
-            painter = remember {
-              BitmapPainter(shortcut.icon.toBitmap().toImageBitmap())
-            }
+            bitmap = remember { appShortcut.icon.toBitmap().toImageBitmap() }
           )
         },
-        title = { Text(shortcut.name) },
-        onClick = { model.pickShortcut(shortcut) }
+        title = { Text(appShortcut.shortLabel) },
+        onClick = { model.pickAppShortcut(appShortcut) }
       )
     }
   }
 }
 
-@Optics data class ShortcutPickerModel(
-  val shortcuts: Resource<List<Shortcut>> = Idle,
-  val pickShortcut: (Shortcut) -> Unit = {}
+@Optics data class AppShortcutPickerModel(
+  val appShortcuts: Resource<List<AppShortcut>> = Idle,
+  val pickAppShortcut: (AppShortcut) -> Unit = {}
 )
 
-@Provide fun shortcutPickerModel(
-  getAllShortcuts: GetAllShortcutsUseCase,
-  extractShortcut: ExtractShortcutUseCase,
-  key: ShortcutPickerKey,
+@Provide fun appShortcutPickerModel(
+  getInstalledApps: GetInstalledAppsUseCase,
+  getAllAppShortcutsForApp: GetAllAppShortcutsForAppUseCase,
+  key: AppShortcutPickerKey,
   navigator: Navigator,
-  scope: NamedCoroutineScope<KeyUiScope>,
-  rp: ResourceProvider,
-  toaster: Toaster
-): @Scoped<KeyUiScope> StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
-  produceResource({ copy(shortcuts = it) }) { getAllShortcuts() }
+  scope: NamedCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
+  produceResource({ copy(appShortcuts = it) }) {
+    getInstalledApps()
+      .parMap { app ->
+        catch { getAllAppShortcutsForApp(app.packageName) }
+          .onFailure { it.printStackTrace() }
+          .getOrElse { emptyList() }
+      }
+      .flatten()
+  }
 
-  action(ShortcutPickerModel.pickShortcut()) { shortcut ->
-    catch {
-      val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
-        ?.getOrNull()
-        ?.data ?: return@catch
-      val finalShortcut = extractShortcut(shortcutRequestResult)
-      navigator.pop(key, finalShortcut)
-    }.onFailure {
-      it.printStackTrace()
-      showToast(R.string.es_failed_to_pick_shortcut)
-    }
+  action(AppShortcutPickerModel.pickAppShortcut()) { appShortcut ->
+    navigator.pop(key, appShortcut)
   }
 }

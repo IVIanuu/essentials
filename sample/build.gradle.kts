@@ -66,7 +66,7 @@ dependencies {
   implementation(project(":essentials-about"))
   implementation(project(":essentials-accessibility"))
   implementation(project(":essentials-apps"))
-  implementation(project(":essentials-apps-coil"))
+  implementation(project(":essentials-apps-shortcuts"))
   implementation(project(":essentials-apps-ui"))
   implementation(project(":essentials-backup"))
   implementation(project(":essentials-billing"))

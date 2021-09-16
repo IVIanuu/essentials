@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2021 Manuel Wrage
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,4 +14,6 @@
   ~ limitations under the License.
   -->
 
-<manifest package="com.ivianuu.essentials.apps.coil" />
+<resources>
+    <string name="es_title_app_shortcut_picker">Pick an app shortcut</string>
+</resources>

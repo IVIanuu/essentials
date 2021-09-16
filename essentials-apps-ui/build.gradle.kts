@@ -29,7 +29,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(project(":essentials-android-core"))
   api(project(":essentials-apps"))
-  api(project(":essentials-apps-coil"))
+  api(project(":essentials-coil"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

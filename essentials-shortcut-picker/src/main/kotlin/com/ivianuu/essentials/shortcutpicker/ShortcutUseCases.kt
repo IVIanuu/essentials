@@ -20,11 +20,11 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.withContext
@@ -49,7 +49,7 @@ typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
               )
             },
             name = resolveInfo.loadLabel(packageManager).toString(),
-            icon = resolveInfo.loadIcon(packageManager).toBitmap().toImageBitmap()
+            icon = resolveInfo.loadIcon(packageManager)
           )
         }.getOrNull()
       }
@@ -61,6 +61,7 @@ typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
 typealias ExtractShortcutUseCase = (Intent) -> Shortcut
 
 @Provide fun extractShortcutUseCase(
+  context: AppContext,
   packageManager: PackageManager
 ): ExtractShortcutUseCase = { shortcutRequestResult ->
   val intent =
@@ -72,13 +73,13 @@ typealias ExtractShortcutUseCase = (Intent) -> Shortcut
     shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
   @Suppress("DEPRECATION") val icon = when {
-    bitmapIcon != null -> bitmapIcon.toImageBitmap()
+    bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
     iconResource != null -> {
       val resources =
         packageManager.getResourcesForApplication(iconResource.packageName)
       val id =
         resources.getIdentifier(iconResource.resourceName, null, null)
-      resources.getDrawable(id).toBitmap().toImageBitmap()
+      resources.getDrawable(id)
     }
     else -> error("No icon provided $shortcutRequestResult")
   }

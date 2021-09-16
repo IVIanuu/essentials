@@ -11,7 +11,7 @@ include(
     ":essentials-android-util",
     ":essentials-app",
     ":essentials-apps",
-    ":essentials-apps-coil",
+    ":essentials-apps-shortcuts",
     ":essentials-apps-ui",
     ":essentials-backup",
     ":essentials-billing",
