@@ -24,7 +24,6 @@ import kotlin.time.milliseconds
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
@@ -78,8 +77,8 @@ class XposedPrefModule<T : Any>(
       awaitClose { sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
       .onStart { emit(readData()) }
-      .flowOn(dispatcher)
       .distinctUntilChanged()
+      .flowOn(dispatcher)
       .shareIn(scope, SharingStarted.Lazily, 1)
 
     val actor = scope.actor(dispatcher)
@@ -123,10 +122,10 @@ class XposedPrefModule<T : Any>(
 
     // todo it's not optimal to use a polling based approach here
     return timer(1000.milliseconds)
-      .filter { sharedPrefs.hasFileChanged() }
+      .filter { it == 0L || sharedPrefs.hasFileChanged() }
       .map { readData() }
-      .flowOn(dispatcher)
       .distinctUntilChanged()
+      .flowOn(dispatcher)
       .shareIn(coroutineScope, SharingStarted.Lazily, 1)
   }
 
