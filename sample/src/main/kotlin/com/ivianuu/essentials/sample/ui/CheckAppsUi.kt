@@ -17,19 +17,28 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.data.AndroidDb
+import com.ivianuu.essentials.data.Db
+import com.ivianuu.essentials.data.EntityDescriptor
+import com.ivianuu.essentials.data.PrimaryKey
+import com.ivianuu.essentials.data.Schema
+import com.ivianuu.essentials.data.deleteAll
+import com.ivianuu.essentials.data.insertAll
+import com.ivianuu.essentials.data.selectAll
+import com.ivianuu.essentials.data.transaction
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
@@ -38,18 +47,23 @@ object CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
   checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
+  db: Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  pref: DataStore<CheckAppsPrefs>,
   scope: NamedCoroutineScope<KeyUiScope>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(
-        pref.data.map { it.checkedApps },
+        db.selectAll<CheckedAppEntity>()
+          .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
           scope.launch {
-            pref.updateData {
-              copy(checkedApps = checkedApps)
+            db.transaction {
+              db.deleteAll<CheckedAppEntity>()
+              db.insertAll(
+                checkedApps
+                  .map { CheckedAppEntity(it) }
+              )
             }
           }
         },
@@ -60,10 +74,15 @@ object CheckAppsKey : Key<Unit>
   }.invoke()
 }
 
-@Serializable data class CheckAppsPrefs(
-  @SerialName("checked_apps") val checkedApps: Set<String> = emptySet(),
-) {
-  companion object {
-    @Provide val prefModule = PrefModule("check_apps_prefs") { CheckAppsPrefs() }
-  }
-}
+typealias CheckAppsDb = Db
+
+@Provide fun checkAppsDb(context: AppContext): @Scoped<AppScope> CheckAppsDb = AndroidDb(
+  context = context,
+  name = "checked_apps.db",
+  schema = Schema(
+    version = 1,
+    entities = listOf(EntityDescriptor<CheckedAppEntity>("checked_apps"))
+  )
+)
+
+@Serializable data class CheckedAppEntity(@PrimaryKey val packageName: String)
