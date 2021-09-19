@@ -4,6 +4,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 interface Db : Disposable {
@@ -30,7 +31,9 @@ suspend inline fun <R> Db.transaction(block: () -> R): R {
 }
 
 fun <T> Db.query(sql: String, @Inject key: TypeKey<T>): Flow<List<T>> =
-  query(sql).map { it.toList(schema) }
+  query(sql)
+    .map { it.toList<T>(schema) }
+    .distinctUntilChanged()
 
 suspend fun <T> Db.insert(
   entity: T,
