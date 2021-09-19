@@ -46,7 +46,7 @@ private class EntityDescriptorImpl<T>(
           PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
           else -> Row.Type.STRING
         },
-        isNullable = serializer.descriptor.isNullable,
+        isNullable = serializer.descriptor.getElementDescriptor(elementIndex).isNullable,
         isPrimaryKey = serializer.descriptor.getElementAnnotations(elementIndex)
           .any { it is PrimaryKey }
       )
@@ -91,5 +91,5 @@ fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): St
   append(")")
 }
 
-fun <T> T.toSqlArg(row: Row) =
-  if (row.type == Row.Type.STRING) "'${toString()}'" else toString()
+fun <T> T.toSqlArg(row: Row): String = if (row.type == Row.Type.STRING &&
+  (!row.isNullable || this != "NULL")) "'${toString()}'" else toString()

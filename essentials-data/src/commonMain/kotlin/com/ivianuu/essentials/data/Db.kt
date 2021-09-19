@@ -113,8 +113,14 @@ interface Cursor : Disposable {
 ): List<T> = buildList {
   while (next()) {
     val serializer = schema.descriptor<T>().serializer
-    this += CursorDecoder(this@toList, schema.serializersModule, serializer.descriptor, schema.embeddedFormat)
-      .decodeSerializableValue(serializer)
+    this += serializer.deserialize(
+      CursorDecoder(
+        this@toList,
+        schema.serializersModule,
+        serializer.descriptor,
+        schema.embeddedFormat
+      )
+    )
   }
   dispose()
 }

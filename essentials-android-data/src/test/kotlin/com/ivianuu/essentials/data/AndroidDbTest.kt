@@ -422,6 +422,44 @@ class AndroidDbTest {
     db.dispose()
   }
 
+  @Test fun testEntityWithNullableStringField() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<EntityWithNullableStringField>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(EntityWithNullableStringField("id", null))
+
+    db.selectById<EntityWithNullableStringField>("id").first() shouldBe
+        EntityWithNullableStringField("id", null)
+
+    db.dispose()
+  }
+
+  @Test fun testEntityWithNullableField() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<EntityWithNullableField>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(EntityWithNullableField("id", null))
+
+    db.selectById<EntityWithNullableField>("id").first() shouldBe
+        EntityWithNullableField("id", null)
+
+    db.dispose()
+  }
+
   @Serializable data class UserWithDog(
     val name: String,
     val dog: Dog
@@ -432,6 +470,16 @@ class AndroidDbTest {
   @Serializable data class UserWithMultipleDogs(
     val name: String,
     val dogs: List<Dog>
+  )
+
+  @Serializable data class EntityWithNullableStringField(
+    @PrimaryKey val id: String,
+    val name: String?
+  )
+
+  @Serializable data class EntityWithNullableField(
+    @PrimaryKey val id: String,
+    val value: Long?
   )
 
   @Serializable data class EntityWithEnum(

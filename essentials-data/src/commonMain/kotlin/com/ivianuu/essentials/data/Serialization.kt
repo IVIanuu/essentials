@@ -5,6 +5,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
+import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.encoding.AbstractDecoder
@@ -22,6 +23,7 @@ class EmittingEncoder(
 ) : AbstractEncoder() {
   override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
     if (serializer.descriptor == this.descriptor ||
+        serializer.descriptor.kind is PrimitiveKind ||
         serializer.descriptor.kind == SerialKind.ENUM) super.encodeSerializableValue(serializer, value)
     else encodeString(embeddedFormat.encodeToString(serializer, value))
   }
@@ -98,8 +100,13 @@ class CursorDecoder(
 
   override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T =
     if (deserializer.descriptor == this.descriptor ||
-        deserializer.descriptor.kind == SerialKind.ENUM) super.decodeSerializableValue(deserializer)
-    else embeddedFormat.decodeFromString(deserializer, decodeString())
+      deserializer.descriptor.kind is PrimitiveKind ||
+      deserializer.descriptor.kind == SerialKind.ENUM) super.decodeSerializableValue(deserializer)
+    else
+      embeddedFormat.decodeFromString(deserializer, decodeString())
+
+  override fun <T : Any> decodeNullableSerializableValue(deserializer: DeserializationStrategy<T?>): T? =
+    if (cursor.isNull(index)) null.also { index++ } else decodeSerializableValue(deserializer)
 
   override fun decodeBoolean(): Boolean = decodeLong() == 1L
 
@@ -110,10 +117,6 @@ class CursorDecoder(
   override fun decodeDouble(): Double =
     cursor.getDouble(cursor.getColumnIndex(descriptor.getElementName(index++)))!!
 
-  override fun decodeNotNullMark(): Boolean = !cursor.isNull(index)
-
-  override fun decodeNull(): Nothing? = null.also { index++ }
-
   override fun decodeEnum(enumDescriptor: SerialDescriptor): Int =
     enumDescriptor.getElementIndex(decodeString())
 
@@ -123,6 +126,10 @@ class CursorDecoder(
 
   override fun decodeLong(): Long =
     cursor.getLong(cursor.getColumnIndex(descriptor.getElementName(index++)))!!
+
+  override fun decodeNotNullMark(): Boolean = !cursor.isNull(index)
+
+  override fun decodeNull(): Nothing? = null.also { index++ }
 
   override fun decodeShort(): Short =
     decodeLong().toShort()
