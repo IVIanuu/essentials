@@ -28,6 +28,7 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-tuples"))
+        api(project(":essentials-serialization"))
         api(project(":essentials-store"))
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
