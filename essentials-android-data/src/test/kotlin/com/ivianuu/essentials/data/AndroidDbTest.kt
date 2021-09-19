@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.data
 
 import androidx.test.core.app.ApplicationProvider
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
@@ -44,6 +45,63 @@ class AndroidDbTest {
     db.insert(MyEntity("Manuel", 25))
 
     db.selectAll<MyEntity>().first() shouldBe listOf(MyEntity("Manuel", 25))
+
+    db.dispose()
+  }
+
+  @Test fun testInsertConflictWithAbort() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(MyEntity("Manuel", 25))
+    catch { db.insert(MyEntity("Manuel", 24), InsertConflictStrategy.ABORT) }
+
+    db.selectAll<MyEntity>().first() shouldBe listOf(MyEntity("Manuel", 25))
+
+    db.dispose()
+  }
+
+  @Test fun testInsertConflictWithIgnore() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(MyEntity("Manuel", 25))
+    db.insert(MyEntity("Manuel", 24), InsertConflictStrategy.IGNORE)
+
+    db.selectAll<MyEntity>().first() shouldBe listOf(MyEntity("Manuel", 25))
+
+    db.dispose()
+  }
+
+  @Test fun testInsertConflictWithReplace() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(MyEntity("Manuel", 25))
+    db.insert(MyEntity("Manuel", 24), InsertConflictStrategy.REPLACE)
+
+    db.selectAll<MyEntity>().first() shouldBe listOf(MyEntity("Manuel", 24))
 
     db.dispose()
   }

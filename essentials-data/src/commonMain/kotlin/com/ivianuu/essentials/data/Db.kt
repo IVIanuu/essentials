@@ -32,13 +32,31 @@ suspend inline fun <R> Db.transaction(block: () -> R): R {
 fun <T> Db.query(sql: String, @Inject key: TypeKey<T>): Flow<List<T>> =
   query(sql).map { it.toList(schema) }
 
-suspend fun <T> Db.insert(entity: T, @Inject key: TypeKey<T>) = transaction {
+suspend fun <T> Db.insert(
+  entity: T,
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
+  @Inject key: TypeKey<T>
+) = transaction {
   val descriptor = schema.descriptor<T>()
-  execute("INSERT INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
+  execute("INSERT ${when (conflictStrategy) {
+    InsertConflictStrategy.REPLACE -> " OR REPLACE "
+    InsertConflictStrategy.ABORT -> " OR ABORT "
+    InsertConflictStrategy.IGNORE -> " OR IGNORE "
+  }}INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
 }
 
-suspend fun <T> Db.insertAll(entities: List<T>, @Inject key: TypeKey<T>) = transaction {
-  entities.forEach { insert(it) }
+suspend fun <T> Db.insertAll(
+  entities: List<T>,
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
+  @Inject key: TypeKey<T>
+) = transaction {
+  entities.forEach { insert(it, conflictStrategy) }
+}
+
+enum class InsertConflictStrategy {
+  REPLACE,
+  ABORT,
+  IGNORE
 }
 
 fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
