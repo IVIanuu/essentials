@@ -35,15 +35,15 @@ private class EntityDescriptorImpl<T>(
     .map { elementIndex ->
       Row(
         name = serializer.descriptor.getElementName(elementIndex),
-        type = when {
-          serializer.descriptor.kind == PrimitiveKind.BOOLEAN -> Row.Type.LONG
-          serializer.descriptor.kind == PrimitiveKind.BYTE -> Row.Type.LONG
-          serializer.descriptor.kind == PrimitiveKind.CHAR -> Row.Type.STRING
-          serializer.descriptor.kind == PrimitiveKind.SHORT -> Row.Type.LONG
-          serializer.descriptor.kind == PrimitiveKind.INT -> Row.Type.LONG
-          serializer.descriptor.kind == PrimitiveKind.LONG -> Row.Type.LONG
-          serializer.descriptor.kind == PrimitiveKind.FLOAT -> Row.Type.DOUBLE
-          serializer.descriptor.kind == PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
+        type = when (serializer.descriptor.kind) {
+          PrimitiveKind.BOOLEAN -> Row.Type.LONG
+          PrimitiveKind.BYTE -> Row.Type.LONG
+          PrimitiveKind.CHAR -> Row.Type.STRING
+          PrimitiveKind.SHORT -> Row.Type.LONG
+          PrimitiveKind.INT -> Row.Type.LONG
+          PrimitiveKind.LONG -> Row.Type.LONG
+          PrimitiveKind.FLOAT -> Row.Type.DOUBLE
+          PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
           else -> Row.Type.STRING
         },
         isNullable = serializer.descriptor.isNullable,
@@ -68,7 +68,7 @@ data class Row(
 }
 
 @OptIn(ExperimentalStdlibApi::class)
-fun <T> T.toSqlRowsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
+fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
   val descriptor = schema.descriptor<T>()
 
   append("(")
@@ -82,7 +82,7 @@ fun <T> T.toSqlRowsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): Strin
       schema.embeddedFormat,
       descriptor.serializer.descriptor
     ) { this += it }
-      .encodeSerializableValue(descriptor.serializer, this@toSqlRowsAndArgsString)
+      .encodeSerializableValue(descriptor.serializer, this@toSqlColumnsAndArgsString)
   }
   append(
     values.zip(descriptor.rows)

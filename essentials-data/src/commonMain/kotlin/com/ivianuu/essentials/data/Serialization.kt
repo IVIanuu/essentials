@@ -6,6 +6,7 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.encoding.AbstractDecoder
 import kotlinx.serialization.encoding.AbstractEncoder
 import kotlinx.serialization.encoding.CompositeDecoder
@@ -20,7 +21,8 @@ class EmittingEncoder(
   private val consumer: (String) -> Unit
 ) : AbstractEncoder() {
   override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
-    if (serializer.descriptor == this.descriptor) super.encodeSerializableValue(serializer, value)
+    if (serializer.descriptor == this.descriptor ||
+        serializer.descriptor.kind == SerialKind.ENUM) super.encodeSerializableValue(serializer, value)
     else encodeString(embeddedFormat.encodeToString(serializer, value))
   }
 
@@ -94,10 +96,10 @@ class CursorDecoder(
     else index
   }
 
-  override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
-    return if (deserializer.descriptor == this.descriptor) super.decodeSerializableValue(deserializer)
+  override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T =
+    if (deserializer.descriptor == this.descriptor ||
+        deserializer.descriptor.kind == SerialKind.ENUM) super.decodeSerializableValue(deserializer)
     else embeddedFormat.decodeFromString(deserializer, decodeString())
-  }
 
   override fun decodeBoolean(): Boolean = decodeLong() == 1L
 

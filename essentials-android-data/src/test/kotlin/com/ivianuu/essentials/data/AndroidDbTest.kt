@@ -328,6 +328,42 @@ class AndroidDbTest {
     db.dispose()
   }
 
+  @Test fun testEntityWithEmbeddedEnum() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<EntityWithEnum>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(EntityWithEnum("1", MyEnum.A))
+
+    db.selectAll<EntityWithEnum>().first() shouldBe listOf(EntityWithEnum("1", MyEnum.A))
+
+    db.dispose()
+  }
+
+  @Test fun testEntityWithEnumId() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<EntityWithEnumId>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insert(EntityWithEnumId(MyEnum.A))
+
+    db.selectById<EntityWithEnumId>(MyEnum.A).first() shouldBe EntityWithEnumId(MyEnum.A)
+
+    db.dispose()
+  }
+
   @Serializable data class UserWithDog(
     val name: String,
     val dog: Dog
@@ -339,6 +375,19 @@ class AndroidDbTest {
     val name: String,
     val dogs: List<Dog>
   )
+
+  @Serializable data class EntityWithEnum(
+    @PrimaryKey val id: String,
+    val enum: MyEnum
+  )
+
+  @Serializable data class EntityWithEnumId(
+    @PrimaryKey val enum: MyEnum
+  )
+
+  enum class MyEnum {
+    A, B, C
+  }
 
   @Serializable data class MyEntity(
      @PrimaryKey val name: String,

@@ -34,7 +34,7 @@ fun <T> Db.query(sql: String, @Inject key: TypeKey<T>): Flow<List<T>> =
 
 suspend fun <T> Db.insert(entity: T, @Inject key: TypeKey<T>) = transaction {
   val descriptor = schema.descriptor<T>()
-  execute("INSERT INTO ${descriptor.tableName} ${entity.toSqlRowsAndArgsString(schema)}")
+  execute("INSERT INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
 }
 
 suspend fun <T> Db.insertAll(entities: List<T>, @Inject key: TypeKey<T>) = transaction {
