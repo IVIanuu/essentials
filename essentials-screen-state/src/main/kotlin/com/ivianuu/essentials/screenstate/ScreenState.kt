@@ -20,22 +20,13 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
 enum class ScreenState(val isOn: Boolean) {
@@ -44,7 +35,6 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Provide fun screenState(
   broadcastsFactory: BroadcastsFactory,
-  logger: Logger,
   scope: NamedCoroutineScope<AppScope>,
   screenStateProvider: CurrentScreenStateProvider
 ): @Scoped<AppScope> Flow<ScreenState> = merge(
@@ -52,8 +42,6 @@ enum class ScreenState(val isOn: Boolean) {
   broadcastsFactory(Intent.ACTION_SCREEN_ON),
   broadcastsFactory(Intent.ACTION_USER_PRESENT)
 )
-  .onStart { d { "sub for screen state" } }
-  .onCompletion { d { "dispose screen state" } }
   .map { Unit }
   .onStart { emit(Unit) }
   .map { screenStateProvider() }
