@@ -41,7 +41,7 @@ private class EntityDescriptorImpl<T>(
     .map { elementIndex ->
       Row(
         name = serializer.descriptor.getElementName(elementIndex),
-        type = when (serializer.descriptor.kind) {
+        type = when (serializer.descriptor.getElementDescriptor(elementIndex).kind) {
           PrimitiveKind.BOOLEAN -> Row.Type.LONG
           PrimitiveKind.BYTE -> Row.Type.LONG
           PrimitiveKind.CHAR -> Row.Type.STRING

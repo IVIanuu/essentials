@@ -140,11 +140,11 @@ suspend fun <T> Db.createTable(
           Row.Type.DOUBLE -> append(" REAL")
         }
 
-        if (!row.isNullable)
-          append(" NOT NULL")
-
         if (row.isPrimaryKey)
           append(" PRIMARY KEY")
+
+        if (!row.isNullable)
+          append(" NOT NULL")
 
         if (index != entity.rows.lastIndex)
           append(",")
