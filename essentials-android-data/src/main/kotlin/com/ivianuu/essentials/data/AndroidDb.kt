@@ -9,6 +9,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -113,9 +114,17 @@ class AndroidDb private constructor(
     }
   }
 
-  override fun query(sql: String): Flow<Cursor> = changes
+  override fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T> = changes
     .onStart { emit(Unit) }
-    .map { AndroidCursor(database.rawQuery(sql, null)) }
+    .map {
+      val cursor = AndroidCursor(database.rawQuery(sql, null))
+      try {
+        transform(cursor)
+      } finally {
+        cursor.dispose()
+      }
+    }
+    .distinctUntilChanged()
     .flowOn(coroutineContext.minusKey(Job))
 
   override fun dispose() {
