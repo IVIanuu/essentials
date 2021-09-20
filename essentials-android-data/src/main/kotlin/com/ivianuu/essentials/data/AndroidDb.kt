@@ -26,7 +26,7 @@ class AndroidDb private constructor(
   database: SQLiteDatabase?
 ) : Db {
   private val transactionsMutex = Mutex()
-  private var currentTransaction: Transaction? = null
+  private var currentTransaction: TransactionImpl? = null
 
   private val changes = EventFlow<Unit>()
 
@@ -85,18 +85,24 @@ class AndroidDb private constructor(
     return transaction
   }
 
-  private inner class TransactionImpl(val parent: Transaction?) : Transaction {
-    override suspend fun endTransaction(successful: Boolean) {
-      transactionsMutex.withLock { currentTransaction = parent }
-      if (parent == null) {
-        withContext(coroutineContext) {
-          if (successful)
-            database.setTransactionSuccessful()
-          database.endTransaction()
-        }
+  private inner class TransactionImpl(val parent: TransactionImpl?) : Transaction {
+    private var childrenSuccessful = true
 
-        if (successful)
-          changes.emit(Unit)
+    override suspend fun endTransaction(successful: Boolean) {
+      transactionsMutex.withLock {
+        currentTransaction = parent
+        if (parent == null) {
+          withContext(coroutineContext) {
+            if (successful && childrenSuccessful)
+              database.setTransactionSuccessful()
+            database.endTransaction()
+          }
+
+          if (successful && childrenSuccessful)
+            changes.emit(Unit)
+        } else {
+          parent.childrenSuccessful = parent.childrenSuccessful && successful
+        }
       }
     }
   }

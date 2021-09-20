@@ -460,6 +460,50 @@ class AndroidDbTest {
     db.dispose()
   }
 
+  @Test fun testNonSuccessfulTransactionRollsBackChanges() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    val transaction = db.beginTransaction()
+    val entity = MyEntity("Manuel", 25)
+    db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}")
+    transaction.endTransaction(false)
+
+    db.selectById<MyEntity>("Manuel").first() shouldBe null
+
+    db.dispose()
+  }
+
+  @Test fun testNonSuccessfulChildTransactionRollsBackChanges() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.transaction {
+      val transaction = db.beginTransaction()
+      val entity = MyEntity("Manuel", 25)
+      db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}")
+      transaction.endTransaction(false)
+    }
+
+    db.selectById<MyEntity>("Manuel").first() shouldBe null
+
+    db.dispose()
+  }
+
   @Serializable data class UserWithDog(
     val name: String,
     val dog: Dog
