@@ -504,6 +504,26 @@ class AndroidDbTest {
     db.dispose()
   }
 
+  @Test fun testAutoIncrementId() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<EntityWithAutoIncrementId>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.insertAndRetrieve(EntityWithAutoIncrementId(name = "Manuel")) shouldBe
+        EntityWithAutoIncrementId(1L, "Manuel")
+
+    db.insertAndRetrieve(EntityWithAutoIncrementId(name = "Cindy")) shouldBe
+        EntityWithAutoIncrementId(2L, "Cindy")
+
+    db.dispose()
+  }
+
   @Serializable data class UserWithDog(
     val name: String,
     val dog: Dog
@@ -572,4 +592,9 @@ class AndroidDbTest {
   )
 
   @Serializable data class Migration3MyEntityV2(@PrimaryKey val name: String)
+
+  @Serializable data class EntityWithAutoIncrementId(
+    @PrimaryKey @AutoIncrement val id: Long = 0L,
+    val name: String
+  )
 }

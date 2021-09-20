@@ -4,6 +4,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 interface Db : Disposable {
@@ -39,10 +40,33 @@ suspend fun <T> Db.insert(
 ) = transaction {
   val descriptor = schema.descriptor<T>()
   execute("INSERT ${when (conflictStrategy) {
-    InsertConflictStrategy.REPLACE -> " OR REPLACE "
-    InsertConflictStrategy.ABORT -> " OR ABORT "
-    InsertConflictStrategy.IGNORE -> " OR IGNORE "
+    InsertConflictStrategy.REPLACE -> "OR REPLACE "
+    InsertConflictStrategy.ABORT -> "OR ABORT "
+    InsertConflictStrategy.IGNORE -> "OR IGNORE "
   }}INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
+}
+
+suspend fun <T> Db.lastInsertedId(@Inject key: TypeKey<T>): Long {
+  val descriptor = schema.descriptor<T>()
+  val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
+    .takeIf { it.type == Row.Type.INT }
+    ?: error("Expected a primary key of type INT $key ${descriptor.rows}")
+
+  return query(
+    "SELECT * FROM ${descriptor.tableName} " +
+        "ORDER BY ${primaryKeyRow.name} DESC LIMIT 1"
+  ) {
+    if (!it.next()) 1L else it.getLong(it.getColumnIndex(primaryKeyRow.name))!!
+  }.first()
+}
+
+suspend fun <T> Db.insertAndRetrieve(
+  entity: T,
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
+  @Inject key: TypeKey<T>
+): T {
+  insert(entity, conflictStrategy)
+  return selectById<T>(lastInsertedId<T>()).first()!!
 }
 
 suspend fun <T> Db.insertAll(
@@ -61,7 +85,7 @@ enum class InsertConflictStrategy {
 
 fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()
-  return query<T>("SELECT * FROM ${descriptor.tableName}")
+  return query("SELECT * FROM ${descriptor.tableName}")
 }
 
 fun <T> Db.selectById(id: Any, @Inject key: TypeKey<T>): Flow<T?> {
@@ -135,13 +159,16 @@ suspend fun <T> Db.createTable(
 
         when (row.type) {
           Row.Type.STRING -> append(" TEXT")
-          Row.Type.LONG -> append(" LONG")
+          Row.Type.INT -> append(" INTEGER")
           Row.Type.BYTES -> append(" BLOB")
           Row.Type.DOUBLE -> append(" REAL")
         }
 
         if (row.isPrimaryKey)
           append(" PRIMARY KEY")
+
+        if (row.autoIncrement)
+          append(" AUTOINCREMENT")
 
         if (!row.isNullable)
           append(" NOT NULL")

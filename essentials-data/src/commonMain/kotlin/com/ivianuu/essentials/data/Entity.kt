@@ -26,6 +26,10 @@ abstract class AbstractEntityDescriptor<T>(
 @SerialInfo
 annotation class PrimaryKey
 
+@Target(AnnotationTarget.PROPERTY)
+@SerialInfo
+annotation class AutoIncrement
+
 fun <T> EntityDescriptor(
   tableName: String,
   @Inject typeKey: TypeKey<T>,
@@ -39,22 +43,23 @@ private class EntityDescriptorImpl<T>(
 ) : EntityDescriptor<T> {
   override val rows: List<Row> = (0 until serializer.descriptor.elementsCount)
     .map { elementIndex ->
+      val annotations = serializer.descriptor.getElementAnnotations(elementIndex)
       Row(
         name = serializer.descriptor.getElementName(elementIndex),
         type = when (serializer.descriptor.getElementDescriptor(elementIndex).kind) {
-          PrimitiveKind.BOOLEAN -> Row.Type.LONG
-          PrimitiveKind.BYTE -> Row.Type.LONG
+          PrimitiveKind.BOOLEAN -> Row.Type.INT
+          PrimitiveKind.BYTE -> Row.Type.INT
           PrimitiveKind.CHAR -> Row.Type.STRING
-          PrimitiveKind.SHORT -> Row.Type.LONG
-          PrimitiveKind.INT -> Row.Type.LONG
-          PrimitiveKind.LONG -> Row.Type.LONG
+          PrimitiveKind.SHORT -> Row.Type.INT
+          PrimitiveKind.INT -> Row.Type.INT
+          PrimitiveKind.LONG -> Row.Type.INT
           PrimitiveKind.FLOAT -> Row.Type.DOUBLE
           PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
           else -> Row.Type.STRING
         },
         isNullable = serializer.descriptor.getElementDescriptor(elementIndex).isNullable,
-        isPrimaryKey = serializer.descriptor.getElementAnnotations(elementIndex)
-          .any { it is PrimaryKey }
+        isPrimaryKey = annotations.any { it is PrimaryKey },
+        autoIncrement = annotations.any { it is AutoIncrement }
       )
     }
 }
@@ -63,11 +68,12 @@ data class Row(
   val name: String,
   val type: Type,
   val isNullable: Boolean,
-  val isPrimaryKey: Boolean
+  val isPrimaryKey: Boolean,
+  val autoIncrement: Boolean
 ) {
   enum class Type {
     STRING,
-    LONG,
+    INT,
     BYTES,
     DOUBLE
   }
@@ -77,23 +83,27 @@ data class Row(
 fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
   val descriptor = schema.descriptor<T>()
 
+  val rowsWithValues = descriptor.rows.zip(
+    buildList {
+      EmittingEncoder(
+        schema.serializersModule,
+        schema.embeddedFormat,
+        descriptor.serializer.descriptor
+      ) { this += it }
+        .encodeSerializableValue(descriptor.serializer, this@toSqlColumnsAndArgsString)
+    }
+  ).filter {
+    !it.first.autoIncrement ||
+        (it.second != "NULL" && it.second != "0")
+  }
+
   append("(")
-  append(descriptor.rows.joinToString { it.name })
+  append(rowsWithValues.joinToString { it.first.name })
   append(") ")
 
   append("VALUES(")
-  val values = buildList {
-    EmittingEncoder(
-      schema.serializersModule,
-      schema.embeddedFormat,
-      descriptor.serializer.descriptor
-    ) { this += it }
-      .encodeSerializableValue(descriptor.serializer, this@toSqlColumnsAndArgsString)
-  }
-  append(
-    values.zip(descriptor.rows)
-      .joinToString { it.first.toSqlArg(it.second) }
-  )
+
+  append(rowsWithValues.joinToString { it.second.toSqlArg(it.first) })
   append(")")
 }
 
