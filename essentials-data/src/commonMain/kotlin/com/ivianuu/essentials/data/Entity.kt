@@ -16,6 +16,12 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
+abstract class AbstractEntityDescriptor<T>(
+  tableName: String,
+  @Inject typeKey: TypeKey<T>,
+  @Inject serializer: KSerializer<T>
+) : EntityDescriptor<T> by EntityDescriptor(tableName)
+
 @Target(AnnotationTarget.PROPERTY)
 @SerialInfo
 annotation class PrimaryKey
