@@ -23,16 +23,11 @@ import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -95,7 +90,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   rp: ResourceProvider,
   toaster: Toaster,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<FloatingWindowsPickerModel> = scope.state(
+): StateFlow<FloatingWindowsPickerModel> = scope.state(
   FloatingWindowsPickerModel(key.actionTitle)
 ) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {

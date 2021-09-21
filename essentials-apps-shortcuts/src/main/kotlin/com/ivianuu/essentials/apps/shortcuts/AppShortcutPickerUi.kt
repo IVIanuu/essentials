@@ -45,7 +45,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 object AppShortcutPickerKey : Key<AppShortcut>
@@ -78,7 +77,7 @@ object AppShortcutPickerKey : Key<AppShortcut>
   key: AppShortcutPickerKey,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
+): StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
   produceResource({ copy(appShortcuts = it) }) {
     getInstalledApps()
       .parMap { app ->

@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -64,7 +63,7 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<SystemOverlayAppBlacklistModel> =
+): StateFlow<SystemOverlayAppBlacklistModel> =
   scope.state(SystemOverlayAppBlacklistModel()) {
     update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
     action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->

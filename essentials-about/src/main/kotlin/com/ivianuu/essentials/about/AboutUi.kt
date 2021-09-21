@@ -33,15 +33,10 @@ import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
@@ -175,7 +170,7 @@ object AboutKey : Key<Unit>
   rateOnPlayUseCase: RateOnPlayUseCase,
   scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider
-): @Scoped<KeyUiScope> StateFlow<AboutModel> = scope.state(initial) {
+): StateFlow<AboutModel> = scope.state(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
 
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }

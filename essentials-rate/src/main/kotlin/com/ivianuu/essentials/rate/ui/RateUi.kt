@@ -19,18 +19,8 @@ package com.ivianuu.essentials.rate.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -56,7 +46,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
@@ -153,7 +142,7 @@ object RateKey : DialogKey<Unit>
   scope: NamedCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-): @Scoped<KeyUiScope> StateFlow<RateModel> = scope.state(initial) {
+): StateFlow<RateModel> = scope.state(initial) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateModel.showLater()) { showLater() }

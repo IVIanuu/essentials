@@ -30,15 +30,10 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
@@ -71,7 +66,7 @@ object LicenseKey : Key<Unit>
   getProjects: GetLicenseProjectsUseCase,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<LicenseModel> = scope.state(LicenseModel()) {
+): StateFlow<LicenseModel> = scope.state(LicenseModel()) {
   flow { emit(getProjects()) }
     .flowResultAsResource()
     .update { copy(projects = it) }

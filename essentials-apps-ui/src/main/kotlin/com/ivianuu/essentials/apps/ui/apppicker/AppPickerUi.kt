@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 data class AppPickerKey(
@@ -94,7 +93,7 @@ data class AppPickerKey(
   getInstalledApps: GetInstalledAppsUseCase,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<AppPickerModel> = scope.state(
+): StateFlow<AppPickerModel> = scope.state(
   AppPickerModel(
     appPredicate = key.appPredicate,
     title = key.title

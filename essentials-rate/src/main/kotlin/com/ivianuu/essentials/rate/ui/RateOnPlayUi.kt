@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 object RateOnPlayKey : DialogKey<Unit>
@@ -79,7 +78,7 @@ object RateOnPlayKey : DialogKey<Unit>
   scope: NamedCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-): @Scoped<KeyUiScope> StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {
+): StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateOnPlayModel.showLater()) { showLater() }

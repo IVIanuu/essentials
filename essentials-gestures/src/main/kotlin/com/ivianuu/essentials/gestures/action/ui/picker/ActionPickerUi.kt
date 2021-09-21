@@ -28,12 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GetActionPickerDelegatesUseCase
-import com.ivianuu.essentials.gestures.action.GetActionSettingsKeyUseCase
-import com.ivianuu.essentials.gestures.action.GetActionUseCase
-import com.ivianuu.essentials.gestures.action.GetAllActionsUseCase
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.optics.Optics
@@ -54,7 +49,6 @@ import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 data class ActionPickerKey(
@@ -162,7 +156,7 @@ sealed class ActionPickerItem {
   permissionRequester: PermissionRequester,
   rp: ResourceProvider,
   scope: NamedCoroutineScope<KeyUiScope>,
-): @Scoped<KeyUiScope> StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
+): StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }

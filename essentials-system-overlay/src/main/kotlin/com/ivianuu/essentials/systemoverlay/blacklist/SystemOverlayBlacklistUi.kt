@@ -32,7 +32,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
@@ -120,7 +119,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
+): StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

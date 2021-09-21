@@ -49,7 +49,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -132,7 +131,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   params: CheckableAppsParams,
   getInstalledApps: GetInstalledAppsUseCase,
   scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state(
+): StateFlow<CheckableAppsModel> = scope.state(
   CheckableAppsModel(
     appPredicate = params.appPredicate,
     appBarTitle = params.appBarTitle

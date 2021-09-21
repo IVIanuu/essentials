@@ -20,12 +20,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -54,7 +49,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 object DonationKey : DialogKey<Unit>
@@ -133,7 +127,7 @@ data class UiDonation(
   scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster
-): @Scoped<KeyUiScope> StateFlow<DonationModel> = scope.state(DonationModel()) {
+): StateFlow<DonationModel> = scope.state(DonationModel()) {
   produceResource({ copy(skus = it) }) {
     donations
       .parMap { donation ->
