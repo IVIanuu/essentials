@@ -64,9 +64,9 @@ suspend fun <T> Db.insertAndRetrieve(
   entity: T,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
   @Inject key: TypeKey<T>
-): T {
+): T = transaction {
   insert(entity, conflictStrategy)
-  return selectById<T>(lastInsertedId<T>()).first()!!
+  selectById<T>(lastInsertedId<T>()).first()!!
 }
 
 suspend fun <T> Db.insertAll(
