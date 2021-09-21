@@ -21,23 +21,15 @@ import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.optics.Lens
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.Tuple3
-import com.ivianuu.essentials.tuples.Tuple4
-import com.ivianuu.essentials.tuples.Tuple5
-import com.ivianuu.essentials.tuples.tupleOf
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.jvm.JvmName
+import com.ivianuu.essentials.tuples.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.jvm.JvmName
 
 fun <S> CoroutineScope.state(
   initial: S,
@@ -53,7 +45,7 @@ fun <S> CoroutineScope.state(
     override suspend fun update(transform: S.() -> S): S = state.update2(transform)
   }
 
-  stateScope.launch(context, CoroutineStart.UNDISPATCHED) { stateScope.block() }
+  stateScope.launch(coroutineContext + context, CoroutineStart.UNDISPATCHED) { stateScope.block() }
 
   return state
 }

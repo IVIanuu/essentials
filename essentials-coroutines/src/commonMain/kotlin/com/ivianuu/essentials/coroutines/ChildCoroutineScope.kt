@@ -16,19 +16,19 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.coroutineContext
 
 fun CoroutineScope.childCoroutineScope(
   context: CoroutineContext = EmptyCoroutineContext,
-): CoroutineScope = CoroutineScope(context + childJob())
+): CoroutineScope = CoroutineScope(coroutineContext + context + childJob())
 
 suspend fun childCoroutineScope(context: CoroutineContext = EmptyCoroutineContext): CoroutineScope =
-  CoroutineScope(context + childJob())
+  CoroutineScope(coroutineContext + context + childJob())
 
 fun CoroutineScope.childJob() = coroutineContext.job.childJob()
 
