@@ -16,6 +16,13 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
+import org.junit.Test
+
 class RaceTest {
   @Test fun testFirstOneWins() = runCancellingBlockingTest {
     val result = race(
