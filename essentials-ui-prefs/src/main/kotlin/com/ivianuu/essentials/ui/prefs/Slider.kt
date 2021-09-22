@@ -22,13 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -42,11 +36,11 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.StepPolicy
-import kotlin.math.absoluteValue
-import kotlin.time.Duration
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
+import kotlin.time.Duration
 
 @Composable fun DoubleSliderListItem(
   value: Double,
@@ -219,12 +213,12 @@ import kotlinx.coroutines.launch
 ) {
   Box(modifier = modifier) {
     ListItem(
-      modifier = Modifier.align(Alignment.BottomCenter)
-        .padding(bottom = 32.dp),
+      modifier = Modifier
+        .align(Alignment.BottomCenter)
+        .padding(bottom = 20.dp),
       title = title,
       subtitle = subtitle,
-      leading = leading,
-      onClick = {}
+      leading = leading
     )
 
     Row(
