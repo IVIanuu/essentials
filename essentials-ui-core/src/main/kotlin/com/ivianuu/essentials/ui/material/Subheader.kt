@@ -36,7 +36,11 @@ import androidx.compose.ui.unit.dp
   Box(
     modifier = Modifier.height(48.dp)
       .fillMaxWidth()
-      .padding(start = 16.dp, end = 16.dp)
+      .padding(
+        start = 16.dp,
+        top = 16.dp,
+        end = 16.dp
+      )
       .then(modifier),
     contentAlignment = Alignment.CenterStart
   ) {
