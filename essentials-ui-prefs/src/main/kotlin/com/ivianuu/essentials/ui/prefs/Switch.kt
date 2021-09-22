@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Switch
 
 @Composable fun SwitchListItem(
   value: Boolean,
