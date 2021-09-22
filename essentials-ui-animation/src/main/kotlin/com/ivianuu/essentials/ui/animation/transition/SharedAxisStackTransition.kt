@@ -98,18 +98,17 @@ fun ScaledSharedAxisStackTransition(
   animate(spec) { value ->
     if (isPush) {
       to?.value = Modifier
-        .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
-        .scale(lerp(0.8f, 1f, FastOutSlowInEasing.transform(value)))
+        .alpha(LinearOutSlowInEasing.transform(interval(0.1f, 0.5f, value)))
+        .scale(lerp(0.85f, 1f, FastOutSlowInEasing.transform(value)))
       from?.value = Modifier
-        .alpha(lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value))))
-        .scale(lerp(1f, 1.1f, FastOutSlowInEasing.transform(value)))
+        .alpha(lerp(1f, 0.4f, LinearOutSlowInEasing.transform(interval(0f, 0.5f, value))))
+        .scale(lerp(1f, 1.05f, FastOutSlowInEasing.transform(value)))
     } else {
       to?.value = Modifier
-        .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
-        .scale(lerp(1.1f, 1f, FastOutSlowInEasing.transform(value)))
+        .scale(lerp(1.05f, 1f, FastOutSlowInEasing.transform(value)))
       from?.value = Modifier
-        .alpha(lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value))))
-        .scale(lerp(1f, 0.8f, FastOutSlowInEasing.transform(value)))
+        .alpha(lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.5f, value))))
+        .scale(lerp(1f, 0.85f, FastOutSlowInEasing.transform(value)))
     }
   }
 }
