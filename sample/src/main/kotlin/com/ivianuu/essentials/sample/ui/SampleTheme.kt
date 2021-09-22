@@ -16,23 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.robotomono.robotoMonoTypography
 import com.ivianuu.essentials.ui.AppTheme
-import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
 import com.ivianuu.essentials.ui.material.EsTheme
 import com.ivianuu.injekt.Provide
 
 @Provide fun sampleTheme(rp: ResourceProvider): AppTheme = { content ->
-  EsTheme(
-    shapes = Shapes(
-      medium = RoundedCornerShape(12.dp)
-    ),
-    typography = robotoMonoTypography(),
-    transition = HorizontalStackTransition(),
-    content = content
-  )
+  EsTheme(content = content)
 }
