@@ -18,14 +18,7 @@ package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -36,6 +29,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 
 @Composable fun ListItem(
@@ -47,7 +41,8 @@ import androidx.compose.ui.unit.dp
   onClick: (() -> Unit)? = null,
   onLongClick: (() -> Unit)? = null,
   enabled: Boolean = true,
-  selected: Boolean = false
+  selected: Boolean = false,
+  contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 20.dp)
 ) {
   val minHeight = if (subtitle != null) {
     if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
@@ -83,9 +78,9 @@ import androidx.compose.ui.unit.dp
           Box(
             modifier = Modifier
               .padding(
-                start = 16.dp,
-                top = 8.dp,
-                bottom = 8.dp
+                start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+                top = contentPadding.calculateTopPadding(),
+                bottom = contentPadding.calculateBottomPadding()
               ),
             contentAlignment = Alignment.Center
           ) {
@@ -107,8 +102,8 @@ import androidx.compose.ui.unit.dp
         Column(
           modifier = Modifier
             .padding(
-              top = 8.dp,
-              bottom = 8.dp
+              top = contentPadding.calculateTopPadding(),
+              bottom = contentPadding.calculateBottomPadding()
             ),
           verticalArrangement = Arrangement.Center
         ) {
@@ -140,9 +135,9 @@ import androidx.compose.ui.unit.dp
         ) {
           Box(
             modifier = Modifier.padding(
-              top = 8.dp,
-              end = 16.dp,
-              bottom = 8.dp
+              top = contentPadding.calculateTopPadding(),
+              end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
+              bottom = contentPadding.calculateBottomPadding()
             ),
             contentAlignment = Alignment.Center
           ) {
@@ -157,8 +152,8 @@ import androidx.compose.ui.unit.dp
   }
 }
 
-private val TitleOnlyMinHeight = 48.dp
-private val TitleOnlyMinHeightWithIcon = 56.dp
-private val TitleAndSubtitleMinHeight = 64.dp
-private val TitleAndSubtitleMinHeightWithIcon = 72.dp
+private val TitleOnlyMinHeight = 56.dp
+private val TitleOnlyMinHeightWithIcon = 64.dp
+private val TitleAndSubtitleMinHeight = 72.dp
+private val TitleAndSubtitleMinHeightWithIcon = 80.dp
 private val HorizontalTextPadding = 16.dp
