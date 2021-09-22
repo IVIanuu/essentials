@@ -50,6 +50,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   title: @Composable (() -> Unit)? = null,
   leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
   actions: @Composable (() -> Unit)? = null,
+  bottomContent: @Composable (() -> Unit)? = null,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
     AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
     AppBarStyle.SURFACE -> MaterialTheme.colors.surface
@@ -61,7 +62,8 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
     modifier = modifier,
     backgroundColor = backgroundColor,
     contentColor = contentColor,
-    elevation = elevation
+    elevation = elevation,
+    bottomContent = bottomContent
   ) {
     leading?.invoke()
     if (title != null) {
@@ -100,6 +102,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
   applySystemBarStyle: Boolean = true,
+  bottomContent: @Composable() (() -> Unit)? = null,
   content: @Composable RowScope.() -> Unit,
 ) {
   val systemBarStyleModifier = if (applySystemBarStyle) {
@@ -116,21 +119,24 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
     modifier = systemBarStyleModifier.then(modifier)
   ) {
     InsetsPadding(left = false, right = false, bottom = false) {
-      Row(
-        modifier = Modifier.height(DefaultAppBarHeight)
-          .fillMaxWidth()
-          .padding(start = 16.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        content = content
-      )
+      Column {
+        Row(
+          modifier = Modifier.height(DefaultAppBarHeight)
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          content = content
+        )
+        bottomContent?.invoke()
+      }
     }
   }
 }
 
 private val DefaultAppBarHeight = 56.dp
-private val DefaultAppBarElevation = 4.dp
+val DefaultAppBarElevation = 4.dp
 
-@Composable private fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
+@Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
   @Providers("com.ivianuu.essentials.ui.composableScope")
   val component = requireElement<AutoTopAppBarComponent>()
   val canGoBack = scoped("can_go_back", LocalScope.current) {

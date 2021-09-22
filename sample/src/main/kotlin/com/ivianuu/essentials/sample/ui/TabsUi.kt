@@ -16,13 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,33 +48,32 @@ val tabsUi: KeyUi<TabsKey> = {
         color = MaterialTheme.colors.primary,
         elevation = 8.dp
       ) {
-        Column {
-          TopAppBar(
-            title = { Text("Tabs") },
-            elevation = 0.dp
-          )
-          TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.primary,
-            indicator = { tabPositions ->
-              TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-              )
-            }
-          ) {
-            TabItems.indices.forEach { page ->
-              Tab(
-                selected = pagerState.currentPage == page,
-                onClick = {
-                  scope.launch {
-                    pagerState.animateScrollToPage(page)
-                  }
-                },
-                text = { Text("Item: $page") }
-              )
+        TopAppBar(
+          title = { Text("Tabs") },
+          bottomContent = {
+            TabRow(
+              selectedTabIndex = pagerState.currentPage,
+              backgroundColor = MaterialTheme.colors.primary,
+              indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                  Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                )
+              }
+            ) {
+              TabItems.indices.forEach { page ->
+                Tab(
+                  selected = pagerState.currentPage == page,
+                  onClick = {
+                    scope.launch {
+                      pagerState.animateScrollToPage(page)
+                    }
+                  },
+                  text = { Text("Item: $page") }
+                )
+              }
             }
           }
-        }
+        )
       }
     }
   ) {
