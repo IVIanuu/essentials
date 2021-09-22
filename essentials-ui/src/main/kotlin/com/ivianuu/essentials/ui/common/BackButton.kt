@@ -23,8 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 
-@Composable
-fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
+@Composable fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
   IconButton(
     onClick = { onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed() },
