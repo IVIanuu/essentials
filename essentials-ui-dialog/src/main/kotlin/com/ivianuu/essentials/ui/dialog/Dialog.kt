@@ -16,11 +16,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -110,7 +106,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 
   val finalContent: @Composable (() -> Unit)? = if (content != null) {
     {
-      ProvideTextStyle(MaterialTheme.typography.subtitle1) {
+      ProvideTextStyle(MaterialTheme.typography.body2) {
         CompositionLocalProvider(
           LocalContentAlpha provides ContentAlpha.medium,
           content = content

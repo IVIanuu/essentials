@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.prefs.CheckboxListItem
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -52,7 +52,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
     }
 
     item {
-      CheckboxListItem(
+      SwitchListItem(
         value = model.disableOnKeyboard,
         onValueChange = model.updateDisableOnKeyboard,
         title = { Text(R.string.es_pref_disable_on_keyboard) },
@@ -66,7 +66,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
     }
 
     item {
-      CheckboxListItem(
+      SwitchListItem(
         value = model.disableOnLockScreen,
         onValueChange = model.updateDisableOnLockScreen,
         title = { Text(R.string.es_pref_disable_on_lock_screen) },
@@ -80,7 +80,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
     }
 
     item {
-      CheckboxListItem(
+      SwitchListItem(
         value = model.disableOnSecureScreens,
         onValueChange = model.updateDisableOnSecureScreens,
         title = { Text(R.string.es_pref_disable_on_secure_screens) },

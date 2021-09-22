@@ -18,9 +18,9 @@ package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.ui.material.Switch
 
 @Composable fun <T> MultiChoiceListDialog(
   modifier: Modifier = Modifier,
@@ -68,7 +68,7 @@ import androidx.compose.ui.Modifier
 ) {
   SimpleDialogListItem(
     leading = {
-      Checkbox(
+      Switch(
         checked = checked,
         onCheckedChange = null
       )

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.apps.ui.checkableapps
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,6 +41,7 @@ import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -93,7 +93,7 @@ data class CheckableAppsParams(
           )
         },
         trailing = {
-          Checkbox(
+          Switch(
             checked = app.isChecked,
             onCheckedChange = null
           )

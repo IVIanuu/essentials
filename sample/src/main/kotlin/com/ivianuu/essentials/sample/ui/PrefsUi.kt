@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.prefs.CheckboxListItem
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
@@ -72,20 +71,6 @@ object PrefsKey : Key<Unit>
     }
     item {
       Subheader(modifier = Modifier.interactive(prefs.switch)) { Text("Category") }
-    }
-    item {
-      CheckboxListItem(
-        value = prefs.checkbox,
-        onValueChange = {
-          scope.launch {
-            prefStore.updateData { copy(checkbox = it) }
-          }
-        },
-        modifier = Modifier.interactive(prefs.switch),
-        title = { Text("Checkbox") },
-        subtitle = { Text("This is a checkbox preference") }
-      )
-
     }
     item {
       RadioButtonListItem(
@@ -234,7 +219,6 @@ object PrefsKey : Key<Unit>
 
 @Serializable data class SamplePrefs(
   val switch: Boolean = false,
-  val checkbox: Boolean = false,
   val radioButton: Boolean = false,
   val slider: Int = 50,
   val steppedSlider: Int = 50,
