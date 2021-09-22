@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,13 +34,10 @@ import com.ivianuu.essentials.ui.animation.transition.StackTransition
 }
 
 val EsTypography = Typography(
-  subtitle1 = Typography().subtitle1.copy(
-    fontWeight = FontWeight.Medium,
-    fontSize = 18.sp
-  ),
-  body2 = Typography().body2.copy(
+  subtitle1 = TextStyle(
     fontWeight = FontWeight.Normal,
-    fontSize = 16.sp
+    fontSize = 20.sp,
+    letterSpacing = 0.15.sp
   )
 )
 
