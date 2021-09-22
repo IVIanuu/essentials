@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
   onLongClick: (() -> Unit)? = null,
   enabled: Boolean = true,
   selected: Boolean = false,
-  contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 20.dp)
+  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp)
 ) {
   val minHeight = if (subtitle != null) {
     if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
