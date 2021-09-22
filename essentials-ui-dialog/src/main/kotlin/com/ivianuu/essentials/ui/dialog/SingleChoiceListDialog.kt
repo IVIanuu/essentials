@@ -17,12 +17,15 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.absorbPointer
+import com.ivianuu.essentials.ui.material.ListItem
 
 @Composable fun <T> SingleChoiceListDialog(
   modifier: Modifier = Modifier,
@@ -59,8 +62,13 @@ import com.ivianuu.essentials.ui.common.absorbPointer
   onSelect: () -> Unit,
   title: @Composable () -> Unit
 ) {
-  SimpleDialogListItem(
-    leading = {
+  ListItem(
+    contentPadding = PaddingValues(
+      horizontal = 24.dp,
+      vertical = 16.dp
+    ),
+    title = title,
+    trailing = {
       Box(modifier = Modifier.absorbPointer()) {
         RadioButton(
           selected = selected,
@@ -68,7 +76,6 @@ import com.ivianuu.essentials.ui.common.absorbPointer
         )
       }
     },
-    title = title,
     onClick = onSelect
   )
 }
