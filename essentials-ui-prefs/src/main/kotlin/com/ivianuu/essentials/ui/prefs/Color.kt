@@ -18,6 +18,7 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -41,8 +42,9 @@ import com.ivianuu.essentials.ui.material.ListItem
     leading = leading,
     trailing = {
       Surface(
-        modifier = Modifier.requiredSize(40.dp),
+        modifier = Modifier.requiredSize(48.dp),
         color = value,
+        shape = CircleShape,
         border = BorderStroke(
           width = 1.dp,
           color = MaterialTheme.colors.onSurface
