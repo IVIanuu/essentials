@@ -16,13 +16,7 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
@@ -36,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.isDark
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.Key
@@ -110,14 +103,9 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   content: @Composable RowScope.() -> Unit,
 ) {
   val systemBarStyleModifier = if (applySystemBarStyle) {
-    val systemBarBackgroundColor = if (LocalAppBarStyle.current == AppBarStyle.PRIMARY ||
-      backgroundColor.isDark
-    ) Color.Black.copy(alpha = 0.2f)
-    else Color.White.copy(alpha = 0.4f)
-    val lightIcons = backgroundColor.isLight
     Modifier.systemBarStyle(
-      bgColor = systemBarBackgroundColor,
-      lightIcons = lightIcons,
+      bgColor = Color.Transparent,
+      lightIcons = backgroundColor.isLight,
       elevation = elevation
     )
   } else Modifier
