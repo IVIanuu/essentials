@@ -62,8 +62,8 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
   title: @Composable (() -> Unit)?,
   content: @Composable (() -> Unit)?,
   buttons: @Composable() (() -> Unit)?,
-  showTopDivider: Boolean = false,
-  showBottomDivider: Boolean = false,
+  showTopDivider: Boolean,
+  showBottomDivider: Boolean,
   applyContentPadding: Boolean
 ) {
   val header: @Composable (() -> Unit)? = if (icon != null || title != null) {
@@ -128,8 +128,8 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 }
 
 @Composable private fun DialogContentLayout(
-  showTopDivider: Boolean = false,
-  showBottomDivider: Boolean = false,
+  showTopDivider: Boolean,
+  showBottomDivider: Boolean,
   applyContentPadding: Boolean,
   header: @Composable (() -> Unit)?,
   content: @Composable (() -> Unit)?,
