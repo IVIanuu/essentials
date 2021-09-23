@@ -22,11 +22,7 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.catch
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 sealed class Resource<out T>
 
@@ -60,6 +56,15 @@ inline fun <T, R> Resource<T>.flatMap(transform: (T) -> Resource<R>): Resource<R
 
 fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
+}
+
+fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
+  this@unwrapResource.collect { value ->
+    when (value) {
+      is Success -> emit(value.value)
+      is Error -> throw value.error
+    }
+  }
 }
 
 fun <T> Flow<Result<T, Throwable>>.flowResultAsResource(): Flow<Resource<T>> = flow {
