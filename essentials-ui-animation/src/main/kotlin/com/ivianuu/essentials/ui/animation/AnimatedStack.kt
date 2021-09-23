@@ -30,7 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
 import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
 import com.ivianuu.essentials.ui.animation.transition.NoOpStackTransition
@@ -308,7 +308,7 @@ internal class AnimatedStackTransaction<T>(
 
   fun execute() {
     job = state.scope.launch(start = CoroutineStart.UNDISPATCHED) {
-      runWithCleanup(
+      guarantee(
         block = {
           val transitionScope = object : StackTransitionScope, CoroutineScope by this {
             override val state: AnimatedStackState<*>
@@ -332,7 +332,7 @@ internal class AnimatedStackTransaction<T>(
           }
           transition(transitionScope)
         },
-        cleanup = { complete() }
+        finalizer = { complete() }
       )
     }
   }

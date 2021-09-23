@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -29,5 +29,5 @@ import com.ivianuu.injekt.scope.Scope
   logger: Logger
 ): ScopeWorker<S> = {
   log { "${scopeKey.value} created" }
-  runOnCancellation { log { "${scopeKey.value} disposed" } }
+  onCancel { log { "${scopeKey.value} disposed" } }
 }

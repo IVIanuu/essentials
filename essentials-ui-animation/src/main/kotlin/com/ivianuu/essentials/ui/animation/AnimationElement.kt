@@ -31,6 +31,7 @@ import com.ivianuu.essentials.cast
   internal val modifiers = mutableStateListOf<State<Modifier>>()
   internal val refs = mutableSetOf<Any>()
   private val props = mutableStateMapOf<AnimationElementPropKey<*>, Any?>()
+
   internal operator fun <T> set(key: AnimationElementPropKey<T>, value: T) {
     props[key] = value
   }

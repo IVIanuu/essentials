@@ -21,11 +21,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcherOwner
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 
 /* Pops the top key on back presses */
 @Provide fun androidBackPressHandler(
@@ -51,7 +56,7 @@ private fun OnBackPressedDispatcherOwner.backPresses() = callbackFlow<Unit> {
 
 /* Pops to root on activity destroy */
 @Provide fun popToRootOnActivityDestroyWorker(navigator: Navigator): ScopeWorker<UiScope> = {
-  runOnCancellation {
+  onCancel {
     navigator.backStack
       .first()
       .drop(1)

@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -38,7 +38,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
 ): ScopeWorkerRunner<S> = {
   log { "${scopeKey.value} run scope workers" }
   scope.launch {
-    runWithCleanup(
+    guarantee(
       block = {
         supervisorScope {
           workers
@@ -49,7 +49,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
             }
         }
       },
-      cleanup = {
+      finalizer = {
         log { "${scopeKey.value} cancel scope workers" }
       }
     )

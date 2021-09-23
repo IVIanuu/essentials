@@ -20,7 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
@@ -48,6 +48,6 @@ interface ForegroundActivityMarker
   }
   withContext(mainDispatcher) {
     activity.lifecycle.addObserver(observer)
-    runOnCancellation { activity.lifecycle.removeObserver(observer) }
+    onCancel { activity.lifecycle.removeObserver(observer) }
   }
 }

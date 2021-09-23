@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
@@ -91,13 +91,13 @@ typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<Permissio
 internal val permissionRefreshes = EventFlow<Unit>()
 
 @Provide fun <S : Scope> permissionRefreshesWorker(): ScopeWorker<S> = {
-  permissionRefreshes.tryEmit(Unit)
-  runOnCancellation { permissionRefreshes.tryEmit(Unit) }
+  permissionRefreshes.emit(Unit)
+  onCancel { permissionRefreshes.emit(Unit) }
 }
 
 private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> = {
   this(it)
-  permissionRefreshes.tryEmit(Unit)
+  permissionRefreshes.emit(Unit)
 }
 
 typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean

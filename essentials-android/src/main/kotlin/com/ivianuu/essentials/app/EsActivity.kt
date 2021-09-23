@@ -22,7 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
@@ -44,7 +44,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     @Provide val uiScope = @Providers("com.ivianuu.injekt.android.activityScope")
     requireElement<@ChildScopeFactory () -> UiScope>()()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      runOnCancellation {
+      onCancel {
         uiScope.cast<DisposableScope>().dispose()
       }
     }

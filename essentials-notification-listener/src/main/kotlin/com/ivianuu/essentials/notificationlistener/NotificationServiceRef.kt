@@ -18,7 +18,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Service
 import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.runOnCancellation
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
@@ -33,5 +33,5 @@ val notificationListenerRef: @Scoped<AppScope> MutableStateFlow<EsNotificationLi
   service: Service
 ): ScopeWorker<NotificationScope> = {
   ref.value = service as EsNotificationListenerService
-  runOnCancellation { ref.value = null }
+  onCancel { ref.value = null }
 }

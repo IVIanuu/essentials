@@ -29,21 +29,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
+import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.par
-import com.ivianuu.essentials.coroutines.runOnCancellation
-import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.animation.AnimatedStackState
 import com.ivianuu.essentials.ui.animation.AnimationElement
 import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.milliseconds
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
 
@@ -65,9 +65,9 @@ fun ContentAnimationStackTransition(
   val toModifier = toElementModifier(ContentAnimationElementKey)
   if (isPush) toModifier?.value = Modifier.alpha(0f)
   attachTo()
-  runWithCleanup(
+  guarantee(
     block = { animate(spec) { block(fromModifier, toModifier, it) } },
-    cleanup = { fromModifier?.value = Modifier; toModifier?.value = Modifier }
+    finalizer = { fromModifier?.value = Modifier; toModifier?.value = Modifier }
   )
 }
 
@@ -89,7 +89,7 @@ fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
   start = CoroutineStart.UNDISPATCHED
 ) {
   state.animationOverlays += overlay
-  runOnCancellation { state.animationOverlays -= overlay }
+  onCancel { state.animationOverlays -= overlay }
 }
 
 suspend fun StackTransitionScope.animate(
@@ -122,7 +122,7 @@ fun StackTransitionScope.element(
   val refKey = "stack transition $key ${child.key} $this"
   val element = child.elementStore.referenceElement(key, refKey)
   launch {
-    runOnCancellation {
+    onCancel {
       child.elementStore.disposeRef(key, refKey)
     }
   }
@@ -159,7 +159,7 @@ fun StackTransitionScope.elementModifier(
   val element = element(child, key)
   element.modifiers += modifier
   launch {
-    runOnCancellation {
+    onCancel {
       element.modifiers -= modifier
     }
   }

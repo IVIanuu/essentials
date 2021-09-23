@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.selects.select
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Deprecated(message = "A race needs racers", level = DeprecationLevel.ERROR)
 suspend fun <T> race(context: CoroutineContext = EmptyCoroutineContext) {
@@ -32,9 +32,7 @@ suspend fun <T> race(
   context: CoroutineContext = EmptyCoroutineContext
 ): T = coroutineScope {
   select {
-    val allRacers = racers.map { racer ->
-      async(context = context, block = racer)
-    }
+    val allRacers = racers.map { async(context = context, block = it) }
     allRacers.forEach { deferredRacer ->
       deferredRacer.onAwait { result ->
         allRacers.forEach { it.cancel() }

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.foreground
 
 import android.app.NotificationManager
 import androidx.work.ListenableWorker
-import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.work.Worker
@@ -68,14 +68,14 @@ import kotlinx.coroutines.flow.takeWhile
     }
   }
 
-  runWithCleanup(
+  guarantee(
     block = {
       internalForegroundState
         .map { it.infos }
         .takeWhile { infos -> infos.any { info -> info.state is ForegroundState.Foreground } }
         .collect { applyState(it) }
     },
-    cleanup = {
+    finalizer = {
       applyState(emptyList())
     }
   )
