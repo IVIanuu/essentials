@@ -18,7 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +36,6 @@ import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
 import com.ivianuu.essentials.ui.animation.transition.LocalSharedElementTransitionFraction
 import com.ivianuu.essentials.ui.animation.transition.SharedElement
 import com.ivianuu.essentials.ui.common.SimpleListScreen
-import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -86,10 +84,6 @@ import kotlinx.coroutines.launch
           scope.launch { navigator.push(item.keyFactory(color)) }
         }
       )
-
-      if (finalItems.indexOf(item) != finalItems.lastIndex) {
-        HorizontalDivider(modifier = Modifier.padding(start = 72.dp))
-      }
     }
 
     item {
