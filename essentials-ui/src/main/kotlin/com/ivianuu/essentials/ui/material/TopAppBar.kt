@@ -140,7 +140,7 @@ val DefaultAppBarElevation = 4.dp
   @Providers("com.ivianuu.essentials.ui.composableScope")
   val component = requireElement<AutoTopAppBarComponent>()
   val canGoBack = scoped("can_go_back", LocalScope.current) {
-    component.navigator.state.value.backStack.indexOf(component.key) > 0
+    component.navigator.backStack.value.indexOf(component.key) > 0
   }
   return when {
     canGoBack -> ({ BackButton() })
