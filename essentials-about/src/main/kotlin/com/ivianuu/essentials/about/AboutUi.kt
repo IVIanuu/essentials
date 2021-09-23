@@ -65,12 +65,14 @@ object AboutKey : Key<Unit>
       )
     }
 
-    item {
-      ListItem(
-        leading = { Icon(R.drawable.es_ic_favorite) },
-        title = { Text(R.string.es_about_donate) },
-        onClick = model.donate
-      )
+    if (model.showDonate) {
+      item {
+        ListItem(
+          leading = { Icon(R.drawable.es_ic_favorite) },
+          title = { Text(R.string.es_about_donate) },
+          onClick = model.donate
+        )
+      }
     }
 
     item {
