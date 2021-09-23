@@ -26,7 +26,11 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
@@ -42,7 +46,7 @@ interface Navigator {
 
 @Provide @Scoped<AppScope>
 class NavigatorImpl(
-  private val intentKeyHandler: IntentKeyHandler,
+  private val keyHandlers: Set<KeyHandler<*>> = emptySet(),
   private val logger: Logger,
   rootKey: RootKey? = null,
   scope: NamedCoroutineScope<AppScope>
@@ -72,7 +76,7 @@ class NavigatorImpl(
         ?.complete(null)
 
       @Suppress("UNCHECKED_CAST")
-      if (!intentKeyHandler(key) { result.complete(it as R) }) {
+      if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
         _backStack.update2 { filter { it != key } + key }
         results[key] = result
       }
@@ -92,7 +96,7 @@ class NavigatorImpl(
         ?.complete(null)
 
       @Suppress("UNCHECKED_CAST")
-      if (intentKeyHandler(key) { result.complete(it as R) }) {
+      if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
         _backStack.update2 { dropLast(1) }
         results.remove(key)
       } else {

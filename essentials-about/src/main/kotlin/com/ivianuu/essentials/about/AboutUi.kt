@@ -33,7 +33,11 @@ import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -136,7 +140,7 @@ object AboutKey : Key<Unit>
 
 @Optics data class AboutModel(
   val version: String = "",
-  val email: DeveloperEmail = "ivianuu@gmail.com",
+  val email: DeveloperEmail = "",
   val privacyPolicyUrl: PrivacyPolicyUrl? = null,
   val showDonate: Boolean = false,
   val donate: () -> Unit = {},

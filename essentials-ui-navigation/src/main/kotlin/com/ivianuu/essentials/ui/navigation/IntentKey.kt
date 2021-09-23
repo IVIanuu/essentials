@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
@@ -39,7 +38,7 @@ import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
+interface IntentKey : Key<Result<ActivityResult, Throwable>>
 
 @Provide fun <@Spread T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
   intentFactory: T,
@@ -50,38 +49,34 @@ typealias KeyIntentFactory<T> = (T) -> Intent
 
 typealias IntentAppUiStarter = suspend () -> ComponentActivity
 
-typealias IntentKeyHandler = (Key<*>, ((Result<ActivityResult, Throwable>) -> Unit)?) -> Boolean
+typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
 
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
   scope: NamedCoroutineScope<AppScope>
-): IntentKeyHandler = handler@{ key, onResult ->
+): KeyHandler<Result<ActivityResult, Throwable>> = handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories[key::class]
   if (intentFactory != null) {
     val intent = intentFactory(key)
     scope.launch {
       val activity = appUiStarter()
-      if (onResult == null) {
-        activity.startActivity(intent)
-      } else {
-        withContext(dispatcher) {
-          val result =
-            suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
-              val launcher = activity.activityResultRegistry.register(
-                UUID.randomUUID().toString(),
-                ActivityResultContracts.StartActivityForResult()
-              ) {
-                if (continuation.isActive) continuation.resume(it.ok())
-              }
-              catch { launcher.launch(intent) }
-                .onFailure { continuation.resume(it.err()) }
-              continuation.invokeOnCancellation { launcher.unregister() }
+      withContext(dispatcher) {
+        val result =
+          suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+            val launcher = activity.activityResultRegistry.register(
+              UUID.randomUUID().toString(),
+              ActivityResultContracts.StartActivityForResult()
+            ) {
+              if (continuation.isActive) continuation.resume(it.ok())
             }
-          onResult(result)
-        }
+            catch { launcher.launch(intent) }
+              .onFailure { continuation.resume(it.err()) }
+            continuation.invokeOnCancellation { launcher.unregister() }
+          }
+        onResult(result)
       }
     }
   }
