@@ -72,6 +72,7 @@ private fun LoadingOrder.Topological<*>.dependencies(): Set<TypeKey<*>> {
         a.collect()
         b.collect()
       }
+      else -> {}
     }
   }
 
@@ -90,6 +91,7 @@ private fun LoadingOrder.Topological<*>.dependents(): Set<TypeKey<*>> {
         a.collect()
         b.collect()
       }
+      else -> {}
     }
   }
 
@@ -137,6 +139,7 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
           dependencies.getOrPut(dependentKey) { mutableSetOf() } += key
         }
       }
+      else -> {}
     }
 
     itemDependencies += first

@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.kotlin.compiler
 
 import com.google.auto.service.AutoService
+import com.ivianuu.essentials.kotlin.compiler.exhaustive.exhaustive
 import com.ivianuu.essentials.kotlin.compiler.optics.optics
 import com.ivianuu.essentials.kotlin.compiler.propertytypes.propertyTypes
 import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
@@ -35,6 +36,7 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
     project.serializationFix()
     project.optics()
     project.propertyTypes()
+    project.exhaustive()
   }
 }
 

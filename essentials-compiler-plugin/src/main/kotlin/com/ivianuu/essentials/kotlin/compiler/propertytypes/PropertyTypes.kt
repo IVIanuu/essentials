@@ -282,7 +282,6 @@ private val INTERNAL_TYPE_ANNOTATION = FqName("com.ivianuu.essentials.InternalTy
 private val PROTECTED_TYPE_ANNOTATION = FqName("com.ivianuu.essentials.ProtectedType")
 private val PROPERTY_TYPE_INFO_ANNOTATION = FqName("com.ivianuu.essentials.PropertyTypeInfo")
 
-
 interface PropertyTypeErrors {
   companion object {
     @JvmField val MAP = DiagnosticFactoryToRendererMap("Injekt")

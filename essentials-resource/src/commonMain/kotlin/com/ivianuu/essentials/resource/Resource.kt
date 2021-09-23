@@ -72,6 +72,7 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
     when (value) {
       is Success -> emit(value.value)
       is Error -> throw value.error
+      else -> {}
     }
   }
 }
