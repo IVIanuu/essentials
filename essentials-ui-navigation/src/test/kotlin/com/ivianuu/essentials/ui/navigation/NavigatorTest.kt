@@ -25,19 +25,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.junit.Test
 
-class NavigationStateTest {
+class NavigatorTest {
   object KeyA : Key<Unit>
   object KeyB : Key<Unit>
   object KeyC : Key<Unit>
 
-  @Test fun testNavigationState() = runCancellingBlockingTest {
+  @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       intentKeyHandler = { _, _ -> false },
       logger = NoopLogger,
       scope = this
     )
 
-    val collector = navigator.state.testCollect(this)
+    val collector = navigator.backStack.testCollect(this)
 
     launch { navigator.push(KeyA) }
     navigator.pop(KeyA)
@@ -46,12 +46,12 @@ class NavigationStateTest {
     navigator.popTop()
 
     collector.values.shouldContainExactly(
-      NavigationState(listOf()),
-      NavigationState(listOf(KeyA)),
-      NavigationState(listOf()),
-      NavigationState(listOf(KeyB)),
-      NavigationState(listOf(KeyC)),
-      NavigationState(listOf())
+      listOf(),
+      listOf(KeyA),
+      listOf(),
+      listOf(KeyB),
+      listOf(KeyC),
+      listOf()
     )
   }
 

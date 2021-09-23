@@ -16,17 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentCompositeKeyHash
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
@@ -44,14 +36,17 @@ typealias NavigationStateContent = @Composable (Modifier) -> Unit
   navigator: Navigator,
   keyUiScopeFactory: @ChildScopeFactory (Key<*>) -> KeyUiScope
 ): NavigationStateContent = { modifier ->
-  val state by navigator.state.collectAsState()
+  val backStack by navigator.backStack.collectAsState()
+
   val contentState = remember {
-    NavigationContentState(keyUiScopeFactory, state.backStack)
+    NavigationContentState(keyUiScopeFactory, backStack)
   }
-  DisposableEffect(state) {
-    contentState.updateBackStack(state.backStack)
+
+  DisposableEffect(backStack) {
+    contentState.updateBackStack(backStack)
     onDispose {  }
   }
+
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
@@ -115,11 +110,13 @@ private class NavigationContentState(
           canBeSaved = { true }
         )
       }
+
       CompositionLocalProvider(
         LocalScope provides scope,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {
         content()
+
         DisposableEffect(true) {
           isComposing = true
           onDispose {

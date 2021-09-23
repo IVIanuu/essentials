@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -30,14 +29,16 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.*
 
 interface Navigator {
-  val state: StateFlow<NavigationState>
+  val backStack: StateFlow<List<Key<*>>>
+
   suspend fun <R> push(key: Key<R>): R?
+
   suspend fun <R> replaceTop(key: Key<R>): R?
+
   suspend fun <R> pop(key: Key<R>, result: R? = null)
+
   suspend fun popTop()
 }
-
-data class NavigationState(val backStack: List<Key<*>> = emptyList())
 
 @Provide @Scoped<AppScope>
 class NavigatorImpl(
@@ -46,17 +47,16 @@ class NavigatorImpl(
   rootKey: RootKey? = null,
   scope: NamedCoroutineScope<AppScope>
 ) : Navigator {
-  private val _state = MutableStateFlow(State(listOfNotNull(rootKey)))
-  override val state: StateFlow<NavigationState>
-    get() = _state.mapState { NavigationState(it.backStack) }
+  private val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
+  override val backStack: StateFlow<List<Key<*>>> get() = _backStack
+
+  private val results = mutableMapOf<Key<*>, CompletableDeferred<out Any?>>()
 
   private val actor = scope.actor()
 
   init {
     if (logger.isEnabled) {
-      _state
-        .map { it.backStack }
-        .distinctUntilChanged()
+      _backStack
         .onEach { log { "back stack changed -> $it" } }
         .launchIn(scope)
     }
@@ -64,88 +64,70 @@ class NavigatorImpl(
 
   override suspend fun <R> push(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
+
     actor.act {
       log { "push $key" }
-      _state.value.results[key]
+      results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
-      if (!intentKeyHandler(key) {
-          @Suppress("UNCHECKED_CAST")
-          result.complete(it as R)
-        }) {
-        _state.update2 {
-          copy(
-            backStack = backStack
-              .filter { it != key } + key,
-            results = results + mapOf(key to result)
-          )
-        }
+
+      @Suppress("UNCHECKED_CAST")
+      if (!intentKeyHandler(key) { result.complete(it as R) }) {
+        _backStack.update2 { filter { it != key } + key }
+        results[key] = result
       }
     }
+
     return result.await()
   }
 
   override suspend fun <R> replaceTop(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
+
     actor.act {
       log { "replace top $key" }
-      _state.value.results[key]
+
+      results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
-      if (intentKeyHandler(key) {
-          @Suppress("UNCHECKED_CAST")
-          result.complete(it as R)
-        }) {
-        _state.update2 {
-          copy(
-            backStack = backStack.dropLast(1),
-            results = results - key
-          )
-        }
+
+      @Suppress("UNCHECKED_CAST")
+      if (intentKeyHandler(key) { result.complete(it as R) }) {
+        _backStack.update2 { dropLast(1) }
+        results.remove(key)
       } else {
-        _state.update2 {
-          copy(
-            backStack = backStack
-              .filter { it != key }
-              .dropLast(1) + key,
-            results = results + mapOf(key to result)
-          )
+        _backStack.update2 {
+          filter { it != key }
+            .dropLast(1) + key
         }
+        results[key] = result
       }
     }
+
     return result.await()
   }
 
   override suspend fun <R> pop(key: Key<R>, result: R?) {
     actor.act {
       log { "pop $key" }
-      _state.update2 { popKey(key, result) }
+      popKey(key, result)
     }
   }
 
   override suspend fun popTop() {
     actor.act {
-      val topKey = state.first().backStack.last()
+      val topKey = backStack.first().last()
       log { "pop top $topKey" }
-      _state.update2 {
-        @Suppress("UNCHECKED_CAST")
-        popKey(topKey, null)
-      }
+      popKey(topKey, null)
     }
   }
 
-  data class State(
-    val backStack: List<Key<*>> = emptyList(),
-    val results: Map<Key<*>, CompletableDeferred<out Any?>> = emptyMap(),
-  )
-
-  private fun <R> State.popKey(key: Key<R>, result: R?): State {
+  private fun <R> popKey(key: Key<R>, result: R?) {
     @Suppress("UNCHECKED_CAST")
     val resultAction = results[key] as? CompletableDeferred<R?>
     resultAction?.complete(result)
-    return copy(
-      backStack = backStack - key,
-      results = results - key
-    )
+
+    _backStack.update2 { this - key }
+    results.remove(key)
   }
 }
