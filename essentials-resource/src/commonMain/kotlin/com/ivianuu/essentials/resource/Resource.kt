@@ -23,6 +23,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.onFailure
 import kotlinx.coroutines.flow.*
+import kotlin.jvm.JvmName
 
 sealed class Resource<out T>
 
@@ -58,6 +59,14 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
+@JvmName("flowResultAsResource")
+fun <T> Flow<Result<T, Throwable>>.flowAsResource(): Flow<Resource<T>> = flow {
+  emit(Loading)
+  this@flowAsResource
+    .map { it.toResource() }
+    .let { emitAll(it) }
+}
+
 fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
   this@unwrapResource.collect { value ->
     when (value) {
@@ -65,13 +74,6 @@ fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
       is Error -> throw value.error
     }
   }
-}
-
-fun <T> Flow<Result<T, Throwable>>.flowResultAsResource(): Flow<Resource<T>> = flow {
-  emit(Loading)
-  this@flowResultAsResource
-    .map { it.toResource() }
-    .let { emitAll(it) }
 }
 
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
