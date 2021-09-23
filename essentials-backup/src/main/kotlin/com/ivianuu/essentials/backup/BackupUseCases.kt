@@ -85,7 +85,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   }
 }
 
-typealias RestoreBackupUseCase = suspend () -> com.ivianuu.essentials.Result<Unit, Throwable>
+typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
