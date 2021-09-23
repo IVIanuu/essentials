@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.container.StorageComponentContainer
-import org.jetbrains.kotlin.container.useInstance
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.*
 import org.jetbrains.kotlin.diagnostics.*
@@ -44,7 +43,7 @@ fun MockProject.propertyTypes() {
         platform: TargetPlatform,
         moduleDescriptor: ModuleDescriptor
       ) {
-        container.useInstance(PropertyTypesDeclarationChecker())
+        //container.useInstance(PropertyTypesDeclarationChecker())
       }
     }
   )

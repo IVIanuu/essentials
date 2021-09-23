@@ -107,4 +107,21 @@ class PropertyTypesTest {
   ) {
     compilationShouldHaveFailed("property annotation type is not sub type of property type")
   }
+
+  @Test fun test4() = codegen(
+    """
+      class MyVm {
+        val state = kotlinx.coroutines.flow.MutableStateFlow(0)
+          @com.ivianuu.essentials.PublicType<kotlinx.coroutines.flow.Flow<Int>> get
+      }
+      
+      fun invoke() {
+        val myVm: MyVm? = MyVm()
+        flatMap<Int> { myVm?.state ?: kotlinx.coroutines.flow.flowOf(0) }
+      }
+
+      fun <T> flatMap(block: () -> kotlinx.coroutines.flow.Flow<T>) {
+      }
+    """
+  )
 }
