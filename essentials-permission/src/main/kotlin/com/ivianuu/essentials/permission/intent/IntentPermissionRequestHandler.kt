@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionState

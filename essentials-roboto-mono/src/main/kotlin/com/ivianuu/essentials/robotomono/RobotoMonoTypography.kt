@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.Typeface
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.material.editEach
 import com.ivianuu.injekt.Inject

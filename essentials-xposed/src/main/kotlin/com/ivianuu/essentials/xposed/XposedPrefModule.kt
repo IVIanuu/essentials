@@ -3,7 +3,6 @@ package com.ivianuu.essentials.xposed
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
@@ -13,6 +12,7 @@ import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -20,7 +20,6 @@ import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import com.ivianuu.injekt.scope.scoped
 import de.robv.android.xposed.XSharedPreferences
-import kotlin.time.milliseconds
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import kotlin.time.milliseconds
 
 class XposedPrefModule<T : Any>(
   private val packageName: String,

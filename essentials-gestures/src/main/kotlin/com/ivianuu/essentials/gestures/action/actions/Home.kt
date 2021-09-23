@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -29,6 +28,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")

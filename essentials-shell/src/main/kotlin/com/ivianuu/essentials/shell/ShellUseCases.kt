@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.shell
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import eu.chainfire.libsuperuser.Shell.SU

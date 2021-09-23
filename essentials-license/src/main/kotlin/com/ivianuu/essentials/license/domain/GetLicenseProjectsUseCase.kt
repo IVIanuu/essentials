@@ -16,8 +16,8 @@
 
 package com.ivianuu.essentials.license.domain
 
-import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.injekt.Provide

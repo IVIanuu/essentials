@@ -18,9 +18,10 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.PublicType
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -34,8 +35,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
-  private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-  internal val notifications: Flow<List<StatusBarNotification>> by this::_notifications
+  val notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
+    @PublicType<Flow<List<StatusBarNotification>>> get
 
   private val component: EsNotificationListenerServiceComponent by lazy {
     requireElement(createServiceScope())
@@ -79,7 +80,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.value = catch { activeNotifications!!.toList() }
+    notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 }

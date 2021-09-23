@@ -21,23 +21,23 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.reflect.KClass
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import java.util.UUID
+import kotlin.coroutines.resume
+import kotlin.reflect.KClass
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 

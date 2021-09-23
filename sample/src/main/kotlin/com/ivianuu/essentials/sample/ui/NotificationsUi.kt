@@ -21,21 +21,31 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.map
-import com.github.michaelbull.result.orElse
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.fold
+import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.Notifications
@@ -44,6 +54,7 @@ import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
+import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
@@ -205,11 +216,9 @@ private fun StatusBarNotification.toUiNotification(context: AppContext) = UiNoti
   icon = catch {
     notification.smallIcon
       .loadDrawable(context)
-  }.orElse {
-    catch {
-      notification.getLargeIcon()
-        .loadDrawable(context)
-    }
+  }.recover {
+    notification.getLargeIcon()
+      .loadDrawable(context)
   }
     .map { it.toBitmap().toImageBitmap() }
     .fold(

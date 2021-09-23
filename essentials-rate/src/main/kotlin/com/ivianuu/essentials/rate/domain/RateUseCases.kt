@@ -16,10 +16,10 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.time.TimestampProvider
 import com.ivianuu.essentials.ui.navigation.Key

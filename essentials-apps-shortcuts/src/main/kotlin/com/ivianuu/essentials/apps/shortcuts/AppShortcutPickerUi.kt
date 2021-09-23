@@ -23,11 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.getOrElse
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.getOrElse
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource

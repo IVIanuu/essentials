@@ -18,10 +18,10 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.coroutines.timer
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
@@ -39,7 +39,12 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlin.time.milliseconds
 
 data class WriteSecureSettingsKey(

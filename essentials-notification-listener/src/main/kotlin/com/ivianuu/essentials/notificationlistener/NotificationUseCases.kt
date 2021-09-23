@@ -18,7 +18,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.github.michaelbull.result.Result
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow

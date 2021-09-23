@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.torch
 
 import android.hardware.camera2.CameraManager
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide

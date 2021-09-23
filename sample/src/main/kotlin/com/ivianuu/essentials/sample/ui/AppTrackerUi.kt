@@ -32,7 +32,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
-import com.ivianuu.essentials.coroutines.runWithCleanup
+import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.foreground.ForegroundState
 import com.ivianuu.essentials.foreground.ForegroundState.Background
 import com.ivianuu.essentials.foreground.ForegroundState.Foreground
@@ -54,11 +54,11 @@ import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
@@ -76,14 +76,14 @@ object AppTrackerKey : Key<Unit>
 
   if (currentForegroundState is Foreground) {
     LaunchedEffect(true) {
-      runWithCleanup(
+      guarantee(
         block = {
           currentApp.collect {
             showToast("App changed $it")
             foregroundState.value = Foreground(createNotification(it))
           }
         },
-        cleanup = {
+        finalizer = {
           foregroundState.value = Background
         }
       )

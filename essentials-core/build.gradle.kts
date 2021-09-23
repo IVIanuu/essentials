@@ -28,7 +28,6 @@ kotlin {
       dependencies {
         api(Deps.Injekt.core)
         api(Deps.Injekt.scope)
-        api(Deps.kotlinResult)
       }
     }
     named("jvmTest") {

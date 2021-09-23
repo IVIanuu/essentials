@@ -18,8 +18,8 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state

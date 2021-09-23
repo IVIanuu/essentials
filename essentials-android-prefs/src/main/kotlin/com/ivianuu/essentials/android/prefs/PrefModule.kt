@@ -20,7 +20,6 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
@@ -29,17 +28,18 @@ import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.essentials.fold
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import java.io.InputStream
-import java.io.OutputStream
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import java.io.InputStream
+import java.io.OutputStream
 
 class PrefModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(

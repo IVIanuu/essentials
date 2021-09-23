@@ -19,8 +19,8 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
@@ -85,7 +85,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   }
 }
 
-typealias RestoreBackupUseCase = suspend () -> com.github.michaelbull.result.Result<Unit, Throwable>
+typealias RestoreBackupUseCase = suspend () -> com.ivianuu.essentials.Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,

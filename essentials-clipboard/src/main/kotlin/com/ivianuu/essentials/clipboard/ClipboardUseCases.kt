@@ -18,10 +18,10 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import com.ivianuu.essentials.Err
+import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast

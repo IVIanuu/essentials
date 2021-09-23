@@ -24,7 +24,6 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberImagePainter
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
@@ -33,6 +32,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.essentials.util.Toaster

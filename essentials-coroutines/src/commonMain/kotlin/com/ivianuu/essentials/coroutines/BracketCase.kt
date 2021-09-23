@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.nonFatalOrThrow
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.awaitCancellation
@@ -37,7 +38,7 @@ suspend inline fun <R> guarantee(
   } catch (e: CancellationException) {
     runReleaseAndRethrow(e) { finalizer(ExitCase.Cancelled(e)) }
   } catch (t: Throwable) {
-    runReleaseAndRethrow(t) { finalizer(ExitCase.Failure(t)) }
+    runReleaseAndRethrow(t.nonFatalOrThrow()) { finalizer(ExitCase.Failure(t)) }
   }
 
   withContext(NonCancellable) { finalizer(ExitCase.Completed) }
@@ -57,7 +58,7 @@ suspend inline fun <T, R> bracket(
   } catch (e: CancellationException) {
     runReleaseAndRethrow(e) { release(acquired, ExitCase.Cancelled(e)) }
   } catch (t: Throwable) {
-    runReleaseAndRethrow(t) { release(acquired, ExitCase.Failure(t)) }
+    runReleaseAndRethrow(t.nonFatalOrThrow()) { release(acquired, ExitCase.Failure(t)) }
   }
 
   withContext(NonCancellable) { release(acquired, ExitCase.Completed) }
@@ -72,7 +73,7 @@ suspend inline fun <T, R> bracket(
   try {
     withContext(NonCancellable) { block() }
   } catch (e: Throwable) {
-    original.addSuppressed(e)
+    original.addSuppressed(e.nonFatalOrThrow())
   }
 
   throw original

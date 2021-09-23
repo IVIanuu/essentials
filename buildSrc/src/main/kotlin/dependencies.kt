@@ -132,8 +132,6 @@ object Deps {
     const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
   }
 
-  const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.11"
-
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
   const val licenseGradlePlugin = "com.jaredsburrows:gradle-license-plugin:0.8.90"

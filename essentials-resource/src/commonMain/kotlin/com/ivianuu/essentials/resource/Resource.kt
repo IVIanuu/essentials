@@ -18,10 +18,10 @@
 
 package com.ivianuu.essentials.resource
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.fold
+import com.ivianuu.essentials.onFailure
 import kotlinx.coroutines.flow.*
 
 sealed class Resource<out T>
