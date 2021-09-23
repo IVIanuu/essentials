@@ -22,7 +22,7 @@ import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
@@ -61,7 +61,7 @@ typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
       .reversed()
       .fold(content) { acc, element ->
         {
-          d { "Decorate key ui ${element.key.value}" }
+          log { "Decorate key ui ${element.key.value}" }
           element.decorator(acc)
         }
       }

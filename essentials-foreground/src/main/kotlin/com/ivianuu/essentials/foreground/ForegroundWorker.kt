@@ -20,7 +20,7 @@ import android.app.NotificationManager
 import androidx.work.ListenableWorker
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.work.Worker
 import com.ivianuu.essentials.work.WorkerId
 import com.ivianuu.injekt.Provide
@@ -37,10 +37,10 @@ import kotlinx.coroutines.flow.takeWhile
   logger: Logger,
   notificationManager: @SystemService NotificationManager
 ): Worker<ForegroundWorkerId> = {
-  d { "start foreground worker" }
+  log { "start foreground worker" }
 
   suspend fun applyState(infos: List<ForegroundInfo>) {
-    d { "apply infos: $infos" }
+    log { "apply infos: $infos" }
 
     infos
       .filter { it.state is ForegroundState.Background }
@@ -80,7 +80,7 @@ import kotlinx.coroutines.flow.takeWhile
     }
   )
 
-  d { "stop foreground worker" }
+  log { "stop foreground worker" }
 
   ListenableWorker.Result.success()
 }

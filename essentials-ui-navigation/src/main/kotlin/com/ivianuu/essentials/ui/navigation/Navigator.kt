@@ -20,20 +20,14 @@ import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 interface Navigator {
   val state: StateFlow<NavigationState>
@@ -63,7 +57,7 @@ class NavigatorImpl(
       _state
         .map { it.backStack }
         .distinctUntilChanged()
-        .onEach { d { "back stack changed -> $it" } }
+        .onEach { log { "back stack changed -> $it" } }
         .launchIn(scope)
     }
   }
@@ -71,7 +65,7 @@ class NavigatorImpl(
   override suspend fun <R> push(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     actor.act {
-      d { "push $key" }
+      log { "push $key" }
       _state.value.results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
@@ -94,7 +88,7 @@ class NavigatorImpl(
   override suspend fun <R> replaceTop(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
     actor.act {
-      d { "replace top $key" }
+      log { "replace top $key" }
       _state.value.results[key]
         ?.safeAs<CompletableDeferred<Any?>>()
         ?.complete(null)
@@ -124,7 +118,7 @@ class NavigatorImpl(
 
   override suspend fun <R> pop(key: Key<R>, result: R?) {
     actor.act {
-      d { "pop $key" }
+      log { "pop $key" }
       _state.update2 { popKey(key, result) }
     }
   }
@@ -132,7 +126,7 @@ class NavigatorImpl(
   override suspend fun popTop() {
     actor.act {
       val topKey = state.first().backStack.last()
-      d { "pop top $topKey" }
+      log { "pop top $topKey" }
       _state.update2 {
         @Suppress("UNCHECKED_CAST")
         popKey(topKey, null)

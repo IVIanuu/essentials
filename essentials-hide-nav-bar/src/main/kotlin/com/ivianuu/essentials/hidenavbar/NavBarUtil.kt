@@ -25,7 +25,7 @@ import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
 typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
@@ -38,14 +38,14 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
   logger: Logger,
 ): NonSdkInterfaceDetectionDisabler = {
   if (systemBuildInfo.sdk >= 29) {
-    d { "disable non sdk on 29" }
+    log { "disable non sdk on 29" }
     hiddenApiPolicyStore.updateData { 1 }
-    d { "disabled non sdk on 29" }
+    log { "disabled non sdk on 29" }
   } else if (systemBuildInfo.sdk >= 28) {
-    d { "disable non sdk on p" }
+    log { "disable non sdk on p" }
     hiddenApiPolicyPrePieAppsStore.updateData { 1 }
     hiddenApiPolicyPieAppsStore.updateData { 1 }
-    d { "disabled non sdk on p" }
+    log { "disabled non sdk on p" }
   }
 }
 
@@ -76,7 +76,7 @@ typealias OverscanUpdater = (Rect) -> Unit
 @SuppressLint("PrivateApi")
 @Provide
 fun overscanUpdater(logger: Logger): OverscanUpdater = { rect ->
-  d { "set overscan $rect" }
+  log { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")
   val invoke = Class.forName("android.os.ServiceManager")

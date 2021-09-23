@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample.work
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
 import com.ivianuu.essentials.work.Worker
 import com.ivianuu.essentials.work.WorkerId
@@ -29,9 +29,9 @@ import kotlinx.coroutines.delay
 @Provide object TestWorkerId : WorkerId("test")
 
 @Provide fun testWorker(logger: Logger): Worker<TestWorkerId> = {
-  d { "start work" }
+  log { "start work" }
   delay(5000)
-  d { "finish work" }
+  log { "finish work" }
   ListenableWorker.Result.success()
 }
 

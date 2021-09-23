@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -46,22 +46,22 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 ): ExecuteActionUseCase = { key ->
   withContext(dispatcher) {
     catch {
-      d { "execute $key" }
+      log { "execute $key" }
       val action = getAction(key)!!
 
       // check permissions
       if (!permissionRequester(action.permissions)) {
-        d { "couldn't get permissions for $key" }
+        log { "couldn't get permissions for $key" }
         return@catch false
       }
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {
-        d { "couldn't unlock screen for $key" }
+        log { "couldn't unlock screen for $key" }
         return@catch false
       }
 
-      d { "fire $key" }
+      log { "fire $key" }
 
       // fire
       getActionExecutor(key)!!()

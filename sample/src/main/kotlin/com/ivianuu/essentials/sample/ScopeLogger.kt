@@ -19,7 +19,7 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.scope.Scope
@@ -28,6 +28,6 @@ import com.ivianuu.injekt.scope.Scope
   scopeKey: TypeKey<S>,
   logger: Logger
 ): ScopeWorker<S> = {
-  d { "${scopeKey.value} created" }
-  runOnCancellation { d { "${scopeKey.value} disposed" } }
+  log { "${scopeKey.value} created" }
+  runOnCancellation { log { "${scopeKey.value} disposed" } }
 }

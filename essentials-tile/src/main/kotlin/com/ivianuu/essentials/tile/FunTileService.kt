@@ -22,7 +22,7 @@ import android.service.quicksettings.TileService
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
@@ -32,10 +32,10 @@ import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.reflect.KClass
 
 class FunTileService1 : AbstractFunTileService<FunTileService1>()
 class FunTileService2 : AbstractFunTileService<FunTileService2>()
@@ -61,7 +61,7 @@ abstract class AbstractFunTileService<T : Any>(
 
   override fun onStartListening() {
     super.onStartListening()
-    d { "$serviceClass on start listening" }
+    log { "$serviceClass on start listening" }
     val tileModelComponent = requireElement<TileModelComponent>(
       component.tileScopeFactory(TileId(serviceClass))
     )
@@ -73,14 +73,14 @@ abstract class AbstractFunTileService<T : Any>(
 
   override fun onClick() {
     super.onClick()
-    d { "$serviceClass on click" }
+    log { "$serviceClass on click" }
     tileModelComponent?.tileModel?.value?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
     tileModelComponent?.tileScope?.cast<DisposableScope>()?.dispose()
     tileModelComponent = null
-    d { "$serviceClass on stop listening" }
+    log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 

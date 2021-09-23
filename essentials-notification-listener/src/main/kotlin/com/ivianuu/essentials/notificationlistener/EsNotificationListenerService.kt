@@ -22,7 +22,7 @@ import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
@@ -47,31 +47,31 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    d { "listener connected" }
+    log { "listener connected" }
     notificationScope = component.notificationScopeFactory()
     updateNotifications()
   }
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    d { "notification posted $sbn" }
+    log { "notification posted $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    d { "notification removed $sbn" }
+    log { "notification removed $sbn" }
     updateNotifications()
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    d { "ranking update $rankingMap" }
+    log { "ranking update $rankingMap" }
     updateNotifications()
   }
 
   override fun onListenerDisconnected() {
-    d { "listener disconnected" }
+    log { "listener disconnected" }
     notificationScope?.cast<DisposableScope>()?.dispose()
     notificationScope = null
     component.serviceScope.cast<DisposableScope>().dispose()

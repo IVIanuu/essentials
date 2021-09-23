@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
@@ -56,7 +56,7 @@ data class ScopeInitializerElement<S>(
     initializers
       .sortedWithLoadingOrder()
       .forEach {
-        d { "${scopeKey.value} initialize ${it.key.value}" }
+        log { "${scopeKey.value} initialize ${it.key.value}" }
         it.factory()()
       }
     workerRunner()

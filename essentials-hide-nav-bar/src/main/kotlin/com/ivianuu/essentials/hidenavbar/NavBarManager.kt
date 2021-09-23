@@ -25,22 +25,13 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
-import com.ivianuu.essentials.logging.e
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 @Provide fun navBarManager(
   context: AppContext,
@@ -69,7 +60,7 @@ import kotlinx.coroutines.flow.onEach
     }
     .distinctUntilChanged()
     .flatMapLatest { currentPrefs ->
-      d { "current prefs $currentPrefs" }
+      log { "current prefs $currentPrefs" }
       if (currentPrefs.hideNavBar) {
         displayRotation
           .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
@@ -97,7 +88,7 @@ private suspend fun NavBarState.apply(
   setOverscan: OverscanUpdater,
   @Inject logger: Logger
 ) {
-  d { "apply nav bar state $this" }
+  log { "apply nav bar state $this" }
   catch {
     catch {
       // ensure that we can access non sdk interfaces
@@ -112,7 +103,7 @@ private suspend fun NavBarState.apply(
     }
     setOverscan(rect)
   }.onFailure {
-    e(it) { "Failed to apply nav bar state $this" }
+    log(Logger.Kind.ERROR) { "Failed to apply nav bar state ${it.stackTraceToString()}" }
   }
 }
 

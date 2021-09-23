@@ -19,25 +19,21 @@ package com.ivianuu.essentials.logging
 import android.util.Log
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.logging.Logger.Kind
-import com.ivianuu.essentials.logging.Logger.Kind.DEBUG
-import com.ivianuu.essentials.logging.Logger.Kind.ERROR
-import com.ivianuu.essentials.logging.Logger.Kind.INFO
-import com.ivianuu.essentials.logging.Logger.Kind.VERBOSE
-import com.ivianuu.essentials.logging.Logger.Kind.WARN
-import com.ivianuu.essentials.logging.Logger.Kind.WTF
+import com.ivianuu.essentials.logging.Logger.Kind.*
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 
 @Provide @Scoped<AppScope> class AndroidLogger(override val isEnabled: LoggingEnabled) : Logger {
-  override fun log(kind: Kind, tag: LoggingTag, message: String?, throwable: Throwable?) {
+  override fun log(kind: Kind, @Inject tag: LoggingTag, message: String) {
     when (kind) {
-      VERBOSE -> Log.v(tag, message, throwable)
-      DEBUG -> Log.d(tag, message, throwable)
-      INFO -> Log.i(tag, message, throwable)
-      WARN -> Log.w(tag, message, throwable)
-      ERROR -> Log.e(tag, message, throwable)
-      WTF -> Log.wtf(tag, message, throwable)
+      VERBOSE -> Log.v(tag, message)
+      DEBUG -> Log.d(tag, message)
+      INFO -> Log.i(tag, message)
+      WARN -> Log.w(tag, message)
+      ERROR -> Log.e(tag, message)
+      WTF -> Log.wtf(tag, message)
     }
   }
 

@@ -21,7 +21,7 @@ import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
@@ -41,12 +41,12 @@ class EsAccessibilityService : AccessibilityService() {
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    d { "service connected" }
+    log { "service connected" }
     accessibilityScope = component.accessibilityScopeFactory()
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
-    d { "on accessibility event $event" }
+    log { "on accessibility event $event" }
     component.accessibilityEvents.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -61,7 +61,7 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    d { "service disconnected" }
+    log { "service disconnected" }
     accessibilityScope?.cast<DisposableScope>()?.dispose()
     accessibilityScope = null
     component.serviceScope.cast<DisposableScope>().dispose()

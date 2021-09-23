@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ReceiverScope
 import com.ivianuu.injekt.android.createReceiverScope
@@ -33,7 +33,7 @@ class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     val component = requireElement<StartupReceiverComponent>(createReceiverScope(context, intent))
-    d(logger = component.logger) { "on system boot" }
+    log(logger = component.logger) { "on system boot" }
     component.bootListeners.forEach { it() }
     component.receiverScope.cast<DisposableScope>().dispose()
   }

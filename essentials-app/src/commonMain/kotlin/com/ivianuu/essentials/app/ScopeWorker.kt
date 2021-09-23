@@ -18,7 +18,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.runWithCleanup
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -36,7 +36,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
   scopeKey: TypeKey<S>,
   workers: Set<() -> ScopeWorker<S>> = emptySet()
 ): ScopeWorkerRunner<S> = {
-  d { "${scopeKey.value} run scope workers" }
+  log { "${scopeKey.value} run scope workers" }
   scope.launch {
     runWithCleanup(
       block = {
@@ -50,7 +50,7 @@ typealias ScopeWorkerRunner<S> = () -> Unit
         }
       },
       cleanup = {
-        d { "${scopeKey.value} cancel scope workers" }
+        log { "${scopeKey.value} cancel scope workers" }
       }
     )
   }

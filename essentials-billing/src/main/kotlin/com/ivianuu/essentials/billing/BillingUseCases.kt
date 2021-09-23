@@ -16,27 +16,12 @@
 
 package com.ivianuu.essentials.billing
 
-import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.ConsumeParams
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.acknowledgePurchase
-import com.android.billingclient.api.consumePurchase
-import com.android.billingclient.api.querySkuDetails
+import com.android.billingclient.api.*
 import com.ivianuu.essentials.app.AppForegroundState
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 
 typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
 
@@ -45,7 +30,7 @@ typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
-      .also { d(logger = logger) { "got sku details $it for $sku" } }
+      .also { log(logger = logger) { "got sku details $it for $sku" } }
   }
 }
 
@@ -59,7 +44,7 @@ typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
   getSkuDetails: GetSkuDetailsUseCase
 ): PurchaseUseCase = { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
   context.withConnection {
-    d(logger = logger) {
+    log(logger = logger) {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
     if (consumeOldPurchaseIfUnspecified) {
@@ -104,7 +89,7 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
 
     val result = billingClient.consumePurchase(consumeParams)
 
-    d(logger = logger) {
+    log(logger = logger) {
       "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
     }
 
@@ -130,7 +115,7 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
 
       val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-      d(logger = logger) {
+      log(logger = logger) {
         "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
       }
 
@@ -158,12 +143,12 @@ typealias IsPurchased = Boolean
     } ?: false
   }
   .distinctUntilChanged()
-  .onEach { d(logger = context.logger) { "is purchased flow for $sku -> $it" } }
+  .onEach { log(logger = context.logger) { "is purchased flow for $sku -> $it" } }
 
 private fun BillingContext.getIsPurchased(sku: Sku): Boolean {
   val purchase = getPurchase(sku) ?: return false
   val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-  d(logger = logger) { "get is purchased for $sku result is $isPurchased for $purchase" }
+  log(logger = logger) { "get is purchased for $sku result is $isPurchased for $purchase" }
   return isPurchased
 }
 
@@ -171,4 +156,4 @@ private fun BillingContext.getPurchase(sku: Sku): Purchase? =
   billingClient.queryPurchases(sku.type.value)
     .purchasesList
     ?.firstOrNull { it.sku == sku.skuString }
-    .also { d(logger = logger) { "got purchase $it for $sku" } }
+    .also { log(logger = logger) { "got purchase $it for $sku" } }

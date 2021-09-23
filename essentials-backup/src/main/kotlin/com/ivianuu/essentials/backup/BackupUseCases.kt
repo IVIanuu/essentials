@@ -25,7 +25,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
@@ -33,11 +33,11 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
-import java.util.Date
+import kotlinx.coroutines.withContext
+import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
-import kotlinx.coroutines.withContext
 
 typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
 
@@ -71,7 +71,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
         .filterNot { it.absolutePath in BACKUP_BLACKLIST }
         .filter { it.exists() }
         .forEach { file ->
-          d { "backup file $file" }
+          log { "backup file $file" }
           val entry = ZipEntry(file.relativeTo(dataDir).toString())
           zipOutputStream.putNextEntry(entry)
           file.inputStream().copyTo(zipOutputStream)
@@ -112,7 +112,7 @@ typealias RestoreBackupUseCase = suspend () -> com.github.michaelbull.result.Res
       generateSequence { zipInputStream.nextEntry }
         .forEach { entry ->
           val file = dataDir.resolve(entry.name)
-          d { "restore file $file" }
+          log { "restore file $file" }
           if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()

@@ -17,19 +17,12 @@
 package com.ivianuu.essentials.foreground
 
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 
 data class ForegroundInfo(val id: Int, val state: ForegroundState)
 
@@ -50,6 +43,6 @@ data class InternalForegroundState(val infos: List<ForegroundInfo>) {
         .distinctUntilChanged()
     }
 ) { currentForegroundStates -> InternalForegroundState(currentForegroundStates.toList()) }
-  .onEach { current -> d { "Internal foreground state changed $current" } }
+  .onEach { current -> log { "Internal foreground state changed $current" } }
   .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
   .distinctUntilChanged()

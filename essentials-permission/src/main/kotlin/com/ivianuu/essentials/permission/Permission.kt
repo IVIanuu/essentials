@@ -22,7 +22,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.runOnCancellation
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppUiStarter
@@ -30,11 +30,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import com.ivianuu.injekt.scope.Scope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
 interface Permission {
@@ -114,7 +110,7 @@ typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
   permissionStateFactory: PermissionStateFactory
 ): PermissionRequester = { requestedPermissions ->
   withContext(dispatcher) {
-    d { "request permissions $requestedPermissions" }
+    log { "request permissions $requestedPermissions" }
 
     if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })
       return@withContext true
@@ -122,7 +118,7 @@ typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
     appUiStarter()
 
     val result = navigator.push(PermissionRequestKey(requestedPermissions)) == true
-    d { "request permissions result $requestedPermissions -> $result" }
+    log { "request permissions result $requestedPermissions -> $result" }
     return@withContext result
   }
 }

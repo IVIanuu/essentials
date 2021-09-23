@@ -20,18 +20,18 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 interface BillingContext {
   val billingClient: BillingClient
@@ -61,7 +61,7 @@ class BillingContextImpl(
   private suspend fun ensureConnected(): Unit? = connectionMutex.withLock {
     if (isConnected) return@withLock
     suspendCoroutine<Unit?> { continuation ->
-      d { "start connection" }
+      log { "start connection" }
       billingClient.startConnection(
         object : BillingClientStateListener {
           private var completed = false
@@ -71,18 +71,18 @@ class BillingContextImpl(
             if (!completed) {
               completed = true
               if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                d { "connected" }
+                log { "connected" }
                 isConnected = true
                 continuation.resume(Unit)
               } else {
-                d { "connecting failed ${result.responseCode} ${result.debugMessage}" }
+                log { "connecting failed ${result.responseCode} ${result.debugMessage}" }
                 continuation.resume(null)
               }
             }
           }
 
           override fun onBillingServiceDisconnected() {
-            d { "on billing service disconnected" }
+            log { "on billing service disconnected" }
           }
         }
       )

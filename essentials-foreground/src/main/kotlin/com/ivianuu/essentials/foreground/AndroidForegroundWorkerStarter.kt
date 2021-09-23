@@ -21,7 +21,7 @@ import androidx.work.WorkManager
 import androidx.work.await
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
 import com.ivianuu.essentials.work.toFunctionalWorkerTag
 import com.ivianuu.injekt.Provide
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.filter
         .none { it.state == WorkInfo.State.RUNNING }
     }
     .collect {
-      d { "start foreground worker $it" }
+      log { "start foreground worker $it" }
       workManager.cancelAllWorkByTag(ForegroundWorkerId.toFunctionalWorkerTag())
       workManager.enqueue(
         OneTimeWorkRequestBuilder(ForegroundWorkerId)

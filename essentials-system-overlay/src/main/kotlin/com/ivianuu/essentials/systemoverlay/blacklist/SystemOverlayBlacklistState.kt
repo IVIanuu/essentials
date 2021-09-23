@@ -17,20 +17,14 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.systemoverlay.IsOnSecureScreen
 import com.ivianuu.essentials.systemoverlay.KeyboardVisible
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
@@ -50,25 +44,25 @@ typealias SystemOverlayEnabled = Boolean
     else SystemOverlayBlacklistState.DISABLED
   }
   .distinctUntilChanged()
-  .onEach { d { "system overlay enabled $it" } }
+  .onEach { log { "system overlay enabled $it" } }
   // after that check the lock screen setting
   .switchIfStillEnabled { lockScreenState }
-  .onEach { d { "lock screen state $it" } }
+  .onEach { log { "lock screen state $it" } }
   // check permission screens
   .switchIfStillEnabled { secureScreenState }
-  .onEach { d { "secure screen state $it" } }
+  .onEach { log { "secure screen state $it" } }
   // check the user specified blacklist
   .switchIfStillEnabled { userBlacklistState }
-  .onEach { d { "user blacklist state $it" } }
+  .onEach { log { "user blacklist state $it" } }
   // finally check the keyboard state
   .switchIfStillEnabled { keyboardState }
-  .onEach { d { "keyboard state $it" } }
+  .onEach { log { "keyboard state $it" } }
   // distinct
   .distinctUntilChanged()
-  .onEach { d { "overlay state changed: $it" } }
+  .onEach { log { "overlay state changed: $it" } }
   .onCompletion {
     it?.printStackTrace()
-    d { "lol $it" }
+    log { "lol $it" }
   }
 
 private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
@@ -84,9 +78,9 @@ private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklist
     if (disableOnLockScreen) {
       screenState
         .map {
-          d { "screen state $it disable on lock $disableOnLockScreen" }
+          log { "screen state $it disable on lock $disableOnLockScreen" }
           if (it != ScreenState.UNLOCKED) {
-            d { "hide: on lock screen" }
+            log { "hide: on lock screen" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED
@@ -107,18 +101,18 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
 ): @Private Flow<SecureScreenSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
-  .onEach { d { "disable on secure screens $it" } }
+  .onEach { log { "disable on secure screens $it" } }
   .flatMapLatest { disableOnSecureScreen ->
     if (disableOnSecureScreen) {
       screenState
-        .onEach { d { "screen state $it" } }
+        .onEach { log { "screen state $it" } }
         .flatMapLatest { screenState ->
           if (screenState == ScreenState.UNLOCKED) {
             isOnSecureScreen
-              .onEach { d { "is on secure screen $it" } }
+              .onEach { log { "is on secure screen $it" } }
               .map {
                 if (it) {
-                  d { "hide: secure screen" }
+                  log { "hide: secure screen" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -143,19 +137,19 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
 ): @Private Flow<UserBlacklistSystemOverlayBlacklistState> = blacklistPrefs
   .map { it.appBlacklist }
   .distinctUntilChanged()
-  .onEach { d { "blacklist $it" } }
+  .onEach { log { "blacklist $it" } }
   .flatMapLatest { blacklist ->
     if (blacklist.isNotEmpty()) {
       screenState
-        .onEach { d { "screen state $it" } }
+        .onEach { log { "screen state $it" } }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
           if (screenState == ScreenState.UNLOCKED) {
             currentApp
-              .onEach { d { "current app $it" } }
+              .onEach { log { "current app $it" } }
               .map { currentApp ->
                 if (currentApp in blacklist) {
-                  d { "hide: user blacklist" }
+                  log { "hide: user blacklist" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -184,7 +178,7 @@ private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistSt
       keyboardVisible
         .map {
           if (it) {
-            d { "hide: keyboard" }
+            log { "hide: keyboard" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED

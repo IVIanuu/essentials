@@ -10,18 +10,12 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.app.Eager
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 fun switchToApp(
   packageName: String,
@@ -72,7 +66,7 @@ fun switchToApp(
       .onEach { topApp ->
         val wasOnHomeScreen = isOnHomeScreen
         if (topApp in getHomePackages(defaultOnly = true)) {
-          d { "moved to home screen" }
+          log { "moved to home screen" }
           isOnHomeScreen = true
           return@onEach
         } else isOnHomeScreen = false
@@ -80,16 +74,16 @@ fun switchToApp(
         if (topApp !in recentApps) {
           recentApps += topApp
           currentIndex = recentApps.lastIndex
-          d { "launched new app $topApp $recentApps $currentIndex" }
+          log { "launched new app $topApp $recentApps $currentIndex" }
         } else if (wasOnHomeScreen) {
           val indexOfTopApp = recentApps.indexOf(topApp)
           recentApps.removeAt(indexOfTopApp)
           recentApps.add(topApp)
           currentIndex = recentApps.lastIndex
-          d { "relaunched app from home screen $topApp $recentApps $currentIndex" }
+          log { "relaunched app from home screen $topApp $recentApps $currentIndex" }
         } else {
           currentIndex = recentApps.indexOf(topApp)
-          d { "relaunched app from history $topApp $recentApps $currentIndex" }
+          log { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
       .launchIn(scope)

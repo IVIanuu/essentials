@@ -27,7 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityScope
 import com.ivianuu.injekt.android.SystemService
@@ -60,10 +60,10 @@ class UnlockScreenActivity : ComponentActivity() {
 
     @Provide val component: UnlockScreenComponent = requireElement(activityScope)
 
-    d(logger = component.logger) { "unlock screen for $requestId" }
+    log(logger = component.logger) { "unlock screen for $requestId" }
 
     fun finishWithResult(success: Boolean) {
-      d(logger = component.logger) { "finish with result $success" }
+      log(logger = component.logger) { "finish with result $success" }
       hasResult = true
       onUnlockScreenResult(requestId, success)
       finish()

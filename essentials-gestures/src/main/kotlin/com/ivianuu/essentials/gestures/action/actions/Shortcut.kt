@@ -26,19 +26,11 @@ import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
+import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.d
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -46,12 +38,11 @@ import com.ivianuu.injekt.Provide
 import java.io.ByteArrayOutputStream
 
 @Provide class ShortcutActionFactory(
-  private val actionIntentSender: ActionIntentSender,
-  private val logger: Logger
+  private val actionIntentSender: ActionIntentSender
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
+
   override suspend fun createAction(id: String): Action<*> {
-    d { "create action from $id" }
     val tmp = id.split(ACTION_DELIMITER)
     val label = tmp[1]
 
