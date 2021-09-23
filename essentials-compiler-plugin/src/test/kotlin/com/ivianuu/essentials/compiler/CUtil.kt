@@ -14,19 +14,37 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.ivianuu.essentials.compiler
+
+import com.ivianuu.essentials.kotlin.compiler.EssentialsCommandLineProcessor
+import com.ivianuu.essentials.kotlin.compiler.EssentialsComponentRegistrar
+import com.ivianuu.injekt.compiler.transform.dumpAllFiles
+import com.tschuchort.compiletesting.KotlinCompilation
+import com.tschuchort.compiletesting.SourceFile
+import com.tschuchort.compiletesting.SourceFileAccessor
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
+import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.name.FqName
+import java.net.URLClassLoader
+import java.nio.file.Files
+import kotlin.reflect.KClass
 
 var fileIndex = 0
 
 fun source(
   @Language("kotlin") source: String,
   name: String = "File${fileIndex++}.kt",
-  packageFqName: FqName = FqName("com.ivianuu.essentials.integrationtests"),
+  packageFqName: FqName = FqName("com.ivianuu.essentials.integrationtests")
 ) = SourceFile.kotlin(
   name = name,
   contents = buildString {
     appendLine("package $packageFqName")
     appendLine()
+
     append(source)
   }
 )
@@ -118,10 +136,11 @@ fun singleAndMultiCodegen(
 ) {
   codegen(sources.flatten(), {
     workingDir = Files.createTempDirectory("single-compilation").toFile()
+    moduleName = "single-compilation"
     config(-1)
   }, { assertions(false) })
   multiCodegen(sources, {
-    workingDir = Files.createTempDirectory("multi-compilation").toFile()
+    workingDir = Files.createTempDirectory("multi-compilation-$it").toFile()
     config(it)
   }, { assertions(true) })
 }
@@ -163,7 +182,9 @@ fun multiCodegen(
   val prevCompilations = mutableListOf<KotlinCompilation>()
   val results = sources.mapIndexed { index, sourceFiles ->
     compile {
+      this.workingDir = Files.createTempDirectory("multi-compilation-$index").toFile()
       this.sources = sourceFiles
+      this.moduleName = "multi-compilation-$index"
       this.classpaths += prevCompilations.map { it.classesDir }
       config(index)
       prevCompilations += this
@@ -208,7 +229,6 @@ fun multiPlatformCodegen(
       }
       .forEach { kotlincArguments += "-Xcommon-sources=$it" }
     this.sources = platformSources + commonSources
-    this.compile()
     config(this)
   }
   assertions(
@@ -222,11 +242,12 @@ fun multiPlatformCodegen(
 fun compilation(block: KotlinCompilation.() -> Unit = {}) = KotlinCompilation().apply {
   compilerPlugins = listOf(EssentialsComponentRegistrar())
   commandLineProcessors = listOf(EssentialsCommandLineProcessor())
-  inheritClassPath = true
   useIR = true
   jvmTarget = "1.8"
   verbose = false
+  inheritClassPath = true
   kotlincArguments += "-XXLanguage:+NewInference"
+  dumpAllFiles = true
   block()
 }
 
@@ -253,7 +274,7 @@ fun <T> KotlinCompilationAssertionScope.invokeSingleFile(vararg args: Any?): T {
 }
 
 private fun ClassLoader.getSingleClass(): KClass<*> =
-  loadClass("com.ivianuu.essentials.integrationtests.FileKt").kotlin
+  loadClass("com.ivianuu.injekt.integrationtests.FileKt").kotlin
 
 fun KotlinCompilationAssertionScope.compilationShouldHaveFailed(message: String? = null) {
   result.exitCode shouldBe KotlinCompilation.ExitCode.COMPILATION_ERROR
@@ -266,4 +287,44 @@ fun KotlinCompilationAssertionScope.shouldContainMessage(message: String) {
 
 fun KotlinCompilationAssertionScope.shouldNotContainMessage(message: String) {
   result.messages shouldNotContain message
+}
+
+@Suppress("Assert")
+inline fun KotlinCompilationAssertionScope.irAssertions(block: (String) -> Unit) {
+  compilationShouldBeOk()
+  result.outputDirectory
+    .parentFile
+    .resolve("injekt/dump")
+    .walkTopDown()
+    .filter { it.isFile }
+    .map { it.readText() }
+    .joinToString("\n")
+    .also {
+      assert(it.isNotEmpty()) {
+        "Source is empty"
+      }
+    }
+    .let(block)
+}
+
+@Suppress("Assert")
+fun KotlinCompilationAssertionScope.irShouldContain(times: Int, text: String) {
+  irAssertions {
+    val matchesCount = it.countMatches(text)
+    assert(matchesCount == times) {
+      "expected '$text' $times times but was found $matchesCount times in '$it'"
+    }
+  }
+}
+
+private fun String.countMatches(other: String): Int = split(other)
+  .dropLastWhile { it.isEmpty() }.size - 1
+
+@Suppress("Assert")
+fun KotlinCompilationAssertionScope.irShouldNotContain(text: String) {
+  irAssertions {
+    assert(text !in it) {
+      "'$text' in source '$it'"
+    }
+  }
 }

@@ -19,6 +19,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
   kotlin("jvm")
   kotlin("kapt")
+  kotlin("plugin.serialization")
   id("com.github.johnrengelman.shadow")
 }
 
@@ -44,13 +45,17 @@ artifacts {
 }
 
 dependencies {
+  api(Deps.KotlinSerialization.json)
   api(Deps.Kotlin.compilerEmbeddable)
+  api(Deps.Injekt.compilerPlugin)
   implementation(Deps.autoService)
   kapt(Deps.autoService)
   testImplementation(Deps.compileTesting)
   testImplementation(Deps.junit)
   testImplementation(Deps.Kotlin.compilerEmbeddable)
   testImplementation(Deps.kotestAssertions)
+  testImplementation(project(":essentials-core"))
+  testImplementation(project(":essentials-coroutines"))
   testImplementation(project(":essentials-optics"))
 }
 

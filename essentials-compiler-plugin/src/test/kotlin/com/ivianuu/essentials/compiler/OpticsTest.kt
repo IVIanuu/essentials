@@ -16,10 +16,14 @@
 
 package com.ivianuu.essentials.compiler
 
+import io.kotest.matchers.shouldBe
+import org.junit.Test
+
 class OpticsTest {
   @Test fun testOptics() = codegen(
     """
-            @Optics data class MyClass(val value: String)
+      @Optics data class MyClass(val value: String)
+      
       fun invoke(): String {
         val valueLens = MyClass.value()
         val initial = MyClass("hello")
@@ -33,7 +37,8 @@ class OpticsTest {
 
   @Test fun testOpticsWithGenerics() = codegen(
     """
-            @Optics data class MyClass<A>(val value: A)
+      @Optics data class MyClass<A>(val value: A)
+      
       fun invoke(): String {
         val valueLens = MyClass.value<String>()
         val initial = MyClass("hello")
