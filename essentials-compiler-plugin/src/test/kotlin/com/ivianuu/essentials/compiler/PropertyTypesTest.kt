@@ -1,9 +1,7 @@
 package com.ivianuu.essentials.compiler
 
-import org.junit.Test
-
 class PropertyTypesTest {
-  @Test fun testValidGetterSubTypeIsOk() = codegen(
+  /*@Test fun testValidGetterSubTypeIsOk() = codegen(
     """
       class MyVm {
         val list = mutableListOf<Int>()
@@ -123,5 +121,5 @@ class PropertyTypesTest {
       fun <T> flatMap(block: () -> kotlinx.coroutines.flow.Flow<T>) {
       }
     """
-  )
+  )*/
 }

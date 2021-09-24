@@ -22,7 +22,7 @@ import org.junit.Test
 class OpticsTest {
   @Test fun testOptics() = codegen(
     """
-      @Optics data class MyClass(val value: String)
+      @com.ivianuu.essentials.optics.Optics data class MyClass(val value: String)
       
       fun invoke(): String {
         val valueLens = MyClass.value()
@@ -37,7 +37,7 @@ class OpticsTest {
 
   @Test fun testOpticsWithGenerics() = codegen(
     """
-      @Optics data class MyClass<A>(val value: A)
+      @com.ivianuu.essentials.optics.Optics data class MyClass<A>(val value: A)
       
       fun invoke(): String {
         val valueLens = MyClass.value<String>()

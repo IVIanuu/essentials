@@ -23,6 +23,7 @@ import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
 import org.junit.Test
 import org.junit.runner.RunWith

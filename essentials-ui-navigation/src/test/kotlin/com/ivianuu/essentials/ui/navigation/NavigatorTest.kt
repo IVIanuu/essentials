@@ -32,7 +32,7 @@ class NavigatorTest {
 
   @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      intentKeyHandler = { _, _ -> false },
+      keyHandlers = emptySet(),
       logger = NoopLogger,
       scope = this
     )
@@ -59,7 +59,7 @@ class NavigatorTest {
 
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      intentKeyHandler = { _, _ -> false },
+      keyHandlers = emptySet(),
       logger = NoopLogger,
       scope = this
     )
@@ -70,7 +70,7 @@ class NavigatorTest {
 
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      intentKeyHandler = { _, _ -> false },
+      keyHandlers = emptySet(),
       logger = NoopLogger,
       scope = this
     )

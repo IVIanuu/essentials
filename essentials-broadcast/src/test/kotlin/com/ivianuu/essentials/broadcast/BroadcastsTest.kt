@@ -16,6 +16,20 @@
 
 package com.ivianuu.essentials.broadcast
 
+import android.content.BroadcastReceiver
+import android.content.Intent
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.test.dispatcher
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldHaveSize
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class BroadcastsTest {
@@ -28,7 +42,7 @@ class BroadcastsTest {
       }
       every { unregisterComponentCallbacks(any()) } returns Unit
     }
-    val collector = broadcastsFactory(appContext, dispatcher)
+    val collector = broadcastsFactory(appContext, dispatcher, this)
       .invoke("action").testCollect(this)
 
     receiver.onReceive(appContext, Intent("action"))

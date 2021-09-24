@@ -274,7 +274,7 @@ fun <T> KotlinCompilationAssertionScope.invokeSingleFile(vararg args: Any?): T {
 }
 
 private fun ClassLoader.getSingleClass(): KClass<*> =
-  loadClass("com.ivianuu.injekt.integrationtests.FileKt").kotlin
+  loadClass("com.ivianuu.essentials.integrationtests.FileKt").kotlin
 
 fun KotlinCompilationAssertionScope.compilationShouldHaveFailed(message: String? = null) {
   result.exitCode shouldBe KotlinCompilation.ExitCode.COMPILATION_ERROR

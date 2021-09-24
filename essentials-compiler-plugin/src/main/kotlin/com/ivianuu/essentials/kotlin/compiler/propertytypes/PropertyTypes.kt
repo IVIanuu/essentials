@@ -1,13 +1,45 @@
 package com.ivianuu.essentials.kotlin.compiler.propertytypes
 
+import com.ivianuu.injekt.compiler.InjektContext
+import com.ivianuu.injekt.compiler.PersistedTypeRef
 import com.ivianuu.injekt.compiler.analysis.AnalysisContext
 import com.ivianuu.injekt.compiler.analysis.InjectFunctionDescriptor
+import com.ivianuu.injekt.compiler.decode
+import com.ivianuu.injekt.compiler.encode
+import com.ivianuu.injekt.compiler.injektContext
+import com.ivianuu.injekt.compiler.isDeserializedDeclaration
+import com.ivianuu.injekt.compiler.resolution.TypeRef
+import com.ivianuu.injekt.compiler.resolution.buildBaseContext
+import com.ivianuu.injekt.compiler.resolution.buildContext
+import com.ivianuu.injekt.compiler.resolution.toTypeRef
+import com.ivianuu.injekt.compiler.toPersistedTypeRef
+import com.ivianuu.injekt.compiler.toTypeRef
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.container.StorageComponentContainer
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.ModuleDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.SourceElement
+import org.jetbrains.kotlin.descriptors.annotations.Annotated
+import org.jetbrains.kotlin.descriptors.annotations.AnnotatedImpl
+import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
+import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptorImpl
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
+import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.diagnostics.Severity
+import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
+import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticFactoryToRendererMap
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
+import org.jetbrains.kotlin.load.kotlin.getJvmModuleNameForDeserializedDescriptor
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.resolve.FunctionImportedFromObject
@@ -18,12 +50,16 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.resolve.constants.StringValue
+import org.jetbrains.kotlin.resolve.descriptorUtil.parentsWithSelf
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf
 import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.util.slicedMap.BasicWritableSlice
 import org.jetbrains.kotlin.util.slicedMap.RewritePolicy
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
+import kotlin.reflect.KClass
 
 fun MockProject.propertyTypes() {
   StorageComponentContainerContributor.registerExtension(
@@ -214,7 +250,7 @@ private fun AnnotationDescriptor.readChunkedValue() = allValueArguments
   .joinToString(separator = "") { it.second.value as String }
 
 private fun String.toChunkedAnnotationArguments() = chunked(65535 / 2)
-  .mapIndexed { index, chunk -> "value$index".asNameId() to StringValue(chunk) }
+  .mapIndexed { index, chunk -> Name.identifier("value$index") to StringValue(chunk) }
   .toMap()
 
 private fun Annotated.updateAnnotation(annotation: AnnotationDescriptor) {
@@ -264,6 +300,19 @@ private fun PersistedPropertyTypeInfo.toPropertyTypeInfo(context: AnalysisContex
     internalType = internalType?.toTypeRef(context),
     protectedType = protectedType?.toTypeRef(context)
   )
+
+fun <T> Any.updatePrivateFinalField(clazz: KClass<*>, fieldName: String, transform: T.() -> T): T {
+  val field = clazz.java.declaredFields
+    .single { it.name == fieldName }
+  field.isAccessible = true
+  val modifiersField: Field = Field::class.java.getDeclaredField("modifiers")
+  modifiersField.isAccessible = true
+  modifiersField.setInt(field, field.modifiers and Modifier.FINAL.inv())
+  val currentValue = field.get(this)
+  val newValue = transform(currentValue as T)
+  field.set(this, newValue)
+  return newValue
+}
 
 private val PROPERTY_TYPE_INFO_SLICE =
   BasicWritableSlice<PropertyDescriptor, PropertyTypeInfo>(RewritePolicy.DO_NOTHING)
