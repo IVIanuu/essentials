@@ -119,6 +119,7 @@ import kotlin.time.milliseconds
   val currentItem by remember(resource::class) {
     mutableStateOf(ResourceBoxItem(resource::class, resource))
   }
+
   SideEffect {
     currentItem.value = resource
   }

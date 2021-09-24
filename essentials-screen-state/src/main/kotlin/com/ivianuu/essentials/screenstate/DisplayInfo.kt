@@ -31,8 +31,6 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 data class DisplayInfo(
   val rotation: DisplayRotation = DisplayRotation.PORTRAIT_UP,
@@ -51,18 +49,15 @@ data class DisplayInfo(
       .onStart { emit(Unit) },
     displayRotation()
   ) { _, rotation ->
-    metricsMutex.withLock {
-      windowManager.defaultDisplay.getRealMetrics(metrics)
-      DisplayInfo(
-        rotation = rotation,
-        screenWidth = metrics.widthPixels,
-        screenHeight = metrics.heightPixels
-      )
-    }
+    val metrics = DisplayMetrics()
+    windowManager.defaultDisplay.getRealMetrics(metrics)
+    DisplayInfo(
+      rotation = rotation,
+      screenWidth = metrics.widthPixels,
+      screenHeight = metrics.heightPixels
+    )
   }.let { emitAll(it) }
 }
   .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
   .distinctUntilChanged()
 
-private val metrics = DisplayMetrics()
-private val metricsMutex = Mutex()
