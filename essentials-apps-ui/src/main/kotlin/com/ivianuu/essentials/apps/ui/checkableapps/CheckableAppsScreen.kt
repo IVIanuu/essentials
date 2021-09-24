@@ -160,7 +160,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
   action(CheckableAppsModel.selectAll()) {
     pushNewCheckedApps { currentState ->
-      currentState.allApps.get()!!.mapTo(mutableSetOf()) { it.packageName }
+      currentState.allApps.get().mapTo(mutableSetOf()) { it.packageName }
     }
   }
 

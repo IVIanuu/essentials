@@ -39,7 +39,12 @@ data class Success<T>(val value: T) : Resource<T>()
 
 data class Error(val error: Throwable) : Resource<Nothing>()
 
-fun <T> Resource<T>.get(): T? = (this as? Success)?.value
+fun <T> Resource<T>.get(): T = if (this is Success) value else error("Called get() on a $this")
+
+inline fun <T> Resource<T>.getOrElse(defaultValue: () -> T) =
+  if (this is Success) value else defaultValue()
+
+fun <T> Resource<T>.getOrNull() = getOrElse { null }
 
 val Resource<*>.shouldLoad: Boolean get() = this is Idle || this is Error
 

@@ -5,15 +5,11 @@ sealed class Result<out V, out E>
 data class Ok<V>(val value: V) : Result<V, Nothing>()
 data class Err<E>(val error: E) : Result<Nothing, E>()
 
+inline val Result<*, *>.isOk: Boolean get() = this is Ok
+inline val Result<*, *>.isErr: Boolean get() = this is Err
+
 operator fun <V> Result<V, *>.component1(): V? = (this as? Ok)?.value
 operator fun <E> Result<*, E>.component2(): E? = (this as? Err)?.error
-
-inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = try {
-  Ok(block())
-} catch (e: Throwable) {
-  e.nonFatalOrThrow()
-  Err(e)
-}
 
 inline fun <V, E, W> Result<V, E>.map(transform: (V) -> W): Result<W, E> = when (this) {
   is Ok -> Ok(transform(value))
@@ -46,7 +42,7 @@ inline fun <V, E> Result<V, E>.getOrElse(defaultValue: (E) -> V): V = when (this
   is Err -> defaultValue(error)
 }
 
-fun <E> Result<*, E>.getErrorOrNull(): E? = (this as? Err)?.error
+fun <V> Result<V, *>.getOrNull(): V? = getOrElse { null }
 
 fun <E> Result<*, E>.getError(): E = when (this) {
   is Ok -> throw IllegalStateException("Called getError() on a Ok type $value")
@@ -57,6 +53,8 @@ inline fun <V, E> Result<V, E>.getErrorOrElse(defaultValue: (V) -> E): E = when 
   is Ok -> defaultValue(value)
   is Err -> error
 }
+
+fun <E> Result<*, E>.getErrorOrNull(): E? = (this as? Err)?.error
 
 inline fun <V, E> Result<V, E>.recover(transform: (E) -> V): Ok<V> = when (this) {
   is Ok -> this
@@ -73,10 +71,7 @@ inline fun <V, E> Result<V, E>.onFailure(action: (E) -> Unit): Result<V, E> {
   return this
 }
 
-inline fun <V, E> Result<V, E>.onEither(
-  success: (V) -> Unit,
-  failure: (E) -> Unit
-): Result<V, E> {
+inline fun <V, E> Result<V, E>.onEither(success: (V) -> Unit, failure: (E) -> Unit): Result<V, E> {
   when (this) {
     is Ok -> success(value)
     is Err -> failure(error)
@@ -89,15 +84,18 @@ inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
 
-fun <V> Result<V, *>.getOrNull(): V? = getOrElse { null }
+inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = try {
+  Ok(block())
+} catch (e: Throwable) {
+  e.nonFatalOrThrow()
+  Err(e)
+}
 
-inline fun <V, E> result(@BuilderInference block: ResultBinding<E>.() -> V): Result<V, E> {
-  @Suppress("UNCHECKED_CAST")
-  return try {
-    Ok(block(ResultBindingImpl as ResultBinding<E>))
-  } catch (e: ResultBindingImpl.ShortCircuitException) {
-    e.error as Err<E>
-  }
+@Suppress("UNCHECKED_CAST")
+inline fun <V, E> result(@BuilderInference block: ResultBinding<E>.() -> V): Result<V, E> = try {
+  Ok(block(ResultBindingImpl as ResultBinding<E>))
+} catch (e: ResultBindingImpl.ShortCircuitException) {
+  e.error as Err<E>
 }
 
 interface ResultBinding<in A> {
