@@ -24,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.GetAppInfoUseCase
 import com.ivianuu.essentials.apps.ui.IntentAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionId
@@ -43,9 +43,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -96,8 +101,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
           Text(
             stringResource(
               R.string.es_pref_media_app_summary,
-              model.mediaApp.get()?.appName
-                ?: stringResource(R.string.es_none)
+              model.mediaApp.get()?.appName ?: stringResource(R.string.es_none)
             )
           )
         },
@@ -108,12 +112,12 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 }
 
 @Optics data class MediaActionSettingsModel(
-  val mediaApp: Resource<AppInfo> = Idle,
+  val mediaApp: Resource<AppInfo?> = Idle,
   val updateMediaApp: () -> Unit = {}
 )
 
 @Provide fun mediaActionSettingsModel(
-  getAppInfo: GetAppInfoUseCase,
+  appInfo: (@Provide PackageName) -> Flow<AppInfo?>,
   intentAppPredicateFactory: (@Provide Intent) -> IntentAppPredicate,
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
@@ -123,9 +127,10 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 ) {
   pref.data
     .map { it.mediaApp }
-    .mapNotNull { if (it != null) getAppInfo(it) else null }
+    .flatMapLatest { if (it != null) appInfo(it) else infiniteEmptyFlow() }
     .flowAsResource()
     .update { copy(mediaApp = it) }
+
   action(MediaActionSettingsModel.updateMediaApp()) {
     val newMediaApp = navigator.push(
       AppPickerKey(

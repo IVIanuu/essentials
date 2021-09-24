@@ -23,16 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.getOrElse
-import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.apps.InstalledApps
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
@@ -43,9 +39,14 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 
 object AppShortcutPickerKey : Key<AppShortcut>
 
@@ -72,21 +73,24 @@ object AppShortcutPickerKey : Key<AppShortcut>
 )
 
 @Provide fun appShortcutPickerModel(
-  getInstalledApps: GetInstalledAppsUseCase,
-  getAllAppShortcutsForApp: GetAllAppShortcutsForAppUseCase,
+  installedApps: Flow<InstalledApps>,
+  appShortcuts: (@Provide PackageName) -> Flow<AppShortcuts>,
   key: AppShortcutPickerKey,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
-  produceResource({ copy(appShortcuts = it) }) {
-    getInstalledApps()
-      .parMap { app ->
-        catch { getAllAppShortcutsForApp(app.packageName) }
-          .onFailure { it.printStackTrace() }
-          .getOrElse { emptyList() }
-      }
-      .flatten()
-  }
+  installedApps
+    .flatMapLatest { apps ->
+      combine(
+        apps
+          .map { app ->
+            appShortcuts(app.packageName)
+              .catch { emit(emptyList()) }
+          }
+      ) { it.toList().flatten() }
+    }
+    .flowAsResource()
+    .update { copy(appShortcuts = it) }
 
   action(AppShortcutPickerModel.pickAppShortcut()) { appShortcut ->
     navigator.pop(key, appShortcut)

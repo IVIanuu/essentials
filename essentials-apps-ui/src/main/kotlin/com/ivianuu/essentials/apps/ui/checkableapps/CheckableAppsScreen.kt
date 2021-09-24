@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.GetInstalledAppsUseCase
+import com.ivianuu.essentials.apps.InstalledApps
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
@@ -34,10 +34,10 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -129,7 +129,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
 @Provide fun checkableAppsModel(
   params: CheckableAppsParams,
-  getInstalledApps: GetInstalledAppsUseCase,
+  installedApps: Flow<InstalledApps>,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<CheckableAppsModel> = scope.state(
   CheckableAppsModel(
@@ -139,15 +139,16 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 ) {
   params.checkedApps.update { copy(checkedApps = it) }
 
-  produceResource({ copy(allApps = it) }) { getInstalledApps() }
+  installedApps
+    .flowAsResource()
+    .update { copy(allApps = it) }
 
   suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
     val currentState = state.first()
     val newCheckedApps = currentState.checkableApps.get()
-      ?.filter { it.isChecked }
-      ?.mapTo(mutableSetOf()) { it.info.packageName }
-      ?.transform(currentState)
-      ?: return
+      .filter { it.isChecked }
+      .mapTo(mutableSetOf()) { it.info.packageName }
+      .transform(currentState)
     params.onCheckedAppsChanged(newCheckedApps)
   }
 

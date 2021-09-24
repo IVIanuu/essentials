@@ -5,8 +5,9 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.apps.shortcuts.AppShortcut
+import com.ivianuu.essentials.apps.shortcuts.AppShortcutId
 import com.ivianuu.essentials.apps.shortcuts.AppShortcutPickerKey
-import com.ivianuu.essentials.apps.shortcuts.GetAppShortcutUseCase
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -21,11 +22,14 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 @Provide class AppShortcutActionFactory(
   private val actionIntentSender: ActionIntentSender,
-  private val getAppShortcut: GetAppShortcutUseCase,
+  private val appShortcut: (@Provide PackageName, @Provide AppShortcutId) -> Flow<AppShortcut?>,
   private val rp: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
@@ -35,7 +39,7 @@ import com.ivianuu.injekt.Provide
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1] }
 
-    val appShortcut = getAppShortcut(packageName, shortcutId)
+    val appShortcut = appShortcut(packageName, shortcutId).first()!!
 
     return Action<ActionId>(
       id = id,
@@ -55,7 +59,7 @@ import com.ivianuu.injekt.Provide
     val (packageName, shortcutId, isFloating) = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
 
-    val appShortcut = getAppShortcut(packageName, shortcutId)
+    val appShortcut = appShortcut(packageName, shortcutId).first()!!
 
     return {
       actionIntentSender(

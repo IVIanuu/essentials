@@ -22,41 +22,54 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.withContext
 
-typealias GetAllShortcutsUseCase = suspend () -> List<Shortcut>
+typealias Shortcuts = List<Shortcut>
 
-@Provide fun getAllShortcutsUseCase(
+@Provide fun shortcuts(
+  broadcastsFactory: BroadcastsFactory,
   dispatcher: IODispatcher,
   packageManager: PackageManager
-): GetAllShortcutsUseCase = {
-  withContext(dispatcher) {
-    val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
-    packageManager.queryIntentActivities(shortcutsIntent, 0)
-      .parMap { resolveInfo ->
-        catch {
-          Shortcut(
-            intent = Intent().apply {
-              action = Intent.ACTION_CREATE_SHORTCUT
-              component = ComponentName(
-                resolveInfo.activityInfo.packageName,
-                resolveInfo.activityInfo.name
-              )
-            },
-            name = resolveInfo.loadLabel(packageManager).toString(),
-            icon = resolveInfo.loadIcon(packageManager)
-          )
-        }.getOrNull()
-      }
-      .filterNotNull()
-      .sortedBy { it.name }
+): Flow<Shortcuts> = merge(
+  broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+)
+  .mapLatest {
+    withContext(dispatcher) {
+      val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
+      packageManager.queryIntentActivities(shortcutsIntent, 0)
+        .parMap { resolveInfo ->
+          catch {
+            Shortcut(
+              intent = Intent().apply {
+                action = Intent.ACTION_CREATE_SHORTCUT
+                component = ComponentName(
+                  resolveInfo.activityInfo.packageName,
+                  resolveInfo.activityInfo.name
+                )
+              },
+              name = resolveInfo.loadLabel(packageManager).toString(),
+              icon = resolveInfo.loadIcon(packageManager)
+            )
+          }.getOrNull()
+        }
+        .filterNotNull()
+        .sortedBy { it.name }
+    }
   }
-}
+  .distinctUntilChanged()
 
 typealias ExtractShortcutUseCase = (Intent) -> Shortcut
 

@@ -31,8 +31,8 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
@@ -44,6 +44,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 object ShortcutPickerKey : Key<Shortcut>
@@ -73,7 +74,7 @@ object ShortcutPickerKey : Key<Shortcut>
 )
 
 @Provide fun shortcutPickerModel(
-  getAllShortcuts: GetAllShortcutsUseCase,
+  shortcuts: Flow<Shortcuts>,
   extractShortcut: ExtractShortcutUseCase,
   key: ShortcutPickerKey,
   navigator: Navigator,
@@ -81,7 +82,9 @@ object ShortcutPickerKey : Key<Shortcut>
   rp: ResourceProvider,
   toaster: Toaster
 ): StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
-  produceResource({ copy(shortcuts = it) }) { getAllShortcuts() }
+  shortcuts
+    .flowAsResource()
+    .update { copy(shortcuts = it) }
 
   action(ShortcutPickerModel.pickShortcut()) { shortcut ->
     catch {

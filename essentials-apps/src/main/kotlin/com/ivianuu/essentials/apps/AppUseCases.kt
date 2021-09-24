@@ -22,7 +22,8 @@ import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.fold
-import com.ivianuu.essentials.get
+import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow
@@ -32,45 +33,62 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-typealias GetInstalledAppsUseCase = suspend () -> List<AppInfo>
+typealias InstalledApps = List<AppInfo>
 
-@Provide fun getInstalledAppsUseCase(
+@Provide fun installedApps(
+  broadcastsFactory: BroadcastsFactory,
   dispatcher: IODispatcher,
   packageManager: PackageManager
-): GetInstalledAppsUseCase = {
-  withContext(dispatcher) {
-    packageManager.getInstalledApplications(0)
-      .parMap {
-        AppInfo(
-          appName = it.loadLabel(packageManager).toString(),
-          packageName = it.packageName
-        )
-      }
-      .distinctBy { it.packageName }
-      .sortedBy { it.appName.toLowerCase() }
-      .toList()
+): Flow<InstalledApps> = merge(
+  broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+)
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map {
+    withContext(dispatcher) {
+      packageManager.getInstalledApplications(0)
+        .parMap {
+          AppInfo(
+            appName = it.loadLabel(packageManager).toString(),
+            packageName = it.packageName
+          )
+        }
+        .distinctBy { it.packageName }
+        .sortedBy { it.appName.toLowerCase() }
+        .toList()
+    }
   }
-}
+  .distinctUntilChanged()
 
-typealias GetAppInfoUseCase = suspend (String) -> AppInfo?
-
-@Provide fun getAppInfoUseCase(
+@Provide fun appInfo(
+  broadcastsFactory: BroadcastsFactory,
   dispatcher: IODispatcher,
+  packageName: PackageName,
   packageManager: PackageManager
-): GetAppInfoUseCase = { packageName ->
-  withContext(dispatcher) {
-    val applicationInfo = catch {
-      packageManager.getApplicationInfo(packageName, 0)
-    }.get() ?: return@withContext null
-    AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
+): Flow<AppInfo?> = merge(
+  broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
+  broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+)
+  .map { Unit }
+  .onStart { emit(Unit) }
+  .map {
+    withContext(dispatcher) {
+      val applicationInfo = catch {
+        packageManager.getApplicationInfo(packageName, 0)
+      }.getOrNull() ?: return@withContext null
+      AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
+    }
   }
-}
+  .distinctUntilChanged()
 
 data class AppInfo(val packageName: String, val appName: String)
 
 typealias IsAppInstalled = Boolean
-
-typealias PackageName = String
 
 @Provide fun isAppInstalled(
   broadcastsFactory: BroadcastsFactory,

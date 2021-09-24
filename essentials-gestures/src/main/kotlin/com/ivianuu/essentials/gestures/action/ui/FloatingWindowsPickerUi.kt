@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.IsAppInstalled
-import com.ivianuu.essentials.apps.PackageName
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.optics.Optics
@@ -23,7 +22,12 @@ import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -101,5 +105,6 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
       navigator.push(PlayStoreAppDetailsKey(FLOATING_WINDOWS_PACKAGE))
     }
   }
+
   action(FloatingWindowsPickerModel.openFullScreen()) { navigator.pop(key, false) }
 }

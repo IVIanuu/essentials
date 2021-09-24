@@ -44,8 +44,7 @@ interface Navigator {
   suspend fun popTop()
 }
 
-@Provide @Scoped<AppScope>
-class NavigatorImpl(
+@Provide @Scoped<AppScope> class NavigatorImpl(
   private val keyHandlers: Set<KeyHandler<*>> = emptySet(),
   private val logger: Logger,
   rootKey: RootKey? = null,
