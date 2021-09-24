@@ -30,8 +30,10 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 typealias Shortcuts = List<Shortcut>
@@ -46,6 +48,8 @@ typealias Shortcuts = List<Shortcut>
   broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
   broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
 )
+  .map { Unit }
+  .onStart { emit(Unit) }
   .mapLatest {
     withContext(dispatcher) {
       val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
