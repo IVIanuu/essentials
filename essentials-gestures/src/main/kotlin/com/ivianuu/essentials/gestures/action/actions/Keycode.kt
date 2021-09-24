@@ -22,7 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.dialog.TextInputKey
@@ -60,7 +66,6 @@ import com.ivianuu.injekt.common.typeKeyOf
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
-
   override val title: String
     get() = loadResource(R.string.es_action_keycode)
   override val icon: @Composable () -> Unit =

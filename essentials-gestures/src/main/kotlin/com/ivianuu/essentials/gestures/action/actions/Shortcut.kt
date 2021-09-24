@@ -26,7 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionFactory
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
@@ -78,10 +84,8 @@ import java.io.ByteArrayOutputStream
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
-
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
-
   override val icon: @Composable () -> Unit = {
     Icon(R.drawable.es_ic_content_cut)
   }

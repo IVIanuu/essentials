@@ -16,7 +16,11 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -153,12 +157,14 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
       }
 
       Box(
-        modifier = Modifier.padding(
-          start = if (applyContentPadding) 24.dp else 0.dp,
-          top = if (header == null) 24.dp else 0.dp,
-          end = if (applyContentPadding) 24.dp else 0.dp,
-          bottom = if (buttons == null) 24.dp else 0.dp
-        ).layoutId(DialogContentSlot.Content)
+        modifier = Modifier
+          .padding(
+            start = if (applyContentPadding) 24.dp else 0.dp,
+            top = if (header == null) 24.dp else 0.dp,
+            end = if (applyContentPadding) 24.dp else 0.dp,
+            bottom = if (buttons == null) 24.dp else 0.dp
+          )
+          .layoutId(DialogContentSlot.Content)
       ) { content() }
     }
 

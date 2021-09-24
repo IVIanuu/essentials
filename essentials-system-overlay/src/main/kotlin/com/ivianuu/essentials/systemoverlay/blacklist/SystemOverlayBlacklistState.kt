@@ -24,7 +24,13 @@ import com.ivianuu.essentials.systemoverlay.IsOnSecureScreen
 import com.ivianuu.essentials.systemoverlay.KeyboardVisible
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 
 enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 

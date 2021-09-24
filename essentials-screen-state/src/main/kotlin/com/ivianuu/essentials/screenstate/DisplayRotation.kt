@@ -27,7 +27,18 @@ import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 enum class DisplayRotation(val isPortrait: Boolean) {

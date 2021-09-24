@@ -34,7 +34,7 @@ import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream

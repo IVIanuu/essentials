@@ -30,11 +30,21 @@ import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlin.time.milliseconds
 
 data class WriteSecureSettingsPcInstructionsKey(
@@ -128,18 +138,18 @@ data class WriteSecureSettingsPcInstructionsKey(
   permissionStateFactory: PermissionStateFactory,
   scope: NamedCoroutineScope<KeyUiScope>,
   updateClipboardText: UpdateClipboardTextUseCase
-): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
-  initial
-) {
+): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(initial) {
   timer(200.milliseconds)
     .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
     .filter { it }
     .take(1)
     .onEach { navigator.pop(key) }
     .launchIn(this)
+
   action(WriteSecureSettingsPcInstructionsModel.copyAdbCommand()) {
     updateClipboardText(state.first().secureSettingsAdbCommand, true)
   }
+
   action(WriteSecureSettingsPcInstructionsModel.openGadgetHacksTutorial()) {
     navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
   }

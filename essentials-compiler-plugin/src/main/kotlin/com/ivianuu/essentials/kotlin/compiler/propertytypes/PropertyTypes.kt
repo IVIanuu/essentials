@@ -1,20 +1,12 @@
 package com.ivianuu.essentials.kotlin.compiler.propertytypes
 
-import com.ivianuu.injekt.compiler.*
 import com.ivianuu.injekt.compiler.analysis.AnalysisContext
 import com.ivianuu.injekt.compiler.analysis.InjectFunctionDescriptor
-import com.ivianuu.injekt.compiler.resolution.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.container.StorageComponentContainer
-import org.jetbrains.kotlin.descriptors.*
-import org.jetbrains.kotlin.descriptors.annotations.*
-import org.jetbrains.kotlin.diagnostics.*
-import org.jetbrains.kotlin.diagnostics.rendering.*
 import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
-import org.jetbrains.kotlin.load.kotlin.getJvmModuleNameForDeserializedDescriptor
-import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -26,7 +18,6 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.resolve.constants.StringValue
-import org.jetbrains.kotlin.resolve.descriptorUtil.parentsWithSelf
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.utils.parentsWithSelf

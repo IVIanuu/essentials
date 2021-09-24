@@ -25,7 +25,7 @@ import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 typealias ScreenUnlocker = suspend () -> Boolean

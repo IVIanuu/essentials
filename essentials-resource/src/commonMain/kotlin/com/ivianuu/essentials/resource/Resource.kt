@@ -22,7 +22,12 @@ import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.onFailure
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlin.jvm.JvmName
 
 sealed class Resource<out T>
