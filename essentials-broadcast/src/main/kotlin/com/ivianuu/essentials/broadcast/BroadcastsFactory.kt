@@ -29,9 +29,11 @@ import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
@@ -68,7 +70,17 @@ typealias BroadcastsFactory = (String) -> Flow<Intent>
             .flowOn(mainDispatcher)
             .shareIn(
               scope,
-              SharingStarted.WhileSubscribed(),
+              { subs ->
+                flow {
+                  subs.first { it > 0 }
+                  emit(SharingCommand.START)
+                  subs
+                    .debounce(1000)
+                    .first { it == 0 }
+                  emit(SharingCommand.STOP)
+                  mutex.withLock { flowsByAction.remove(action) }
+                }
+              },
               0
             )
         }
