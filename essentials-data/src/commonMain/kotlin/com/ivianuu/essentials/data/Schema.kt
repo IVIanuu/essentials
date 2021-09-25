@@ -84,7 +84,11 @@ inline fun Migration.after(crossinline action: (Db, Int, Int) -> Unit): Migratio
   action(db, from, to)
 }
 
-inline fun Migration(from: Int, to: Int, crossinline execute: suspend (Db, Int, Int) -> Unit) = object : Migration {
+inline fun Migration(
+  from: Int = Migration.ANY_VERSION,
+  to: Int = Migration.ANY_VERSION,
+  crossinline execute: suspend (Db, Int, Int) -> Unit
+) = object : Migration {
   override val from: Int
     get() = from
 
@@ -96,8 +100,11 @@ inline fun Migration(from: Int, to: Int, crossinline execute: suspend (Db, Int, 
   }
 }
 
-fun DestructiveDowngradeMigration() = Migration(Migration.ANY_VERSION, Migration.ANY_VERSION) { db, from, to ->
-  if (from > to) {
+fun DestructiveMigration() = Migration { db, from, to ->
+  db.dropAllAndRecreateTables()
+}
+
+fun DestructiveDowngradeMigration() = Migration { db, from, to ->
+  if (from > to)
     db.dropAllAndRecreateTables()
-  }
 }
