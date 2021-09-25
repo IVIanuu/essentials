@@ -249,7 +249,7 @@ class AndroidDbTest {
           EntityDescriptor<Migration1MyEntityV2>(tableName = "MyEntity")
         ),
         migrations = listOf(
-          Migration(1, 2) { db ->
+          Migration(1, 2) { db, _, _ ->
             db.execute(
               "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL"
             )
@@ -289,7 +289,7 @@ class AndroidDbTest {
           EntityDescriptor<Migration2MyEntityV2>(tableName = "MyEntity")
         ),
         migrations = listOf(
-          Migration(1, 2) { db ->
+          Migration(1, 2) { db, _, _ ->
             db.execute(
               "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL"
             )
@@ -329,7 +329,7 @@ class AndroidDbTest {
           EntityDescriptor<Migration3MyEntityV2>(tableName = "MyEntity")
         ),
         migrations = listOf(
-          Migration(1, 2) { db ->
+          Migration(1, 2) { db, _, _ ->
             db.createTable<Migration3MyEntityV2>(
               entity = EntityDescriptor(tableName = "MyEntity"),
               tableName = "MyEntity_new"
@@ -522,6 +522,57 @@ class AndroidDbTest {
         EntityWithAutoIncrementId(2L, "Cindy")
 
     db.dispose()
+  }
+
+  @Test fun testTableNames() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    db.tableNames().first() shouldBe listOf("MyEntity")
+
+    db.dispose()
+  }
+
+  @Test fun testDropTable() = runCancellingBlockingTest {
+    val v1Db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<Migration3MyEntityV1>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    v1Db.tableNames().first() shouldBe listOf("MyEntity")
+
+    v1Db.dispose()
+
+    val v2Db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 2,
+        entities = emptyList(),
+        migrations = listOf(
+          Migration(1, 2) { db, _, _ ->
+            db.dropTable("MyEntity")
+          }
+        )
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    v2Db.tableNames().first() shouldBe emptyList()
+
+    v2Db.dispose()
   }
 
   @Serializable data class UserWithDog(

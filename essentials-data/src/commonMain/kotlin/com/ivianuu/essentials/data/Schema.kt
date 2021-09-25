@@ -3,6 +3,7 @@ package com.ivianuu.essentials.data
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -54,7 +55,7 @@ private class SchemaImpl(
       "Could not find a migration from $from to $to"
     }
 
-    migrationsToExecute.forEach { it.execute(db) }
+    migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
   override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
@@ -65,31 +66,38 @@ interface Migration {
   val from: Int
   val to: Int
 
-  suspend fun execute(db: Db)
+  suspend fun execute(db: Db, from: Int, to: Int)
 
   companion object {
     const val ANY_VERSION = -1
   }
 }
 
-inline fun Migration.before(crossinline action: (Db) -> Unit): Migration = Migration(from, to) {
-  action(it)
-  execute(it)
+fun DropAllTablesOnDowngradeMigration() = Migration(Migration.ANY_VERSION, Migration.ANY_VERSION) { db, from, to ->
+  if (from > to)
+    db.tableNames().first().forEach {
+      db.dropTable(it)
+    }
 }
 
-inline fun Migration.after(crossinline action: (Db) -> Unit): Migration = Migration(from, to) {
-  execute(it)
-  action(it)
+inline fun Migration.before(crossinline action: (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
+  action(db, from, to)
+  execute(db, from, to)
 }
 
-inline fun Migration(from: Int, to: Int, crossinline execute: suspend (Db) -> Unit) = object : Migration {
+inline fun Migration.after(crossinline action: (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
+  execute(db, from, to)
+  action(db, from, to)
+}
+
+inline fun Migration(from: Int, to: Int, crossinline execute: suspend (Db, Int, Int) -> Unit) = object : Migration {
   override val from: Int
     get() = from
 
   override val to: Int
     get() = to
 
-  override suspend fun execute(db: Db) {
-    execute.invoke(db)
+  override suspend fun execute(db: Db, from: Int, to: Int) {
+    execute.invoke(db, from, to)
   }
 }

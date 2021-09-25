@@ -146,10 +146,26 @@ interface Cursor : Disposable {
   dispose()
 }
 
+@OptIn(ExperimentalStdlibApi::class)
+fun Db.tableNames(): Flow<List<String>> =
+  query("SELECT * FROM sqlite_master WHERE type='table';") { cursor ->
+    buildList {
+      while (cursor.next()) {
+        val tableName = cursor.getString(1)!!
+        if (tableName != "android_metadata" && tableName != "sqlite_sequence")
+          add(tableName)
+      }
+    }
+  }
+
+suspend fun Db.dropTable(tableName: String) = transaction {
+  execute("DROP TABLE IF EXISTS $tableName")
+}
+
 suspend fun <T> Db.createTable(
   @Inject entity: EntityDescriptor<T>,
   tableName: String = entity.tableName
-) {
+) = transaction {
   execute(
     buildString {
       append("CREATE TABLE IF NOT EXISTS $tableName")
