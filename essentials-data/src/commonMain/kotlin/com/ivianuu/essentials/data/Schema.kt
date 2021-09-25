@@ -3,7 +3,6 @@ package com.ivianuu.essentials.data
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.first
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
@@ -14,6 +13,8 @@ interface Schema {
   val embeddedFormat: StringFormat
 
   val serializersModule: SerializersModule
+
+  val entities: List<EntityDescriptor<*>>
 
   suspend fun create(db: Db)
 
@@ -32,15 +33,15 @@ fun Schema(
 
 private class SchemaImpl(
   override val version: Int,
-  entities: List<EntityDescriptor<*>>,
+  override val entities: List<EntityDescriptor<*>>,
   private val migrations: List<Migration>,
   override val serializersModule: SerializersModule,
   override val embeddedFormat: StringFormat
 ) : Schema {
-  private val entities = entities.associateBy { it.typeKey }
+  private val _entities = entities.associateBy { it.typeKey }
 
   override suspend fun create(db: Db) {
-    entities.values
+    _entities.values
       .forEach { db.createTable(it) }
   }
 
@@ -59,7 +60,7 @@ private class SchemaImpl(
   }
 
   override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
-    entities[key]?.cast() ?: error("Unknown entity $key")
+    _entities[key]?.cast() ?: error("Unknown entity $key")
 }
 
 interface Migration {
@@ -71,13 +72,6 @@ interface Migration {
   companion object {
     const val ANY_VERSION = -1
   }
-}
-
-fun DropAllTablesOnDowngradeMigration() = Migration(Migration.ANY_VERSION, Migration.ANY_VERSION) { db, from, to ->
-  if (from > to)
-    db.tableNames().first().forEach {
-      db.dropTable(it)
-    }
 }
 
 inline fun Migration.before(crossinline action: (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
@@ -99,5 +93,11 @@ inline fun Migration(from: Int, to: Int, crossinline execute: suspend (Db, Int, 
 
   override suspend fun execute(db: Db, from: Int, to: Int) {
     execute.invoke(db, from, to)
+  }
+}
+
+fun DestructiveDowngradeMigration() = Migration(Migration.ANY_VERSION, Migration.ANY_VERSION) { db, from, to ->
+  if (from > to) {
+    db.dropAllAndRecreateTables()
   }
 }

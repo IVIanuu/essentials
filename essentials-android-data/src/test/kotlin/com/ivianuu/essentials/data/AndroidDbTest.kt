@@ -575,6 +575,46 @@ class AndroidDbTest {
     v2Db.dispose()
   }
 
+  @Test fun testDropAllAndRecreateTables() = runCancellingBlockingTest {
+    val v1Db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 2,
+        entities = listOf(
+          EntityDescriptor<Migration3MyEntityV1>(tableName = "MyEntity1"),
+          EntityDescriptor<Migration3MyEntityV2>(tableName = "MyEntity2")
+        )
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    v1Db.tableNames().first() shouldBe listOf("MyEntity1", "MyEntity2")
+
+    v1Db.dispose()
+
+    val v2Db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(
+          EntityDescriptor<Migration3MyEntityV1>(tableName = "MyEntity1")
+        ),
+        migrations = listOf(
+          Migration(2, 1) { db, _, _ ->
+            db.dropAllAndRecreateTables()
+          }
+        )
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    v2Db.tableNames().first() shouldBe listOf("MyEntity1")
+
+    v2Db.dispose()
+  }
+
   @Serializable data class UserWithDog(
     val name: String,
     val dog: Dog

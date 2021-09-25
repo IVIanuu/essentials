@@ -158,10 +158,6 @@ fun Db.tableNames(): Flow<List<String>> =
     }
   }
 
-suspend fun Db.dropTable(tableName: String) = transaction {
-  execute("DROP TABLE IF EXISTS $tableName")
-}
-
 suspend fun <T> Db.createTable(
   @Inject entity: EntityDescriptor<T>,
   tableName: String = entity.tableName
@@ -195,4 +191,13 @@ suspend fun <T> Db.createTable(
       append(")")
     }
   )
+}
+
+suspend fun Db.dropTable(tableName: String) = transaction {
+  execute("DROP TABLE IF EXISTS $tableName")
+}
+
+suspend fun Db.dropAllAndRecreateTables() = transaction {
+  tableNames().first().forEach { dropTable(it) }
+  schema.entities.forEach { createTable(it) }
 }
