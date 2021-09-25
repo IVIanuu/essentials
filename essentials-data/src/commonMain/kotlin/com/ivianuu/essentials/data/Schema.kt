@@ -100,7 +100,7 @@ inline fun Migration(
   }
 }
 
-fun DestructiveMigration() = Migration { db, from, to ->
+fun DestructiveMigration() = Migration { db, _, _ ->
   db.dropAllAndRecreateTables()
 }
 
