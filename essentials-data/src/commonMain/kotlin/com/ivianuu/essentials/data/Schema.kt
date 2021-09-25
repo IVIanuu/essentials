@@ -74,12 +74,12 @@ interface Migration {
   }
 }
 
-inline fun Migration.before(crossinline action: (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
+inline fun Migration.before(crossinline action: suspend (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
   action(db, from, to)
   execute(db, from, to)
 }
 
-inline fun Migration.after(crossinline action: (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
+inline fun Migration.after(crossinline action: suspend (Db, Int, Int) -> Unit): Migration = Migration(from, to) { db, from, to ->
   execute(db, from, to)
   action(db, from, to)
 }
