@@ -24,6 +24,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionState
@@ -111,7 +112,7 @@ private suspend fun NavBarState.apply(
     }
     setOverscan(rect)
   }.onFailure {
-    log(Logger.Kind.ERROR) { "Failed to apply nav bar state ${it.stackTraceToString()}" }
+    log(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
   }
 }
 

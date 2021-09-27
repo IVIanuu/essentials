@@ -7,8 +7,8 @@ import com.ivianuu.injekt.Provide
   override val isEnabled: Boolean
     get() = true
 
-  override fun log(kind: Logger.Kind, @Inject tag: LoggingTag, message: String) {
-    println("$logTag: [${kind.name}] $tag $message")
+  override fun log(priority: Logger.Priority, @Inject tag: LoggingTag, message: String) {
+    println("$logTag: [${priority.name}] $tag $message")
   }
 }
 
