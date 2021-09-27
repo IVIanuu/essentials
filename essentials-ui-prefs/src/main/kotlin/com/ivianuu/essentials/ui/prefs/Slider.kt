@@ -280,11 +280,15 @@ import kotlin.time.Duration
               val stepFractions = (if (steps == 0) emptyList()
               else List(steps + 2) { it.toFloat() / (steps + 1) })
               val stepValues = stepFractions
-                .map { (toFloat(valueRange.endInclusive) - toFloat(valueRange.start)) * it }
+                .map {
+                  toFloat(valueRange.start) +
+                      ((toFloat(valueRange.endInclusive) - toFloat(valueRange.start)) * it)
+                }
 
               val steppedValue = stepValues
                 .minByOrNull { (it - internalValue).absoluteValue }
                 ?: internalValue
+
               fromFloat(steppedValue)
             }
 

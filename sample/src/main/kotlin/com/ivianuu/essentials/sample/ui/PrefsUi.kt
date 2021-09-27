@@ -39,8 +39,10 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.ColorListItem
+import com.ivianuu.essentials.ui.prefs.FloatSliderListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
+import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -101,7 +103,7 @@ object PrefsKey : Key<Unit>
       )
     }
     item {
-      IntSliderListItem(
+      FloatSliderListItem(
         value = prefs.steppedSlider,
         onValueChange = {
           scope.launch {
@@ -111,9 +113,9 @@ object PrefsKey : Key<Unit>
         modifier = Modifier.interactive(prefs.switch),
         title = { Text("Stepped slider") },
         subtitle = { Text("This is a stepped slider preference") },
-        stepPolicy = incrementingStepPolicy(5),
-        valueRange = 0..100,
-        valueText = { Text(it.toString()) }
+        stepPolicy = incrementingStepPolicy(0.05f),
+        valueRange = 0.75f..1.5f,
+        valueText = { ScaledPercentageUnitText(it) }
       )
     }
     item {
@@ -221,7 +223,7 @@ object PrefsKey : Key<Unit>
   val switch: Boolean = false,
   val radioButton: Boolean = false,
   val slider: Int = 50,
-  val steppedSlider: Int = 50,
+  val steppedSlider: Float = 0.5f,
   val textInput: String = "",
   val color: Int = Color.Red.toArgb(),
   val multiChoice: Set<String> = setOf("A", "B", "C"),
