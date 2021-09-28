@@ -33,6 +33,7 @@ android {
 
 dependencies {
   api(project(":essentials-android"))
+  api(project(":essentials-broadcast"))
   compileOnly(project(":essentials-xposed-provided"))
 }
 
