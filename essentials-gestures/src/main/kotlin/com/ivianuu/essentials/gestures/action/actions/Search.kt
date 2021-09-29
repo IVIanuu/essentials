@@ -25,15 +25,18 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object SearchActionId : ActionId("search")
 
 @Provide fun searchAction(rp: ResourceProvider): Action<SearchActionId> = Action(
   id = SearchActionId,
   title = loadResource(R.string.es_action_search),
-  icon = singleActionIcon(Icons.Default.Search)
+  icon = singleActionIcon(Icons.Default.Search),
+  permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
 )
 
 @Provide fun searchActionExecutor(

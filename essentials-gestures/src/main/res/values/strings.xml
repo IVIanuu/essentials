@@ -78,6 +78,8 @@
     <string name="es_action_accessibility_permission_title">Accessibility</string>
     <string name="es_action_accessibility_permission_desc">Required to click buttons</string>
     <string name="es_action_root_permission_title">Root</string>
+    <string name="es_action_system_overlay_permission_title">System overlay</string>
+    <string name="es_action_system_overlay_permission_desc">Required to open apps from the background</string>
     <string name="es_action_write_secure_settings_permission_title">Write secure settings</string>
     <string name="es_action_write_secure_settings_permission_desc">Required to change the navigation bar visibility</string>
     <string name="es_action_write_settings_permission_title">Write settings</string>

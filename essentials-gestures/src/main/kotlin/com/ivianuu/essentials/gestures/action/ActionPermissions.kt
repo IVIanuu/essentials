@@ -25,6 +25,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.root.RootPermission
+import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Provide
@@ -50,6 +51,17 @@ import kotlin.reflect.KClass
 ) : RootPermission {
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
+  override val icon: @Composable () -> Unit
+    get() = { Icon(R.drawable.es_ic_adb) }
+}
+
+@Provide class ActionSystemOverlayPermission(
+  private val rp: ResourceProvider
+) : SystemOverlayPermission {
+  override val title: String
+    get() = loadResource(R.string.es_action_system_overlay_permission_title)
+  override val desc: String
+    get() = loadResource(R.string.es_action_system_overlay_permission_desc)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_adb) }
 }

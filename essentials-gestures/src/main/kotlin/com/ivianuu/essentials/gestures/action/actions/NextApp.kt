@@ -7,15 +7,17 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object NextAppActionId : ActionId("next_app")
 
 @Provide fun nextAppAction(rp: ResourceProvider): Action<NextAppActionId> = Action(
   id = NextAppActionId,
   title = loadResource(R.string.es_action_next_app),
-  permissions = accessibilityActionPermissions,
+  permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
   unlockScreen = true,
   closeSystemDialogs = true,
   icon = singleActionIcon(R.drawable.es_ic_arrow_forward)

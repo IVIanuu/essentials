@@ -93,7 +93,7 @@ typealias ActionIntentSender = (Intent, Boolean, Bundle?) -> Unit
     intent.addFlags(FLOATING_WINDOW_FLAG)
   catch {
     PendingIntent.getActivity(
-      context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT, options
+      context, 1000, intent, PendingIntent.FLAG_CANCEL_CURRENT, options
     ).send()
   }.onFailure {
     it.printStackTrace()

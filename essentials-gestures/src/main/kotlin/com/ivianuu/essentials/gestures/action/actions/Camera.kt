@@ -23,8 +23,10 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object CameraActionId : ActionId("camera")
 
@@ -32,6 +34,7 @@ import com.ivianuu.injekt.Provide
   id = CameraActionId,
   title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
+  permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
   turnScreenOn = true,
   closeSystemDialogs = true
 )

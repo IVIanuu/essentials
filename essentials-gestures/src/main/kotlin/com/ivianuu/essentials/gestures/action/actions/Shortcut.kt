@@ -32,6 +32,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionFactory
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
@@ -41,6 +42,7 @@ import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 import java.io.ByteArrayOutputStream
 
 @Provide class ShortcutActionFactory(
@@ -60,6 +62,7 @@ import java.io.ByteArrayOutputStream
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
+      permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
       icon = singleActionIcon {
         Image(
           modifier = LocalActionImageSizeModifier.current,
