@@ -69,6 +69,10 @@ class UnlockScreenActivity : ComponentActivity() {
       finish()
     }
 
+    window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+    window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+    window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+
     if (component.systemBuildInfo.sdk >= 26) {
       component.keyguardManager.requestDismissKeyguard(
         this,
@@ -91,7 +95,6 @@ class UnlockScreenActivity : ComponentActivity() {
         }
       )
     } else {
-      window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
       merge(
         component.broadcastsFactory(Intent.ACTION_SCREEN_OFF),
         component.broadcastsFactory(Intent.ACTION_SCREEN_ON),

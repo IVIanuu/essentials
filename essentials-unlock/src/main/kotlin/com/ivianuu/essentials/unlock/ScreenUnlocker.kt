@@ -37,6 +37,7 @@ typealias ScreenUnlocker = suspend () -> Boolean
   logger: Logger,
 ): ScreenUnlocker = {
   withContext(dispatcher) {
+    log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) return@withContext true
 
     val result = CompletableDeferred<Boolean>()
