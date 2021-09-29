@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.first
       id = id,
       title = appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
       unlockScreen = true,
+      closeSystemDialogs = true,
       enabled = true,
       icon = singleActionImage(AppIcon(packageName))
     )

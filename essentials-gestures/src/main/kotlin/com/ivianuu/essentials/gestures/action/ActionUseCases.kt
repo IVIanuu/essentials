@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import android.content.Intent
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
@@ -35,6 +37,7 @@ import kotlinx.coroutines.withContext
 typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
 @Provide fun executeActionUseCase(
+  context: AppContext,
   dispatcher: DefaultDispatcher,
   getAction: GetActionUseCase,
   getActionExecutor: GetActionExecutorUseCase,
@@ -54,6 +57,10 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
         log { "couldn't get permissions for $key" }
         return@catch false
       }
+
+      // close system dialogs
+      if (action.closeSystemDialogs)
+        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {

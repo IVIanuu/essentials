@@ -30,6 +30,7 @@ data class Action<I : ActionId>(
   val title: String,
   val permissions: List<TypeKey<Permission>> = emptyList(),
   val unlockScreen: Boolean = false,
+  val closeSystemDialogs: Boolean = false,
   val enabled: Boolean = true,
   val icon: Flow<ActionIcon>
 ) {
@@ -38,9 +39,10 @@ data class Action<I : ActionId>(
     title: String,
     permissions: List<TypeKey<Permission>> = emptyList(),
     unlockScreen: Boolean = false,
+    closeSystemDialogs: Boolean = false,
     enabled: Boolean = true,
     icon: Flow<ActionIcon>
-  ) : this(id.value, title, permissions, unlockScreen, enabled, icon)
+  ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, enabled, icon)
 }
 
 typealias ActionIcon = @Composable () -> Unit

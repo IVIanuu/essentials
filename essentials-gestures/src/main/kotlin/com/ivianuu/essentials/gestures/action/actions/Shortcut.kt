@@ -58,6 +58,7 @@ import java.io.ByteArrayOutputStream
       id = id,
       title = label,
       unlockScreen = true,
+      closeSystemDialogs = true,
       enabled = true,
       icon = singleActionIcon {
         Image(

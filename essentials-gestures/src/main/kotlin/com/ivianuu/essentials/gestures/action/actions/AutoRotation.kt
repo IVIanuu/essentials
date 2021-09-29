@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.map
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
-  unlockScreen = true,
+  unlockScreen = false,
   icon = autoRotation.autoRotationIcon()
 )
 

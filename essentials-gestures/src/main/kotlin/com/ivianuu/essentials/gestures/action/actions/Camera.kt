@@ -32,7 +32,8 @@ import com.ivianuu.injekt.Provide
   id = CameraActionId,
   title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
-  unlockScreen = true
+  unlockScreen = true,
+  closeSystemDialogs = true
 )
 
 @Provide fun cameraActionExecutor(

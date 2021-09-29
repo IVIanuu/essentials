@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.first
       id = id,
       title = appShortcut.shortLabel,
       unlockScreen = true,
+      closeSystemDialogs = true,
       enabled = true,
       icon = singleActionIcon {
         Image(

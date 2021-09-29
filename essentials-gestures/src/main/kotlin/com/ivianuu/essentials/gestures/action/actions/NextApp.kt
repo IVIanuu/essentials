@@ -17,6 +17,7 @@ import com.ivianuu.injekt.Provide
   title = loadResource(R.string.es_action_next_app),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
+  closeSystemDialogs = true,
   icon = singleActionIcon(R.drawable.es_ic_arrow_forward)
 )
 

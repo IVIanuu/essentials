@@ -34,6 +34,7 @@ import kotlinx.coroutines.delay
   title = loadResource(R.string.es_action_last_app_native),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
+  closeSystemDialogs = true,
   icon = singleActionIcon(R.drawable.es_ic_repeat)
 )
 
