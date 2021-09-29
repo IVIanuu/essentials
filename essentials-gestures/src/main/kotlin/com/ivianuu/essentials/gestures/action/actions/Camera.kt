@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Provide
   id = CameraActionId,
   title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
-  unlockScreen = true,
+  turnScreenOn = true,
   closeSystemDialogs = true
 )
 
@@ -40,7 +40,7 @@ import com.ivianuu.injekt.Provide
   actionIntentSender: ActionIntentSender
 ): ActionExecutor<CameraActionId> = {
   actionIntentSender(
-    Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA),
+    Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
     false,
     null
   )
