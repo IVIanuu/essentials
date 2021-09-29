@@ -27,6 +27,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
@@ -43,6 +44,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   getActionExecutor: GetActionExecutorUseCase,
   logger: Logger,
   permissionRequester: PermissionRequester,
+  screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
   rp: ResourceProvider,
   toaster: Toaster
@@ -58,15 +60,20 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
         return@catch false
       }
 
-      // close system dialogs
-      if (action.closeSystemDialogs)
-        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+      if (action.turnScreenOn && !screenActivator()) {
+        log { "couldn't turn screen on for $key" }
+        return@catch false
+      }
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {
         log { "couldn't unlock screen for $key" }
         return@catch false
       }
+
+      // close system dialogs
+      if (action.closeSystemDialogs)
+        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 
       log { "fire $key" }
 
