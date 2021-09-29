@@ -22,5 +22,9 @@
             android:name="com.ivianuu.essentials.unlock.UnlockScreenActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:theme="@style/Theme.Es.Translucent" />
+        <activity
+            android:name="com.ivianuu.essentials.unlock.ScreenOnActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
+            android:theme="@style/Theme.Es.Translucent" />
     </application>
 </manifest>

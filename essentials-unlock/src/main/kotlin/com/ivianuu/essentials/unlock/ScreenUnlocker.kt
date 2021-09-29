@@ -38,7 +38,10 @@ typealias ScreenUnlocker = suspend () -> Boolean
 ): ScreenUnlocker = {
   withContext(dispatcher) {
     log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
-    if (!keyguardManager.isKeyguardLocked) return@withContext true
+    if (!keyguardManager.isKeyguardLocked) {
+      log { "already unlocked" }
+      return@withContext true
+    }
 
     val result = CompletableDeferred<Boolean>()
     val requestId = UUID.randomUUID().toString()

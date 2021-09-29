@@ -35,8 +35,10 @@ import com.ivianuu.injekt.android.activityScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.take
 
 /**
@@ -44,14 +46,14 @@ import kotlinx.coroutines.flow.take
  */
 class UnlockScreenActivity : ComponentActivity() {
   private var hasResult = false
-  private var valid = true
+  private var isValid = true
   private lateinit var requestId: String
 
   @SuppressLint("NewApi")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     if (!intent.hasExtra(KEY_REQUEST_ID)) {
-      valid = false
+      isValid = false
       finish()
       return
     }
@@ -100,17 +102,20 @@ class UnlockScreenActivity : ComponentActivity() {
         component.broadcastsFactory(Intent.ACTION_SCREEN_ON),
         component.broadcastsFactory(Intent.ACTION_USER_PRESENT)
       )
-        .take(1)
-        .onEach {
-          finishWithResult(it.action == Intent.ACTION_USER_PRESENT)
+        .map { it.action == Intent.ACTION_USER_PRESENT }
+        .onStart {
+          if (!component.keyguardManager.isKeyguardLocked)
+            emit(true)
         }
+        .take(1)
+        .onEach { finishWithResult(it) }
         .launchIn(lifecycleScope)
     }
   }
 
   override fun onDestroy() {
     // just in case we didn't respond yet
-    if (valid && !hasResult) {
+    if (isValid && !hasResult) {
       onUnlockScreenResult(requestId, false)
     }
     super.onDestroy()
