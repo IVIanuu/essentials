@@ -87,27 +87,27 @@ data class UiPermission<P : Permission>(
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<PermissionRequestModel> = scope.state(PermissionRequestModel()) {
-    state
-      .filter {
-        key.permissionsKeys
-          .all { permissionStateFactory(listOf(it)).first() }
-      }
-      .take(1)
-      .onEach { navigator.pop(key, true) }
-      .launchIn(this)
-
-    suspend fun updatePermissions() {
-      val notGrantedPermissions = key.permissionsKeys
-        .filterNot { permissionStateFactory(listOf(it)).first() }
-        .map { UiPermission(it, permissions[it]!!) }
-      update { copy(permissions = notGrantedPermissions) }
+  state
+    .filter {
+      key.permissionsKeys
+        .all { permissionStateFactory(listOf(it)).first() }
     }
+    .take(1)
+    .onEach { navigator.pop(key, true) }
+    .launchIn(this)
 
-    launch { updatePermissions() }
-
-    action(PermissionRequestModel.grantPermission()) { permission ->
-      requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
-      appUiStarter()
-      updatePermissions()
-    }
+  suspend fun updatePermissions() {
+    val notGrantedPermissions = key.permissionsKeys
+      .filterNot { permissionStateFactory(listOf(it)).first() }
+      .map { UiPermission(it, permissions[it]!!) }
+    update { copy(permissions = notGrantedPermissions) }
   }
+
+  launch { updatePermissions() }
+
+  action(PermissionRequestModel.grantPermission()) { permission ->
+    requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
+    appUiStarter()
+    updatePermissions()
+  }
+}
