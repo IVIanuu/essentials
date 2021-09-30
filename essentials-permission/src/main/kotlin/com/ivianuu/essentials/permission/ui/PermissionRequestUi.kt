@@ -16,12 +16,8 @@
 
 package com.ivianuu.essentials.permission.ui
 
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -62,13 +58,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
         },
         leading = permission.permission.icon,
         trailing = {
-          Button(
-            modifier = Modifier
-              .widthIn(96.dp)
-              .requiredHeight(48.dp),
-            elevation = null,
-            onClick = { model.grantPermission(permission) }
-          ) {
+          Button(onClick = { model.grantPermission(permission) }) {
             Text(R.string.es_grant)
           }
         },

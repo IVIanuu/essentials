@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ButtonElevation
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable fun Button(
@@ -25,11 +27,16 @@ import androidx.compose.ui.graphics.Shape
   border: BorderStroke? = null,
   colors: ButtonColors = ButtonDefaults.esButtonColors(),
   contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+  forceMinSize: Boolean = true,
   content: @Composable RowScope.() -> Unit
 ) {
   androidx.compose.material.Button(
     onClick,
-    modifier,
+    modifier
+      .then(
+        if (forceMinSize) Modifier.sizeIn(minWidth = 96.dp, minHeight = 48.dp)
+        else Modifier
+      ),
     enabled,
     interactionSource,
     elevation,
