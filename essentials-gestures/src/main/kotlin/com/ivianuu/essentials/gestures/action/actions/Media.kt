@@ -35,7 +35,7 @@ import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
-import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -101,7 +101,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
           Text(
             stringResource(
               R.string.es_pref_media_app_summary,
-              model.mediaApp.get()?.appName ?: stringResource(R.string.es_none)
+              model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
             )
           )
         },
