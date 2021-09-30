@@ -19,13 +19,11 @@ package com.ivianuu.essentials.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ReceiverScope
 import com.ivianuu.injekt.android.createReceiverScope
-import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 
@@ -35,7 +33,7 @@ class StartupReceiver : BroadcastReceiver() {
     val component = requireElement<StartupReceiverComponent>(createReceiverScope(context, intent))
     log(logger = component.logger) { "on system boot" }
     component.bootListeners.forEach { it() }
-    component.receiverScope.cast<DisposableScope>().dispose()
+    component.receiverScope.dispose()
   }
 }
 

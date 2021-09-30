@@ -19,7 +19,6 @@ package com.ivianuu.essentials.notificationlistener
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.PublicType
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
@@ -28,7 +27,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.Flow
@@ -73,9 +71,9 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerDisconnected() {
     log { "listener disconnected" }
-    notificationScope?.cast<DisposableScope>()?.dispose()
+    notificationScope?.dispose()
     notificationScope = null
-    component.serviceScope.cast<DisposableScope>().dispose()
+    component.serviceScope.dispose()
     super.onListenerDisconnected()
   }
 

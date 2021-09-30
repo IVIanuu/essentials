@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlin.reflect.KClass
@@ -152,7 +151,7 @@ private class NavigationContentState(
       if (isFinalized) return
       if (isComposing || !isDetached) return
       isFinalized = true
-      (scope as DisposableScope).dispose()
+      scope.dispose()
     }
   }
 }

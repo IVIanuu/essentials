@@ -19,14 +19,12 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 
@@ -62,9 +60,9 @@ class EsAccessibilityService : AccessibilityService() {
 
   override fun onUnbind(intent: Intent?): Boolean {
     log { "service disconnected" }
-    accessibilityScope?.cast<DisposableScope>()?.dispose()
+    accessibilityScope?.dispose()
     accessibilityScope = null
-    component.serviceScope.cast<DisposableScope>().dispose()
+    component.serviceScope.dispose()
     return super.onUnbind(intent)
   }
 }

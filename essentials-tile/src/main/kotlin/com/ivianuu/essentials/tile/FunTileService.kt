@@ -20,7 +20,6 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
@@ -29,7 +28,6 @@ import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.DisposableScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.StateFlow
@@ -78,14 +76,14 @@ abstract class AbstractFunTileService<T : Any>(
   }
 
   override fun onStopListening() {
-    tileModelComponent?.tileScope?.cast<DisposableScope>()?.dispose()
+    tileModelComponent?.tileScope?.dispose()
     tileModelComponent = null
     log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
   override fun onDestroy() {
-    component.serviceScope.cast<DisposableScope>().dispose()
+    component.serviceScope.dispose()
     super.onDestroy()
   }
 
