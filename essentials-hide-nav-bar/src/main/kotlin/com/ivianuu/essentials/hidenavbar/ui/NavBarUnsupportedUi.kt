@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator

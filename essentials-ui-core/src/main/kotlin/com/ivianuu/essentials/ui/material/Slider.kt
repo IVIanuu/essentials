@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.material
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SliderColors
 import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
@@ -33,7 +34,10 @@ import kotlin.time.Duration
   stepPolicy: StepPolicy<Float> = NoStepsStepPolicy,
   onValueChangeFinished: (() -> Unit)? = null,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-  colors: SliderColors = SliderDefaults.colors()
+  colors: SliderColors = SliderDefaults.colors(
+    thumbColor = MaterialTheme.colors.secondary,
+    activeTrackColor = MaterialTheme.colors.secondary,
+  )
 ) {
   androidx.compose.material.Slider(
     value,

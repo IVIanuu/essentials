@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import android.accessibilityservice.AccessibilityService
 import android.app.admin.DeviceAdminReceiver
 import android.service.notification.NotificationListenerService
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -41,6 +40,7 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.essentials.sample.deviceadmin.SampleDeviceAdmin
 import com.ivianuu.essentials.ui.layout.center
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
@@ -49,8 +49,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlin.reflect.KClass
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
 

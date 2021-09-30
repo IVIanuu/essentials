@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
+import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide

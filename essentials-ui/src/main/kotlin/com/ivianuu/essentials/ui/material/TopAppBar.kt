@@ -141,7 +141,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 }
 
 private val DefaultAppBarHeight = 56.dp
-val DefaultAppBarElevation = 4.dp
+val DefaultAppBarElevation = 0.dp
 
 @Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
   @Providers("com.ivianuu.essentials.ui.composableScope")
