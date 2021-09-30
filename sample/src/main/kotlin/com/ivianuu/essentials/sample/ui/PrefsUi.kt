@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.MultiChoiceListKey
@@ -68,6 +69,7 @@ object PrefsKey : Key<Unit>
             prefStore.updateData { copy(switch = it) }
           }
         },
+        leading = { IconPlaceholder() },
         title = { Text("Switch") }
       )
     }
@@ -83,6 +85,7 @@ object PrefsKey : Key<Unit>
           }
         },
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Radio Button") },
         subtitle = { Text("This is a radio button preference") }
       )
@@ -96,6 +99,7 @@ object PrefsKey : Key<Unit>
           }
         },
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Slider") },
         subtitle = { Text("This is a slider preference") },
         valueRange = 0..100,
@@ -111,6 +115,7 @@ object PrefsKey : Key<Unit>
           }
         },
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Stepped slider") },
         subtitle = { Text("This is a stepped slider preference") },
         stepPolicy = incrementingStepPolicy(0.05f),
@@ -126,6 +131,7 @@ object PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Text input") },
         subtitle = { Text("This is a text input preference") },
         onClick = {
@@ -162,6 +168,7 @@ object PrefsKey : Key<Unit>
           }
         },
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Color") },
         subtitle = { Text("This is a color preference") }
       )
@@ -169,6 +176,7 @@ object PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Multi select list") },
         subtitle = { Text("This is a multi select list preference") },
         onClick = {
@@ -194,6 +202,7 @@ object PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier.interactive(prefs.switch),
+        leading = { IconPlaceholder() },
         title = { Text("Single item list") },
         subtitle = { Text("This is a single item list preference") },
         onClick = {

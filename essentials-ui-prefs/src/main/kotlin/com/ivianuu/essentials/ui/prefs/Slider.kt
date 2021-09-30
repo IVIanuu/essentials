@@ -24,6 +24,7 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +32,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.time.toDuration
 import com.ivianuu.essentials.time.toLong
 import com.ivianuu.essentials.ui.common.getValue
@@ -218,20 +223,44 @@ import kotlin.time.Duration
   modifier: Modifier = Modifier,
 ) {
   Box(modifier = modifier) {
+    var listItemStart by remember { mutableStateOf(0.dp) }
+    var titleStart by remember { mutableStateOf(0.dp) }
+    val sliderStartPadding by remember {
+      derivedStateOf { titleStart - listItemStart }
+    }
+
+    val density = LocalDensity.current
     ListItem(
       modifier = Modifier
+        .onGloballyPositioned {
+          with(density) { listItemStart = it.positionInWindow().x.toDp() }
+        }
         .align(Alignment.BottomCenter)
         .padding(bottom = 20.dp),
       title = title,
       subtitle = subtitle,
-      leading = leading
+      leading = if (leading != null)
+        ({
+        Box(
+          modifier = Modifier
+            .onGloballyPositioned {
+              with(density) {
+                titleStart = (it.positionInWindow().x + it.size.width).toDp() + 16.dp
+              }
+            },
+          propagateMinConstraints = true
+        ) {
+          leading()
+        }
+      }) else null
     )
 
     Row(
       modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(
-          start = 12.dp, // make the slider pretty
+          // align the slider with the content
+          start = max(4.dp, sliderStartPadding - 4.dp),
           end = 16.dp
         ),
       verticalAlignment = Alignment.CenterVertically
