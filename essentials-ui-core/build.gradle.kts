@@ -31,6 +31,7 @@ dependencies {
   api(Deps.Accompanist.pager)
   api(Deps.Accompanist.pagerIndicators)
   api(Deps.Accompanist.swipeRefresh)
+  api(Deps.AndroidX.Activity.compose)
   api(Deps.AndroidX.core)
   api(Deps.AndroidX.Compose.core)
   api(Deps.AndroidX.Compose.material)

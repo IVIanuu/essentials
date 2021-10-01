@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -32,14 +33,19 @@ import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 typealias NavigationStateContent = @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
+  appScope: NamedCoroutineScope<AppScope>,
   navigator: Navigator,
   keyUiScopeFactory: @ChildScopeFactory (Key<*>) -> KeyUiScope
 ): NavigationStateContent = { modifier ->
@@ -52,6 +58,23 @@ typealias NavigationStateContent = @Composable (Modifier) -> Unit
   DisposableEffect(backStack) {
     contentState.updateBackStack(backStack)
     onDispose {  }
+  }
+
+  BackHandler(enabled = backStack.size > 1) {
+    appScope.launch {
+      navigator.popTop()
+    }
+  }
+
+  DisposableEffect(true) {
+    onDispose {
+      appScope.launch {
+        navigator.backStack
+          .first()
+          .drop(1)
+          .forEach { navigator.pop(it) }
+      }
+    }
   }
 
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
