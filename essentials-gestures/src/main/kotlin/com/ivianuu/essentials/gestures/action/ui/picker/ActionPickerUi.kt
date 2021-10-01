@@ -30,10 +30,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.GetActionPickerDelegatesUseCase
-import com.ivianuu.essentials.gestures.action.GetActionSettingsKeyUseCase
-import com.ivianuu.essentials.gestures.action.GetActionUseCase
-import com.ivianuu.essentials.gestures.action.GetAllActionsUseCase
+import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.optics.Optics
@@ -152,13 +149,10 @@ sealed class ActionPickerItem {
 
 @Provide fun actionPickerModel(
   filter: ActionFilter,
-  getAction: GetActionUseCase,
-  getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-  getAllActions: GetAllActionsUseCase,
-  getActionSettings: GetActionSettingsKeyUseCase,
   key: ActionPickerKey,
   navigator: Navigator,
   permissionRequester: PermissionRequester,
+  repository: ActionRepository,
   rp: ResourceProvider,
   scope: NamedCoroutineScope<KeyUiScope>,
 ): StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
@@ -168,7 +162,7 @@ sealed class ActionPickerItem {
   action(ActionPickerModel.pickAction()) { item ->
     val result = item.getResult() ?: return@action
     if (result is ActionPickerKey.Result.Action) {
-      val action = getAction(result.actionId)!!
+      val action = repository.getAction(result.actionId)!!
       if (!permissionRequester(action.permissions))
         return@action
     }
@@ -178,10 +172,8 @@ sealed class ActionPickerItem {
 
 private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,
-  @Inject getActionPickerDelegates: GetActionPickerDelegatesUseCase,
-  @Inject getAllActions: GetAllActionsUseCase,
-  @Inject getActionSettingsKey: GetActionSettingsKeyUseCase,
   @Inject key: ActionPickerKey,
+  @Inject repository: ActionRepository,
   @Inject rp: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
@@ -201,14 +193,14 @@ private suspend fun getActionPickerItems(
   }
 
   val actionsAndDelegates = (
-      (getActionPickerDelegates()
+      (repository.getActionPickerDelegates()
         .filter { filter(it.baseId) }
-        .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+        .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
         .filter { filter(it.id) }
         .map {
           ActionPickerItem.ActionItem(
             it,
-            getActionSettingsKey(it.id)
+            repository.getActionSettingsKey(it.id)
           )
         })
       )

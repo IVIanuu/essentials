@@ -18,8 +18,8 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
-import com.ivianuu.essentials.gestures.action.GetActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
@@ -40,8 +40,8 @@ import kotlinx.coroutines.launch
 object ActionsKey : Key<Unit>
 
 @Provide fun actionsUi(
+  actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
-  getAction: GetActionUseCase,
   navigator: Navigator,
   scope: NamedCoroutineScope<UiScope>,
   toaster: Toaster
@@ -57,7 +57,7 @@ object ActionsKey : Key<Unit>
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch
 
-          val action = getAction(actionId)!!
+          val action = actionRepository.getAction(actionId)!!
 
           showToast("Execute action ${action.title}")
 

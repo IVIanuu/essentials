@@ -26,7 +26,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
@@ -40,10 +39,9 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 @Provide fun executeActionUseCase(
   context: AppContext,
   dispatcher: DefaultDispatcher,
-  getAction: GetActionUseCase,
-  getActionExecutor: GetActionExecutorUseCase,
   logger: Logger,
   permissionRequester: PermissionRequester,
+  repository: ActionRepository,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
   rp: ResourceProvider,
@@ -52,7 +50,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   withContext(dispatcher) {
     catch {
       log { "execute $key" }
-      val action = getAction(key)!!
+      val action = repository.getAction(key)!!
 
       // check permissions
       if (!permissionRequester(action.permissions)) {
@@ -78,75 +76,11 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
       log { "fire $key" }
 
       // fire
-      getActionExecutor(key)!!()
+      repository.getActionExecutor(key)!!()
       return@catch true
     }.onFailure {
       it.printStackTrace()
       showToast(R.string.es_action_execution_failed, key)
     }
   }
-}
-
-typealias GetAllActionsUseCase = suspend () -> List<Action<*>>
-
-@Provide fun getAllActionsUseCase(
-  actions: Map<String, () -> Action<*>> = emptyMap(),
-  dispatcher: DefaultDispatcher
-): GetAllActionsUseCase = {
-  withContext(dispatcher) { actions.values.map { it() } }
-}
-
-typealias GetActionUseCase = suspend (String) -> Action<*>?
-
-@Provide fun getActionUseCase(
-  actions: Map<String, () -> Action<*>> = emptyMap(),
-  actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
-  dispatcher: DefaultDispatcher
-): GetActionUseCase = { key ->
-  withContext(dispatcher) {
-    actions[key]
-      ?.invoke()
-      ?: actionFactories()
-        .asSequence()
-        .map { it() }
-        .firstOrNull { it.handles(key) }
-        ?.createAction(key)
-  }
-}
-
-typealias GetActionExecutorUseCase = suspend (String) -> ActionExecutor<*>?
-
-@Provide fun getActionExecutorUseCase(
-  actionsExecutors: Map<String, () -> ActionExecutor<*>> = emptyMap(),
-  actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
-  dispatcher: DefaultDispatcher
-): GetActionExecutorUseCase = { key ->
-  withContext(dispatcher) {
-    actionsExecutors[key]
-      ?.invoke()
-      ?: actionFactories()
-        .asSequence()
-        .map { it() }
-        .firstOrNull { it.handles(key) }
-        ?.createExecutor(key)
-      ?: error("Unsupported action key $key")
-  }
-}
-
-typealias GetActionSettingsKeyUseCase = suspend (String) -> Key<Unit>?
-
-@Provide fun getActionSettingsKeyUseCase(
-  actionSettings: Map<String, () -> ActionSettingsKey<*>> = emptyMap(),
-  dispatcher: DefaultDispatcher
-): GetActionSettingsKeyUseCase = { key ->
-  withContext(dispatcher) { actionSettings[key]?.invoke() }
-}
-
-typealias GetActionPickerDelegatesUseCase = suspend () -> List<ActionPickerDelegate>
-
-@Provide fun getActionPickerDelegatesUseCase(
-  actionPickerDelegates: Set<() -> ActionPickerDelegate> = emptySet(),
-  dispatcher: DefaultDispatcher
-): GetActionPickerDelegatesUseCase = {
-  withContext(dispatcher) { actionPickerDelegates.map { it() } }
 }
