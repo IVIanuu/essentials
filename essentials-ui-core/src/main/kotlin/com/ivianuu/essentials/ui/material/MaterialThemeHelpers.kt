@@ -41,11 +41,6 @@ inline fun Typography.editEach(edit: TextStyle.() -> TextStyle) = Typography(
   overline = edit(overline)
 )
 
-fun blackColors() = darkColors().copy(
-  background = Color.Black,
-  surface = Color.Black
-)
-
 fun colors(
   isLight: Boolean = true,
   primary: Color = if (isLight) Color(0xFF6200EE) else Color(0xFFBB86FC),

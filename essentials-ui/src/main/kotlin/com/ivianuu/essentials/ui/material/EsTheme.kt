@@ -39,10 +39,41 @@ import com.ivianuu.essentials.ui.animation.transition.StackTransition
 }
 
 val EsTypography = Typography(
-  subtitle1 = TextStyle(
+  h6 = TextStyle(
+    fontSize = 22.sp,
+    lineHeight = 28.sp,
     fontWeight = FontWeight.Normal,
-    fontSize = 20.sp,
-    letterSpacing = 0.15.sp
+    letterSpacing = 0.0.sp
+  ),
+  subtitle1 = TextStyle(
+    fontSize = 18.sp,
+    lineHeight = 24.sp,
+    fontWeight = FontWeight.Medium,
+    letterSpacing = 0.2.sp
+  ),
+  body2 = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 20.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = 0.2.sp
+  ),
+  button = TextStyle(
+    fontSize = 14.sp,
+    lineHeight = 20.sp,
+    fontWeight = FontWeight.Medium,
+    letterSpacing = 0.1.sp
+  ),
+  caption = TextStyle(
+    fontSize = 12.sp,
+    lineHeight = 16.sp,
+    fontWeight = FontWeight.Medium,
+    letterSpacing = 0.5.sp
+  ),
+  overline = TextStyle(
+    fontSize = 11.sp,
+    lineHeight = 16.sp,
+    fontWeight = FontWeight.Medium,
+    letterSpacing = 0.5.sp
   )
 )
 

@@ -43,7 +43,7 @@ include(
     ":essentials-rate",
     ":essentials-recent-apps",
     ":essentials-resource",
-    ":essentials-roboto-mono",
+    ":essentials-rubik",
     ":essentials-screen-state",
     ":essentials-serialization",
     ":essentials-shell",
