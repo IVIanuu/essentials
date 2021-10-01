@@ -18,12 +18,12 @@ package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
@@ -35,7 +35,7 @@ suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
-): List<R> = supervisorScope {
+): List<R> = coroutineScope {
   val semaphore = Semaphore(concurrency.value)
   map { item ->
     async(context) {

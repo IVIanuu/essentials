@@ -19,5 +19,5 @@
     <string name="es_notif_channel_torch">Torch</string>
     <string name="es_notif_title_torch">Torch enabled</string>
     <string name="es_notif_text_torch">Touch to disable</string>
-    <string name="es_failed_to_toggle_torch">Failed to toggle torch!</string>
+    <string name="es_failed_to_enable_torch">Failed to enable torch!</string>
 </resources>
