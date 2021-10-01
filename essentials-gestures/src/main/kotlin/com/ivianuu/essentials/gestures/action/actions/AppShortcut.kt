@@ -5,9 +5,8 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.apps.shortcuts.AppShortcut
-import com.ivianuu.essentials.apps.shortcuts.AppShortcutId
 import com.ivianuu.essentials.apps.shortcuts.AppShortcutPickerKey
+import com.ivianuu.essentials.apps.shortcuts.AppShortcutRepository
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -23,15 +22,13 @@ import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide class AppShortcutActionFactory(
   private val actionIntentSender: ActionIntentSender,
-  private val appShortcut: (@Provide PackageName, @Provide AppShortcutId) -> Flow<AppShortcut?>,
+  private val appShortcutRepository: AppShortcutRepository,
   private val rp: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
@@ -41,7 +38,7 @@ import kotlinx.coroutines.flow.first
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1] }
 
-    val appShortcut = appShortcut(packageName, shortcutId).first()!!
+    val appShortcut = appShortcutRepository.appShortcut(packageName, shortcutId).first()!!
 
     return Action<ActionId>(
       id = id,
@@ -63,7 +60,7 @@ import kotlinx.coroutines.flow.first
     val (packageName, shortcutId, isFloating) = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
 
-    val appShortcut = appShortcut(packageName, shortcutId).first()!!
+    val appShortcut = appShortcutRepository.appShortcut(packageName, shortcutId).first()!!
 
     return {
       actionIntentSender(

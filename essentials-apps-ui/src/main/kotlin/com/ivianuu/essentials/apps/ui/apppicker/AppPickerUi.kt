@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.InstalledApps
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 data class AppPickerKey(
@@ -90,8 +89,8 @@ data class AppPickerKey(
 }
 
 @Provide fun appPickerModel(
+  appRepository: AppRepository,
   key: AppPickerKey,
-  installedApps: Flow<InstalledApps>,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<AppPickerModel> = scope.state(
@@ -100,7 +99,7 @@ data class AppPickerKey(
     title = key.title
   )
 ) {
-  installedApps
+  appRepository.installedApps
     .flowAsResource()
     .update { copy(allApps = it) }
   action(AppPickerModel.pickApp()) { navigator.pop(key, it) }

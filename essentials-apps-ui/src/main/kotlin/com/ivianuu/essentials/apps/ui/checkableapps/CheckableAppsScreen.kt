@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.essentials.apps.InstalledApps
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
@@ -128,8 +128,8 @@ data class CheckableAppsParams(
 data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
 @Provide fun checkableAppsModel(
+  appRepository: AppRepository,
   params: CheckableAppsParams,
-  installedApps: Flow<InstalledApps>,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<CheckableAppsModel> = scope.state(
   CheckableAppsModel(
@@ -139,7 +139,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 ) {
   params.checkedApps.update { copy(checkedApps = it) }
 
-  installedApps
+  appRepository.installedApps
     .flowAsResource()
     .update { copy(allApps = it) }
 

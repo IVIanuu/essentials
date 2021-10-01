@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.apps.IsAppInstalled
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.optics.Optics
@@ -27,12 +27,10 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
-import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
@@ -88,7 +86,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
 )
 
 @Provide fun floatingWindowsPickerModel(
-  isAppInstalledFactory: (@Provide PackageName) -> Flow<IsAppInstalled>,
+  appRepository: AppRepository,
   key: FloatingWindowsPickerKey,
   navigator: Navigator,
   rp: ResourceProvider,
@@ -98,7 +96,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   FloatingWindowsPickerModel(key.actionTitle)
 ) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {
-    if (isAppInstalledFactory(FLOATING_WINDOWS_PACKAGE).first()) {
+    if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
       navigator.pop(key, true)
     } else {
       showToast(R.string.es_floating_windows_not_installed)

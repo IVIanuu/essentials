@@ -26,14 +26,12 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-typealias GetLicenseProjectsUseCase = suspend () -> Result<List<Project>, Throwable>
-
-@Provide fun getLicenseProjectsUseCase(
-  context: AppContext,
-  dispatcher: IODispatcher,
-  json: Json
-): GetLicenseProjectsUseCase = {
-  withContext(dispatcher) {
+@Provide class LicenseProjectRepository(
+  private val context: AppContext,
+  private val dispatcher: IODispatcher,
+  private val json: Json
+) {
+  suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(dispatcher) {
     catch {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()
@@ -41,6 +39,8 @@ typealias GetLicenseProjectsUseCase = suspend () -> Result<List<Project>, Throwa
         .let { json.decodeFromString(it) }
     }
   }
-}
 
-private const val LICENSE_JSON_FILE_NAME = "open_source_licenses.json"
+  private companion object {
+    private const val LICENSE_JSON_FILE_NAME = "open_source_licenses.json"
+  }
+}

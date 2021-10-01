@@ -48,7 +48,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 object ShortcutPickerKey : Key<Shortcut>
@@ -78,15 +77,14 @@ object ShortcutPickerKey : Key<Shortcut>
 )
 
 @Provide fun shortcutPickerModel(
-  shortcuts: Flow<Shortcuts>,
-  extractShortcut: ExtractShortcutUseCase,
   key: ShortcutPickerKey,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>,
+  shortcutRepository: ShortcutRepository,
   rp: ResourceProvider,
   toaster: Toaster
 ): StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
-  shortcuts
+  shortcutRepository.shortcuts
     .flowAsResource()
     .update { copy(shortcuts = it) }
 
@@ -95,7 +93,7 @@ object ShortcutPickerKey : Key<Shortcut>
       val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
         ?.getOrNull()
         ?.data ?: return@catch
-      val finalShortcut = extractShortcut(shortcutRequestResult)
+      val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
       navigator.pop(key, finalShortcut)
     }.onFailure {
       it.printStackTrace()

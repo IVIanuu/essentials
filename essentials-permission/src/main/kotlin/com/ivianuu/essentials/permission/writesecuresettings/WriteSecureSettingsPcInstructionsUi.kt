@@ -21,7 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.clipboard.UpdateClipboardTextUseCase
+import com.ivianuu.essentials.clipboard.Clipboard
 import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
@@ -132,12 +132,12 @@ data class WriteSecureSettingsPcInstructionsKey(
 }
 
 @Provide fun writeSecureSettingsPcInstructionsModel(
+  clipboard: Clipboard,
   initial: @Initial WriteSecureSettingsPcInstructionsModel,
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: NamedCoroutineScope<KeyUiScope>,
-  updateClipboardText: UpdateClipboardTextUseCase
+  scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(initial) {
   timer(200.milliseconds)
     .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
@@ -147,7 +147,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     .launchIn(this)
 
   action(WriteSecureSettingsPcInstructionsModel.copyAdbCommand()) {
-    updateClipboardText(state.first().secureSettingsAdbCommand, true)
+    clipboard.updateText(state.first().secureSettingsAdbCommand, true)
   }
 
   action(WriteSecureSettingsPcInstructionsModel.openGadgetHacksTutorial()) {

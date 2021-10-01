@@ -20,7 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
-import com.ivianuu.essentials.license.domain.GetLicenseProjectsUseCase
+import com.ivianuu.essentials.license.domain.LicenseProjectRepository
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -67,11 +67,11 @@ object LicenseKey : Key<Unit>
 )
 
 @Provide fun licenseModel(
-  getProjects: GetLicenseProjectsUseCase,
+  licenseProjectRepository: LicenseProjectRepository,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<LicenseModel> = scope.state(LicenseModel()) {
-  flow { emit(getProjects()) }
+  flow { emit(licenseProjectRepository.getLicenseProjects()) }
     .flowAsResource()
     .update { copy(projects = it) }
 

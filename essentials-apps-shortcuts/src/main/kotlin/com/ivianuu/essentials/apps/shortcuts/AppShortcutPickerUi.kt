@@ -23,7 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.apps.InstalledApps
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -39,10 +39,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
-import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -73,18 +71,18 @@ object AppShortcutPickerKey : Key<AppShortcut>
 )
 
 @Provide fun appShortcutPickerModel(
-  installedApps: Flow<InstalledApps>,
-  appShortcuts: (@Provide PackageName) -> Flow<AppShortcuts>,
+  appRepository: AppRepository,
+  appShortcutRepository: AppShortcutRepository,
   key: AppShortcutPickerKey,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
-  installedApps
+  appRepository.installedApps
     .flatMapLatest { apps ->
       combine(
         apps
           .map { app ->
-            appShortcuts(app.packageName)
+            appShortcutRepository.appShortcuts(app.packageName)
               .catch { emit(emptyList()) }
           }
       ) { it.toList().flatten() }

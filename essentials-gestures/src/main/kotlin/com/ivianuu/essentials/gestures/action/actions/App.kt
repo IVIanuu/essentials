@@ -20,7 +20,7 @@ import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
@@ -37,15 +37,13 @@ import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide class AppActionFactory(
   private val actionIntentSender: ActionIntentSender,
-  private val appInfo: (@Provide PackageName) -> Flow<AppInfo?>,
+  private val appRepository: AppRepository,
   private val packageManager: PackageManager,
   private val rp: ResourceProvider
 ) : ActionFactory {
@@ -56,7 +54,7 @@ import kotlinx.coroutines.flow.first
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
-      title = appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
+      title = appRepository.appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,

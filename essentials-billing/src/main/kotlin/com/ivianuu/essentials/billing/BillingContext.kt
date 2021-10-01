@@ -41,8 +41,7 @@ interface BillingContext {
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R?
 }
 
-@Provide @Scoped<AppScope>
-class BillingContextImpl(
+@Provide @Scoped<AppScope> class BillingContextImpl(
   override val billingClient: BillingClient,
   private val dispatcher: IODispatcher,
   override val logger: Logger,

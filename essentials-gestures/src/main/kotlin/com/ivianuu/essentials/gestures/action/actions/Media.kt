@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
@@ -43,7 +44,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.PackageName
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -117,7 +117,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 )
 
 @Provide fun mediaActionSettingsModel(
-  appInfo: (@Provide PackageName) -> Flow<AppInfo?>,
+  appRepository: AppRepository,
   intentAppPredicateFactory: (@Provide Intent) -> IntentAppPredicate,
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
@@ -127,7 +127,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 ) {
   pref.data
     .map { it.mediaApp }
-    .flatMapLatest { if (it != null) appInfo(it) else infiniteEmptyFlow() }
+    .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
     .flowAsResource()
     .update { copy(mediaApp = it) }
 
