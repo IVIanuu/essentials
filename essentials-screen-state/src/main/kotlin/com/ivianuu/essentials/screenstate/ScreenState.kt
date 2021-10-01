@@ -23,16 +23,11 @@ import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 enum class ScreenState(val isOn: Boolean) {
@@ -41,9 +36,8 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Provide fun screenState(
   broadcastsFactory: BroadcastsFactory,
-  scope: NamedCoroutineScope<AppScope>,
   screenStateProvider: CurrentScreenStateProvider
-): @Scoped<AppScope> Flow<ScreenState> = merge(
+): Flow<ScreenState> = merge(
   broadcastsFactory(Intent.ACTION_SCREEN_OFF),
   broadcastsFactory(Intent.ACTION_SCREEN_ON),
   broadcastsFactory(Intent.ACTION_USER_PRESENT)
@@ -51,7 +45,6 @@ enum class ScreenState(val isOn: Boolean) {
   .map { Unit }
   .onStart { emit(Unit) }
   .map { screenStateProvider() }
-  .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
   .distinctUntilChanged()
 
 private typealias CurrentScreenStateProvider = suspend () -> ScreenState

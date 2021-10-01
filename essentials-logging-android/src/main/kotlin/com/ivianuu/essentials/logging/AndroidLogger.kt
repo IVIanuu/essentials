@@ -28,11 +28,9 @@ import com.ivianuu.essentials.logging.Logger.Priority.WARN
 import com.ivianuu.essentials.logging.Logger.Priority.WTF
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlin.math.min
 
-@Provide @Scoped<AppScope> class AndroidLogger(
+@Provide class AndroidLogger(
   override val isEnabled: LoggingEnabled,
   private val systemBuildInfo: SystemBuildInfo
 ) : Logger {

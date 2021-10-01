@@ -18,15 +18,12 @@ package com.ivianuu.essentials.android.settings
 
 import android.content.ContentResolver
 import android.provider.Settings
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -46,9 +43,7 @@ class AndroidSettingModule<T : S, S>(
     contentResolver: ContentResolver,
     dispatcher: IODispatcher,
     scope: NamedCoroutineScope<AppScope>
-  ): @Scoped<AppScope> DataStore<T> = object : DataStore<T> {
-    private val actor = scope.actor(dispatcher)
-
+  ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
@@ -57,20 +52,16 @@ class AndroidSettingModule<T : S, S>(
       }
     )
       .onStart { emit(Unit) }
-      .map {
-        actor.actAndReply {
-          adapter.get(contentResolver, name, type, defaultValue) as T
-        }
-      }
+      .map { adapter.get(contentResolver, name, type, defaultValue) as T }
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
-    override suspend fun updateData(transform: T.() -> T) = actor.actAndReply {
+    override suspend fun updateData(transform: T.() -> T): T {
       val currentValue = adapter.get(contentResolver, name, type, defaultValue) as T
       val newValue = transform(currentValue)
       if (currentValue != newValue)
         adapter.set(contentResolver, name, type, newValue)
-      newValue
+      return newValue
     }
   }
 }

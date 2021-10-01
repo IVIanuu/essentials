@@ -24,11 +24,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
@@ -38,7 +34,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 enum class DisplayRotation(val isPortrait: Boolean) {
@@ -57,13 +52,11 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   configChanges: () -> Flow<ConfigChange>,
-  dispatcher: IODispatcher,
   rotationChanges: () -> Flow<RotationChange>,
   logger: Logger,
-  scope: NamedCoroutineScope<AppScope>,
   screenState: () -> Flow<ScreenState>,
   windowManager: @SystemService WindowManager
-): @Scoped<AppScope> Flow<DisplayRotation> = flow {
+): Flow<DisplayRotation> = flow {
   screenState()
     .flatMapLatest { currentScreenState ->
       if (currentScreenState.isOn) {
@@ -80,8 +73,6 @@ enum class DisplayRotation(val isPortrait: Boolean) {
     .distinctUntilChanged()
     .let { emitAll(it) }
 }
-  .shareIn(scope, SharingStarted.WhileSubscribed(1000), 1)
-  .distinctUntilChanged()
 
 private suspend fun getCurrentDisplayRotation(
   @Inject dispatcher: IODispatcher,

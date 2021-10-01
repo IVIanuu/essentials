@@ -54,11 +54,10 @@ class BillingContextImpl(
 
   override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
     withContext(scope.coroutineContext + dispatcher) {
-      ensureConnected()
-        ?.let { block() }
+      block()
     }
 
-  private suspend fun ensureConnected(): Unit? = connectionMutex.withLock {
+  private suspend fun ensureConnected(): Unit = connectionMutex.withLock {
     if (isConnected) return@withLock
     suspendCoroutine<Unit?> { continuation ->
       log { "start connection" }
