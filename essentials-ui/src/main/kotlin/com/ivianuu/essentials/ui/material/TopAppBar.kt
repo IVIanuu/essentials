@@ -63,13 +63,15 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   },
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
+  applySystemBarStyle: Boolean = true
 ) {
   TopAppBar(
     modifier = modifier,
     backgroundColor = backgroundColor,
     contentColor = contentColor,
     elevation = elevation,
-    bottomContent = bottomContent
+    bottomContent = bottomContent,
+    applySystemBarStyle = applySystemBarStyle
   ) {
     leading?.invoke()
     if (title != null) {
