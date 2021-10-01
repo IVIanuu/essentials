@@ -45,10 +45,8 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.map
-import com.ivianuu.essentials.notificationlistener.DismissNotificationUseCase
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
-import com.ivianuu.essentials.notificationlistener.Notifications
-import com.ivianuu.essentials.notificationlistener.OpenNotificationUseCase
+import com.ivianuu.essentials.notificationlistener.NotificationService
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
@@ -180,14 +178,12 @@ data class UiNotification(
 
 @Provide fun notificationsModel(
   context: AppContext,
-  dismissNotification: DismissNotificationUseCase,
-  notifications: Flow<Notifications>,
-  openNotification: OpenNotificationUseCase,
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>,
+  service: NotificationService
 ): StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
-  notifications
+  service.notifications
     .map { notifications ->
       notifications
         .parMap { it.toUiNotification(context) }
@@ -201,10 +197,10 @@ data class UiNotification(
     permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
   }
   action(NotificationsModel.openNotification()) { notification ->
-    openNotification(notification.sbn.notification)
+    service.openNotification(notification.sbn.notification)
   }
   action(NotificationsModel.dismissNotification()) { notification ->
-    dismissNotification(notification.sbn.key)
+    service.dismissNotification(notification.sbn.key)
   }
 }
 
