@@ -24,17 +24,13 @@ import com.ivianuu.injekt.coroutines.IODispatcher
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-typealias IsShellAvailableUseCase = suspend () -> Boolean
-
-@Provide fun isShellAvailableUseCase(dispatcher: IODispatcher): IsShellAvailableUseCase = {
-  withContext(dispatcher) {
+@Provide class Shell(private val dispatcher: IODispatcher) {
+  suspend fun isAvailable(): Boolean = withContext(dispatcher) {
     catch { SU.available() }.getOrElse { false }
   }
-}
 
-typealias RunShellCommandUseCase = suspend (List<String>) -> Result<List<String>, Throwable>
-
-@Provide
-fun runShellCommandUseCase(dispatcher: IODispatcher): RunShellCommandUseCase = { commands ->
-  withContext(dispatcher) { catch { SU.run(commands)!! } }
+  suspend fun run(vararg commands: String): Result<List<String>, Throwable> =
+    withContext(dispatcher) {
+      catch { SU.run(commands) ?: emptyList() }
+    }
 }

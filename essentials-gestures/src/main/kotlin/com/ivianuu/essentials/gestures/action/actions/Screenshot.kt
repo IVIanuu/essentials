@@ -28,7 +28,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.shell.RunShellCommandUseCase
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.delay
@@ -52,13 +51,13 @@ import kotlinx.coroutines.delay
 @Provide
 fun screenshotActionExecutor(
   globalActionExecutor: GlobalActionExecutor,
-  runShellCommand: RunShellCommandUseCase,
+  rootCommandRunner: ActionRootCommandRunner,
   systemBuildInfo: SystemBuildInfo,
 ): ActionExecutor<ScreenshotActionId> = {
   delay(500)
   if (systemBuildInfo.sdk >= 28) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
   } else {
-    runShellCommand(listOf("input keyevent 26"))
+    rootCommandRunner("input keyevent 26")
   }
 }

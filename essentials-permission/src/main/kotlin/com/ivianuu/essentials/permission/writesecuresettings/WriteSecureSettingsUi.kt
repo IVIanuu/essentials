@@ -25,7 +25,7 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.shell.RunShellCommandUseCase
+import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -85,8 +85,8 @@ data class WriteSecureSettingsKey(
   key: WriteSecureSettingsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  runShellCommand: RunShellCommandUseCase,
   scope: NamedCoroutineScope<KeyUiScope>,
+  shell: Shell,
   rp: ResourceProvider,
   toaster: Toaster,
 ): StateFlow<WriteSecureSettingsModel> = scope.state(
@@ -105,7 +105,7 @@ data class WriteSecureSettingsKey(
     navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
   }
   action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
-    runShellCommand(listOf("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS"))
+    shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
       .onFailure {
         it.printStackTrace()
         showToast(R.string.es_secure_settings_no_root)

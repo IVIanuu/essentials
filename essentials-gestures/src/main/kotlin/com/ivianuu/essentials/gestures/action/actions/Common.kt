@@ -34,7 +34,7 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.shell.RunShellCommandUseCase
+import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -70,11 +70,11 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
 typealias ActionRootCommandRunner = suspend (String) -> Unit
 
 @Provide fun actionRootCommandRunner(
-  runShellCommand: RunShellCommandUseCase,
+  shell: Shell,
   rp: ResourceProvider,
   toaster: Toaster
 ): ActionRootCommandRunner = { command ->
-  catch { runShellCommand(listOf(command)) }
+  catch { shell.run(command) }
     .onFailure {
       it.printStackTrace()
       showToast(R.string.es_no_root)
