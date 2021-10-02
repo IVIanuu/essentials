@@ -5,6 +5,7 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
 interface Schema {
@@ -27,7 +28,7 @@ fun Schema(
   version: Int,
   entities: List<EntityDescriptor<*>> = emptyList(),
   migrations: List<Migration> = emptyList(),
-  serializersModule: SerializersModule = SerializersModule {  },
+  serializersModule: SerializersModule = EmptySerializersModule,
   embeddedFormat: StringFormat = Json
 ): Schema = SchemaImpl(version, entities, migrations, serializersModule, embeddedFormat)
 

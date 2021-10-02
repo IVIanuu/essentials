@@ -85,7 +85,7 @@ fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): St
 
   val rowsWithValues = descriptor.rows.zip(
     buildList {
-      EmittingEncoder(
+      OneLevelEmittingEncoder(
         schema.serializersModule,
         schema.embeddedFormat,
         descriptor.serializer.descriptor

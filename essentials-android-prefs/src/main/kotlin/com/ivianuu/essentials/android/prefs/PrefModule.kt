@@ -16,76 +16,62 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStoreFactory
-import androidx.datastore.core.Serializer
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.fold
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import java.io.InputStream
-import java.io.OutputStream
+import kotlinx.serialization.modules.EmptySerializersModule
 
-class PrefModule<T : Any>(private val name: String, private val default: () -> T) {
+class PrefModule<T : Any>(private val default: () -> T) {
   @Provide fun dataStore(
+    prefsDataStore: DataStore<Map<String, String>>,
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
-    prefsDir: () -> PrefsDir,
     scope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> {
-    val dataStore = DataStoreFactory.create(
-      produceFile = { prefsDir().resolve(name) },
-      serializer = object : Serializer<T> {
-        override val defaultValue: T
-          get() = initial()
-        private val json by lazy(jsonFactory)
-        private val serializer by lazy(serializerFactory)
-        override suspend fun readFrom(input: InputStream): T = catch {
-          json.decodeFromString(serializer, String(input.readBytes()))
-        }.fold(
-          success = { it },
-          failure = { throw CorruptionException("Couldn't deserialize data", it) }
-        )
+    val json by lazy(jsonFactory)
+    val serializer by lazy(serializerFactory)
 
-        override suspend fun writeTo(t: T, output: OutputStream) {
-          output.write(json.encodeToString(serializer, t).toByteArray())
-        }
-      },
-      scope = scope.childCoroutineScope(dispatcher),
-      corruptionHandler = ReplaceFileCorruptionHandler {
-        it.printStackTrace()
-        initial()
-      }
-    )
-    val actor = scope.actor()
+    fun Map<String, String>.decode(): T =
+      PrefsDecoder(this, EmptySerializersModule, serializer.descriptor, json)
+        .decodeSerializableValue(serializer)
+
     return object : DataStore<T> {
-      override val data: Flow<T>
-        get() = dataStore.data
+      override val data: Flow<T> = prefsDataStore.data
+        .map { it.decode() }
+        .distinctUntilChanged()
+        .shareIn(scope, SharingStarted.Eagerly, 1)
 
-      override suspend fun updateData(transform: T.() -> T) = actor.actAndReply {
-        dataStore.updateData { transform(it) }
-        data.first()
-      }
+      override suspend fun updateData(transform: T.() -> T): T =
+        prefsDataStore.updateData {
+          val current = decode()
+          val update = current.transform()
+          if (current != update) {
+            toMutableMap().apply {
+              PrefsEncoder(EmptySerializersModule, json, serializer.descriptor, this)
+                .encodeSerializableValue(serializer, update)
+            }
+          } else this
+        }.decode()
     }
   }
 
   @Provide
   fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 }
+
+@Provide val prefsDataStoreModule =
+  DataStoreModule<Map<String, String>>("prefs") { emptyMap() }

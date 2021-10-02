@@ -28,8 +28,6 @@ import kotlinx.serialization.Serializable
   @SerialName("disable_on_secure_screens") val disableOnSecureScreens: Boolean = true
 ) {
   companion object {
-    @Provide val prefModule = PrefModule("system_overlay_blacklist_prefs") {
-      SystemOverlayBlacklistPrefs()
-    }
+    @Provide val prefModule = PrefModule { SystemOverlayBlacklistPrefs() }
   }
 }

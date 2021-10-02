@@ -85,7 +85,7 @@ private fun mediaIntentFor(
   @SerialName("media_app") val mediaApp: String? = null,
 ) {
   companion object {
-    @Provide val prefModule = PrefModule("media_action_prefs") { MediaActionPrefs() }
+    @Provide val prefModule = PrefModule { MediaActionPrefs() }
   }
 }
 

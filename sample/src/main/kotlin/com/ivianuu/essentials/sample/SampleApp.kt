@@ -25,6 +25,7 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.essentials.*",
   "com.ivianuu.essentials.about.*",
   "com.ivianuu.essentials.accessibility.*",
+  "com.ivianuu.essentials.android.prefs.*",
   "com.ivianuu.essentials.android.settings.*",
   "com.ivianuu.essentials.app.*",
   "com.ivianuu.essentials.apps.*",

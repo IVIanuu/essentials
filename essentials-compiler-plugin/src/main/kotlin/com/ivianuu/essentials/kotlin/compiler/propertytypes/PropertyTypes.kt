@@ -177,7 +177,6 @@ class PropertyTypesDeclarationChecker : DeclarationChecker, CallChecker {
             )
           }
         }
-      println()
     }
   }
 

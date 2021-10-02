@@ -40,6 +40,6 @@ import kotlinx.serialization.Serializable
 
     @Provide fun prefModule(
       initialFactory: () -> @Initial NavBarPrefs
-    ): PrefModule<NavBarPrefs> = PrefModule("nav_bar_prefs", initialFactory)
+    ): PrefModule<NavBarPrefs> = PrefModule(initialFactory)
   }
 }

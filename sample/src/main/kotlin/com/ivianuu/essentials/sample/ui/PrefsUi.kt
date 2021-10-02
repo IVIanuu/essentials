@@ -239,6 +239,6 @@ object PrefsKey : Key<Unit>
   val singleChoice: String = "C",
 ) {
   companion object {
-    @Provide val prefModule = PrefModule("sample_prefs") { SamplePrefs() }
+    @Provide val prefModule = PrefModule { SamplePrefs() }
   }
 }

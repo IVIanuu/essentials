@@ -33,6 +33,6 @@ import kotlinx.serialization.Serializable
   }
 
   companion object {
-    @Provide val prefModule = PrefModule("feedback_prefs") { RatePrefs() }
+    @Provide val prefModule = PrefModule { RatePrefs() }
   }
 }
