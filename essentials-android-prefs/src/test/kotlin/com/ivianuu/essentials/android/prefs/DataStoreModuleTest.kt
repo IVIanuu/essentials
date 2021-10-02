@@ -14,7 +14,7 @@ class DataStoreModuleTest {
       dispatcher = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer<Map<String, String>>() },
+      serializerFactory = { kSerializer<Map<String, String?>>() },
       scope = this
     )
 

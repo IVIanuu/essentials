@@ -1,9 +1,11 @@
 package com.ivianuu.essentials.android.prefs
 
+import com.ivianuu.essentials.data.TestDataStore
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.kSerializer
 import org.junit.Test
@@ -15,7 +17,7 @@ class PrefModuleTest {
       dispatcher = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer<Map<String, String>>() },
+      serializerFactory = { kSerializer<Map<String, String?>>() },
       scope = this,
       initial = { emptyMap() }
     )
@@ -50,6 +52,34 @@ class PrefModuleTest {
     prefsCollector.values[2] shouldBe mapOf("b" to "2")
     modelCollector.values[2] shouldBe MyPrefs(0, 2)
   }
+
+  @Test fun testNullableFieldWithDefaultValue() = runCancellingBlockingTest {
+    val dataStore = PrefModule { NullableWithDefault() }.dataStore(
+      dispatcher = dispatcher,
+      prefsDataStore = TestDataStore(emptyMap()),
+      // todo remove arg once injekt is fixed
+      serializerFactory = { kSerializer() },
+      scope = this
+    )
+
+    dataStore.data.first().string shouldBe "a"
+  }
+
+  @Test fun testNullableFieldWithDefaultValueWhichIsNull() = runCancellingBlockingTest {
+    val dataStore = PrefModule { NullableWithDefault() }.dataStore(
+      dispatcher = dispatcher,
+      prefsDataStore = TestDataStore(emptyMap()),
+      // todo remove arg once injekt is fixed
+      serializerFactory = { kSerializer() },
+      scope = this
+    )
+
+    dataStore.updateData { copy(null) }
+
+    dataStore.data.first().string shouldBe null
+  }
+
+  @Serializable data class NullableWithDefault(val string: String? = "a")
 
   @Serializable data class MyPrefs(val a: Int = 0, val b: Int = 0)
 }

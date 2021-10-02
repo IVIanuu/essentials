@@ -35,7 +35,7 @@ import kotlinx.serialization.modules.EmptySerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
   @Provide fun dataStore(
-    prefsDataStore: DataStore<Map<String, String>>,
+    prefsDataStore: DataStore<Map<String, String?>>,
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
@@ -45,7 +45,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
 
-    fun Map<String, String>.decode(): T =
+    fun Map<String, String?>.decode(): T =
       PrefsDecoder(this, EmptySerializersModule, serializer.descriptor, json)
         .decodeSerializableValue(serializer)
 
@@ -74,4 +74,4 @@ class PrefModule<T : Any>(private val default: () -> T) {
 }
 
 @Provide val prefsDataStoreModule =
-  DataStoreModule<Map<String, String>>("prefs") { emptyMap() }
+  DataStoreModule<Map<String, String?>>("prefs") { emptyMap() }

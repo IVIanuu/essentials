@@ -18,7 +18,7 @@ class PrefsEncoder(
   override val serializersModule: SerializersModule,
   private val embeddedFormat: StringFormat,
   private val descriptor: SerialDescriptor,
-  private val result: MutableMap<String, String>
+  private val result: MutableMap<String, String?>
 ) : TaggedEncoder<String>() {
   override fun SerialDescriptor.getTag(index: Int): String = getElementName(index)
 
@@ -64,6 +64,7 @@ class PrefsEncoder(
   }
 
   override fun encodeTaggedNull(tag: String) {
+    result[tag] = null
   }
 
   override fun encodeTaggedShort(tag: String, value: Short) {
@@ -77,7 +78,7 @@ class PrefsEncoder(
 
 @OptIn(InternalSerializationApi::class)
 class PrefsDecoder(
-  private val prefs: Map<String, String>,
+  private val prefs: Map<String, String?>,
   override val serializersModule: SerializersModule,
   private val descriptor: SerialDescriptor,
   private val embeddedFormat: StringFormat
@@ -87,10 +88,8 @@ class PrefsDecoder(
   override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder = this
 
   override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
-    // we skip non nullable elements which are null in the cursor
     while (index <= descriptor.elementsCount - 1 &&
-      !descriptor.getElementDescriptor(index).isNullable &&
-      descriptor.getElementName(index) !in prefs) {
+      !prefs.containsKey(descriptor.getElementName(index))) {
       index++
     }
 
@@ -106,31 +105,31 @@ class PrefsDecoder(
       embeddedFormat.decodeFromString(deserializer, decodeString())
 
   override fun <T : Any> decodeNullableSerializableValue(deserializer: DeserializationStrategy<T?>): T? =
-    if (deserializer.descriptor.getElementName(index) !in prefs) null.also { index++ }
+    if (prefs[deserializer.descriptor.getElementName(index)] == null) null.also { index++ }
     else decodeSerializableValue(deserializer)
 
   override fun decodeBoolean(): Boolean = prefs.getValue(descriptor.getElementName(index++)).toBoolean()
 
-  override fun decodeByte(): Byte = prefs.getValue(descriptor.getElementName(index++)).toByte()
+  override fun decodeByte(): Byte = prefs.getValue(descriptor.getElementName(index++))!!.toByte()
 
-  override fun decodeChar(): Char = prefs.getValue(descriptor.getElementName(index++)).single()
+  override fun decodeChar(): Char = prefs.getValue(descriptor.getElementName(index++))!!.single()
 
-  override fun decodeDouble(): Double = prefs.getValue(descriptor.getElementName(index++)).toDouble()
+  override fun decodeDouble(): Double = prefs.getValue(descriptor.getElementName(index++))!!.toDouble()
 
   override fun decodeEnum(enumDescriptor: SerialDescriptor): Int =
-    enumDescriptor.getElementIndex(prefs.getValue(descriptor.getElementName(index++)))
+    enumDescriptor.getElementIndex(prefs.getValue(descriptor.getElementName(index++))!!)
 
-  override fun decodeFloat(): Float = prefs.getValue(descriptor.getElementName(index++)).toFloat()
+  override fun decodeFloat(): Float = prefs.getValue(descriptor.getElementName(index++))!!.toFloat()
 
-  override fun decodeInt(): Int = prefs.getValue(descriptor.getElementName(index++)).toInt()
+  override fun decodeInt(): Int = prefs.getValue(descriptor.getElementName(index++))!!.toInt()
 
-  override fun decodeLong(): Long = prefs.getValue(descriptor.getElementName(index++)).toLong()
+  override fun decodeLong(): Long = prefs.getValue(descriptor.getElementName(index++))!!.toLong()
 
-  override fun decodeNotNullMark(): Boolean = descriptor.getElementName(index) in prefs
+  override fun decodeNotNullMark(): Boolean = prefs[descriptor.getElementName(index)] != null
 
   override fun decodeNull(): Nothing? = null.also { index++ }
 
-  override fun decodeShort(): Short = prefs.getValue(descriptor.getElementName(index++)).toShort()
+  override fun decodeShort(): Short = prefs.getValue(descriptor.getElementName(index++))!!.toShort()
 
-  override fun decodeString(): String = prefs.getValue(descriptor.getElementName(index++))
+  override fun decodeString(): String = prefs.getValue(descriptor.getElementName(index++))!!
 }
