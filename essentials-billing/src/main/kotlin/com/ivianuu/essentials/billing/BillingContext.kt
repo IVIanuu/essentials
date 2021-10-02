@@ -53,6 +53,7 @@ interface BillingContext {
 
   override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
     withContext(scope.coroutineContext + dispatcher) {
+      ensureConnected()
       block()
     }
 
