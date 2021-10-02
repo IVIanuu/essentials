@@ -126,7 +126,7 @@ class PrefsDecoder(
 
   override fun decodeLong(): Long = prefs.getValue(descriptor.getElementName(index++)).toLong()
 
-  override fun decodeNotNullMark(): Boolean = descriptor.getElementName(index++) in prefs
+  override fun decodeNotNullMark(): Boolean = descriptor.getElementName(index) in prefs
 
   override fun decodeNull(): Nothing? = null.also { index++ }
 
