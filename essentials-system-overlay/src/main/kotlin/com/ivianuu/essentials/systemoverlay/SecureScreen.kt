@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -57,10 +56,7 @@ typealias IsOnSecureScreen = Boolean
   .onEach { log { "on secure screen changed: $it" } }
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
-@Provide val isOnSecureScreenAccessibilityConfig = flow {
-  emit(
-    AccessibilityConfig(
-      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-    )
+@Provide val isOnSecureScreenAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
-}

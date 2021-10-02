@@ -18,7 +18,6 @@ import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -112,10 +111,7 @@ fun switchToApp(
   }
 }
 
-@Provide val appSwitchingAccessibilityConfig = flow {
-  emit(
-    AccessibilityConfig(
-      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-    )
+@Provide val appSwitchingAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
-}

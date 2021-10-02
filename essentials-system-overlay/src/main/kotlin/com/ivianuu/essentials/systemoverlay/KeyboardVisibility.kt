@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -63,13 +62,10 @@ typealias KeyboardVisible = Boolean
   .distinctUntilChanged()
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
 
-@Provide val keyboardVisibilityAccessibilityConfig = flow {
-  emit(
-    AccessibilityConfig(
-      eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-    )
+@Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
-}
 
 private typealias KeyboardHeightProvider = () -> Int?
 

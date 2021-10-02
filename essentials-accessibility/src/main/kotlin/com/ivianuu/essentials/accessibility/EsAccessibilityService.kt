@@ -21,7 +21,6 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.addFlag
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -32,11 +31,7 @@ import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
@@ -55,34 +50,29 @@ class EsAccessibilityService : AccessibilityService() {
     component.ref.value = this
 
     scopedCoroutineScope(scope = accessibilityScope!!).launch(start = CoroutineStart.UNDISPATCHED) {
-      combine(
-        requireElement<EsAccessibilityServiceAccessibilityComponent>(accessibilityScope!!)
-          .configs
-          .cast<Set<Flow<AccessibilityConfig?>>>()
-          .map { it.onStart { emit(null) } }
-      ) { it.filterNotNull() }
-        .collect { configs ->
-          log { "update config from $configs" }
-          serviceInfo = serviceInfo?.apply {
-            eventTypes = configs
-              .map { it.eventTypes }
-              .fold(0) { acc, events -> acc.addFlag(events) }
+      val configs = requireElement<EsAccessibilityServiceAccessibilityComponent>(accessibilityScope!!)
+        .configs
 
-            flags = configs
-              .map { it.flags }
-              .fold(0) { acc, flags -> acc.addFlag(flags) }
+      log { "update config from $configs" }
+      serviceInfo = serviceInfo?.apply {
+        eventTypes = configs
+          .map { it.eventTypes }
+          .fold(0) { acc, events -> acc.addFlag(events) }
 
-            // first one wins
-            configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
-            feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+        flags = configs
+          .map { it.flags }
+          .fold(0) { acc, flags -> acc.addFlag(flags) }
 
-            notificationTimeout = configs
-              .map { it.notificationTimeout }
-              .maxOrNull() ?: 0L
+        // first one wins
+        configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+        feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-            packageNames = null
-          }
-        }
+        notificationTimeout = configs
+          .map { it.notificationTimeout }
+          .maxOrNull() ?: 0L
+
+        packageNames = null
+      }
     }
   }
 
@@ -122,5 +112,5 @@ class EsAccessibilityServiceComponent(
 
 @Provide @ScopeElement<AccessibilityScope>
 class EsAccessibilityServiceAccessibilityComponent(
-  val configs: Set<Flow<AccessibilityConfig>> = emptySet(),
+  val configs: Set<AccessibilityConfig> = emptySet(),
 )
