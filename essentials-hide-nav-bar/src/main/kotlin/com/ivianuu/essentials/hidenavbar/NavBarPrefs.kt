@@ -25,7 +25,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable data class NavBarPrefs(
   @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
-  @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT
+  @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
+  @SerialName("was_nav_bar_hidden") val wasNavBarHidden: Boolean = false
 ) {
   companion object {
     @Provide fun initial(systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
@@ -39,10 +40,6 @@ import kotlinx.serialization.Serializable
 
     @Provide fun prefModule(
       initialFactory: () -> @Initial NavBarPrefs
-    ) = PrefModule<NavBarPrefs>("nav_bar_prefs", initialFactory)
+    ): PrefModule<NavBarPrefs> = PrefModule("nav_bar_prefs", initialFactory)
   }
 }
-
-internal typealias WasNavBarHidden = Boolean
-
-@Provide val wasNavBarHiddenModule = PrefModule<WasNavBarHidden>("was_nav_bar_hidden") { false }

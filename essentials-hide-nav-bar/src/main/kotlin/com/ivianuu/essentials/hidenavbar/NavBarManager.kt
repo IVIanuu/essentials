@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -50,9 +49,8 @@ import kotlinx.coroutines.flow.onEach
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   permissionState: Flow<PermissionState<NavBarPermission>>,
-  prefs: Flow<NavBarPrefs>,
-  setOverscan: OverscanUpdater,
-  wasNavBarHiddenPref: DataStore<WasNavBarHidden>
+  pref: DataStore<NavBarPrefs>,
+  setOverscan: OverscanUpdater
 ): ScopeWorker<AppScope> = worker@ {
   if (!navBarFeatureSupported) return@worker
   permissionState
@@ -60,7 +58,7 @@ import kotlinx.coroutines.flow.onEach
       if (hasPermission) {
         forceNavBarVisibleState
           .flatMapLatest { forceVisible ->
-            if (!forceVisible) prefs
+            if (!forceVisible) pref.data
             else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
           }
       } else {
@@ -73,11 +71,11 @@ import kotlinx.coroutines.flow.onEach
       if (currentPrefs.hideNavBar) {
         displayRotation
           .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
-          .onEach { wasNavBarHiddenPref.updateData { true } }
+          .onEach { pref.updateData { copy(wasNavBarHidden = true) } }
       } else {
         flowOf(NavBarState.Visible)
-          .filter { wasNavBarHiddenPref.data.first() }
-          .onEach { wasNavBarHiddenPref.updateData { false } }
+          .filter { currentPrefs.wasNavBarHidden }
+          .onEach { pref.updateData { copy(wasNavBarHidden = false) } }
       }
     }
     .distinctUntilChanged()
