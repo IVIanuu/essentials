@@ -24,11 +24,10 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 
 @Provide class NavBarPermission(private val rp: ResourceProvider) : WriteSecureSettingsPermission {
   override val title: String
@@ -43,10 +42,7 @@ import kotlinx.coroutines.flow.filter
   navBarFeatureSupported: NavBarFeatureSupported,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>
-): ScopeWorker<AppScope> = {
-  if (navBarFeatureSupported) {
-    permissionState
-      .filter { !it }
-      .collect { pref.updateData { copy(hideNavBar = false) } }
-  }
+): ScopeWorker<UiScope> = {
+  if (navBarFeatureSupported && !permissionState.first())
+    pref.updateData { copy(hideNavBar = false) }
 }
