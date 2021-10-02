@@ -16,27 +16,33 @@
 
 package com.ivianuu.essentials.sample.work
 
+import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkerParameters
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
-import com.ivianuu.essentials.work.Worker
-import com.ivianuu.essentials.work.WorkerId
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.work.InjektWorker
 import kotlinx.coroutines.delay
 
-@Provide object TestWorkerId : WorkerId("test")
-
-@Provide fun testWorker(logger: Logger): Worker<TestWorkerId> = {
-  log { "start work" }
-  delay(5000)
-  log { "finish work" }
-  ListenableWorker.Result.success()
+@Provide @InjektWorker class TestWorker(
+  appContext: AppContext,
+  params: WorkerParameters,
+  private val logger: Logger
+) : CoroutineWorker(appContext, params) {
+  override suspend fun doWork(): Result {
+    log { "start work" }
+    delay(5000)
+    log { "finish work" }
+    return ListenableWorker.Result.success()
+  }
 }
 
 typealias TestWorkScheduler = () -> Unit
 
 @Provide fun testWorkScheduler(workManager: WorkManager): TestWorkScheduler = {
-  workManager.enqueue(OneTimeWorkRequestBuilder(TestWorkerId).build())
+  workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
 }

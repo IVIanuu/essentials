@@ -16,38 +16,32 @@
 
 package com.ivianuu.essentials.foreground
 
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import androidx.work.await
+import android.content.Intent
+import androidx.core.content.ContextCompat
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.work.OneTimeWorkRequestBuilder
-import com.ivianuu.essentials.work.toFunctionalWorkerTag
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
 @Provide fun androidForegroundWorkerStarter(
+  context: AppContext,
   logger: Logger,
-  state: Flow<InternalForegroundState>,
-  workManager: WorkManager
+  state: Flow<InternalForegroundState>
 ): ScopeWorker<AppScope> = {
   state
     .filter { it.isForeground }
-    .filter {
-      workManager.getWorkInfosByTag(ForegroundWorkerId.toFunctionalWorkerTag())
-        .await()
-        .none { it.state == WorkInfo.State.RUNNING }
-    }
+    .distinctUntilChanged()
     .collect {
-      log { "start foreground worker $it" }
-      workManager.cancelAllWorkByTag(ForegroundWorkerId.toFunctionalWorkerTag())
-      workManager.enqueue(
-        OneTimeWorkRequestBuilder(ForegroundWorkerId)
-          .build()
+      log { "start foreground service $it" }
+      ContextCompat.startForegroundService(
+        context,
+        Intent(context, ForegroundService::class.java)
       )
     }
 }

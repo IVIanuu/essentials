@@ -54,31 +54,30 @@ typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
-  intentFactories: Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
+  intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
   scope: NamedCoroutineScope<AppScope>
 ): KeyHandler<Result<ActivityResult, Throwable>> = handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
-  val intentFactory = intentFactories[key::class]
-  if (intentFactory != null) {
-    val intent = intentFactory(key)
-    scope.launch {
-      val activity = appUiStarter()
-      withContext(dispatcher) {
-        val result =
-          suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
-            val launcher = activity.activityResultRegistry.register(
-              UUID.randomUUID().toString(),
-              ActivityResultContracts.StartActivityForResult()
-            ) {
-              if (continuation.isActive) continuation.resume(it.ok())
-            }
-            catch { launcher.launch(intent) }
-              .onFailure { continuation.resume(it.err()) }
-            continuation.invokeOnCancellation { launcher.unregister() }
+  val intentFactory = intentFactories()[key::class]
+    ?: return@handler false
+  val intent = intentFactory(key)
+  scope.launch {
+    val activity = appUiStarter()
+    withContext(dispatcher) {
+      val result =
+        suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+          val launcher = activity.activityResultRegistry.register(
+            UUID.randomUUID().toString(),
+            ActivityResultContracts.StartActivityForResult()
+          ) {
+            if (continuation.isActive) continuation.resume(it.ok())
           }
-        onResult(result)
-      }
+          catch { launcher.launch(intent) }
+            .onFailure { continuation.resume(it.err()) }
+          continuation.invokeOnCancellation { launcher.unregister() }
+        }
+      onResult(result)
     }
   }
-  intentFactory != null
+  true
 }
