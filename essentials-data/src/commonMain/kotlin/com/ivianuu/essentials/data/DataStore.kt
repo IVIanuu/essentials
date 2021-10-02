@@ -20,11 +20,20 @@ import com.ivianuu.essentials.optics.Lens
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.updateAndGet
 
 interface DataStore<T> {
   val data: Flow<T>
   suspend fun updateData(transform: T.() -> T): T
+}
+
+class TestDataStore<T>(initial: T) : DataStore<T> {
+  override val data = MutableStateFlow(initial)
+
+  override suspend fun updateData(transform: T.() -> T): T =
+    data.updateAndGet(transform)
 }
 
 fun <T, S> DataStore<T>.lens(lens: Lens<T, S>): DataStore<S> = object : DataStore<S> {

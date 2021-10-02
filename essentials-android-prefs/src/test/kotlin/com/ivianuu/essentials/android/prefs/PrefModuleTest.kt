@@ -1,28 +1,24 @@
 package com.ivianuu.essentials.android.prefs
 
-import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.shouldBe
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.kSerializer
 import org.junit.Test
+import java.nio.file.Files
 
 class PrefModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {
-    val prefsDataStore = /*prefsDataStoreModule.dataStore(
+    val prefsDataStore = prefsDataStoreModule.dataStore(
       dispatcher = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       // todo remove arg once injekt is fixed
       serializerFactory = { kSerializer<Map<String, String>>() },
       scope = this,
-      initial = { mapOf("c" to "D") }
-    )*/ object : DataStore<Map<String, String>> {
-      override val data = MutableStateFlow(mapOf("c" to "D"))
-      override suspend fun updateData(transform: Map<String, String>.() -> Map<String, String>): Map<String, String> {
-        return transform(data.value)
-      }
-    }
+      initial = { emptyMap() }
+    )
 
     val dataStore = PrefModule { MyPrefs() }.dataStore(
       dispatcher = dispatcher,
@@ -32,16 +28,16 @@ class PrefModuleTest {
       scope = this
     )
 
-    //val prefsCollector = prefsDataStore.data.testCollect(this)
-    //val modelCollector = dataStore.data.testCollect(this)
+    val prefsCollector = prefsDataStore.data.testCollect(this)
+    val modelCollector = dataStore.data.testCollect(this)
 
-    //prefsCollector.values[0] shouldBe emptyMap()
-    //modelCollector.values[0] shouldBe MyPrefs(0, 0)
+    prefsCollector.values[0] shouldBe emptyMap()
+    modelCollector.values[0] shouldBe MyPrefs(0, 0)
 
     dataStore.updateData { copy(a = a.inc()) }
 
-    //prefsCollector.values[1] shouldBe mapOf("a" to 1, "b" to 0)
-    //modelCollector.values[1] shouldBe MyPrefs(1, 0)
+    prefsCollector.values[1] shouldBe mapOf("a" to "1", "b" to "0")
+    modelCollector.values[1] shouldBe MyPrefs(1, 0)
 
     prefsDataStore.updateData {
       toMutableMap()
@@ -51,8 +47,8 @@ class PrefModuleTest {
         }
     }
 
-    //prefsCollector.values[1] shouldBe mapOf("b" to "2")
-    //modelCollector.values[1] shouldBe MyPrefs(0, 2)
+    prefsCollector.values[2] shouldBe mapOf("b" to "2")
+    modelCollector.values[2] shouldBe MyPrefs(0, 2)
   }
 
   @Serializable data class MyPrefs(val a: Int = 0, val b: Int = 0)
