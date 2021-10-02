@@ -36,7 +36,6 @@ import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.take
@@ -97,10 +96,10 @@ class UnlockScreenActivity : ComponentActivity() {
         }
       )
     } else {
-      merge(
-        component.broadcastsFactory(Intent.ACTION_SCREEN_OFF),
-        component.broadcastsFactory(Intent.ACTION_SCREEN_ON),
-        component.broadcastsFactory(Intent.ACTION_USER_PRESENT)
+      component.broadcastsFactory(
+        Intent.ACTION_SCREEN_OFF,
+        Intent.ACTION_SCREEN_ON,
+        Intent.ACTION_USER_PRESENT
       )
         .map { it.action == Intent.ACTION_USER_PRESENT }
         .onStart {

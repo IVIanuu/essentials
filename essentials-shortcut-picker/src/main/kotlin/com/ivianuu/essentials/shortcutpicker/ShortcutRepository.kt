@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
@@ -43,11 +42,11 @@ import kotlinx.coroutines.withContext
   private val packageManager: PackageManager
 ) {
   val shortcuts: Flow<List<Shortcut>>
-    get() = merge(
-      broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+    get() = broadcastsFactory(
+      Intent.ACTION_PACKAGE_ADDED,
+      Intent.ACTION_PACKAGE_REMOVED,
+      Intent.ACTION_PACKAGE_CHANGED,
+      Intent.ACTION_PACKAGE_REPLACED
     )
       .map { Unit }
       .onStart { emit(Unit) }

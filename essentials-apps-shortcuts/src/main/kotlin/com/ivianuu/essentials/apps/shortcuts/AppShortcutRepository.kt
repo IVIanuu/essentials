@@ -8,7 +8,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
@@ -17,11 +16,11 @@ import kotlinx.coroutines.withContext
   private val context: AppContext,
   private val dispatcher: IODispatcher
 ) {
-  fun appShortcuts(packageName: String): Flow<List<AppShortcut>> = merge(
-    broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+  fun appShortcuts(packageName: String): Flow<List<AppShortcut>> = broadcastsFactory(
+    Intent.ACTION_PACKAGE_ADDED,
+    Intent.ACTION_PACKAGE_REMOVED,
+    Intent.ACTION_PACKAGE_CHANGED,
+    Intent.ACTION_PACKAGE_REPLACED
   )
     .map { Unit }
     .onStart { emit(Unit) }

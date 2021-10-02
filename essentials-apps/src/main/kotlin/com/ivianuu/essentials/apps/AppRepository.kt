@@ -62,11 +62,11 @@ import kotlinx.coroutines.withContext
       }
       .distinctUntilChanged()
 
-  fun appInfo(packageName: String): Flow<AppInfo?> = merge(
-    broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+  fun appInfo(packageName: String): Flow<AppInfo?> = broadcastsFactory(
+    Intent.ACTION_PACKAGE_ADDED,
+    Intent.ACTION_PACKAGE_REMOVED,
+    Intent.ACTION_PACKAGE_CHANGED,
+    Intent.ACTION_PACKAGE_REPLACED
   )
     .map { Unit }
     .onStart { emit(Unit) }
@@ -80,9 +80,9 @@ import kotlinx.coroutines.withContext
     }
     .distinctUntilChanged()
 
-  fun isAppInstalled(packageName: String): Flow<Boolean> = merge(
-    broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-    broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED)
+  fun isAppInstalled(packageName: String): Flow<Boolean> = broadcastsFactory(
+    Intent.ACTION_PACKAGE_ADDED,
+    Intent.ACTION_PACKAGE_REMOVED
   )
     .map { Unit }
     .onStart { emit(Unit) }

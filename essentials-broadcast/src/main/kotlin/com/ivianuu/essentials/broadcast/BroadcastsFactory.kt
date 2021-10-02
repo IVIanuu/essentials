@@ -24,69 +24,33 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingCommand
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
-typealias BroadcastsFactory = (String) -> Flow<Intent>
+fun interface BroadcastsFactory {
+  operator fun invoke(vararg actions: String): Flow<Intent>
+}
 
 @Provide fun broadcastsFactory(
   context: AppContext,
-  mainDispatcher: MainDispatcher,
-  scope: NamedCoroutineScope<AppScope>
-): @Scoped<AppScope> BroadcastsFactory {
-  val flowsByAction = mutableMapOf<String, Flow<Intent>>()
-  val mutex = Mutex()
-
-  return { action ->
-    flow<Intent> {
-      val inner = mutex.withLock {
-        flowsByAction.getOrPut(action) {
-          callbackFlow<Intent> {
-            val broadcastReceiver = object : BroadcastReceiver() {
-              override fun onReceive(context: Context, intent: Intent) {
-                trySend(intent)
-              }
-            }
-            context.registerReceiver(broadcastReceiver, IntentFilter(action))
-            awaitClose {
-              catch {
-                context.unregisterReceiver(broadcastReceiver)
-              }
-            }
-          }
-            .flowOn(mainDispatcher)
-            .shareIn(
-              scope,
-              { subs ->
-                flow {
-                  subs.first { it > 0 }
-                  emit(SharingCommand.START)
-                  subs
-                    .debounce(1000)
-                    .first { it == 0 }
-                  emit(SharingCommand.STOP)
-                  mutex.withLock { flowsByAction.remove(action) }
-                }
-              },
-              0
-            )
-        }
+  mainDispatcher: MainDispatcher
+): BroadcastsFactory = BroadcastsFactory { actions ->
+  callbackFlow<Intent> {
+    val broadcastReceiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context, intent: Intent) {
+        trySend(intent)
       }
-
-      emitAll(inner)
+    }
+    context.registerReceiver(broadcastReceiver, IntentFilter().apply {
+      actions.forEach { addAction(it) }
+    })
+    awaitClose {
+      catch {
+        context.unregisterReceiver(broadcastReceiver)
+      }
     }
   }
+    .flowOn(mainDispatcher)
 }

@@ -42,7 +42,7 @@ class BroadcastsTest {
       }
       every { unregisterComponentCallbacks(any()) } returns Unit
     }
-    val collector = broadcastsFactory(appContext, dispatcher, this)
+    val collector = broadcastsFactory(appContext, dispatcher)
       .invoke("action").testCollect(this)
 
     receiver.onReceive(appContext, Intent("action"))

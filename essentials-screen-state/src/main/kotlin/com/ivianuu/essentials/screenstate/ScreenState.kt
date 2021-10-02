@@ -26,7 +26,6 @@ import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
@@ -37,10 +36,10 @@ enum class ScreenState(val isOn: Boolean) {
 @Provide fun screenState(
   broadcastsFactory: BroadcastsFactory,
   screenStateProvider: CurrentScreenStateProvider
-): Flow<ScreenState> = merge(
-  broadcastsFactory(Intent.ACTION_SCREEN_OFF),
-  broadcastsFactory(Intent.ACTION_SCREEN_ON),
-  broadcastsFactory(Intent.ACTION_USER_PRESENT)
+): Flow<ScreenState> = broadcastsFactory(
+  Intent.ACTION_SCREEN_OFF,
+  Intent.ACTION_SCREEN_ON,
+  Intent.ACTION_USER_PRESENT
 )
   .map { Unit }
   .onStart { emit(Unit) }
