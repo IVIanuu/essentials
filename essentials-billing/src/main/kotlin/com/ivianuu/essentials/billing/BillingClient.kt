@@ -37,3 +37,4 @@ typealias BillingRefresh = Unit
 
 @Provide val billingRefreshes: @Scoped<AppScope> MutableSharedFlow<BillingRefresh>
   get() = EventFlow()
+
