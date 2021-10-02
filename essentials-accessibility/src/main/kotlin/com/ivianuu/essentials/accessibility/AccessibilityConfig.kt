@@ -17,18 +17,6 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
-import com.ivianuu.essentials.addFlag
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 data class AccessibilityConfig(
   val eventTypes: Int = 0,
@@ -37,48 +25,3 @@ data class AccessibilityConfig(
   val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
   val notificationTimeout: Long = 0L,
 )
-
-@Provide fun accessibilityConfigWorker(
-  configs: Set<() -> Flow<AccessibilityConfig>> = emptySet(),
-  ref: Flow<EsAccessibilityService?>,
-): ScopeWorker<AccessibilityScope> = {
-  coroutineScope {
-    ref
-      .flatMapLatest { service ->
-        if (service != null) {
-          combine(
-            configs
-              .map { it() }
-              .map { config ->
-                config
-                  .stateIn(this, SharingStarted.Eagerly, null)
-              }
-          ) { it.filterNotNull() }
-            .map { service to it }
-        } else {
-          infiniteEmptyFlow()
-        }
-      }
-      .collect { (service, configs) ->
-        service.serviceInfo = service.serviceInfo?.apply {
-          eventTypes = configs
-            .map { it.eventTypes }
-            .fold(0) { acc, events -> acc.addFlag(events) }
-
-          flags = configs
-            .map { it.flags }
-            .fold(0) { acc, flags -> acc.addFlag(flags) }
-
-          // first one wins
-          configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
-          feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-
-          notificationTimeout = configs
-            .map { it.notificationTimeout }
-            .maxOrNull() ?: 0L
-
-          packageNames = null
-        }
-      }
-  }
-}

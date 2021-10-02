@@ -16,9 +16,6 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.app.Service
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
@@ -27,11 +24,3 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Provide
 val notificationListenerRef: @Scoped<AppScope> MutableStateFlow<EsNotificationListenerService?>
   get() = MutableStateFlow(null)
-
-@Provide fun notificationServiceRefWorker(
-  ref: MutableStateFlow<EsNotificationListenerService?>,
-  service: Service
-): ScopeWorker<NotificationScope> = {
-  ref.value = service as EsNotificationListenerService
-  onCancel { ref.value = null }
-}

@@ -25,9 +25,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
-@Provide class NotificationService(
-  private val ref: Flow<EsNotificationListenerService?>
-) {
+@Provide class NotificationService(private val ref: Flow<EsNotificationListenerService?>) {
   val notifications: Flow<List<StatusBarNotification>>
     get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 

@@ -17,16 +17,27 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.addFlag
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceScope
 import com.ivianuu.injekt.android.createServiceScope
+import com.ivianuu.injekt.coroutines.scopedCoroutineScope
 import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
   private val component: EsAccessibilityServiceComponent by lazy {
@@ -41,6 +52,38 @@ class EsAccessibilityService : AccessibilityService() {
     super.onServiceConnected()
     log { "service connected" }
     accessibilityScope = component.accessibilityScopeFactory()
+    component.ref.value = this
+
+    scopedCoroutineScope(scope = accessibilityScope!!).launch(start = CoroutineStart.UNDISPATCHED) {
+      combine(
+        requireElement<EsAccessibilityServiceAccessibilityComponent>(accessibilityScope!!)
+          .configs
+          .cast<Set<Flow<AccessibilityConfig?>>>()
+          .map { it.onStart { emit(null) } }
+      ) { it.filterNotNull() }
+        .collect { configs ->
+          log { "update config from $configs" }
+          serviceInfo = serviceInfo?.apply {
+            eventTypes = configs
+              .map { it.eventTypes }
+              .fold(0) { acc, events -> acc.addFlag(events) }
+
+            flags = configs
+              .map { it.flags }
+              .fold(0) { acc, flags -> acc.addFlag(flags) }
+
+            // first one wins
+            configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+            feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+
+            notificationTimeout = configs
+              .map { it.notificationTimeout }
+              .maxOrNull() ?: 0L
+
+            packageNames = null
+          }
+        }
+    }
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -63,6 +106,7 @@ class EsAccessibilityService : AccessibilityService() {
     accessibilityScope?.dispose()
     accessibilityScope = null
     component.serviceScope.dispose()
+    component.ref.value = null
     return super.onUnbind(intent)
   }
 }
@@ -72,5 +116,11 @@ class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableAccessibilityEvents,
   val accessibilityScopeFactory: @ChildScopeFactory () -> AccessibilityScope,
   val logger: Logger,
+  val ref: MutableStateFlow<EsAccessibilityService?>,
   val serviceScope: ServiceScope
+)
+
+@Provide @ScopeElement<AccessibilityScope>
+class EsAccessibilityServiceAccessibilityComponent(
+  val configs: Set<Flow<AccessibilityConfig>> = emptySet(),
 )

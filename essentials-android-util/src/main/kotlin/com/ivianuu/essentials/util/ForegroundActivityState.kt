@@ -40,7 +40,7 @@ interface ForegroundActivityMarker
   activity: ComponentActivity,
   mainDispatcher: MainDispatcher,
   state: MutableStateFlow<ForegroundActivity>
-): ScopeWorker<ActivityScope> = worker@{
+): ScopeWorker<ActivityScope> = worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))

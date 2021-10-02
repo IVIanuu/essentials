@@ -48,6 +48,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     super.onListenerConnected()
     log { "listener connected" }
     notificationScope = component.notificationScopeFactory()
+    component.ref.value = this
     updateNotifications()
   }
 
@@ -74,6 +75,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     notificationScope?.dispose()
     notificationScope = null
     component.serviceScope.dispose()
+    component.ref.value = null
     super.onListenerDisconnected()
   }
 
@@ -87,5 +89,6 @@ class EsNotificationListenerService : NotificationListenerService() {
 class EsNotificationListenerServiceComponent(
   val logger: Logger,
   val notificationScopeFactory: @ChildScopeFactory () -> NotificationScope,
+  val ref: MutableStateFlow<EsNotificationListenerService?>,
   val serviceScope: ServiceScope
 )

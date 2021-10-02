@@ -40,10 +40,13 @@ import kotlinx.coroutines.flow.filter
 }
 
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(
+  navBarFeatureSupported: NavBarFeatureSupported,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>
 ): ScopeWorker<AppScope> = {
-  permissionState
-    .filter { !it }
-    .collect { pref.updateData { copy(hideNavBar = false) } }
+  if (navBarFeatureSupported) {
+    permissionState
+      .filter { !it }
+      .collect { pref.updateData { copy(hideNavBar = false) } }
+  }
 }
