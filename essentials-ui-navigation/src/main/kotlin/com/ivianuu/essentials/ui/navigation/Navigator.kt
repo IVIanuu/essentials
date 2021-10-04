@@ -29,8 +29,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
@@ -57,14 +55,6 @@ interface Navigator {
 
   private val actor = scope.actor()
 
-  init {
-    if (logger.isEnabled) {
-      _backStack
-        .onEach { log { "back stack changed -> $it" } }
-        .launchIn(scope)
-    }
-  }
-
   override suspend fun <R> push(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
 
@@ -76,7 +66,7 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
-        _backStack.update2 { filter { it != key } + key }
+        updateBackStack { filter { it != key } + key }
         results[key] = result
       }
     }
@@ -96,10 +86,10 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
-        _backStack.update2 { dropLast(1) }
+        updateBackStack { dropLast(1) }
         results.remove(key)
       } else {
-        _backStack.update2 {
+        updateBackStack {
           filter { it != key }
             .dropLast(1) + key
         }
@@ -130,7 +120,12 @@ interface Navigator {
     val resultAction = results[key] as? CompletableDeferred<R?>
     resultAction?.complete(result)
 
-    _backStack.update2 { this - key }
+    updateBackStack { this - key }
     results.remove(key)
+  }
+
+  private inline fun updateBackStack(update: List<Key<*>>.() -> List<Key<*>>) {
+    _backStack.update2(update)
+      .also { log { "back stack changed -> $it" } }
   }
 }
