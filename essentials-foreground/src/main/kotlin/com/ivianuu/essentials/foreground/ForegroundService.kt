@@ -1,12 +1,11 @@
 package com.ivianuu.essentials.foreground
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.foreground.ForegroundState.Background
-import com.ivianuu.essentials.foreground.ForegroundState.Foreground
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -17,10 +16,12 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
@@ -29,16 +30,28 @@ class ForegroundService : Service() {
   }
   @Provide private val logger: Logger get() = component.logger
 
+  private var previousStates = emptyList<Pair<Int, Notification>>()
+
   override fun onCreate() {
     super.onCreate()
-    log { "started foreground service" }
+    log { "start foreground service" }
 
     component.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(
         block = {
-          component.internalForegroundState
-            .map { it.infos }
-            .takeWhile { infos -> infos.any { info -> info.state is Foreground } }
+          component.foregroundManager.states
+            .flatMapLatest { states ->
+              if (states.isNotEmpty()) {
+                combine(
+                  states
+                    .map { state ->
+                      state.notification
+                        .map { state.id to it }
+                    }
+                ) { it.toList() }
+                  .onStart { emit(states.map { it.id to it.notification.value }) }
+              } else flowOf(emptyList())
+            }
             .collect { applyState(it) }
         },
         finalizer = {
@@ -49,32 +62,33 @@ class ForegroundService : Service() {
   }
 
   override fun onDestroy() {
+    log { "stop foreground service" }
     component.serviceScope.dispose()
     super.onDestroy()
   }
 
-  private fun applyState(infos: List<ForegroundInfo>) {
-    log { "apply infos: $infos" }
+  private fun applyState(states: List<Pair<Int, Notification>>) {
+    log { "apply states: $states" }
 
-    infos
-      .filter { it.state is Background }
-      .forEach { component.notificationManager.cancel(it.id) }
+    previousStates
+      .filter { state -> states.none { state.first == it.first } }
+      .forEach { component.notificationManager.cancel(it.first) }
 
-    if (infos.any { it.state is Foreground }) {
-      infos
-        .filter { it.state is Foreground }
-        .map { it.id to (it.state as Foreground).notification }
-        .forEachIndexed { index, (id, notification) ->
+    if (states.isNotEmpty()) {
+      states
+        .forEachIndexed { index, state ->
           if (index == 0) {
-            startForeground(id, notification)
+            startForeground(state.first, state.second)
           } else {
-            component.notificationManager.notify(id, notification)
+            component.notificationManager.notify(state.first, state.second)
           }
         }
     } else {
       stopForeground(true)
       stopSelf()
     }
+
+    previousStates = states
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
@@ -83,7 +97,7 @@ class ForegroundService : Service() {
 @Provide @ScopeElement<ServiceScope>
 class ForegroundServiceComponent(
   val coroutineScope: NamedCoroutineScope<ServiceScope>,
-  val internalForegroundState: Flow<InternalForegroundState>,
+  val foregroundManager: ForegroundManager,
   val notificationManager: @SystemService NotificationManager,
   val logger: Logger,
   val serviceScope: ServiceScope

@@ -24,17 +24,16 @@ import android.app.NotificationManager
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
-import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.foreground.ForegroundState
-import com.ivianuu.essentials.foreground.ForegroundState.Background
-import com.ivianuu.essentials.foreground.ForegroundState.Foreground
+import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
@@ -52,11 +51,11 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -66,29 +65,23 @@ object AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp>,
-  foregroundState: AppTrackerForegroundState,
   createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
+  foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
   scope: NamedCoroutineScope<KeyUiScope>,
   toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
-  val currentForegroundState by foregroundState.collectAsState()
+  var isEnabled by remember { mutableStateOf(false) }
 
-  if (currentForegroundState is Foreground) {
+  if (isEnabled)
     LaunchedEffect(true) {
-      guarantee(
-        block = {
-          currentApp.collect {
-            showToast("App changed $it")
-            foregroundState.value = Foreground(createNotification(it))
-          }
-        },
-        finalizer = {
-          foregroundState.value = Background
-        }
+      foregroundManager.startForeground(
+        currentApp
+          .onEach { showToast("App changed $it") }
+          .map { createNotification(it) }
+          .stateIn(this, SharingStarted.Eagerly, createNotification(""))
       )
     }
-  }
 
   Scaffold(
     topBar = { TopAppBar(title = { Text("App tracker") }) }
@@ -98,8 +91,7 @@ object AppTrackerKey : Key<Unit>
       onClick = {
         scope.launch {
           if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
-            foregroundState.value = if (currentForegroundState is Foreground) Background
-            else Foreground(createNotification(null))
+            isEnabled = !isEnabled
           }
         }
       }
@@ -108,11 +100,6 @@ object AppTrackerKey : Key<Unit>
     }
   }
 }
-
-typealias AppTrackerForegroundState = MutableStateFlow<ForegroundState>
-
-@Provide val appTrackerForegroundState: @Scoped<AppScope> AppTrackerForegroundState
-  get() = MutableStateFlow(Background)
 
 typealias AppTrackerNotification = Notification
 

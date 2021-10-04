@@ -14,8 +14,10 @@ import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.coroutines.race
-import com.ivianuu.essentials.foreground.ForegroundState
+import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -29,11 +31,9 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,6 +42,7 @@ import kotlinx.coroutines.sync.withLock
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val context: AppContext,
+  private val foregroundManager: ForegroundManager,
   private val logger: Logger,
   private val notificationManager: @SystemService NotificationManager,
   private val rp: ResourceProvider,
@@ -56,13 +57,6 @@ import kotlinx.coroutines.sync.withLock
   private var torchJob: Job? = null
 
   private var wasEverEnabled = false
-
-  @Provide val foregroundState: Flow<ForegroundState> =
-    torchState
-      .map {
-        if (it) ForegroundState.Foreground(createTorchNotification())
-        else ForegroundState.Background
-      }
 
   suspend fun setTorchState(value: Boolean) {
     torchJobMutex.withLock {
@@ -79,28 +73,35 @@ import kotlinx.coroutines.sync.withLock
       return
     }
 
-    race(
+    par(
       {
-        catch {
-          val cameraId = cameraManager.cameraIdList[0]
-          log { "enable torch" }
-          cameraManager.setTorchMode(cameraId, true)
-          wasEverEnabled = true
-          _torchState.value = true
-          onCancel {
-            log { "disable torch" }
-            catch { cameraManager.setTorchMode(cameraId, false) }
-            _torchState.value = false
+        race(
+          {
+            catch {
+              val cameraId = cameraManager.cameraIdList[0]
+              log { "enable torch" }
+              cameraManager.setTorchMode(cameraId, true)
+              wasEverEnabled = true
+              _torchState.value = true
+              onCancel {
+                log { "disable torch" }
+                catch { cameraManager.setTorchMode(cameraId, false) }
+                _torchState.value = false
+              }
+            }.onFailure {
+              log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+              if (wasEverEnabled)
+                showToast(R.string.es_failed_to_enable_torch)
+              setTorchState(false)
+            }
+          },
+          {
+            broadcastsFactory(ACTION_DISABLE_TORCH).first()
           }
-        }.onFailure {
-          log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-          if (wasEverEnabled)
-            showToast(R.string.es_failed_to_enable_torch)
-          setTorchState(false)
-        }
+        )
       },
       {
-        broadcastsFactory(ACTION_DISABLE_TORCH).first()
+        foregroundManager.startForeground(createTorchNotification())
       }
     )
   }
