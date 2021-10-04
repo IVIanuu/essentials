@@ -58,8 +58,11 @@ import kotlinx.coroutines.flow.onEach
       if (hasPermission) {
         forceNavBarVisibleState
           .flatMapLatest { forceVisible ->
-            if (!forceVisible) pref.data
-            else flowOf(NavBarPrefs(false, NavBarRotationMode.NOUGAT))
+            pref.data
+              .map {
+                if (!forceVisible) it
+                else it.copy(hideNavBar = false)
+              }
           }
       } else {
         infiniteEmptyFlow()
