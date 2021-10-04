@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.elementNames
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 
@@ -46,8 +47,9 @@ class PrefModule<T : Any>(private val default: () -> T) {
     val serializer by lazy(serializerFactory)
 
     fun Map<String, String?>.decode(): T =
-      PrefsDecoder(this, EmptySerializersModule, serializer.descriptor, json)
-        .decodeSerializableValue(serializer)
+      if (serializer.descriptor.elementNames.any { it in this })
+        PrefsDecoder(this, EmptySerializersModule, serializer.descriptor, json)
+          .decodeSerializableValue(serializer) else initial()
 
     return object : DataStore<T> {
       override val data: Flow<T> = prefsDataStore.data
