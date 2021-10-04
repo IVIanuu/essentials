@@ -53,7 +53,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
       override val data: Flow<T> = prefsDataStore.data
         .map { it.decode() }
         .distinctUntilChanged()
-        .shareIn(scope, SharingStarted.Eagerly, 1)
+        .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
       override suspend fun updateData(transform: T.() -> T): T =
         prefsDataStore.updateData {
