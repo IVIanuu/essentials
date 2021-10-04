@@ -78,7 +78,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart { emit(readData()) }
       .distinctUntilChanged()
       .flowOn(dispatcher)
-      .shareIn(scope, SharingStarted.Lazily, 1)
+      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
     val actor = scope.actor(dispatcher)
 
