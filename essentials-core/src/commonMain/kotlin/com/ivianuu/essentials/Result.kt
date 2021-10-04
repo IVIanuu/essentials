@@ -87,8 +87,7 @@ inline fun <E> E.err() = Err(this)
 inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = try {
   Ok(block())
 } catch (e: Throwable) {
-  e.nonFatalOrThrow()
-  Err(e)
+  Err(e.nonFatalOrThrow())
 }
 
 @Suppress("UNCHECKED_CAST")
