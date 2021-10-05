@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -58,9 +57,9 @@ typealias MediaActionSender = suspend (Int) -> Unit
 
 @Provide fun mediaActionSender(
   context: AppContext,
-  prefs: Flow<MediaActionPrefs>
+  prefs: DataStore<MediaActionPrefs>
 ): MediaActionSender = { keycode ->
-  val currentPrefs = prefs.first()
+  val currentPrefs = prefs.data.first()
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }

@@ -37,13 +37,13 @@ import kotlinx.coroutines.flow.map
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
 @Provide fun autoRotationAction(
-  autoRotation: Flow<AutoRotation>,
+  autoRotation: DataStore<AutoRotation>,
   rp: ResourceProvider,
 ): Action<AutoRotationActionId> = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
-  icon = autoRotation.autoRotationIcon()
+  icon = autoRotation.data.autoRotationIcon()
 )
 
 @Provide fun autoRotationActionExecutor(
