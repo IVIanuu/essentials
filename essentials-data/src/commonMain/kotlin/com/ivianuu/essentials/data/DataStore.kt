@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.optics.Lens
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -42,5 +40,3 @@ fun <T, S> DataStore<T>.lens(lens: Lens<T, S>): DataStore<S> = object : DataStor
   override suspend fun updateData(transform: S.() -> S): S =
     lens.get(this@lens.updateData { lens.set(this, transform(lens.get(this))) })
 }
-
-@Provide fun <@Spread T : DataStore<D>, D> dataStoreFlow(dataStore: T): Flow<D> = dataStore.data
