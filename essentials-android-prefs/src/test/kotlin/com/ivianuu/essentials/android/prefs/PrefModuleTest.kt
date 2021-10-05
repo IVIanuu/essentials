@@ -79,6 +79,20 @@ class PrefModuleTest {
     dataStore.data.first().string shouldBe null
   }
 
+  @Test fun testNullableFieldWithDefaultValue2() = runCancellingBlockingTest {
+    val dataStore = PrefModule { NullableWithDefault() }.dataStore(
+      dispatcher = dispatcher,
+      prefsDataStore = TestDataStore(emptyMap()),
+      // todo remove arg once injekt is fixed
+      serializerFactory = { kSerializer() },
+      scope = this
+    )
+
+    dataStore.updateData { copy("a") }
+
+    dataStore.data.first().string shouldBe "a"
+  }
+
   @Serializable data class NullableWithDefault(val string: String? = "a")
 
   @Serializable data class MyPrefs(val a: Int = 0, val b: Int = 0)
