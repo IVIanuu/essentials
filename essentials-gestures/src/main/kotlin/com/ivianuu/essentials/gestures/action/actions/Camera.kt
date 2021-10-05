@@ -47,7 +47,7 @@ import kotlin.coroutines.resume
 
 @Provide fun cameraAction(rp: ResourceProvider): Action<CameraActionId> = Action(
   id = CameraActionId,
-  title = loadResource<String>(R.string.es_action_camera) + " 2",
+  title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
   permissions = listOf(
     typeKeyOf<ActionAccessibilityPermission>(),
