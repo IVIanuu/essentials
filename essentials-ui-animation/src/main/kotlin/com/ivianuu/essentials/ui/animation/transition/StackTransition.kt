@@ -115,11 +115,10 @@ fun StackTransitionScope.fromElement(key: Any): AnimationElement? = from?.let { 
 
 fun StackTransitionScope.toElement(key: Any): AnimationElement? = to?.let { element(it, key) }
 
-fun StackTransitionScope.element(
-  child: AnimatedStackChild<*>,
-  key: Any,
-): AnimationElement {
-  val refKey = "stack transition $key ${child.key} $this"
+private var refKeys = 0
+
+fun StackTransitionScope.element(child: AnimatedStackChild<*>, key: Any): AnimationElement {
+  val refKey = refKeys++
   val element = child.elementStore.referenceElement(key, refKey)
   launch {
     onCancel {
