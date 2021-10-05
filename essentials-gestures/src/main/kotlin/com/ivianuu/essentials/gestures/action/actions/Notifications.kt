@@ -17,16 +17,26 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Intent
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
@@ -38,7 +48,39 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun notificationsActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
+  context: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
+  service: Flow<EsAccessibilityService?>
 ): ActionExecutor<NotificationsActionId> = {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+  val targetState = catch {
+    val service = service.first()!!
+
+    val systemUiContext = context.createPackageContext(
+      "com.android.systemui", 0
+    )
+
+    val id = systemUiContext.resources.getIdentifier(
+      "accessibility_desc_notification_shade", "string", "com.android.systemui")
+
+    val notificationShadeDesc = systemUiContext.resources.getString(id)
+
+    fun AccessibilityNodeInfo.isNotificationShadeVisibleRecursive(): Boolean {
+      if (packageName != "com.android.systemui") return false
+      if (paneTitle == notificationShadeDesc) return true
+      return (0 until childCount)
+        .any { getChild(it).isNotificationShadeVisibleRecursive() }
+    }
+
+    return@catch !service.rootInActiveWindow.isNotificationShadeVisibleRecursive()
+  }.getOrElse { true }
+
+  if (targetState)
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+  else
+    context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 }
+
+@Provide val notificationsActionAccessibilityConfig = AccessibilityConfig(
+  flags = AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT or
+      AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+)
