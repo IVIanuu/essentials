@@ -28,6 +28,7 @@
     <string name="es_action_back">Back</string>
     <string name="es_action_bluetooth">Bluetooth</string>
     <string name="es_action_camera">Camera</string>
+    <string name="es_action_do_not_disturb">Do not disturb</string>
     <string name="es_action_home">Home</string>
     <string name="es_action_input_method">Input method</string>
     <string name="es_action_keycode">Keycode</string>
