@@ -162,7 +162,7 @@ sealed class ActionPickerItem {
   action(ActionPickerModel.pickAction()) { item ->
     val result = item.getResult() ?: return@action
     if (result is ActionPickerKey.Result.Action) {
-      val action = repository.getAction(result.actionId)!!
+      val action = repository.getAction(result.actionId)
       if (!permissionRequester(action.permissions))
         return@action
     }

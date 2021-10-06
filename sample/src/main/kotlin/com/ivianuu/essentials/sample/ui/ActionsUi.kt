@@ -57,7 +57,7 @@ object ActionsKey : Key<Unit>
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch
 
-          val action = actionRepository.getAction(actionId)!!
+          val action = actionRepository.getAction(actionId)
 
           showToast("Execute action ${action.title}")
 

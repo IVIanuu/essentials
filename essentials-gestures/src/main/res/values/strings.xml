@@ -56,6 +56,8 @@
     <string name="es_action_volume">Volume</string>
     <string name="es_action_wifi">WiFi</string>
 
+    <string name="es_error_action">Error please reconfigure this action</string>
+
     <!-- Floating windows -->
     <string name="es_floating_window_picker_title">Floating window</string>
     <string name="es_floating_window_picker_content">Would you like to open \"%s\" in a floating window? This is can only be done if the Xposed Framework module \"Floating Windows\" is installed.</string>

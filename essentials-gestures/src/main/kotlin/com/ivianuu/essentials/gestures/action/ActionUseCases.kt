@@ -50,7 +50,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   withContext(dispatcher) {
     catch {
       log { "execute $key" }
-      val action = repository.getAction(key)!!
+      val action = repository.getAction(key)
 
       // check permissions
       if (!permissionRequester(action.permissions)) {
@@ -76,7 +76,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
       log { "fire $key" }
 
       // fire
-      repository.getActionExecutor(key)!!()
+      repository.getActionExecutor(key)()
       return@catch true
     }.onFailure {
       it.printStackTrace()
