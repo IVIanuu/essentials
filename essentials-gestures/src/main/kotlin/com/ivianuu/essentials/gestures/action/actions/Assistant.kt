@@ -35,6 +35,7 @@ import com.ivianuu.injekt.android.SystemService
     id = AssistantActionId,
     title = loadResource(R.string.es_action_assistant),
     closeSystemDialogs = true,
+    turnScreenOn = true,
     icon = singleActionIcon(R.drawable.es_ic_google)
   )
 
