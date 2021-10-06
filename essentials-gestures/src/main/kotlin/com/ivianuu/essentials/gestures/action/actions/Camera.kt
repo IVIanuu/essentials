@@ -74,9 +74,9 @@ import kotlin.coroutines.resume
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
-  val frontFacing = frontCamera != null &&
-      cameraApp?.activityInfo?.packageName == currentApp.first() &&
-      suspendCancellableCoroutine { cont ->
+  val frontFacing = if (frontCamera != null &&
+    cameraApp?.activityInfo?.packageName == currentApp.first())
+      suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
           override fun onCameraAvailable(cameraId: String) {
             super.onCameraAvailable(cameraId)
@@ -93,10 +93,12 @@ import kotlin.coroutines.resume
           }
         }, Handler(Looper.getMainLooper()))
       }
+  else null
 
   log { "open camera with $frontFacing" }
 
-  intent.addCameraFacingExtras(frontFacing)
+  if (frontFacing != null)
+    intent.addCameraFacingExtras(frontFacing)
 
   actionIntentSender(intent, false, null)
 }
