@@ -20,7 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -97,32 +96,25 @@ import kotlin.coroutines.resume
 
   log { "open camera with $frontFacing" }
 
-  intent.addCameraFacingExtras(frontFacing)
+  intent.addCameraFacingExtras(true)
 
   actionIntentSender(intent, false, null)
 }
 
-private fun Intent.addCameraFacingExtras(frontFacing: Boolean) {
-  if(Build.VERSION.SDK_INT < 26) {
-    if (frontFacing)
-      putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_BACK)
-    else
-      putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT)
-  }
-  else if (frontFacing) {
-    putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_BACK)
-    putExtra("android.intent.extra.USE_FRONT_CAMERA", true)
+fun Intent.addCameraFacingExtras(frontFacing: Boolean) {
+  putExtra(
+    "android.intent.extras.CAMERA_FACING",
+    if (frontFacing) CameraCharacteristics.LENS_FACING_FRONT
+    else CameraCharacteristics.LENS_FACING_BACK
+  )
 
-    //samsung
-    putExtra("camerafacing", "front")
-    putExtra("previous_mode", "front")
-  }
-  else {
-    putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT)
-    putExtra("android.intent.extra.USE_FRONT_CAMERA", false)
+  putExtra("android.intent.extras.LENS_FACING_FRONT", if (frontFacing) 1 else 0)
+  putExtra("android.intent.extra.USE_FRONT_CAMERA", frontFacing)
+  putExtra("com.google.assistant.extra.USE_FRONT_CAMERA", frontFacing)
 
-    //samsung
-    putExtra("camerafacing", "rear")
-    putExtra("previous_mode", "rear")
-  }
+  // one plus
+  putExtra(
+    "com.android.systemui.camera_launch_source_gesture",
+    if (frontFacing) 512 else 256
+  )
 }
