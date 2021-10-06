@@ -32,6 +32,7 @@ import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
@@ -84,7 +85,8 @@ typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<Permissio
 @Provide fun permissionStateFactory(
   permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>> = { emptyMap() }
 ): PermissionStateFactory = { permissions ->
-  combine(
+  if (permissions.isEmpty()) flowOf(true)
+  else combine(
     *permissions
       .map { permissionStates()[it]!! }
       .toTypedArray()
