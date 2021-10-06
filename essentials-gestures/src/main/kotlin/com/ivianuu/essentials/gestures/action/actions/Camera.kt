@@ -42,7 +42,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-@Provide object CameraActionId : ActionId("camera2")
+@Provide object CameraActionId : ActionId("camera")
 
 @Provide fun cameraAction(rp: ResourceProvider): Action<CameraActionId> = Action(
   id = CameraActionId,
