@@ -96,7 +96,7 @@ import kotlin.coroutines.resume
 
   log { "open camera with $frontFacing" }
 
-  intent.addCameraFacingExtras(true)
+  intent.addCameraFacingExtras(frontFacing)
 
   actionIntentSender(intent, false, null)
 }
