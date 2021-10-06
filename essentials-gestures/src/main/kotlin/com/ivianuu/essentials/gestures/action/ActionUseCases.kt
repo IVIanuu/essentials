@@ -26,12 +26,14 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
@@ -41,6 +43,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
   dispatcher: DefaultDispatcher,
   logger: Logger,
   permissionRequester: PermissionRequester,
+  permissionStateFactory: PermissionStateFactory,
   repository: ActionRepository,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
@@ -53,8 +56,10 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
       val action = repository.getAction(key)
 
       // check permissions
-      if (!permissionRequester(action.permissions)) {
-        log { "couldn't get permissions for $key" }
+      if (!permissionStateFactory(action.permissions).first()) {
+        log { "didn't had permissions for $key ${action.permissions}" }
+        screenUnlocker()
+        permissionRequester(action.permissions)
         return@catch false
       }
 
