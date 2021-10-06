@@ -9,9 +9,11 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -25,10 +27,11 @@ import kotlinx.coroutines.flow.onStart
 ): Action<DoNotDisturbAction> = Action(
   id = DoNotDisturbAction,
   title = loadResource(R.string.es_action_do_not_disturb),
-  icon = icon
+  icon = icon,
+  permissions = listOf(typeKeyOf<ActionNotificationPolicyPermission>())
 )
 
-@Provide fun lastAppNativeActionExecutor(
+@Provide fun doNotDisturbActionExecutor(
   notificationManager: @SystemService NotificationManager
 ): ActionExecutor<DoNotDisturbAction> = {
   notificationManager.setInterruptionFilter(

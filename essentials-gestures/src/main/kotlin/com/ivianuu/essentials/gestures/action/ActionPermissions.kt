@@ -24,6 +24,7 @@ import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.notificationpolicy.NotificationPolicyPermission
 import com.ivianuu.essentials.permission.root.RootPermission
 import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
@@ -46,9 +47,18 @@ import kotlin.reflect.KClass
     }
 }
 
-@Provide class ActionRootPermission(
+@Provide class ActionNotificationPolicyPermission(
   private val rp: ResourceProvider
-) : RootPermission {
+) : NotificationPolicyPermission {
+  override val title: String
+    get() = loadResource(R.string.es_action_notification_policy_permission_title)
+  override val desc: String
+    get() = loadResource(R.string.es_action_notification_policy_permission_desc)
+  override val icon: @Composable () -> Unit
+    get() = { Icon(R.drawable.es_ic_notifications) }
+}
+
+@Provide class ActionRootPermission(private val rp: ResourceProvider) : RootPermission {
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
   override val icon: @Composable () -> Unit
@@ -87,3 +97,4 @@ import kotlin.reflect.KClass
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_settings) }
 }
+
