@@ -63,10 +63,15 @@ import kotlin.coroutines.resume
   logger: Logger,
   packageManager: PackageManager
 ): ActionExecutor<CameraActionId> = {
-  val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
-
   val cameraApp = packageManager
-    .resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    .resolveActivity(
+      Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
+      PackageManager.MATCH_DEFAULT_ONLY
+    )!!
+
+  val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
+    packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
+  else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
   val frontCamera = cameraManager.cameraIdList
     .firstOrNull {
@@ -75,7 +80,7 @@ import kotlin.coroutines.resume
     }
 
   val frontFacing = if (frontCamera != null &&
-    cameraApp?.activityInfo?.packageName == currentApp.first())
+    cameraApp.activityInfo!!.packageName == currentApp.first())
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
           override fun onCameraAvailable(cameraId: String) {
