@@ -14,7 +14,6 @@ import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.foreground.startForeground
@@ -73,32 +72,28 @@ import kotlinx.coroutines.sync.withLock
       return
     }
 
-    par(
+    race(
       {
-        race(
-          {
-            catch {
-              val cameraId = cameraManager.cameraIdList[0]
-              log { "enable torch" }
-              cameraManager.setTorchMode(cameraId, true)
-              wasEverEnabled = true
-              _torchState.value = true
-              onCancel {
-                log { "disable torch" }
-                catch { cameraManager.setTorchMode(cameraId, false) }
-                _torchState.value = false
-              }
-            }.onFailure {
-              log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-              if (wasEverEnabled)
-                showToast(R.string.es_failed_to_enable_torch)
-              setTorchState(false)
-            }
-          },
-          {
-            broadcastsFactory(ACTION_DISABLE_TORCH).first()
+        catch {
+          val cameraId = cameraManager.cameraIdList[0]
+          log { "enable torch" }
+          cameraManager.setTorchMode(cameraId, true)
+          wasEverEnabled = true
+          _torchState.value = true
+          onCancel {
+            log { "disable torch" }
+            catch { cameraManager.setTorchMode(cameraId, false) }
+            _torchState.value = false
           }
-        )
+        }.onFailure {
+          log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+          if (wasEverEnabled)
+            showToast(R.string.es_failed_to_enable_torch)
+          setTorchState(false)
+        }
+      },
+      {
+        broadcastsFactory(ACTION_DISABLE_TORCH).first()
       },
       {
         foregroundManager.startForeground(createTorchNotification())
@@ -121,7 +116,7 @@ import kotlinx.coroutines.sync.withLock
     return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
       .apply {
         setAutoCancel(true)
-        setSmallIcon(R.drawable.es_ic_flash_on)
+        setSmallIcon(R.drawable.es_ic_flashlight_on)
         setContentTitle(loadResource<String>(R.string.es_notif_title_torch))
         setContentText(loadResource<String>(R.string.es_notif_text_torch))
         setContentIntent(

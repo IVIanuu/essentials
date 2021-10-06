@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
@@ -33,7 +34,10 @@ import kotlinx.coroutines.sync.withLock
       val state = mutex.withLock {
         val id = currentId++
         ForegroundState(id, notification)
-          .also { _states.value = _states.value + it }
+          .also {
+            _states.value = _states.value + it
+            log { "start foreground $id ${_states.value}" }
+          }
       }
 
       ContextCompat.startForegroundService(
@@ -47,6 +51,7 @@ import kotlinx.coroutines.sync.withLock
     release = { state, _ ->
       mutex.withLock {
         _states.value = _states.value - state
+        log { "stop foreground ${state.id} ${_states.value}" }
       }
     }
   )

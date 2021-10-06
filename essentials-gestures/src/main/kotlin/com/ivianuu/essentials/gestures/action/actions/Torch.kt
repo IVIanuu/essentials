@@ -45,8 +45,8 @@ import kotlinx.coroutines.flow.map
 
 private fun Flow<Boolean>.torchIcon(): Flow<ActionIcon> = this
   .map {
-    if (it) R.drawable.es_ic_flash_on
-    else R.drawable.es_ic_flash_off
+    if (it) R.drawable.es_ic_flashlight_on
+    else R.drawable.es_ic_flashlight_off
   }
   .map {
     {
