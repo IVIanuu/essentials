@@ -27,12 +27,12 @@ import kotlinx.coroutines.sync.withLock
   private val _states = MutableStateFlow<List<ForegroundState>>(emptyList())
   internal val states: Flow<List<ForegroundState>> get() = _states
 
-  private var currentId = 1
-
-  suspend fun startForeground(notification: StateFlow<Notification>): Nothing = bracket(
+  suspend fun startForeground(
+    id: Int,
+    notification: StateFlow<Notification>
+  ): Nothing = bracket(
     acquire = {
       val state = mutex.withLock {
-        val id = currentId++
         ForegroundState(id, notification)
           .also {
             _states.value = _states.value + it
@@ -59,5 +59,5 @@ import kotlinx.coroutines.sync.withLock
   internal class ForegroundState(val id: Int, val notification: StateFlow<Notification>)
 }
 
-suspend fun ForegroundManager.startForeground(notification: Notification): Nothing =
-  startForeground(MutableStateFlow(notification))
+suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
+  startForeground(id, MutableStateFlow(notification))

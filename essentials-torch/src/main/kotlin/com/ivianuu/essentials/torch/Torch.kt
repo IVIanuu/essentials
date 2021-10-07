@@ -96,7 +96,7 @@ import kotlinx.coroutines.sync.withLock
         broadcastsFactory(ACTION_DISABLE_TORCH).first()
       },
       {
-        foregroundManager.startForeground(createTorchNotification())
+        foregroundManager.startForeground(64578, createTorchNotification())
       }
     )
   }

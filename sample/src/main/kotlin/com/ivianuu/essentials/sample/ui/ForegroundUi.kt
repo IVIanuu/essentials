@@ -72,6 +72,7 @@ fun foregroundUi(
         par(
           {
             foregroundManager.startForeground(
+              5,
               count
                 .mapState { createForegroundNotification(primaryColor, it) }
             )

@@ -76,6 +76,7 @@ object AppTrackerKey : Key<Unit>
   if (isEnabled)
     LaunchedEffect(true) {
       foregroundManager.startForeground(
+        24,
         currentApp
           .onEach { showToast("App changed $it") }
           .map { createNotification(it) }
