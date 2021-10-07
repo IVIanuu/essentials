@@ -8,6 +8,7 @@ import android.os.PowerManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -16,27 +17,22 @@ import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.activityScope
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 /**
  * Turns the screen on
  */
 class ScreenOnActivity : ComponentActivity() {
-  private var hasResult = false
-  private var isValid = true
-  private lateinit var requestId: String
-
   @SuppressLint("NewApi")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    if (!intent.hasExtra(KEY_REQUEST_ID)) {
-      isValid = false
+
+    val requestId = intent.getStringExtra(KEY_REQUEST_ID) ?: run {
       finish()
       return
     }
-
-    requestId = intent.getStringExtra(KEY_REQUEST_ID)!!
 
     @Provide val component: ScreenOnActivityComponent = requireElement(activityScope)
 
@@ -45,23 +41,25 @@ class ScreenOnActivity : ComponentActivity() {
     window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
     window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 
+    var hasResult = false
+
     lifecycleScope.launch {
       while (!component.powerManager.isInteractive) {
-        delay(100)
+        yield()
       }
 
       hasResult = true
       onScreenOnResult(requestId, true)
       finish()
     }
-  }
 
-  override fun onDestroy() {
-    // just in case we didn't respond yet
-    if (isValid && !hasResult) {
-      onScreenOnResult(requestId, false)
+    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+      onCancel {
+        // just in case we didn't respond yet
+        if (!hasResult)
+          onScreenOnResult(requestId, false)
+      }
     }
-    super.onDestroy()
   }
 
   internal companion object {
@@ -78,8 +76,7 @@ class ScreenOnActivity : ComponentActivity() {
   }
 }
 
-@Provide @ScopeElement<ActivityScope>
-class ScreenOnActivityComponent(
+@Provide @ScopeElement<ActivityScope> class ScreenOnActivityComponent(
   val logger: Logger,
   val powerManager: @SystemService PowerManager
 )

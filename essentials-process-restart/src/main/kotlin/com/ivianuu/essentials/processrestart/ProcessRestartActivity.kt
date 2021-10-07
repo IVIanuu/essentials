@@ -25,9 +25,8 @@ class ProcessRestartActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val restartIntent = intent.getParcelableExtra<Intent>(KEY_RESTART_INTENT)
-    if (restartIntent != null) {
+    if (restartIntent != null)
       startActivity(restartIntent)
-    }
 
     finish()
     Runtime.getRuntime().exit(0)
