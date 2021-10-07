@@ -21,7 +21,6 @@ import kotlinx.coroutines.sync.withLock
   private val context: AppContext,
   private val logger: Logger
 ) {
-
   private val mutex = Mutex()
 
   private val _states = MutableStateFlow<List<ForegroundState>>(emptyList())
