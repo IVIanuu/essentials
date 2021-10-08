@@ -7,10 +7,12 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.time.TimestampProvider
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +21,8 @@ import kotlinx.coroutines.sync.withLock
 
 @Provide @Scoped<AppScope> class ForegroundManager(
   private val context: AppContext,
-  private val logger: Logger
+  private val logger: Logger,
+  private val timestampProvider: TimestampProvider
 ) {
   private val mutex = Mutex()
 
@@ -31,23 +34,32 @@ import kotlinx.coroutines.sync.withLock
     notification: StateFlow<Notification>
   ): Nothing = bracket(
     acquire = {
-      val state = mutex.withLock {
-        ForegroundState(id, notification)
+      mutex.withLock {
+        ForegroundState(id, notification, timestampProvider().inWholeMilliseconds)
           .also {
             _states.value = _states.value + it
             log { "start foreground $id ${_states.value}" }
           }
       }
-
+    },
+    use = {
       ContextCompat.startForegroundService(
         context,
         Intent(context, ForegroundService::class.java)
       )
 
-      state
+      awaitCancellation()
     },
-    use = { awaitCancellation() },
     release = { state, _ ->
+      // we ensure that the foreground service had enough time to call startForeground
+      // to prevent a crash in the android system
+      val now = timestampProvider().inWholeMilliseconds
+      val delta = now - state.startTime
+      if (delta < MIN_FOREGROUND_DURATION) {
+        log { "delay foreground stop of ${state.id} for ${MIN_FOREGROUND_DURATION - delta}" }
+        delay(MIN_FOREGROUND_DURATION - delta)
+      }
+
       mutex.withLock {
         _states.value = _states.value - state
         log { "stop foreground ${state.id} ${_states.value}" }
@@ -55,7 +67,15 @@ import kotlinx.coroutines.sync.withLock
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: StateFlow<Notification>)
+  internal class ForegroundState(
+    val id: Int,
+    val notification: StateFlow<Notification>,
+    val startTime: Long
+  )
+
+  private companion object {
+    private const val MIN_FOREGROUND_DURATION = 2000
+  }
 }
 
 suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
