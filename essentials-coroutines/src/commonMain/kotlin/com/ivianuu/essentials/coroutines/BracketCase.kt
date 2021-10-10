@@ -46,6 +46,11 @@ suspend inline fun <R> guarantee(
   return result
 }
 
+suspend inline fun <T> bracket(
+  crossinline acquire: suspend () -> T,
+  crossinline release: suspend (T, ExitCase) -> Unit
+): Nothing = bracket(acquire, { awaitCancellation() }, release)
+
 suspend inline fun <T, R> bracket(
   crossinline acquire: suspend () -> T,
   use: suspend (T) -> R,
