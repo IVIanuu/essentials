@@ -4,8 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.ivianuu.essentials.coroutines.EventFlow
-import java.util.concurrent.Executors
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +15,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.util.concurrent.Executors
+import kotlin.coroutines.CoroutineContext
 
 private val databaseFile = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
@@ -90,7 +90,7 @@ class AndroidDb private constructor(
     private var childrenSuccessful = true
 
     override suspend fun endTransaction(successful: Boolean) {
-      transactionsMutex.withLock {
+      val sendChange = transactionsMutex.withLock {
         currentTransaction = parent
         if (parent == null) {
           withContext(coroutineContext) {
@@ -99,12 +99,15 @@ class AndroidDb private constructor(
             database.endTransaction()
           }
 
-          if (successful && childrenSuccessful)
-            changes.emit(Unit)
+          successful && childrenSuccessful
         } else {
           parent.childrenSuccessful = parent.childrenSuccessful && successful
+          false
         }
       }
+
+      if (sendChange)
+        changes.emit(Unit)
     }
   }
 
