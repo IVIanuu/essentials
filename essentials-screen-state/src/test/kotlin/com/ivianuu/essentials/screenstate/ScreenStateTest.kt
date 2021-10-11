@@ -42,8 +42,7 @@ class ScreenStateTest {
 
     val collector = screenState(
       broadcastsFactory = { broadcasts },
-      screenStateProvider = { currentScreenState },
-      scope = globalScope
+      screenStateProvider = { currentScreenState }
     ).testCollect(this)
 
     globalScopeDispatcher.runCurrent()

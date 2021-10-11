@@ -47,7 +47,6 @@ class DisplayInfoTest {
     val collector = displayInfo(
       { configChanges },
       { rotation },
-      this,
       windowManager
     ).testCollect(this)
     advanceUntilIdle()
