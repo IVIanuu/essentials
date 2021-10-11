@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-private val databaseFile = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+private val databaseExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 class AndroidDb private constructor(
   override val schema: Schema,
@@ -37,7 +37,7 @@ class AndroidDb private constructor(
     context: Context,
     name: String,
     schema: Schema,
-    coroutineContext: CoroutineContext = databaseFile
+    coroutineContext: CoroutineContext = databaseExecutor
   ) : this(
     schema,
     coroutineContext,
