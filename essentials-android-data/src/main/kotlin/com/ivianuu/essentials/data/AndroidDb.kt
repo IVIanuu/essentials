@@ -62,6 +62,10 @@ class AndroidDb private constructor(
           schema.migrate(AndroidDb(schema, this.coroutineContext, null, db), oldVersion, newVersion)
         }
       }
+
+      override fun onOpen(db: SQLiteDatabase) {
+        db.enableWriteAheadLogging()
+      }
     },
     null
   )
@@ -106,10 +110,12 @@ class AndroidDb private constructor(
     }
   }
 
-  override suspend fun execute(sql: String) {
-    withContext(coroutineContext) {
-      database.execSQL(sql)
-    }
+  override suspend fun execute(sql: String) = withContext(coroutineContext) {
+    database.execSQL(sql)
+  }
+
+  override suspend fun executeInsert(sql: String): Long = withContext(coroutineContext) {
+    database.compileStatement(sql).executeInsert()
   }
 
   override fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T> = changes

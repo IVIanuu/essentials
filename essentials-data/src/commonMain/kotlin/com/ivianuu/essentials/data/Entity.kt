@@ -2,7 +2,6 @@ package com.ivianuu.essentials.data
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -15,8 +14,6 @@ interface EntityDescriptor<T> {
   val rows: List<Row>
 
   val serializer: KSerializer<T>
-
-  val mutex: Mutex
 }
 
 abstract class AbstractEntityDescriptor<T>(
@@ -42,8 +39,7 @@ fun <T> EntityDescriptor(
 private class EntityDescriptorImpl<T>(
   override val tableName: String,
   override val typeKey: TypeKey<T>,
-  override val serializer: KSerializer<T>,
-  override val mutex: Mutex = Mutex()
+  override val serializer: KSerializer<T>
 ) : EntityDescriptor<T> {
   override val rows: List<Row> = (0 until serializer.descriptor.elementsCount)
     .map { elementIndex ->

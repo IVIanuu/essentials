@@ -515,10 +515,14 @@ class AndroidDbTest {
       coroutineContext = coroutineContext
     )
 
-    db.insertAndRetrieve(EntityWithAutoIncrementId(name = "Manuel")) shouldBe
+    val insertedId1 = db.insert(EntityWithAutoIncrementId(name = "Manuel"))
+
+    db.selectById<EntityWithAutoIncrementId>(insertedId1).first() shouldBe
         EntityWithAutoIncrementId(1L, "Manuel")
 
-    db.insertAndRetrieve(EntityWithAutoIncrementId(name = "Cindy")) shouldBe
+    val insertedId2 = db.insert(EntityWithAutoIncrementId(name = "Cindy"))
+
+    db.selectById<EntityWithAutoIncrementId>(insertedId2).first() shouldBe
         EntityWithAutoIncrementId(2L, "Cindy")
 
     db.dispose()

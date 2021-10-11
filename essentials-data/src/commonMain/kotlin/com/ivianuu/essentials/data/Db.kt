@@ -6,7 +6,6 @@ import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.sync.withLock
 
 interface Db : Disposable {
   val schema: Schema
@@ -16,6 +15,8 @@ interface Db : Disposable {
   suspend fun beginTransaction(): Transaction
 
   suspend fun execute(sql: String)
+
+  suspend fun executeInsert(sql: String): Long
 
   fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T>
 }
@@ -38,39 +39,13 @@ suspend fun <T> Db.insert(
   entity: T,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
   @Inject key: TypeKey<T>
-) = transaction {
+): Long = transaction {
   val descriptor = schema.descriptor<T>()
-  execute("INSERT ${when (conflictStrategy) {
+  executeInsert("INSERT ${when (conflictStrategy) {
     InsertConflictStrategy.REPLACE -> "OR REPLACE "
     InsertConflictStrategy.ABORT -> "OR ABORT "
     InsertConflictStrategy.IGNORE -> "OR IGNORE "
   }}INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
-}
-
-suspend fun <T> Db.lastInsertedId(@Inject key: TypeKey<T>): Long {
-  val descriptor = schema.descriptor<T>()
-  val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
-    .takeIf { it.type == Row.Type.INT }
-    ?: error("Expected a primary key of type INT $key ${descriptor.rows}")
-
-  return query(
-    "SELECT * FROM ${descriptor.tableName} " +
-        "ORDER BY ${primaryKeyRow.name} DESC LIMIT 1"
-  ) {
-    if (!it.next()) 1L else it.getLong(it.getColumnIndex(primaryKeyRow.name))!!
-  }.first()
-}
-
-suspend fun <T> Db.insertAndRetrieve(
-  entity: T,
-  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
-  @Inject key: TypeKey<T>
-): T = transaction {
-  val descriptor = schema.descriptor<T>()
-  descriptor.mutex.withLock {
-    insert(entity, conflictStrategy)
-    selectById<T>(lastInsertedId<T>()).first()!!
-  }
 }
 
 suspend fun <T> Db.insertAll(
