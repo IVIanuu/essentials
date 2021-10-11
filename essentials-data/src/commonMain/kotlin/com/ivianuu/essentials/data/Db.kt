@@ -23,12 +23,14 @@ interface Db : Disposable {
 
 suspend inline fun <R> Db.transaction(block: () -> R): R {
   val transaction = beginTransaction()
+  var success = true
   return try {
     block()
-      .also { transaction.endTransaction(true) }
   } catch (e: Throwable) {
-    transaction.endTransaction(false)
+    success = false
     throw e
+  } finally {
+    transaction.endTransaction(success)
   }
 }
 
