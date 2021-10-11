@@ -4,11 +4,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.ivianuu.essentials.coroutines.EventFlow
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.runBlocking
@@ -117,7 +115,9 @@ class AndroidDb private constructor(
   override fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T> = changes
     .onStart { emit(Unit) }
     .map {
-      val cursor = AndroidCursor(database.rawQuery(sql, null))
+      val cursor = withContext(coroutineContext) {
+        AndroidCursor(database.rawQuery(sql, null))
+      }
       try {
         transform(cursor)
       } finally {
@@ -125,10 +125,9 @@ class AndroidDb private constructor(
       }
     }
     .distinctUntilChanged()
-    .flowOn(coroutineContext.minusKey(Job))
 
   override fun dispose() {
-    database.close()
+    openHelper?.close() ?: database.close()
   }
 }
 

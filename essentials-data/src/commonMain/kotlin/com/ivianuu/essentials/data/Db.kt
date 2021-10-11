@@ -6,6 +6,7 @@ import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.withLock
 
 interface Db : Disposable {
   val schema: Schema
@@ -65,8 +66,11 @@ suspend fun <T> Db.insertAndRetrieve(
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
   @Inject key: TypeKey<T>
 ): T = transaction {
-  insert(entity, conflictStrategy)
-  selectById<T>(lastInsertedId<T>()).first()!!
+  val descriptor = schema.descriptor<T>()
+  descriptor.mutex.withLock {
+    insert(entity, conflictStrategy)
+    selectById<T>(lastInsertedId<T>()).first()!!
+  }
 }
 
 suspend fun <T> Db.insertAll(
