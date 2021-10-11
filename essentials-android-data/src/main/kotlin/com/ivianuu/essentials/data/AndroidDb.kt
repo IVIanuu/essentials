@@ -90,7 +90,7 @@ class AndroidDb private constructor(
     private var childrenSuccessful = true
 
     override suspend fun endTransaction(successful: Boolean) {
-      val sendChange = transactionsMutex.withLock {
+      transactionsMutex.withLock {
         currentTransaction = parent
         if (parent == null) {
           withContext(coroutineContext) {
@@ -99,15 +99,12 @@ class AndroidDb private constructor(
             database.endTransaction()
           }
 
-          successful && childrenSuccessful
+          if (successful && childrenSuccessful)
+            changes.emit(Unit)
         } else {
           parent.childrenSuccessful = parent.childrenSuccessful && successful
-          false
         }
       }
-
-      if (sendChange)
-        changes.emit(Unit)
     }
   }
 
