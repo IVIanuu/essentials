@@ -70,7 +70,3 @@ typealias WifiIcon = ActionIcon
       Icon(it)
     }
   }
-
-// open https://app.webadb.com on your pc
-// plug in your device
-//
