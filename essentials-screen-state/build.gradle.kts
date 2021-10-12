@@ -25,8 +25,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(project(":essentials-android-core"))
-  api(project(":essentials-broadcast"))
+  api(project(":essentials-android-util"))
   testImplementation(project(":essentials-android-test"))
 }
 

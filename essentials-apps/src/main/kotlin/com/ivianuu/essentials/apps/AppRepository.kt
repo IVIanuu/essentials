@@ -18,11 +18,11 @@ package com.ivianuu.essentials.apps
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow

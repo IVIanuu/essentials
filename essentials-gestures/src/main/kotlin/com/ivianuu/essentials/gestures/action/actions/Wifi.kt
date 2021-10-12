@@ -18,13 +18,13 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.net.wifi.WifiManager
 import androidx.compose.material.Icon
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
@@ -70,3 +70,7 @@ typealias WifiIcon = ActionIcon
       Icon(it)
     }
   }
+
+// open https://app.webadb.com on your pc
+// plug in your device
+//

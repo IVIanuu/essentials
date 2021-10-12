@@ -3,7 +3,7 @@ package com.ivianuu.essentials.apps.shortcuts
 import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
+import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow

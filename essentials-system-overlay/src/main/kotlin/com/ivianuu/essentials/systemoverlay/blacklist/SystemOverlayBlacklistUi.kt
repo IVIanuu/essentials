@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
@@ -104,22 +103,16 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   val updateDisableOnKeyboard: (Boolean) -> Unit = {},
   val updateDisableOnLockScreen: (Boolean) -> Unit = {},
   val updateDisableOnSecureScreens: (Boolean) -> Unit = {}
-) {
-  companion object {
-    @Provide fun initial(
-      key: SystemOverlayBlacklistKey
-    ): @Initial SystemOverlayBlacklistModel = SystemOverlayBlacklistModel(
-      systemOverlayName = key.systemOverlayName
-    )
-  }
-}
+)
 
 @Provide fun systemOverlayBlacklistModel(
-  initial: @Initial SystemOverlayBlacklistModel,
+  key: SystemOverlayBlacklistKey,
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: NamedCoroutineScope<KeyUiScope>
-): StateFlow<SystemOverlayBlacklistModel> = scope.state(initial) {
+): StateFlow<SystemOverlayBlacklistModel> = scope.state(
+  SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)
+) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

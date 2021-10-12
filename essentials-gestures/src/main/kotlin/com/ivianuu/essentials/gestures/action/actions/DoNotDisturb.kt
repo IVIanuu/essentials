@@ -3,7 +3,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.app.NotificationManager
 import androidx.compose.material.Icon
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.broadcast.BroadcastsFactory
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -11,6 +10,7 @@ import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf

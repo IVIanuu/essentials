@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
@@ -137,22 +136,16 @@ object RateKey : DialogKey<Unit>
   val updateRating: (Int) -> Unit = {},
 ) {
   val confirmEnabled: Boolean get() = rating != 0
-
-  companion object {
-    @Provide fun initial(buildInfo: BuildInfo): @Initial RateModel = RateModel(
-      packageName = buildInfo.packageName
-    )
-  }
 }
 
 @Provide fun rateModel(
-  initial: @Initial RateModel,
+  buildInfo: BuildInfo,
   displayShowNever: DisplayShowNeverUseCase,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-): StateFlow<RateModel> = scope.state(initial) {
+): StateFlow<RateModel> = scope.state(RateModel(packageName = buildInfo.packageName)) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateModel.showLater()) { showLater() }
