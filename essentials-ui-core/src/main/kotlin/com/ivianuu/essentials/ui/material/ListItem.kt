@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -62,7 +63,7 @@ import androidx.compose.ui.unit.dp
 
   Box(
     modifier = modifier
-      .heightIn(min = minHeight)
+      .defaultMinSize(minHeight = minHeight)
       .fillMaxWidth()
       .background(color = if (selected) LocalRippleTheme.current.defaultColor() else Color.Transparent)
       .then(
