@@ -20,6 +20,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.PublicType
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -30,11 +31,15 @@ import com.ivianuu.injekt.scope.ChildScopeFactory
 import com.ivianuu.injekt.scope.ScopeElement
 import com.ivianuu.injekt.scope.requireElement
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
   val notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
     @PublicType<Flow<List<StatusBarNotification>>> get
+
+  val events: MutableSharedFlow<NotificationEvent> = EventFlow()
+    @PublicType<Flow<NotificationEvent>> get
 
   private val component: EsNotificationListenerServiceComponent by lazy {
     requireElement(createServiceScope())
@@ -56,18 +61,21 @@ class EsNotificationListenerService : NotificationListenerService() {
     super.onNotificationPosted(sbn)
     log { "notification posted $sbn" }
     updateNotifications()
+    events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
     log { "notification removed $sbn" }
     updateNotifications()
+    events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
     log { "ranking update $rankingMap" }
     updateNotifications()
+    events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
@@ -83,6 +91,12 @@ class EsNotificationListenerService : NotificationListenerService() {
     notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
+}
+
+sealed class NotificationEvent {
+  data class NotificationPosted(val sbn: StatusBarNotification) : NotificationEvent()
+  data class NotificationRemoved(val sbn: StatusBarNotification) : NotificationEvent()
+  data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent()
 }
 
 @Provide @ScopeElement<ServiceScope>

@@ -21,6 +21,7 @@ import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -28,6 +29,8 @@ import kotlinx.coroutines.flow.flowOf
 @Provide class NotificationService(private val ref: Flow<EsNotificationListenerService?>) {
   val notifications: Flow<List<StatusBarNotification>>
     get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+  val events: Flow<NotificationEvent>
+    get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
 
   suspend fun openNotification(notification: Notification) {
     catch { notification.contentIntent.send() }
