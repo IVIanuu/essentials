@@ -41,8 +41,7 @@ enum class ScreenState(val isOn: Boolean) {
   Intent.ACTION_SCREEN_ON,
   Intent.ACTION_USER_PRESENT
 )
-  .map { Unit }
-  .onStart { emit(Unit) }
+  .onStart<Any?> { emit(Unit) }
   .map { screenStateProvider() }
   .distinctUntilChanged()
 

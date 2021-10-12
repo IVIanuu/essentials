@@ -22,8 +22,7 @@ import kotlinx.coroutines.withContext
     Intent.ACTION_PACKAGE_CHANGED,
     Intent.ACTION_PACKAGE_REPLACED
   )
-    .map { Unit }
-    .onStart { emit(Unit) }
+    .onStart<Any?> { emit(Unit) }
     .map {
       withContext(dispatcher) {
         val resources = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY)

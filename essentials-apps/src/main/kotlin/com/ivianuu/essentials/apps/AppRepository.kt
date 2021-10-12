@@ -44,8 +44,7 @@ import kotlinx.coroutines.withContext
       broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
       broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
     )
-      .map { Unit }
-      .onStart { emit(Unit) }
+      .onStart<Any?> { emit(Unit) }
       .map {
         withContext(dispatcher) {
           packageManager.getInstalledApplications(0)
@@ -68,8 +67,7 @@ import kotlinx.coroutines.withContext
     Intent.ACTION_PACKAGE_CHANGED,
     Intent.ACTION_PACKAGE_REPLACED
   )
-    .map { Unit }
-    .onStart { emit(Unit) }
+    .onStart<Any?> { emit(Unit) }
     .map {
       withContext(dispatcher) {
         val applicationInfo = catch {
@@ -84,8 +82,7 @@ import kotlinx.coroutines.withContext
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED
   )
-    .map { Unit }
-    .onStart { emit(Unit) }
+    .onStart<Any?> { emit(Unit) }
     .map {
       withContext(dispatcher) {
         catch { packageManager.getApplicationInfo(packageName, 0) }

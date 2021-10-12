@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
@@ -49,8 +48,7 @@ typealias KeyboardVisible = Boolean
     it.isFullScreen &&
         it.className == "android.inputmethodservice.SoftInputWindow"
   }
-  .map { Unit }
-  .onStart { emit(Unit) }
+  .onStart<Any?> { emit(Unit) }
   .transformLatest {
     emit(true)
     while ((keyboardHeightProvider() ?: 0) > 0) {

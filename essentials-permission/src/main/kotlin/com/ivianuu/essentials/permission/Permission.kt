@@ -72,8 +72,7 @@ typealias PermissionState<P> = Boolean
   permission: P,
   stateProvider: PermissionStateProvider<P>
 ): Flow<PermissionState<P>> = permissionRefreshes
-  .map { Unit }
-  .onStart { emit(Unit) }
+  .onStart<Any?> { emit(Unit) }
   .map {
     withContext(dispatcher) {
       stateProvider(permission)

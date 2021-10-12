@@ -48,8 +48,7 @@ typealias DoNotDisturbIcon = ActionIcon
 ): Flow<DoNotDisturbIcon> = broadcastsFactory(
   NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED
 )
-  .map { Unit }
-  .onStart { emit(Unit) }
+  .onStart<Any?> { emit(Unit) }
   .map {
     notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY
   }

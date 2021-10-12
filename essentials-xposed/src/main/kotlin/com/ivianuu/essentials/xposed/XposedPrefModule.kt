@@ -123,8 +123,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
 
     return broadcastsFactory(prefsChangedAction(packageName))
       .filter { sharedPrefs.hasFileChanged() }
-      .map { Unit }
-      .onStart { emit(Unit) }
+      .onStart<Any?> { emit(Unit) }
       .map { readData() }
       .distinctUntilChanged()
       .flowOn(dispatcher)
