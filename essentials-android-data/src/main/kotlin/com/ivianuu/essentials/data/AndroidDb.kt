@@ -123,7 +123,6 @@ class AndroidDb private constructor(
 
     suspend fun acquire() {
       refs.update { it.inc() }
-      println("acquire ${refs.get()}")
     }
 
     suspend fun release() {
@@ -131,11 +130,7 @@ class AndroidDb private constructor(
         controlJob.cancel()
         this@AndroidDb.launch {
           synchronized(changedTableNames) { changedTableNames.toList() }
-            .forEach {
-              println("pre emit change $it")
-              changes.emit(it)
-              println("post emit change $it")
-            }
+            .forEach { changes.emit(it) }
         }
       }
     }
