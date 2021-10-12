@@ -5,7 +5,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -204,22 +203,20 @@ class AndroidDbTest {
     )
 
     var updates = 0
-    val queryStarted = CompletableDeferred<Unit>()
     val queryJob = launch {
       db.query("SELECT * FROM MyEntity", "MyEntity") {
         updates++
-        queryStarted.complete(Unit)
       }.collect()
     }
 
-    queryStarted.await()
+    delay(50)
 
     db.transaction {
       db.insert(MyEntity("Manuel", 25))
       db.insert(MyEntity("Cindy", 23))
     }
 
-    delay(100)
+    delay(50)
     queryJob.cancelAndJoin()
 
     updates shouldBe 2
