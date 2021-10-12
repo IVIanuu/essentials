@@ -85,6 +85,9 @@ fun interface ResourceLoader<T> {
     @Provide val typeface = ResourceLoader { context, id ->
       Typeface(ResourcesCompat.getFont(context, id)!!)
     }
+    @Provide val frameworkTypeface = ResourceLoader { context, id ->
+      ResourcesCompat.getFont(context, id)!!
+    }
     @Provide val int = ResourceLoader { context, id -> context.resources.getInteger(id) }
     @Provide val intArray = ResourceLoader { context, id -> context.resources.getIntArray(id) }
     @Provide val string = ResourceLoader { context, id -> context.getString(id) }
