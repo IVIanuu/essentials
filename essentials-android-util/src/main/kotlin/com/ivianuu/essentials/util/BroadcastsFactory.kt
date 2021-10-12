@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.broadcast
+package com.ivianuu.essentials.util
 
 import android.content.BroadcastReceiver
 import android.content.Context
