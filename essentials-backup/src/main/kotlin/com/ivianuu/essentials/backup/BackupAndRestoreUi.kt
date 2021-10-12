@@ -34,10 +34,10 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-object BackupAndRestoreKey : Key<Unit>
+object BackupRestoreKey : Key<Unit>
 
-@Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
-  SimpleListScreen(R.string.es_backup_and_restore_title) {
+@Provide val backupRestoreUi: ModelKeyUi<BackupRestoreKey, BackupRestoreModel> = {
+  SimpleListScreen(R.string.es_backup_restore_title) {
     item {
       ListItem(
         leading = { Icon(R.drawable.es_ic_save) },
@@ -57,26 +57,26 @@ object BackupAndRestoreKey : Key<Unit>
   }
 }
 
-@Optics data class BackupAndRestoreModel(
+@Optics data class BackupRestoreModel(
   val backupData: () -> Unit = {},
   val restoreData: () -> Unit = {}
 )
 
-@Provide fun backupAndRestoreModel(
+@Provide fun backupRestoreModel(
   createBackupUseCase: CreateBackupUseCase,
   restoreBackupUseCase: RestoreBackupUseCase,
   scope: NamedCoroutineScope<KeyUiScope>,
   rp: ResourceProvider,
   toaster: Toaster,
-): StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {
-    action(BackupAndRestoreModel.backupData()) {
+): StateFlow<BackupRestoreModel> = scope.state(BackupRestoreModel()) {
+    action(BackupRestoreModel.backupData()) {
       createBackupUseCase()
         .onFailure {
           it.printStackTrace()
           showToast(R.string.es_backup_error)
         }
     }
-    action(BackupAndRestoreModel.restoreData()) {
+    action(BackupRestoreModel.restoreData()) {
       restoreBackupUseCase()
         .onFailure {
           it.printStackTrace()
