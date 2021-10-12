@@ -28,7 +28,7 @@ class AndroidDb private constructor(
   override val coroutineContext: CoroutineContext,
   private val openHelper: SQLiteOpenHelper?,
   database: SQLiteDatabase?
-) : Db {
+) : Db, CoroutineScope {
   private val changes = EventFlow<String?>()
 
   private val database by lazy { database ?: openHelper!!.writableDatabase!! }
@@ -86,7 +86,7 @@ class AndroidDb private constructor(
 
       val interceptor = suspendCancellableCoroutine<ContinuationInterceptor> { cont ->
         cont.invokeOnCancellation { controlJob.cancel() }
-        CoroutineScope(coroutineContext).launch {
+        this@AndroidDb.launch {
           runBlocking {
             cont.resume(coroutineContext[ContinuationInterceptor]!!)
             controlJob.join()
@@ -123,12 +123,20 @@ class AndroidDb private constructor(
 
     suspend fun acquire() {
       refs.update { it.inc() }
+      println("acquire ${refs.get()}")
     }
 
     suspend fun release() {
       if (refs.update { it.dec() } == 0) {
         controlJob.cancel()
-        changedTableNames.forEach { changes.emit(it) }
+        this@AndroidDb.launch {
+          synchronized(changedTableNames) { changedTableNames.toList() }
+            .forEach {
+              println("pre emit change $it")
+              changes.emit(it)
+              println("post emit change $it")
+            }
+        }
       }
     }
   }
@@ -150,7 +158,7 @@ class AndroidDb private constructor(
     )
 
   private suspend fun handleTableMutation(tableName: String?) {
-    coroutineContext[TransactionContextKey]
+    currentCoroutineContext()[TransactionContextKey]
       ?.let {
         synchronized(it.changedTableNames) {
           it.changedTableNames += tableName
@@ -159,8 +167,8 @@ class AndroidDb private constructor(
   }
 
   override fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T> = changes
-    .onStart { emit(tableName) }
     .filter { tableName == null || it == tableName }
+    .onStart { emit(tableName) }
     .map {
       val cursor = withTransactionOrDefaultContext {
         AndroidCursor(database.rawQuery(sql, null))

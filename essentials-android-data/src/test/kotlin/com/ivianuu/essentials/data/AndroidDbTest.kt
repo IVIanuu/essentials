@@ -5,7 +5,13 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.junit.Test
@@ -124,6 +130,99 @@ class AndroidDbTest {
       MyEntity("Manuel", 25),
       MyEntity("Cindy", 23)
     )
+
+    db.dispose()
+  }
+
+  @Test fun testQueryWillBeExecutedOnUnspecifiedChange() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    var updates = 0
+    db.query("SELECT * FROM MyEntity", null) {
+      updates++
+    }.launchIn(this)
+    advanceUntilIdle()
+
+    updates shouldBe 1
+
+    db.insert(MyEntity("Manuel", 25))
+
+    updates shouldBe 2
+
+    db.dispose()
+  }
+
+  @Test fun testQueryWillBeExecutedOnlyOnSpecifiedTableChanges() = runCancellingBlockingTest {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(
+          EntityDescriptor<MyEntity>(tableName = "MyEntity"),
+          EntityDescriptor<MyEntity2>(tableName = "MyEntity2")
+        )
+      ),
+      coroutineContext = coroutineContext
+    )
+
+    var updates = 0
+    db.query("SELECT * FROM MyEntity", "MyEntity") {
+      updates++
+    }.launchIn(this)
+    advanceUntilIdle()
+
+    updates shouldBe 1
+
+    db.insert(MyEntity("Manuel", 25))
+
+    updates shouldBe 2
+
+    db.insert(MyEntity2("Manuel", 25))
+
+    updates shouldBe 2
+
+    db.dispose()
+  }
+
+  @Test fun testQueryWillBeExecutedOnlyOncePerTransaction() = runBlocking {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      )
+    )
+
+    var updates = 0
+    val queryStarted = CompletableDeferred<Unit>()
+    val queryJob = launch {
+      db.query("SELECT * FROM MyEntity", "MyEntity") {
+        updates++
+        queryStarted.complete(Unit)
+      }.collect()
+    }
+
+    queryStarted.await()
+
+    db.transaction {
+      db.insert(MyEntity("Manuel", 25))
+      db.insert(MyEntity("Cindy", 23))
+    }
+
+    delay(100)
+    queryJob.cancelAndJoin()
+
+    updates shouldBe 2
 
     db.dispose()
   }
@@ -682,6 +781,11 @@ class AndroidDbTest {
   @Serializable data class MyEntity(
      @PrimaryKey val name: String,
      val age: Int
+  )
+
+  @Serializable data class MyEntity2(
+    @PrimaryKey val name: String,
+    val age: Int
   )
 
   @Serializable data class Migration1MyEntityV1(
