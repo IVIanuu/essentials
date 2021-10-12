@@ -71,10 +71,16 @@ fun interface ResourceLoader<T> {
   operator fun invoke(context: AppContext, id: Int): T
 
   companion object {
+    @Provide val bitmap = ResourceLoader { context, id ->
+      context.getDrawable(id)!!.toBitmap()
+    }
     @Provide val boolean = ResourceLoader { context, id -> context.resources.getBoolean(id) }
     @Provide val color = ResourceLoader { context, id -> Color(context.getColor(id)) }
     @Provide val dimension = ResourceLoader { context, id ->
       (context.resources.getDimensionPixelOffset(id) / context.resources.displayMetrics.density).dp
+    }
+    @Provide val drawable = ResourceLoader { context, id ->
+      context.getDrawable(id)!!
     }
     @Provide val float = ResourceLoader { context, id ->
       ResourcesCompat.getFloat(context.resources, id)
