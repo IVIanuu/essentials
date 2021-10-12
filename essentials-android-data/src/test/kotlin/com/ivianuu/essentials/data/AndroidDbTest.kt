@@ -6,6 +6,7 @@ import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -251,7 +252,8 @@ class AndroidDbTest {
         migrations = listOf(
           Migration(1, 2) { db, _, _ ->
             db.execute(
-              "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL"
+              "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL",
+              "MyEntity"
             )
           }
         )
@@ -291,7 +293,8 @@ class AndroidDbTest {
         migrations = listOf(
           Migration(1, 2) { db, _, _ ->
             db.execute(
-              "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL"
+              "ALTER TABLE MyEntity ADD COLUMN height LONG DEFAULT NULL",
+              "MyEntity"
             )
           }
         )
@@ -334,9 +337,9 @@ class AndroidDbTest {
               entity = EntityDescriptor(tableName = "MyEntity"),
               tableName = "MyEntity_new"
             )
-            db.execute("INSERT INTO MyEntity_new (name) SELECT name FROM MyEntity")
-            db.execute("DROP TABLE MyEntity")
-            db.execute("ALTER TABLE MyEntity_new RENAME TO MyEntity")
+            db.execute("INSERT INTO MyEntity_new (name) SELECT name FROM MyEntity", "MyEntity")
+            db.execute("DROP TABLE MyEntity", "MyEntity")
+            db.execute("ALTER TABLE MyEntity_new RENAME TO MyEntity", "MyEntity")
           }
         )
       ),
@@ -460,43 +463,65 @@ class AndroidDbTest {
     db.dispose()
   }
 
-  @Test fun testNonSuccessfulTransactionRollsBackChanges() = runCancellingBlockingTest {
+  @Test fun testTransaction() = runBlocking {
     val db = AndroidDb(
       context = ApplicationProvider.getApplicationContext(),
       name = "mydb.db",
       schema = Schema(
         version = 1,
         entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
-      ),
-      coroutineContext = coroutineContext
+      )
     )
 
-    val transaction = db.beginTransaction()
-    val entity = MyEntity("Manuel", 25)
-    db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}")
-    transaction.endTransaction(false)
+    db.transaction {
+      val entity = MyEntity("Manuel", 25)
+      db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}", "MyEntity")
+    }
+
+    db.selectById<MyEntity>("Manuel").first() shouldBe MyEntity("Manuel", 25)
+
+    db.dispose()
+  }
+
+  @Test fun testNonSuccessfulTransactionRollsBackChanges() = runBlocking {
+    val db = AndroidDb(
+      context = ApplicationProvider.getApplicationContext(),
+      name = "mydb.db",
+      schema = Schema(
+        version = 1,
+        entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
+      )
+    )
+
+    catch {
+      db.transaction {
+        val entity = MyEntity("Manuel", 25)
+        db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}", "MyEntity")
+        throw RuntimeException()
+      }
+    }
 
     db.selectById<MyEntity>("Manuel").first() shouldBe null
 
     db.dispose()
   }
 
-  @Test fun testNonSuccessfulChildTransactionRollsBackChanges() = runCancellingBlockingTest {
+  @Test fun testNonSuccessfulChildTransactionRollsBackChanges() = runBlocking {
     val db = AndroidDb(
       context = ApplicationProvider.getApplicationContext(),
       name = "mydb.db",
       schema = Schema(
         version = 1,
         entities = listOf(EntityDescriptor<MyEntity>(tableName = "MyEntity"))
-      ),
-      coroutineContext = coroutineContext
+      )
     )
 
-    db.transaction {
-      val transaction = db.beginTransaction()
-      val entity = MyEntity("Manuel", 25)
-      db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}")
-      transaction.endTransaction(false)
+    catch {
+      db.transaction {
+        val entity = MyEntity("Manuel", 25)
+        db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}", "MyEntity")
+        throw RuntimeException()
+      }
     }
 
     db.selectById<MyEntity>("Manuel").first() shouldBe null

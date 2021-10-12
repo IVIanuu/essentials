@@ -6,55 +6,50 @@ import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlin.coroutines.CoroutineContext
 
 interface Db : Disposable {
   val schema: Schema
+  val coroutineContext: CoroutineContext
 
-  suspend fun currentTransaction(): Transaction?
+  suspend fun <R> transaction(block: suspend Db.() -> R): R
 
-  suspend fun beginTransaction(): Transaction
+  suspend fun execute(sql: String, tableName: String?)
 
-  suspend fun execute(sql: String)
+  suspend fun executeInsert(sql: String, tableName: String?): Long
 
-  suspend fun executeInsert(sql: String): Long
-
-  fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T>
+  fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T>
 }
 
-suspend inline fun <R> Db.transaction(block: () -> R): R {
-  val transaction = beginTransaction()
-  var success = true
-  return try {
-    block()
-  } catch (e: Throwable) {
-    success = false
-    throw e
-  } finally {
-    transaction.endTransaction(success)
-  }
-}
-
-fun <T> Db.query(sql: String, @Inject key: TypeKey<T>): Flow<List<T>> =
-  query(sql) { it.toList(schema) }
+fun <T> Db.query(
+  sql: String,
+  tableName: String?,
+  @Inject key: TypeKey<T>
+): Flow<List<T>> = query(sql, tableName) { it.toList(schema) }
 
 suspend fun <T> Db.insert(
   entity: T,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
   @Inject key: TypeKey<T>
-): Long = transaction {
+): Long {
   val descriptor = schema.descriptor<T>()
-  executeInsert("INSERT ${when (conflictStrategy) {
-    InsertConflictStrategy.REPLACE -> "OR REPLACE "
-    InsertConflictStrategy.ABORT -> "OR ABORT "
-    InsertConflictStrategy.IGNORE -> "OR IGNORE "
-  }}INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}")
+  return executeInsert(
+    "INSERT ${
+      when (conflictStrategy) {
+        InsertConflictStrategy.REPLACE -> "OR REPLACE "
+        InsertConflictStrategy.ABORT -> "OR ABORT "
+        InsertConflictStrategy.IGNORE -> "OR IGNORE "
+      }
+    }INTO ${descriptor.tableName} ${entity.toSqlColumnsAndArgsString(schema)}",
+    descriptor.tableName
+  )
 }
 
 suspend fun <T> Db.insertAll(
   entities: List<T>,
   conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
   @Inject key: TypeKey<T>
-) = transaction {
+) {
   entities.forEach { insert(it, conflictStrategy) }
 }
 
@@ -66,31 +61,36 @@ enum class InsertConflictStrategy {
 
 fun <T> Db.selectAll(@Inject key: TypeKey<T>): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()
-  return query("SELECT * FROM ${descriptor.tableName}")
+  return query(
+    "SELECT * FROM ${descriptor.tableName}",
+    descriptor.tableName
+  )
 }
 
 fun <T> Db.selectById(id: Any, @Inject key: TypeKey<T>): Flow<T?> {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
-  return query<T>("SELECT * FROM ${descriptor.tableName} " +
-      "WHERE ${primaryKeyRow.name} = ${id.toSqlArg(primaryKeyRow)}")
+  return query<T>(
+    "SELECT * FROM ${descriptor.tableName} " +
+        "WHERE ${primaryKeyRow.name} = ${id.toSqlArg(primaryKeyRow)}",
+    descriptor.tableName
+  )
     .map { it.singleOrNull() }
 }
 
-suspend fun <T> Db.deleteById(vararg ids: Any, @Inject key: TypeKey<T>) = transaction {
+suspend fun <T> Db.deleteById(vararg ids: Any, @Inject key: TypeKey<T>) {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
-  execute("DELETE FROM ${descriptor.tableName} " +
-      "WHERE ${primaryKeyRow.name} in (${ids.joinToString { it.toSqlArg(primaryKeyRow) }})")
+  execute(
+    "DELETE FROM ${descriptor.tableName} " +
+        "WHERE ${primaryKeyRow.name} in (${ids.joinToString { it.toSqlArg(primaryKeyRow) }})",
+    descriptor.tableName,
+  )
 }
 
-suspend fun <T> Db.deleteAll(@Inject key: TypeKey<T>) = transaction {
-  val descriptor = schema.descriptor<T>()
-  execute("DELETE FROM ${descriptor.tableName}")
-}
-
-interface Transaction {
-  suspend fun endTransaction(successful: Boolean)
+suspend fun <T> Db.deleteAll(@Inject key: TypeKey<T>) {
+  val tableName = schema.descriptor<T>().tableName
+  execute("DELETE FROM $tableName", tableName)
 }
 
 interface Cursor : Disposable {
@@ -129,7 +129,7 @@ interface Cursor : Disposable {
 
 @OptIn(ExperimentalStdlibApi::class)
 fun Db.tableNames(): Flow<List<String>> =
-  query("SELECT * FROM sqlite_master WHERE type='table';") { cursor ->
+  query("SELECT * FROM sqlite_master WHERE type='table';", "sqlite_master") { cursor ->
     buildList {
       while (cursor.next()) {
         val tableName = cursor.getString(1)!!
@@ -142,43 +142,42 @@ fun Db.tableNames(): Flow<List<String>> =
 suspend fun <T> Db.createTable(
   @Inject entity: EntityDescriptor<T>,
   tableName: String = entity.tableName
-) = transaction {
-  execute(
-    buildString {
-      append("CREATE TABLE IF NOT EXISTS $tableName")
-      append("(")
-      entity.rows.forEachIndexed { index, row ->
-        append(row.name)
+) = execute(
+  sql = buildString {
+    append("CREATE TABLE IF NOT EXISTS $tableName")
+    append("(")
+    entity.rows.forEachIndexed { index, row ->
+      append(row.name)
 
-        when (row.type) {
-          Row.Type.STRING -> append(" TEXT")
-          Row.Type.INT -> append(" INTEGER")
-          Row.Type.BYTES -> append(" BLOB")
-          Row.Type.DOUBLE -> append(" REAL")
-        }
-
-        if (row.isPrimaryKey)
-          append(" PRIMARY KEY")
-
-        if (row.autoIncrement)
-          append(" AUTOINCREMENT")
-
-        if (!row.isNullable)
-          append(" NOT NULL")
-
-        if (index != entity.rows.lastIndex)
-          append(",")
+      when (row.type) {
+        Row.Type.STRING -> append(" TEXT")
+        Row.Type.INT -> append(" INTEGER")
+        Row.Type.BYTES -> append(" BLOB")
+        Row.Type.DOUBLE -> append(" REAL")
       }
-      append(")")
+
+      if (row.isPrimaryKey)
+        append(" PRIMARY KEY")
+
+      if (row.autoIncrement)
+        append(" AUTOINCREMENT")
+
+      if (!row.isNullable)
+        append(" NOT NULL")
+
+      if (index != entity.rows.lastIndex)
+        append(",")
     }
-  )
+    append(")")
+  },
+  tableName = tableName
+)
+
+suspend fun Db.dropTable(tableName: String) {
+  execute("DROP TABLE IF EXISTS $tableName", tableName)
 }
 
-suspend fun Db.dropTable(tableName: String) = transaction {
-  execute("DROP TABLE IF EXISTS $tableName")
-}
-
-suspend fun Db.dropAllAndRecreateTables() = transaction {
+suspend fun Db.dropAllAndRecreateTables() {
   tableNames().first().forEach { dropTable(it) }
   schema.entities.forEach { createTable(it) }
 }

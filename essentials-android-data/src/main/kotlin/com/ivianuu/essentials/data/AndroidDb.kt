@@ -3,39 +3,45 @@ package com.ivianuu.essentials.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.ivianuu.essentials.coroutines.Atomic
 import com.ivianuu.essentials.coroutines.EventFlow
-import kotlinx.coroutines.asCoroutineDispatcher
+import com.ivianuu.essentials.coroutines.update
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.concurrent.Executors
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
-
-private val databaseExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+import kotlin.coroutines.currentCoroutineContext
+import kotlin.coroutines.resume
 
 class AndroidDb private constructor(
   override val schema: Schema,
-  private val coroutineContext: CoroutineContext,
+  override val coroutineContext: CoroutineContext,
   private val openHelper: SQLiteOpenHelper?,
   database: SQLiteDatabase?
 ) : Db {
-  private val transactionsMutex = Mutex()
-  private var currentTransaction: TransactionImpl? = null
-
-  private val changes = EventFlow<Unit>()
+  private val changes = EventFlow<String?>()
 
   private val database by lazy { database ?: openHelper!!.writableDatabase!! }
+
+  init {
+    checkNotNull(coroutineContext[ContinuationInterceptor])
+  }
 
   constructor(
     context: Context,
     name: String,
     schema: Schema,
-    coroutineContext: CoroutineContext = databaseExecutor
+    coroutineContext: CoroutineContext = Dispatchers.IO
   ) : this(
     schema,
     coroutineContext,
@@ -70,58 +76,93 @@ class AndroidDb private constructor(
     null
   )
 
-  override suspend fun currentTransaction(): Transaction? =
-    transactionsMutex.withLock { currentTransaction }
+  override suspend fun <R> transaction(block: suspend Db.() -> R): R {
+    val currentCoroutineContext = currentCoroutineContext()
+    val transactionContext = currentCoroutineContext[TransactionContextKey] ?: run {
+      val controlJob = Job()
 
-  override suspend fun beginTransaction(): Transaction {
-    val transaction = transactionsMutex.withLock {
-      TransactionImpl(currentTransaction)
-        .also { currentTransaction = it }
-    }
+      val job = currentCoroutineContext[Job]!!
+      job.invokeOnCompletion { controlJob.cancel() }
 
-    if (transaction.parent == null) {
-      withContext(coroutineContext) {
-        database.beginTransactionNonExclusive()
-      }
-    }
-
-    return transaction
-  }
-
-  private inner class TransactionImpl(val parent: TransactionImpl?) : Transaction {
-    private var childrenSuccessful = true
-
-    override suspend fun endTransaction(successful: Boolean) {
-      transactionsMutex.withLock {
-        currentTransaction = parent
-        if (parent == null) {
-          withContext(coroutineContext) {
-            if (successful && childrenSuccessful)
-              database.setTransactionSuccessful()
-            database.endTransaction()
+      val interceptor = suspendCancellableCoroutine<ContinuationInterceptor> { cont ->
+        cont.invokeOnCancellation { controlJob.cancel() }
+        CoroutineScope(coroutineContext).launch {
+          runBlocking {
+            cont.resume(coroutineContext[ContinuationInterceptor]!!)
+            controlJob.join()
           }
-
-          if (successful && childrenSuccessful)
-            changes.emit(Unit)
-        } else {
-          parent.childrenSuccessful = parent.childrenSuccessful && successful
         }
       }
+
+      TransactionContext(interceptor, controlJob)
+    }
+
+    return withContext(transactionContext + transactionContext.interceptor) {
+      transactionContext.acquire()
+      database.beginTransactionNonExclusive()
+      try {
+        block()
+          .also { database.setTransactionSuccessful() }
+      } finally {
+        database.endTransaction()
+        transactionContext.release()
+      }
     }
   }
 
-  override suspend fun execute(sql: String) = withContext(coroutineContext) {
-    database.execSQL(sql)
+  private inner class TransactionContext(
+    val interceptor: ContinuationInterceptor,
+    private val controlJob: Job
+  ) : CoroutineContext.Element {
+    override val key: CoroutineContext.Key<*>
+      get() = TransactionContextKey
+
+    val changedTableNames = mutableSetOf<String?>()
+
+    private val refs = Atomic(0)
+
+    suspend fun acquire() {
+      refs.update { it.inc() }
+    }
+
+    suspend fun release() {
+      if (refs.update { it.dec() } == 0) {
+        controlJob.cancel()
+        changedTableNames.forEach { changes.emit(it) }
+      }
+    }
   }
 
-  override suspend fun executeInsert(sql: String): Long = withContext(coroutineContext) {
-    database.compileStatement(sql).executeInsert()
+  private object TransactionContextKey : CoroutineContext.Key<TransactionContext>
+
+  override suspend fun execute(sql: String, tableName: String?) =
+    withTransactionOrDefaultContext { database.execSQL(sql) }
+      .also { handleTableMutation(tableName) }
+
+  override suspend fun executeInsert(sql: String, tableName: String?): Long =
+    withTransactionOrDefaultContext { database.compileStatement(sql).executeInsert() }
+      .also { handleTableMutation(tableName) }
+
+  private suspend fun <R> withTransactionOrDefaultContext(block: suspend CoroutineScope.() -> R): R =
+    withContext(
+      currentCoroutineContext()[TransactionContextKey]?.interceptor ?: coroutineContext,
+      block
+    )
+
+  private suspend fun handleTableMutation(tableName: String?) {
+    coroutineContext[TransactionContextKey]
+      ?.let {
+        synchronized(it.changedTableNames) {
+          it.changedTableNames += tableName
+        }
+      } ?: changes.emit(tableName)
   }
 
-  override fun <T> query(sql: String, transform: (Cursor) -> T): Flow<T> = changes
-    .onStart { emit(Unit) }
+  override fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T> = changes
+    .onStart { emit(tableName) }
+    .filter { tableName == null || it == tableName }
     .map {
-      val cursor = withContext(coroutineContext) {
+      val cursor = withTransactionOrDefaultContext {
         AndroidCursor(database.rawQuery(sql, null))
       }
       try {
