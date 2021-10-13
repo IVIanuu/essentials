@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
@@ -85,6 +86,8 @@ interface ActionPickerDelegate {
 }
 
 typealias FloatingWindowActionsEnabled = Boolean
-@Provide val floatingWindowActionsEnabled: FloatingWindowActionsEnabled = true
+@Provide fun floatingWindowActionsEnabled(
+  systemBuildInfo: SystemBuildInfo
+): FloatingWindowActionsEnabled = systemBuildInfo.sdk >= 29
 
 const val ACTION_DELIMITER = "=:="
