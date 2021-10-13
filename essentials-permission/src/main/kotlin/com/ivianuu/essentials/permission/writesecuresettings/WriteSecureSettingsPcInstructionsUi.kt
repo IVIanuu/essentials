@@ -30,10 +30,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
@@ -50,6 +52,8 @@ import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -211,15 +215,17 @@ typealias IsCharging = Boolean
   .distinctUntilChanged()
 
 @Provide fun writeSecureSettingsPcInstructionsModel(
+  adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>,
-  adbEnabledSetting: DataStore<AdbEnabled>,
+  isCharging: Flow<IsCharging>,
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   scope: NamedCoroutineScope<KeyUiScope>,
-  isCharging: Flow<IsCharging>
+  rp: ResourceProvider,
+  toaster: Toaster
 ): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
   WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)
 ) {
@@ -259,7 +265,10 @@ typealias IsCharging = Boolean
   action(WriteSecureSettingsPcInstructionsModel.openPhoneInfo()) {
     race(
       { developerModeSetting.data.first { it != 0 } },
-      { navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey()) }
+      {
+        navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
+          ?.onFailure { showToast(R.string.open_phone_info_failed) }
+      }
     )
     appUiStarter()
   }

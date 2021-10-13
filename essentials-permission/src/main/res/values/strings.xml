@@ -17,7 +17,7 @@
 <resources>
     <string name="es_no_root">Your device is not rooted!</string>
 
-    <string name="es_request_permission_title">Write secure settings</string>
+    <string name="es_request_permission_title">Permissions required</string>
     <string name="es_grant">Grant</string>
     <string name="es_continue">Continue</string>
     <string name="es_complete">Complete</string>
@@ -38,11 +38,12 @@
     <string name="es_secure_settings_pc_instructions_desc">The WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! You don\'t have to install any drivers or programs</string>
 
     <string name="es_secure_settings_step_1_title">Enable Developer options</string>
-    <string name="es_secure_settings_step_1_content">1) Go to \"Android-Settings\"\n2) Click \"About phone\"\n3) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
+    <string name="es_secure_settings_step_1_content">1) Click \"Open about phone\"\n2) Click \"Build Number\" multiple times until the \"Developer options\" are active</string>
     <string name="open_phone_info">Open about phone</string>
+    <string name="open_phone_info_failed">Couldn\'t open phone! Please open phone info manually</string>
 
     <string name="es_secure_settings_step_2_title">Enable USB debugging</string>
-    <string name="es_secure_settings_step_2_content">1) Go to \"Android-Settings\"\n2) Click \"System\"\n3) Click \"Advanced\"\n4) Click \"Developer Options\"\n4) Enable \"USB debugging\"</string>
+    <string name="es_secure_settings_step_2_content">1) Click \"Open developer options\"\n4) Enable \"USB debugging\"</string>
     <string name="open_developer_settings">Open developer options</string>
 
     <string name="es_secure_settings_step_3_title">Connect your phone to WebADB</string>
