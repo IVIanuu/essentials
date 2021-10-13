@@ -22,6 +22,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -29,7 +30,16 @@ suspend fun <T> par(
   vararg blocks: suspend () -> T,
   context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency
-): List<T> = blocks.asIterable().parMap(context) { it() }
+): List<T> = coroutineScope {
+  val semaphore = Semaphore(concurrency.value)
+  blocks.map { block ->
+    async(context) {
+      semaphore.withPermit {
+        block()
+      }
+    }
+  }.awaitAll()
+}
 
 suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
@@ -39,12 +49,7 @@ suspend fun <T, R> Iterable<T>.parMap(
   val semaphore = Semaphore(concurrency.value)
   map { item ->
     async(context) {
-      semaphore.acquire()
-      try {
-        transform(item)
-      } finally {
-        semaphore.release()
-      }
+      semaphore.withPermit { transform(item) }
     }
   }.awaitAll()
 }
