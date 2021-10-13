@@ -31,6 +31,6 @@ import kotlinx.coroutines.withContext
 
   suspend fun run(vararg commands: String): Result<List<String>, Throwable> =
     withContext(dispatcher) {
-      catch { SU.run(commands) ?: emptyList() }
+      catch { SU.run(commands)!! }
     }
 }

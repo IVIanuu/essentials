@@ -23,6 +23,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
 import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.action
@@ -40,6 +41,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 
 data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -88,6 +90,7 @@ data class WriteSecureSettingsKey(
   buildInfo: BuildInfo,
   key: WriteSecureSettingsKey,
   navigator: Navigator,
+  permissionStateFactory: PermissionStateFactory,
   scope: NamedCoroutineScope<KeyUiScope>,
   shell: Shell,
   rp: ResourceProvider,
@@ -102,7 +105,12 @@ data class WriteSecureSettingsKey(
 
   action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-      .onSuccess { showToast(R.string.es_secure_settings_permission_granted) }
+      .onSuccess {
+        if (permissionStateFactory(listOf(key.permissionKey)).first()) {
+          showToast(R.string.es_secure_settings_permission_granted)
+          navigator.pop(key)
+        }
+      }
       .onFailure {
         it.printStackTrace()
         showToast(R.string.es_secure_settings_no_root)
