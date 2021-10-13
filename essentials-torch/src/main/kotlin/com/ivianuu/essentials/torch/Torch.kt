@@ -26,6 +26,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.coroutines.MainDispatcher
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.scope.AppScope
 import com.ivianuu.injekt.scope.Scoped
@@ -34,8 +35,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 
 @Provide @Scoped<AppScope> class Torch(
   private val broadcastsFactory: BroadcastsFactory,
@@ -43,6 +47,7 @@ import kotlinx.coroutines.sync.withLock
   private val context: AppContext,
   private val foregroundManager: ForegroundManager,
   private val logger: Logger,
+  private val mainDispatcher: MainDispatcher,
   private val notificationManager: @SystemService NotificationManager,
   private val rp: ResourceProvider,
   private val scope: NamedCoroutineScope<AppScope>,
@@ -54,8 +59,6 @@ import kotlinx.coroutines.sync.withLock
 
   private val torchJobMutex = Mutex()
   private var torchJob: Job? = null
-
-  private var wasEverEnabled = false
 
   suspend fun setTorchState(value: Boolean) {
     torchJobMutex.withLock {
@@ -78,26 +81,53 @@ import kotlinx.coroutines.sync.withLock
           val cameraId = cameraManager.cameraIdList[0]
           log { "enable torch" }
           cameraManager.setTorchMode(cameraId, true)
-          wasEverEnabled = true
           _torchState.value = true
-          onCancel {
-            log { "disable torch" }
-            catch { cameraManager.setTorchMode(cameraId, false) }
-            _torchState.value = false
-          }
+
+          onCancel(
+            block = {
+              withContext(mainDispatcher) {
+                suspendCancellableCoroutine<Unit> { cont ->
+                  val callback = object : CameraManager.TorchCallback() {
+                    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                      super.onTorchModeChanged(cameraId, enabled)
+                      if (!enabled) {
+                        cameraManager.unregisterTorchCallback(this)
+                        if (cont.isActive) cont.resume(Unit)
+                      }
+                    }
+                    override fun onTorchModeUnavailable(cameraId: String) {
+                      super.onTorchModeUnavailable(cameraId)
+                      cameraManager.unregisterTorchCallback(this)
+                      if (cont.isActive) cont.resume(Unit)
+                    }
+                  }
+
+                  cont.invokeOnCancellation {
+                    cameraManager.unregisterTorchCallback(callback)
+                  }
+
+                  cameraManager.registerTorchCallback(callback, null)
+                }
+              }
+
+              log { "torch unavailable" }
+              catch { cameraManager.setTorchMode(cameraId, false) }
+              _torchState.value = false
+            },
+            onCancel = {
+              log { "disable torch on cancel" }
+              catch { cameraManager.setTorchMode(cameraId, false) }
+              _torchState.value = false
+            }
+          )
         }.onFailure {
           log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-          if (wasEverEnabled)
-            showToast(R.string.es_failed_to_enable_torch)
+          showToast(R.string.es_failed_to_enable_torch)
           setTorchState(false)
         }
       },
-      {
-        broadcastsFactory(ACTION_DISABLE_TORCH).first()
-      },
-      {
-        foregroundManager.startForeground(64578, createTorchNotification())
-      }
+      { broadcastsFactory(ACTION_DISABLE_TORCH).first() },
+      { foregroundManager.startForeground(64578, createTorchNotification()) }
     )
   }
 
