@@ -16,15 +16,22 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogKey
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.material.Button
+import com.ivianuu.essentials.ui.material.Scaffold
+import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -33,33 +40,45 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-object NavBarUnsupportedKey : DialogKey<Unit>
+object NavBarUnsupportedKey : Key<Unit>
 
 @Provide val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
-  DialogScaffold {
-    Dialog(
-      title = {
-        Text(R.string.es_nav_bar_unsupported_title)
-      },
-      content = {
-        Text(R.string.es_nav_bar_unsupported_content)
-      },
-      buttons = {
-        TextButton(onClick = model.openMoreInfos) {
+  Scaffold(
+    topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_unsupported_title) }) }
+  ) {
+    Column {
+      Text(
+        modifier = Modifier.padding(16.dp),
+        textResId = R.string.es_nav_bar_unsupported_content,
+        style = MaterialTheme.typography.body2
+      )
+
+      Row {
+        Button(
+          modifier = Modifier
+            .width(200.dp)
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+          onClick = model.openMoreInfos
+        ) {
           Text(R.string.es_more_infos)
         }
 
-        TextButton(onClick = model.close) {
-          Text(R.string.es_close)
+        Button(
+          modifier = Modifier
+            .width(200.dp)
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+          onClick = model.openRootMethod
+        ) {
+          Text(R.string.es_root_method)
         }
       }
-    )
+    }
   }
 }
 
 @Optics data class NavBarUnsupportedModel(
   val openMoreInfos: () -> Unit = {},
-  val close: () -> Unit = {}
+  val openRootMethod: () -> Unit = {}
 )
 
 @Provide fun navBarUnsupportedModel(
@@ -76,5 +95,11 @@ object NavBarUnsupportedKey : DialogKey<Unit>
       )
     )
   }
-  action(NavBarUnsupportedModel.close()) { navigator.pop(key) }
+  action(NavBarUnsupportedModel.openRootMethod()) {
+    navigator.push(
+      UrlKey(
+        "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
+      )
+    )
+  }
 }
