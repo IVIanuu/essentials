@@ -90,6 +90,13 @@ inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = t
   Err(e.nonFatalOrThrow())
 }
 
+inline fun <V, reified T> catchT(@BuilderInference block: () -> V): Result<V, T> = try {
+  Ok(block())
+} catch (e: Throwable) {
+  if (e is T) Err(e.nonFatalOrThrow() as T)
+  else throw e
+}
+
 @Suppress("UNCHECKED_CAST")
 inline fun <V, E> result(@BuilderInference block: ResultBinding<E>.() -> V): Result<V, E> = try {
   Ok(block(ResultBindingImpl as ResultBinding<E>))

@@ -16,13 +16,14 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.catchT
 import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
@@ -38,7 +39,7 @@ import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentKey : Key<Result<ActivityResult, Throwable>>
+interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
 @Provide fun <@Spread T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
   intentFactory: T,
@@ -58,7 +59,7 @@ typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
   scope: NamedCoroutineScope<AppScope>
 ): KeyHandler<Result<ActivityResult, Throwable>> = handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
-  val intentFactory = intentFactories()[key::class]
+  val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler false
   val intent = intentFactory(key)
   scope.launch {
@@ -72,7 +73,7 @@ typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
           ) {
             if (continuation.isActive) continuation.resume(it.ok())
           }
-          catch { launcher.launch(intent) }
+          catchT<Unit, ActivityNotFoundException> { launcher.launch(intent) }
             .onFailure { continuation.resume(it.err()) }
           continuation.invokeOnCancellation { launcher.unregister() }
         }
