@@ -26,8 +26,8 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
-import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -37,12 +37,13 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
@@ -57,11 +58,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
           }
         },
         leading = permission.permission.icon,
-        trailing = {
-          Button(onClick = { model.grantPermission(permission) }) {
-            Text(R.string.es_grant)
-          }
-        },
+        trailing = { Switch(checked = permission.isGranted, null) },
         onClick = { model.grantPermission(permission) }
       )
     }
@@ -75,7 +72,8 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
 
 data class UiPermission<P : Permission>(
   val permissionKey: TypeKey<P>,
-  val permission: P
+  val permission: P,
+  val isGranted: Boolean
 )
 
 @Provide fun permissionRequestModel(
@@ -87,6 +85,17 @@ data class UiPermission<P : Permission>(
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
   scope: NamedCoroutineScope<KeyUiScope>
 ): StateFlow<PermissionRequestModel> = scope.state(PermissionRequestModel()) {
+  combine(
+    key.permissionsKeys
+      .map { permissionKey ->
+        permissionStateFactory(listOf(permissionKey))
+          .map { state ->
+            UiPermission(permissionKey, permissions[permissionKey]!!, state)
+          }
+      }
+  ) { it.toList() }
+    .update { copy(permissions = it) }
+
   state
     .filter {
       key.permissionsKeys
@@ -96,18 +105,8 @@ data class UiPermission<P : Permission>(
     .onEach { navigator.pop(key, true) }
     .launchIn(this)
 
-  suspend fun updatePermissions() {
-    val notGrantedPermissions = key.permissionsKeys
-      .filterNot { permissionStateFactory(listOf(it)).first() }
-      .map { UiPermission(it, permissions[it]!!) }
-    update { copy(permissions = notGrantedPermissions) }
-  }
-
-  launch { updatePermissions() }
-
   action(PermissionRequestModel.grantPermission()) { permission ->
     requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
     appUiStarter()
-    updatePermissions()
   }
 }
