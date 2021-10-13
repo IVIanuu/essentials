@@ -19,6 +19,8 @@
 
     <string name="es_request_permission_title">Write secure settings</string>
     <string name="es_grant">Grant</string>
+    <string name="es_continue">Continue</string>
+    <string name="es_complete">Complete</string>
 
     <string name="es_find_app_here">Find %s here</string>
     <string name="es_grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>

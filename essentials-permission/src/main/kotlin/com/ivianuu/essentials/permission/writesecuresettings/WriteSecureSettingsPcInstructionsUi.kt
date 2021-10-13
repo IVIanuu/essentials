@@ -20,29 +20,11 @@ import android.content.Intent
 import android.os.BatteryManager
 import android.provider.Settings
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -60,13 +42,12 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
-import com.ivianuu.essentials.ui.material.VerticalDivider
-import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
+import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
@@ -98,7 +79,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 1,
-        isFinished = model.completedStep > 1,
+        isCompleted = model.completedStep > 1,
         isCurrent = model.currentStep == 1,
         onClick = { model.openStep(1) },
         title = { Text(R.string.es_secure_settings_step_1_title) },
@@ -112,8 +93,8 @@ data class WriteSecureSettingsPcInstructionsKey(
           Button(
             onClick = model.continueStep,
             enabled = model.canContinueStep
-          ) { Text("Continue") }
-          OutlinedButton(onClick = model.openPhoneInfo) { Text("Open phone info") }
+          ) { Text(R.string.es_continue) }
+          OutlinedButton(onClick = model.openPhoneInfo) { Text(R.string.open_phone_info) }
         }
       )
     }
@@ -121,7 +102,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 2,
-        isFinished = model.completedStep > 2,
+        isCompleted = model.completedStep > 2,
         isCurrent = model.currentStep == 2,
         onClick = { model.openStep(2) },
         title = { Text(R.string.es_secure_settings_step_2_title) },
@@ -135,8 +116,8 @@ data class WriteSecureSettingsPcInstructionsKey(
           Button(
             onClick = model.continueStep,
             enabled = model.canContinueStep
-          ) { Text("Continue") }
-          OutlinedButton(onClick = model.openDeveloperSettings) { Text("Open developer settings") }
+          ) { Text(R.string.es_continue) }
+          OutlinedButton(onClick = model.openDeveloperSettings) { Text(R.string.open_developer_settings) }
         }
       )
     }
@@ -144,7 +125,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 3,
-        isFinished = model.completedStep > 3,
+        isCompleted = model.completedStep > 3,
         isCurrent = model.currentStep == 3,
         onClick = { model.openStep(3) },
         title = { Text(R.string.es_secure_settings_step_3_title) },
@@ -153,7 +134,7 @@ data class WriteSecureSettingsPcInstructionsKey(
           Button(
             onClick = model.continueStep,
             enabled = model.canContinueStep
-          ) { Text("Continue") }
+          ) { Text(R.string.es_continue) }
         }
       )
     }
@@ -161,7 +142,7 @@ data class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 4,
-        isFinished = model.completedStep > 4,
+        isCompleted = model.completedStep > 4,
         isCurrent = model.currentStep == 4,
         onClick = { model.openStep(4) },
         title = { Text(R.string.es_secure_settings_step_4_title) },
@@ -181,95 +162,9 @@ data class WriteSecureSettingsPcInstructionsKey(
           Button(
             onClick = model.continueStep,
             enabled = model.canContinueStep
-          ) { Text("Complete") }
+          ) { Text(R.string.es_complete) }
         }
       )
-    }
-  }
-}
-
-@Composable fun Step(
-  step: Int,
-  isCurrent: Boolean,
-  isFinished: Boolean,
-  onClick: () -> Unit,
-  title: @Composable () -> Unit,
-  content: (@Composable () -> Unit)? = null,
-  actions: @Composable () -> Unit
-) {
-  Column(
-    modifier = Modifier.fillMaxWidth()
-      .clickable(onClick = onClick)
-      .padding(horizontal = 24.dp, vertical = 8.dp)
-  ) {
-    Row(
-      modifier = Modifier.fillMaxWidth()
-        .height(48.dp),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      val backgroundColor = if (isCurrent || isFinished) MaterialTheme.colors.secondary
-      else MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-      Box(
-        modifier = Modifier
-          .size(24.dp)
-          .background(backgroundColor, CircleShape),
-        contentAlignment = Alignment.Center
-      ) {
-        CompositionLocalProvider(
-          LocalContentColor provides guessingContentColorFor(backgroundColor)
-        ) {
-          if (isFinished) {
-            Icon(
-              modifier = Modifier.padding(4.dp),
-              painterResId = R.drawable.es_ic_done
-            )
-          } else {
-            Text(
-              text = step.toString(),
-              style = MaterialTheme.typography.caption
-            )
-          }
-        }
-      }
-
-      Spacer(Modifier.width(16.dp))
-
-      ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-        CompositionLocalProvider(
-          LocalContentAlpha provides ContentAlpha.high,
-          content = title
-        )
-      }
-    }
-
-    Spacer(Modifier.height(8.dp))
-
-    Row {
-      VerticalDivider(
-        modifier = Modifier
-          .padding(start = 24.dp)
-      )
-
-      Spacer(Modifier.width(40.dp))
-
-      if (isCurrent) {
-        Column {
-          if (content != null) {
-            ProvideTextStyle(value = MaterialTheme.typography.body2) {
-              CompositionLocalProvider(
-                LocalContentAlpha provides ContentAlpha.medium,
-                content = content
-              )
-            }
-
-            Spacer(Modifier.padding(bottom = 16.dp))
-          }
-
-          Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            actions()
-          }
-        }
-      }
     }
   }
 }
