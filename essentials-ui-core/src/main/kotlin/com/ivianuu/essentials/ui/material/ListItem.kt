@@ -53,12 +53,13 @@ import androidx.compose.ui.unit.dp
   onLongClick: (() -> Unit)? = null,
   enabled: Boolean = true,
   selected: Boolean = false,
-  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp)
+  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+  textPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
 ) {
   val minHeight = if (subtitle != null) {
-    if (leading == null) TitleAndSubtitleMinHeight else TitleAndSubtitleMinHeightWithIcon
+    if (leading == null) 72.dp else 80.dp
   } else {
-    if (leading == null) TitleOnlyMinHeight else TitleOnlyMinHeightWithIcon
+    if (leading == null) 56.dp else 64.dp
   }
 
   Box(
@@ -107,7 +108,7 @@ import androidx.compose.ui.unit.dp
       Box(
         modifier = Modifier
           .weight(1f)
-          .padding(horizontal = HorizontalTextPadding),
+          .padding(textPadding),
         contentAlignment = Alignment.CenterStart
       ) {
         Column(
@@ -162,9 +163,3 @@ import androidx.compose.ui.unit.dp
     }
   }
 }
-
-private val TitleOnlyMinHeight = 56.dp
-private val TitleOnlyMinHeightWithIcon = 64.dp
-private val TitleAndSubtitleMinHeight = 72.dp
-private val TitleAndSubtitleMinHeightWithIcon = 80.dp
-private val HorizontalTextPadding = 16.dp
