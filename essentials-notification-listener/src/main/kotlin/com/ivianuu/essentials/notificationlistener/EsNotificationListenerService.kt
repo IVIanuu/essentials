@@ -18,7 +18,6 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.PublicType
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.getOrElse
@@ -35,11 +34,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
-  val notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-    @PublicType<Flow<List<StatusBarNotification>>> get
+  private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
+  val notifications: Flow<List<StatusBarNotification>> get() = _notifications
 
-  val events: MutableSharedFlow<NotificationEvent> = EventFlow()
-    @PublicType<Flow<NotificationEvent>> get
+  private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
+  val events: Flow<NotificationEvent> get() = _events
 
   private val component: EsNotificationListenerServiceComponent by lazy {
     requireElement(createServiceScope())
@@ -61,21 +60,21 @@ class EsNotificationListenerService : NotificationListenerService() {
     super.onNotificationPosted(sbn)
     log { "notification posted $sbn" }
     updateNotifications()
-    events.tryEmit(NotificationEvent.NotificationPosted(sbn))
+    _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
     log { "notification removed $sbn" }
     updateNotifications()
-    events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
+    _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
     log { "ranking update $rankingMap" }
     updateNotifications()
-    events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
+    _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
@@ -88,7 +87,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    notifications.value = catch { activeNotifications!!.toList() }
+    _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 }
