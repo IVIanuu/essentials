@@ -20,10 +20,9 @@ import androidx.compose.material.Text
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.onSuccess
 import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.action
@@ -41,12 +40,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlin.time.milliseconds
 
 data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
@@ -95,7 +88,6 @@ data class WriteSecureSettingsKey(
   buildInfo: BuildInfo,
   key: WriteSecureSettingsKey,
   navigator: Navigator,
-  permissionStateFactory: PermissionStateFactory,
   scope: NamedCoroutineScope<KeyUiScope>,
   shell: Shell,
   rp: ResourceProvider,
@@ -103,20 +95,14 @@ data class WriteSecureSettingsKey(
 ): StateFlow<WriteSecureSettingsModel> = scope.state(
   WriteSecureSettingsModel()
 ) {
-  timer(200.milliseconds)
-    .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
-    .filter { it }
-    .take(1)
-    .onEach {
-      showToast(R.string.es_secure_settings_permission_granted)
-      navigator.pop(key, true)
-    }
-    .launchIn(this)
   action(WriteSecureSettingsModel.openPcInstructions()) {
-    navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey))
+    if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
+      navigator.pop(key)
   }
+
   action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+      .onSuccess { showToast(R.string.es_secure_settings_permission_granted) }
       .onFailure {
         it.printStackTrace()
         showToast(R.string.es_secure_settings_no_root)

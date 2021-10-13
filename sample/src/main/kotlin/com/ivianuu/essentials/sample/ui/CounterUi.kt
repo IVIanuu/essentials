@@ -18,8 +18,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -52,7 +50,7 @@ object CounterKey : Key<Unit>
   ) {
     Column(
       modifier = Modifier.center(),
-      verticalArrangement = Arrangement.Center,
+      verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
@@ -60,14 +58,10 @@ object CounterKey : Key<Unit>
         style = MaterialTheme.typography.h3
       )
 
-      Spacer(Modifier.height(8.dp))
-
       ExtendedFloatingActionButton(
         text = { Text("Inc") },
         onClick = model.inc
       )
-
-      Spacer(Modifier.height(8.dp))
 
       ExtendedFloatingActionButton(
         text = { Text("dec") },

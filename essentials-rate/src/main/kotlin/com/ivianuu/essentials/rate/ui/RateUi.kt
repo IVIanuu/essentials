@@ -22,9 +22,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -66,7 +64,7 @@ object RateKey : DialogKey<Unit>
       content = {
         Column(
           modifier = Modifier.fillMaxWidth(),
-          verticalArrangement = Arrangement.Center,
+          verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
@@ -74,16 +72,12 @@ object RateKey : DialogKey<Unit>
             modifier = Modifier.size(96.dp)
           )
 
-          Spacer(Modifier.height(16.dp))
-
           Text(
             textResId = R.string.es_rate_title,
             style = MaterialTheme.typography.h6,
             color = MaterialTheme.colors.onSurface
               .copy(alpha = ContentAlpha.high)
           )
-
-          Spacer(Modifier.height(16.dp))
 
           Row(
             modifier = Modifier.fillMaxWidth(),
