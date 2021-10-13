@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 @Composable internal fun SecureSettingsHeader(text: String) {
   Text(
     text = text,
-    style = MaterialTheme.typography.body2.copy(color = LocalContentColor.current.copy(alpha = 0.6f)),
+    style = MaterialTheme.typography.body2,
     modifier = Modifier.padding(all = 16.dp)
   )
 }

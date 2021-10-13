@@ -16,11 +16,22 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.clipboard.Clipboard
 import com.ivianuu.essentials.coroutines.timer
 import com.ivianuu.essentials.optics.Optics
@@ -34,7 +45,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -56,89 +67,154 @@ data class WriteSecureSettingsPcInstructionsKey(
   SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
     item {
       SecureSettingsHeader(
-        text = stringResource(R.string.es_pref_secure_settings_pc_instructions_header_summary)
+        text = stringResource(R.string.es_secure_settings_pc_instructions_desc)
       )
     }
+
     item {
       ListItem(
-        title = { Text(R.string.es_pref_secure_settings_step_1) },
-        subtitle = { Text(R.string.es_pref_secure_settings_step_1_summary) }
-      )
-    }
-    item {
-      ListItem(
-        title = { Text(R.string.es_pref_secure_settings_step_2) },
-        subtitle = { Text(R.string.es_pref_secure_settings_step_2_summary) }
-      )
-    }
-    item {
-      ListItem(
-        title = { Text(R.string.es_pref_secure_settings_step_3) },
-        subtitle = { Text(R.string.es_pref_secure_settings_step_3_summary) }
-      )
-    }
-    item {
-      ListItem(
-        leading = { Icon(R.drawable.es_ic_link) },
-        title = { Text(R.string.es_pref_secure_settings_link_gadget_hacks_summary) },
-        onClick = model.openGadgetHacksTutorial
-      )
-    }
-    item {
-      ListItem(
-        leading = { Icon(R.drawable.es_ic_link) },
-        title = { Text(R.string.es_pref_secure_settings_link_lifehacker_summary) },
-        onClick = model.openLifehackerTutorial
-      )
-    }
-    item {
-      ListItem(
-        leading = { Icon(R.drawable.es_ic_link) },
-        title = { Text(R.string.es_pref_secure_settings_link_xda_summary) },
-        onClick = model.openXdaTutorial
-      )
-    }
-    item {
-      ListItem(
-        title = { Text(R.string.es_pref_secure_settings_step_4) },
-        subtitle = {
+        leading = { StepBadge(1) },
+        title = {
           Text(
-            stringResource(
-              R.string.es_pref_secure_settings_step_4_summary,
-              model.packageName
-            )
+            textResId = R.string.es_secure_settings_step_1,
+            style = MaterialTheme.typography.body2
           )
         },
+        trailing = { Icon(R.drawable.es_ic_launch) },
+        onClick = model.openPhoneInfo
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(2) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_2,
+            style = MaterialTheme.typography.body2
+          )
+        },
+        trailing = { Icon(R.drawable.es_ic_launch) },
+        onClick = model.openDeveloperSettings
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(3) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_3,
+            style = MaterialTheme.typography.body2
+          )
+        }
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(4) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_4,
+            style = MaterialTheme.typography.body2
+          )
+        },
+        trailing = { Icon(R.drawable.es_ic_content_copy) },
+        onClick = model.copyWebAdbLink
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(5) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_5,
+            style = MaterialTheme.typography.body2
+          )
+        }
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(6) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_6,
+            style = MaterialTheme.typography.body2
+          )
+        }
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(7) },
+        title = {
+          Text(
+            textResId = R.string.es_secure_settings_step_7,
+            style = MaterialTheme.typography.body2
+          )
+        },
+      )
+    }
+
+    item {
+      ListItem(
+        leading = { StepBadge(8) },
+        title = {
+          Text(
+            text = stringResource(
+              R.string.es_secure_settings_step_8,
+              model.packageName
+            ),
+            style = MaterialTheme.typography.body2
+          )
+        },
+        trailing = { Icon(R.drawable.es_ic_content_copy) },
         onClick = model.copyAdbCommand
       )
     }
   }
 }
 
-@Optics data class WriteSecureSettingsPcInstructionsModel(
-  val packageName: String = "",
-  val copyAdbCommand: () -> Unit = {},
-  val openGadgetHacksTutorial: () -> Unit = {},
-  val openLifehackerTutorial: () -> Unit = {},
-  val openXdaTutorial: () -> Unit = {}
-) {
-  val secureSettingsAdbCommand =
-    "adb shell pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
-
-  companion object {
-    @Provide fun initial(buildInfo: BuildInfo): @Initial WriteSecureSettingsPcInstructionsModel =
-      WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)
+@Composable fun StepBadge(step: Int) {
+  Box(
+    modifier = Modifier
+      .size(24.dp)
+      .background(MaterialTheme.colors.secondary, CircleShape),
+    contentAlignment = Alignment.Center
+  ) {
+    Text(
+      text = step.toString(),
+      style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onSecondary),
+      textAlign = TextAlign.Center
+    )
   }
 }
 
+@Optics data class WriteSecureSettingsPcInstructionsModel(
+  val packageName: String = "",
+  val openPhoneInfo: () -> Unit = {},
+  val openDeveloperSettings: () -> Unit = {},
+  val copyWebAdbLink: () -> Unit = {},
+  val copyAdbCommand: () -> Unit = {}
+) {
+  val secureSettingsAdbCommand = "pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
+}
+
 @Provide fun writeSecureSettingsPcInstructionsModel(
+  buildInfo: BuildInfo,
   clipboard: Clipboard,
-  initial: @Initial WriteSecureSettingsPcInstructionsModel,
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   scope: NamedCoroutineScope<KeyUiScope>
-): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(initial) {
+): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
+  WriteSecureSettingsPcInstructionsModel(buildInfo.packageName)
+) {
   timer(200.milliseconds)
     .flatMapLatest { permissionStateFactory(listOf(key.permissionKey)) }
     .filter { it }
@@ -146,21 +222,19 @@ data class WriteSecureSettingsPcInstructionsKey(
     .onEach { navigator.pop(key) }
     .launchIn(this)
 
-  action(WriteSecureSettingsPcInstructionsModel.copyAdbCommand()) {
-    clipboard.updateText(state.first().secureSettingsAdbCommand, true)
+  action(WriteSecureSettingsPcInstructionsModel.openPhoneInfo()) {
+    navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
   }
 
-  action(WriteSecureSettingsPcInstructionsModel.openGadgetHacksTutorial()) {
-    navigator.push(UrlKey("https://youtu.be/CDuxcrrWLnY"))
+  action(WriteSecureSettingsPcInstructionsModel.openDeveloperSettings()) {
+    navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey())
   }
-  action(WriteSecureSettingsPcInstructionsModel.openLifehackerTutorial()) {
-    navigator.push(
-      UrlKey("https://lifehacker.com/the-easiest-way-to-install-androids-adb-and-fastboot-to-1586992378")
-    )
+
+  action(WriteSecureSettingsPcInstructionsModel.copyWebAdbLink()) {
+    clipboard.updateText("https://webadb.com")
   }
-  action(WriteSecureSettingsPcInstructionsModel.openXdaTutorial()) {
-    navigator.push(
-      UrlKey("https://www.xda-developers.com/install-adb-windows-macos-linux/")
-    )
+
+  action(WriteSecureSettingsPcInstructionsModel.copyAdbCommand()) {
+    clipboard.updateText(state.first().secureSettingsAdbCommand, true)
   }
 }

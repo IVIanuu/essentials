@@ -29,6 +29,7 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
@@ -55,20 +56,30 @@ data class WriteSecureSettingsKey(
   SimpleListScreen(R.string.es_secure_settings_title) {
     item {
       SecureSettingsHeader(
-        stringResource(R.string.es_pref_secure_settings_header_summary)
+        stringResource(R.string.es_secure_settings_desc)
       )
     }
     item {
       ListItem(
-        title = { Text(R.string.es_pref_use_pc) },
-        subtitle = { Text(R.string.es_pref_use_pc_summary) },
+        title = { Text(R.string.es_use_pc) },
+        subtitle = { Text(R.string.es_use_pc_summary) },
+        trailing = {
+          Button(onClick = model.openPcInstructions) {
+            Text(R.string.es_grant)
+          }
+        },
         onClick = model.openPcInstructions
       )
     }
     item {
       ListItem(
-        title = { Text(R.string.es_pref_use_root) },
-        subtitle = { Text(R.string.es_pref_use_root_summary) },
+        title = { Text(R.string.es_use_root) },
+        subtitle = { Text(R.string.es_use_root_summary) },
+        trailing = {
+          Button(onClick = model.grantPermissionsViaRoot) {
+            Text(R.string.es_grant)
+          }
+        },
         onClick = model.grantPermissionsViaRoot
       )
     }

@@ -17,38 +17,39 @@
 <resources>
     <string name="es_no_root">Your device is not rooted!</string>
 
-    <string name="es_request_permission_title">Required permissions</string>
+    <string name="es_request_permission_title">Write secure settings</string>
     <string name="es_grant">Grant</string>
 
     <string name="es_find_app_here">Find %s here</string>
     <string name="es_grant_permission_manually">Couldn\'t open settings screen! Please grant the permission manually</string>
 
-    <!-- Secure settings dialog -->
+    <!-- Write secure settings title -->
     <string name="es_secure_settings_title">Permission required</string>
-    <string name="es_pref_secure_settings_header_summary">The WRITE_SECURE_SETTINGS permission is required to write system settings</string>
-    <string name="es_pref_use_root">Grant using root</string>
-    <string name="es_pref_use_root_summary">Use root to grant the permission</string>
-    <string name="es_pref_use_pc">Grant using PC</string>
-    <string name="es_pref_use_pc_summary">Connect to a PC to grant the permission with ADB.\nNote that ADB simply is a developers tool and it will not void the warranty unlike root.</string>
+    <string name="es_secure_settings_desc">The WRITE_SECURE_SETTINGS permission is required to write system settings</string>
+    <string name="es_use_root">Grant using root</string>
+    <string name="es_use_root_summary">Use root to grant the permission</string>
+    <string name="es_use_pc">Grant using PC</string>
+    <string name="es_use_pc_summary">Grant the permission from the browser on your PC</string>
 
-    <!-- Secure settings instructions -->
+    <!-- Pc instructions -->
     <string name="es_secure_settings_pc_instructions_title">PC instructions</string>
-    <string name="es_pref_secure_settings_pc_instructions_header_summary">Follow the instructions to grant the permission with a PC (Windows, Mac or Linux)</string>
+    <string name="es_secure_settings_pc_instructions_desc">Granting the WRITE_SECURE_SETTINGS permission can be granted from the browser on your PC! You don\'t have to mess around with any drivers</string>
 
-    <string name="es_pref_secure_settings_step_1">1 - Activate the developer options</string>
-    <string name="es_pref_secure_settings_step_1_summary">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active. Click to open</string>
+    <string name="es_secure_settings_step_1">Go to Android-Settings -> Phone Info -> Search for Build Number and tap multiple times until the Developer options are active</string>
 
-    <string name="es_pref_secure_settings_step_2">2 - Enable USB-Debugging</string>
-    <string name="es_pref_secure_settings_step_2_summary">Go to Android-Settings -> Developer Options -> Enable USB-Debugging. Click to open</string>
+    <string name="es_secure_settings_step_2">Go to Android-Settings -> Developer Options -> Enable USB-Debugging</string>
 
-    <string name="es_pref_secure_settings_step_3">3 - Install ADB on your PC</string>
-    <string name="es_pref_secure_settings_step_3_summary">Use one of the following tutorials to learn more about how to install ADB</string>
-    <string name="es_pref_secure_settings_link_gadget_hacks_summary">Gadget-Hacks (click to open)</string>
-    <string name="es_pref_secure_settings_link_lifehacker_summary">Lifehacker (click to open)</string>
-    <string name="es_pref_secure_settings_link_xda_summary">XDA Developers (click to open)</string>
+    <string name="es_secure_settings_step_3">Connect your phone with your PC</string>
 
-    <string name="es_pref_secure_settings_step_4">4 - Execute the ADB Command</string>
-    <string name="es_pref_secure_settings_step_4_summary">adb shell pm grant %s android.permission.WRITE_SECURE_SETTINGS\n\n(click to copy)</string>
+    <string name="es_secure_settings_step_4">Open https://webadb.com in the browser on your PC</string>
+
+    <string name="es_secure_settings_step_5">Click \"Start\" then \"Add device\" then click "*YOUR DEVICE*" then click \"Connect\"</string>
+
+    <string name="es_secure_settings_step_6">On your phone click \"Allow\"</string>
+
+    <string name="es_secure_settings_step_7">On your PC click \"Interactive Shell\"</string>
+
+    <string name="es_secure_settings_step_8">In the terminal window type-in \"pm grant %s android.permission.WRITE_SECURE_SETTINGS\" and hit the enter button</string>
 
     <string name="es_secure_settings_no_root">Your device is not rooted you have to use your PC to grant permissions</string>
 
