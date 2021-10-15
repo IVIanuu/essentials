@@ -17,9 +17,9 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide val accessibilityServiceRef: @Scoped<AppScope> MutableStateFlow<EsAccessibilityService?>
+@Provide val accessibilityServiceRef: @Scoped<AppComponent> MutableStateFlow<EsAccessibilityService?>
   get() = MutableStateFlow(null)

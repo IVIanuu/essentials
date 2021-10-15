@@ -20,22 +20,22 @@ import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.Scope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-typealias ScopeWorker<S> = suspend () -> Unit
+typealias ScopeWorker<C> = suspend () -> Unit
 
-typealias ScopeWorkerRunner<S> = () -> Unit
+typealias ScopeWorkerRunner<C> = () -> Unit
 
-@Provide fun <S : Scope> scopeWorkerRunner(
+@Provide fun <C : @Component Any> scopeWorkerRunner(
   logger: Logger,
-  scope: NamedCoroutineScope<S>,
-  scopeKey: TypeKey<S>,
-  workers: Set<() -> ScopeWorker<S>> = emptySet()
-): ScopeWorkerRunner<S> = {
+  scope: ComponentScope<C>,
+  scopeKey: TypeKey<C>,
+  workers: Set<() -> ScopeWorker<C>> = emptySet()
+): ScopeWorkerRunner<C> = {
   log { "${scopeKey.value} run scope workers" }
   scope.launch {
     guarantee(

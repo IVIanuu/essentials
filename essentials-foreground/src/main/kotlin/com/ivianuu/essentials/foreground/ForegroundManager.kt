@@ -9,8 +9,8 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.TimestampProvider
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-@Provide @Scoped<AppScope> class ForegroundManager(
+@Provide @Scoped<AppComponent> class ForegroundManager(
   private val context: AppContext,
   private val logger: Logger,
   private val timestampProvider: TimestampProvider

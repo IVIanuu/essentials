@@ -49,5 +49,5 @@ typealias ContentChangesFactory = (Uri) -> Flow<Unit>
   }.flowOn(mainDispatcher)
 }
 
-@Provide inline val Application.bindContentResolver: ContentResolver
-  get() = contentResolver
+@Provide inline fun contentResolver(application: Application): ContentResolver =
+  application.contentResolver

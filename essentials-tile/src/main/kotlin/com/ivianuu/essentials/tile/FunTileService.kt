@@ -24,12 +24,12 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.dispose
+import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -49,41 +49,40 @@ abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
   private val component: FunTileServiceComponent by lazy {
-    requireElement(createServiceScope())
+    entryPoint(createServiceComponent())
   }
 
   @Provide private val logger
     get() = component.logger
 
-  private var tileModelComponent: TileModelComponent? = null
+  private var tileModelHolder: TileModelHolder? = null
 
   override fun onStartListening() {
     super.onStartListening()
     log { "$serviceClass on start listening" }
-    val tileModelComponent = requireElement<TileModelComponent>(
-      component.tileScopeFactory(TileId(serviceClass))
-    )
-      .also { this.tileModelComponent = it }
-    tileModelComponent.tileModel
+    val tileModelHolder = entryPoint<TileModelComponent>(
+      component.tileComponentFactory.tileComponent(TileId(serviceClass))
+    ).holder.also { this.tileModelHolder = it }
+    tileModelHolder.tileModel
       .onEach { applyModel(it) }
-      .launchIn(tileModelComponent.scope)
+      .launchIn(tileModelHolder.scope)
   }
 
   override fun onClick() {
     super.onClick()
     log { "$serviceClass on click" }
-    tileModelComponent?.tileModel?.value?.onTileClicked?.invoke()
+    tileModelHolder?.tileModel?.value?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
-    tileModelComponent?.tileScope?.dispose()
-    tileModelComponent = null
+    tileModelHolder?.component?.dispose()
+    tileModelHolder = null
     log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
   override fun onDestroy() {
-    component.serviceScope.dispose()
+    component.dispose()
     super.onDestroy()
   }
 
@@ -114,22 +113,23 @@ abstract class AbstractFunTileService<T : Any>(
   }
 }
 
-@Provide @ScopeElement<ServiceScope>
-class FunTileServiceComponent(
-  val logger: Logger,
-  val resourceProvider: ResourceProvider,
-  val serviceScope: ServiceScope,
-  val tileScopeFactory: @ChildScopeFactory (TileId) -> TileScope
-)
+@EntryPoint<ServiceComponent> interface FunTileServiceComponent {
+  val logger: Logger
+  val resourceProvider: ResourceProvider
+  val tileComponentFactory: TileComponentFactory
+}
 
-@Provide @ScopeElement<TileScope>
-class TileModelComponent(
+@Provide class TileModelHolder(
   tileId: TileId,
   tileModelElements: Set<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptySet(),
-  val scope: NamedCoroutineScope<TileScope>,
-  val tileScope: TileScope
+  val scope: ComponentScope<TileComponent>,
+  val component: TileComponent
 ) {
   val tileModel = tileModelElements.toMap()[tileId]
     ?.invoke()
     ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
+}
+
+@EntryPoint<TileComponent> interface TileModelComponent {
+  val holder: TileModelHolder
 }

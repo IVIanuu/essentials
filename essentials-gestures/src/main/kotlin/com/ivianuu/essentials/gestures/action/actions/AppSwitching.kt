@@ -13,8 +13,8 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -47,11 +47,11 @@ fun switchToApp(
   }
 }
 
-@Provide @Eager<AppScope> class AppSwitchManager(
+@Provide @Eager<AppComponent> class AppSwitchManager(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   private val packageManager: PackageManager,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ComponentScope<AppComponent>
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
@@ -112,6 +112,4 @@ fun switchToApp(
 }
 
 @Provide val appSwitchingAccessibilityConfig: AccessibilityConfig
-  get() = AccessibilityConfig(
-    eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-  )
+  get() = AccessibilityConfig(eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)

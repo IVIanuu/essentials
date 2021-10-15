@@ -22,10 +22,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
@@ -33,14 +33,14 @@ typealias ForegroundActivity = ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Provide val foregroundActivityState: @Scoped<AppScope> MutableStateFlow<ForegroundActivity>
+@Provide val foregroundActivityState: @Scoped<AppComponent> MutableStateFlow<ForegroundActivity>
   get() = MutableStateFlow(null)
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
   mainDispatcher: MainDispatcher,
   state: MutableStateFlow<ForegroundActivity>
-): ScopeWorker<ActivityScope> = worker@ {
+): ScopeWorker<ActivityComponent> = worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))

@@ -37,7 +37,7 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.FloatSliderListItem
@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
 import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -57,7 +57,7 @@ object PrefsKey : Key<Unit>
 @Provide fun prefsUi(
   navigator: Navigator,
   prefStore: DataStore<SamplePrefs>,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ComponentScope<KeyUiComponent>
 ): KeyUi<PrefsKey> = {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {

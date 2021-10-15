@@ -20,11 +20,11 @@ import android.graphics.drawable.Icon
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.scope.ChildScopeModule1
-import com.ivianuu.injekt.scope.Scope
-import kotlin.reflect.KClass
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.EntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.reflect.KClass
 
 @Optics data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,
@@ -53,9 +53,10 @@ class TileModuleElementModule<@com.ivianuu.injekt.Spread T : StateFlow<TileModel
   @Provide fun clazz(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 }
 
-typealias TileScope = Scope
+@Component interface TileComponent
 
-@Provide val tileScopeModule =
-  ChildScopeModule1<ServiceScope, TileId, TileScope>()
+@EntryPoint<ServiceComponent> interface TileComponentFactory {
+  fun tileComponent(tileId: TileId): TileComponent
+}
 
 inline class TileId(val clazz: KClass<*>)

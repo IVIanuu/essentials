@@ -17,10 +17,10 @@
 package com.ivianuu.essentials.notificationlistener
 
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Provide
-val notificationListenerRef: @Scoped<AppScope> MutableStateFlow<EsNotificationListenerService?>
+val notificationListenerRef: @Scoped<AppComponent> MutableStateFlow<EsNotificationListenerService?>
   get() = MutableStateFlow(null)

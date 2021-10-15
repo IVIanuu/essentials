@@ -12,11 +12,11 @@ import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ActivityScope
+import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.activityScope
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -34,7 +34,7 @@ class ScreenOnActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component: ScreenOnActivityComponent = requireElement(activityScope)
+    @Provide val component: ScreenOnActivityComponent = entryPoint(activityComponent)
 
     log(logger = component.logger) { "turn screen on for $requestId" }
 
@@ -76,7 +76,7 @@ class ScreenOnActivity : ComponentActivity() {
   }
 }
 
-@Provide @ScopeElement<ActivityScope> class ScreenOnActivityComponent(
-  val logger: Logger,
+@EntryPoint<ActivityComponent> interface ScreenOnActivityComponent {
+  val logger: Logger
   val powerManager: @SystemService PowerManager
-)
+}

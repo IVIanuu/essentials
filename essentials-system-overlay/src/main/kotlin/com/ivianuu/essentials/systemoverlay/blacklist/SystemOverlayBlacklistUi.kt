@@ -25,12 +25,12 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
@@ -109,7 +109,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   key: SystemOverlayBlacklistKey,
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ComponentScope<KeyUiComponent>
 ): StateFlow<SystemOverlayBlacklistModel> = scope.state(
   SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)
 ) {

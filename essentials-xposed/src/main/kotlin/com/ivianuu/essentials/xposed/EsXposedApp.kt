@@ -2,31 +2,31 @@ package com.ivianuu.essentials.xposed
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Framework
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.entryPoint
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
-private lateinit var appScope: AppScope
+private lateinit var appComponent: AppComponent
 
 abstract class EsXposedApp : IXposedHookLoadPackage {
   override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
     @Provide val context = XposedContextImpl(lpparam)
-    @Provide val appScope = buildAppScope()
-      .also { appScope = it }
-    val component = requireElement<XposedAppComponent>()
-    component.hooks().forEach { it(context) }
+    @Provide val appComponent = buildAppComponent()
+      .also { appComponent = it }
+    val xposedComponent = entryPoint<XposedAppComponent>(appComponent)
+    xposedComponent.hooks().forEach { it(context) }
   }
 
-  protected abstract fun buildAppScope(@Inject context: XposedContext): AppScope
+  protected abstract fun buildAppComponent(@Inject context: XposedContext): AppComponent
 }
 
-@Provide @ScopeElement<AppScope>
-class XposedAppComponent(val hooks: () -> Set<Hooks>)
+@EntryPoint<AppComponent> interface XposedAppComponent {
+  val hooks: () -> Set<Hooks>
+}
 
-inline fun createXposedAppScope(
+inline fun createXposedAppComponent(
   @Inject context: XposedContext,
-  @Inject scopeFactory: (@Provide XposedContext) -> @Framework AppScope
-): AppScope = scopeFactory(context)
+  @Inject scopeFactory: (@Provide XposedContext) -> AppComponent
+): AppComponent = scopeFactory(context)

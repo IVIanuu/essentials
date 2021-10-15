@@ -17,15 +17,15 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injekt.android.AppScopeOwner
-import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.android.AppComponentOwner
+import com.ivianuu.injekt.common.AppComponent
 
-abstract class EsApp : Application(), AppScopeOwner {
-  override lateinit var appScope: AppScope
+abstract class EsApp : Application(), AppComponentOwner {
+  override lateinit var appComponent: AppComponent
   override fun onCreate() {
-    appScope = buildAppScope()
+    appComponent = buildAppComponent()
     super.onCreate()
   }
 
-  protected abstract fun buildAppScope(): AppScope
+  protected abstract fun buildAppComponent(): AppComponent
 }

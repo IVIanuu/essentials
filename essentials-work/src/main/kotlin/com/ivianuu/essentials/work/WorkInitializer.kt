@@ -22,9 +22,9 @@ import androidx.work.WorkerFactory
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.common.AppComponent
 
-typealias WorkInitializer = ScopeInitializer<AppScope>
+typealias WorkInitializer = ScopeInitializer<AppComponent>
 
 @Provide fun workInitializer(
   context: AppContext,

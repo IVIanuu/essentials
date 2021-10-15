@@ -24,11 +24,11 @@ import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.dispose
+import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,18 +41,18 @@ class EsNotificationListenerService : NotificationListenerService() {
   val events: Flow<NotificationEvent> get() = _events
 
   private val component: EsNotificationListenerServiceComponent by lazy {
-    requireElement(createServiceScope())
+    entryPoint(createServiceComponent())
   }
 
   @Provide private val logger get() = component.logger
 
-  private var notificationScope: NotificationScope? = null
+  private var notificationComponent: NotificationComponent? = null
 
   override fun onListenerConnected() {
     super.onListenerConnected()
     log { "listener connected" }
-    notificationScope = component.notificationScopeFactory()
-    component.ref.value = this
+    notificationComponent = component.notificationComponentFactory.notificationComponent()
+    component.notificationServiceRef.value = this
     updateNotifications()
   }
 
@@ -79,10 +79,10 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerDisconnected() {
     log { "listener disconnected" }
-    notificationScope?.dispose()
-    notificationScope = null
-    component.serviceScope.dispose()
-    component.ref.value = null
+    notificationComponent?.dispose()
+    notificationComponent = null
+    component.dispose()
+    component.notificationServiceRef.value = null
     super.onListenerDisconnected()
   }
 
@@ -98,10 +98,8 @@ sealed class NotificationEvent {
   data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent()
 }
 
-@Provide @ScopeElement<ServiceScope>
-class EsNotificationListenerServiceComponent(
-  val logger: Logger,
-  val notificationScopeFactory: @ChildScopeFactory () -> NotificationScope,
-  val ref: MutableStateFlow<EsNotificationListenerService?>,
-  val serviceScope: ServiceScope
-)
+@EntryPoint<ServiceComponent> interface EsNotificationListenerServiceComponent {
+  val logger: Logger
+  val notificationComponentFactory: NotificationComponentFactory
+  val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
+}

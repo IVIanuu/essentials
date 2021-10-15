@@ -46,8 +46,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ComponentStorage
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.essentials.scoped
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.ListItem
@@ -57,17 +59,17 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.scoped
 import kotlinx.coroutines.launch
 
 @Provide val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }
 
 object ContainerTransformKey : Key<Unit>
 
-@Provide fun containerTransformUi(navigator: Navigator): KeyUi<ContainerTransformKey> = {
-  var listInfo by scoped("list_state", LocalScope.current) {
-    mutableStateOf(0 to 0)
-  }
+@Provide fun containerTransformUi(
+  navigator: Navigator,
+  storage: ComponentStorage<UiComponent>
+): KeyUi<ContainerTransformKey> = {
+  var listInfo by storage.scoped("list_state") { mutableStateOf(0 to 0) }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = true) {
     Scaffold(
       topBar = { TopAppBar(title = { Text("Container transform") }) },

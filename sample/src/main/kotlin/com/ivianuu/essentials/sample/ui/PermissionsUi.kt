@@ -45,10 +45,10 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -58,7 +58,7 @@ object PermissionsKey : Key<Unit>
 
 @Provide fun permissionUi(
   permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ComponentScope<KeyUiComponent>
 ): KeyUi<PermissionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }

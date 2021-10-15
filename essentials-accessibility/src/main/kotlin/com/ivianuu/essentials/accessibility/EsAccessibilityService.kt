@@ -24,50 +24,50 @@ import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.coroutines.scopedCoroutineScope
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.dispose
+import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
   private val component: EsAccessibilityServiceComponent by lazy {
-    requireElement(createServiceScope())
+    entryPoint(createServiceComponent())
   }
 
   @Provide private val logger get() = component.logger
 
-  private var accessibilityScope: AccessibilityScope? = null
+  private var accessibilityComponent: AccessibilityComponent? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
-    accessibilityScope = component.accessibilityScopeFactory()
-    component.ref.value = this
+    accessibilityComponent = component.accessibilityComponentFactory.accessibilityComponent()
+    component.accessibilityServiceRef.value = this
 
-    scopedCoroutineScope(scope = accessibilityScope!!).launch(start = CoroutineStart.UNDISPATCHED) {
-      val configs = requireElement<EsAccessibilityServiceAccessibilityComponent>(accessibilityScope!!)
-        .configs
+    val accessibilityServiceComponent =
+      entryPoint<EsAccessibilityServiceAccessibilityComponent>(accessibilityComponent!!)
 
-      log { "update config from $configs" }
+    accessibilityServiceComponent.scope.launch(start = CoroutineStart.UNDISPATCHED) {
+      log { "update config from ${accessibilityServiceComponent.configs}" }
       serviceInfo = serviceInfo?.apply {
-        eventTypes = configs
+        eventTypes = accessibilityServiceComponent.configs
           .map { it.eventTypes }
           .fold(0) { acc, events -> acc.addFlag(events) }
 
-        flags = configs
+        flags = accessibilityServiceComponent.configs
           .map { it.flags }
           .fold(0) { acc, flags -> acc.addFlag(flags) }
 
         // first one wins
-        configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+        accessibilityServiceComponent.configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
         feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-        notificationTimeout = configs
+        notificationTimeout = accessibilityServiceComponent.configs
           .map { it.notificationTimeout }
           .maxOrNull() ?: 0L
 
@@ -93,24 +93,22 @@ class EsAccessibilityService : AccessibilityService() {
 
   override fun onUnbind(intent: Intent?): Boolean {
     log { "service disconnected" }
-    accessibilityScope?.dispose()
-    accessibilityScope = null
-    component.serviceScope.dispose()
-    component.ref.value = null
+    accessibilityComponent?.dispose()
+    accessibilityComponent = null
+    component.dispose()
+    component.accessibilityServiceRef.value = null
     return super.onUnbind(intent)
   }
 }
 
-@Provide @ScopeElement<ServiceScope>
-class EsAccessibilityServiceComponent(
-  val accessibilityEvents: MutableAccessibilityEvents,
-  val accessibilityScopeFactory: @ChildScopeFactory () -> AccessibilityScope,
-  val logger: Logger,
-  val ref: MutableStateFlow<EsAccessibilityService?>,
-  val serviceScope: ServiceScope
-)
+@EntryPoint<ServiceComponent> interface EsAccessibilityServiceComponent {
+  val accessibilityEvents: MutableAccessibilityEvents
+  val accessibilityComponentFactory: AccessibilityComponentFactory
+  val logger: Logger
+  val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
+}
 
-@Provide @ScopeElement<AccessibilityScope>
-class EsAccessibilityServiceAccessibilityComponent(
-  val configs: Set<AccessibilityConfig> = emptySet(),
-)
+@EntryPoint<AccessibilityComponent> interface EsAccessibilityServiceAccessibilityComponent {
+  val configs: Set<AccessibilityConfig> get() = emptySet()
+  val scope: ComponentScope<AccessibilityComponent>
+}

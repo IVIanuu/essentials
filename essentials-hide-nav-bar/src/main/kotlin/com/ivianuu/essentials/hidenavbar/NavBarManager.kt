@@ -31,7 +31,7 @@ import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.common.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -51,7 +51,7 @@ import kotlinx.coroutines.flow.onEach
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater
-): ScopeWorker<AppScope> = worker@ {
+): ScopeWorker<AppComponent> = worker@ {
   if (!navBarFeatureSupported) return@worker
   permissionState
     .flatMapLatest { hasPermission ->

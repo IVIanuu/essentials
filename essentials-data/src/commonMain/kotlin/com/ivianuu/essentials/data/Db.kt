@@ -1,8 +1,8 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.common.Disposable
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.Disposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

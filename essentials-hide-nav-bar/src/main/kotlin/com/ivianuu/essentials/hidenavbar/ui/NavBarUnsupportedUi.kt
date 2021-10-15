@@ -32,12 +32,12 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 
 object NavBarUnsupportedKey : Key<Unit>
@@ -84,7 +84,7 @@ object NavBarUnsupportedKey : Key<Unit>
 @Provide fun navBarUnsupportedModel(
   key: NavBarUnsupportedKey,
   navigator: Navigator,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ComponentScope<KeyUiComponent>
 ): StateFlow<NavBarUnsupportedModel> = scope.state(
   NavBarUnsupportedModel()
 ) {

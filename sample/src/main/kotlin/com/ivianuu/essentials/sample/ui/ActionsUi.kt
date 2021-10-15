@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -32,7 +32,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
@@ -43,7 +43,7 @@ object ActionsKey : Key<Unit>
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  scope: NamedCoroutineScope<UiScope>,
+  component: ComponentScope<UiComponent>,
   toaster: Toaster
 ): KeyUi<ActionsKey> = {
   Scaffold(
@@ -52,7 +52,7 @@ object ActionsKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        component.launch {
           val actionId = navigator.push(ActionPickerKey())
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch

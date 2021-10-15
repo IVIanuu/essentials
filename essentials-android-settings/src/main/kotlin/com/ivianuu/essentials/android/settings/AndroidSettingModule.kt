@@ -21,9 +21,9 @@ import android.provider.Settings
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,7 +44,7 @@ class AndroidSettingModule<T : S, S>(
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
     dispatcher: IODispatcher,
-    scope: NamedCoroutineScope<AppScope>
+    scope: ComponentScope<AppComponent>
   ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
       when (type) {

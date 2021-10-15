@@ -19,8 +19,8 @@ package com.ivianuu.essentials
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 
 data class BuildInfo(
   val isDebug: Boolean,
@@ -31,7 +31,7 @@ data class BuildInfo(
 ) {
   companion object {
     @Provide fun androidBuildInfo(context: AppContext, packageManager: PackageManager):
-        @Scoped<AppScope> BuildInfo {
+        @Scoped<AppComponent> BuildInfo {
       val appInfo = context.applicationInfo
       val packageInfo = packageManager
         .getPackageInfo(appInfo.packageName, 0)

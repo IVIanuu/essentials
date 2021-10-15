@@ -36,8 +36,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ComponentStorage
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.LocalScope
+import com.ivianuu.essentials.scoped
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformStackTransition
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
@@ -48,14 +50,13 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.scoped
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Unit>
 
-@Provide val containerTransformDetailsUi: KeyUi<ContainerTransformDetailsKey> = {
-  var listInfo by scoped("list_state", LocalScope.current) {
-    mutableStateOf(0 to 0)
-  }
+@Provide fun containerTransformDetailsUi(
+  storage: ComponentStorage<UiComponent>
+): KeyUi<ContainerTransformDetailsKey> = {
+  var listInfo by storage.scoped("list_state") { mutableStateOf(0 to 0) }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {
     Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
       val listState = rememberLazyListState(listInfo.first, listInfo.second)

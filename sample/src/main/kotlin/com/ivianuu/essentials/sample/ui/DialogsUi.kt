@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Providers("com.ivianuu.essentials.ui.composableScope")
-
 package com.ivianuu.essentials.sample.ui
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -41,7 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
-import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -57,9 +56,8 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.launch
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
@@ -264,7 +262,7 @@ object DialogsKey : Key<Unit>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = requireElement<DialogLauncherComponent>()
+  val component = entryPoint<DialogLauncherComponent>(LocalUiComponent.current)
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -285,7 +283,7 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = requireElement<DialogLauncherComponent>()
+  val component = entryPoint<DialogLauncherComponent>(LocalUiComponent.current)
   val scope = rememberCoroutineScope()
   Button(
     onClick = {
@@ -313,5 +311,6 @@ data class DialogLauncherKey(
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
-@Provide @ScopeElement<UiScope>
-class DialogLauncherComponent(val navigator: Navigator)
+@EntryPoint<UiComponent> interface DialogLauncherComponent {
+  val navigator: Navigator
+}

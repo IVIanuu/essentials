@@ -18,8 +18,8 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.EsApp
 import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.android.createAppScope
-import com.ivianuu.injekt.scope.AppScope
+import com.ivianuu.injekt.android.createAppComponent
+import com.ivianuu.injekt.common.AppComponent
 
 @Providers(
   "com.ivianuu.essentials.*",
@@ -95,9 +95,8 @@ import com.ivianuu.injekt.scope.AppScope
   "com.ivianuu.essentials.work.*",
   "com.ivianuu.injekt.android.*",
   "com.ivianuu.injekt.android.work.*",
-  "com.ivianuu.injekt.coroutines.*",
-  "com.ivianuu.injekt.scope.*"
+  "com.ivianuu.injekt.coroutines.*"
 )
 class SampleApp : EsApp() {
-  override fun buildAppScope(): AppScope = createAppScope()
+  override fun buildAppComponent(): AppComponent = createAppComponent()
 }

@@ -24,17 +24,17 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.reflect.KClass
 
 typealias KeyUi<K> = @Composable () -> Unit
 
-typealias KeyUiFactory<K> = (K, KeyUiScope) -> KeyUi<K>
+typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 
 @Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
     keyClass: KClass<K>,
-    keyUiFactory: (@Provide K, @Provide KeyUiScope) -> KeyUi<K>
+    keyUiFactory: (@Provide K) -> KeyUi<K>
   ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
     (keyClass to keyUiFactory).cast()
 

@@ -22,9 +22,9 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,11 +42,11 @@ interface Navigator {
   suspend fun popTop()
 }
 
-@Provide @Scoped<AppScope> class NavigatorImpl(
+@Provide @Scoped<AppComponent> class NavigatorImpl(
   private val keyHandlers: Set<KeyHandler<*>> = emptySet(),
   private val logger: Logger,
   rootKey: RootKey? = null,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ComponentScope<AppComponent>
 ) : Navigator {
   private val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> get() = _backStack

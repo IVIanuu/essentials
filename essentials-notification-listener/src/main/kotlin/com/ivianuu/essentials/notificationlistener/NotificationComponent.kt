@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui
+package com.ivianuu.essentials.notificationlistener
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ActivityScope
-import com.ivianuu.injekt.scope.ChildScopeModule0
-import com.ivianuu.injekt.scope.Scope
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.EntryPoint
 
-val LocalScope = compositionLocalOf<Scope> { error("No scope provided") }
+@Component interface NotificationComponent
 
-@Provide val composableScope: Scope
-  @Composable get() = LocalScope.current
-
-typealias UiScope = Scope
-
-@Provide val uiScopeModule = ChildScopeModule0<ActivityScope, UiScope>()
+@EntryPoint<ServiceComponent> interface NotificationComponentFactory {
+  fun notificationComponent(): NotificationComponent
+}

@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.navigation
+package com.ivianuu.essentials.ui
 
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.scope.ChildScopeModule1
-import com.ivianuu.injekt.scope.Scope
+import androidx.compose.runtime.compositionLocalOf
+import com.ivianuu.injekt.android.ActivityComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.EntryPoint
 
-typealias KeyUiScope = Scope
+val LocalUiComponent = compositionLocalOf<UiComponent> { error("No ui component provided") }
 
-@Provide val keyUiScopeModule = ChildScopeModule1<UiScope, Key<*>, KeyUiScope>()
+@Component interface UiComponent
+
+@EntryPoint<ActivityComponent> interface UiComponentFactory {
+  fun uiComponent(): UiComponent
+}

@@ -29,9 +29,9 @@ import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -56,7 +56,7 @@ typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ComponentScope<AppComponent>
 ): KeyHandler<Result<ActivityResult, Throwable>> = handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]

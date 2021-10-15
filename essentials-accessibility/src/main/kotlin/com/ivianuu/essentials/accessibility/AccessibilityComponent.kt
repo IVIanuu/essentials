@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.scope.ChildScopeModule0
-import com.ivianuu.injekt.scope.Scope
+import com.ivianuu.injekt.android.ServiceComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.EntryPoint
 
-typealias AccessibilityScope = Scope
+@Component interface AccessibilityComponent
 
-@Provide val accessibilityScopeModule =
-  ChildScopeModule0<ServiceScope, AccessibilityScope>()
+@EntryPoint<ServiceComponent> interface AccessibilityComponentFactory {
+  fun accessibilityComponent(): AccessibilityComponent
+}

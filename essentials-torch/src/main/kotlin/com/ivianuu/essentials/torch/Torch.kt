@@ -26,10 +26,10 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +41,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-@Provide @Scoped<AppScope> class Torch(
+@Provide @Scoped<AppComponent> class Torch(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val context: AppContext,
@@ -50,7 +50,7 @@ import kotlin.coroutines.resume
   private val mainDispatcher: MainDispatcher,
   private val notificationManager: @SystemService NotificationManager,
   private val rp: ResourceProvider,
-  private val scope: NamedCoroutineScope<AppScope>,
+  private val scope: ComponentScope<AppComponent>,
   private val systemBuildInfo: SystemBuildInfo,
   private val toaster: Toaster
 ) {

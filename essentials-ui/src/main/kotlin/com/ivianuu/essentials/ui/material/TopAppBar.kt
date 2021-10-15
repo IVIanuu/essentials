@@ -28,24 +28,22 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
-import com.ivianuu.injekt.scope.scoped
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.entryPoint
 
 enum class AppBarStyle { PRIMARY, SURFACE }
 
@@ -146,9 +144,8 @@ private val DefaultAppBarHeight = 64.dp
 val DefaultAppBarElevation = 0.dp
 
 @Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-  @Providers("com.ivianuu.essentials.ui.composableScope")
-  val component = requireElement<AutoTopAppBarComponent>()
-  val canGoBack = scoped("can_go_back", LocalScope.current) {
+  val component = entryPoint<AutoTopAppBarComponent>(LocalKeyUiComponent.current)
+  val canGoBack = remember {
     component.navigator.backStack.value.indexOf(component.key) > 0
   }
   return when {
@@ -157,5 +154,7 @@ val DefaultAppBarElevation = 0.dp
   }
 }
 
-@Provide @ScopeElement<KeyUiScope>
-class AutoTopAppBarComponent(val key: Key<*>, val navigator: Navigator)
+@EntryPoint<KeyUiComponent> interface AutoTopAppBarComponent {
+  val key: Key<*>
+  val navigator: Navigator
+}

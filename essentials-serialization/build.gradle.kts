@@ -30,7 +30,6 @@ kotlin {
       dependencies {
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
-        api(Deps.Injekt.scope)
         api(Deps.KotlinSerialization.json)
       }
     }

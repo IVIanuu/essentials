@@ -30,11 +30,11 @@ import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 
 object RateOnPlayKey : DialogKey<Unit>
@@ -75,7 +75,7 @@ object RateOnPlayKey : DialogKey<Unit>
   key: RateOnPlayKey,
   navigator: Navigator,
   rateOnPlay: RateOnPlayUseCase,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): StateFlow<RateOnPlayModel> = scope.state(RateOnPlayModel()) {

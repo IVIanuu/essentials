@@ -29,12 +29,12 @@ import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 
 object FeedbackKey : DialogKey<Unit>
@@ -77,7 +77,7 @@ object FeedbackKey : DialogKey<Unit>
   displayShowNever: DisplayShowNeverUseCase,
   key: FeedbackKey,
   navigator: Navigator,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ): StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {

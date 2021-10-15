@@ -44,13 +44,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -68,7 +68,7 @@ object AppTrackerKey : Key<Unit>
   createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
   foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: ComponentScope<KeyUiComponent>,
   toaster: Toaster,
 ): KeyUi<AppTrackerKey> = {
   var isEnabled by remember { mutableStateOf(false) }

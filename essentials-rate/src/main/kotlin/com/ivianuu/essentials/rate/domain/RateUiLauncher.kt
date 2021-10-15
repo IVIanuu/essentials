@@ -23,7 +23,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.rate.ui.RateKey
 import com.ivianuu.essentials.time.TimestampProvider
-import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -39,7 +39,7 @@ import kotlin.time.toDuration
   pref: DataStore<RatePrefs>,
   schedule: RateUiSchedule = RateUiSchedule(),
   timestampProvider: TimestampProvider
-): ScopeWorker<UiScope> = {
+): ScopeWorker<UiComponent> = {
   if (pref.data.first().installTime == 0L) {
     val now = timestampProvider().toLongMilliseconds()
     pref.updateData { copy(installTime = now) }

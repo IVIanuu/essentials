@@ -30,9 +30,9 @@ import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.zip.ZipEntry
@@ -49,7 +49,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   dispatcher: IODispatcher,
   logger: Logger,
   navigator: Navigator,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ComponentScope<AppComponent>
 ): CreateBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
@@ -94,7 +94,7 @@ typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
   logger: Logger,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ComponentScope<AppComponent>
 ): RestoreBackupUseCase = {
   catch {
     withContext(scope.coroutineContext + dispatcher) {

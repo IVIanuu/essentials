@@ -23,15 +23,15 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.LocalScope
-import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiComponentFactory
 import com.ivianuu.essentials.ui.core.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.scope.ChildScopeFactory
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.dispose
+import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
@@ -39,23 +39,24 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    @Provide val uiScope = @Providers("com.ivianuu.injekt.android.activityScope")
-    requireElement<@ChildScopeFactory () -> UiScope>()()
+    val uiComponent = entryPoint<UiComponentFactory>(activityComponent).uiComponent()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { uiScope.dispose() }
+      onCancel { uiComponent.dispose() }
     }
 
-    val component = requireElement<EsActivityComponent>()
+    val esActivityComponent = entryPoint<EsActivityComponent>(uiComponent)
 
     setContent {
-      CompositionLocalProvider(LocalScope provides uiScope) {
-        component.decorateUi {
-          component.appUi()
+      CompositionLocalProvider(LocalUiComponent provides uiComponent) {
+        esActivityComponent.decorateUi {
+          esActivityComponent.appUi()
         }
       }
     }
   }
 }
 
-@Provide @ScopeElement<UiScope>
-class EsActivityComponent(val appUi: AppUi, val decorateUi: DecorateUi)
+@EntryPoint<UiComponent> interface EsActivityComponent {
+  val appUi: AppUi
+  val decorateUi: DecorateUi
+}

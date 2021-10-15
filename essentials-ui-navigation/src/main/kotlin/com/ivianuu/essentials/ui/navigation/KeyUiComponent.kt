@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.notificationlistener
+package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
-import com.ivianuu.injekt.scope.ChildScopeModule0
-import com.ivianuu.injekt.scope.Scope
+import androidx.compose.runtime.compositionLocalOf
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.EntryPoint
 
-typealias NotificationScope = Scope
+val LocalKeyUiComponent = compositionLocalOf<KeyUiComponent> { error("No key ui component provided") }
 
-@Provide val notificationScopeModule = ChildScopeModule0<ServiceScope, NotificationScope>()
+@Component interface KeyUiComponent
+
+@EntryPoint<UiComponent> interface KeyUiComponentFactory {
+  fun keyUiComponent(key: Key<*>): KeyUiComponent
+}

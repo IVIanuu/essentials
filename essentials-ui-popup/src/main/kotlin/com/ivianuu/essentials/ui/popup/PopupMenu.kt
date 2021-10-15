@@ -28,13 +28,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.launch
 
 object PopupMenu {
@@ -46,16 +45,14 @@ object PopupMenu {
 
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
-    @Providers("com.ivianuu.essentials.ui.composableScope")
     Column {
-      val component = requireElement<PopupMenuComponent>()
-      val key = requireElement<Key<*>>()
+      val component = entryPoint<PopupMenuComponent>(LocalUiComponent.current)
       val scope = rememberCoroutineScope()
       items.forEach { item ->
         key(item) {
           PopupMenuItem(
             onSelected = {
-              scope.launch { component.navigator.pop(key) }
+              scope.launch { component.navigator.pop(component.key) }
               item.onSelected()
             },
             content = item.content
@@ -66,8 +63,10 @@ object PopupMenu {
   }
 }
 
-@Provide @ScopeElement<UiScope>
-class PopupMenuComponent(val navigator: Navigator)
+@EntryPoint<KeyUiComponent> interface PopupMenuComponent {
+  val key: Key<*>
+  val navigator: Navigator
+}
 
 @Composable private fun PopupMenuItem(
   onSelected: () -> Unit,

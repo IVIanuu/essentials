@@ -34,7 +34,6 @@ dependencies {
   api(Deps.Coroutines.android)
   api(Deps.Injekt.android)
   api(Deps.Injekt.core)
-  api(Deps.Injekt.scope)
 
   api(project(":essentials-ui"))
   api(project(":essentials-common"))

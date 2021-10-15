@@ -2,20 +2,22 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.scope.Scope
-import com.ivianuu.injekt.scope.scoped
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentObserver
+import com.ivianuu.injekt.common.Scoped
 
-@Tag annotation class Eager<S : Scope> {
+@Tag annotation class Eager<C : @Component Any> {
   companion object {
-    @Provide class Module<@com.ivianuu.injekt.Spread T : @Eager<S> U, U : Any, S : Scope> {
-      @Provide inline fun scopedValue(
-        factory: () -> T,
-        scope: S,
-        key: TypeKey<U>
-      ): U = scoped(key = key, computation = factory)
+    @Provide class Module<@com.ivianuu.injekt.Spread T : @Eager<C> U, U : Any, C : @Component Any> {
+      @Provide inline fun scopedValue(factory: () -> T): @Scoped<C> U = factory()
 
-      @Provide inline fun initializer(crossinline factory: () -> U): ScopeWorker<S> = { factory() }
+      @Provide inline fun initializer(
+        crossinline factory: () -> U
+      ): ComponentObserver<C> = object : ComponentObserver<C> {
+        override fun init() {
+          factory()
+        }
+      }
     }
   }
 }

@@ -9,12 +9,13 @@ import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceScope
+import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.createServiceScope
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.ScopeElement
-import com.ivianuu.injekt.scope.requireElement
+import com.ivianuu.injekt.android.createServiceComponent
+import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.dispose
+import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
   private val component: ForegroundServiceComponent by lazy {
-    requireElement(createServiceScope())
+    entryPoint(createServiceComponent())
   }
   @Provide private val logger: Logger get() = component.logger
 
@@ -36,7 +37,7 @@ class ForegroundService : Service() {
     super.onCreate()
     log { "start foreground service" }
 
-    component.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+    component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(
         block = {
           component.foregroundManager.states
@@ -63,7 +64,7 @@ class ForegroundService : Service() {
 
   override fun onDestroy() {
     log { "stop foreground service" }
-    component.serviceScope.dispose()
+    component.dispose()
     super.onDestroy()
   }
 
@@ -94,11 +95,9 @@ class ForegroundService : Service() {
   override fun onBind(intent: Intent?): IBinder? = null
 }
 
-@Provide @ScopeElement<ServiceScope>
-class ForegroundServiceComponent(
-  val coroutineScope: NamedCoroutineScope<ServiceScope>,
-  val foregroundManager: ForegroundManager,
-  val notificationManager: @SystemService NotificationManager,
-  val logger: Logger,
-  val serviceScope: ServiceScope
-)
+@EntryPoint<ServiceComponent> interface ForegroundServiceComponent {
+  val foregroundManager: ForegroundManager
+  val notificationManager: @SystemService NotificationManager
+  val logger: Logger
+  val scope: ComponentScope<ServiceComponent>
+}

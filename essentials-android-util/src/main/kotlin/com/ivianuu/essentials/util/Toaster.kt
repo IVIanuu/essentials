@@ -22,9 +22,9 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
 import kotlinx.coroutines.launch
 
 typealias Toaster = (String) -> Unit
@@ -32,7 +32,7 @@ typealias Toaster = (String) -> Unit
 @Provide fun toaster(
   context: AppContext,
   mainDispatcher: MainDispatcher,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ComponentScope<AppComponent>
 ): Toaster = { message ->
   scope.launch(mainDispatcher) {
     Toast.makeText(

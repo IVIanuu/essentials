@@ -25,8 +25,8 @@ import coil.map.Mapper
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import kotlin.reflect.KClass
 
 @Provide fun imageLoader(
@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
   fetchers: Set<FetcherPair<*>> = emptySet(),
   interceptors: Set<Interceptor> = emptySet(),
   mappers: Set<MapperPair<*>> = emptySet(),
-): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
+): @Scoped<AppComponent> ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }
     interceptors.forEach { add(it) }

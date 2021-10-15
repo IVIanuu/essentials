@@ -31,11 +31,11 @@ import com.ivianuu.essentials.data.insertAll
 import com.ivianuu.essentials.data.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -48,7 +48,7 @@ object CheckAppsKey : Key<Unit>
   checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
   db: Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ComponentScope<KeyUiComponent>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(
@@ -75,7 +75,7 @@ object CheckAppsKey : Key<Unit>
 
 typealias CheckAppsDb = Db
 
-@Provide fun checkAppsDb(context: AppContext): @Scoped<AppScope> CheckAppsDb = AndroidDb(
+@Provide fun checkAppsDb(context: AppContext): @Scoped<AppComponent> CheckAppsDb = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

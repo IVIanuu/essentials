@@ -22,10 +22,10 @@ import com.android.billingclient.api.BillingResult
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -41,12 +41,12 @@ interface BillingContext {
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R?
 }
 
-@Provide @Scoped<AppScope> class BillingContextImpl(
+@Provide @Scoped<AppComponent> class BillingContextImpl(
   override val billingClient: BillingClient,
   private val dispatcher: IODispatcher,
   override val logger: Logger,
   override val refreshes: MutableSharedFlow<BillingRefresh>,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ComponentScope<AppComponent>
 ) : BillingContext {
   private var isConnected = false
   private val connectionMutex = Mutex()

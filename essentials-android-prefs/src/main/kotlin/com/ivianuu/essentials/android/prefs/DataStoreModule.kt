@@ -14,10 +14,10 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.fold
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -33,8 +33,8 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir,
-    scope: NamedCoroutineScope<AppScope>
-  ): @Scoped<AppScope> DataStore<T> {
+    scope: ComponentScope<AppComponent>
+  ): @Scoped<AppComponent> DataStore<T> {
     val dataStore = DataStoreFactory.create(
       produceFile = { prefsDir().resolve(name) },
       serializer = object : Serializer<T> {

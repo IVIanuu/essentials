@@ -42,13 +42,13 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.scope.AppScope
-import com.ivianuu.injekt.scope.Scoped
+import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ object NavBarKey : Key<Unit>
   navigator: Navigator,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: ComponentScope<KeyUiComponent>,
 ): KeyUi<NavBarKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -148,5 +148,5 @@ object NavBarKey : Key<Unit>
 
 typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
 
-@Provide val sampleForceNavBarVisibleState: @Scoped<AppScope> SampleForceNavBarVisibleState
+@Provide val sampleForceNavBarVisibleState: @Scoped<AppComponent> SampleForceNavBarVisibleState
   get() = MutableStateFlow(false)
