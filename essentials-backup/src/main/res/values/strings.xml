@@ -16,7 +16,7 @@
 
 <resources>
     <!-- Backup -->
-    <string name="es_backup_restore_title">Backup / restore</string>
+    <string name="es_backup_and_restore_title">Backup / restore</string>
     <string name="es_pref_backup">Backup</string>
     <string name="es_pref_backup_summary">Export your data</string>
     <string name="es_pref_restore">Restore</string>
