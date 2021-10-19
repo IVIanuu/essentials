@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 @Provide fun homeUi(
   isXposedRunning: IsXposedRunning,
   navigator: Navigator,
-  itemsFactory: () -> Set<HomeItem>,
+  itemsFactory: () -> List<HomeItem>,
   toaster: Toaster,
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }

@@ -43,7 +43,7 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
   backupDir: BackupDir,
-  backupFiles: Set<BackupFile>,
+  backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
   dataDir: DataDir,
   dispatcher: IODispatcher,

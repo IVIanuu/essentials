@@ -34,7 +34,7 @@ typealias ScopeWorkerRunner<C> = () -> Unit
   logger: Logger,
   scope: ComponentScope<C>,
   scopeKey: TypeKey<C>,
-  workers: Set<() -> ScopeWorker<C>> = emptySet()
+  workers: List<() -> ScopeWorker<C>> = emptyList()
 ): ScopeWorkerRunner<C> = {
   log { "${scopeKey.value} run scope workers" }
   scope.launch {

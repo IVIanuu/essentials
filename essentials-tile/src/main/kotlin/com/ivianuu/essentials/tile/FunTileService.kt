@@ -121,7 +121,7 @@ abstract class AbstractFunTileService<T : Any>(
 
 @Provide class TileModelHolder(
   tileId: TileId,
-  tileModelElements: Set<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptySet(),
+  tileModelElements: List<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptyList(),
   val scope: ComponentScope<TileComponent>,
   val component: TileComponent
 ) {

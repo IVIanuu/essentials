@@ -23,7 +23,7 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
 }
 
 @EntryPoint<AppComponent> interface XposedAppComponent {
-  val hooks: () -> Set<Hooks>
+  val hooks: () -> List<Hooks>
 }
 
 inline fun createXposedAppComponent(

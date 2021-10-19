@@ -109,6 +109,6 @@ class EsAccessibilityService : AccessibilityService() {
 }
 
 @EntryPoint<AccessibilityComponent> interface EsAccessibilityServiceAccessibilityComponent {
-  val configs: Set<AccessibilityConfig> get() = emptySet()
+  val configs: List<AccessibilityConfig> get() = emptyList()
   val scope: ComponentScope<AccessibilityComponent>
 }

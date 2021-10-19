@@ -52,7 +52,7 @@ data class KeyUiDecoratorElement(
 typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateKeyUi(
-  elements: Set<KeyUiDecoratorElement> = emptySet(),
+  elements: List<KeyUiDecoratorElement> = emptyList(),
   logger: Logger
 ): DecorateKeyUi = { content ->
   remember {

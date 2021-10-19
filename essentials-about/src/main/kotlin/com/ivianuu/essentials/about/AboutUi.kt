@@ -159,7 +159,7 @@ object AboutKey : Key<Unit>
     @Provide fun initial(
       buildInfo: BuildInfo,
       privacyPolicyUrl: PrivacyPolicyUrl? = null,
-      donations: (() -> Set<Donation>)? = null,
+      donations: (() -> List<Donation>)? = null,
       email: DeveloperEmail
     ): @Initial AboutModel = AboutModel(
       version = buildInfo.versionName,

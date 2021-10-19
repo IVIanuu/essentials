@@ -31,10 +31,10 @@ import kotlin.reflect.KClass
 
 @Provide fun imageLoader(
   context: AppContext,
-  decoders: Set<Decoder> = emptySet(),
-  fetchers: Set<FetcherPair<*>> = emptySet(),
-  interceptors: Set<Interceptor> = emptySet(),
-  mappers: Set<MapperPair<*>> = emptySet(),
+  decoders: List<Decoder> = emptyList(),
+  fetchers: List<FetcherPair<*>> = emptyList(),
+  interceptors: List<Interceptor> = emptyList(),
+  mappers: List<MapperPair<*>> = emptyList(),
 ): @Scoped<AppComponent> ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }

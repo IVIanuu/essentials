@@ -12,10 +12,10 @@ import kotlinx.coroutines.withContext
 
 @Provide class ActionRepository(
   private val actions: () -> Map<String, () -> Action<*>> = { emptyMap() },
-  private val actionFactories: () -> Set<() -> ActionFactory> = { emptySet() },
+  private val actionFactories: () -> List<() -> ActionFactory> = { emptyList() },
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>> = { emptyMap() },
   private val actionSettings: () -> Map<String, () -> ActionSettingsKey<*>> = { emptyMap() },
-  private val actionPickerDelegates: () -> Set<() -> ActionPickerDelegate> = { emptySet() },
+  private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate> = { emptyList() },
   private val dispatcher: DefaultDispatcher,
   private val rp: ResourceProvider,
   private val toaster: Toaster

@@ -48,7 +48,7 @@ data class ScopeInitializerElement<C : @Component Any>(
 
 @Provide fun <C : @Component Any> scopeInitializerRunner(
   componentKey: TypeKey<C>,
-  initializers: Set<ScopeInitializerElement<C>> = emptySet(),
+  initializers: List<ScopeInitializerElement<C>> = emptyList(),
   logger: Logger,
   workerRunner: ScopeWorkerRunner<C>
 ): ComponentObserver<C> = object : ComponentObserver<C> {

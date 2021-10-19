@@ -41,7 +41,7 @@ typealias ForceNavBarVisibleState = Boolean
 internal typealias CombinedForceNavBarVisibleState = Boolean
 
 @Provide fun combinedForceNavBarVisibleState(
-  forceNavbarVisibleStates: Set<Flow<ForceNavBarVisibleState>>
+  forceNavbarVisibleStates: List<Flow<ForceNavBarVisibleState>>
 ): Flow<CombinedForceNavBarVisibleState> = combine(
   forceNavbarVisibleStates
     .map { state ->
