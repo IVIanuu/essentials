@@ -124,7 +124,7 @@ data class UiDonation(
 
 @Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
-  donations: Set<Donation>,
+  donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
   key: DonationKey,
   navigator: Navigator,
