@@ -45,7 +45,7 @@ object TabsKey : Key<Unit>
 @OptIn(ExperimentalPagerApi::class)
 @Provide
 val tabsUi: KeyUi<TabsKey> = {
-  val pagerState = rememberPagerState(TabItems.size)
+  val pagerState = rememberPagerState()
   val scope = rememberCoroutineScope()
   Scaffold(
     topBar = {
@@ -82,7 +82,7 @@ val tabsUi: KeyUi<TabsKey> = {
       }
     }
   ) {
-    HorizontalPager(pagerState) { page ->
+    HorizontalPager(count = TabItems.size, state = pagerState) { page ->
       val color = TabItems[page]
       Surface(color = color) {
         Text(

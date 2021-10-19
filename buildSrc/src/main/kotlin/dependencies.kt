@@ -18,7 +18,7 @@
 
 object Build {
   const val applicationId = "com.ivianuu.essentials.sample"
-  const val compileSdk = 30
+  const val compileSdk = 31
   const val minSdk = 24
   const val targetSdk = 30
   const val versionCode = 1
@@ -27,7 +27,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.18.0"
+    private const val version = "0.20.0"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
@@ -46,7 +46,7 @@ object Deps {
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
     object Compose {
-      const val version = "1.0.3"
+      const val version = "1.0.4"
       const val compiler = "androidx.compose.compiler:compiler:$version"
       const val core = "androidx.compose.ui:ui:$version"
       const val material = "androidx.compose.material:material:$version"
@@ -72,7 +72,7 @@ object Deps {
       const val runner = "androidx.test:runner:1.2.0"
     }
 
-    const val work = "androidx.work:work-runtime-ktx:2.5.0"
+    const val work = "androidx.work:work-runtime-ktx:2.7.0"
   }
 
   const val autoService = "com.google.auto.service:auto-service:1.0-rc7"
@@ -97,12 +97,12 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev993"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev994"
 
   const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
 
   object Injekt {
-    private const val version = "0.0.1-dev622"
+    private const val version = "0.0.1-dev624"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"
@@ -119,7 +119,7 @@ object Deps {
   const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.4.2"
 
   object Kotlin {
-    const val version = "1.5.30"
+    const val version = "1.5.31"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

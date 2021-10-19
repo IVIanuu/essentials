@@ -20,9 +20,16 @@
 
     <application>
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:enabled="false"
-            tools:ignore="ExportedContentProvider" />
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <!-- If you are using androidx.startup to initialize other components -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+    </provider>
     </application>
 
 </manifest>
