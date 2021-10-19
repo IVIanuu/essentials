@@ -45,7 +45,7 @@ import kotlinx.serialization.Serializable
 object CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
-  checkableAppsScreen: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
+  checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: Db,
   launchableAppPredicate: LaunchableAppPredicate,
   scope: ComponentScope<KeyUiComponent>

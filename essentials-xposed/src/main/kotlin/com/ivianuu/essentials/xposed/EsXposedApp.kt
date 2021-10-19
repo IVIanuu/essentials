@@ -28,5 +28,5 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
 
 inline fun createXposedAppComponent(
   @Inject context: XposedContext,
-  @Inject scopeFactory: (@Provide XposedContext) -> AppComponent
+  @Inject scopeFactory: (XposedContext) -> AppComponent
 ): AppComponent = scopeFactory(context)

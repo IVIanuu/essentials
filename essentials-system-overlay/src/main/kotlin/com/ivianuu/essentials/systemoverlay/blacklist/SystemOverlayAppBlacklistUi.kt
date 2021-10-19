@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.map
 object SystemOverlayAppBlacklistKey : Key<Unit>
 
 @Provide fun systemOverlayAppBlacklistUi(
-  checkableAppsPageFactory: (@Provide CheckableAppsParams) -> CheckableAppsScreen,
+  checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
   rp: ResourceProvider
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {

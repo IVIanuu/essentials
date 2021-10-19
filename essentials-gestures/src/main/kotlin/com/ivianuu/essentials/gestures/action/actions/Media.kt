@@ -117,7 +117,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
 
 @Provide fun mediaActionSettingsModel(
   appRepository: AppRepository,
-  intentAppPredicateFactory: (@Provide Intent) -> IntentAppPredicate,
+  intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
   scope: ComponentScope<KeyUiComponent>

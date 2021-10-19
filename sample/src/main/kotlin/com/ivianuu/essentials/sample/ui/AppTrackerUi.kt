@@ -65,7 +65,7 @@ object AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp>,
-  createNotification: (@Provide CurrentApp) -> AppTrackerNotification,
+  createNotification: (CurrentApp) -> AppTrackerNotification,
   foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
   scope: ComponentScope<KeyUiComponent>,

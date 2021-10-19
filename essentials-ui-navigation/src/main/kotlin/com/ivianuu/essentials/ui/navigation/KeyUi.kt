@@ -34,7 +34,7 @@ typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 @Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
     keyClass: KClass<K>,
-    keyUiFactory: (@Provide K) -> KeyUi<K>
+    keyUiFactory: (K) -> KeyUi<K>
   ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
     (keyClass to keyUiFactory).cast()
 
