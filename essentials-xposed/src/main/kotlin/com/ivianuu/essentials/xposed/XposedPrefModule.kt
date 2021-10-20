@@ -105,8 +105,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
-    serializerFactory: () -> KSerializer<T>
-  ): XposedPrefFlow<T> {
+    serializerFactory: () -> KSerializer<T>,
+    coroutineScope: ComponentScope<AppComponent>
+  ): @Scoped<AppComponent> XposedPrefFlow<T> {
     val sharedPrefs by lazy { XSharedPreferences(packageName, prefName) }
 
     val json by lazy(jsonFactory)
@@ -127,6 +128,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .map { readData() }
       .distinctUntilChanged()
       .flowOn(dispatcher)
+      .shareIn(coroutineScope, SharingStarted.Lazily, 1)
   }
 
   @Provide
