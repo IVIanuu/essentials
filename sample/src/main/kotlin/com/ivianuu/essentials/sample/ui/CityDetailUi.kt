@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -41,6 +40,7 @@ import com.ivianuu.essentials.ui.animation.transition.defaultAnimationSpec
 import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.animation.util.fractionalTranslation
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.core.LocalInsets
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
@@ -53,7 +53,7 @@ import kotlin.time.milliseconds
 data class CityDetailKey(val city: City) : Key<Unit>
 
 @Provide fun cityDetailUi(key: CityDetailKey): KeyUi<CityDetailKey> = {
-  LazyColumn {
+  VerticalList {
     item {
       TopAppBar(
         title = { Text(key.city.name) },

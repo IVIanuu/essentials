@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +50,7 @@ object AppShortcutPickerKey : Key<AppShortcut>
 
 @Provide val appShortcutPickerUi: ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
-    ResourceLazyColumnFor(model.appShortcuts) { appShortcut ->
+    ResourceVerticalListFor(model.appShortcuts) { appShortcut ->
       ListItem(
         leading = {
           Image(

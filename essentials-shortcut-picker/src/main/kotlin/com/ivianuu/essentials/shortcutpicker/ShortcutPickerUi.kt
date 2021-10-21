@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -54,7 +54,7 @@ object ShortcutPickerKey : Key<Shortcut>
 
 @Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
-    ResourceLazyColumnFor(model.shortcuts) { shortcut ->
+    ResourceVerticalListFor(model.shortcuts) { shortcut ->
       ListItem(
         leading = {
           Image(

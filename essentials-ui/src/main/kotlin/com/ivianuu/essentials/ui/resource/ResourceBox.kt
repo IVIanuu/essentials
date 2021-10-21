@@ -18,9 +18,7 @@ package com.ivianuu.essentials.ui.resource
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -44,13 +42,13 @@ import com.ivianuu.essentials.ui.animation.AnimatedBox
 import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
 import com.ivianuu.essentials.ui.animation.transition.StackTransition
 import com.ivianuu.essentials.ui.animation.transition.defaultAnimationSpec
-import com.ivianuu.essentials.ui.core.localHorizontalInsetsPadding
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.HorizontalList
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
 import kotlin.reflect.KClass
 import kotlin.time.milliseconds
 
-@Composable fun <T> ResourceLazyColumnFor(
+@Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
   transition: StackTransition = ResourceBoxDefaults.transition,
@@ -69,16 +67,14 @@ import kotlin.time.milliseconds
     idle = idle
   ) { items ->
     if (items.isNotEmpty()) {
-      LazyColumn(
-        contentPadding = localVerticalInsetsPadding()
-      ) { items(items) { successItemContent(it) } }
+      VerticalList { items(items) { successItemContent(it) } }
     } else {
       successEmpty()
     }
   }
 }
 
-@Composable fun <T> ResourceLazyRowFor(
+@Composable fun <T> ResourceHorizontalListFor(
   resource: Resource<List<T>>,
   modifier: Modifier = Modifier,
   transition: StackTransition = ResourceBoxDefaults.transition,
@@ -97,9 +93,7 @@ import kotlin.time.milliseconds
     idle = idle
   ) { items ->
     if (items.isNotEmpty()) {
-      LazyRow(contentPadding = localHorizontalInsetsPadding()) {
-        items(items) { successItemContent(it) }
-      }
+      HorizontalList { items(items) { successItemContent(it) } }
     } else {
       successEmpty()
     }

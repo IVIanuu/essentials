@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerPalette
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.core.isLight
 import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -47,7 +47,7 @@ object DynamicSystemBarsKey : Key<Unit>
         .flatMap { it.colors }
         .shuffled()
     }
-    LazyColumn {
+    VerticalList {
       items(colors) { color ->
         Box(
           modifier = Modifier

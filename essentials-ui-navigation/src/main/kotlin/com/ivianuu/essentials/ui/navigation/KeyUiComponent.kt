@@ -23,7 +23,9 @@ import com.ivianuu.injekt.common.EntryPoint
 
 val LocalKeyUiComponent = compositionLocalOf<KeyUiComponent> { error("No key ui component provided") }
 
-@Component interface KeyUiComponent
+@Component interface KeyUiComponent {
+  val key: Key<*>
+}
 
 @EntryPoint<UiComponent> interface KeyUiComponentFactory {
   fun keyUiComponent(key: Key<*>): KeyUiComponent

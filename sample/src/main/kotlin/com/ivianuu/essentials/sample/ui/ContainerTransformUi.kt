@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -51,7 +50,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.scoped
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -99,7 +98,7 @@ object ContainerTransformKey : Key<Unit>
     ) {
       val listState = rememberLazyListState(listInfo.first, listInfo.second)
       listInfo = listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
-      LazyColumn(state = listState, contentPadding = localVerticalInsetsPadding()) {
+      VerticalList(state = listState) {
         item { BigDetailsCard(navigator) }
         item { SmallDetailsCard(navigator) }
         item {

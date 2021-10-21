@@ -46,7 +46,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -83,7 +83,7 @@ data class CheckableAppsParams(
       )
     }
   ) {
-    ResourceLazyColumnFor(model.checkableApps) { app ->
+    ResourceVerticalListFor(model.checkableApps) { app ->
       ListItem(
         title = { Text(app.info.appName) },
         leading = {

@@ -1,12 +1,10 @@
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
@@ -31,7 +29,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
     floatingActionButton = floatingActionButton,
     floatingActionButtonPosition = floatingActionButtonPosition
   ) {
-    LazyColumn(contentPadding = localVerticalInsetsPadding(), content = content)
+    VerticalList(content = content)
   }
 }
 

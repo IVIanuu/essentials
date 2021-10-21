@@ -68,7 +68,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceBox
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -102,7 +102,7 @@ object NotificationsKey : Key<Unit>
   onDismissNotificationClick: (UiNotification) -> Unit,
   notifications: Resource<List<UiNotification>>
 ) {
-  ResourceLazyColumnFor(
+  ResourceVerticalListFor(
     resource = notifications,
     successEmpty = {
       Text(

@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -66,7 +66,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       applyContentPadding = false,
       title = { Text(R.string.es_donation_title) },
       content = {
-        ResourceLazyColumnFor(
+        ResourceVerticalListFor(
           modifier = Modifier.animateContentSize(),
           resource = model.skus,
           loading = {

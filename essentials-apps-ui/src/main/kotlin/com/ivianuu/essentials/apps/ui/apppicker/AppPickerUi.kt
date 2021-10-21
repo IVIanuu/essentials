@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
@@ -63,7 +63,7 @@ data class AppPickerKey(
       )
     }
   ) {
-    ResourceLazyColumnFor(model.filteredApps) { app ->
+    ResourceVerticalListFor(model.filteredApps) { app ->
       ListItem(
         title = { Text(app.appName) },
         leading = {

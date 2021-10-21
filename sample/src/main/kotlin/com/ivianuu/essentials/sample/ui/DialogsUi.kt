@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -68,9 +68,8 @@ object DialogsKey : Key<Unit>
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
-    LazyColumn(
+    VerticalList(
       modifier = Modifier.fillMaxSize(),
-      contentPadding = localVerticalInsetsPadding(),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center
     ) {

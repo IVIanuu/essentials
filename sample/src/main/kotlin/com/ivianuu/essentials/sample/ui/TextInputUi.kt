@@ -19,7 +19,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -36,7 +35,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -121,7 +120,7 @@ object TextInputKey : Key<Unit>
           }
       }*/
 
-      LazyColumn(contentPadding = localVerticalInsetsPadding()) {
+      VerticalList {
         items(items) { item ->
           ListItem(title = { Text(item) })
         }

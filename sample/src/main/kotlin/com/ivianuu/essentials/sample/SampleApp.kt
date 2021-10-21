@@ -84,6 +84,7 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.time.*",
   "com.ivianuu.essentials.torch.*",
   "com.ivianuu.essentials.ui.*",
+  "com.ivianuu.essentials.ui.common.*",
   "com.ivianuu.essentials.ui.core.*",
   "com.ivianuu.essentials.ui.dialog.*",
   "com.ivianuu.essentials.ui.material.*",

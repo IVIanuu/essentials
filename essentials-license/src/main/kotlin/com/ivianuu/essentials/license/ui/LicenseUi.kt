@@ -35,7 +35,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +45,7 @@ object LicenseKey : Key<Unit>
 
 @Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
-    ResourceLazyColumnFor(model.projects) { project ->
+    ResourceVerticalListFor(model.projects) { project ->
       Project(
         project = project,
         onClick = { model.openProject(project) }

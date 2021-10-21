@@ -47,7 +47,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.resource.ResourceLazyColumnFor
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -68,7 +68,7 @@ data class ActionPickerKey(
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {
-    ResourceLazyColumnFor(model.items) { item ->
+    ResourceVerticalListFor(model.items) { item ->
       ListItem(
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
