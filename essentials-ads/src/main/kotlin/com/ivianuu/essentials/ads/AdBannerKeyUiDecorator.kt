@@ -14,41 +14,48 @@ import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.StateFlow
+import com.ivianuu.injekt.Spread
+import kotlinx.coroutines.flow.Flow
+import kotlin.reflect.KClass
 
 typealias KeyUiAdBannerConfig = AdBannerConfig
 
 typealias AdBannerKeyUiDecorator = KeyUiDecorator
 
+typealias AdBannerKeyUiBlacklistEntry<T> = KClass<T>
+
+@Provide fun <@Spread T : DialogKey<*>> dialogAdBannerKeyUiBlacklistEntry(
+  clazz: KClass<T>
+): AdBannerKeyUiBlacklistEntry<T> = clazz
+
 @Provide fun adBannerKeyUiDecorator(
+  keyBlacklist: List<AdBannerKeyUiBlacklistEntry<*>>,
   config: KeyUiAdBannerConfig? = null,
-  showAdsFlow: StateFlow<ShowAds>
+  showAdsFlow: Flow<ShowAds>
 ): AdBannerKeyUiDecorator = decorator@ { content ->
   if (config == null) {
     content()
     return@decorator
   }
 
-  val key = LocalKeyUiComponent.current.key
-
-  if (key is DialogKey<*>) {
+  if (LocalKeyUiComponent.current.key::class in keyBlacklist) {
     content()
     return@decorator
   }
 
-  val showAds by showAdsFlow.collectAsState()
+  val showAds by showAdsFlow.collectAsState(null)
 
   Column {
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (!showAds) currentInsets
+        LocalInsets provides if (showAds == true) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (showAds) {
+    if (showAds == true) {
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

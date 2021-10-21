@@ -4,7 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 typealias ListAdBannerConfig = AdBannerConfig
 
@@ -12,12 +12,12 @@ typealias AdBannerListDecorator = ListDecorator
 
 @Provide fun adBannerListDecorators(
   config: ListAdBannerConfig? = null,
-  showAdsFlow: StateFlow<ShowAds>
+  showAdsFlow: Flow<ShowAds>
 ): AdBannerListDecorator = decorator@ {
   if (config != null && isVertical) {
     item(null) {
-      val showAds by showAdsFlow.collectAsState()
-      if (showAds) AdBanner(config)
+      val showAds by showAdsFlow.collectAsState(null)
+      if (showAds == true) AdBanner(config)
     }
   }
 
