@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.permission.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -51,6 +53,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
   SimpleListScreen(R.string.es_request_permission_title) {
     items(model.permissions) { permission ->
       ListItem(
+        modifier = Modifier.clickable { model.grantPermission(permission) },
         title = { Text(permission.permission.title) },
         subtitle = permission.permission.desc?.let {
           {
@@ -58,8 +61,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
           }
         },
         leading = permission.permission.icon,
-        trailing = { Switch(checked = permission.isGranted, null) },
-        onClick = { model.grantPermission(permission) }
+        trailing = { Switch(checked = permission.isGranted, null) }
       )
     }
   }

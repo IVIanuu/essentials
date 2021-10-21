@@ -9,6 +9,7 @@ import com.ivianuu.essentials.ads.FullScreenAd
 import com.ivianuu.essentials.ads.FullScreenAdId
 import com.ivianuu.essentials.ads.KeyUiAdBannerConfig
 import com.ivianuu.essentials.ads.ListAdBannerConfig
+import com.ivianuu.essentials.ads.ScreenLaunchFullscreenAdConfig
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -55,6 +56,7 @@ object AdsKey : Key<Unit>
   size = AdSize.LARGE_BANNER
 )
 @Provide val fullScreenAdId: FullScreenAdId = "ca-app-pub-3940256099942544/1033173712"
+@Provide val screenLaunchAdConfig = ScreenLaunchFullscreenAdConfig(4)
 
 @Provide val showAdsState: @Scoped<UiComponent> MutableStateFlow<ShowAds>
   get() = MutableStateFlow(false)

@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.backup
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
@@ -40,18 +42,18 @@ object BackupAndRestoreKey : Key<Unit>
   SimpleListScreen(R.string.es_backup_and_restore_title) {
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.backupData),
         leading = { Icon(R.drawable.es_ic_save) },
         title = { Text(R.string.es_pref_backup) },
-        subtitle = { Text(R.string.es_pref_backup_summary) },
-        onClick = model.backupData
+        subtitle = { Text(R.string.es_pref_backup_summary) }
       )
     }
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.restoreData),
         leading = { Icon(R.drawable.es_ic_restore) },
         title = { Text(R.string.es_pref_restore) },
-        subtitle = { Text(R.string.es_pref_restore_summary) },
-        onClick = model.restoreData
+        subtitle = { Text(R.string.es_pref_restore_summary) }
       )
     }
   }

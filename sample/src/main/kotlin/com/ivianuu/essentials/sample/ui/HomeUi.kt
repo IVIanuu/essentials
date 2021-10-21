@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
@@ -106,6 +107,7 @@ import kotlinx.coroutines.launch
 ) {
   ContainerTransformSurface(key = "container ${item.title}", isOpened = false) {
     ListItem(
+      modifier = Modifier.clickable(onClick = onClick),
       title = {
         SharedElement(key = "title ${item.title}", isStart = true) {
           Text(
@@ -124,8 +126,7 @@ import kotlinx.coroutines.launch
               }
             }
         )
-      },
-      onClick = onClick
+      }
     )
   }
 }

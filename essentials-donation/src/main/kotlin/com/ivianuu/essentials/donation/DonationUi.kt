@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.donation
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -96,6 +97,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
 @Composable private fun Donation(donation: UiDonation, onClick: () -> Unit) {
   ListItem(
     modifier = Modifier
+      .clickable(onClick = onClick)
       .padding(horizontal = 8.dp),
     title = { Text(donation.title) },
     leading = { Icon(donation.donation.iconRes) },
@@ -105,8 +107,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
         style = MaterialTheme.typography.body2,
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
       )
-    },
-    onClick = onClick
+    }
   )
 }
 

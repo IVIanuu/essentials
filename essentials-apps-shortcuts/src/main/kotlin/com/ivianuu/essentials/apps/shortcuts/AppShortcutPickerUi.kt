@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.shortcuts
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.remember
@@ -52,14 +53,14 @@ object AppShortcutPickerKey : Key<AppShortcut>
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.appShortcuts) { appShortcut ->
       ListItem(
+        modifier = Modifier.clickable { model.pickAppShortcut(appShortcut) },
         leading = {
           Image(
             modifier = Modifier.size(40.dp),
             bitmap = remember { appShortcut.icon.toBitmap().toImageBitmap() }
           )
         },
-        title = { Text(appShortcut.shortLabel) },
-        onClick = { model.pickAppShortcut(appShortcut) }
+        title = { Text(appShortcut.shortLabel) }
       )
     }
   }

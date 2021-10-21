@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -70,14 +71,14 @@ data class ActionPickerKey(
   ) {
     ResourceVerticalListFor(model.items) { item ->
       ListItem(
+        modifier = Modifier.clickable { model.pickAction(item) },
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
           IconButton(onClick = { model.openActionSettings(item) }) {
             Icon(R.drawable.es_ic_settings)
           }
         }) else null,
-        title = { Text(item.title) },
-        onClick = { model.pickAction(item) }
+        title = { Text(item.title) }
       )
     }
   }

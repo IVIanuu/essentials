@@ -19,7 +19,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.Intent
 import android.provider.MediaStore
 import android.view.KeyEvent
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.android.prefs.PrefModule
@@ -95,6 +97,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.updateMediaApp),
         title = { Text(R.string.es_pref_media_app) },
         subtitle = {
           Text(
@@ -103,8 +106,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
               model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
             )
           )
-        },
-        onClick = model.updateMediaApp
+        }
       )
     }
   }

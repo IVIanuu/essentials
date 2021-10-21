@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.license.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenseProjectRepository
@@ -56,8 +58,8 @@ object LicenseKey : Key<Unit>
 
 @Composable private fun Project(onClick: () -> Unit, project: Project) {
   ListItem(
-    title = { Text(project.project) },
-    onClick = onClick
+    modifier = Modifier.clickable(onClick = onClick),
+    title = { Text(project.project) }
   )
 }
 

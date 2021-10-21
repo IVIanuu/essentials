@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.apps.ui.checkableapps
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -85,6 +86,7 @@ data class CheckableAppsParams(
   ) {
     ResourceVerticalListFor(model.checkableApps) { app ->
       ListItem(
+        modifier = Modifier.clickable { model.updateAppCheckedState(app, !app.isChecked) },
         title = { Text(app.info.appName) },
         leading = {
           Image(
@@ -97,8 +99,7 @@ data class CheckableAppsParams(
             checked = app.isChecked,
             onCheckedChange = null
           )
-        },
-        onClick = { model.updateAppCheckedState(app, !app.isChecked) }
+        }
       )
     }
   }

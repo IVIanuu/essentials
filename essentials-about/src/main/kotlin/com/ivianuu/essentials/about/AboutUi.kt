@@ -16,8 +16,10 @@
 
 package com.ivianuu.essentials.about
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.ResourceProvider
@@ -58,82 +60,82 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.rate),
         leading = { Icon(R.drawable.es_ic_star) },
         title = { Text(R.string.es_about_rate) },
-        subtitle = { Text(R.string.es_about_rate_desc) },
-        onClick = model.rate
+        subtitle = { Text(R.string.es_about_rate_desc) }
       )
     }
 
     if (model.showDonate) {
       item {
         ListItem(
+          modifier = Modifier.clickable(onClick = model.donate),
           leading = { Icon(R.drawable.es_ic_favorite) },
-          title = { Text(R.string.es_about_donate) },
-          onClick = model.donate
+          title = { Text(R.string.es_about_donate) }
         )
       }
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openMoreApps),
         leading = { Icon(R.drawable.es_ic_google_play) },
         title = { Text(R.string.es_about_more_apps) },
-        subtitle = { Text(R.string.es_about_more_apps_desc) },
-        onClick = model.openMoreApps
+        subtitle = { Text(R.string.es_about_more_apps_desc) }
       )
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openRedditPage),
         leading = { Icon(R.drawable.es_ic_reddit) },
         title = { Text(R.string.es_about_reddit) },
-        subtitle = { Text(R.string.es_about_reddit_desc) },
-        onClick = model.openRedditPage
+        subtitle = { Text(R.string.es_about_reddit_desc) }
       )
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openGithubPage),
         leading = { Icon(R.drawable.es_ic_github) },
         title = { Text(R.string.es_about_github) },
-        subtitle = { Text(R.string.es_about_github_desc) },
-        onClick = model.openGithubPage
+        subtitle = { Text(R.string.es_about_github_desc) }
       )
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openTwitterPage),
         leading = { Icon(R.drawable.es_ic_twitter) },
         title = { Text(R.string.es_about_twitter) },
-        subtitle = { Text(R.string.es_about_twitter_desc) },
-        onClick = model.openTwitterPage
+        subtitle = { Text(R.string.es_about_twitter_desc) }
       )
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.sendMail),
         leading = { Icon(R.drawable.es_ic_email) },
         title = { Text(R.string.es_about_feedback) },
-        subtitle = { Text(model.email) },
-        onClick = model.sendMail
+        subtitle = { Text(model.email) }
       )
     }
 
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openLicenses),
         leading = { Icon(R.drawable.es_ic_assignment) },
-        title = { Text(R.string.es_licenses_title) },
-        onClick = model.openLicenses
+        title = { Text(R.string.es_licenses_title) }
       )
     }
 
     if (model.privacyPolicyUrl != null) {
       item {
         ListItem(
+          modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
           leading = { Icon(R.drawable.es_ic_policy) },
-          title = { Text(R.string.es_about_privacy_policy) },
-          onClick = model.openPrivacyPolicy
+          title = { Text(R.string.es_about_privacy_policy) }
         )
       }
     }

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.dialog
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -70,6 +71,7 @@ import com.ivianuu.essentials.ui.material.Switch
   title: @Composable () -> Unit
 ) {
   ListItem(
+    modifier = Modifier.clickable { onCheckedChange(!checked) },
     contentPadding = PaddingValues(
       horizontal = 24.dp,
       vertical = 16.dp
@@ -80,7 +82,6 @@ import com.ivianuu.essentials.ui.material.Switch
         checked = checked,
         onCheckedChange = null
       )
-    },
-    onClick = { onCheckedChange(!checked) }
+    }
   )
 }

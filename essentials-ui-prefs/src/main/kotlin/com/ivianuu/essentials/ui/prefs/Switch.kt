@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.prefs
 
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.material.ListItem
@@ -30,7 +31,7 @@ import com.ivianuu.essentials.ui.material.Switch
   modifier: Modifier = Modifier
 ) {
   ListItem(
-    modifier = modifier,
+    modifier = modifier.clickable { onValueChange(!value) },
     title = title,
     subtitle = subtitle,
     leading = leading,
@@ -39,7 +40,6 @@ import com.ivianuu.essentials.ui.material.Switch
         checked = value,
         onCheckedChange = null
       )
-    },
-    onClick = { onValueChange(!value) }
+    }
   )
 }

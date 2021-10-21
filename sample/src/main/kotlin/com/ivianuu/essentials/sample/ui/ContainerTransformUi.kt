@@ -287,6 +287,11 @@ object ContainerTransformKey : Key<Unit>
   ) {
     val scope = rememberCoroutineScope()
     ListItem(
+      modifier = Modifier.clickable {
+        scope.launch {
+          navigator.push(ContainerTransformDetailsKey("list item $index"))
+        }
+      },
       leading = {
         Image(
           modifier = Modifier.size(40.dp),
@@ -294,12 +299,7 @@ object ContainerTransformKey : Key<Unit>
         )
       },
       title = { Text("List item $index") },
-      subtitle = { Text(Strings.Text) },
-      onClick = {
-        scope.launch {
-          navigator.push(ContainerTransformDetailsKey("list item $index"))
-        }
-      }
+      subtitle = { Text(Strings.Text) }
     )
   }
 }

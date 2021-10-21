@@ -158,8 +158,7 @@ object DialogsKey : Key<Unit>
                       Text(
                         "Item: $item"
                       )
-                    },
-                    onClick = {}
+                    }
                   )
                 }
               }

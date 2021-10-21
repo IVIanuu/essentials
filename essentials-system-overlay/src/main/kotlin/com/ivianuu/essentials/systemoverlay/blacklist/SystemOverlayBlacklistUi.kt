@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
@@ -40,13 +42,13 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openAppBlacklistSettings),
         title = {
           Text(
             R.string.es_pref_system_overlay_app_blacklist,
             model.systemOverlayName
           )
-        },
-        onClick = model.openAppBlacklistSettings
+        }
       )
     }
 

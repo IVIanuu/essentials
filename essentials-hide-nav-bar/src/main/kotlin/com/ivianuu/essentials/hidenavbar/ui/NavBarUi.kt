@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.hidenavbar.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ResourceProvider
@@ -57,10 +58,11 @@ object NavBarKey : Key<Unit>
     }
     item {
       ListItem(
+        modifier = Modifier
+          .clickable(onClick = model.updateNavBarRotationMode)
+          .interactive(model.canChangeNavBarRotationMode),
         title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
-        subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) },
-        modifier = Modifier.interactive(model.canChangeNavBarRotationMode),
-        onClick = model.updateNavBarRotationMode
+        subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) }
       )
     }
   }

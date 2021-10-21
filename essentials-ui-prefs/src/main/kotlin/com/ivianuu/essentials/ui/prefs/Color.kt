@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -36,7 +37,7 @@ import com.ivianuu.essentials.ui.material.ListItem
   modifier: Modifier = Modifier
 ) {
   ListItem(
-    modifier = modifier,
+    modifier = modifier.clickable(onClick = onValueChangeRequest),
     title = title,
     subtitle = subtitle,
     leading = leading,
@@ -50,7 +51,6 @@ import com.ivianuu.essentials.ui.material.ListItem
           color = MaterialTheme.colors.onSurface
         )
       ) {}
-    },
-    onClick = onValueChangeRequest
+    }
   )
 }

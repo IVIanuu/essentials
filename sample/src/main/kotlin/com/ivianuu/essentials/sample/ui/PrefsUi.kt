@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -130,25 +131,26 @@ object PrefsKey : Key<Unit>
     }
     item {
       ListItem(
-        modifier = Modifier.interactive(prefs.switch),
-        leading = { IconPlaceholder() },
-        title = { Text("Text input") },
-        subtitle = { Text("This is a text input preference") },
-        onClick = {
-          scope.launch {
-            val newTextInput = navigator.push(
-              TextInputKey(
-                initial = prefs.textInput,
-                label = "Input",
-                title = "Text input",
-                allowEmpty = false
-              )
-            ) ?: return@launch
+        modifier = Modifier
+          .clickable {
             scope.launch {
-              prefStore.updateData { copy(textInput = newTextInput) }
+              val newTextInput = navigator.push(
+                TextInputKey(
+                  initial = prefs.textInput,
+                  label = "Input",
+                  title = "Text input",
+                  allowEmpty = false
+                )
+              ) ?: return@launch
+              scope.launch {
+                prefStore.updateData { copy(textInput = newTextInput) }
+              }
             }
           }
-        }
+          .interactive(prefs.switch),
+        leading = { IconPlaceholder() },
+        title = { Text("Text input") },
+        subtitle = { Text("This is a text input preference") }
       )
     }
     item {
@@ -175,54 +177,56 @@ object PrefsKey : Key<Unit>
     }
     item {
       ListItem(
-        modifier = Modifier.interactive(prefs.switch),
-        leading = { IconPlaceholder() },
-        title = { Text("Multi select list") },
-        subtitle = { Text("This is a multi select list preference") },
-        onClick = {
-          scope.launch {
-            val newItems = navigator.push(
-              MultiChoiceListKey(
-                items = listOf(
-                  MultiChoiceListKey.Item("A", "A"),
-                  MultiChoiceListKey.Item("B", "B"),
-                  MultiChoiceListKey.Item("C", "C")
-                ),
-                selectedItems = prefs.multiChoice,
-                title = "Multi select list"
-              )
-            ) ?: return@launch
+        modifier = Modifier
+          .clickable {
             scope.launch {
-              prefStore.updateData { copy(multiChoice = newItems) }
+              val newItems = navigator.push(
+                MultiChoiceListKey(
+                  items = listOf(
+                    MultiChoiceListKey.Item("A", "A"),
+                    MultiChoiceListKey.Item("B", "B"),
+                    MultiChoiceListKey.Item("C", "C")
+                  ),
+                  selectedItems = prefs.multiChoice,
+                  title = "Multi select list"
+                )
+              ) ?: return@launch
+              scope.launch {
+                prefStore.updateData { copy(multiChoice = newItems) }
+              }
             }
           }
-        }
+          .interactive(prefs.switch),
+        leading = { IconPlaceholder() },
+        title = { Text("Multi select list") },
+        subtitle = { Text("This is a multi select list preference") }
       )
     }
     item {
       ListItem(
-        modifier = Modifier.interactive(prefs.switch),
-        leading = { IconPlaceholder() },
-        title = { Text("Single item list") },
-        subtitle = { Text("This is a single item list preference") },
-        onClick = {
-          scope.launch {
-            val newItem = navigator.push(
-              SingleChoiceListKey(
-                items = listOf(
-                  SingleChoiceListKey.Item("A", "A"),
-                  SingleChoiceListKey.Item("B", "B"),
-                  SingleChoiceListKey.Item("C", "C")
-                ),
-                selectedItem = prefs.singleChoice,
-                title = "Single item list"
-              )
-            ) ?: return@launch
+        modifier = Modifier
+          .clickable {
             scope.launch {
-              prefStore.updateData { copy(singleChoice = newItem) }
+              val newItem = navigator.push(
+                SingleChoiceListKey(
+                  items = listOf(
+                    SingleChoiceListKey.Item("A", "A"),
+                    SingleChoiceListKey.Item("B", "B"),
+                    SingleChoiceListKey.Item("C", "C")
+                  ),
+                  selectedItem = prefs.singleChoice,
+                  title = "Single item list"
+                )
+              ) ?: return@launch
+              scope.launch {
+                prefStore.updateData { copy(singleChoice = newItem) }
+              }
             }
           }
-        }
+          .interactive(prefs.switch),
+        leading = { IconPlaceholder() },
+        title = { Text("Single item list") },
+        subtitle = { Text("This is a single item list preference") }
       )
     }
   }

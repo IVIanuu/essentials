@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
@@ -56,26 +58,26 @@ data class WriteSecureSettingsKey(
     }
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.openPcInstructions),
         title = { Text(R.string.es_use_pc) },
         subtitle = { Text(R.string.es_use_pc_summary) },
         trailing = {
           Button(onClick = model.openPcInstructions) {
             Text(R.string.es_grant)
           }
-        },
-        onClick = model.openPcInstructions
+        }
       )
     }
     item {
       ListItem(
+        modifier = Modifier.clickable(onClick = model.grantPermissionsViaRoot),
         title = { Text(R.string.es_use_root) },
         subtitle = { Text(R.string.es_use_root_summary) },
         trailing = {
           Button(onClick = model.grantPermissionsViaRoot) {
             Text(R.string.es_grant)
           }
-        },
-        onClick = model.grantPermissionsViaRoot
+        }
       )
     }
   }

@@ -21,6 +21,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -113,9 +114,9 @@ object NotificationsKey : Key<Unit>
     },
     successItemContent = { notification ->
       ListItem(
+        modifier = Modifier.clickable { onNotificationClick(notification) },
         title = { Text(notification.title) },
         subtitle = { Text(notification.text) },
-        onClick = { onNotificationClick(notification) },
         leading = {
           Box(
             modifier = Modifier.size(40.dp)
