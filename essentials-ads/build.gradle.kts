@@ -26,6 +26,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(Deps.Firebase.ads)
+  api(project(":essentials-android"))
   api(project(":essentials-ui"))
 }
 
