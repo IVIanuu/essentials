@@ -23,7 +23,13 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
 
-typealias ListDecorator = LazyListScope.(LazyListScope.() -> Unit) -> Unit
+typealias ListDecorator = ListDecoratorScope.() -> Unit
+
+interface ListDecoratorScope : LazyListScope {
+  val isVertical: Boolean
+
+  fun content()
+}
 
 @Provide fun <@Spread T : ListDecorator> listDecoratorElement(
   instance: T,
@@ -77,12 +83,7 @@ val LocalListDecorators = staticCompositionLocalOf<List<ListDecoratorElement>> {
     horizontalAlignment = horizontalAlignment,
     flingBehavior = flingBehavior
   ) {
-    decorators
-      .reversed()
-      .fold(content) { acc, element ->
-        { element.decorator(this, acc) }
-      }
-      .invoke(this)
+    decoratedContent(true, decorators, content)
   }
 }
 
@@ -108,11 +109,27 @@ val LocalListDecorators = staticCompositionLocalOf<List<ListDecoratorElement>> {
     verticalAlignment = verticalAlignment,
     flingBehavior = flingBehavior
   ) {
-    decorators
-      .reversed()
-      .fold(content) { acc, element ->
-        { element.decorator(this, acc) }
-      }
-      .invoke(this)
+    decoratedContent(false, decorators, content)
   }
+}
+
+private fun LazyListScope.decoratedContent(
+  isVertical: Boolean,
+  decorators: List<ListDecoratorElement>,
+  content: LazyListScope.() -> Unit
+) {
+  val scope = object : ListDecoratorScope, LazyListScope by this {
+    override val isVertical: Boolean
+      get() = isVertical
+
+    override fun content() {
+      content.invoke(this)
+    }
+  }
+  decorators
+    .reversed()
+    .fold(content) { acc, element ->
+      { element.decorator(scope) }
+    }
+    .invoke(this)
 }

@@ -2,7 +2,9 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
-import com.ivianuu.essentials.ads.KeyUiBannerConfig
+import com.google.android.gms.ads.AdSize
+import com.ivianuu.essentials.ads.KeyUiAdBannerConfig
+import com.ivianuu.essentials.ads.ListAdBannerConfig
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -29,7 +31,14 @@ object AdsKey : Key<Unit>
   }
 }
 
-@Provide val adBannerConfig = KeyUiBannerConfig(id = "ca-app-pub-3940256099942544/6300978111")
+@Provide val keyUiAdBannerConfig = KeyUiAdBannerConfig(
+  id = "ca-app-pub-3940256099942544/6300978111",
+  size = AdSize.LARGE_BANNER
+)
+@Provide val listAdBannerConfig = ListAdBannerConfig(
+  id = "ca-app-pub-3940256099942544/6300978111",
+  size = AdSize.LARGE_BANNER
+)
 
 @Provide val showAdsState: @Scoped<UiComponent> MutableStateFlow<ShowAds>
   get() = MutableStateFlow(false)
