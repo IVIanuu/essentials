@@ -118,18 +118,21 @@ private fun LazyListScope.decoratedContent(
   decorators: List<ListDecoratorElement>,
   content: LazyListScope.() -> Unit
 ) {
-  val scope = object : ListDecoratorScope, LazyListScope by this {
-    override val isVertical: Boolean
-      get() = isVertical
-
-    override fun content() {
-      content.invoke(this)
-    }
-  }
   decorators
     .reversed()
     .fold(content) { acc, element ->
-      { element.decorator(scope) }
+      {
+        element.decorator(
+          object : ListDecoratorScope, LazyListScope by this {
+            override val isVertical: Boolean
+              get() = isVertical
+
+            override fun content() {
+              acc()
+            }
+          }
+        )
+      }
     }
     .invoke(this)
 }
