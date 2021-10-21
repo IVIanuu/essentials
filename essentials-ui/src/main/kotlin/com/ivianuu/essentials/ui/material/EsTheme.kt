@@ -39,6 +39,30 @@ import com.ivianuu.essentials.ui.animation.transition.StackTransition
 }
 
 val EsTypography = Typography(
+  h1 = TextStyle(
+    fontSize = 57.sp,
+    lineHeight = 64.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = (-0.2).sp
+  ),
+  h2 = TextStyle(
+    fontSize = 45.sp,
+    lineHeight = 52.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = 0.0.sp
+  ),
+  h3 = TextStyle(
+    fontSize = 45.sp,
+    lineHeight = 52.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = 0.0.sp
+  ),
+  h5 = TextStyle(
+    fontSize = 28.sp,
+    lineHeight = 32.sp,
+    fontWeight = FontWeight.Normal,
+    letterSpacing = 0.0.sp
+  ),
   h6 = TextStyle(
     fontSize = 22.sp,
     lineHeight = 28.sp,
