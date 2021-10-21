@@ -13,33 +13,49 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
 
+@Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey }
+
+object DecoratorsKey : Key<Unit>
+
+@Provide val decoratorsUi: KeyUi<DecoratorsKey> = {
+  SimpleListScreen("Decorators") {
+    (1..10).forEach { itemIndex ->
+      item {
+        ListItem(title = { Text("Item $itemIndex") })
+      }
+    }
+  }
+}
+
 @Provide val sampleListDecorator: ListDecorator = { content ->
   item {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
-    Text(
-      "Sample decorator before content $key"
-    )
+    if (key is DecoratorsKey)
+      Text("Sample decorator before content $key")
   }
 
   content()
 
   item {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
-    Text(
-      "Sample decorator after content $key"
-    )
+    if (key is DecoratorsKey)
+      Text("Sample decorator before content $key")
   }
 }
 
-@Provide val sampleKeyUiDecorator: KeyUiDecorator = decorator@ { content ->
+@Provide val sampleKeyUiDecorator: KeyUiDecorator = decorator@{ content ->
   val key = LocalKeyUiComponent.current.key
-  if (key !is TabsKey) {
+  if (key !is DecoratorsKey) {
     content()
     return@decorator
   } else {
@@ -52,7 +68,7 @@ import com.ivianuu.injekt.Provide
         )
       }
 
-      Surface(color = MaterialTheme.colors.primary,elevation = 8.dp) {
+      Surface(color = MaterialTheme.colors.primary, elevation = 8.dp) {
         InsetsPadding(top = false) {
           Box(
             modifier = Modifier.fillMaxWidth(),
