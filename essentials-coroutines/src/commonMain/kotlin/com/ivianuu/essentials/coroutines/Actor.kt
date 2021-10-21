@@ -19,6 +19,7 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ChannelResult
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-interface Actor<T> {
+interface Actor<T> : CoroutineScope {
   suspend fun act(message: T)
 
   fun tryAct(message: T): ChannelResult<Unit>
@@ -42,12 +43,15 @@ fun <T> CoroutineScope.actor(
 interface ActorScope<T> : CoroutineScope, ReceiveChannel<T>
 
 private class ActorImpl<T>(
-  override val coroutineContext: CoroutineContext,
+  coroutineContext: CoroutineContext,
   capacity: Int,
   start: CoroutineStart,
   block: suspend ActorScope<T>.() -> Unit,
   private val mailbox: Channel<T> = Channel(capacity = capacity)
 ) : Actor<T>, ActorScope<T>, ReceiveChannel<T> by mailbox, CoroutineScope {
+  override val coroutineContext: CoroutineContext =
+    coroutineContext + coroutineContext[Job]!!.childJob()
+
   private val job = launch(start = start) { block() }
 
   override suspend fun act(message: T) {
