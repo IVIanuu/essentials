@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
+  id("com.ivianuu.essentials.compose")
   kotlin("android")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(Deps.Firebase.crashlytics)
-  testImplementation(project(":essentials-test"))
-  testImplementation(project(":essentials-android-test"))
+  api(Deps.Firebase.ads)
+  api(project(":essentials-ui"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

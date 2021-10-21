@@ -16,4 +16,6 @@
 
 <resources>
     <string name="app_name">Essentials sample</string>
+
+    <string name="app_ad_id">ca-app-pub-9158627376176162~8119782228</string>
 </resources>

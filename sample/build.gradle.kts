@@ -49,6 +49,7 @@ dependencies {
   implementation(project(":essentials-android-settings"))
   implementation(project(":essentials-about"))
   implementation(project(":essentials-accessibility"))
+  implementation(project(":essentials-ads"))
   implementation(project(":essentials-apps"))
   implementation(project(":essentials-apps-shortcuts"))
   implementation(project(":essentials-apps-ui"))

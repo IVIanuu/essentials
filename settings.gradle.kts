@@ -1,6 +1,7 @@
 include(
     ":essentials-about",
     ":essentials-accessibility",
+    ":essentials-ads",
     ":essentials-analytics",
     ":essentials-android",
     ":essentials-android-core",

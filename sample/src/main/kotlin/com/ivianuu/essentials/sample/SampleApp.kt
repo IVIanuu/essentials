@@ -25,6 +25,7 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.*",
   "com.ivianuu.essentials.about.*",
   "com.ivianuu.essentials.accessibility.*",
+  "com.ivianuu.essentials.ads.*",
   "com.ivianuu.essentials.android.prefs.*",
   "com.ivianuu.essentials.android.settings.*",
   "com.ivianuu.essentials.app.*",

@@ -99,7 +99,11 @@ object Deps {
   const val essentialsGradlePlugin =
     "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev997"
 
-  const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
+  object Firebase {
+    const val ads = "com.google.firebase:firebase-ads:18.3.0"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
+    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
+  }
 
   object Injekt {
     private const val version = "0.0.1-dev625"
