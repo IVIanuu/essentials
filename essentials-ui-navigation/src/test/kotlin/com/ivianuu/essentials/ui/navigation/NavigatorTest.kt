@@ -32,7 +32,7 @@ class NavigatorTest {
 
   @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      keyHandlers = emptySet(),
+      keyHandlers = emptyList(),
       logger = NoopLogger,
       scope = this
     )
@@ -44,6 +44,8 @@ class NavigatorTest {
     launch { navigator.push(KeyB) }
     launch { navigator.replaceTop(KeyC) }
     navigator.popTop()
+    launch { navigator.push(KeyB) }
+    launch { navigator.setRoot(KeyA) }
 
     collector.values.shouldContainExactly(
       listOf(),
@@ -51,7 +53,9 @@ class NavigatorTest {
       listOf(),
       listOf(KeyB),
       listOf(KeyC),
-      listOf()
+      emptyList(),
+      listOf(KeyB),
+      listOf(KeyA)
     )
   }
 
@@ -59,7 +63,7 @@ class NavigatorTest {
 
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      keyHandlers = emptySet(),
+      keyHandlers = emptyList(),
       logger = NoopLogger,
       scope = this
     )
@@ -70,7 +74,7 @@ class NavigatorTest {
 
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
-      keyHandlers = emptySet(),
+      keyHandlers = emptyList(),
       logger = NoopLogger,
       scope = this
     )

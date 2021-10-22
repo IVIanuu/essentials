@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.logging.Logger
@@ -32,6 +33,8 @@ import kotlinx.coroutines.flow.first
 
 interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
+
+  suspend fun <R> setRoot(key: Key<R>): R?
 
   suspend fun <R> push(key: Key<R>): R?
 
@@ -51,9 +54,28 @@ interface Navigator {
   private val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> get() = _backStack
 
-  private val results = mutableMapOf<Key<*>, CompletableDeferred<out Any?>>()
+  private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
 
   private val actor = scope.actor()
+
+  override suspend fun <R> setRoot(key: Key<R>): R? {
+    val result = CompletableDeferred<R?>()
+
+    actor.act {
+      log { "set root $key" }
+
+      results.forEach { it.value.complete(null) }
+      results.clear()
+
+      @Suppress("UNCHECKED_CAST")
+      if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
+        updateBackStack { listOf(key) }
+        results[key] = result.cast()
+      }
+    }
+
+    return result.await()
+  }
 
   override suspend fun <R> push(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()
@@ -67,7 +89,7 @@ interface Navigator {
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
         updateBackStack { filter { it != key } + key }
-        results[key] = result
+        results[key] = result.cast()
       }
     }
 
@@ -93,7 +115,7 @@ interface Navigator {
           filter { it != key }
             .dropLast(1) + key
         }
-        results[key] = result
+        results[key] = result.cast()
       }
     }
 
