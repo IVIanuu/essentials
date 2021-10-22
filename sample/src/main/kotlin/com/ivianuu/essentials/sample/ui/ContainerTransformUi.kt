@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ComponentStorage
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.scoped
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.animation.transition.ContainerTransformSurface
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.ListItem
@@ -56,6 +55,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
@@ -66,7 +66,7 @@ object ContainerTransformKey : Key<Unit>
 
 @Provide fun containerTransformUi(
   navigator: Navigator,
-  storage: ComponentStorage<UiComponent>
+  storage: ComponentStorage<KeyUiComponent>
 ): KeyUi<ContainerTransformKey> = {
   var listInfo by storage.scoped("list_state") { mutableStateOf(0 to 0) }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = true) {

@@ -63,6 +63,7 @@ dependencies {
   implementation(project(":essentials-license"))
   implementation(project(":essentials-notification-listener"))
   implementation(project(":essentials-permission"))
+  implementation(project(":essentials-premium"))
   implementation(project(":essentials-process-restart"))
   implementation(project(":essentials-rate"))
   implementation(project(":essentials-rubik"))

@@ -31,10 +31,10 @@ import org.json.JSONObject
 @Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
 
 @Provide val sampleDonations = setOf(
-  Donation(Sku("crossaint"), R.drawable.es_ic_bakery_dining),
-  Donation(Sku("coffee"), R.drawable.es_ic_free_breakfast),
-  Donation(Sku("burger_menu"), R.drawable.es_ic_lunch_dining),
-  Donation(Sku("movie"), R.drawable.es_ic_popcorn)
+  Donation(Sku("crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),
+  Donation(Sku("coffee", Sku.Type.IN_APP), R.drawable.es_ic_free_breakfast),
+  Donation(Sku("burger_menu", Sku.Type.IN_APP), R.drawable.es_ic_lunch_dining),
+  Donation(Sku("movie", Sku.Type.IN_APP), R.drawable.es_ic_popcorn)
 )
 
 @Provide val sampleGetSkuDetailsUseCase: GetSkuDetailsUseCase = {

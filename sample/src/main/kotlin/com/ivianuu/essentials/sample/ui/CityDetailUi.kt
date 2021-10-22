@@ -19,6 +19,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,7 +54,7 @@ import kotlin.time.milliseconds
 data class CityDetailKey(val city: City) : Key<Unit>
 
 @Provide fun cityDetailUi(key: CityDetailKey): KeyUi<CityDetailKey> = {
-  VerticalList {
+  VerticalList(contentPadding = PaddingValues(0.dp)) {
     item {
       TopAppBar(
         title = { Text(key.city.name) },

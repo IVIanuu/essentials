@@ -40,6 +40,7 @@ include(
     ":essentials-notification-listener",
     ":essentials-optics",
     ":essentials-permission",
+    ":essentials-premium",
     ":essentials-process-restart",
     ":essentials-rate",
     ":essentials-recent-apps",

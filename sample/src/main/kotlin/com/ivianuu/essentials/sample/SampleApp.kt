@@ -69,6 +69,7 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.permission.ui.*",
   "com.ivianuu.essentials.permission.writesecuresettings.*",
   "com.ivianuu.essentials.permission.writesettings.*",
+  //"com.ivianuu.essentials.premium.*",
   "com.ivianuu.essentials.processrestart.*",
   "com.ivianuu.essentials.rate.data.*",
   "com.ivianuu.essentials.rate.domain.*",

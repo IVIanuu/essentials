@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.items
@@ -47,7 +48,7 @@ object DynamicSystemBarsKey : Key<Unit>
         .flatMap { it.colors }
         .shuffled()
     }
-    VerticalList {
+    VerticalList(contentPadding = PaddingValues(0.dp)) {
       items(colors) { color ->
         Box(
           modifier = Modifier

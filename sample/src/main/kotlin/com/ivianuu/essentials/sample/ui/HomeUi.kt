@@ -147,4 +147,4 @@ import kotlinx.coroutines.launch
   }
 }
 
-data class HomeItem(val title: String, val keyFactory: (Color) -> Key<Unit>)
+data class HomeItem(val title: String, val keyFactory: (Color) -> Key<*>)

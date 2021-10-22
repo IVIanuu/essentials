@@ -29,7 +29,7 @@ typealias AdBannerKeyUiBlacklistEntry<T> = KClass<T>
 ): AdBannerKeyUiBlacklistEntry<T> = clazz
 
 @Provide fun adBannerKeyUiDecorator(
-  keyBlacklist: List<AdBannerKeyUiBlacklistEntry<*>>,
+  keyBlacklist: List<AdBannerKeyUiBlacklistEntry<*>> = emptyList(),
   config: KeyUiAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
 ): AdBannerKeyUiDecorator = decorator@ { content ->
