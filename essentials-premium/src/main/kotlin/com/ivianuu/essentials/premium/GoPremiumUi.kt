@@ -41,9 +41,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.ads.AdBannerKeyUiBlacklistEntry
 import com.ivianuu.essentials.ads.FullScreenAd
-import com.ivianuu.essentials.ads.ScreenLaunchFullScreenAdBlacklistEntry
+import com.ivianuu.essentials.ads.ScreenAdBlacklist
+import com.ivianuu.essentials.ads.ScreenLaunchFullscreenAdBlacklist
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
@@ -63,6 +63,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 data class AppFeature(
   val title: String,
@@ -73,11 +74,12 @@ data class AppFeature(
 
 @Provide data class GoPremiumKey(val showTryBasicOption: Boolean) : Key<Boolean>
 
-@Provide val goPremiumAdBannerKeyUiBlacklistEntry: AdBannerKeyUiBlacklistEntry<GoPremiumKey>
+@Provide val goPremiumScreenAdBannerBlacklistEntry: @ScreenAdBlacklist KClass<*>
   get() = GoPremiumKey::class
 
-@Provide val goPremiumScreenLaunchFullScreenAdBlacklistEntry:
-    ScreenLaunchFullScreenAdBlacklistEntry<GoPremiumKey> get() = GoPremiumKey::class
+@Provide
+val goPremiumScreenLaunchFullScreenAdBlacklistEntry: @ScreenLaunchFullscreenAdBlacklist KClass<*>
+  get() = GoPremiumKey::class
 
 @Provide fun goPremiumUi(model: GoPremiumModel): KeyUi<GoPremiumKey> = {
   Surface {

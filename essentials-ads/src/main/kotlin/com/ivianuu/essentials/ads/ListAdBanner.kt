@@ -7,20 +7,21 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
 
 typealias ListAdBannerConfig = AdBannerConfig
 
-typealias AdBannerListDecorator = ListDecorator
+typealias ListAdBannerListDecorator = ListDecorator
 
-typealias AdBannerListDecoratorBlacklistEntry<T> = KClass<T>
+@Tag annotation class ListAdBannerBlacklist
 
 @Provide fun adBannerListDecorators(
-  blacklist: List<AdBannerListDecoratorBlacklistEntry<*>> = emptyList(),
+  blacklist: List<@ListAdBannerBlacklist KClass<*>> = emptyList(),
   config: ListAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
-): AdBannerListDecorator = decorator@ {
+): ListAdBannerListDecorator = decorator@ {
   if (config != null && isVertical) {
     item(null) {
       val key = catch { LocalKeyUiComponent.current.key::class }.getOrNull()

@@ -7,20 +7,21 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlin.reflect.KClass
 
-typealias ScreenLaunchFullScreenAdBlacklistEntry<T> = KClass<T>
-
 @Provide data class ScreenLaunchFullscreenAdConfig(
   val screenLaunchToShowAdCount: Int = Int.MAX_VALUE
 )
 
+@Tag annotation class ScreenLaunchFullscreenAdBlacklist
+
 @Provide fun screenLaunchFullScreenObserver(
-  blacklist: List<ScreenLaunchFullScreenAdBlacklistEntry<*>> = emptyList(),
+  blacklist: List<@ScreenLaunchFullscreenAdBlacklist KClass<*>> = emptyList(),
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   logger: Logger,
@@ -44,7 +45,7 @@ typealias ScreenLaunchFullScreenAdBlacklistEntry<T> = KClass<T>
     }
 }
 
-private fun Navigator.launchEvents(blacklist: List<ScreenLaunchFullScreenAdBlacklistEntry<*>>): Flow<Unit> {
+private fun Navigator.launchEvents(blacklist: List<@ScreenLaunchFullscreenAdBlacklist KClass<*>>): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->

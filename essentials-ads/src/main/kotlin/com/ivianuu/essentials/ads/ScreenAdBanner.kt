@@ -15,24 +15,25 @@ import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
 
-typealias KeyUiAdBannerConfig = AdBannerConfig
+typealias ScreenAdBannerConfig = AdBannerConfig
 
-typealias AdBannerKeyUiDecorator = KeyUiDecorator
+typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
 
-typealias AdBannerKeyUiBlacklistEntry<T> = KClass<T>
+@Tag annotation class ScreenAdBlacklist
 
-@Provide fun <@Spread T : DialogKey<*>> dialogAdBannerKeyUiBlacklistEntry(
+@Provide fun <@Spread T : DialogKey<*>> dialogScreenAdBannerBlacklistEntry(
   clazz: KClass<T>
-): AdBannerKeyUiBlacklistEntry<T> = clazz
+): @ScreenAdBlacklist KClass<*> = clazz
 
 @Provide fun adBannerKeyUiDecorator(
-  keyBlacklist: List<AdBannerKeyUiBlacklistEntry<*>> = emptyList(),
-  config: KeyUiAdBannerConfig? = null,
+  keyBlacklist: List<@ScreenAdBlacklist KClass<*>> = emptyList(),
+  config: ScreenAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
-): AdBannerKeyUiDecorator = decorator@ { content ->
+): ScreenAdBannerKeyUiDecorator = decorator@ { content ->
   if (config == null) {
     content()
     return@decorator
