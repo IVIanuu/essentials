@@ -43,6 +43,8 @@ interface Navigator {
   suspend fun <R> pop(key: Key<R>, result: R? = null)
 
   suspend fun popTop()
+
+  suspend fun clear()
 }
 
 @Provide @Scoped<AppComponent> class NavigatorImpl(
@@ -134,6 +136,15 @@ interface Navigator {
       val topKey = backStack.first().last()
       log { "pop top $topKey" }
       popKey(topKey, null)
+    }
+  }
+
+  override suspend fun clear() {
+    actor.act {
+      log { "clear" }
+      results.forEach { it.value.complete(null) }
+      results.clear()
+      _backStack.value = emptyList()
     }
   }
 

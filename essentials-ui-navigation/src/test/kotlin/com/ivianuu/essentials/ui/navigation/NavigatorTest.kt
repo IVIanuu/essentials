@@ -46,6 +46,7 @@ class NavigatorTest {
     navigator.popTop()
     launch { navigator.push(KeyB) }
     launch { navigator.setRoot(KeyA) }
+    navigator.clear()
 
     collector.values.shouldContainExactly(
       listOf(),
@@ -53,9 +54,10 @@ class NavigatorTest {
       listOf(),
       listOf(KeyB),
       listOf(KeyC),
-      emptyList(),
+      listOf(),
       listOf(KeyB),
-      listOf(KeyA)
+      listOf(KeyA),
+      listOf()
     )
   }
 
