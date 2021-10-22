@@ -5,12 +5,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.google.android.gms.ads.AdSize
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.FullScreenAd
 import com.ivianuu.essentials.ads.FullScreenAdId
 import com.ivianuu.essentials.ads.KeyUiAdBannerConfig
 import com.ivianuu.essentials.ads.ListAdBannerConfig
 import com.ivianuu.essentials.ads.ScreenLaunchFullscreenAdConfig
 import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
@@ -47,16 +50,19 @@ object AdsKey : Key<Unit>
   }
 }
 
-@Provide val keyUiAdBannerConfig = KeyUiAdBannerConfig(
-  id = "ca-app-pub-3940256099942544/6300978111",
+@Provide fun keyUiAdBannerConfig(rp: ResourceProvider): KeyUiAdBannerConfig = KeyUiAdBannerConfig(
+  id = loadResource(R.string.es_test_ad_unit_id_banner),
   size = AdSize.LARGE_BANNER
 )
-@Provide val listAdBannerConfig = ListAdBannerConfig(
-  id = "ca-app-pub-3940256099942544/6300978111",
+@Provide fun listAdBannerConfig(rp: ResourceProvider): ListAdBannerConfig = ListAdBannerConfig(
+  id = loadResource(R.string.es_test_ad_unit_id_banner),
   size = AdSize.LARGE_BANNER
 )
-@Provide val fullScreenAdId: FullScreenAdId = "ca-app-pub-3940256099942544/1033173712"
-@Provide val screenLaunchAdConfig = ScreenLaunchFullscreenAdConfig(4)
+@Provide fun fullScreenAdId(rp: ResourceProvider): FullScreenAdId =
+  loadResource<String>(R.string.es_test_ad_unit_id_interstitial)
+
+@Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
+  get() = ScreenLaunchFullscreenAdConfig(4)
 
 @Provide val showAdsState: @Scoped<UiComponent> MutableStateFlow<ShowAds>
   get() = MutableStateFlow(false)

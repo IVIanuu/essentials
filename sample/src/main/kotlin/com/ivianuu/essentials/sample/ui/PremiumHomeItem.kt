@@ -16,7 +16,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
-/*@Provide val premiumHomeItem = HomeItem("Premium") { GoPremiumKey }
+import androidx.compose.material.Icon
+import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.premium.AppFeature
+import com.ivianuu.essentials.premium.GoPremiumKey
+import com.ivianuu.essentials.premium.PremiumVersionSku
+import com.ivianuu.essentials.sample.R
+import com.ivianuu.injekt.Provide
+
+@Provide val premiumHomeItem = HomeItem("Premium") { GoPremiumKey(true) }
+
+@Provide val premiumVersionSku: PremiumVersionSku = PremiumVersionSku(
+  "id",
+  Sku.Type.IN_APP
+)
 
 @Provide val premiumFeature = listOf(
   AppFeature(
@@ -44,4 +57,3 @@ package com.ivianuu.essentials.sample.ui
     inBasic = true
   )
 )
-*/

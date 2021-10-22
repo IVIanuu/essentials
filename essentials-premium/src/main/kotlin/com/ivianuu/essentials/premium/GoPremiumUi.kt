@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ads.AdBannerKeyUiBlacklistEntry
+import com.ivianuu.essentials.ads.FullScreenAd
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
@@ -269,26 +270,29 @@ data class AppFeature(
 
 @Provide class GoPremiumModel(
   val features: List<AppFeature>,
+  private val fullScreenAd: FullScreenAd,
   private val key: GoPremiumKey,
   private val navigator: Navigator,
   private val premiumVersionManager: PremiumVersionManager,
   private val scope: ComponentScope<KeyUiComponent>
 ) {
-  val premiumSkuDetails: Flow<Resource<SkuDetails>>
-    get() = premiumVersionManager.premiumSkuDetails
-      .flowAsResource()
+  val premiumSkuDetails: Flow<Resource<SkuDetails>> = premiumVersionManager.premiumSkuDetails
+    .flowAsResource()
 
   val showTryBasicOption: Boolean
     get() = key.showTryBasicOption
 
   fun goPremium() {
     scope.launch {
-      premiumVersionManager.purchasePremiumVersion()
+      if (premiumVersionManager.purchasePremiumVersion()) {
+        navigator.pop(key, true)
+      }
     }
   }
 
   fun tryBasicVersion() {
     scope.launch {
+      fullScreenAd.loadAndShow()
       navigator.pop(key, false)
     }
   }

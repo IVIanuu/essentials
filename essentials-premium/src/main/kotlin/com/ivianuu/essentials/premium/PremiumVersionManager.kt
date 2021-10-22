@@ -17,6 +17,8 @@
 package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.IsPurchased
 import com.ivianuu.essentials.billing.PurchaseUseCase
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 
 typealias PremiumVersionSku = Sku
@@ -37,11 +40,12 @@ typealias PremiumVersionSku = Sku
 typealias OldPremiumVersionSku = Sku
 
 @Provide @Scoped<AppComponent> class PremiumVersionManager(
+  private val consumePurchase: ConsumePurchaseUseCase,
   private val getSkuDetails: GetSkuDetailsUseCase,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku> = emptyList(),
   isPurchased: (Sku) -> Flow<IsPurchased>,
-  private val purchaseUseCase: PurchaseUseCase,
+  private val purchase: PurchaseUseCase,
   scope: ComponentScope<AppComponent>
 ) {
   val premiumSkuDetails: Flow<SkuDetails>
@@ -55,7 +59,10 @@ typealias OldPremiumVersionSku = Sku
   ) { a, b -> a || b }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
-  suspend fun purchasePremiumVersion() {
-    purchaseUseCase(premiumVersionSku, true, true)
-  }
+  suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
+
+  suspend fun consumePremiumVersion() = consumePurchase(premiumVersionSku)
 }
+
+@Provide fun showAdsState(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
+  premiumVersionManager.isPremiumVersion.map { !it }
