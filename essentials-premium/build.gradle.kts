@@ -29,6 +29,7 @@ dependencies {
     api(project(":essentials-android-util"))
     api(project(":essentials-billing"))
     api(project(":essentials-broadcast"))
+    api(project(":essentials-unlock"))
     api(project(":essentials-ui"))
 }
 

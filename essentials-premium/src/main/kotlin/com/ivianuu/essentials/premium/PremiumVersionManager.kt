@@ -23,6 +23,9 @@ import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.IsPurchased
 import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
@@ -30,23 +33,28 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 
 typealias PremiumVersionSku = Sku
 
 typealias OldPremiumVersionSku = Sku
 
 @Provide @Scoped<AppComponent> class PremiumVersionManager(
+  private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val getSkuDetails: GetSkuDetailsUseCase,
+  private val navigator: Navigator,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku> = emptyList(),
   isPurchased: (Sku) -> Flow<IsPurchased>,
+  private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
-  scope: ComponentScope<AppComponent>
+  private val scope: ComponentScope<AppComponent>
 ) {
   val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
@@ -62,6 +70,18 @@ typealias OldPremiumVersionSku = Sku
   suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
 
   suspend fun consumePremiumVersion() = consumePurchase(premiumVersionSku)
+
+  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
+    if (isPremiumVersion.first()) return block()
+
+    scope.launch {
+      if (!screenUnlocker()) return@launch
+      appUiStarter()
+      navigator.setRoot(GoPremiumKey(showTryBasicOption = false))
+    }
+
+    return null
+  }
 }
 
 @Provide fun showAdsState(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
