@@ -18,6 +18,7 @@ package com.ivianuu.essentials.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +40,10 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
+    onBackPressedDispatcher.addCallback(this) {
+      finish()
+    }
+
     val uiComponent = entryPoint<UiComponentFactory>(activityComponent).uiComponent()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { uiComponent.dispose() }
@@ -53,6 +58,10 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
         }
       }
     }
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
   }
 }
 
