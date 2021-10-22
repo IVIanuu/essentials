@@ -16,12 +16,12 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import android.content.Intent
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
@@ -39,6 +39,7 @@ import kotlinx.coroutines.withContext
 typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
 @Provide fun executeActionUseCase(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   dispatcher: DefaultDispatcher,
   logger: Logger,
@@ -76,7 +77,7 @@ typealias ExecuteActionUseCase = suspend (String) -> Result<Boolean, Throwable>
 
       // close system dialogs
       if (action.closeSystemDialogs)
-        context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+        closeSystemDialogs()
 
       log { "fire $key" }
 

@@ -18,7 +18,6 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.Intent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -48,6 +47,7 @@ import kotlinx.coroutines.flow.first
 )
 
 @Provide fun notificationsActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
   service: Flow<EsAccessibilityService?>
@@ -77,10 +77,11 @@ import kotlinx.coroutines.flow.first
   if (targetState)
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
   else
-    context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    closeSystemDialogs()
 }
 
-@Provide val notificationsActionAccessibilityConfig = AccessibilityConfig(
-  flags = AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT or
-      AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
-)
+@Provide val notificationsActionAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    flags = AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT or
+        AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+  )

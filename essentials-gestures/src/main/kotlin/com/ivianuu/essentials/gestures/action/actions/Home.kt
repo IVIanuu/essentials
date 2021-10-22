@@ -22,13 +22,11 @@ import android.os.Build
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
@@ -43,16 +41,14 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun homeActionExecutor(
   actionIntentSender: ActionIntentSender,
+  closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
 ): ActionExecutor<HomeActionId> = {
   if (!needsHomeIntentWorkaround) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
   } else {
-    catch {
-      val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-      context.sendBroadcast(intent)
-    }.onFailure { it.printStackTrace() }
+    closeSystemDialogs()
 
     actionIntentSender(
       Intent(Intent.ACTION_MAIN).apply {

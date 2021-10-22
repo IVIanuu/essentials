@@ -16,6 +16,8 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.accessibilityservice.AccessibilityService
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +28,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Result
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
 import com.ivianuu.essentials.gestures.R
@@ -98,5 +103,22 @@ typealias ActionIntentSender = (Intent, Boolean, Bundle?) -> Unit
   }.onFailure {
     it.printStackTrace()
     showToast(R.string.es_activity_not_found)
+  }
+}
+
+typealias CloseSystemDialogsUseCase = suspend () -> Result<Unit, Throwable>
+
+@SuppressLint("MissingPermission", "InlinedApi")
+@Provide
+fun closeSystemDialogsUseCase(
+  context: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
+  systemBuildInfo: SystemBuildInfo
+): CloseSystemDialogsUseCase = {
+  catch {
+    if (systemBuildInfo.sdk >= 31)
+      globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+    else
+      context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }
 }

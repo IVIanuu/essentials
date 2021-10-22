@@ -18,12 +18,13 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -47,12 +48,16 @@ import kotlinx.coroutines.flow.first
   icon = singleActionIcon(Icons.Default.Settings)
 )
 
-@Provide fun quickSettingsActionExecutor(
+@Provide
+@SuppressLint("NewApi")
+fun quickSettingsActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  service: Flow<EsAccessibilityService?>
+  service: Flow<EsAccessibilityService?>,
+  systemBuildInfo: SystemBuildInfo
 ): ActionExecutor<QuickSettingsActionId> = {
-  val targetState = catch {
+  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
     val service = service.first()!!
 
     val systemUiContext = context.createPackageContext(
@@ -78,10 +83,11 @@ import kotlinx.coroutines.flow.first
   if (targetState)
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
   else
-    context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+    closeSystemDialogs()
 }
 
-@Provide val quickSettingsActionAccessibilityConfig = AccessibilityConfig(
-  flags = AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT or
-      AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
-)
+@Provide val quickSettingsActionAccessibilityConfig: AccessibilityConfig
+  get() = AccessibilityConfig(
+    flags = AccessibilityServiceInfo.CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT or
+        AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
+  )
