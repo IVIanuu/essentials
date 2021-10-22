@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ads.AdBannerKeyUiBlacklistEntry
 import com.ivianuu.essentials.ads.FullScreenAd
+import com.ivianuu.essentials.ads.ScreenLaunchFullScreenAdBlacklistEntry
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
@@ -74,6 +75,9 @@ data class AppFeature(
 
 @Provide val goPremiumAdBannerKeyUiBlacklistEntry: AdBannerKeyUiBlacklistEntry<GoPremiumKey>
   get() = GoPremiumKey::class
+
+@Provide val goPremiumScreenLaunchFullScreenAdBlacklistEntry:
+    ScreenLaunchFullScreenAdBlacklistEntry<GoPremiumKey> get() = GoPremiumKey::class
 
 @Provide fun goPremiumUi(model: GoPremiumModel): KeyUi<GoPremiumKey> = {
   Surface {

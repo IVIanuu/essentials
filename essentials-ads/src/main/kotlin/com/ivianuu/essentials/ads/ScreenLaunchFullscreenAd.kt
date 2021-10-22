@@ -11,12 +11,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
+import kotlin.reflect.KClass
+
+typealias ScreenLaunchFullScreenAdBlacklistEntry<T> = KClass<T>
 
 @Provide data class ScreenLaunchFullscreenAdConfig(
   val screenLaunchToShowAdCount: Int = Int.MAX_VALUE
 )
 
 @Provide fun screenLaunchFullScreenObserver(
+  blacklist: List<ScreenLaunchFullScreenAdBlacklistEntry<*>> = emptyList(),
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   logger: Logger,
@@ -27,7 +31,7 @@ import kotlinx.coroutines.flow.mapNotNull
   showAds
     .flatMapLatest {
       if (!it) infiniteEmptyFlow()
-      else navigator.launchEvents()
+      else navigator.launchEvents(blacklist)
     }
     .collectLatest {
       launchCount++
@@ -40,11 +44,13 @@ import kotlinx.coroutines.flow.mapNotNull
     }
 }
 
-private fun Navigator.launchEvents(): Flow<Unit> {
+private fun Navigator.launchEvents(blacklist: List<ScreenLaunchFullScreenAdBlacklistEntry<*>>): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->
-      (if (currentBackStack.size > lastBackStack.size) Unit
+      val launchedKeys = currentBackStack
+        .filter { it !in lastBackStack && it::class !in blacklist }
+      (if (launchedKeys.isNotEmpty()) Unit
       else null)
         .also { lastBackStack = currentBackStack }
     }
