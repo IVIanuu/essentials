@@ -33,7 +33,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
@@ -62,10 +61,7 @@ object ActionsKey : Key<Unit>
 
           showToast("Execute action ${action.title}")
 
-          while (true) {
-            delay(2000)
-            executeAction(actionId)
-          }
+          executeAction(actionId)
         }
       }
     ) { Text("Pick action") }
