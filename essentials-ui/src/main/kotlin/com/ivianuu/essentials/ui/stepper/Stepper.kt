@@ -49,7 +49,7 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
       verticalAlignment = Alignment.CenterVertically
     ) {
       val backgroundColor = if (isCurrent || isCompleted) MaterialTheme.colors.secondary
-      else MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
+      else LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
       Box(
         modifier = Modifier
           .size(24.dp)

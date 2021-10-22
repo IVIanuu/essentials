@@ -20,7 +20,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,7 +48,7 @@ import com.ivianuu.essentials.ui.material.ListItem
         shape = CircleShape,
         border = BorderStroke(
           width = 1.dp,
-          color = MaterialTheme.colors.onSurface
+          color = LocalContentColor.current
         )
       ) {}
     }

@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
@@ -75,8 +76,7 @@ object RateKey : DialogKey<Unit>
           Text(
             textResId = R.string.es_rate_title,
             style = MaterialTheme.typography.h6,
-            color = MaterialTheme.colors.onSurface
-              .copy(alpha = ContentAlpha.high)
+            color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
           )
 
           Row(
@@ -94,8 +94,7 @@ object RateKey : DialogKey<Unit>
                   ) { model.updateRating(rating) },
                 painterResId = R.drawable.es_ic_star,
                 tint = if (rating <= model.rating) MaterialTheme.colors.secondary
-                else MaterialTheme.colors.onSurface
-                  .copy(alpha = 0.12f)
+                else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }
           }

@@ -49,6 +49,7 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.gestures.action.actions.*",
   "com.ivianuu.essentials.gestures.action.ui.*",
   "com.ivianuu.essentials.gestures.action.ui.picker.*",
+  "com.ivianuu.essentials.help.*",
   "com.ivianuu.essentials.hidenavbar.*",
   "com.ivianuu.essentials.hidenavbar.ui.*",
   "com.ivianuu.essentials.license.domain.*",

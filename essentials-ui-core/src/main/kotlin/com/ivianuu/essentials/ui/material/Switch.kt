@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.dp
   checked: Boolean,
   onCheckedChange: ((Boolean) -> Unit)?,
   checkedBackgroundColor: Color = MaterialTheme.colors.secondary,
-  uncheckedBackgroundColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
+  uncheckedBackgroundColor: Color = LocalContentColor.current.copy(alpha = 0.54f),
   checkedThumbColor: Color = Color.White.copy(alpha = 0.87f),
   uncheckedThumbColor: Color = guessingContentColorFor(uncheckedBackgroundColor).copy(alpha = 0.87f)
 ) {

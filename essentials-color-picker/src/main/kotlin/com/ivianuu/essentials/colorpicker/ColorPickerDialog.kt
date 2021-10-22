@@ -264,7 +264,7 @@ private sealed class ColorGridItem {
         .border(
           BorderStroke(
             width = 1.dp,
-            color = MaterialTheme.colors.onSurface
+            color = LocalContentColor.current
           ),
           shape
         )
