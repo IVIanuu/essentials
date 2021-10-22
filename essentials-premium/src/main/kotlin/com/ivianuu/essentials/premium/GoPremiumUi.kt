@@ -211,7 +211,7 @@ data class AppFeature(
           contentAlignment = Alignment.Center
         ) {
           Icon(
-            painterResId = if (feature.inPremium) R.drawable.es_ic_remove
+            painterResId = if (feature.inBasic) R.drawable.es_ic_remove
             else R.drawable.es_ic_done,
             tint = MaterialTheme.colors.primary
           )
