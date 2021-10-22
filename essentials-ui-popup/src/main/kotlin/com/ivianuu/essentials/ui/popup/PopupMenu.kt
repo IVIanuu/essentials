@@ -28,9 +28,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.entryPoint
@@ -46,7 +46,7 @@ object PopupMenu {
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
     Column {
-      val component = entryPoint<PopupMenuComponent>(LocalUiComponent.current)
+      val component = entryPoint<PopupMenuComponent>(LocalKeyUiComponent.current)
       val scope = rememberCoroutineScope()
       items.forEach { item ->
         key(item) {

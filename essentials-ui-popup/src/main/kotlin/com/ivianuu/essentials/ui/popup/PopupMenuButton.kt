@@ -39,7 +39,10 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
+import com.ivianuu.essentials.ui.LocalUiComponent
+import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.launch
 
@@ -68,7 +71,7 @@ import kotlinx.coroutines.launch
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = entryPoint<PopupMenuComponent>(LocalKeyUiComponent.current)
+  val component = entryPoint<PopupMenuButtonComponent>(LocalUiComponent.current)
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
@@ -89,4 +92,8 @@ import kotlinx.coroutines.launch
         )
       }
     }
+}
+
+@EntryPoint<UiComponent> interface PopupMenuButtonComponent {
+  val navigator: Navigator
 }
