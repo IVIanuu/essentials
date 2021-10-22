@@ -20,6 +20,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.injekt.Provide
@@ -37,7 +39,6 @@ import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
@@ -46,7 +47,8 @@ typealias NavigationStateContent = @Composable (Modifier) -> Unit
 @Provide fun navigationStateContent(
   appScope: ComponentScope<AppComponent>,
   navigator: Navigator,
-  keyUiComponentFactory: KeyUiComponentFactory
+  keyUiComponentFactory: KeyUiComponentFactory,
+  rootKey: RootKey? = null
 ): NavigationStateContent = { modifier ->
   val backStack by navigator.backStack.collectAsState()
 
@@ -65,14 +67,10 @@ typealias NavigationStateContent = @Composable (Modifier) -> Unit
     }
   }
 
-  DisposableEffect(true) {
-    onDispose {
-      appScope.launch {
-        navigator.backStack
-          .first()
-          .drop(1)
-          .forEach { navigator.pop(it) }
-      }
+  LaunchedEffect(true) {
+    onCancel {
+      if (rootKey != null) navigator.setRoot(rootKey)
+      else navigator.clear()
     }
   }
 
