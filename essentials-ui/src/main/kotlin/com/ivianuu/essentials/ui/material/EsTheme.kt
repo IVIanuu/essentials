@@ -75,6 +75,12 @@ val EsTypography = Typography(
     fontWeight = FontWeight.Medium,
     letterSpacing = 0.2.sp
   ),
+  subtitle2 = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 20.sp,
+    fontWeight = FontWeight.Medium,
+    letterSpacing = 0.1.sp
+  ),
   body2 = TextStyle(
     fontSize = 16.sp,
     lineHeight = 20.sp,

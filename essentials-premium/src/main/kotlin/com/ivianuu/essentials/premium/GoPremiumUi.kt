@@ -161,7 +161,7 @@ data class AppFeature(
           Text(
             text = it.title,
             maxLines = 1,
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.subtitle2
           )
         }
       }
@@ -194,7 +194,6 @@ data class AppFeature(
     }
 
     Column(
-      modifier = Modifier.padding(end = 16.dp),
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
