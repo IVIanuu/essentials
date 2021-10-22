@@ -7,21 +7,19 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
-import kotlin.reflect.KClass
+
+@Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 
 @Provide data class ScreenLaunchFullscreenAdConfig(
   val screenLaunchToShowAdCount: Int = Int.MAX_VALUE
 )
 
-@Tag annotation class ScreenLaunchFullscreenAdBlacklist
-
 @Provide fun screenLaunchFullScreenObserver(
-  blacklist: List<@ScreenLaunchFullscreenAdBlacklist KClass<*>> = emptyList(),
+  isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   logger: Logger,
@@ -32,7 +30,7 @@ import kotlin.reflect.KClass
   showAds
     .flatMapLatest {
       if (!it) infiniteEmptyFlow()
-      else navigator.launchEvents(blacklist)
+      else navigator.launchEvents(isFeatureEnabled)
     }
     .collectLatest {
       launchCount++
@@ -45,12 +43,15 @@ import kotlin.reflect.KClass
     }
 }
 
-private fun Navigator.launchEvents(blacklist: List<@ScreenLaunchFullscreenAdBlacklist KClass<*>>): Flow<Unit> {
+private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
-        .filter { it !in lastBackStack && it::class !in blacklist }
+        .filter {
+          it !in lastBackStack &&
+              isFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
+        }
       (if (launchedKeys.isNotEmpty()) Unit
       else null)
         .also { lastBackStack = currentBackStack }

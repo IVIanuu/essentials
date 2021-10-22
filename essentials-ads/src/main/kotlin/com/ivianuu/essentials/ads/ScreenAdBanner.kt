@@ -10,27 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.core.LocalInsets
-import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
-import kotlin.reflect.KClass
+
+@Provide object ScreenAdBannerFeature : AdFeature
 
 typealias ScreenAdBannerConfig = AdBannerConfig
 
 typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
 
-@Tag annotation class ScreenAdBlacklist
-
-@Provide fun <@Spread T : DialogKey<*>> dialogScreenAdBannerBlacklistEntry(
-  clazz: KClass<T>
-): @ScreenAdBlacklist KClass<*> = clazz
-
 @Provide fun adBannerKeyUiDecorator(
-  keyBlacklist: List<@ScreenAdBlacklist KClass<*>> = emptyList(),
+  isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
 ): ScreenAdBannerKeyUiDecorator = decorator@ { content ->
@@ -39,7 +31,7 @@ typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
     return@decorator
   }
 
-  if (LocalKeyUiComponent.current.key::class in keyBlacklist) {
+  if (!isFeatureEnabled(LocalKeyUiComponent.current.key::class, ScreenAdBannerFeature)) {
     content()
     return@decorator
   }
