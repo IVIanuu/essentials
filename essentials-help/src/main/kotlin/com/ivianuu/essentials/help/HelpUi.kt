@@ -128,7 +128,8 @@ data class HelpItem(
         painterResId = R.drawable.es_ic_expand_more,
         modifier = Modifier
           .size(24.dp)
-          .rotate(iconRotation)
+          .rotate(iconRotation),
+        tint = MaterialTheme.colors.primary
       )
     }
 
