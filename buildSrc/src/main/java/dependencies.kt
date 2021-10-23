@@ -53,16 +53,16 @@ object Versions {
     const val bintray = "1.8.4"
     const val constraintLayout = "2.0.0-beta1"
     const val coroutines = "1.3.0-M1"
-    const val director = "0.0.1-dev-35"
+    const val director = "6114355e"
     const val epoxy = "3.5.1"
-    const val epoxyPrefs = "0.0.1-dev-13"
+    const val epoxyPrefs = "b905534a"
     const val glide = "4.9.0"
-    const val injekt = "0.0.1-dev-59"
+    const val injekt = "7c8990ef"
     const val junit = "4.12"
-    const val kommon = "0.0.1-dev-12"
-    const val kotlin = "1.3.40-eap-67"
-    const val kPrefs = "0.0.1-dev-9"
-    const val kSettings = "0.0.1-dev-7"
+    const val kommon = "6452168d"
+    const val kotlin = "1.3.40"
+    const val kPrefs = "d1e77161"
+    const val kSettings = "c5bf12bb"
     const val mavenGradle = "2.1"
     const val materialComponents = "1.1.0-alpha06"
     const val materialDialogs = "2.0.3"
@@ -71,11 +71,11 @@ object Versions {
     const val rxAndroid = "2.1.0"
     const val rxJava = "2.2.8"
     const val rxKotlin = "2.3.0"
-    const val scopes = "0.0.1-dev-12"
+    const val scopes = "9aa8dce7"
     const val superUser = "1.0.0.+"
     const val timber = "4.7.1"
     const val timberKt = "1.5.1"
-    const val traveler = "0.0.1-dev-6"
+    const val traveler = "b5b58726"
 }
 
 object Deps {
@@ -113,54 +113,53 @@ object Deps {
     const val coroutinesRxJava =
         "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.coroutines}"
 
-    const val director = "com.ivianuu.director:director:${Versions.director}"
+    const val director = "com.github.IVIanuu.director:director:${Versions.director}"
     const val directorActivityCallbacks =
-        "com.ivianuu.director:director-activitycallbacks:${Versions.director}"
-    const val directorCommon = "com.ivianuu.director:director-common:${Versions.director}"
-    const val directorScopes = "com.ivianuu.director:director-scopes:${Versions.director}"
-    const val directorTraveler =
-        "com.ivianuu.director:director-traveler:${Versions.director}"
+        "com.github.IVIanuu.director:director-activitycallbacks:${Versions.director}"
+    const val directorCommon = "com.github.IVIanuu.director:director-common:${Versions.director}"
+    const val directorScopes = "com.github.IVIanuu.director:director-scopes:${Versions.director}"
+    const val directorTraveler = "com.github.IVIanuu.director:director-traveler:${Versions.director}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
-    const val epoxyPrefs = "com.ivianuu.epoxyprefs:epoxyprefs:${Versions.epoxyPrefs}"
+    const val epoxyPrefs = "com.github.IVIanuu:epoxy-prefs:${Versions.epoxyPrefs}"
 
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
 
-    const val injekt = "com.ivianuu.injekt:injekt:${Versions.injekt}"
-    const val injektAndroid = "com.ivianuu.injekt:injekt-android:${Versions.injekt}"
-    const val injektCompiler = "com.ivianuu.injekt:injekt-compiler:${Versions.injekt}"
+    const val injekt = "com.github.IVIanuu.injekt:injekt:${Versions.injekt}"
+    const val injektAndroid = "com.github.IVIanuu.injekt:injekt-android:${Versions.injekt}"
+    const val injektCompiler = "com.github.IVIanuu.injekt:injekt-compiler:${Versions.injekt}"
 
     const val junit = "junit:junit:${Versions.junit}"
 
     const val kommonAppCompat =
-        "com.ivianuu.kommon:kommon-appcompat:${Versions.kommon}"
-    const val kommonCore = "com.ivianuu.kommon:kommon-core:${Versions.kommon}"
+        "com.github.IVIanuu.kommon:kommon-appcompat:${Versions.kommon}"
+    const val kommonCore = "com.github.IVIanuu.kommon:kommon-core:${Versions.kommon}"
     const val kommonLifecycle =
-        "com.ivianuu.kommon:kommon-lifecycle:${Versions.kommon}"
+        "com.github.IVIanuu.kommon:kommon-lifecycle:${Versions.kommon}"
     const val kommonMaterial =
-        "com.ivianuu.kommon:kommon-material:${Versions.kommon}"
+        "com.github.IVIanuu.kommon:kommon-material:${Versions.kommon}"
     const val kommonRecyclerView =
-        "com.ivianuu.kommon:kommon-recyclerview:${Versions.kommon}"
+        "com.github.IVIanuu.kommon:kommon-recyclerview:${Versions.kommon}"
     const val kommonViewPager =
-        "com.ivianuu.kommon:kommon-viewpager:${Versions.kommon}"
+        "com.github.IVIanuu.kommon:kommon-viewpager:${Versions.kommon}"
     
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
-    const val kPrefs = "com.ivianuu.kprefs:kprefs:${Versions.kPrefs}"
-    const val kPrefsCommon = "com.ivianuu.kprefs:kprefs-common:${Versions.kPrefs}"
-    const val kPrefsCoroutines = "com.ivianuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
-    const val kPrefsLiveData = "com.ivianuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
-    const val kPrefsRx = "com.ivianuu.kprefs:kprefs-rx:${Versions.kPrefs}"
+    const val kPrefs = "com.github.IVIanuu.kprefs:kprefs:${Versions.kPrefs}"
+    const val kPrefsCommon = "com.github.IVIanuu.kprefs:kprefs-common:${Versions.kPrefs}"
+    const val kPrefsCoroutines = "com.github.IVIanuu.kprefs:kprefs-coroutines:${Versions.kPrefs}"
+    const val kPrefsLiveData = "com.github.IVIanuu.kprefs:kprefs-livedata:${Versions.kPrefs}"
+    const val kPrefsRx = "com.github.IVIanuu.kprefs:kprefs-rx:${Versions.kPrefs}"
 
     const val kSettings =
-        "com.ivianuu.ksettings:ksettings:${Versions.kSettings}"
+        "com.github.IVIanuu.ksettings:ksettings:${Versions.kSettings}"
     const val kSettingsCoroutines =
-        "com.ivianuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
+        "com.github.IVIanuu.ksettings:ksettings-coroutines:${Versions.kSettings}"
     const val kSettingsLiveData =
-        "com.ivianuu.ksettings:ksettings-livedata:${Versions.kSettings}"
+        "com.github.IVIanuu.ksettings:ksettings-livedata:${Versions.kSettings}"
     const val kSettingsRx =
-        "com.ivianuu.ksettings:ksettings-rx:${Versions.kSettings}"
+        "com.github.IVIanuu.ksettings:ksettings-rx:${Versions.kSettings}"
 
     const val materialComponents =
         "com.google.android.material:material:${Versions.materialComponents}"
@@ -182,19 +181,18 @@ object Deps {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
 
-    const val scopes = "com.ivianuu.scopes:scopes:${Versions.scopes}"
-    const val scopesAndroid = "com.ivianuu.scopes:scopes-android:${Versions.scopes}"
-    const val scopesCommon = "com.ivianuu.scopes:scopes-common:${Versions.scopes}"
-    const val scopesCoroutines = "com.ivianuu.scopes:scopes-coroutines:${Versions.scopes}"
-    const val scopesRx = "com.ivianuu.scopes:scopes-rx:${Versions.scopes}"
+    const val scopes = "com.github.IVIanuu.scopes:scopes:${Versions.scopes}"
+    const val scopesAndroid = "com.github.IVIanuu.scopes:scopes-android:${Versions.scopes}"
+    const val scopesCommon = "com.github.IVIanuu.scopes:scopes-common:${Versions.scopes}"
+    const val scopesCoroutines = "com.github.IVIanuu.scopes:scopes-coroutines:${Versions.scopes}"
+    const val scopesRx = "com.github.IVIanuu.scopes:scopes-rx:${Versions.scopes}"
 
     const val superUser = "eu.chainfire:libsuperuser:${Versions.superUser}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val timberKt = "com.github.ajalt:timberkt:${Versions.timberKt}"
 
-    const val traveler = "com.ivianuu.traveler:traveler:${Versions.traveler}"
-    const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
-    const val travelerCommon =
-        "com.ivianuu.traveler:traveler-common:${Versions.traveler}"
+    const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
+    const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
+    const val travelerCommon = "com.github.IVIanuu.traveler:traveler-common:${Versions.traveler}"
 }

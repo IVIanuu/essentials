@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Essentials.iml" filepath="$PROJECT_DIR$/Essentials.iml" />
-      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials/essentials.iml" filepath="$PROJECT_DIR$/essentials/essentials.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps/essentials-apps.iml" filepath="$PROJECT_DIR$/essentials-apps/essentials-apps.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" filepath="$PROJECT_DIR$/essentials-apps-glide/essentials-apps-glide.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" filepath="$PROJECT_DIR$/essentials-apps-ui/essentials-apps-ui.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" filepath="$PROJECT_DIR$/essentials-compiler/essentials-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/essentials-hidenavbar/essentials-hidenavbar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-picker/essentials-picker.iml" filepath="$PROJECT_DIR$/essentials-picker/essentials-picker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" filepath="$PROJECT_DIR$/essentials-securesettings/essentials-securesettings.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-shell/essentials-shell.iml" filepath="$PROJECT_DIR$/essentials-shell/essentials-shell.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-test/essentials-test.iml" filepath="$PROJECT_DIR$/essentials-test/essentials-test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/essentials-work/essentials-work.iml" filepath="$PROJECT_DIR$/essentials-work/essentials-work.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-legacy.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-legacy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-legacy.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-legacy.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials/essentials-legacy.essentials.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials/essentials-legacy.essentials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-legacy.essentials-apps.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps/essentials-legacy.essentials-apps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-glide/essentials-legacy.essentials-apps-glide.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-glide/essentials-legacy.essentials-apps-glide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-legacy.essentials-apps-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-apps-ui/essentials-legacy.essentials-apps-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-compiler/essentials-legacy.essentials-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-compiler/essentials-legacy.essentials-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-hidenavbar/essentials-legacy.essentials-hidenavbar.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-hidenavbar/essentials-legacy.essentials-hidenavbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-picker/essentials-legacy.essentials-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-picker/essentials-legacy.essentials-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-securesettings/essentials-legacy.essentials-securesettings.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-securesettings/essentials-legacy.essentials-securesettings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-shell/essentials-legacy.essentials-shell.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-shell/essentials-legacy.essentials-shell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-test/essentials-legacy.essentials-test.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-test/essentials-legacy.essentials-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/essentials-work/essentials-legacy.essentials-work.iml" filepath="$PROJECT_DIR$/.idea/modules/essentials-work/essentials-legacy.essentials-work.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/essentials-legacy.sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/essentials-legacy.sample.iml" />
     </modules>
   </component>
 </project>
