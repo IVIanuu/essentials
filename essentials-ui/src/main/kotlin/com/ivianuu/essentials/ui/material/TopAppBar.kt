@@ -23,10 +23,13 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -81,8 +84,9 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
           .weight(1f),
         verticalArrangement = Arrangement.Center
       ) {
-        ProvideTextStyle(
-          MaterialTheme.typography.h6,
+        CompositionLocalProvider(
+          LocalTextStyle provides MaterialTheme.typography.h6,
+          LocalContentAlpha provides ContentAlpha.high,
           content = title
         )
       }

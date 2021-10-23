@@ -17,8 +17,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -75,12 +75,11 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
 
       Spacer(Modifier.width(16.dp))
 
-      ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-        CompositionLocalProvider(
-          LocalContentAlpha provides ContentAlpha.high,
-          content = title
-        )
-      }
+      CompositionLocalProvider(
+        LocalTextStyle provides MaterialTheme.typography.subtitle1,
+        LocalContentAlpha provides ContentAlpha.high,
+        content = title
+      )
     }
 
     Spacer(Modifier.height(8.dp))
@@ -96,12 +95,11 @@ import com.ivianuu.essentials.ui.material.guessingContentColorFor
       if (isCurrent) {
         Column {
           if (content != null) {
-            ProvideTextStyle(value = MaterialTheme.typography.body2) {
-              CompositionLocalProvider(
-                LocalContentAlpha provides ContentAlpha.medium,
-                content = content
-              )
-            }
+            CompositionLocalProvider(
+              LocalTextStyle provides MaterialTheme.typography.body2,
+              LocalContentAlpha provides ContentAlpha.medium,
+              content = content
+            )
 
             Spacer(Modifier.padding(bottom = 16.dp))
           }

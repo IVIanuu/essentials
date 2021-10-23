@@ -21,8 +21,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -44,8 +44,10 @@ import androidx.compose.ui.unit.dp
       .then(modifier),
     contentAlignment = Alignment.CenterStart
   ) {
-    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
-      ProvideTextStyle(MaterialTheme.typography.body2, text)
-    }
+    CompositionLocalProvider(
+      LocalTextStyle provides MaterialTheme.typography.body2,
+      LocalContentColor provides MaterialTheme.colors.secondary,
+      content = text
+    )
   }
 }

@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -74,12 +74,11 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
     {
       val styledTitle: @Composable (() -> Unit)? = title?.let {
         {
-          ProvideTextStyle(MaterialTheme.typography.h6) {
-            CompositionLocalProvider(
-              LocalContentAlpha provides ContentAlpha.high,
-              content = title
-            )
-          }
+          CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.h6,
+            LocalContentAlpha provides ContentAlpha.high,
+            content = title
+          )
         }
       }
 
@@ -110,12 +109,11 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 
   val finalContent: @Composable (() -> Unit)? = if (content != null) {
     {
-      ProvideTextStyle(MaterialTheme.typography.body2) {
-        CompositionLocalProvider(
-          LocalContentAlpha provides ContentAlpha.medium,
-          content = content
-        )
-      }
+      CompositionLocalProvider(
+        LocalTextStyle provides MaterialTheme.typography.body2,
+        LocalContentAlpha provides ContentAlpha.medium,
+        content = content
+      )
     }
   } else {
     null

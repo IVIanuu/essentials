@@ -32,8 +32,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -115,10 +115,11 @@ data class HelpItem(
       modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.high) {
-        ProvideTextStyle(MaterialTheme.typography.subtitle1) {
-          Text(item.question)
-        }
+      CompositionLocalProvider(
+        LocalTextStyle provides MaterialTheme.typography.subtitle1,
+        LocalContentAlpha provides ContentAlpha.high
+      ) {
+        Text(item.question)
       }
 
       Spacer(Modifier.weight(1f))
@@ -134,13 +135,14 @@ data class HelpItem(
     }
 
     if (isExpanded) {
-      CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-        ProvideTextStyle(MaterialTheme.typography.body2) {
-          Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = item.answer
-          )
-        }
+      CompositionLocalProvider(
+        LocalTextStyle provides MaterialTheme.typography.body2,
+        LocalContentAlpha provides ContentAlpha.medium
+      ) {
+        Text(
+          modifier = Modifier.padding(top = 8.dp),
+          text = item.answer
+        )
       }
 
       if (item.actions != null) {

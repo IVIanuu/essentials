@@ -30,8 +30,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -100,22 +100,18 @@ import androidx.compose.ui.unit.dp
             ),
           verticalArrangement = Arrangement.Center
         ) {
-          if (title != null) {
-            ProvideTextStyle(value = MaterialTheme.typography.subtitle1) {
-              CompositionLocalProvider(
-                LocalContentAlpha provides ContentAlpha.high,
-                content = title
-              )
-            }
-          }
-          if (subtitle != null) {
-            ProvideTextStyle(value = MaterialTheme.typography.body2) {
-              CompositionLocalProvider(
-                LocalContentAlpha provides ContentAlpha.medium,
-                content = subtitle
-              )
-            }
-          }
+          if (title != null)
+            CompositionLocalProvider(
+              LocalTextStyle provides MaterialTheme.typography.subtitle1,
+              LocalContentAlpha provides ContentAlpha.high,
+              content = title
+            )
+          if (subtitle != null)
+            CompositionLocalProvider(
+              LocalTextStyle provides MaterialTheme.typography.body2,
+              LocalContentAlpha provides ContentAlpha.medium,
+              content = subtitle
+            )
         }
       }
 
