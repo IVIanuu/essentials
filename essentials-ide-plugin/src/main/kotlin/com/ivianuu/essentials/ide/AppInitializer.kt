@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UnusedImport")
+
 package com.ivianuu.essentials.ide
 
 import com.intellij.ide.ApplicationInitializedListener
