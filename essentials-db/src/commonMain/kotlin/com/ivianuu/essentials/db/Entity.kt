@@ -79,7 +79,6 @@ data class Row(
   }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
   val descriptor = schema.descriptor<T>()
 

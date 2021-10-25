@@ -1,8 +1,6 @@
 package com.ivianuu.essentials.db
 
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -14,7 +12,6 @@ import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.modules.SerializersModule
 
-@OptIn(ExperimentalSerializationApi::class)
 class OneLevelEmittingEncoder(
   override val serializersModule: SerializersModule,
   private val embeddedFormat: StringFormat,
@@ -75,7 +72,6 @@ class OneLevelEmittingEncoder(
   }
 }
 
-@OptIn(InternalSerializationApi::class)
 class CursorDecoder(
   private val cursor: Cursor,
   override val serializersModule: SerializersModule,

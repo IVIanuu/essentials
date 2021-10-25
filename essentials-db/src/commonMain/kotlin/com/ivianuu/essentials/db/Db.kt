@@ -109,7 +109,7 @@ interface Cursor : Disposable {
   fun getColumnIndex(name: String): Int
 }
 
-@OptIn(ExperimentalStdlibApi::class) fun <T> Cursor.toList(
+fun <T> Cursor.toList(
   schema: Schema,
   @Inject key: TypeKey<T>
 ): List<T> = buildList {
@@ -127,7 +127,6 @@ interface Cursor : Disposable {
   dispose()
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 fun Db.tableNames(): Flow<List<String>> =
   query("SELECT * FROM sqlite_master WHERE type='table';", "sqlite_master") { cursor ->
     buildList {

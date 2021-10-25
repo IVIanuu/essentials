@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
@@ -42,9 +41,7 @@ import kotlinx.coroutines.launch
 
 object TabsKey : Key<Unit>
 
-@OptIn(ExperimentalPagerApi::class)
-@Provide
-val tabsUi: KeyUi<TabsKey> = {
+@Provide val tabsUi: KeyUi<TabsKey> = {
   val pagerState = rememberPagerState()
   val scope = rememberCoroutineScope()
   Scaffold(

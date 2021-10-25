@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ButtonElevation
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable fun Button(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,

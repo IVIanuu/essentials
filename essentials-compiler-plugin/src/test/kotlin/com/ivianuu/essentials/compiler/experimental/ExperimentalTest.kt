@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.kotlin.compiler.optics
+package com.ivianuu.essentials.compiler.experimental
 
-import org.jetbrains.kotlin.name.FqName
+import com.ivianuu.essentials.compiler.codegen
+import com.ivianuu.essentials.compiler.compilationShouldBeOk
+import org.junit.Test
 
-val OpticsAnnotation = FqName("com.ivianuu.essentials.optics.Optics")
-val Lens = FqName("com.ivianuu.essentials.optics.Lens")
+class ExperimentalTest {
+  @Test fun testDoesNotShowExperimentalError() = codegen(
+    """
+      fun invoke() = buildList<String> {
+      }
+    """
+  ) {
+    compilationShouldBeOk()
+  }
+}

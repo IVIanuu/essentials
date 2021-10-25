@@ -17,6 +17,50 @@
 package com.ivianuu.essentials.time
 
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
+
+public val Int.nanoseconds get() = toDuration(DurationUnit.NANOSECONDS)
+
+public val Long.nanoseconds get() = toDuration(DurationUnit.NANOSECONDS)
+
+public val Double.nanoseconds get() = toDuration(DurationUnit.NANOSECONDS)
+
+public val Int.microseconds get() = toDuration(DurationUnit.MICROSECONDS)
+
+public val Long.microseconds get() = toDuration(DurationUnit.MICROSECONDS)
+
+public val Double.microseconds get() = toDuration(DurationUnit.MICROSECONDS)
+
+public val Int.milliseconds get() = toDuration(DurationUnit.MILLISECONDS)
+
+public val Long.milliseconds get() = toDuration(DurationUnit.MILLISECONDS)
+
+public val Double.milliseconds get() = toDuration(DurationUnit.MILLISECONDS)
+
+public val Int.seconds get() = toDuration(DurationUnit.SECONDS)
+
+public val Long.seconds get() = toDuration(DurationUnit.SECONDS)
+
+public val Double.seconds get() = toDuration(DurationUnit.SECONDS)
+
+public val Int.minutes get() = toDuration(DurationUnit.MINUTES)
+
+public val Long.minutes get() = toDuration(DurationUnit.MINUTES)
+
+public val Double.minutes get() = toDuration(DurationUnit.MINUTES)
+
+public val Int.hours get() = toDuration(DurationUnit.HOURS)
+
+public val Long.hours get() = toDuration(DurationUnit.HOURS)
+
+public val Double.hours get() = toDuration(DurationUnit.HOURS)
+
+public val Int.days get() = toDuration(DurationUnit.DAYS)
+
+public val Long.days get() = toDuration(DurationUnit.DAYS)
+
+public val Double.days get() = toDuration(DurationUnit.DAYS)
 
 expect fun Long.toDuration(): Duration
 

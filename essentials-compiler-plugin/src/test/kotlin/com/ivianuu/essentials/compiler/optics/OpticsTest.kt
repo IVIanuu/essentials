@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.compiler
+package com.ivianuu.essentials.compiler.optics
 
+import com.ivianuu.essentials.compiler.codegen
+import com.ivianuu.essentials.compiler.invokeSingleFile
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 
