@@ -19,6 +19,7 @@ include(
     ":essentials-billing",
     ":essentials-boot",
     ":essentials-broadcast",
+    ":essentials-cache",
     ":essentials-clipboard",
     ":essentials-coil",
     ":essentials-color-picker",

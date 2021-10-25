@@ -93,7 +93,7 @@ inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = t
 inline fun <V, reified T> catchT(@BuilderInference block: () -> V): Result<V, T> = try {
   Ok(block())
 } catch (e: Throwable) {
-  if (e is T) Err(e.nonFatalOrThrow() as T)
+  if (e is T) Err(e)
   else throw e
 }
 
