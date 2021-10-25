@@ -25,6 +25,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.jvm.JvmInline
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
@@ -68,6 +69,6 @@ suspend fun <T> Iterable<T>.parForEach(
   parMap(context) { action(it) }
 }
 
-inline class Concurrency(val value: Int)
+@JvmInline value class Concurrency(val value: Int)
 
 @Provide internal expect val defaultConcurrency: Concurrency

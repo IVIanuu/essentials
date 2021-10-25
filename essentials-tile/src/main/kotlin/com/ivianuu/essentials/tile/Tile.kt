@@ -59,4 +59,4 @@ class TileModuleElementModule<@com.ivianuu.injekt.Spread T : StateFlow<TileModel
   fun tileComponent(tileId: TileId): TileComponent
 }
 
-inline class TileId(val clazz: KClass<*>)
+@JvmInline value class TileId(val clazz: KClass<*>)
