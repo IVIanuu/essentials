@@ -17,6 +17,5 @@
 package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.Provide
-import kotlin.time.nanoseconds
 
 @Provide actual val clock: Clock = { System.nanoTime().nanoseconds }

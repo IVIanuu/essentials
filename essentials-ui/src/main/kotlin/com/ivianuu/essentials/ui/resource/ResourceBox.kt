@@ -38,6 +38,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedBox
 import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
 import com.ivianuu.essentials.ui.animation.transition.StackTransition
@@ -46,7 +47,6 @@ import com.ivianuu.essentials.ui.common.HorizontalList
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.layout.center
 import kotlin.reflect.KClass
-import kotlin.time.milliseconds
 
 @Composable fun <T> ResourceVerticalListFor(
   resource: Resource<List<T>>,

@@ -45,17 +45,17 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Constraints
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimationElement
 import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.util.arcLerp
 import com.ivianuu.essentials.ui.core.withCompositionContext
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.yield
+import kotlin.time.Duration
 
 fun SharedElementStackTransition(
   vararg sharedElements: Pair<Any, Any>,

@@ -27,9 +27,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.boundsInWindow
 import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import kotlin.math.hypot
-import kotlin.time.milliseconds
 
 fun CircularRevealStackTransition(
   centerElementKey: Any,

@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.par
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.animation.AnimatedStackState
 import com.ivianuu.essentials.ui.animation.AnimationElement
@@ -43,7 +44,6 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
-import kotlin.time.milliseconds
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
 
@@ -106,8 +106,8 @@ fun defaultAnimationSpec(
   delay: Duration = 0.milliseconds,
   easing: Easing = LinearEasing
 ) = tween<Float>(
-  durationMillis = duration.toLongMilliseconds().toInt(),
-  delayMillis = delay.toLongMilliseconds().toInt(),
+  durationMillis = duration.inWholeMilliseconds.toInt(),
+  delayMillis = delay.inWholeMilliseconds.toInt(),
   easing = easing
 )
 

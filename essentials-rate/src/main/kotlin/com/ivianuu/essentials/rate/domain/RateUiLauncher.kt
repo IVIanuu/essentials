@@ -23,15 +23,14 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.rate.ui.RateKey
 import com.ivianuu.essentials.time.Clock
+import com.ivianuu.essentials.time.days
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
-import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
-import kotlin.time.days
-import kotlin.time.toDuration
 
 @Provide fun rateUiLauncher(
   logger: Logger,
@@ -71,7 +70,7 @@ private suspend fun shouldShowRateDialog(
     }
 
   val now = clock()
-  val installedDuration = now - prefs.installTime.toDuration(TimeUnit.NANOSECONDS)
+  val installedDuration = now - prefs.installTime.milliseconds
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {
       log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }

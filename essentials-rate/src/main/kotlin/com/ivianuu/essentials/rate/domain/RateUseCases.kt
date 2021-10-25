@@ -70,7 +70,7 @@ internal typealias ShowLaterUseCase = suspend () -> Unit
   pref.updateData {
     copy(
       launchTimes = 0,
-      installTime = now.inWholeNanoseconds,
+      installTime = now.inWholeMilliseconds,
       feedbackState = RatePrefs.FeedbackState.LATER
     )
   }

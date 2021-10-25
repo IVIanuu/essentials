@@ -36,7 +36,9 @@ class ExperimentalDiagnosticSuppressor : DiagnosticSuppressor {
   override fun isSuppressed(diagnostic: Diagnostic, bindingContext: BindingContext?): Boolean {
     if (diagnostic.factory == Errors.EXPERIMENTAL_API_USAGE ||
         diagnostic.factory == Errors.EXPERIMENTAL_API_USAGE_ERROR ||
-        diagnostic.factory == Errors.EXPERIMENTAL_API_USAGE_FUTURE_ERROR)
+        diagnostic.factory == Errors.EXPERIMENTAL_API_USAGE_FUTURE_ERROR ||
+        diagnostic.factory == Errors.EXPERIMENTAL_OVERRIDE ||
+      diagnostic.factory == Errors.EXPERIMENTAL_OVERRIDE_ERROR)
       return true
 
     return false

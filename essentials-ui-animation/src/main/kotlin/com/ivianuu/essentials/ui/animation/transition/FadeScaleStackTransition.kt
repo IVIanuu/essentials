@@ -23,9 +23,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import com.ivianuu.essentials.lerp
+import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import com.ivianuu.essentials.ui.animation.util.interval
-import kotlin.time.milliseconds
 
 object ScrimAnimationElementKey
 
