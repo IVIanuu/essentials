@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.Provide
-import kotlin.time.milliseconds
+import kotlin.time.nanoseconds
 
-@Provide actual val timestampProvider: TimestampProvider =
-  { System.currentTimeMillis().milliseconds }
+@Provide actual val clock: Clock = { System.nanoTime().nanoseconds }

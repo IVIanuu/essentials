@@ -7,7 +7,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.time.TimestampProvider
+import com.ivianuu.essentials.time.Clock
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
@@ -22,7 +22,7 @@ import kotlinx.coroutines.sync.withLock
 @Provide @Scoped<AppComponent> class ForegroundManager(
   private val context: AppContext,
   private val logger: Logger,
-  private val timestampProvider: TimestampProvider
+  private val clock: Clock
 ) {
   private val mutex = Mutex()
 
@@ -35,7 +35,7 @@ import kotlinx.coroutines.sync.withLock
   ): Nothing = bracket(
     acquire = {
       mutex.withLock {
-        ForegroundState(id, notification, timestampProvider().inWholeMilliseconds)
+        ForegroundState(id, notification, clock().inWholeMilliseconds)
           .also {
             _states.value = _states.value + it
             log { "start foreground $id ${_states.value}" }
@@ -53,7 +53,7 @@ import kotlinx.coroutines.sync.withLock
     release = { state, _ ->
       // we ensure that the foreground service had enough time to call startForeground
       // to prevent a crash in the android system
-      val now = timestampProvider().inWholeMilliseconds
+      val now = clock().inWholeMilliseconds
       val delta = now - state.startTime
       if (delta < MIN_FOREGROUND_DURATION) {
         log { "delay foreground stop of ${state.id} for ${MIN_FOREGROUND_DURATION - delta}" }

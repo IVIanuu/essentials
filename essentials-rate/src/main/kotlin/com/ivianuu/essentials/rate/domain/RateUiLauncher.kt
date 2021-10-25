@@ -22,7 +22,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.rate.ui.RateKey
-import com.ivianuu.essentials.time.TimestampProvider
+import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Inject
@@ -38,10 +38,10 @@ import kotlin.time.toDuration
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
   schedule: RateUiSchedule = RateUiSchedule(),
-  timestampProvider: TimestampProvider
+  clock: Clock
 ): ScopeWorker<UiComponent> = {
   if (pref.data.first().installTime == 0L) {
-    val now = timestampProvider().toLongMilliseconds()
+    val now = clock().toLongMilliseconds()
     pref.updateData { copy(installTime = now) }
   }
 
@@ -55,7 +55,7 @@ private suspend fun shouldShowRateDialog(
   @Inject logger: Logger,
   @Inject pref: DataStore<RatePrefs>,
   @Inject schedule: RateUiSchedule,
-  @Inject timestampProvider: TimestampProvider
+  @Inject clock: Clock
 ): Boolean {
   val prefs = pref.data.first()
 
@@ -70,7 +70,7 @@ private suspend fun shouldShowRateDialog(
       log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
     }
 
-  val now = timestampProvider()
+  val now = clock()
   val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {

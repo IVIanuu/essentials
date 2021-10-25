@@ -19,6 +19,6 @@ package com.ivianuu.essentials.time
 import com.ivianuu.injekt.Provide
 import kotlin.time.Duration
 
-typealias TimestampProvider = () -> Duration
+typealias Clock = () -> Duration
 
-@Provide expect val timestampProvider: TimestampProvider
+@Provide expect val clock: Clock

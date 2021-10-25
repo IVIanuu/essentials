@@ -21,7 +21,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.rate.data.RatePrefs
-import com.ivianuu.essentials.time.TimestampProvider
+import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
@@ -64,9 +64,9 @@ internal typealias ShowLaterUseCase = suspend () -> Unit
   key: Key<*>,
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
-  timestampProvider: TimestampProvider
+  clock: Clock
 ): ShowLaterUseCase = {
-  val now = timestampProvider().toLongMilliseconds()
+  val now = clock().toLongMilliseconds()
   pref.updateData {
     copy(
       launchTimes = 0,

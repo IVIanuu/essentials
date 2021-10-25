@@ -55,6 +55,7 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
         "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi",
         "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
         "-Xuse-experimental=kotlinx.serialization.UnstableDefault",
+        "-Xuse-experimental=kotlin.time.ExperimentalTime",
         "-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer",
         "-Xuse-experimental=androidx.compose.ExperimentalComposeApi",
         "-Xuse-experimental=org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI",
