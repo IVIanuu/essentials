@@ -41,8 +41,8 @@ import kotlin.time.toDuration
   clock: Clock
 ): ScopeWorker<UiComponent> = {
   if (pref.data.first().installTime == 0L) {
-    val now = clock().toLongMilliseconds()
-    pref.updateData { copy(installTime = now) }
+    val now = clock()
+    pref.updateData { copy(installTime = now.inWholeNanoseconds) }
   }
 
   pref.updateData { copy(launchTimes = launchTimes.inc()) }
@@ -71,7 +71,7 @@ private suspend fun shouldShowRateDialog(
     }
 
   val now = clock()
-  val installedDuration = now - prefs.installTime.toDuration(TimeUnit.MILLISECONDS)
+  val installedDuration = now - prefs.installTime.toDuration(TimeUnit.NANOSECONDS)
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {
       log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }

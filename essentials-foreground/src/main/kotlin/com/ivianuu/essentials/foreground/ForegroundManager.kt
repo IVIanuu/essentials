@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration
+import kotlin.time.seconds
 
 @Provide @Scoped<AppComponent> class ForegroundManager(
   private val context: AppContext,
@@ -35,7 +37,7 @@ import kotlinx.coroutines.sync.withLock
   ): Nothing = bracket(
     acquire = {
       mutex.withLock {
-        ForegroundState(id, notification, clock().inWholeMilliseconds)
+        ForegroundState(id, notification, clock())
           .also {
             _states.value = _states.value + it
             log { "start foreground $id ${_states.value}" }
@@ -53,7 +55,7 @@ import kotlinx.coroutines.sync.withLock
     release = { state, _ ->
       // we ensure that the foreground service had enough time to call startForeground
       // to prevent a crash in the android system
-      val now = clock().inWholeMilliseconds
+      val now = clock()
       val delta = now - state.startTime
       if (delta < MIN_FOREGROUND_DURATION) {
         log { "delay foreground stop of ${state.id} for ${MIN_FOREGROUND_DURATION - delta}" }
@@ -70,11 +72,11 @@ import kotlinx.coroutines.sync.withLock
   internal class ForegroundState(
     val id: Int,
     val notification: StateFlow<Notification>,
-    val startTime: Long
+    val startTime: Duration
   )
 
   private companion object {
-    private const val MIN_FOREGROUND_DURATION = 2000
+    private val MIN_FOREGROUND_DURATION = 2.seconds
   }
 }
 
