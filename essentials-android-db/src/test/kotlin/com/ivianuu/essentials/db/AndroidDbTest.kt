@@ -225,14 +225,16 @@ class AndroidDbTest {
       }.collect()
     }
 
-    delay(50)
+    delay(500)
+
+    updates shouldBe 1
 
     db.transaction {
       db.insert(MyEntity("Manuel", 25))
       db.insert(MyEntity("Cindy", 23))
     }
 
-    delay(50)
+    delay(500)
     queryJob.cancelAndJoin()
 
     updates shouldBe 2
