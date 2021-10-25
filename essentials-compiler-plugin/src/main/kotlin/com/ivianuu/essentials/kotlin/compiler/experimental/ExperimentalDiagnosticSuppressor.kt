@@ -16,14 +16,14 @@
 
 package com.ivianuu.essentials.kotlin.compiler.experimental
 
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticSuppressor
 
-fun MockProject.experimental() {
+fun Project.experimental() {
   @Suppress("DEPRECATION")
   Extensions.getRootArea().getExtensionPoint(DiagnosticSuppressor.EP_NAME)
     .registerExtension(ExperimentalDiagnosticSuppressor(), this)

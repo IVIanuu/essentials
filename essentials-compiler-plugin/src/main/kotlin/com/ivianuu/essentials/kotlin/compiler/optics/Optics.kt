@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.kotlin.compiler.optics
 
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.types.replace
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
-fun MockProject.optics() {
+fun Project.optics() {
   SyntheticResolveExtension.registerExtension(this, OpticsResolveExtension())
   IrGenerationExtension.registerExtension(this, OpticsIrGenerationExtension())
 }

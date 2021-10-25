@@ -2,7 +2,7 @@ package com.ivianuu.essentials.kotlin.compiler.exhaustive
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.useInstance
@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.types.TypeUtils
 
-fun MockProject.exhaustive() {
+fun Project.exhaustive() {
   StorageComponentContainerContributor.registerExtension(
     this,
     object : StorageComponentContainerContributor {
