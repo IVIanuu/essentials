@@ -43,6 +43,7 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.colorpicker.*",
   "com.ivianuu.essentials.coroutines.*",
   "com.ivianuu.essentials.data.*",
+  "com.ivianuu.essentials.db.*",
   "com.ivianuu.essentials.donation.*",
   "com.ivianuu.essentials.foreground.*",
   "com.ivianuu.essentials.gestures.action.*",

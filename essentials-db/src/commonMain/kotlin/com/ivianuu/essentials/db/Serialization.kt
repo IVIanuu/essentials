@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.data
+package com.ivianuu.essentials.db
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi

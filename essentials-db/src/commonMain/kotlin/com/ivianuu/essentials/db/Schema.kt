@@ -1,4 +1,4 @@
-package com.ivianuu.essentials.data
+package com.ivianuu.essentials.db
 
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject

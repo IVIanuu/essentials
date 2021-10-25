@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 plugins {
-  kotlin("multiplatform")
-  kotlin("plugin.serialization")
-  id("com.ivianuu.essentials")
+    kotlin("multiplatform")
+    kotlin("plugin.serialization")
+    id("com.ivianuu.essentials")
 }
 
 kotlin {
-  jvm {
-    withJava()
-  }
+    jvm {
+        withJava()
+    }
 
-  sourceSets {
-    commonMain {
-      dependencies {
-        api(project(":essentials-db"))
-        api(project(":essentials-tuples"))
-        api(project(":essentials-serialization"))
-        api(project(":essentials-store"))
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
-      }
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":essentials-tuples"))
+                api(project(":essentials-serialization"))
+                api(project(":essentials-store"))
+                api(Deps.Coroutines.core)
+                api(Deps.Injekt.core)
+                api(Deps.Injekt.common)
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation(project(":essentials-test"))
+            }
+        }
     }
-    named("jvmTest") {
-      dependencies {
-        implementation(project(":essentials-test"))
-      }
-    }
-  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")
