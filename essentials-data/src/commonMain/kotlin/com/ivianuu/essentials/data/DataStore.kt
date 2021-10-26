@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.updateAndGet
 
 interface DataStore<T> {
   val data: Flow<T>
+
   suspend fun updateData(transform: T.() -> T): T
 }
 
