@@ -56,10 +56,7 @@ private class RefCountedReleaseImpl<K, T>(
     }
   }
 
-  private inner class Item(
-    val value: T,
-    var refCount: Int = 0
-  )
+  private inner class Item(val value: T, var refCount: Int = 0)
 }
 
 suspend inline fun <K, T, R> RefCountedResource<K, T>.withResource(
