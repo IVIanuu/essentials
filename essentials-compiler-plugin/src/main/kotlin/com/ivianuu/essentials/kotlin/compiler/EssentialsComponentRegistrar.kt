@@ -24,6 +24,7 @@ import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.LoadingOrder
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 
@@ -33,15 +34,15 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
     project: MockProject,
     configuration: CompilerConfiguration
   ) {
-    project.serializationFix()
-    project.optics()
-    project.exhaustive()
-    project.experimental()
+    exhaustive(project)
+    experimental(project)
+    optics(project)
+    serializationFix(project)
   }
 }
 
 fun IrGenerationExtension.Companion.registerExtensionWithLoadingOrder(
-  project: MockProject,
+  project: Project,
   loadingOrder: LoadingOrder,
   extension: IrGenerationExtension,
 ) {

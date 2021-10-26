@@ -41,9 +41,9 @@ import org.jetbrains.kotlin.types.replace
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
-fun Project.optics() {
-  SyntheticResolveExtension.registerExtension(this, OpticsResolveExtension())
-  IrGenerationExtension.registerExtension(this, OpticsIrGenerationExtension())
+fun optics(project: Project) {
+  SyntheticResolveExtension.registerExtension(project, OpticsResolveExtension())
+  IrGenerationExtension.registerExtension(project, OpticsIrGenerationExtension())
 }
 
 class OpticsResolveExtension : SyntheticResolveExtension {

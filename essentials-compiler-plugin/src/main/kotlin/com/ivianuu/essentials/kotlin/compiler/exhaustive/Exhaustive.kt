@@ -25,9 +25,9 @@ import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
 import org.jetbrains.kotlin.types.TypeUtils
 
-fun Project.exhaustive() {
+fun exhaustive(project: Project) {
   StorageComponentContainerContributor.registerExtension(
-    this,
+    project,
     object : StorageComponentContainerContributor {
       override fun registerModuleComponents(
         container: StorageComponentContainer,

@@ -19,8 +19,8 @@ package com.ivianuu.essentials.kotlin.compiler.serializationfix
 import com.ivianuu.essentials.kotlin.compiler.registerExtensionWithLoadingOrder
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.LoadingOrder
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.declarations.IrClass
@@ -37,9 +37,9 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.FqName
 
-fun MockProject.serializationFix() {
+fun serializationFix(project: Project) {
   IrGenerationExtension.registerExtensionWithLoadingOrder(
-    this,
+    project,
     LoadingOrder.FIRST,
     object : IrGenerationExtension {
       override fun generate(

@@ -23,10 +23,10 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.diagnostics.DiagnosticSuppressor
 
-fun Project.experimental() {
+fun experimental(project: Project) {
   @Suppress("DEPRECATION")
   Extensions.getRootArea().getExtensionPoint(DiagnosticSuppressor.EP_NAME)
-    .registerExtension(ExperimentalDiagnosticSuppressor(), this)
+    .registerExtension(ExperimentalDiagnosticSuppressor(), project)
 }
 
 class ExperimentalDiagnosticSuppressor : DiagnosticSuppressor {
