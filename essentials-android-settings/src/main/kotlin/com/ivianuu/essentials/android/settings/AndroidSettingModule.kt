@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
@@ -53,7 +52,6 @@ class AndroidSettingModule<T : S, S>(
         AndroidSettingsType.SYSTEM -> Settings.System.getUriFor(name)
       }
     )
-      .onEach { println("on content change $name") }
       .onStart { emit(Unit) }
       .map {
         withContext(dispatcher) {
