@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.sample.work
 
 import androidx.work.CoroutineWorker
-import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -37,7 +36,7 @@ import kotlinx.coroutines.delay
     log { "start work" }
     delay(5000)
     log { "finish work" }
-    return ListenableWorker.Result.success()
+    return Result.success()
   }
 }
 

@@ -25,6 +25,7 @@ class TestCollector<T>(
   private val onEach: suspend (T) -> Unit = {}
 ) : FlowCollector<T> {
   val values = mutableListOf<T>()
+  var error: Throwable? = null
   override suspend fun emit(value: T) {
     values += value
     onEach(value)
@@ -34,6 +35,11 @@ class TestCollector<T>(
 fun <T> Flow<T>.testCollect(scope: CoroutineScope, onEach: suspend (T) -> Unit = {}) =
   TestCollector(onEach).also { collector ->
     scope.launch {
-      collect(collector)
+      try {
+        collect(collector)
+      } catch (e: Throwable) {
+        collector.error = e
+        throw e
+      }
     }
   }
