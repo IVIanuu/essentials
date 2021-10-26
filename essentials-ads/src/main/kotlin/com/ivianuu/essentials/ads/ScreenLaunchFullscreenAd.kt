@@ -11,7 +11,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.SerialName
@@ -61,14 +60,13 @@ import kotlinx.serialization.Serializable
 private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
-    .filter { it.size > 1 }
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {
           it !in lastBackStack &&
               isFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
         }
-      (if (launchedKeys.isNotEmpty()) Unit
+      (if (currentBackStack.size > 1 && launchedKeys.isNotEmpty()) Unit
       else null)
         .also { lastBackStack = currentBackStack }
     }

@@ -15,7 +15,7 @@ typealias ListAdBannerConfig = AdBannerConfig
 
 typealias ListAdBannerListDecorator = ListDecorator
 
-@Provide fun adBannerListDecorators(
+@Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
