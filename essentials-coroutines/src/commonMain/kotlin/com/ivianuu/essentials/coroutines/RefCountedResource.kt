@@ -44,14 +44,15 @@ private class RefCountedReleaseImpl<K, T>(
       .also { it.refCount++ }
   }.value
 
-  override suspend fun release(key: K) = lock.withLock {
-    val item = values[key] ?: return@withLock
-    item.refCount--
-    if (item.refCount == 0) {
-      values -= key
+  override suspend fun release(key: K) {
+    lock.withLock {
+      val item = values[key] ?: return@withLock null
+      item.refCount--
+      if (item.refCount == 0) values.remove(key) else null
+    }?.let { removedItem ->
       if (release != null)
         withContext(NonCancellable) {
-          release.invoke(key, item.value)
+          release.invoke(key, removedItem.value)
         }
     }
   }
