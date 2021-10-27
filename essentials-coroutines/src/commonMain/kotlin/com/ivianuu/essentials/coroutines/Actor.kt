@@ -19,7 +19,6 @@ package com.ivianuu.essentials.coroutines
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ChannelResult
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -49,8 +48,7 @@ private class ActorImpl<T>(
   block: suspend ActorScope<T>.() -> Unit,
   private val mailbox: Channel<T> = Channel(capacity = capacity)
 ) : Actor<T>, ActorScope<T>, ReceiveChannel<T> by mailbox, CoroutineScope {
-  override val coroutineContext: CoroutineContext =
-    coroutineContext + coroutineContext[Job]!!.childJob()
+  override val coroutineContext: CoroutineContext = coroutineContext.childCoroutineContext()
 
   private val job = launch(start = start) { block() }
 

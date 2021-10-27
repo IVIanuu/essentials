@@ -5,9 +5,9 @@ import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.kSerializer
 import org.junit.Test
 import java.nio.file.Files
 
@@ -16,8 +16,6 @@ class PrefModuleTest {
     val prefsDataStore = prefsDataStoreModule.dataStore(
       dispatcher = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer<Map<String, String?>>() },
       scope = this,
       initial = { emptyMap() }
     )
@@ -25,13 +23,13 @@ class PrefModuleTest {
     val dataStore = PrefModule { MyPrefs() }.dataStore(
       dispatcher = dispatcher,
       prefsDataStore = prefsDataStore,
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer() },
       scope = this
     )
 
     val prefsCollector = prefsDataStore.data.testCollect(this)
     val modelCollector = dataStore.data.testCollect(this)
+
+    delay(100)
 
     prefsCollector.values[0] shouldBe emptyMap()
     modelCollector.values[0] shouldBe MyPrefs(0, 0)
@@ -57,8 +55,6 @@ class PrefModuleTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
       dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer() },
       scope = this
     )
 
@@ -69,8 +65,6 @@ class PrefModuleTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
       dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer() },
       scope = this
     )
 
@@ -83,8 +77,6 @@ class PrefModuleTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
       dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer() },
       scope = this
     )
 

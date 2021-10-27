@@ -77,13 +77,15 @@ private class DiskDataStoreImpl<T>(
   private val state = MutableStateFlow<State<T>>(State.Uninitialized)
   override val data: Flow<T> = flow<T> {
     val initialState = state.value
-    if (initialState !is State.Data) {
+    if (initialState !is State.Data)
       actor.tryAct(Message.ReadData(initialState))
-    }
 
     emitAll(
       state
-        .filter { it !is State.Uninitialized }
+        .filter {
+          it is State.Data || it is State.Final ||
+              it !== initialState
+        }
         .map {
           when (it) {
             is State.Data -> it.value
@@ -104,7 +106,7 @@ private class DiskDataStoreImpl<T>(
             val newData = message.transform(currentData)
             if (newData != currentData) {
               writeData(newData)
-              state.emit(State.Data(newData))
+              state.value = State.Data(newData)
             }
             newData
           }
@@ -131,11 +133,11 @@ private class DiskDataStoreImpl<T>(
   }
 
   private sealed class Message<out T> {
-    class UpdateData<T>(
+    data class UpdateData<T>(
       val transform: (T) -> T,
       val newData: CompletableDeferred<T>
     ) : Message<T>()
-    class ReadData<T>(val lastState: State<T>) : Message<T>()
+    data class ReadData<T>(val lastState: State<T>) : Message<T>()
   }
 
   override suspend fun updateData(transform: (t: T) -> T): T {
@@ -178,9 +180,8 @@ private class DiskDataStoreImpl<T>(
     if (!file.exists()) {
       file.parentFile?.mkdirs()
 
-      if (!file.createNewFile()) {
+      if (!file.createNewFile())
         throw IOException("Couldn't create '$file'")
-      }
     }
 
     val serializedData = try {
@@ -198,13 +199,11 @@ private class DiskDataStoreImpl<T>(
 
     try {
       tmpFile.bufferedWriter().use { it.write(serializedData) }
-      if (!tmpFile.renameTo(file)) {
+      if (!tmpFile.renameTo(file))
         throw IOException("$tmpFile could not be renamed to $file")
-      }
     } catch (e: IOException) {
-      if (tmpFile.exists()) {
+      if (tmpFile.exists())
         tmpFile.delete()
-      }
       throw e
     } finally {
       tmpFile.delete()

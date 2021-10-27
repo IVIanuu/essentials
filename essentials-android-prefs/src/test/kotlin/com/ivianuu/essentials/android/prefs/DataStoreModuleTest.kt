@@ -4,7 +4,6 @@ import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.matchers.shouldBe
-import kotlinx.serialization.kSerializer
 import org.junit.Test
 import java.nio.file.Files
 
@@ -13,8 +12,6 @@ class DataStoreModuleTest {
     val dataStore = prefsDataStoreModule.dataStore(
       dispatcher = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
-      // todo remove arg once injekt is fixed
-      serializerFactory = { kSerializer<Map<String, String?>>() },
       scope = this
     )
 

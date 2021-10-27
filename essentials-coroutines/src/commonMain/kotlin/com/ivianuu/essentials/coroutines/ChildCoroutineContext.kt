@@ -31,6 +31,6 @@ suspend fun childCoroutineScope(context: CoroutineContext = EmptyCoroutineContex
   CoroutineScope(coroutineContext.childCoroutineContext(context))
 
 fun CoroutineContext.childCoroutineContext(context: CoroutineContext = EmptyCoroutineContext) =
-  (this + context).job.childJob()
+  plus(plus(context).job.childJob())
 
 fun Job.childJob() = Job(parent = this)

@@ -138,7 +138,6 @@ sealed class ActionPickerItem {
   abstract val title: String
   abstract val settingsKey: Key<Unit>?
 
-  // todo remove overload once compose supports abstract params with default value
   @Composable fun Icon() {
     Icon(Modifier)
   }

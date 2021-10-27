@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.InitialOrDefault
+import com.ivianuu.essentials.serialization.KTypeT
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.Inject
@@ -28,7 +29,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.serialization.KTypeT
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
@@ -41,15 +41,11 @@ class DiskDataStoreTest {
     @Inject type: KTypeT<T>,
     serializer: Serializer<T>? = null,
     @Provide defaultData: @Provide () -> @InitialOrDefault T
-  ): Pair<DataStore<T>, File> {
-    // todo remove once injekt supports provide lambdas
-    @Provide fun provideDefaultData(): @InitialOrDefault T = defaultData()
-    return DiskDataStore(
-      coroutineContext = coroutineContext,
-      produceFile = { File(storeDir, name) },
-      produceSerializer = serializer?.let { { it } } ?: inject()
-    ) to storeDir.resolve(name)
-  }
+  ): Pair<DataStore<T>, File> = DiskDataStore(
+    coroutineContext = coroutineContext,
+    produceFile = { File(storeDir, name) },
+    produceSerializer = serializer?.let { { it } } ?: inject()
+  ) to storeDir.resolve(name)
 
   @Test fun testWrite() = runCancellingBlockingTest {
     val (store, file) = createStore("test") { 0 }
