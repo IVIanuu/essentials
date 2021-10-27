@@ -73,7 +73,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(
       TextInputKey(
-        title = loadResource<String>(R.string.es_keycode_picker_title),
+        title = loadResource(R.string.es_keycode_picker_title),
         label = loadResource(R.string.es_keycode_input_hint),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         allowEmpty = false

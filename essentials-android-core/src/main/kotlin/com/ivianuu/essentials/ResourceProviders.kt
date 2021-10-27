@@ -57,7 +57,7 @@ interface ResourceProvider {
   ): T = loader(context, id, *args)
 }
 
-fun interface ResourceLoaderWithArgs<T> {
+fun interface ResourceLoaderWithArgs<out T> {
   operator fun invoke(context: AppContext, id: Int, vararg args: Any?): T
 
   companion object {
@@ -67,7 +67,7 @@ fun interface ResourceLoaderWithArgs<T> {
   }
 }
 
-fun interface ResourceLoader<T> {
+fun interface ResourceLoader<out T> {
   operator fun invoke(context: AppContext, id: Int): T
 
   companion object {

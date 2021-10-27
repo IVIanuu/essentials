@@ -137,7 +137,7 @@ import kotlin.coroutines.resume
       notificationManager.createNotificationChannel(
         NotificationChannel(
           NOTIFICATION_CHANNEL_ID,
-          loadResource<String>(R.string.es_notif_channel_torch),
+          loadResource(R.string.es_notif_channel_torch),
           NotificationManager.IMPORTANCE_LOW
         )
       )
@@ -147,8 +147,8 @@ import kotlin.coroutines.resume
       .apply {
         setAutoCancel(true)
         setSmallIcon(R.drawable.es_ic_flashlight_on)
-        setContentTitle(loadResource<String>(R.string.es_notif_title_torch))
-        setContentText(loadResource<String>(R.string.es_notif_text_torch))
+        setContentTitle(loadResource(R.string.es_notif_title_torch))
+        setContentText(loadResource(R.string.es_notif_text_torch))
         setContentIntent(
           PendingIntent.getBroadcast(
             context,
