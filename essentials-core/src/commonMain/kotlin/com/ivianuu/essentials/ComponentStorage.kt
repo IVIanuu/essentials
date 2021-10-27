@@ -23,7 +23,7 @@ interface ComponentStorage<C : @Component Any> {
   val componentStorage: ComponentStorage<C>
 }
 
-val <C : @Component Any> C.componentStorage: ComponentStorage<C>
+val <C : @Component Any> C.storage: ComponentStorage<C>
   get() = entryPoint<ComponentStorageComponent<C>>(this).componentStorage
 
 inline fun <T> ComponentStorage<*>.scoped(key: Any, computation: () -> T): T {
@@ -57,7 +57,7 @@ inline fun <T> ComponentStorage<*>.scoped(
   return holder.value as T
 }
 
-class ComponentStorageImpl<C : @Component Any> @Provide @Scoped<C> constructor() : ComponentStorage<C> {
+class ComponentStorageImpl<C : @Component Any> @Provide @Scoped<C> constructor() : ComponentStorage<C>, Disposable {
   private val values = mutableMapOf<Any, Any?>()
 
   override operator fun <T> get(key: Any): T? = values[key] as? T
@@ -68,6 +68,14 @@ class ComponentStorageImpl<C : @Component Any> @Provide @Scoped<C> constructor()
 
   override fun remove(key: Any) {
     values.remove(key)
+      ?.safeAs<Disposable>()
+      ?.dispose()
+  }
+
+  override fun dispose() {
+    val valuesToDispose = values.values.filterIsInstance<Disposable>()
+    values.clear()
+    valuesToDispose.forEach { it.dispose() }
   }
 }
 
