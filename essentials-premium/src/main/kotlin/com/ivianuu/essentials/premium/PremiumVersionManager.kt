@@ -44,7 +44,19 @@ typealias PremiumVersionSku = Sku
 
 typealias OldPremiumVersionSku = Sku
 
-@Provide @Scoped<AppComponent> class PremiumVersionManager(
+interface PremiumVersionManager {
+  val premiumSkuDetails: Flow<SkuDetails>
+
+  val isPremiumVersion: Flow<Boolean>
+
+  suspend fun purchasePremiumVersion(): Boolean
+
+  suspend fun consumePremiumVersion(): Boolean
+
+  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
+}
+
+@Provide @Scoped<AppComponent> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val getSkuDetails: GetSkuDetailsUseCase,
@@ -55,11 +67,11 @@ typealias OldPremiumVersionSku = Sku
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
   private val scope: ComponentScope<AppComponent>
-) {
-  val premiumSkuDetails: Flow<SkuDetails>
+) : PremiumVersionManager {
+  override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
 
-  val isPremiumVersion: Flow<Boolean> = combine(
+  override val isPremiumVersion: Flow<Boolean> = combine(
     isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty()) combine(oldPremiumVersionSkus.map(isPurchased)) {
       it.any { it }
@@ -67,17 +79,17 @@ typealias OldPremiumVersionSku = Sku
   ) { a, b -> a || b }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
-  suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
+  override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
 
-  suspend fun consumePremiumVersion() = consumePurchase(premiumVersionSku)
+  override suspend fun consumePremiumVersion() = consumePurchase(premiumVersionSku)
 
-  suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
+  override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
       if (!screenUnlocker()) return@launch
       appUiStarter()
-      navigator.setRoot(GoPremiumKey(showTryBasicOption = false))
+      navigator.push(GoPremiumKey(showTryBasicOption = false))
     }
 
     return null
