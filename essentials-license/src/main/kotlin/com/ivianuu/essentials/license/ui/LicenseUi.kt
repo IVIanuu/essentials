@@ -18,11 +18,10 @@ package com.ivianuu.essentials.license.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
-import com.ivianuu.essentials.license.domain.LicenseProjectRepository
+import com.ivianuu.essentials.license.domain.LicenceProjectRepository
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
@@ -48,19 +47,12 @@ object LicenseKey : Key<Unit>
 @Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
     ResourceVerticalListFor(model.projects) { project ->
-      Project(
-        project = project,
-        onClick = { model.openProject(project) }
+      ListItem(
+        modifier = Modifier.clickable { model.openProject(project) },
+        title = { Text(project.project) }
       )
     }
   }
-}
-
-@Composable private fun Project(onClick: () -> Unit, project: Project) {
-  ListItem(
-    modifier = Modifier.clickable(onClick = onClick),
-    title = { Text(project.project) }
-  )
 }
 
 @Optics data class LicenseModel(
@@ -69,7 +61,7 @@ object LicenseKey : Key<Unit>
 )
 
 @Provide fun licenseModel(
-  licenseProjectRepository: LicenseProjectRepository,
+  licenseProjectRepository: LicenceProjectRepository,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
 ): StateFlow<LicenseModel> = scope.state(LicenseModel()) {
