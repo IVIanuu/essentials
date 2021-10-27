@@ -31,6 +31,7 @@ import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.injekt.Provide
@@ -138,6 +139,7 @@ private class NavigationContentState(
       }
 
       CompositionLocalProvider(
+        LocalComponent provides component,
         LocalKeyUiComponent provides component,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {

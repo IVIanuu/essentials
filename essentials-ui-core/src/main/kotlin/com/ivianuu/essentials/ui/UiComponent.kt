@@ -21,6 +21,8 @@ import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.EntryPoint
 
+val LocalComponent = compositionLocalOf<@Component Any> { error("No component provided") }
+
 val LocalUiComponent = compositionLocalOf<UiComponent> { error("No ui component provided") }
 
 @Component interface UiComponent

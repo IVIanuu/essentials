@@ -24,6 +24,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
+import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiComponentFactory
@@ -44,15 +45,18 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
       finish()
     }
 
-    val uiComponent = entryPoint<UiComponentFactory>(activityComponent).uiComponent()
+    val component = entryPoint<UiComponentFactory>(activityComponent).uiComponent()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { uiComponent.dispose() }
+      onCancel { component.dispose() }
     }
 
-    val esActivityComponent = entryPoint<EsActivityComponent>(uiComponent)
+    val esActivityComponent = entryPoint<EsActivityComponent>(component)
 
     setContent {
-      CompositionLocalProvider(LocalUiComponent provides uiComponent) {
+      CompositionLocalProvider(
+        LocalComponent provides component,
+        LocalUiComponent provides component
+      ) {
         esActivityComponent.decorateUi {
           esActivityComponent.appUi()
         }
