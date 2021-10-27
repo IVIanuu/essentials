@@ -109,7 +109,7 @@ private class NavigationContentState(
   private fun getOrCreateEntry(key: Key<*>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
     val keyUiComponent = keyUiComponentFactory.keyUiComponent(key)
-    val navigationContentComponent = entryPoint<NavigationContentComponent>(keyUiComponent)
+    val navigationContentComponent = keyUiComponent.entryPoint<NavigationContentComponent>()
     val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
     checkNotNull(content) { "No ui factory found for $key" }
     val decoratedContent: @Composable () -> Unit = { navigationContentComponent.decorateUi(content) }

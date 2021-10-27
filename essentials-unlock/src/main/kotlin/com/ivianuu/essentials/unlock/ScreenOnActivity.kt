@@ -34,7 +34,7 @@ class ScreenOnActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component: ScreenOnActivityComponent = entryPoint(activityComponent)
+    @Provide val component = activityComponent.entryPoint<ScreenOnActivityComponent>()
 
     log(logger = component.logger) { "turn screen on for $requestId" }
 

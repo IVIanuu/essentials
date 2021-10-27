@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
   private val component: EsAccessibilityServiceComponent by lazy {
-    entryPoint(createServiceComponent())
+    createServiceComponent().entryPoint()
   }
 
   @Provide private val logger get() = component.logger
@@ -50,7 +50,7 @@ class EsAccessibilityService : AccessibilityService() {
     component.accessibilityServiceRef.value = this
 
     val accessibilityServiceComponent =
-      entryPoint<EsAccessibilityServiceAccessibilityComponent>(accessibilityComponent!!)
+      accessibilityComponent!!.entryPoint<EsAccessibilityServiceAccessibilityComponent>()
 
     accessibilityServiceComponent.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       log { "update config from ${accessibilityServiceComponent.configs}" }

@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
   private val component: ForegroundServiceComponent by lazy {
-    entryPoint(createServiceComponent())
+    createServiceComponent().entryPoint()
   }
   @Provide private val logger: Logger get() = component.logger
 

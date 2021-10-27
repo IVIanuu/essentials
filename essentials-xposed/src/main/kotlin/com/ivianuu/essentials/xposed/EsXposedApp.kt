@@ -15,7 +15,7 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
     @Provide val context = XposedContextImpl(lpparam)
     @Provide val appComponent = buildAppComponent()
       .also { appComponent = it }
-    val xposedComponent = entryPoint<XposedAppComponent>(appComponent)
+    val xposedComponent = appComponent.entryPoint<XposedAppComponent>()
     xposedComponent.hooks().forEach { it(context) }
   }
 

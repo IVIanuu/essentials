@@ -2,6 +2,7 @@ package com.ivianuu.essentials
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.AnyInterface
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.ComponentObserver
 import com.ivianuu.injekt.common.Disposable
@@ -19,12 +20,12 @@ interface ComponentStorage<C : @Component Any> {
   fun remove(key: Any)
 }
 
-@EntryPoint<Any> interface ComponentStorageComponent<C : @Component Any> {
+interface ComponentStorageComponent<C : @Component Any> : @EntryPoint<C> AnyInterface {
   val componentStorage: ComponentStorage<C>
 }
 
 val <C : @Component Any> C.storage: ComponentStorage<C>
-  get() = entryPoint<ComponentStorageComponent<C>>(this).componentStorage
+  get() = entryPoint<ComponentStorageComponent<C>>().componentStorage
 
 inline fun <T> ComponentStorage<*>.scoped(key: Any, computation: () -> T): T {
   synchronized(this) {

@@ -41,7 +41,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   val events: Flow<NotificationEvent> get() = _events
 
   private val component: EsNotificationListenerServiceComponent by lazy {
-    entryPoint(createServiceComponent())
+    createServiceComponent().entryPoint()
   }
 
   @Provide private val logger get() = component.logger

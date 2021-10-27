@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = entryPoint<PopupMenuButtonComponent>(LocalUiComponent.current)
+  val component = LocalUiComponent.current.entryPoint<PopupMenuButtonComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

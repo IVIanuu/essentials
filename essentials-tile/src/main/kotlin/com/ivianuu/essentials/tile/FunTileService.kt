@@ -49,7 +49,7 @@ abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
   private val component: FunTileServiceComponent by lazy {
-    entryPoint(createServiceComponent())
+    createServiceComponent().entryPoint()
   }
 
   @Provide private val logger
@@ -60,9 +60,11 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onStartListening() {
     super.onStartListening()
     log { "$serviceClass on start listening" }
-    val tileModelHolder = entryPoint<TileModelComponent>(
-      component.tileComponentFactory.tileComponent(TileId(serviceClass))
-    ).holder.also { this.tileModelHolder = it }
+    val tileModelHolder = component.tileComponentFactory
+      .tileComponent(TileId(serviceClass))
+      .entryPoint<TileModelComponent>()
+      .holder
+      .also { this.tileModelHolder = it }
     tileModelHolder.tileModel
       .onEach { applyModel(it) }
       .launchIn(tileModelHolder.scope)

@@ -260,7 +260,7 @@ object DialogsKey : Key<Unit>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = entryPoint<DialogLauncherComponent>(LocalUiComponent.current)
+  val component = LocalUiComponent.current.entryPoint<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -281,7 +281,7 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = entryPoint<DialogLauncherComponent>(LocalUiComponent.current)
+  val component = LocalUiComponent.current.entryPoint<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {

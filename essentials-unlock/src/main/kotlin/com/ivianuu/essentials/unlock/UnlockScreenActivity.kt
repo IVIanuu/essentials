@@ -57,7 +57,7 @@ class UnlockScreenActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component: UnlockScreenComponent = entryPoint(activityComponent)
+    @Provide val component = activityComponent.entryPoint<UnlockScreenComponent>()
 
     log(logger = component.logger) { "unlock screen for $requestId" }
 

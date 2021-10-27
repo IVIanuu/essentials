@@ -45,12 +45,12 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
       finish()
     }
 
-    val component = entryPoint<UiComponentFactory>(activityComponent).uiComponent()
+    val component = activityComponent.entryPoint<UiComponentFactory>().uiComponent()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { component.dispose() }
     }
 
-    val esActivityComponent = entryPoint<EsActivityComponent>(component)
+    val esActivityComponent = component.entryPoint<EsActivityComponent>()
 
     setContent {
       CompositionLocalProvider(

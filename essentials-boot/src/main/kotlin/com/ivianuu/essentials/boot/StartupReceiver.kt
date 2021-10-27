@@ -30,7 +30,8 @@ import com.ivianuu.injekt.common.entryPoint
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    val component = entryPoint<StartupReceiverComponent>(createReceiverComponent(context, intent))
+    val component = createReceiverComponent(context, intent)
+      .entryPoint<StartupReceiverComponent>()
 
     log(logger = component.logger) { "on system boot" }
     component.bootListeners.forEach { it() }

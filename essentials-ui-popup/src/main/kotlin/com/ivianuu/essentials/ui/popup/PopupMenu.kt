@@ -46,7 +46,7 @@ object PopupMenu {
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
     Column {
-      val component = entryPoint<PopupMenuComponent>(LocalKeyUiComponent.current)
+      val component = LocalKeyUiComponent.current.entryPoint<PopupMenuComponent>()
       val scope = rememberCoroutineScope()
       items.forEach { item ->
         key(item) {

@@ -16,14 +16,15 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.common.AnyInterface
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
 
-@EntryPoint<Any> interface ComponentScopeComponent<C : @Component Any> {
+interface ComponentScopeComponent<C : @Component Any> : @EntryPoint<C> AnyInterface {
   val componentScope: ComponentScope<C>
 }
 
 val <C : @Component Any> C.scope: ComponentScope<C>
-  get() = entryPoint<ComponentScopeComponent<C>>(this).componentScope
+  get() = entryPoint<ComponentScopeComponent<C>>().componentScope
