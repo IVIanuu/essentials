@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,10 +51,12 @@ data class ListDecoratorElement(
   }
 }
 
-val LocalListDecorators = staticCompositionLocalOf<List<ListDecoratorElement>> { emptyList() }
+val LocalListDecorators = staticCompositionLocalOf<() -> List<ListDecoratorElement>> {
+  { emptyList() }
+}
 
 @Provide fun listDecoratorsProvider(
-  decorators: List<ListDecoratorElement> = emptyList()
+  decorators: () -> List<ListDecoratorElement> = { emptyList() }
 ): UiDecorator = { content ->
   CompositionLocalProvider(
     LocalListDecorators provides decorators,
@@ -73,7 +76,7 @@ val LocalListDecorators = staticCompositionLocalOf<List<ListDecoratorElement>> {
   decorate: Boolean = true,
   content: LazyListScope.() -> Unit
 ) {
-  val decorators = if (decorate) LocalListDecorators.current else emptyList()
+  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyColumn(
     modifier = modifier,
     state = state,
@@ -99,7 +102,7 @@ val LocalListDecorators = staticCompositionLocalOf<List<ListDecoratorElement>> {
   decorate: Boolean = true,
   content: LazyListScope.() -> Unit
 ) {
-  val decorators = if (decorate) LocalListDecorators.current else emptyList()
+  val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyRow(
     modifier = modifier,
     state = state,
