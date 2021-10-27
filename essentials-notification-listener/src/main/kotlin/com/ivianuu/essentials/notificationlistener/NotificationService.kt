@@ -26,21 +26,36 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
-@Provide class NotificationService(private val ref: Flow<EsNotificationListenerService?>) {
+interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>
-    get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+
   val events: Flow<NotificationEvent>
+
+  suspend fun openNotification(notification: Notification)
+
+  suspend fun dismissNotification(key: String)
+
+  suspend fun dismissAllNotifications()
+}
+
+@Provide class NotificationServiceImpl(
+  private val ref: Flow<EsNotificationListenerService?>
+) : NotificationService {
+  override val notifications: Flow<List<StatusBarNotification>>
+    get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+
+  override val events: Flow<NotificationEvent>
     get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
 
-  suspend fun openNotification(notification: Notification) {
+  override suspend fun openNotification(notification: Notification) {
     catch { notification.contentIntent.send() }
   }
 
-  suspend fun dismissNotification(key: String) {
+  override suspend fun dismissNotification(key: String) {
     catch { ref.first()!!.cancelNotification(key) }
   }
 
-  suspend fun dismissAllNotifications() {
+  override suspend fun dismissAllNotifications() {
     catch { ref.first()!!.cancelAllNotifications() }
   }
 }

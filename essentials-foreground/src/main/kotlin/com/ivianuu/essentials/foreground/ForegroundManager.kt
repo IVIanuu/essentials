@@ -21,17 +21,24 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
-@Provide @Scoped<AppComponent> class ForegroundManager(
+interface ForegroundManager {
+  suspend fun startForeground(id: Int, notification: StateFlow<Notification>): Nothing
+}
+
+suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
+  startForeground(id, MutableStateFlow(notification))
+
+@Provide @Scoped<AppComponent> class ForegroundManagerImpl(
   private val context: AppContext,
   private val logger: Logger,
   private val clock: Clock
-) {
+) : ForegroundManager {
   private val lock = Mutex()
 
   private val _states = MutableStateFlow<List<ForegroundState>>(emptyList())
   internal val states: Flow<List<ForegroundState>> get() = _states
 
-  suspend fun startForeground(
+  override suspend fun startForeground(
     id: Int,
     notification: StateFlow<Notification>
   ): Nothing = bracket(
@@ -80,5 +87,3 @@ import kotlin.time.Duration
   }
 }
 
-suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
-  startForeground(id, MutableStateFlow(notification))

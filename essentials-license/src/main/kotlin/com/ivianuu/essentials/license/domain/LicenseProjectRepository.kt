@@ -26,12 +26,16 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-@Provide class LicenseProjectRepository(
+interface LicenceProjectRepository {
+  suspend fun getLicenseProjects(): Result<List<Project>, Throwable>
+}
+
+@Provide class LicenceProjectRepositoryImpl(
   private val context: AppContext,
   private val dispatcher: IODispatcher,
   private val json: Json
-) {
-  suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(dispatcher) {
+) : LicenceProjectRepository{
+  override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(dispatcher) {
     catch {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()

@@ -8,16 +8,24 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.synchronized
 
-class ComponentStorage<C : @Component Any> @Provide @Scoped<C> constructor() {
+interface ComponentStorage<C : @Component Any> {
+  operator fun <T> get(key: Any): T?
+
+  operator fun <T> set(key: Any, value: T)
+
+  fun remove(key: Any)
+}
+
+class ComponentStorageImpl<C : @Component Any> @Provide @Scoped<C> constructor() : ComponentStorage<C> {
   private val values = mutableMapOf<Any, Any?>()
 
-  operator fun <T> get(key: Any): T? = values[key] as? T
+  override operator fun <T> get(key: Any): T? = values[key] as? T
 
-  operator fun <T> set(key: Any, value: T) {
+  override operator fun <T> set(key: Any, value: T) {
     values[key] = value
   }
 
-  fun remove(key: Any) {
+  override fun remove(key: Any) {
     values.remove(key)
   }
 }

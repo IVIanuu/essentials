@@ -10,7 +10,19 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.withContext
 
-@Provide class ActionRepository(
+interface ActionRepository {
+  suspend fun getAllActions(): List<Action<*>>
+
+  suspend fun getAction(id: String): Action<*>
+
+  suspend fun getActionExecutor(id: String): ActionExecutor<*>
+
+  suspend fun getActionSettingsKey(id: String): ActionSettingsKey<*>?
+
+  suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
+}
+
+@Provide class ActionRepositoryImpl(
   private val actions: () -> Map<String, () -> Action<*>> = { emptyMap() },
   private val actionFactories: () -> List<() -> ActionFactory> = { emptyList() },
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>> = { emptyMap() },
@@ -19,12 +31,12 @@ import kotlinx.coroutines.withContext
   private val dispatcher: DefaultDispatcher,
   private val rp: ResourceProvider,
   private val toaster: Toaster
-) {
-  suspend fun getAllActions(): List<Action<*>> = withContext(dispatcher) {
+) : ActionRepository {
+  override suspend fun getAllActions() = withContext(dispatcher) {
     actions().values.map { it() }
   }
 
-  suspend fun getAction(id: String): Action<*> = withContext(dispatcher) {
+  override suspend fun getAction(id: String) = withContext(dispatcher) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -39,7 +51,7 @@ import kotlinx.coroutines.withContext
       )
   }
 
-  suspend fun getActionExecutor(id: String): ActionExecutor<*> = withContext(dispatcher) {
+  override suspend fun getActionExecutor(id: String) = withContext(dispatcher) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -52,9 +64,9 @@ import kotlinx.coroutines.withContext
       }
   }
 
-  suspend fun getActionSettingsKey(id: String): ActionSettingsKey<*>? =
+  override suspend fun getActionSettingsKey(id: String) =
     withContext(dispatcher) { actionSettings()[id]?.invoke() }
 
-  suspend fun getActionPickerDelegates(): List<ActionPickerDelegate> =
+  override suspend fun getActionPickerDelegates() =
     withContext(dispatcher) { actionPickerDelegates().map { it() } }
 }

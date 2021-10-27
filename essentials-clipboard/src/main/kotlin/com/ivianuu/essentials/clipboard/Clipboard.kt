@@ -30,12 +30,18 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-@Provide class Clipboard(
+interface Clipboard {
+  val text: Flow<String?>
+
+  suspend fun updateText(value: String, showMessage: Boolean = true)
+}
+
+@Provide class ClipboardImpl(
   private val clipboardManager: @SystemService ClipboardManager,
   private val rp: ResourceProvider,
   private val toaster: Toaster
-) {
-  val text: Flow<String?>
+) : Clipboard {
+  override val text: Flow<String?>
     get() = callbackFlow<String?> {
       val listener = ClipboardManager.OnPrimaryClipChangedListener {
         val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
@@ -44,7 +50,7 @@ import kotlinx.coroutines.flow.callbackFlow
       awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
-  suspend fun updateText(value: String, showMessage: Boolean = true) {
+  override suspend fun updateText(value: String, showMessage: Boolean) {
     catch {
       clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
     }

@@ -29,43 +29,54 @@ import kotlin.coroutines.suspendCoroutine
 
 typealias FullScreenAdId = String
 
-@Provide @Scoped<UiComponent> class FullScreenAd(
+interface FullScreenAd {
+  suspend fun isLoaded(): Boolean
+
+  fun preload()
+
+  suspend fun load(): Boolean
+
+  suspend fun loadAndShow(): Boolean
+
+  suspend fun showIfLoaded(): Boolean
+}
+
+@Provide @Scoped<UiComponent> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val logger: Logger,
   private val mainDispatcher: MainDispatcher,
   private val scope: ComponentScope<AppComponent>,
   private val showAds: Flow<ShowAds>
-) {
+) : FullScreenAd {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Unit>? = null
 
-  suspend fun isLoaded(): Boolean = getCurrentAd() != null
+  override suspend fun isLoaded() = getCurrentAd() != null
 
-  fun preloadAd() {
-    scope.launch { loadAd() }
+  override fun preload() {
+    scope.launch { load() }
   }
 
-  suspend fun loadAd(): Boolean {
+  override suspend fun load(): Boolean {
     if (!showAds.first()) return false
     getOrCreateCurrentAd()
     return true
   }
 
-  suspend fun loadAndShow(): Boolean {
+  override suspend fun loadAndShow(): Boolean {
     if (!showAds.first()) return false
     getOrCreateCurrentAd().invoke()
-    preloadAd()
+    preload()
     return true
   }
 
-  suspend fun showIfLoaded() {
-    getCurrentAd()
-      ?.let {
-        it.invoke()
-        preloadAd()
-      }
-  }
+  override suspend fun showIfLoaded(): Boolean = getCurrentAd()
+    ?.let {
+      it.invoke()
+      preload()
+      true
+    } ?: false
 
   private suspend fun getCurrentAd(): (suspend () -> Unit)? = lock.withLock {
     deferredAd?.takeUnless { it.isCompleted && it.getCompletionExceptionOrNull() != null }
@@ -123,6 +134,6 @@ class AdLoadingException(val reason: Int) : RuntimeException()
   showAds
     .filter { it }
     .collect {
-      fullScreenAd.preloadAd()
+      fullScreenAd.preload()
     }
 }

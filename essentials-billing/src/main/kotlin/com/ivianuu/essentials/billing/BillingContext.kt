@@ -35,7 +35,9 @@ import kotlin.coroutines.suspendCoroutine
 
 interface BillingContext {
   val billingClient: BillingClient
+
   @Provide val logger: Logger
+
   val refreshes: MutableSharedFlow<BillingRefresh>
 
   suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R?

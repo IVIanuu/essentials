@@ -96,7 +96,7 @@ class ForegroundService : Service() {
 }
 
 @EntryPoint<ServiceComponent> interface ForegroundServiceComponent {
-  val foregroundManager: ForegroundManager
+  val foregroundManager: ForegroundManagerImpl
   val notificationManager: @SystemService NotificationManager
   val logger: Logger
   val scope: ComponentScope<ServiceComponent>

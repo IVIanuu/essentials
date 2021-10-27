@@ -24,13 +24,18 @@ import com.ivianuu.injekt.coroutines.IODispatcher
 import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
-@Provide class Shell(private val dispatcher: IODispatcher) {
-  suspend fun isAvailable(): Boolean = withContext(dispatcher) {
+interface Shell {
+  suspend fun isAvailable(): Boolean
+
+  suspend fun run(vararg commands: String): Result<List<String>, Throwable>
+}
+
+@Provide class ShellImpl(private val dispatcher: IODispatcher) : Shell {
+  override suspend fun isAvailable() = withContext(dispatcher) {
     catch { SU.available() }.getOrElse { false }
   }
 
-  suspend fun run(vararg commands: String): Result<List<String>, Throwable> =
-    withContext(dispatcher) {
-      catch { SU.run(commands)!! }
-    }
+  override suspend fun run(vararg commands: String) = withContext(dispatcher) {
+    catch { SU.run(commands)!! }
+  }
 }

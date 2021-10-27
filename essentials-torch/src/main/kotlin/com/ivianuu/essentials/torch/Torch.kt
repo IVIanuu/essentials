@@ -41,7 +41,13 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-@Provide @Scoped<AppComponent> class Torch(
+interface Torch {
+  val torchState: StateFlow<Boolean>
+
+  suspend fun setTorchState(value: Boolean)
+}
+
+@Provide @Scoped<AppComponent> class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val context: AppContext,
@@ -53,14 +59,14 @@ import kotlin.coroutines.resume
   private val scope: ComponentScope<AppComponent>,
   private val systemBuildInfo: SystemBuildInfo,
   private val toaster: Toaster
-) {
+) : Torch {
   private val _torchState = MutableStateFlow(false)
-  val torchState: StateFlow<Boolean> get() = _torchState
+  override val torchState: StateFlow<Boolean> get() = _torchState
 
   private val torchJobLock = Mutex()
   private var torchJob: Job? = null
 
-  suspend fun setTorchState(value: Boolean) {
+  override suspend fun setTorchState(value: Boolean) {
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
