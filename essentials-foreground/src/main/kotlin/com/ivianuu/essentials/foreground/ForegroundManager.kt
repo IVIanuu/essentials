@@ -26,7 +26,7 @@ import kotlin.time.Duration
   private val logger: Logger,
   private val clock: Clock
 ) {
-  private val mutex = Mutex()
+  private val lock = Mutex()
 
   private val _states = MutableStateFlow<List<ForegroundState>>(emptyList())
   internal val states: Flow<List<ForegroundState>> get() = _states
@@ -36,7 +36,7 @@ import kotlin.time.Duration
     notification: StateFlow<Notification>
   ): Nothing = bracket(
     acquire = {
-      mutex.withLock {
+      lock.withLock {
         ForegroundState(id, notification, clock())
           .also {
             _states.value = _states.value + it
@@ -62,7 +62,7 @@ import kotlin.time.Duration
         delay(MIN_FOREGROUND_DURATION - delta)
       }
 
-      mutex.withLock {
+      lock.withLock {
         _states.value = _states.value - state
         log { "stop foreground ${state.id} ${_states.value}" }
       }

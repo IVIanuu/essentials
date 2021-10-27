@@ -32,13 +32,13 @@ fun <T> Atomic(initial: T): Atomic<T> = AtomicImpl(initial)
 private class AtomicImpl<T>(initial: T) : Atomic<T> {
   private var value = initial
 
-  private val mutex = Mutex()
+  private val lock = Mutex()
 
-  override suspend fun get(): T = mutex.withLock { value }
+  override suspend fun get(): T = lock.withLock { value }
 
-  override suspend fun set(value: T) = mutex.withLock { this.value = value }
+  override suspend fun set(value: T) = lock.withLock { this.value = value }
 
-  override suspend fun compareAndSet(expect: T, update: T): Boolean = mutex.withLock {
+  override suspend fun compareAndSet(expect: T, update: T): Boolean = lock.withLock {
     if (value == expect) {
       value = update
       true

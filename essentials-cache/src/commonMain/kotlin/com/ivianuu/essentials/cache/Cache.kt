@@ -61,7 +61,7 @@ internal class CacheImpl<K : Any, V : Any>(
   private val maxSize: Long = Long.MAX_VALUE,
   @Inject val clock: Clock
 ) : Cache<K, V> {
-  private val cacheMutex = Mutex()
+  private val cacheLock = Mutex()
 
   private val entries = hashMapOf<K, CacheEntry>()
 
@@ -72,7 +72,7 @@ internal class CacheImpl<K : Any, V : Any>(
 
   override suspend fun get(key: K): V? {
     val now = clock()
-    return cacheMutex.withLock {
+    return cacheLock.withLock {
       removeExpiredEntries(now)
 
       entries[key]
@@ -82,7 +82,7 @@ internal class CacheImpl<K : Any, V : Any>(
 
   override suspend fun get(key: K, computation: suspend (K) -> V): V {
     val now = clock()
-    return cacheMutex.withLock {
+    return cacheLock.withLock {
       removeExpiredEntries(now)
 
       val entry = entries[key] ?: CacheEntry(key)
@@ -100,7 +100,7 @@ internal class CacheImpl<K : Any, V : Any>(
 
   override suspend fun put(key: K, value: V) {
     val now = clock()
-    cacheMutex.withLock {
+    cacheLock.withLock {
       removeExpiredEntries(now)
 
       val entry = entries[key] ?: CacheEntry(key)
@@ -114,7 +114,7 @@ internal class CacheImpl<K : Any, V : Any>(
 
   override suspend fun remove(key: K) {
     val now = clock()
-    cacheMutex.withLock {
+    cacheLock.withLock {
       removeExpiredEntries(now)
 
       entries.remove(key)?.also {
@@ -125,7 +125,7 @@ internal class CacheImpl<K : Any, V : Any>(
     }
   }
 
-  override suspend fun removeAll(): Unit = cacheMutex.withLock {
+  override suspend fun removeAll(): Unit = cacheLock.withLock {
     entries.forEach { it.value.onRemove() }
     entries.clear()
     writeQueue?.clear()
@@ -134,7 +134,7 @@ internal class CacheImpl<K : Any, V : Any>(
 
   override suspend fun asMap(): Map<K, V> {
     val now = clock()
-    return cacheMutex.withLock {
+    return cacheLock.withLock {
       buildMap {
         this@CacheImpl.entries.forEach { (_, entry) ->
           entry.valueSnapshot(now)
@@ -183,10 +183,10 @@ internal class CacheImpl<K : Any, V : Any>(
     var writeTime = Duration.INFINITE
       private set
 
-    private val valueMutex = Mutex()
+    private val valueLock = Mutex()
     private var value: Deferred<V>? = null
 
-    suspend fun valueSnapshot(now: Duration): V? = valueMutex.withLock {
+    suspend fun valueSnapshot(now: Duration): V? = valueLock.withLock {
       try {
         value?.getCompleted()
       } catch (e: IllegalStateException) {
@@ -197,7 +197,7 @@ internal class CacheImpl<K : Any, V : Any>(
     }
 
     suspend fun awaitValue(now: Duration): V? = try {
-        valueMutex.withLock { value }?.await()
+        valueLock.withLock { value }?.await()
       } catch (e: Throwable) {
         if (e is ValueOverrideException)
           e.value as V
@@ -206,15 +206,15 @@ internal class CacheImpl<K : Any, V : Any>(
           null
         }
       }?.also {
-        cacheMutex.withLock { recordRead(now) }
+        cacheLock.withLock { recordRead(now) }
       }
 
     suspend fun awaitValueOrUpdateFrom(block: suspend (K) -> V): V = try {
-      valueMutex.withLock {
+      valueLock.withLock {
         value ?: CoroutineScope(coroutineContext).async {
           block(key).also {
             val now = clock()
-            cacheMutex.withLock { recordWrite(now) }
+            cacheLock.withLock { recordWrite(now) }
           }
         }.also { value = it }
       }.await()
@@ -222,7 +222,7 @@ internal class CacheImpl<K : Any, V : Any>(
       if (e is ValueOverrideException) {
         e.value as V
       } else {
-        cacheMutex.withLock {
+        cacheLock.withLock {
           entries.remove(key)?.onRemove()
           writeQueue?.remove(this)
           accessQueue?.remove(this)
@@ -232,20 +232,20 @@ internal class CacheImpl<K : Any, V : Any>(
     }
       .also {
         val now = clock()
-        cacheMutex.withLock { recordRead(now) }
+        cacheLock.withLock { recordRead(now) }
       }
 
     suspend fun updateValueImmediately(value: V, now: Duration) {
-      valueMutex.withLock {
+      valueLock.withLock {
         val previousValue = this.value
         this.value = CompletableDeferred(value)
         previousValue?.cancel(ValueOverrideException(value))
       }
-      cacheMutex.withLock { recordWrite(now) }
+      cacheLock.withLock { recordWrite(now) }
     }
 
     suspend fun onRemove() {
-      valueMutex.withLock {
+      valueLock.withLock {
         value?.cancel()
       }
     }

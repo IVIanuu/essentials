@@ -36,15 +36,15 @@ private class RefCountedReleaseImpl<K, T>(
   private val create: suspend (K) -> T,
   private val release: (suspend (K, T) -> Unit)?
 ) : RefCountedResource<K, T> {
-  private val mutex = Mutex()
+  private val lock = Mutex()
   private val values = mutableMapOf<K, Item>()
 
-  override suspend fun acquire(key: K) = mutex.withLock {
+  override suspend fun acquire(key: K) = lock.withLock {
     values.getOrPut(key) { Item(withContext(NonCancellable) { create(key) }, 0) }
       .also { it.refCount++ }
   }.value
 
-  override suspend fun release(key: K) = mutex.withLock {
+  override suspend fun release(key: K) = lock.withLock {
     val item = values[key] ?: return@withLock
     item.refCount--
     if (item.refCount == 0) {

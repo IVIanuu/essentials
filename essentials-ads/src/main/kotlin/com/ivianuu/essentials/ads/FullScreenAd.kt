@@ -37,7 +37,7 @@ typealias FullScreenAdId = String
   private val scope: ComponentScope<AppComponent>,
   private val showAds: Flow<ShowAds>
 ) {
-  private val mutex = Mutex()
+  private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Unit>? = null
 
   suspend fun isLoaded(): Boolean = getCurrentAd() != null
@@ -67,12 +67,12 @@ typealias FullScreenAdId = String
       }
   }
 
-  private suspend fun getCurrentAd(): (suspend () -> Unit)? = mutex.withLock {
+  private suspend fun getCurrentAd(): (suspend () -> Unit)? = lock.withLock {
     deferredAd?.takeUnless { it.isCompleted && it.getCompletionExceptionOrNull() != null }
       ?.await()
   }
 
-  private suspend fun getOrCreateCurrentAd(): suspend () -> Unit = mutex.withLock {
+  private suspend fun getOrCreateCurrentAd(): suspend () -> Unit = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(mainDispatcher) {
@@ -103,7 +103,7 @@ typealias FullScreenAdId = String
 
       val result: suspend () -> Unit = {
         log { "show ad" }
-        mutex.withLock { deferredAd = null }
+        lock.withLock { deferredAd = null }
         withContext(mainDispatcher) {
           ad.show()
         }

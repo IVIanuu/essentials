@@ -49,7 +49,7 @@ interface BillingContext {
   private val scope: ComponentScope<AppComponent>
 ) : BillingContext {
   private var isConnected = false
-  private val connectionMutex = Mutex()
+  private val connectionLock = Mutex()
 
   override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
     withContext(scope.coroutineContext + dispatcher) {
@@ -57,7 +57,7 @@ interface BillingContext {
       block()
     }
 
-  private suspend fun ensureConnected(): Unit = connectionMutex.withLock {
+  private suspend fun ensureConnected(): Unit = connectionLock.withLock {
     if (isConnected) return@withLock
     suspendCoroutine<Unit?> { continuation ->
       log { "start connection" }

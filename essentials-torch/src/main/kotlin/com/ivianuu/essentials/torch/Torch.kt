@@ -57,11 +57,11 @@ import kotlin.coroutines.resume
   private val _torchState = MutableStateFlow(false)
   val torchState: StateFlow<Boolean> get() = _torchState
 
-  private val torchJobMutex = Mutex()
+  private val torchJobLock = Mutex()
   private var torchJob: Job? = null
 
   suspend fun setTorchState(value: Boolean) {
-    torchJobMutex.withLock {
+    torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
       torchJob = scope.launch { handleTorchState(value) }
