@@ -25,5 +25,5 @@ import com.ivianuu.injekt.coroutines.ComponentScope
   val componentScope: ComponentScope<C>
 }
 
-val <C : @Component Any> C.componentScope: ComponentScope<C>
+val <C : @Component Any> C.scope: ComponentScope<C>
   get() = entryPoint<ComponentScopeComponent<C>>(this).componentScope
