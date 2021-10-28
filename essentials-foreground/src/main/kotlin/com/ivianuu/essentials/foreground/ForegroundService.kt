@@ -1,6 +1,5 @@
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
@@ -21,8 +20,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
@@ -31,7 +28,7 @@ class ForegroundService : Service() {
   }
   @Provide private val logger: Logger get() = component.logger
 
-  private var previousStates = emptyList<Pair<Int, Notification>>()
+  private var previousStates = emptyList<ForegroundManagerImpl.ForegroundState>()
 
   override fun onCreate() {
     super.onCreate()
@@ -42,22 +39,12 @@ class ForegroundService : Service() {
         block = {
           component.foregroundManager.states
             .flatMapLatest { states ->
-              if (states.isNotEmpty()) {
-                combine(
-                  states
-                    .map { state ->
-                      state.notification
-                        .map { state.id to it }
-                    }
-                ) { it.toList() }
-                  .onStart { emit(states.map { it.id to it.notification.value }) }
-              } else flowOf(emptyList())
+              if (states.isEmpty()) flowOf(emptyList())
+              else combine(states.map { it.notification }) { states }
             }
             .collect { applyState(it) }
         },
-        finalizer = {
-          applyState(emptyList())
-        }
+        finalizer = { applyState(emptyList()) }
       )
     }
   }
@@ -68,26 +55,28 @@ class ForegroundService : Service() {
     super.onDestroy()
   }
 
-  private fun applyState(states: List<Pair<Int, Notification>>) {
+  private fun applyState(states: List<ForegroundManagerImpl.ForegroundState>) {
     log { "apply states: $states" }
 
     previousStates
-      .filter { state -> states.none { state.first == it.first } }
-      .forEach { component.notificationManager.cancel(it.first) }
+      .filter { state -> states.none { state.id == it.id } }
+      .forEach { component.notificationManager.cancel(it.id) }
 
     if (states.isNotEmpty()) {
       states
         .forEachIndexed { index, state ->
           if (index == 0) {
-            startForeground(state.first, state.second)
+            startForeground(state.id, state.notification.value)
           } else {
-            component.notificationManager.notify(state.first, state.second)
+            component.notificationManager.notify(state.id, state.notification.value)
           }
         }
     } else {
       stopForeground(true)
       stopSelf()
     }
+
+    states.forEach { it.seen.complete(Unit) }
 
     previousStates = states
   }
