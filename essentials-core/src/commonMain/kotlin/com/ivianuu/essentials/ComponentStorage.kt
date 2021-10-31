@@ -2,7 +2,6 @@ package com.ivianuu.essentials
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AnyInterface
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.ComponentObserver
 import com.ivianuu.injekt.common.Disposable
@@ -20,7 +19,7 @@ interface ComponentStorage<C : @Component Any> {
   fun remove(key: Any)
 }
 
-interface ComponentStorageComponent<C : @Component Any> : @EntryPoint<C> AnyInterface {
+@EntryPoint<C> interface ComponentStorageComponent<C : @Component Any> {
   val componentStorage: ComponentStorage<C>
 }
 
@@ -58,7 +57,8 @@ inline fun <T> ComponentStorage<*>.scoped(
   return holder.value as T
 }
 
-class ComponentStorageImpl<C : @Component Any> @Provide @Scoped<C> constructor() : ComponentStorage<C>, Disposable {
+@Provide @Scoped<C>
+class ComponentStorageImpl<C : @Component Any> constructor() : ComponentStorage<C>, Disposable {
   private val values = mutableMapOf<Any, Any?>()
 
   override operator fun <T> get(key: Any): T? = values[key] as? T

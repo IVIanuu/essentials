@@ -27,12 +27,12 @@ typealias ScreenAdBannerConfig = AdBannerConfig
 
 typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
 
-@Provide fun adBannerKeyUiDecorator(
+@Provide @Scoped<KeyUiComponent> fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>,
   key: Key<*>
-): @Scoped<KeyUiComponent>  ScreenAdBannerKeyUiDecorator {
+): ScreenAdBannerKeyUiDecorator {
   var showAds by mutableStateOf<Boolean?>(null)
   return (decorator@ { content ->
     if (config == null) {

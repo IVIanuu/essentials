@@ -64,5 +64,5 @@ object AdsKey : Key<Unit>
 @Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
   get() = ScreenLaunchFullscreenAdConfig(4)
 
-@Provide val showAdsState: @Scoped<UiComponent> MutableStateFlow<ShowAds>
+@Provide @Scoped<UiComponent> val showAdsState: MutableStateFlow<ShowAds>
   get() = MutableStateFlow(false)

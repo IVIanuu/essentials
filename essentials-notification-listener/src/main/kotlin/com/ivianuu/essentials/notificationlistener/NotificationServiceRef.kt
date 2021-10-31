@@ -21,6 +21,6 @@ import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide
-val notificationListenerRef: @Scoped<AppComponent> MutableStateFlow<EsNotificationListenerService?>
+@Provide @Scoped<AppComponent>
+val notificationListenerRef: MutableStateFlow<EsNotificationListenerService?>
   get() = MutableStateFlow(null)

@@ -75,7 +75,7 @@ object CheckAppsKey : Key<Unit>
 
 typealias CheckAppsDb = Db
 
-@Provide fun checkAppsDb(context: AppContext): @Scoped<AppComponent> CheckAppsDb = AndroidDb(
+@Provide @Scoped<AppComponent> fun checkAppsDb(context: AppContext): CheckAppsDb = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

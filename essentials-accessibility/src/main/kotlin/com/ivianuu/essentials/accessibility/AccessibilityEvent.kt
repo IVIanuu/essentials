@@ -34,7 +34,7 @@ typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEv
 
 internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityEvent>
 
-@Provide val mutableAccessibilityEvents: @Scoped<AppComponent> MutableAccessibilityEvents
+@Provide @Scoped<AppComponent> val mutableAccessibilityEvents: MutableAccessibilityEvents
   get() = EventFlow()
 
 @Provide inline val MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>

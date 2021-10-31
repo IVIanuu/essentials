@@ -148,5 +148,5 @@ object NavBarKey : Key<Unit>
 
 typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
 
-@Provide val sampleForceNavBarVisibleState: @Scoped<AppComponent> SampleForceNavBarVisibleState
+@Provide @Scoped<AppComponent> val sampleForceNavBarVisibleState: SampleForceNavBarVisibleState
   get() = MutableStateFlow(false)

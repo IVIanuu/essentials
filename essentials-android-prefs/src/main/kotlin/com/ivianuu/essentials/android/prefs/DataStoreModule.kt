@@ -15,13 +15,13 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
-  @Provide fun dataStore(
+  @Provide @Scoped<AppComponent> fun dataStore(
     dispatcher: IODispatcher,
     initial: () -> @Initial T = default,
     serializerFactory: () -> Serializer<T>,
     prefsDir: () -> PrefsDir,
     scope: ComponentScope<AppComponent>
-  ): @Scoped<AppComponent> DataStore<T> = DiskDataStore(
+  ): DataStore<T> = DiskDataStore(
     coroutineContext = scope.coroutineContext.childCoroutineContext(dispatcher),
     produceFile = { prefsDir().resolve(name) },
     produceSerializer = serializerFactory,

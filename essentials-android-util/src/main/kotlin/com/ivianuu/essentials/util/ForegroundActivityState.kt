@@ -33,7 +33,7 @@ typealias ForegroundActivity = ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Provide val foregroundActivityState: @Scoped<AppComponent> MutableStateFlow<ForegroundActivity>
+@Provide @Scoped<AppComponent> val foregroundActivityState: MutableStateFlow<ForegroundActivity>
   get() = MutableStateFlow(null)
 
 @Provide fun foregroundActivityStateWorker(

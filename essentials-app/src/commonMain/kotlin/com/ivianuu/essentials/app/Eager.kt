@@ -9,7 +9,7 @@ import com.ivianuu.injekt.common.Scoped
 @Tag annotation class Eager<C : @Component Any> {
   companion object {
     @Provide class Module<@com.ivianuu.injekt.Spread T : @Eager<C> U, U : Any, C : @Component Any> {
-      @Provide inline fun scopedValue(factory: () -> T): @Scoped<C> U = factory()
+      @Provide @Scoped<C> inline fun scopedValue(factory: () -> T): U = factory()
 
       @Provide inline fun initializer(
         crossinline factory: () -> U

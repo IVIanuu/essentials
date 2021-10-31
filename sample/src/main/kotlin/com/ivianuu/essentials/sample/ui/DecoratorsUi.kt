@@ -38,7 +38,7 @@ object DecoratorsKey : Key<Unit>
 }
 
 @Provide val sampleListDecorator: ListDecorator = {
-  item {
+  item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
@@ -46,7 +46,7 @@ object DecoratorsKey : Key<Unit>
 
   content()
 
-  item {
+  item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")

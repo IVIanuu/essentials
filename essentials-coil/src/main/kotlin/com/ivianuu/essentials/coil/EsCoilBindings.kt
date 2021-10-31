@@ -29,13 +29,13 @@ import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlin.reflect.KClass
 
-@Provide fun imageLoader(
+@Provide @Scoped<AppComponent> fun imageLoader(
   context: AppContext,
   decoders: List<Decoder> = emptyList(),
   fetchers: List<FetcherPair<*>> = emptyList(),
   interceptors: List<Interceptor> = emptyList(),
   mappers: List<MapperPair<*>> = emptyList(),
-): @Scoped<AppComponent> ImageLoader = ImageLoader.Builder(context)
+): ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }
     interceptors.forEach { add(it) }
