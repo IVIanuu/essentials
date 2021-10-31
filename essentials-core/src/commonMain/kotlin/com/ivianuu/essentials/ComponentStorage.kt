@@ -58,7 +58,7 @@ inline fun <T> ComponentStorage<*>.scoped(
 }
 
 @Provide @Scoped<C>
-class ComponentStorageImpl<C : @Component Any> constructor() : ComponentStorage<C>, Disposable {
+class ComponentStorageImpl<C : @Component Any> : ComponentStorage<C>, Disposable {
   private val values = mutableMapOf<Any, Any?>()
 
   override operator fun <T> get(key: Any): T? = values[key] as? T
