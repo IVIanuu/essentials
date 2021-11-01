@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.rubik.Rubik
 import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.material.EsTheme
@@ -24,7 +23,7 @@ import com.ivianuu.essentials.ui.material.EsTypography
 import com.ivianuu.essentials.ui.material.editEach
 import com.ivianuu.injekt.Provide
 
-@Provide fun sampleTheme(rp: ResourceProvider): AppTheme = { content ->
+@Provide val sampleTheme: AppTheme = { content ->
   EsTheme(
     typography = EsTypography.editEach { copy(fontFamily = Rubik) },
     content = content
