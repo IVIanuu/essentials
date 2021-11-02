@@ -23,34 +23,70 @@ import com.ivianuu.injekt.common.Component
   @Provide val a: A
 }
 
-@Component interface Context2<A, B> : Context1<A> {
+@Component interface Context2<A, B> {
+  @Provide val a: A
   @Provide val b: B
 }
 
-@Component interface Context3<A, B, C> : Context2<A, B> {
+@Component interface Context3<A, B, C> {
+  @Provide val a: A
+  @Provide val b: B
   @Provide val c: C
 }
 
-@Component interface Context4<A, B, C, D> : Context3<A, B, C> {
+@Component interface Context4<A, B, C, D> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
   @Provide val d: D
 }
 
-@Component interface Context5<A, B, C, D, E> : Context4<A, B, C, D> {
+@Component interface Context5<A, B, C, D, E> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
+  @Provide val d: D
   @Provide val e: E
 }
 
-@Component interface Context6<A, B, C, D, E, F> : Context5<A, B, C, D, E> {
+@Component interface Context6<A, B, C, D, E, F> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
+  @Provide val d: D
+  @Provide val e: E
   @Provide val f: F
 }
 
-@Component interface Context7<A, B, C, D, E, F, G> : Context6<A, B, C, D, E, F> {
+@Component interface Context7<A, B, C, D, E, F, G> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
+  @Provide val d: D
+  @Provide val e: E
+  @Provide val f: F
   @Provide val g: G
 }
 
-@Component interface Context8<A, B, C, D, E, F, G, H> : Context7<A, B, C, D, E, F, G> {
+@Component interface Context8<A, B, C, D, E, F, G, H> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
+  @Provide val d: D
+  @Provide val e: E
+  @Provide val f: F
+  @Provide val g: G
   @Provide val h: H
 }
 
-@Component interface Context9<A, B, C, D, E, F, G, H, I> : Context8<A, B, C, D, E, F, G, H> {
+@Component interface Context9<A, B, C, D, E, F, G, H, I> {
+  @Provide val a: A
+  @Provide val b: B
+  @Provide val c: C
+  @Provide val d: D
+  @Provide val e: E
+  @Provide val f: F
+  @Provide val g: G
+  @Provide val h: H
   @Provide val i: I
 }
