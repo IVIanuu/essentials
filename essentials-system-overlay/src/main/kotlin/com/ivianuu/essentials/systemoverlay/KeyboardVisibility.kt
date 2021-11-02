@@ -20,12 +20,12 @@ import android.view.inputmethod.InputMethodManager
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.app.Eager
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -39,11 +39,11 @@ import kotlinx.coroutines.flow.transformLatest
 
 typealias KeyboardVisible = Boolean
 
-@Provide fun keyboardVisible(
+@Provide @Scoped<AppComponent>(eager = true) fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
   keyboardHeightProvider: KeyboardHeightProvider,
   scope: ComponentScope<AppComponent>
-): @Eager<AppComponent> Flow<KeyboardVisible> = accessibilityEvents
+): Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&
         it.className == "android.inputmethodservice.SoftInputWindow"

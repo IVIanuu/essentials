@@ -41,12 +41,13 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.keyScope
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 
 data class AppPickerKey(
@@ -91,17 +92,15 @@ data class AppPickerKey(
 
 @Provide fun appPickerModel(
   appRepository: AppRepository,
-  key: AppPickerKey,
-  navigator: Navigator,
-  scope: ComponentScope<KeyUiComponent>
-): StateFlow<AppPickerModel> = scope.state(
+  ctx: KeyUiContext<AppPickerKey>
+): StateFlow<AppPickerModel> = keyScope().state(
   AppPickerModel(
-    appPredicate = key.appPredicate,
-    title = key.title
+    appPredicate = key<AppPickerKey>().appPredicate,
+    title = key<AppPickerKey>().title
   )
 ) {
   appRepository.installedApps
     .flowAsResource()
     .update { copy(allApps = it) }
-  action(AppPickerModel.pickApp()) { navigator.pop(key, it) }
+  action(AppPickerModel.pickApp()) { navigator().pop(key(), it) }
 }

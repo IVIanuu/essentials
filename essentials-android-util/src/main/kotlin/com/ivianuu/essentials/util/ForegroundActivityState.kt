@@ -23,8 +23,6 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityComponent
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -33,8 +31,8 @@ typealias ForegroundActivity = ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Provide @Scoped<AppComponent> val foregroundActivityState: MutableStateFlow<ForegroundActivity>
-  get() = MutableStateFlow(null)
+@Provide val foregroundActivityState: MutableStateFlow<ForegroundActivity> =
+  MutableStateFlow(null)
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
