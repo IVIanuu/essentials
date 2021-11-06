@@ -16,18 +16,26 @@
 
 package com.ivianuu.essentials
 
-inline fun <R> nullable(@BuilderInference block: NullableBinding.() -> R): R? = try {
-  with(NullableBindingImpl, block)
-} catch (e: NullableBindingImpl.ShortCircuitException) {
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.provide
+
+inline fun <R> nullable(block: @NullableEffect () -> R): R? = try {
+  provide(NullableControlImpl, block)
+} catch (e: NullableControlImpl.ShortCircuitException) {
   null
 }
 
-interface NullableBinding {
-  fun <T> T?.bind(): T
+typealias NullableEffect = Inject1<NullableControl>
+
+interface NullableControl {
+  fun <T> bind(x: T?): T
 }
 
-@PublishedApi internal object NullableBindingImpl : NullableBinding {
-  override fun <T> T?.bind(): T = this ?: throw ShortCircuitException
+inline fun <T> T.bind(@Inject control: NullableControl): T? = control.bind<T>(this)
+
+@PublishedApi internal object NullableControlImpl : NullableControl {
+  override fun <T> bind(x: T?): T = x ?: throw ShortCircuitException
 
   object ShortCircuitException : ControlException()
 }
