@@ -48,7 +48,6 @@ import com.ivianuu.essentials.ui.navigation.keyScope
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.StateFlow
 
 data class AppPickerKey(
   val appPredicate: AppPredicate = DefaultAppPredicate,
@@ -90,10 +89,9 @@ data class AppPickerKey(
     .map { it.filter(appPredicate) }
 }
 
-@Provide fun appPickerModel(
-  appRepository: AppRepository,
-  ctx: KeyUiContext<AppPickerKey>
-): StateFlow<AppPickerModel> = keyScope().state(
+@Provide @KeyUiContext<AppPickerKey> fun appPickerModel(
+  appRepository: AppRepository
+) = keyScope.state(
   AppPickerModel(
     appPredicate = key<AppPickerKey>().appPredicate,
     title = key<AppPickerKey>().title
@@ -102,5 +100,5 @@ data class AppPickerKey(
   appRepository.installedApps
     .flowAsResource()
     .update { copy(allApps = it) }
-  action(AppPickerModel.pickApp()) { navigator().pop(key(), it) }
+  action(AppPickerModel.pickApp()) { navigator.pop(key(), it) }
 }

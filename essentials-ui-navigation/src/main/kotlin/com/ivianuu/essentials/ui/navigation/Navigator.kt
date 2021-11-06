@@ -22,10 +22,12 @@ import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,6 +48,8 @@ interface Navigator {
 
   suspend fun clear()
 }
+
+@Inject1<Navigator> val navigator: Navigator get() = inject()
 
 @Provide @Scoped<AppComponent> class NavigatorImpl(
   private val keyHandlers: List<KeyHandler<*>> = emptyList(),

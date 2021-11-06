@@ -15,7 +15,6 @@ import com.ivianuu.essentials.ui.core.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Scoped
@@ -42,7 +41,7 @@ object ScreenAdBanner
       return@decorator
     }
 
-    if (!isFeatureEnabled(LocalKeyUiComponent.current.key::class, ScreenAdBannerFeature)) {
+    if (!isFeatureEnabled(key::class, ScreenAdBannerFeature)) {
       content()
       return@decorator
     }

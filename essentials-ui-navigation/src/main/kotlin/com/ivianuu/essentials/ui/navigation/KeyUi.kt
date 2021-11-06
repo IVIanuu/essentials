@@ -21,14 +21,15 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.Context3
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.Inject3
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
@@ -82,11 +83,9 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   scope.ui()
 }
 
-@Component
-interface KeyUiContext<K : Key<*>> : Context3<K, ComponentScope<KeyUiComponent>, Navigator>
+typealias KeyUiContext<K> = Inject3<K, ComponentScope<KeyUiComponent>, Navigator>
 
-inline fun <K : Key<*>> key(@Inject key: K) = key
+inline fun <K : Key<*>> key(@Inject x: K) = x
 
-inline fun keyScope(@Inject scope: ComponentScope<KeyUiComponent>) = scope
-
-inline fun navigator(@Inject navigator: Navigator) = navigator
+@Inject1<ComponentScope<KeyUiComponent>> val keyScope: ComponentScope<KeyUiComponent>
+  get() = inject()

@@ -27,13 +27,15 @@ import kotlin.reflect.KClass
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<out K>(val value: List<AdFeature>)
+@JvmInline value class AdFeatures<K>(val value: List<AdFeature>)
 
-@Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+// todo : Key<*>
+@Provide fun <K/* : Key<*>*/> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
   AdFeatures(allFeatures)
 
 @Provide fun <K : DialogKey<*>> defaultDialogAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
+// todo : Key<*>
 @Provide fun <@Spread T : KeyUi<K>, K : Any> adFeatureConfigMapEntry(
   keyClass: KClass<K>,
   features: AdFeatures<K>
