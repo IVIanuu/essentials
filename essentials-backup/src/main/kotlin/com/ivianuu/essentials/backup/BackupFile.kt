@@ -19,11 +19,14 @@ package com.ivianuu.essentials.backup
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import java.io.File
 
-typealias BackupFile = File
+@Tag annotation class BackupFileTag
+typealias BackupFile = @BackupFileTag File
 
-typealias BackupDir = File
+@Tag annotation class BackupDirTag
+typealias BackupDir = @BackupDirTag File
 
 @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
 

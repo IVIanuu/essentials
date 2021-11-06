@@ -21,6 +21,7 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +36,7 @@ enum class ScreenState(val isOn: Boolean) {
 
 @Provide fun screenState(
   broadcastsFactory: BroadcastsFactory,
-  screenStateProvider: CurrentScreenStateProvider
+  screenStateProvider: @CurrentScreenStateProvider suspend () -> ScreenState
 ): Flow<ScreenState> = broadcastsFactory(
   Intent.ACTION_SCREEN_OFF,
   Intent.ACTION_SCREEN_ON,
@@ -45,13 +46,13 @@ enum class ScreenState(val isOn: Boolean) {
   .map { screenStateProvider() }
   .distinctUntilChanged()
 
-private typealias CurrentScreenStateProvider = suspend () -> ScreenState
+@Tag private annotation class CurrentScreenStateProvider
 
 @Provide fun currentScreenStateProvider(
   dispatcher: DefaultDispatcher,
   keyguardManager: @SystemService KeyguardManager,
   powerManager: @SystemService PowerManager,
-): CurrentScreenStateProvider = {
+): @CurrentScreenStateProvider suspend () -> ScreenState = {
   withContext(dispatcher) {
     if (powerManager.isInteractive) {
       if (keyguardManager.isDeviceLocked) {

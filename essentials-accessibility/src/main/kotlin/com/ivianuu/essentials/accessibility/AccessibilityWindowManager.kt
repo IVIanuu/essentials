@@ -20,8 +20,12 @@ import android.app.Service
 import android.view.WindowManager
 import androidx.core.content.getSystemService
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 
-typealias AccessibilityWindowManager = WindowManager
-
-@Provide inline val Service.accessibilityWindowManager: AccessibilityWindowManager
-  get() = getSystemService()!!
+@Tag annotation class AccessibilityWindowManagerTag {
+  companion object {
+    @Provide inline fun windowManager(service: Service): AccessibilityWindowManager =
+      service.getSystemService()!!
+  }
+}
+typealias AccessibilityWindowManager = @AccessibilityWindowManagerTag WindowManager

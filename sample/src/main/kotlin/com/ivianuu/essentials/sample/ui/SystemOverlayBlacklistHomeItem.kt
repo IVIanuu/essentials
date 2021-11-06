@@ -25,4 +25,4 @@ import kotlinx.coroutines.flow.flowOf
   SystemOverlayBlacklistKey("Gestures")
 }
 
-@Provide val overlayEnabled = flowOf<SystemOverlayEnabled>(false)
+@Provide val overlayEnabled = flowOf<SystemOverlayEnabled>(SystemOverlayEnabled(false))

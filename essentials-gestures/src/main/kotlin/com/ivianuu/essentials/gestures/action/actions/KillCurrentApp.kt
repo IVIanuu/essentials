@@ -47,10 +47,10 @@ import kotlinx.coroutines.flow.first
 @Provide fun killCurrentAppActionExecutor(
   actionRootCommandRunner: ActionRootCommandRunner,
   buildInfo: BuildInfo,
-  currentAppFlow: Flow<CurrentApp>,
+  currentAppFlow: Flow<CurrentApp?>,
   packageManager: PackageManager
 ): ActionExecutor<KillCurrentAppActionId> = {
-  val currentApp = currentAppFlow.first()
+  val currentApp = currentAppFlow.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
     currentApp != buildInfo.packageName && // we have no suicidal intentions :D

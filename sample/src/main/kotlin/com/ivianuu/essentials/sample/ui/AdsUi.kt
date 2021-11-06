@@ -14,13 +14,11 @@ import com.ivianuu.essentials.ads.ScreenLaunchFullscreenAdConfig
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -35,8 +33,8 @@ object AdsKey : Key<Unit>
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
-        value = showAdsState.collectAsState().value,
-        onValueChange = { showAdsState.value = it },
+        value = showAdsState.collectAsState().value.value,
+        onValueChange = { showAdsState.value = ShowAds(it) },
         title = { Text("Show ads") }
       )
     }
@@ -59,10 +57,9 @@ object AdsKey : Key<Unit>
   size = AdSize.LARGE_BANNER
 )
 @Provide fun fullScreenAdId(rp: ResourceProvider): FullScreenAdId =
-  loadResource<String>(R.string.es_test_ad_unit_id_interstitial)
+  FullScreenAdId(loadResource<String>(R.string.es_test_ad_unit_id_interstitial))
 
 @Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
   get() = ScreenLaunchFullscreenAdConfig(4)
 
-@Provide @Scoped<UiComponent> val showAdsState: MutableStateFlow<ShowAds>
-  get() = MutableStateFlow(false)
+@Provide val showAdsState = MutableStateFlow(ShowAds(false))

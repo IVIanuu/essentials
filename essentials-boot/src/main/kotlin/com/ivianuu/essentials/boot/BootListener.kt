@@ -16,4 +16,7 @@
 
 package com.ivianuu.essentials.boot
 
-typealias BootListener = () -> Unit
+import com.ivianuu.injekt.Tag
+
+@Tag annotation class BootListenerTag
+typealias BootListener = @BootListenerTag () -> Unit

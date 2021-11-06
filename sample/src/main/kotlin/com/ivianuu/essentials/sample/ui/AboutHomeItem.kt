@@ -22,4 +22,4 @@ import com.ivianuu.injekt.Provide
 
 @Provide val aboutHomeItem = HomeItem("About") { AboutKey }
 
-@Provide val privacyPolicy: PrivacyPolicyUrl = "https://www.google.com"
+@Provide val privacyPolicy = PrivacyPolicyUrl("https://www.google.com")

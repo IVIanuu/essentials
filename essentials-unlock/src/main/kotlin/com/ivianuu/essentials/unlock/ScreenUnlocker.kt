@@ -21,6 +21,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.CompletableDeferred
@@ -28,7 +29,8 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-typealias ScreenUnlocker = suspend () -> Boolean
+@Tag annotation class ScreenUnlockerTag
+typealias ScreenUnlocker = @ScreenUnlockerTag suspend () -> Boolean
 
 @Provide fun screenUnlocker(
   context: AppContext,

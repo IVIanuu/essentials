@@ -16,8 +16,8 @@ import com.ivianuu.injekt.common.AppComponent
 )
 class SampleXposedApp : EsXposedApp() {
   override fun buildAppComponent(@Inject context: XposedContext): AppComponent {
-    @Provide val logTag: XposedLogTag = "EssentialsSample"
-    @Provide val modulePackageName: ModulePackageName = "com.ivianuu.essentials.sample"
+    @Provide val logTag = XposedLogTag("EssentialsSample")
+    @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")
     return createXposedAppComponent()
   }
 }

@@ -12,29 +12,31 @@ import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @Provide object ListAdBannerFeature : AdFeature
 
-typealias ListAdBannerConfig = AdBannerConfig
+@Tag annotation class ListAdBannerConfigTag
+typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
-typealias ListAdBannerListDecorator = ListDecorator
+object ListAdBanner
 
 @Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>
-): ListAdBannerListDecorator = decorator@ {
+): ListDecorator<ListAdBanner> = decorator@ {
   if (config != null && isVertical) {
     item(null) {
       val key = catch { LocalKeyUiComponent.current.key::class }.getOrNull()
       if (key == null || isFeatureEnabled(key, ListAdBannerFeature)) {
-        var showAds by LocalComponent.current.storage.scoped { mutableStateOf<Boolean?>(null) }
+        var showAds by LocalComponent.current.storage.scoped { mutableStateOf<ShowAds?>(null) }
         LaunchedEffect(true) {
           showAdsFlow.collect { showAds = it }
         }
-        if (showAds == true) AdBanner(config)
+        if (showAds?.value == true) AdBanner(config)
       }
     }
   }

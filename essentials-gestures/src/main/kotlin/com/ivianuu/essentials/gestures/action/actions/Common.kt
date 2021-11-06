@@ -43,6 +43,7 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -72,7 +73,8 @@ fun singleActionIcon(id: Int) = singleActionIcon {
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
-typealias ActionRootCommandRunner = suspend (String) -> Unit
+@Tag annotation class ActionRootCommandRunnerTag
+typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String) -> Unit
 
 @Provide fun actionRootCommandRunner(
   shell: Shell,
@@ -86,7 +88,8 @@ typealias ActionRootCommandRunner = suspend (String) -> Unit
     }
 }
 
-typealias ActionIntentSender = (Intent, Boolean, Bundle?) -> Unit
+@Tag annotation class ActionIntentSenderTag
+typealias ActionIntentSender = @ActionIntentSenderTag (Intent, Boolean, Bundle?) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
@@ -106,7 +109,8 @@ typealias ActionIntentSender = (Intent, Boolean, Bundle?) -> Unit
   }
 }
 
-typealias CloseSystemDialogsUseCase = suspend () -> Result<Unit, Throwable>
+@Tag annotation class CloseSystemDialogsUseCaseTag
+typealias CloseSystemDialogsUseCase = @CloseSystemDialogsUseCaseTag suspend () -> Result<Unit, Throwable>
 
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide

@@ -37,7 +37,9 @@ object DecoratorsKey : Key<Unit>
   }
 }
 
-@Provide val sampleListDecorator: ListDecorator = {
+object SampleListDecorator
+
+@Provide val sampleListDecorator: ListDecorator<SampleListDecorator> = {
   item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
     if (key is DecoratorsKey)
@@ -53,7 +55,9 @@ object DecoratorsKey : Key<Unit>
   }
 }
 
-@Provide val sampleKeyUiDecorator: KeyUiDecorator = decorator@{ content ->
+object SampleKeyUiDecorator
+
+@Provide val sampleKeyUiDecorator: KeyUiDecorator<SampleKeyUiDecorator> = decorator@ { content ->
   val key = LocalKeyUiComponent.current.key
   if (key !is DecoratorsKey) {
     content()

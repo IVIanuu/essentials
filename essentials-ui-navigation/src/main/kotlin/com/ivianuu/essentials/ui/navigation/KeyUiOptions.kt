@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.ui.animation.transition.StackTransition
+import com.ivianuu.injekt.Tag
 
 data class KeyUiOptions(
   val enterTransition: StackTransition? = null,
@@ -29,7 +30,8 @@ data class KeyUiOptions(
   ) : this(transition, transition, opaque)
 }
 
-typealias KeyUiOptionsFactory<K> = (K) -> KeyUiOptions
+@Tag annotation class KeyUiOptionsFactoryTag
+typealias KeyUiOptionsFactory<K> = @KeyUiOptionsFactoryTag (K) -> KeyUiOptions
 
 fun <K> noOpKeyUiOptionFactory(): KeyUiOptionsFactory<K> = { defaultKeyUiOptions }
 

@@ -35,7 +35,7 @@ interface NotificationListenerPermission : Permission {
 }
 
 @Provide fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
-): ShowFindPermissionHint<P> = true
+) = ShowFindPermissionHint<P>(true)
 
 @Provide fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
   context: AppContext,

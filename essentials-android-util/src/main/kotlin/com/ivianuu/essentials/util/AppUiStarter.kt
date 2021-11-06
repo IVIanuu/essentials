@@ -22,12 +22,16 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
-typealias AppUiStarter = IntentAppUiStarter
+@Tag annotation class AppUiStarterTag
+typealias AppUiStarter = @AppUiStarterTag IntentAppUiStarter
+
+@Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
 
 @Provide fun appUiStarter(
   context: AppContext,

@@ -18,21 +18,17 @@ package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 data class AccessibilityEvent(
   val type: Int,
   val packageName: String?,
   val className: String?,
   val isFullScreen: Boolean,
-)
+) {
+  companion object {
+    @Provide val accessibilityEvents = EventFlow<AccessibilityEvent>()
+  }
+}
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
 
-internal typealias MutableAccessibilityEvents = MutableSharedFlow<AccessibilityEvent>
-
-@Provide val mutableAccessibilityEvents: MutableAccessibilityEvents = EventFlow()
-
-@Provide inline val MutableAccessibilityEvents.accessibilityEvents: Flow<AccessibilityEvent>
-  get() = this

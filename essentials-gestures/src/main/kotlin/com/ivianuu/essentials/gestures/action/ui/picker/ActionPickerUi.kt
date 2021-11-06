@@ -172,9 +172,9 @@ sealed class ActionPickerItem {
 
 private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,
-  @Inject key: ActionPickerKey,
-  @Inject repository: ActionRepository,
-  @Inject rp: ResourceProvider
+  key: ActionPickerKey,
+  repository: ActionRepository,
+  rp: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

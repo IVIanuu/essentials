@@ -27,7 +27,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-typealias FullScreenAdId = String
+@JvmInline value class FullScreenAdId(val value: String)
 
 interface FullScreenAd {
   suspend fun isLoaded(): Boolean
@@ -59,13 +59,13 @@ interface FullScreenAd {
   }
 
   override suspend fun load(): Boolean {
-    if (!showAds.first()) return false
+    if (!showAds.first().value) return false
     getOrCreateCurrentAd()
     return true
   }
 
   override suspend fun loadAndShow(): Boolean {
-    if (!showAds.first()) return false
+    if (!showAds.first().value) return false
     getOrCreateCurrentAd().invoke()
     preload()
     return true
@@ -88,7 +88,7 @@ interface FullScreenAd {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(mainDispatcher) {
       val ad = InterstitialAd(context).apply {
-        adUnitId = id
+        adUnitId = id.value
       }
 
       log { "start loading ad" }
@@ -132,8 +132,6 @@ class AdLoadingException(val reason: Int) : RuntimeException()
   showAds: Flow<ShowAds>
 ): ScopeWorker<UiComponent> = {
   showAds
-    .filter { it }
-    .collect {
-      fullScreenAd.preload()
-    }
+    .filter { it.value }
+    .collect { fullScreenAd.preload() }
 }

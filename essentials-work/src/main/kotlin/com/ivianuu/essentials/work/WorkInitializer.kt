@@ -21,15 +21,16 @@ import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeInitializer
+import com.ivianuu.essentials.app.ScopeInitializerKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 
-typealias WorkInitializer = ScopeInitializer<AppComponent>
+object WorkInitializer : ScopeInitializerKey<AppComponent>
 
 @Provide fun workInitializer(
   context: AppContext,
   workerFactory: WorkerFactory
-): WorkInitializer = {
+): ScopeInitializer<WorkInitializer> = {
   WorkManager.initialize(
     context,
     Configuration.Builder()

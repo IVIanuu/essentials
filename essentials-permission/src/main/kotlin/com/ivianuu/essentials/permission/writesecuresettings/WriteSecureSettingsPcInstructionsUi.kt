@@ -55,6 +55,7 @@ import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.delay
@@ -187,7 +188,8 @@ data class WriteSecureSettingsPcInstructionsKey(
   val adbCommand = "pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
 }
 
-typealias DeveloperMode = Int
+@Tag annotation class DeveloperModeTag
+typealias DeveloperMode = @DeveloperModeTag Int
 
 @Provide val developerModeSetting = AndroidSettingModule<DeveloperMode, Int>(
   Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
@@ -195,7 +197,8 @@ typealias DeveloperMode = Int
   0
 )
 
-typealias AdbEnabled = Int
+@Tag annotation class AdbEnabledTag
+typealias AdbEnabled = @AdbEnabledTag Int
 
 @Provide val adbEnabledSetting = AndroidSettingModule<AdbEnabled, Int>(
   Settings.Global.ADB_ENABLED,
@@ -203,14 +206,16 @@ typealias AdbEnabled = Int
   0
 )
 
-typealias IsCharging = Boolean
+@JvmInline value class IsCharging(val value: Boolean)
 
 @Provide fun isCharging(
   broadcastsFactory: BroadcastsFactory
 ): Flow<IsCharging> = broadcastsFactory(Intent.ACTION_BATTERY_CHANGED)
   .map {
-    it.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ==
-        BatteryManager.BATTERY_STATUS_CHARGING
+    IsCharging(
+      it.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ==
+          BatteryManager.BATTERY_STATUS_CHARGING
+    )
   }
   .distinctUntilChanged()
 
@@ -235,7 +240,7 @@ typealias IsCharging = Boolean
       else when (currentState.completedStep) {
         1 -> developerModeSetting.data.map { it != 0 }
         2 -> adbEnabledSetting.data.map { it != 0 }
-        3 -> isCharging
+        3 -> isCharging.map { it.value }
         4 -> flow {
           while (true) {
             emit(permissionStateFactory(listOf(key.permissionKey)).first())

@@ -96,8 +96,8 @@ fun foregroundUi(
   color: Color,
   count: Int,
   @Inject context: AppContext,
-  @Inject notificationManager: @SystemService NotificationManager,
-  @Inject systemBuildInfo: SystemBuildInfo
+  notificationManager: @SystemService NotificationManager,
+  systemBuildInfo: SystemBuildInfo
 ): Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(

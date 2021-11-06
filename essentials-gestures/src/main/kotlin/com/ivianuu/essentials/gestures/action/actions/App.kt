@@ -95,7 +95,7 @@ import kotlinx.coroutines.flow.first
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null
-    val isFloating = floatingWindowActionsEnabled &&
+    val isFloating = floatingWindowActionsEnabled.value &&
         navigator.push(FloatingWindowsPickerKey(app.appName)) ?: return null
     return ActionPickerKey.Result.Action("$BASE_ID${app.packageName}$ACTION_DELIMITER$isFloating")
   }

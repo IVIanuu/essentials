@@ -36,7 +36,7 @@ interface SystemOverlayPermission : Permission
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayShowFindPermissionHint(
   systemBuildInfo: SystemBuildInfo
-): ShowFindPermissionHint<P> = systemBuildInfo.sdk >= 30
+) = ShowFindPermissionHint<P>(systemBuildInfo.sdk >= 30)
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
   buildInfo: BuildInfo

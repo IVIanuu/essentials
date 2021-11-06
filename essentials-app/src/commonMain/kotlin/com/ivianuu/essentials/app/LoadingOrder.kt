@@ -154,7 +154,7 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
     if (unprocessedItems.isEmpty()) break
     // todo improve error message
     check(lastItems != unprocessedItems) {
-      "Corrupt collection setup $this"
+      "Corrupt collection setup last and unprocessed$unprocessedItems\nall $this"
     }
     lastItems = unprocessedItems
     sortedItems += unprocessedItems

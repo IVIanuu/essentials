@@ -29,6 +29,7 @@ import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -38,7 +39,8 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
+@Tag annotation class GetSkuDetailsUseCaseTag
+typealias GetSkuDetailsUseCase = @GetSkuDetailsUseCaseTag suspend (Sku) -> SkuDetails?
 
 @Provide fun getSkuDetailsUseCase(context: BillingContext): GetSkuDetailsUseCase = { sku ->
   context.withConnection {
@@ -49,7 +51,8 @@ typealias GetSkuDetailsUseCase = suspend (Sku) -> SkuDetails?
   }
 }
 
-typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
+@Tag annotation class PurchaseUseCaseTag
+typealias PurchaseUseCase = @PurchaseUseCaseTag suspend (Sku, Boolean, Boolean) -> Boolean
 
 @Provide fun purchaseUseCase(
   acknowledgePurchase: AcknowledgePurchaseUseCase,
@@ -92,7 +95,8 @@ typealias PurchaseUseCase = suspend (Sku, Boolean, Boolean) -> Boolean
   } ?: false
 }
 
-typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
+@Tag annotation class ConsumePurchaseUseCaseTag
+typealias ConsumePurchaseUseCase = @ConsumePurchaseUseCaseTag suspend (Sku) -> Boolean
 
 @Provide fun consumePurchaseUseCase(context: BillingContext): ConsumePurchaseUseCase = { sku ->
   context.withConnection {
@@ -114,7 +118,8 @@ typealias ConsumePurchaseUseCase = suspend (Sku) -> Boolean
   } ?: false
 }
 
-typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
+@Tag annotation class AcknowledgePurchaseUseCaseTag
+typealias AcknowledgePurchaseUseCase = @AcknowledgePurchaseUseCaseTag suspend (Sku) -> Boolean
 
 @Provide fun acknowledgePurchaseUseCase(context: BillingContext): AcknowledgePurchaseUseCase =
   { sku ->
@@ -140,7 +145,8 @@ typealias AcknowledgePurchaseUseCase = suspend (Sku) -> Boolean
     } ?: false
   }
 
-typealias IsPurchased = Boolean
+@Tag annotation class IsPurchasedTag
+typealias IsPurchased = @IsPurchasedTag Boolean
 
 @Provide fun isPurchased(
   appForegroundState: Flow<AppForegroundState>,

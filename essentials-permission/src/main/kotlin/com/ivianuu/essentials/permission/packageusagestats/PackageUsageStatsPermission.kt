@@ -32,7 +32,7 @@ import com.ivianuu.injekt.android.SystemService
 interface PackageUsageStatsPermission : Permission
 
 @Provide fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
-): ShowFindPermissionHint<P> = true
+) = ShowFindPermissionHint<P>(true)
 
 @Suppress("DEPRECATION")
 @Provide

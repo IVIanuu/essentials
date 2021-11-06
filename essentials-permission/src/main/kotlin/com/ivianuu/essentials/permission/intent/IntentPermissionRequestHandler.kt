@@ -31,26 +31,28 @@ import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-typealias PermissionIntentFactory<P> = (P) -> Intent
+@Tag annotation class PermissionIntentFactoryTag
+typealias PermissionIntentFactory<P> = @PermissionIntentFactoryTag (P) -> Intent
 
-typealias ShowFindPermissionHint<P> = Boolean
+@JvmInline value class ShowFindPermissionHint<P>(val value: Boolean)
 
 @Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
-  showFindPermissionHint: ShowFindPermissionHint<P> = false,
+  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   state: Flow<PermissionState<P>>,
   rp: ResourceProvider,
   toaster: Toaster
 ): PermissionRequestHandler<P> = { permission ->
   race(
     {
-      if (showFindPermissionHint)
+      if (showFindPermissionHint.value)
         showToast(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
       catch { navigator.push(intentFactory(permission).toIntentKey()) }

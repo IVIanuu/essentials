@@ -118,7 +118,7 @@ object AboutKey : Key<Unit>
         modifier = Modifier.clickable(onClick = model.sendMail),
         leading = { Icon(R.drawable.es_ic_email) },
         title = { Text(R.string.es_about_feedback) },
-        subtitle = { Text(model.email) }
+        subtitle = { Text(model.email.value) }
       )
     }
 
@@ -144,7 +144,7 @@ object AboutKey : Key<Unit>
 
 @Optics data class AboutModel(
   val version: String = "",
-  val email: DeveloperEmail = "",
+  val email: DeveloperEmail = DeveloperEmail(""),
   val privacyPolicyUrl: PrivacyPolicyUrl? = null,
   val showDonate: Boolean = false,
   val donate: () -> Unit = {},
@@ -205,7 +205,7 @@ object AboutKey : Key<Unit>
     navigator.push(
       WebKey(
         loadResource(R.string.es_about_privacy_policy),
-        state.first().privacyPolicyUrl!!
+        state.first().privacyPolicyUrl!!.value
       )
     )
   }
@@ -213,4 +213,4 @@ object AboutKey : Key<Unit>
   action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
 }
 
-typealias PrivacyPolicyUrl = String
+@JvmInline value class PrivacyPolicyUrl(val value: String)

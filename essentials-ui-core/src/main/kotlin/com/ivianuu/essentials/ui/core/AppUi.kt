@@ -17,5 +17,7 @@
 package com.ivianuu.essentials.ui.core
 
 import androidx.compose.runtime.Composable
+import com.ivianuu.injekt.Tag
 
-typealias AppUi = @Composable () -> Unit
+@Tag annotation class AppUiTag
+typealias AppUi = @AppUiTag @Composable () -> Unit

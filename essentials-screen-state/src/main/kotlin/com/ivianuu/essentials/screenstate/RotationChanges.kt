@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-typealias RotationChange = Unit
+object RotationChange
 
 @Provide fun rotationChanges(
   context: AppContext,

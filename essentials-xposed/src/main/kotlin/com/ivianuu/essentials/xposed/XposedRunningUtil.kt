@@ -2,6 +2,6 @@ package com.ivianuu.essentials.xposed
 
 import com.ivianuu.injekt.Provide
 
-typealias IsXposedRunning = Boolean
+@JvmInline value class IsXposedRunning(val value: Boolean)
 
-@Provide val isXposedRunning: IsXposedRunning get() = false
+@Provide val isXposedRunning: IsXposedRunning get() = IsXposedRunning(false)

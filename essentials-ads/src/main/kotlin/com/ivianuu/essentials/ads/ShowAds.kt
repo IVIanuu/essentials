@@ -1,3 +1,3 @@
 package com.ivianuu.essentials.ads
 
-typealias ShowAds = Boolean
+@JvmInline value class ShowAds(val value: Boolean)

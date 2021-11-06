@@ -49,12 +49,14 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
-typealias CheckableAppsScreen = @Composable () -> Unit
+@Tag annotation class CheckableAppsScreenTag
+typealias CheckableAppsScreen = @CheckableAppsScreenTag @Composable () -> Unit
 
 data class CheckableAppsParams(
   val checkedApps: Flow<Set<String>>,

@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -40,9 +41,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
-typealias PremiumVersionSku = Sku
+@Tag annotation class PremiumVersionSkuTag
+typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 
-typealias OldPremiumVersionSku = Sku
+@Tag annotation class OldPremiumVersionSkuTag
+typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 interface PremiumVersionManager {
   val premiumSkuDetails: Flow<SkuDetails>
@@ -73,9 +76,11 @@ interface PremiumVersionManager {
 
   override val isPremiumVersion: Flow<Boolean> = combine(
     isPurchased(premiumVersionSku),
-    if (oldPremiumVersionSkus.isNotEmpty()) combine(oldPremiumVersionSkus.map(isPurchased)) {
-      it.any { it }
-    } else flowOf(false)
+    if (oldPremiumVersionSkus.isNotEmpty())
+      combine(oldPremiumVersionSkus.map { isPurchased(it) }) {
+        it.any { it }
+      }
+    else flowOf(false)
   ) { a, b -> a || b }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
@@ -97,4 +102,4 @@ interface PremiumVersionManager {
 }
 
 @Provide fun showAdsState(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
-  premiumVersionManager.isPremiumVersion.map { !it }
+  premiumVersionManager.isPremiumVersion.map { ShowAds(!it) }

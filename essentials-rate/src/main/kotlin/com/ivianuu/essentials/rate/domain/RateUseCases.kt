@@ -26,9 +26,11 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.first
 
-typealias RateOnPlayUseCase = suspend () -> Unit
+@Tag annotation class RateOnPlayUseCaseTag
+typealias RateOnPlayUseCase = @RateOnPlayUseCaseTag suspend () -> Unit
 
 @Provide fun rateOnPlayUseCase(
   buildInfo: BuildInfo,
@@ -41,13 +43,15 @@ typealias RateOnPlayUseCase = suspend () -> Unit
   }.onFailure { it.printStackTrace() }
 }
 
-internal typealias DisplayShowNeverUseCase = suspend () -> Boolean
+@Tag internal annotation class DisplayShowNeverUseCaseTag
+internal typealias DisplayShowNeverUseCase = @DisplayShowNeverUseCaseTag suspend () -> Boolean
 
 @Provide fun displayShowNeverUseCase(pref: DataStore<RatePrefs>): DisplayShowNeverUseCase = {
   pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
 }
 
-internal typealias ShowNeverUseCase = suspend () -> Unit
+@Tag internal annotation class ShowNeverUseCaseTag
+internal typealias ShowNeverUseCase = @ShowNeverUseCaseTag suspend () -> Unit
 
 @Provide fun showNeverUseCase(
   key: Key<*>,
@@ -58,7 +62,8 @@ internal typealias ShowNeverUseCase = suspend () -> Unit
   navigator.pop(key)
 }
 
-internal typealias ShowLaterUseCase = suspend () -> Unit
+@Tag internal annotation class ShowLaterUseCaseTag
+internal typealias ShowLaterUseCase = @ShowLaterUseCaseTag suspend () -> Unit
 
 @Provide fun showLaterUseCase(
   key: Key<*>,

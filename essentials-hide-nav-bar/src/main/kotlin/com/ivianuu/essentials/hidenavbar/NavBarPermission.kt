@@ -43,6 +43,6 @@ import kotlinx.coroutines.flow.first
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>
 ): ScopeWorker<UiComponent> = {
-  if (navBarFeatureSupported && !permissionState.first())
+  if (navBarFeatureSupported.value && !permissionState.first())
     pref.updateData { copy(hideNavBar = false) }
 }

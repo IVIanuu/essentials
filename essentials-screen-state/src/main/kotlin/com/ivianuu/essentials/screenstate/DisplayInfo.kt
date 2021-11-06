@@ -40,7 +40,7 @@ data class DisplayInfo(
 ): Flow<DisplayInfo> = flow {
   combine(
     configChanges()
-      .onStart { emit(Unit) },
+      .onStart { emit(ConfigChange) },
     displayRotation()
   ) { _, rotation ->
     val metrics = DisplayMetrics()

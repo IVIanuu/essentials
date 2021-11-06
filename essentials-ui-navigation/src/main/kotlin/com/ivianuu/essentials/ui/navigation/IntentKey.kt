@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
@@ -41,16 +42,19 @@ import kotlin.reflect.KClass
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
-@Provide fun <@Spread T : KeyIntentFactory<K>, K : Key<*>> keyIntentFactoryElement(
+@Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> keyIntentFactoryElement(
   intentFactory: T,
   keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
-typealias KeyIntentFactory<T> = (T) -> Intent
+@Tag annotation class KeyIntentFactoryTag
+typealias KeyIntentFactory<T> = @KeyIntentFactoryTag (T) -> Intent
 
-typealias IntentAppUiStarter = suspend () -> ComponentActivity
+@Tag annotation class IntentAppUiStarterTag
+typealias IntentAppUiStarter = @IntentAppUiStarterTag suspend () -> ComponentActivity
 
-typealias KeyHandler<R> = suspend (Key<R>, (R) -> Unit) -> Boolean
+@Tag annotation class KeyHandlerTag
+typealias KeyHandler<R> = @KeyHandlerTag suspend (Key<R>, (R) -> Unit) -> Boolean
 
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,

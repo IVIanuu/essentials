@@ -35,19 +35,19 @@ import kotlinx.coroutines.flow.onEach
 
 enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
-typealias SystemOverlayEnabled = Boolean
+@JvmInline value class SystemOverlayEnabled(val value: Boolean)
 
 @Provide fun systemOverlayBlacklistState(
   mainSwitchState: Flow<SystemOverlayEnabled>,
-  keyboardState: @Private Flow<KeyboardSystemOverlayBlacklistState>,
-  lockScreenState: @Private Flow<LockScreenSystemOverlayBlacklistState>,
-  secureScreenState: @Private Flow<SecureScreenSystemOverlayBlacklistState>,
-  userBlacklistState: @Private Flow<UserBlacklistSystemOverlayBlacklistState>,
+  keyboardState: @Private Flow<@Keyboard SystemOverlayBlacklistState>,
+  lockScreenState: @Private Flow<@LockScreen SystemOverlayBlacklistState>,
+  secureScreenState: @Private Flow<@SecureScreen SystemOverlayBlacklistState>,
+  userBlacklistState: @Private Flow<@UserBlacklist SystemOverlayBlacklistState>,
   logger: Logger
 ): Flow<SystemOverlayBlacklistState> = mainSwitchState
   // check the main state of the overlay
   .map {
-    if (it) SystemOverlayBlacklistState.ENABLED
+    if (it.value) SystemOverlayBlacklistState.ENABLED
     else SystemOverlayBlacklistState.DISABLED
   }
   .distinctUntilChanged()
@@ -72,13 +72,13 @@ typealias SystemOverlayEnabled = Boolean
     log { "lol $it" }
   }
 
-private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
+@Tag private annotation class LockScreen
 
-@Provide fun lockScreenSystemOverlayEnabledState(
+@Provide fun lockScreenState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   logger: Logger,
   screenState: Flow<ScreenState>,
-): @Private Flow<LockScreenSystemOverlayBlacklistState> = pref.data
+): @Private Flow<@LockScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
   .flatMapLatest { disableOnLockScreen ->
@@ -98,14 +98,14 @@ private typealias LockScreenSystemOverlayBlacklistState = SystemOverlayBlacklist
     }
   }
 
-private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlacklistState
+@Tag private annotation class SecureScreen
 
-@Provide fun secureScreenSystemOverlayBlacklistState(
+@Provide fun secureScreenState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   isOnSecureScreen: Flow<IsOnSecureScreen>,
   logger: Logger,
   screenState: Flow<ScreenState>
-): @Private Flow<SecureScreenSystemOverlayBlacklistState> = pref.data
+): @Private Flow<@SecureScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
   .onEach { log { "disable on secure screens $it" } }
@@ -118,7 +118,7 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
             isOnSecureScreen
               .onEach { log { "is on secure screen $it" } }
               .map {
-                if (it) {
+                if (it.value) {
                   log { "hide: secure screen" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
@@ -134,14 +134,14 @@ private typealias SecureScreenSystemOverlayBlacklistState = SystemOverlayBlackli
     }
   }
 
-private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlacklistState
+@Tag private annotation class UserBlacklist
 
-@Provide fun userBlacklistSystemOverlayBlacklistState(
+@Provide fun userBlacklistState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  currentApp: Flow<CurrentApp>,
+  currentApp: Flow<CurrentApp?>,
   logger: Logger,
   screenState: Flow<ScreenState>,
-): @Private Flow<UserBlacklistSystemOverlayBlacklistState> = pref.data
+): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
   .distinctUntilChanged()
   .onEach { log { "blacklist $it" } }
@@ -155,7 +155,7 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
             currentApp
               .onEach { log { "current app $it" } }
               .map { currentApp ->
-                if (currentApp in blacklist) {
+                if (currentApp?.value in blacklist) {
                   log { "hide: user blacklist" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
@@ -171,20 +171,20 @@ private typealias UserBlacklistSystemOverlayBlacklistState = SystemOverlayBlackl
     }
   }
 
-private typealias KeyboardSystemOverlayBlacklistState = SystemOverlayBlacklistState
+@Tag private annotation class Keyboard
 
-@Provide fun keyboardSystemOverlayBlacklistState(
+@Provide fun keyboardState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   logger: Logger,
   keyboardVisible: Flow<KeyboardVisible>,
-): @Private Flow<KeyboardSystemOverlayBlacklistState> = pref.data
+): @Private Flow<@Keyboard SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()
   .flatMapLatest { disableOnKeyboard ->
     if (disableOnKeyboard) {
       keyboardVisible
         .map {
-          if (it) {
+          if (it.value) {
             log { "hide: keyboard" }
             SystemOverlayBlacklistState.HIDDEN
           } else {

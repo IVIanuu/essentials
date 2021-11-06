@@ -17,9 +17,14 @@
 package com.ivianuu.essentials.serialization
 
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-typealias KTypeT<T> = KType
+@Tag annotation class KTypeTTag<T> {
+  companion object {
+    @Provide inline fun <reified T> kTypeT(): KTypeT<T> = typeOf<T>()
+  }
+}
 
-@Provide inline fun <reified T> kTypeT(): KTypeT<T> = typeOf<T>()
+typealias KTypeT<T> = @KTypeTTag<T> KType

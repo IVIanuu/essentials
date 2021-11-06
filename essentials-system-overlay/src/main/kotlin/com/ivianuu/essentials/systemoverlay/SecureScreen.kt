@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 
-typealias IsOnSecureScreen = Boolean
+@JvmInline value class IsOnSecureScreen(val value: Boolean)
 
 @Provide @Scoped<AppComponent>(eager = true) fun isOnSecureScreen(
   accessibilityEvents: Flow<AccessibilityEvent>,
@@ -50,11 +50,11 @@ typealias IsOnSecureScreen = Boolean
           className == "android.app.MaterialDialog"
     }
 
-    isOnSecureScreen
+    IsOnSecureScreen(isOnSecureScreen)
   }
   .distinctUntilChanged()
   .onEach { log { "on secure screen changed: $it" } }
-  .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
+  .stateIn(scope, SharingStarted.WhileSubscribed(1000), IsOnSecureScreen(false))
 
 @Provide val isOnSecureScreenAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

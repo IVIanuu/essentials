@@ -20,12 +20,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 
-typealias AppPredicate = (AppInfo) -> Boolean
+@Tag annotation class AppPredicateTag
+typealias AppPredicate = @AppPredicateTag (AppInfo) -> Boolean
 
 val DefaultAppPredicate: AppPredicate = { true }
 
-typealias LaunchableAppPredicate = AppPredicate
+@Tag annotation class LaunchableAppPredicateTag
+typealias LaunchableAppPredicate = @LaunchableAppPredicateTag AppPredicate
 
 @Provide fun launchableAppPredicate(packageManager: PackageManager): LaunchableAppPredicate {
   val cache = mutableMapOf<String, Boolean>()
@@ -36,7 +39,8 @@ typealias LaunchableAppPredicate = AppPredicate
   }
 }
 
-typealias IntentAppPredicate = AppPredicate
+@Tag annotation class IntentAppPredicateTag
+typealias IntentAppPredicate = @IntentAppPredicateTag AppPredicate
 
 @Provide fun intentAppPredicate(
   packageManager: PackageManager,

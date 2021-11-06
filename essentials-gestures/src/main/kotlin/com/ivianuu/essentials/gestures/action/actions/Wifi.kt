@@ -26,6 +26,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -49,7 +50,8 @@ import kotlinx.coroutines.flow.onStart
   wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
-typealias WifiIcon = ActionIcon
+@Tag annotation class WifiIconTag
+typealias WifiIcon = @WifiIconTag ActionIcon
 
 @Provide fun wifiIcon(
   broadcastsFactory: BroadcastsFactory,

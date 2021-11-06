@@ -58,7 +58,7 @@ interface AccessibilityServicePermission : Permission {
 }
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
-): ShowFindPermissionHint<P> = true
+): ShowFindPermissionHint<P> = ShowFindPermissionHint(true)
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
   buildInfo: BuildInfo

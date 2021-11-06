@@ -24,6 +24,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.work.InjektWorker
 import kotlinx.coroutines.delay
 
@@ -40,7 +41,8 @@ import kotlinx.coroutines.delay
   }
 }
 
-typealias TestWorkScheduler = () -> Unit
+@Tag annotation class TestWorkSchedulerTag
+typealias TestWorkScheduler = @TestWorkSchedulerTag () -> Unit
 
 @Provide fun testWorkScheduler(workManager: WorkManager): TestWorkScheduler = {
   workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())

@@ -30,6 +30,7 @@ import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
@@ -39,7 +40,8 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
+@Tag annotation class CreateBackupUseCaseTag
+typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
   backupDir: BackupDir,
@@ -85,7 +87,8 @@ typealias CreateBackupUseCase = suspend () -> Result<Unit, Throwable>
   }
 }
 
-typealias RestoreBackupUseCase = suspend () -> Result<Unit, Throwable>
+@Tag annotation class RestoreBackUseCaseTag
+typealias RestoreBackupUseCase = @RestoreBackUseCaseTag suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,

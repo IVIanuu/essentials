@@ -23,8 +23,10 @@ import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 
-typealias ProcessRestarter = suspend () -> Unit
+@Tag annotation class ProcessRestarterTag
+typealias ProcessRestarter = @ProcessRestarterTag suspend () -> Unit
 
 @Provide fun processRestarter(
   buildInfo: BuildInfo,

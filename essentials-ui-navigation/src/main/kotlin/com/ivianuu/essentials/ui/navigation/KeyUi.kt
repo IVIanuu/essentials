@@ -26,14 +26,17 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
-typealias KeyUi<K> = @Composable () -> Unit
+@Tag annotation class KeyUiTag<K : Key<*>>
+typealias KeyUi<K> = @KeyUiTag<K> @Composable () -> Unit
 
-typealias KeyUiFactory<K> = (K) -> KeyUi<K>
+@Tag annotation class KeyUiFactoryTag
+typealias KeyUiFactory<K> = @KeyUiFactoryTag (K) -> KeyUi<K>
 
 @Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
@@ -64,7 +67,7 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   val model: S
 }
 
-@Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
+@Provide fun <@Spread U : ModelKeyUi<K, S>, K, S> modelKeyUi(
   uiFactory: () -> U,
   model: StateFlow<S>
 ): KeyUi<K> = {

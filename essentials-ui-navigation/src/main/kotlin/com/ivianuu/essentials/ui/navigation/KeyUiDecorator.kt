@@ -25,21 +25,23 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-@Provide fun <@Spread T : KeyUiDecorator> keyUiDecoratorElement(
+@Provide fun <@Spread T : KeyUiDecorator<K>, K> keyUiDecoratorElement(
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
 ): KeyUiDecoratorElement =
-  KeyUiDecoratorElement(key, instance as KeyUiDecorator, loadingOrder.cast())
+  KeyUiDecoratorElement(key, instance as KeyUiDecorator<*>, loadingOrder.cast())
 
-typealias KeyUiDecorator = @Composable (@Composable () -> Unit) -> Unit
+@Tag annotation class KeyUiDecoratorTag<K>
+typealias KeyUiDecorator<K> = @KeyUiDecoratorTag<K> @Composable (@Composable () -> Unit) -> Unit
 
 data class KeyUiDecoratorElement(
-  val key: TypeKey<KeyUiDecorator>,
-  val decorator: KeyUiDecorator,
-  val loadingOrder: LoadingOrder<KeyUiDecorator>
+  val key: TypeKey<KeyUiDecorator<*>>,
+  val decorator: KeyUiDecorator<*>,
+  val loadingOrder: LoadingOrder<KeyUiDecorator<*>>
 ) {
   companion object {
     @Provide val treeDescriptor = object : LoadingOrder.Descriptor<KeyUiDecoratorElement> {
@@ -49,7 +51,8 @@ data class KeyUiDecoratorElement(
   }
 }
 
-typealias DecorateKeyUi = @Composable (@Composable () -> Unit) -> Unit
+@Tag annotation class DecorateKeyUiTag
+typealias DecorateKeyUi = @DecorateKeyUiTag @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateKeyUi(
   elements: List<KeyUiDecoratorElement> = emptyList(),

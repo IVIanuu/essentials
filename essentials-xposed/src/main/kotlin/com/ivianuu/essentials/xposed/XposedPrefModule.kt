@@ -17,6 +17,7 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.scoped
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -107,7 +108,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     packageName: ModulePackageName,
     serializerFactory: () -> KSerializer<T>
   ): XposedPrefFlow<T> {
-    val sharedPrefs by lazy { XSharedPreferences(packageName, prefName) }
+    val sharedPrefs by lazy { XSharedPreferences(packageName.value, prefName) }
 
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
@@ -136,4 +137,5 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     "${packageName}.PREFS_CHANGED"
 }
 
-typealias XposedPrefFlow<T> = Flow<T>
+@Tag annotation class XposedPrefFlowTag
+typealias XposedPrefFlow<T> = @XposedPrefFlowTag Flow<T>

@@ -29,7 +29,7 @@ import com.ivianuu.injekt.android.SystemService
 interface NotificationPolicyPermission : Permission
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyShowFindPermissionHint(
-): ShowFindPermissionHint<P> = true
+) = ShowFindPermissionHint<P>(true)
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
   notificationManager: @SystemService NotificationManager

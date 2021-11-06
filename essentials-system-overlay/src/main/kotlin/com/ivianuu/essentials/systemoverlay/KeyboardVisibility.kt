@@ -23,6 +23,7 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
@@ -33,15 +34,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 
-typealias KeyboardVisible = Boolean
+@JvmInline value class KeyboardVisible(val value: Boolean)
 
 @Provide @Scoped<AppComponent>(eager = true) fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  keyboardHeightProvider: KeyboardHeightProvider,
+  keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
   scope: ComponentScope<AppComponent>
 ): Flow<KeyboardVisible> = accessibilityEvents
   .filter {
@@ -57,19 +59,20 @@ typealias KeyboardVisible = Boolean
     emit(false)
     awaitCancellation()
   }
+  .map { KeyboardVisible(it) }
   .distinctUntilChanged()
-  .stateIn(scope, SharingStarted.WhileSubscribed(1000), false)
+  .stateIn(scope, SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(
     eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
 
-private typealias KeyboardHeightProvider = () -> Int?
+@Tag private annotation class KeyboardHeightProvider
 
 @Provide fun keyboardHeightProvider(
   inputMethodManager: @SystemService InputMethodManager
-): KeyboardHeightProvider = {
+): @KeyboardHeightProvider () -> Int? = {
   catch {
     val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
     method.invoke(inputMethodManager) as Int

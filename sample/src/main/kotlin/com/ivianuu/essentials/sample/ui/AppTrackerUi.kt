@@ -48,6 +48,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -64,8 +65,8 @@ import kotlin.reflect.KClass
 object AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
-  currentApp: Flow<CurrentApp>,
-  createNotification: (CurrentApp) -> AppTrackerNotification,
+  currentApp: Flow<CurrentApp?>,
+  createNotification: (CurrentApp?) -> @AppTracker Notification,
   foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
   scope: ComponentScope<KeyUiComponent>,
@@ -80,7 +81,7 @@ object AppTrackerKey : Key<Unit>
         currentApp
           .onEach { showToast("App changed $it") }
           .map { createNotification(it) }
-          .stateIn(this, SharingStarted.Eagerly, createNotification(""))
+          .stateIn(this, SharingStarted.Eagerly, createNotification(null))
       )
     }
 
@@ -102,16 +103,16 @@ object AppTrackerKey : Key<Unit>
   }
 }
 
-typealias AppTrackerNotification = Notification
+@Tag private annotation class AppTracker
 
 @SuppressLint("NewApi")
 @Provide
 fun appTrackerNotification(
   context: AppContext,
-  currentApp: CurrentApp,
+  currentApp: CurrentApp?,
   notificationManager: @SystemService NotificationManager,
   systemBuildInfo: SystemBuildInfo
-): AppTrackerNotification {
+): @AppTracker Notification {
   if (systemBuildInfo.sdk >= 26) {
     notificationManager.createNotificationChannel(
       NotificationChannel(

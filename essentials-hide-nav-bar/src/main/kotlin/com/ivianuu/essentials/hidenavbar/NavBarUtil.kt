@@ -27,8 +27,10 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 
-typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
+@Tag annotation class NonSdkInterfaceDetectionDisablerTag
+typealias NonSdkInterfaceDetectionDisabler = @NonSdkInterfaceDetectionDisablerTag suspend () -> Unit
 
 @Provide fun nonSdkInterfaceDetectionDisabler(
   systemBuildInfo: SystemBuildInfo,
@@ -49,12 +51,14 @@ typealias NonSdkInterfaceDetectionDisabler = suspend () -> Unit
   }
 }
 
-internal typealias HiddenApiPolicy = Int
+@Tag internal annotation class HiddenApiPolicyTag
+internal typealias HiddenApiPolicy = @HiddenApiPolicyTag Int
 
 @Provide val hiddenApiPolicyModule =
   AndroidSettingModule<HiddenApiPolicy, Int>("hidden_api_policy", AndroidSettingsType.GLOBAL, 0)
 
-internal typealias HiddenApiPolicyPrePieApps = Int
+@Tag internal annotation class HiddenApiPolicyPrePieAppsTag
+internal typealias HiddenApiPolicyPrePieApps = @HiddenApiPolicyPrePieAppsTag Int
 
 @Provide val hiddenApiPolicyPrePieAppsModule =
   AndroidSettingModule<HiddenApiPolicyPrePieApps, Int>(
@@ -63,7 +67,8 @@ internal typealias HiddenApiPolicyPrePieApps = Int
     0
   )
 
-internal typealias HiddenApiPolicyPieApps = Int
+@Tag internal annotation class HiddenApiPolicyPieAppsTag
+internal typealias HiddenApiPolicyPieApps = @HiddenApiPolicyPieAppsTag Int
 
 @Provide val hiddenApiPolicyPieAppsModule = AndroidSettingModule<HiddenApiPolicyPieApps, Int>(
   "hidden_api_policy_p_apps",
@@ -71,7 +76,8 @@ internal typealias HiddenApiPolicyPieApps = Int
   0
 )
 
-typealias OverscanUpdater = (Rect) -> Unit
+@Tag internal annotation class OverscanUpdaterTag
+typealias OverscanUpdater = @OverscanUpdaterTag (Rect) -> Unit
 
 @SuppressLint("PrivateApi")
 @Provide

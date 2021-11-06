@@ -45,8 +45,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +56,7 @@ import kotlinx.coroutines.launch
 object NavBarKey : Key<Unit>
 
 @Provide fun navBarUi(
-  forceNavBarVisibleState: SampleForceNavBarVisibleState,
+  forceNavBarVisibleState: MutableStateFlow<ForceNavBarVisibleState>,
   navBarPref: DataStore<NavBarPrefs>,
   navigator: Navigator,
   permissionState: Flow<PermissionState<NavBarPermission>>,
@@ -96,7 +94,7 @@ object NavBarKey : Key<Unit>
             if (navBarPrefs.hideNavBar) {
               "Nav bar hidden"
             } else {
-              if (forceNavBarVisibleState.collectAsState().value) {
+              if (forceNavBarVisibleState.collectAsState().value.value) {
                 "Nav bar forced shown"
               } else {
                 "Nav bar shown"
@@ -130,7 +128,10 @@ object NavBarKey : Key<Unit>
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = { forceNavBarVisibleState.value = !forceNavBarVisibleState.value }
+        onClick = {
+          forceNavBarVisibleState.value =
+            ForceNavBarVisibleState(!forceNavBarVisibleState.value.value)
+        }
       ) { Text("Toggle force nav bar") }
 
       Spacer(Modifier.height(8.dp))
@@ -146,7 +147,4 @@ object NavBarKey : Key<Unit>
   }
 }
 
-typealias SampleForceNavBarVisibleState = MutableStateFlow<ForceNavBarVisibleState>
-
-@Provide @Scoped<AppComponent> val sampleForceNavBarVisibleState: SampleForceNavBarVisibleState
-  get() = MutableStateFlow(false)
+@Provide val sampleForceNavBarVisibleState = MutableStateFlow(ForceNavBarVisibleState(false))

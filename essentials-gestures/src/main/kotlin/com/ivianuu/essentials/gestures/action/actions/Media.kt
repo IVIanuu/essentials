@@ -47,6 +47,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -55,7 +56,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-typealias MediaActionSender = suspend (Int) -> Unit
+@Tag annotation class MediaActionSenderTag
+typealias MediaActionSender = @MediaActionSenderTag suspend (Int) -> Unit
 
 @Provide fun mediaActionSender(
   context: AppContext,

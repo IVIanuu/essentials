@@ -89,7 +89,7 @@ import kotlinx.coroutines.flow.first
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val shortcut = navigator.push(AppShortcutPickerKey) ?: return null
-    val isFloating = floatingWindowActionsEnabled &&
+    val isFloating = floatingWindowActionsEnabled.value &&
         navigator.push(FloatingWindowsPickerKey(shortcut.shortLabel)) ?: return null
     return ActionPickerKey.Result.Action("$BASE_ID${shortcut.packageName}" +
         "$ACTION_DELIMITER${shortcut.id}$ACTION_DELIMITER$isFloating")

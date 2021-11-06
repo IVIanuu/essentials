@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -46,7 +47,7 @@ object CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
-  db: Db,
+  db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
   scope: ComponentScope<KeyUiComponent>
 ): KeyUi<CheckAppsKey> = {
@@ -73,9 +74,9 @@ object CheckAppsKey : Key<Unit>
   }.invoke()
 }
 
-typealias CheckAppsDb = Db
+@Tag private annotation class CheckApps
 
-@Provide @Scoped<AppComponent> fun checkAppsDb(context: AppContext): CheckAppsDb = AndroidDb(
+@Provide @Scoped<AppComponent> fun checkAppsDb(context: AppContext): @CheckApps Db = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

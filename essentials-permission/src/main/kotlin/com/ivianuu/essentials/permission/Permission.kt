@@ -27,6 +27,7 @@ import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -61,11 +62,14 @@ interface Permission {
   ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 }
 
-typealias PermissionStateProvider<P> = suspend (P) -> Boolean
+@Tag annotation class PermissionStateProviderTag
+typealias PermissionStateProvider<P> = @PermissionStateProviderTag suspend (P) -> Boolean
 
-typealias PermissionRequestHandler<P> = suspend (P) -> Unit
+@Tag annotation class PermissionRequestHandlerTag
+typealias PermissionRequestHandler<P> = @PermissionRequestHandlerTag suspend (P) -> Unit
 
-typealias PermissionState<P> = Boolean
+@Tag annotation class PermissionStateTag<P>
+typealias PermissionState<P> = @PermissionStateTag<P> Boolean
 
 @Provide fun <P : Permission> permissionState(
   dispatcher: DefaultDispatcher,
@@ -79,7 +83,9 @@ typealias PermissionState<P> = Boolean
     }
   }
 
-typealias PermissionStateFactory = (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
+@Tag annotation class PermissionStateFactoryTag
+typealias PermissionStateFactory =
+    @PermissionStateFactoryTag (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
 @Provide fun permissionStateFactory(
   permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>> = { emptyMap() }
@@ -103,7 +109,8 @@ private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandle
   permissionRefreshes.emit(Unit)
 }
 
-typealias PermissionRequester = suspend (List<TypeKey<Permission>>) -> Boolean
+@Tag annotation class PermissionRequesterTag
+typealias PermissionRequester = @PermissionRequesterTag suspend (List<TypeKey<Permission>>) -> Boolean
 
 @Provide fun permissionRequester(
   appUiStarter: AppUiStarter,

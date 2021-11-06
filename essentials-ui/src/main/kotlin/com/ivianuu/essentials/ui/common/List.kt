@@ -22,9 +22,11 @@ import com.ivianuu.essentials.ui.core.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-typealias ListDecorator = ListDecoratorScope.() -> Unit
+@Tag annotation class ListDecoratorTag<K>
+typealias ListDecorator<K> = @ListDecoratorTag<K> ListDecoratorScope.() -> Unit
 
 interface ListDecoratorScope : LazyListScope {
   val isVertical: Boolean
@@ -32,16 +34,16 @@ interface ListDecoratorScope : LazyListScope {
   fun content()
 }
 
-@Provide fun <@Spread T : ListDecorator> listDecoratorElement(
+@Provide fun <@Spread T : ListDecorator<K>, K> listDecoratorElement(
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-): ListDecoratorElement = ListDecoratorElement(key, instance as ListDecorator, loadingOrder.cast())
+): ListDecoratorElement = ListDecoratorElement(key, instance as ListDecorator<*>, loadingOrder.cast())
 
 data class ListDecoratorElement(
-  val key: TypeKey<ListDecorator>,
-  val decorator: ListDecorator,
-  val loadingOrder: LoadingOrder<ListDecorator>
+  val key: TypeKey<ListDecorator<*>>,
+  val decorator: ListDecorator<*>,
+  val loadingOrder: LoadingOrder<ListDecorator<*>>
 ) {
   companion object {
     @Provide val treeDescriptor = object : LoadingOrder.Descriptor<ListDecoratorElement> {
@@ -55,9 +57,11 @@ val LocalListDecorators = staticCompositionLocalOf<() -> List<ListDecoratorEleme
   { emptyList() }
 }
 
+object ListDecoratorsProvider
+
 @Provide fun listDecoratorsProvider(
   decorators: () -> List<ListDecoratorElement> = { emptyList() }
-): UiDecorator = { content ->
+): UiDecorator<ListDecoratorsProvider> = { content ->
   CompositionLocalProvider(
     LocalListDecorators provides decorators,
     content = content

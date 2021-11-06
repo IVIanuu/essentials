@@ -22,6 +22,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import kotlin.reflect.KClass
 
 interface AdFeature
@@ -33,12 +34,13 @@ interface AdFeature
 
 @Provide fun <K : DialogKey<*>> defaultDialogAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
-@Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
+@Provide fun <@Spread T : KeyUi<K>, K : Any> adFeatureConfigMapEntry(
   keyClass: KClass<K>,
   features: AdFeatures<K>
 ): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features).cast()
 
-typealias IsAdFeatureEnabledUseCase = (KClass<out Key<*>>, AdFeature) -> Boolean
+@Tag annotation class IsAdFeatureEnabledUseCaseTag
+typealias IsAdFeatureEnabledUseCase = @IsAdFeatureEnabledUseCaseTag (KClass<out Key<*>>, AdFeature) -> Boolean
 
 @Provide fun isAdFeatureEnabledUseCase(
   featuresByKey: Map<KClass<out Key<*>>, AdFeatures<*>>

@@ -20,9 +20,10 @@ import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
+import kotlin.jvm.JvmInline
 
 interface Logger {
-  val isEnabled: Boolean
+  val isEnabled: LoggingEnabled
 
   fun log(priority: Priority = DEBUG, @Inject tag: LoggingTag, message: String)
 
@@ -34,17 +35,17 @@ interface Logger {
 inline fun log(
   priority: Logger.Priority = DEBUG,
   @Inject tag: LoggingTag,
-  @Inject logger: Logger,
+  logger: Logger,
   message: () -> String
 ) {
-  if (logger.isEnabled) logger.log(priority, tag, message())
+  if (logger.isEnabled.value) logger.log(priority, tag, message())
 }
 
 expect fun Throwable.asLog(): String
 
 object NoopLogger : Logger {
-  override val isEnabled: Boolean
-    get() = false
+  override val isEnabled: LoggingEnabled
+    get() = LoggingEnabled(false)
 
   override fun log(priority: Logger.Priority, @Inject tag: LoggingTag, message: String) {
   }
@@ -56,8 +57,8 @@ object NoopLogger : Logger {
   }
 }
 
-typealias LoggingTag = String
+@JvmInline value class LoggingTag(val value: String)
 
-@Provide inline fun loggingTag(sourceKey: SourceKey): LoggingTag = sourceKey.value
+@Provide inline fun loggingTag(sourceKey: SourceKey) = LoggingTag(sourceKey.value)
 
-typealias LoggingEnabled = Boolean
+@JvmInline value class LoggingEnabled(val value: Boolean)

@@ -35,6 +35,7 @@ import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
@@ -43,7 +44,8 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
-typealias NavigationStateContent = @Composable (Modifier) -> Unit
+@Tag annotation class NavigationStateContentTag
+typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
   appScope: ComponentScope<AppComponent>,

@@ -59,7 +59,7 @@ import kotlin.coroutines.resume
 @Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
-  currentApp: Flow<CurrentApp>,
+  currentApp: Flow<CurrentApp?>,
   logger: Logger,
   packageManager: PackageManager
 ): ActionExecutor<CameraActionId> = {
@@ -80,7 +80,7 @@ import kotlin.coroutines.resume
     }
 
   val frontFacing = if (frontCamera != null &&
-    cameraApp.activityInfo!!.packageName == currentApp.first())
+    cameraApp.activityInfo!!.packageName == currentApp.first()?.value)
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
           override fun onCameraAvailable(cameraId: String) {

@@ -20,15 +20,18 @@ import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-typealias ScopeWorker<C> = suspend () -> Unit
+@Tag annotation class ScopeWorkerTag<C>
+typealias ScopeWorker<C> = @ScopeWorkerTag<C> suspend () -> Unit
 
-typealias ScopeWorkerRunner<C> = () -> Unit
+@Tag annotation class ScopeWorkerRunnerTag<C>
+typealias ScopeWorkerRunner<C> = @ScopeWorkerRunnerTag<C> () -> Unit
 
 @Provide fun <C : @Component Any> scopeWorkerRunner(
   logger: Logger,

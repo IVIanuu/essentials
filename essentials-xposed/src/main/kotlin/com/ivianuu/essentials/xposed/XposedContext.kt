@@ -14,20 +14,20 @@ interface XposedContext {
   @Provide val appInfo: ApplicationInfo
 }
 
-typealias ModulePackageName = String
+@JvmInline value class ModulePackageName(val value: String)
 
-typealias PackageName = String
+@JvmInline value class PackageName(val value: String)
 
-typealias ProcessName = String
+@JvmInline value class ProcessName(val value: String)
 
 class XposedContextImpl(
   private val params: XC_LoadPackage.LoadPackageParam
 ) : XposedContext {
   @Provide override val packageName: PackageName
-    get() = params.packageName
+    get() = PackageName(params.packageName)
 
   @Provide override val processName: ProcessName
-    get() = params.processName
+    get() = ProcessName(params.processName)
 
   @Provide override val classLoader: ClassLoader
     get() = params.classLoader

@@ -20,6 +20,7 @@ import com.android.billingclient.api.BillingClient
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,7 +34,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
   .build()
 
-typealias BillingRefresh = Unit
+@Tag annotation class BillingRefreshTag
+typealias BillingRefresh = @BillingRefreshTag Unit
 
-@Provide @Scoped<AppComponent> val billingRefreshes: MutableSharedFlow<BillingRefresh>
-  get() = EventFlow()
+@Provide val billingRefreshes = EventFlow<BillingRefresh>()

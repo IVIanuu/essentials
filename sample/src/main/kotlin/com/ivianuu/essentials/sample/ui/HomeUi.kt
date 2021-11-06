@@ -91,7 +91,7 @@ import kotlinx.coroutines.launch
       ListItem(
         title = {
           Text(
-            if (isXposedRunning) "Xposed is running"
+            if (isXposedRunning.value) "Xposed is running"
             else "Xposed is NOT running"
           )
         }

@@ -127,9 +127,9 @@ val LocalInsets = compositionLocalOf { Insets() }
   CompositionLocalProvider(LocalInsets provides insets, content = content)
 }
 
-typealias WindowInsetsProvider = UiDecorator
+object WindowInsetsProvider
 
-@Provide val windowInsetsProvider: WindowInsetsProvider = { content ->
+@Provide val windowInsetsProvider: UiDecorator<WindowInsetsProvider> = { content ->
   val ownerView = LocalView.current
   val density = LocalDensity.current
   var insets by remember { mutableStateOf(Insets()) }

@@ -42,6 +42,6 @@ object FeedbackMailKey : IntentKey
   }
 }
 
-typealias DeveloperEmail = String
+@JvmInline value class DeveloperEmail(val value: String)
 
-@Provide val developerEmail: DeveloperEmail = "ivianuu@gmail.com"
+@Provide val developerEmail = DeveloperEmail("ivianuu@gmail.com")

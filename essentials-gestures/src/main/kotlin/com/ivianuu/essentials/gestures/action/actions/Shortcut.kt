@@ -102,7 +102,7 @@ import java.io.ByteArrayOutputStream
     icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
     val iconBytes = stream.toByteArray()
 
-    val isFloating = floatingWindowActionsEnabled &&
+    val isFloating = floatingWindowActionsEnabled.value &&
         navigator.push(FloatingWindowsPickerKey(name)) ?: return null
 
     val key = "$BASE_ID$ACTION_DELIMITER" +

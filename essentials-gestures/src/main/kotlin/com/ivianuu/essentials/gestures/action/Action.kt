@@ -23,6 +23,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 
@@ -48,7 +49,8 @@ data class Action<I : ActionId>(
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
 }
 
-typealias ActionIcon = @Composable () -> Unit
+@Tag annotation class ActionIconTag
+typealias ActionIcon = @ActionIconTag @Composable () -> Unit
 
 abstract class ActionId(val value: String)
 
@@ -57,7 +59,8 @@ abstract class ActionId(val value: String)
   provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
 
-typealias ActionExecutor<I> = suspend () -> Unit
+@Tag annotation class ActionExecutorTag<I : ActionId>
+typealias ActionExecutor<I> = @ActionExecutorTag<I> suspend () -> Unit
 
 @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
   id: I,
@@ -70,7 +73,8 @@ interface ActionFactory {
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
-typealias ActionSettingsKey<I> = Key<Unit>
+@Tag annotation class ActionSettingsKeyTag<I : ActionId>
+typealias ActionSettingsKey<I> = @ActionSettingsKeyTag<I> Key<Unit>
 
 @Provide fun <@Spread T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
   id: I,
@@ -85,9 +89,12 @@ interface ActionPickerDelegate {
   suspend fun pickAction(): ActionPickerKey.Result?
 }
 
-typealias FloatingWindowActionsEnabled = Boolean
-@Provide fun floatingWindowActionsEnabled(
-  systemBuildInfo: SystemBuildInfo
-): FloatingWindowActionsEnabled = systemBuildInfo.sdk >= 29
+@JvmInline value class FloatingWindowActionsEnabled(val value: Boolean) {
+  companion object {
+    @Provide fun floatingWindowActionsEnabled(
+      systemBuildInfo: SystemBuildInfo
+    ) = FloatingWindowActionsEnabled(systemBuildInfo.sdk >= 29   )
+  }
+}
 
 const val ACTION_DELIMITER = "=:="

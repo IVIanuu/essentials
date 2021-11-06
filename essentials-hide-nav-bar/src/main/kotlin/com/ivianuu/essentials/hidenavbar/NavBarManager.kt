@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.onEach
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater
 ): ScopeWorker<AppComponent> = worker@ {
-  if (!navBarFeatureSupported) return@worker
+  if (!navBarFeatureSupported.value) return@worker
   permissionState
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
@@ -60,7 +60,7 @@ import kotlinx.coroutines.flow.onEach
           .flatMapLatest { forceVisible ->
             pref.data
               .map {
-                if (!forceVisible) it
+                if (!forceVisible.value) it
                 else it.copy(hideNavBar = false)
               }
           }

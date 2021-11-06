@@ -17,23 +17,25 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
-typealias ScreenAdBannerConfig = AdBannerConfig
+@Tag annotation class ScreenAdBannerConfigTag
+typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
-typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
+object ScreenAdBanner
 
 @Provide @Scoped<KeyUiComponent> fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   showAdsFlow: Flow<ShowAds>,
   key: Key<*>
-): ScreenAdBannerKeyUiDecorator {
-  var showAds by mutableStateOf<Boolean?>(null)
+): KeyUiDecorator<ScreenAdBanner> {
+  var showAds by mutableStateOf<ShowAds?>(null)
   return (decorator@ { content ->
     if (config == null) {
       content()
@@ -53,13 +55,13 @@ typealias ScreenAdBannerKeyUiDecorator = KeyUiDecorator
       Box(modifier = Modifier.weight(1f)) {
         val currentInsets = LocalInsets.current
         CompositionLocalProvider(
-          LocalInsets provides if (showAds == true) currentInsets
+          LocalInsets provides if (showAds?.value == true) currentInsets
           else currentInsets.copy(bottom = 0.dp),
           content = content
         )
       }
 
-      if (showAds == true) {
+      if (showAds?.value == true) {
         Surface(elevation = 8.dp) {
           InsetsPadding(top = false) {
             AdBanner(config)

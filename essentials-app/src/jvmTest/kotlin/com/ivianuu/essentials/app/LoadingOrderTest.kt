@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.common.typeKeyOf
 import io.kotest.matchers.collections.shouldContainInOrder
@@ -120,9 +121,12 @@ private val aKey = typeKeyOf<A>()
 private val bKey = typeKeyOf<B>()
 private val cKey = typeKeyOf<C>()
 
-private typealias A = Item
-private typealias B = Item
-private typealias C = Item
+@Tag private annotation class ATag
+private typealias A = @ATag Item
+@Tag private annotation class BTag
+private typealias B = @BTag Item
+@Tag private annotation class CTag
+private typealias C = @CTag Item
 
 private data class Item(
   val key: TypeKey<*>,

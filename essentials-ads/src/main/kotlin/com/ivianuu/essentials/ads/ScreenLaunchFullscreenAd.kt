@@ -41,7 +41,7 @@ import kotlinx.serialization.Serializable
 ): ScopeWorker<UiComponent> = {
   showAds
     .flatMapLatest {
-      if (!it) infiniteEmptyFlow()
+      if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents(isFeatureEnabled)
     }
     .collectLatest {

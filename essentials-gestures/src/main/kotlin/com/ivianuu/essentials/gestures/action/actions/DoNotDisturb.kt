@@ -12,6 +12,7 @@ import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +41,8 @@ import kotlinx.coroutines.flow.onStart
   )
 }
 
-typealias DoNotDisturbIcon = ActionIcon
+@Tag annotation class DoNotDisturbIconTag
+typealias DoNotDisturbIcon = @DoNotDisturbIconTag ActionIcon
 
 @Provide fun doNotDisturbIcon(
   broadcastsFactory: BroadcastsFactory,

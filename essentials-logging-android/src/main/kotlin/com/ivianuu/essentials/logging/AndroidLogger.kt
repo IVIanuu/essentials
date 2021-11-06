@@ -35,10 +35,10 @@ import kotlin.math.min
   private val systemBuildInfo: SystemBuildInfo
 ) : Logger {
   override fun log(priority: Priority, @Inject tag: LoggingTag, message: String) {
-    val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
-      tag
+    val trimmedTag = if (tag.value.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
+      tag.value
     } else {
-      tag.substring(0, MAX_TAG_LENGTH)
+      tag.value.substring(0, MAX_TAG_LENGTH)
     }
 
     var i = 0
@@ -74,10 +74,11 @@ import kotlin.math.min
     @Provide inline fun androidLogger(
       loggingEnabled: LoggingEnabled,
       androidLoggerFactory: () -> AndroidLogger
-    ): Logger = if (loggingEnabled) androidLoggerFactory()
+    ): Logger = if (loggingEnabled.value) androidLoggerFactory()
     else NoopLogger
   }
 }
 
-@Provide fun androidLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled = buildInfo.isDebug
+@Provide fun androidLoggingEnabled(buildInfo: BuildInfo): LoggingEnabled =
+  LoggingEnabled(buildInfo.isDebug)
 

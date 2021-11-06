@@ -31,6 +31,7 @@ import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -102,7 +103,7 @@ class EsAccessibilityService : AccessibilityService() {
 }
 
 @EntryPoint<ServiceComponent> interface EsAccessibilityServiceComponent {
-  val accessibilityEvents: MutableAccessibilityEvents
+  val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>
   val accessibilityComponentFactory: AccessibilityComponentFactory
   val logger: Logger
   val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>

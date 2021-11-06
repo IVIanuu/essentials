@@ -17,8 +17,10 @@
 package com.ivianuu.essentials.time
 
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import kotlin.time.Duration
 
-typealias Clock = () -> Duration
+@Tag annotation class ClockTag
+typealias Clock = @ClockTag () -> Duration
 
 @Provide expect val clock: Clock

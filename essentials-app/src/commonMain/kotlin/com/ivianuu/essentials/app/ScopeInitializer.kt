@@ -20,22 +20,25 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.ComponentObserver
 import com.ivianuu.injekt.common.TypeKey
 
-typealias ScopeInitializer<C> = () -> Unit
+@Tag annotation class ScopeInitializerTag<K : ScopeInitializerKey<*>>
+typealias ScopeInitializer<K> = @ScopeInitializerTag<K> () -> Unit
+interface ScopeInitializerKey<C : @Component Any>
 
-@Provide fun <@Spread T : ScopeInitializer<C>, C : @Component Any> scopeInitializerElement(
+@Provide fun <@Spread T : ScopeInitializer<K>, K : ScopeInitializerKey<C>, C : @Component Any> scopeInitializerElement(
   factory: () -> T,
-  key: TypeKey<T>,
+  key: TypeKey<K>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
 ): ScopeInitializerElement<C> = ScopeInitializerElement(key, factory, loadingOrder)
 
 data class ScopeInitializerElement<C : @Component Any>(
-  val key: TypeKey<ScopeInitializer<C>>,
-  val factory: () -> ScopeInitializer<C>,
-  val loadingOrder: LoadingOrder<out ScopeInitializer<C>>
+  val key: TypeKey<*>,
+  val factory: () -> ScopeInitializer<*>,
+  val loadingOrder: LoadingOrder<out ScopeInitializer<*>>
 ) {
   companion object {
     @Provide val descriptor = object : LoadingOrder.Descriptor<ScopeInitializerElement<*>> {

@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
-typealias ConfigChange = Unit
+object ConfigChange
 
 @Provide fun configChanges(
   context: AppContext,

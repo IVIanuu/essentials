@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-typealias ForceNavBarVisibleState = Boolean
+@JvmInline value class ForceNavBarVisibleState(val value: Boolean)
 
 /**
  * We always wanna show the nav bar on system shut down
@@ -34,11 +34,11 @@ typealias ForceNavBarVisibleState = Boolean
   broadcastsFactory: BroadcastsFactory
 ): Flow<ForceNavBarVisibleState> = flow {
   broadcastsFactory(Intent.ACTION_SHUTDOWN)
-    .onStart { emit(false) }
-    .map { true }
+    .onStart { emit(ForceNavBarVisibleState(false)) }
+    .map { ForceNavBarVisibleState(true) }
 }
 
-internal typealias CombinedForceNavBarVisibleState = Boolean
+@JvmInline value class CombinedForceNavBarVisibleState(val value: Boolean)
 
 @Provide fun combinedForceNavBarVisibleState(
   forceNavbarVisibleStates: List<Flow<ForceNavBarVisibleState>>
@@ -46,8 +46,6 @@ internal typealias CombinedForceNavBarVisibleState = Boolean
   forceNavbarVisibleStates
     .map { state ->
       state
-        .onStart { emit(false) }
+        .onStart { emit(ForceNavBarVisibleState(true)) }
     }
-) { states ->
-  states.any { it }
-}
+) { states -> CombinedForceNavBarVisibleState(states.any { it.value }) }

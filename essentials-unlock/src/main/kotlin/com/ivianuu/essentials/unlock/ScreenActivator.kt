@@ -5,6 +5,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.CompletableDeferred
@@ -12,7 +13,8 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-typealias ScreenActivator = suspend () -> Boolean
+@Tag annotation class ScreenActivatorTag
+typealias ScreenActivator = @ScreenActivatorTag suspend () -> Boolean
 
 @Provide fun screenActivator(
   context: AppContext,
