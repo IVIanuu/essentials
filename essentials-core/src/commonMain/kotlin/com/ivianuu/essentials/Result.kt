@@ -1,5 +1,9 @@
 package com.ivianuu.essentials
 
+import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.provide
+
 sealed class Result<out V, out E>
 
 data class Ok<V>(val value: V) : Result<V, Nothing>()
@@ -84,33 +88,38 @@ inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
 
-inline fun <V> catch(@BuilderInference block: () -> V): Result<V, Throwable> = try {
-  Ok(block())
+inline fun <V> catch(@BuilderInference block: @ResultEffect<Throwable> () -> V): Result<V, Throwable> = try {
+  Ok(provide(ResultControlImpl as ResultControl<Throwable>, block))
 } catch (e: Throwable) {
   Err(e.nonFatalOrThrow())
 }
 
-inline fun <V, reified T> catchT(@BuilderInference block: () -> V): Result<V, T> = try {
-  Ok(block())
+inline fun <V, reified T> catchT(@BuilderInference block: @ResultEffect<T> () -> V): Result<V, T> = try {
+  Ok(provide(ResultControlImpl as ResultControl<T>, block))
 } catch (e: Throwable) {
   if (e is T) Err(e)
   else throw e
 }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <V, E> result(@BuilderInference block: ResultBinding<E>.() -> V): Result<V, E> = try {
-  Ok(block(ResultBindingImpl as ResultBinding<E>))
-} catch (e: ResultBindingImpl.ShortCircuitException) {
+inline fun <V, E> result(@BuilderInference block: @ResultEffect<E> () -> V): Result<V, E> = try {
+  Ok(provide(ResultControlImpl as ResultControl<E>, block))
+} catch (e: ResultControlImpl.ShortCircuitException) {
   e.error as Err<E>
 }
 
-interface ResultBinding<in A> {
-  fun <T> Result<T, A>.bind(): T
+typealias ResultEffect<A> = Inject1<ResultControl<A>>
+
+interface ResultControl<in A> {
+  fun <T> bind(result: Result<T, A>): T
 }
 
-@PublishedApi internal object ResultBindingImpl : ResultBinding<Nothing> {
-  override fun <T> Result<T, Nothing>.bind(): T = when (this) {
-    is Ok -> value
+@ResultEffect<A> inline fun <T, A> Result<T, A>.bind(): T =
+  inject<ResultControl<A>>().bind(this)
+
+@PublishedApi internal object ResultControlImpl : ResultControl<Nothing> {
+  override fun <T> bind(result: Result<T, Nothing>): T = when (result) {
+    is Ok -> result.value
     is Err -> throw ShortCircuitException(this)
   }
 
