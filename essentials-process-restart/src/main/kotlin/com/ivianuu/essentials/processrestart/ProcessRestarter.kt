@@ -20,7 +20,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -28,10 +28,9 @@ import com.ivianuu.injekt.Tag
 @Tag annotation class ProcessRestarterTag
 typealias ProcessRestarter = @ProcessRestarterTag suspend () -> Unit
 
-@Provide fun processRestarter(
+@Provide @Log fun processRestarter(
   buildInfo: BuildInfo,
   context: AppContext,
-  logger: Logger,
   packageManager: PackageManager,
 ): ProcessRestarter = {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!

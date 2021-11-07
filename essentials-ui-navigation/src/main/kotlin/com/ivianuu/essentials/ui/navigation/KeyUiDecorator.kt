@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -54,9 +54,8 @@ data class KeyUiDecoratorElement(
 @Tag annotation class DecorateKeyUiTag
 typealias DecorateKeyUi = @DecorateKeyUiTag @Composable (@Composable () -> Unit) -> Unit
 
-@Provide fun decorateKeyUi(
-  elements: List<KeyUiDecoratorElement> = emptyList(),
-  logger: Logger
+@Provide @Log fun decorateKeyUi(
+  elements: List<KeyUiDecoratorElement> = emptyList()
 ): DecorateKeyUi = { content ->
   remember {
     elements

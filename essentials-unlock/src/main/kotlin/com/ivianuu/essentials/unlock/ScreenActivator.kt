@@ -2,7 +2,7 @@ package com.ivianuu.essentials.unlock
 
 import android.os.PowerManager
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -16,10 +16,9 @@ import java.util.concurrent.ConcurrentHashMap
 @Tag annotation class ScreenActivatorTag
 typealias ScreenActivator = @ScreenActivatorTag suspend () -> Boolean
 
-@Provide fun screenActivator(
+@Provide @Log fun screenActivator(
   context: AppContext,
   dispatcher: DefaultDispatcher,
-  logger: Logger,
   powerManager: @SystemService PowerManager
 ): ScreenActivator = {
   withContext(dispatcher) {

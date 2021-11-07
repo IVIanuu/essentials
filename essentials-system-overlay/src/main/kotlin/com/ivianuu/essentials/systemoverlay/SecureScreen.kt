@@ -19,7 +19,7 @@ package com.ivianuu.essentials.systemoverlay
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
@@ -35,9 +35,11 @@ import kotlinx.coroutines.flow.stateIn
 
 @JvmInline value class IsOnSecureScreen(val value: Boolean)
 
-@Provide @Scoped<AppComponent>(eager = true) fun isOnSecureScreen(
+@Provide
+@Scoped<AppComponent>(eager = true)
+@Log
+fun isOnSecureScreen(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  logger: Logger,
   scope: ComponentScope<AppComponent>,
 ): Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }

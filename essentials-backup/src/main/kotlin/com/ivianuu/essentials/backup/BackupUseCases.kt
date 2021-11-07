@@ -24,7 +24,7 @@ import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -43,13 +43,12 @@ import java.util.zip.ZipOutputStream
 @Tag annotation class CreateBackupUseCaseTag
 typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Unit, Throwable>
 
-@Provide fun createBackupUseCase(
+@Provide @Log fun createBackupUseCase(
   backupDir: BackupDir,
   backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
   dataDir: DataDir,
   dispatcher: IODispatcher,
-  logger: Logger,
   navigator: Navigator,
   scope: ComponentScope<AppComponent>
 ): CreateBackupUseCase = {
@@ -90,11 +89,10 @@ typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Uni
 @Tag annotation class RestoreBackUseCaseTag
 typealias RestoreBackupUseCase = @RestoreBackUseCaseTag suspend () -> Result<Unit, Throwable>
 
-@Provide fun restoreBackupUseCase(
+@Provide @Log fun restoreBackupUseCase(
   contentResolver: ContentResolver,
   dataDir: DataDir,
   dispatcher: IODispatcher,
-  logger: Logger,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
   scope: ComponentScope<AppComponent>

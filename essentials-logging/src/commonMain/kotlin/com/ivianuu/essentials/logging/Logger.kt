@@ -18,6 +18,7 @@ package com.ivianuu.essentials.logging
 
 import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
 import kotlin.jvm.JvmInline
@@ -31,6 +32,8 @@ interface Logger {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
   }
 }
+
+typealias Log = Inject1<Logger>
 
 inline fun log(
   priority: Logger.Priority = DEBUG,

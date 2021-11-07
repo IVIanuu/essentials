@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.boot.BootListener
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide fun bootLogger(logger: Logger): BootListener = { log { "booted!" } }
+@Provide @Log val bootLogger: () -> Unit
+  get() = { log { "booted!" } }

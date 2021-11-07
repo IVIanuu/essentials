@@ -9,7 +9,6 @@ import android.content.Intent
 import android.hardware.camera2.CameraManager
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
@@ -17,12 +16,13 @@ import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -47,18 +47,15 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-@Provide @Scoped<AppComponent> class TorchImpl(
+@Provide @Scoped<AppComponent> @Log @Toasts class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val context: AppContext,
   private val foregroundManager: ForegroundManager,
-  private val logger: Logger,
   private val mainDispatcher: MainDispatcher,
   private val notificationManager: @SystemService NotificationManager,
-  private val rp: ResourceProvider,
   private val scope: ComponentScope<AppComponent>,
-  private val systemBuildInfo: SystemBuildInfo,
-  private val toaster: Toaster
+  private val systemBuildInfo: SystemBuildInfo
 ) : Torch {
   private val _torchState = MutableStateFlow(false)
   override val torchState: StateFlow<Boolean> get() = _torchState

@@ -18,7 +18,7 @@ package com.ivianuu.essentials.rate.domain
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.rate.ui.RateKey
@@ -32,8 +32,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlin.time.Duration
 
-@Provide fun rateUiLauncher(
-  logger: Logger,
+@Provide @Log fun rateUiLauncher(
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
   schedule: RateUiSchedule = RateUiSchedule(),
@@ -50,9 +49,8 @@ import kotlin.time.Duration
     navigator.push(RateKey)
 }
 
-private suspend fun shouldShowRateDialog(
-  @Inject logger: Logger,
-  pref: DataStore<RatePrefs>,
+@Log private suspend fun shouldShowRateDialog(
+  @Inject pref: DataStore<RatePrefs>,
   schedule: RateUiSchedule,
   clock: Clock
 ): Boolean {

@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.bracket
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
@@ -25,9 +25,8 @@ interface ForegroundManager {
 suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
   startForeground(id, MutableStateFlow(notification))
 
-@Provide @Scoped<AppComponent> class ForegroundManagerImpl(
-  private val context: AppContext,
-  private val logger: Logger
+@Provide @Scoped<AppComponent> @Log class ForegroundManagerImpl(
+  private val context: AppContext
 ) : ForegroundManager {
   private val lock = Mutex()
 

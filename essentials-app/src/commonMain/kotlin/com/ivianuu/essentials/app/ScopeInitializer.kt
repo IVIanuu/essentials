@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -49,10 +49,9 @@ data class ScopeInitializerElement<C : @Component Any>(
   }
 }
 
-@Provide fun <C : @Component Any> scopeInitializerRunner(
+@Provide @Log fun <C : @Component Any> scopeInitializerRunner(
   componentKey: TypeKey<C>,
   initializers: List<ScopeInitializerElement<C>> = emptyList(),
-  logger: Logger,
   workerRunner: ScopeWorkerRunner<C>
 ): ComponentObserver<C> = object : ComponentObserver<C> {
   override fun init() {

@@ -17,19 +17,18 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -40,18 +39,15 @@ import kotlinx.coroutines.withContext
 @Tag annotation class ExecuteActionUseCaseTag
 typealias ExecuteActionUseCase = @ExecuteActionUseCaseTag suspend (String) -> Result<Boolean, Throwable>
 
-@Provide fun executeActionUseCase(
+@Provide @Log @Toasts fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   dispatcher: DefaultDispatcher,
-  logger: Logger,
   permissionRequester: PermissionRequester,
   permissionStateFactory: PermissionStateFactory,
   repository: ActionRepository,
   screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker,
-  rp: ResourceProvider,
-  toaster: Toaster
+  screenUnlocker: ScreenUnlocker
 ): ExecuteActionUseCase = { key ->
   withContext(dispatcher) {
     catch {

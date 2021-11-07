@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.core.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
@@ -54,9 +54,8 @@ data class UiDecoratorElement(
 @Tag annotation class DecorateUiTag
 typealias DecorateUi = @DecorateUiTag @Composable (@Composable () -> Unit) -> Unit
 
-@Provide fun decorateUi(
-  elements: List<UiDecoratorElement> = emptyList(),
-  logger: Logger
+@Provide @Log fun decorateUi(
+  elements: List<UiDecoratorElement> = emptyList()
 ): DecorateUi = { content ->
   remember {
     elements

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -33,8 +33,7 @@ typealias ScopeWorker<C> = @ScopeWorkerTag<C> suspend () -> Unit
 @Tag annotation class ScopeWorkerRunnerTag<C>
 typealias ScopeWorkerRunner<C> = @ScopeWorkerRunnerTag<C> () -> Unit
 
-@Provide fun <C : @Component Any> scopeWorkerRunner(
-  logger: Logger,
+@Provide @Log fun <C : @Component Any> scopeWorkerRunner(
   scope: ComponentScope<C>,
   scopeKey: TypeKey<C>,
   workers: List<() -> ScopeWorker<C>> = emptyList()

@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.injekt.Provide
@@ -56,11 +56,10 @@ import kotlin.coroutines.resume
   closeSystemDialogs = true
 )
 
-@Provide fun cameraActionExecutor(
+@Provide @Log fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
-  logger: Logger,
   packageManager: PackageManager
 ): ActionExecutor<CameraActionId> = {
   val cameraApp = packageManager

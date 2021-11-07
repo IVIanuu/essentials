@@ -23,13 +23,13 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import kotlinx.coroutines.flow.Flow
@@ -41,11 +41,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@Provide fun navBarManager(
+@Provide @Log fun navBarManager(
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
   forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
-  logger: Logger,
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   permissionState: Flow<PermissionState<NavBarPermission>>,
@@ -92,11 +91,10 @@ private sealed class NavBarState {
   object Visible : NavBarState()
 }
 
-private suspend fun NavBarState.apply(
+@Log private suspend fun NavBarState.apply(
   context: Context,
   disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
-  setOverscan: OverscanUpdater,
-  @Inject logger: Logger
+  setOverscan: OverscanUpdater
 ) {
   log { "apply nav bar state $this" }
   catch {

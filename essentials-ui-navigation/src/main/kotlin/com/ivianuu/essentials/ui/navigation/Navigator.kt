@@ -19,7 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.update2
-import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.injekt.Inject1
@@ -51,9 +51,8 @@ interface Navigator {
 
 @Inject1<Navigator> val navigator: Navigator get() = inject()
 
-@Provide @Scoped<AppComponent> class NavigatorImpl(
+@Provide @Scoped<AppComponent> @Log class NavigatorImpl(
   private val keyHandlers: List<KeyHandler<*>> = emptyList(),
-  private val logger: Logger,
   rootKey: RootKey? = null,
   scope: ComponentScope<AppComponent>
 ) : Navigator {

@@ -21,13 +21,16 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject2
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.launch
 
-typealias Toaster = (String) -> Unit
+@Tag annotation class ToasterTag
+typealias Toaster = @ToasterTag (String) -> Unit
 
 @Provide fun toaster(
   context: AppContext,
@@ -43,19 +46,16 @@ typealias Toaster = (String) -> Unit
   }
 }
 
+typealias Toasts = Inject2<Toaster, ResourceProvider>
+
 fun showToast(message: String, @Inject toaster: Toaster) {
   toaster(message)
 }
 
-fun showToast(messageRes: Int, @Inject toaster: Toaster, rp: ResourceProvider) {
+@Toasts fun showToast(messageRes: Int) {
   showToast(loadResource<String>(messageRes))
 }
 
-fun showToast(
-  messageRes: Int,
-  vararg args: Any?,
-  @Inject toaster: Toaster,
-  rp: ResourceProvider
-) {
+@Toasts fun showToast(messageRes: Int, vararg args: Any?) {
   showToast(loadResource<String>(messageRes, *args))
 }
