@@ -29,14 +29,12 @@ interface AdFeature
 
 @JvmInline value class AdFeatures<K>(val value: List<AdFeature>)
 
-// todo : Key<*>
-@Provide fun <K/* : Key<*>*/> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+@Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
   AdFeatures(allFeatures)
 
 @Provide fun <K : DialogKey<*>> defaultDialogAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
-// todo : Key<*>
-@Provide fun <@Spread T : KeyUi<K>, K : Any> adFeatureConfigMapEntry(
+@Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
   keyClass: KClass<K>,
   features: AdFeatures<K>
 ): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features).cast()
