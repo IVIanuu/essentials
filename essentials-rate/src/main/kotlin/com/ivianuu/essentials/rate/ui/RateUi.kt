@@ -137,7 +137,7 @@ object RateKey : DialogKey<Unit>
   scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-) = scope.state(RateModel(packageName = buildInfo.packageName)) {
+) = state(RateModel(packageName = buildInfo.packageName)) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateModel.showLater()) { showLater() }

@@ -61,7 +61,7 @@ interface Navigator {
 
   private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
 
-  private val actor = scope.actor()
+  private val actor = actor()
 
   override suspend fun <R> setRoot(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()

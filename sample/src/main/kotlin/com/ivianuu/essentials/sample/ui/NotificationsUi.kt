@@ -182,7 +182,7 @@ data class UiNotification(
   permissionRequester: PermissionRequester,
   scope: ComponentScope<KeyUiComponent>,
   service: NotificationService
-) = scope.state(NotificationsModel()) {
+) = state(NotificationsModel()) {
   service.notifications
     .map { notifications ->
       notifications

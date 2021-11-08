@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.scope
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.optics.Lens
 import com.ivianuu.essentials.resource.Resource
@@ -26,6 +27,7 @@ import com.ivianuu.essentials.tuples.Tuple3
 import com.ivianuu.essentials.tuples.Tuple4
 import com.ivianuu.essentials.tuples.Tuple5
 import com.ivianuu.essentials.tuples.tupleOf
+import com.ivianuu.injekt.Inject1
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
@@ -39,21 +41,23 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.jvm.JvmName
 
-fun <S> CoroutineScope.state(
+@Inject1<CoroutineScope> fun <S> state(
   initial: S,
   context: CoroutineContext = EmptyCoroutineContext,
   block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
   val state = MutableStateFlow(initial)
 
-  val stateScope = object : StateScope<S>, CoroutineScope by this {
+  val stateScope = object : StateScope<S>, CoroutineScope by scope {
     override val state: Flow<S>
       get() = state
 
     override suspend fun update(transform: S.() -> S): S = state.update2(transform)
   }
 
-  stateScope.launch(coroutineContext + context, CoroutineStart.UNDISPATCHED) { stateScope.block() }
+  stateScope.launch(scope.coroutineContext + context, CoroutineStart.UNDISPATCHED) {
+    stateScope.block()
+  }
 
   return state
 }

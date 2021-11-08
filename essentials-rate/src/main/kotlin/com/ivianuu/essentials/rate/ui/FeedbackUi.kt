@@ -79,7 +79,7 @@ object FeedbackKey : DialogKey<Unit>
   scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-) = scope.state(FeedbackModel()) {
+) = state(FeedbackModel()) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(FeedbackModel.showLater()) { showLater() }

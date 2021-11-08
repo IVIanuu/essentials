@@ -82,7 +82,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .flowOn(dispatcher)
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
-    val actor = scope.actor(dispatcher)
+    val actor = actor(dispatcher)
 
     return object : DataStore<T> {
       override val data: Flow<T>

@@ -93,7 +93,7 @@ data class WriteSecureSettingsKey(
   permissionStateFactory: PermissionStateFactory,
   scope: ComponentScope<KeyUiComponent>,
   shell: Shell
-) = scope.state(WriteSecureSettingsModel()) {
+) = state(WriteSecureSettingsModel()) {
   action(WriteSecureSettingsModel.openPcInstructions()) {
     if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
       navigator.pop(key)

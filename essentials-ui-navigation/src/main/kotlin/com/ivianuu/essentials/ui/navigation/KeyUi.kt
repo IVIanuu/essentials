@@ -23,13 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Inject3
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.ComponentScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
@@ -86,6 +84,3 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
 typealias KeyUiContext<K> = Inject3<K, ComponentScope<KeyUiComponent>, Navigator>
 
 inline fun <K : Key<*>> key(@Inject x: K) = x
-
-@Inject1<ComponentScope<KeyUiComponent>> val keyScope: ComponentScope<KeyUiComponent>
-  get() = inject()

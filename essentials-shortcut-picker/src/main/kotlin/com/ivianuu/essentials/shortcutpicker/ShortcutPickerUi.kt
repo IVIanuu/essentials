@@ -80,7 +80,7 @@ object ShortcutPickerKey : Key<Shortcut>
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>,
   shortcutRepository: ShortcutRepository
-) = scope.state(ShortcutPickerModel()) {
+) = state(ShortcutPickerModel()) {
   shortcutRepository.shortcuts
     .flowAsResource()
     .update { copy(shortcuts = it) }

@@ -124,7 +124,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(MediaActionSettingsModel()) {
+) = state(MediaActionSettingsModel()) {
   pref.data
     .map { it.mediaApp }
     .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }

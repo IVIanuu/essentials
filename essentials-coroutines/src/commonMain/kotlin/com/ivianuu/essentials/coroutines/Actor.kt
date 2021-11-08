@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.Inject1
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -32,12 +33,12 @@ interface Actor<T> : CoroutineScope {
   fun tryAct(message: T): ChannelResult<Unit>
 }
 
-fun <T> CoroutineScope.actor(
+@Inject1<CoroutineScope> fun <T> actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
   block: suspend ActorScope<T>.() -> Unit
-): Actor<T> = ActorImpl(coroutineContext + context, capacity, start, block)
+): Actor<T> = ActorImpl(scope.coroutineContext + context, capacity, start, block)
 
 interface ActorScope<T> : CoroutineScope, ReceiveChannel<T>
 
@@ -63,8 +64,8 @@ private class ActorImpl<T>(
   }
 }
 
-fun CoroutineScope.actor(
-  context: CoroutineContext = this.coroutineContext,
+@Inject1<CoroutineScope> fun actor(
+  context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64
 ): Actor<suspend () -> Unit> = actor(context, capacity) {
   for (block in this) block()

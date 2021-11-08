@@ -76,7 +76,7 @@ object CounterKey : Key<Unit>
   val dec: () -> Unit = {}
 )
 
-@Provide @Toasts fun counterModel(scope: ComponentScope<KeyUiComponent>) = scope.state(CounterModel()) {
+@Provide @Toasts fun counterModel(scope: ComponentScope<KeyUiComponent>) = state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {
     if (state.first().count > 0) update { copy(count = count.dec()) }

@@ -61,7 +61,7 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(SystemOverlayAppBlacklistModel()) {
+) = state(SystemOverlayAppBlacklistModel()) {
   update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
   action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
     pref.updateData { copy(appBlacklist = appBlacklist) }

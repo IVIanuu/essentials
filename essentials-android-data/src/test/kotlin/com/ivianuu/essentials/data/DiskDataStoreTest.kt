@@ -36,13 +36,14 @@ import java.nio.file.Files
 class DiskDataStoreTest {
   private val storeDir = Files.createTempDirectory("tmp").toFile()
 
-  private fun <T : Any> CoroutineScope.createStore(
+  private fun <T : Any> createStore(
     name: String,
     serializer: Serializer<T>? = null,
     @Inject type: KTypeT<T>,
+    scope: CoroutineScope,
     @Provide defaultData: @Provide () -> @InitialOrDefault T
   ): Pair<DataStore<T>, File> = DiskDataStore(
-    coroutineContext = coroutineContext,
+    coroutineContext = scope.coroutineContext,
     produceFile = { File(storeDir, name) },
     produceSerializer = serializer?.let { { it } } ?: inject()
   ) to storeDir.resolve(name)

@@ -153,7 +153,7 @@ sealed class ActionPickerItem {
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
   scope: ComponentScope<KeyUiComponent>,
-) = scope.state(ActionPickerModel()) {
+) = state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }

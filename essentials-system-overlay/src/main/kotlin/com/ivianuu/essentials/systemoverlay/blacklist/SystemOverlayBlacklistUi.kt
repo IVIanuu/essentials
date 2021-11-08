@@ -111,7 +111,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)) {
+) = state(SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

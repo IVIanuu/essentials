@@ -85,7 +85,7 @@ data class UiPermission<P : Permission>(
   permissionStateFactory: PermissionStateFactory,
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(PermissionRequestModel()) {
+) = state(PermissionRequestModel()) {
   combine(
     key.permissionsKeys
       .map { permissionKey ->

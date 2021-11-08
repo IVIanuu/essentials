@@ -77,7 +77,7 @@ object RateOnPlayKey : DialogKey<Unit>
   scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-) = scope.state(RateOnPlayModel()) {
+) = state(RateOnPlayModel()) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateOnPlayModel.showLater()) { showLater() }

@@ -66,7 +66,7 @@ object BackupAndRestoreKey : Key<Unit>
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(BackupAndRestoreModel()) {
+) = state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
       createBackup()
         .onFailure {

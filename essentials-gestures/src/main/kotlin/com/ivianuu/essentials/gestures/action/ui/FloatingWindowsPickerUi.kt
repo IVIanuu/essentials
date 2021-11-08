@@ -88,7 +88,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   key: FloatingWindowsPickerKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(FloatingWindowsPickerModel(key.actionTitle)) {
+) = state(FloatingWindowsPickerModel(key.actionTitle)) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {
     if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
       navigator.pop(key, true)

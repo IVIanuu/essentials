@@ -130,7 +130,7 @@ data class UiDonation(
   navigator: Navigator,
   purchase: PurchaseUseCase,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(DonationModel()) {
+) = state(DonationModel()) {
   produceResource({ copy(skus = it) }) {
     donations
       .parMap { donation ->

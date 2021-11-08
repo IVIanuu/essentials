@@ -82,7 +82,7 @@ object NavBarKey : Key<Unit>
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
   scope: ComponentScope<KeyUiComponent>,
-) = scope.state(NavBarModel()) {
+) = state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
   }

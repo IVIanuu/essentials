@@ -227,7 +227,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
+) = state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
   state
     .flatMapLatest { currentState ->
       if (currentState.currentStep != currentState.completedStep) flowOf(false)

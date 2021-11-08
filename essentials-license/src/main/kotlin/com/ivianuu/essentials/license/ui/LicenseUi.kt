@@ -63,7 +63,7 @@ object LicenseKey : Key<Unit>
   licenseProjectRepository: LicenceProjectRepository,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(LicenseModel()) {
+) = state(LicenseModel()) {
   flow { emit(licenseProjectRepository.getLicenseProjects()) }
     .flowAsResource()
     .update { copy(projects = it) }

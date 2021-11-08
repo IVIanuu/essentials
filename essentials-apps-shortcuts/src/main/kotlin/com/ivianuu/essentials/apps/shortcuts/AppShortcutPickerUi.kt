@@ -76,7 +76,7 @@ object AppShortcutPickerKey : Key<AppShortcut>
   key: AppShortcutPickerKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(AppShortcutPickerModel()) {
+) = state(AppShortcutPickerModel()) {
   appRepository.installedApps
     .flatMapLatest { apps ->
       combine(

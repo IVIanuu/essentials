@@ -44,7 +44,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.keyScope
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
@@ -91,7 +90,7 @@ data class AppPickerKey(
 
 @Provide @KeyUiContext<AppPickerKey> fun appPickerModel(
   appRepository: AppRepository
-) = keyScope.state(
+) = state(
   AppPickerModel(
     appPredicate = key<AppPickerKey>().appPredicate,
     title = key<AppPickerKey>().title

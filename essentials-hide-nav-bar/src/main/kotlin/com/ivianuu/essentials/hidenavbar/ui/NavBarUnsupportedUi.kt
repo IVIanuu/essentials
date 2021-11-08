@@ -84,7 +84,7 @@ object NavBarUnsupportedKey : Key<Unit>
   key: NavBarUnsupportedKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-) = scope.state(NavBarUnsupportedModel()) {
+) = state(NavBarUnsupportedModel()) {
   action(NavBarUnsupportedModel.openMoreInfos()) {
     navigator.push(
       UrlKey(
