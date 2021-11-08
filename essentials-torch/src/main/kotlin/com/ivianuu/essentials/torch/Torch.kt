@@ -2,14 +2,10 @@ package com.ivianuu.essentials.torch
 
 import android.annotation.SuppressLint
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
-import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
@@ -23,7 +19,9 @@ import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -50,12 +48,10 @@ interface Torch {
 @Provide @Scoped<AppComponent> @Log @Toasts class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
-  private val context: AppContext,
   private val foregroundManager: ForegroundManager,
   private val mainDispatcher: MainDispatcher,
-  private val notificationManager: @SystemService NotificationManager,
-  private val scope: ComponentScope<AppComponent>,
-  private val systemBuildInfo: SystemBuildInfo
+  private val notificationFactory: NotificationFactory,
+  private val scope: ComponentScope<AppComponent>
 ) : Torch {
   private val _torchState = MutableStateFlow(false)
   override val torchState: StateFlow<Boolean> get() = _torchState
@@ -134,34 +130,24 @@ interface Torch {
     )
   }
 
-  @SuppressLint("LaunchActivityFromNotification", "UnspecifiedImmutableFlag", "NewApi")
-  private fun createTorchNotification(): Notification {
-    if (systemBuildInfo.sdk >= 26) {
-      notificationManager.createNotificationChannel(
-        NotificationChannel(
-          NOTIFICATION_CHANNEL_ID,
-          loadResource(R.string.es_notif_channel_torch),
-          NotificationManager.IMPORTANCE_LOW
-        )
+  @SuppressLint("LaunchActivityFromNotification")
+  private fun createTorchNotification(): Notification = notificationFactory.build(
+    NOTIFICATION_CHANNEL_ID,
+    loadResource(R.string.es_notif_channel_torch),
+    NotificationManager.IMPORTANCE_LOW
+  ) {
+    setAutoCancel(true)
+    setSmallIcon(R.drawable.es_ic_flashlight_on)
+    setContentTitle(loadResource(R.string.es_notif_title_torch))
+    setContentText(loadResource(R.string.es_notif_text_torch))
+    setContentIntent(
+      PendingIntent.getBroadcast(
+        context,
+        87,
+        Intent(ACTION_DISABLE_TORCH),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
       )
-    }
-
-    return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-      .apply {
-        setAutoCancel(true)
-        setSmallIcon(R.drawable.es_ic_flashlight_on)
-        setContentTitle(loadResource(R.string.es_notif_title_torch))
-        setContentText(loadResource(R.string.es_notif_text_torch))
-        setContentIntent(
-          PendingIntent.getBroadcast(
-            context,
-            87,
-            Intent(ACTION_DISABLE_TORCH),
-            PendingIntent.FLAG_UPDATE_CURRENT
-          )
-        )
-      }
-      .build()
+    )
   }
 
   private companion object {

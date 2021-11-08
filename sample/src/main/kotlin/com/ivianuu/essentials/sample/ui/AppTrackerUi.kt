@@ -17,9 +17,7 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.accessibilityservice.AccessibilityService
-import android.annotation.SuppressLint
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,9 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -46,12 +41,12 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -68,8 +63,8 @@ object AppTrackerKey : Key<Unit>
 @Provide @Inject1<ComponentScope<KeyUiComponent>> @Toasts
 fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
-  createNotification: (CurrentApp?) -> @AppTracker Notification,
   foregroundManager: ForegroundManager,
+  notificationFactory: NotificationFactory,
   permissionRequester: PermissionRequester
 ): KeyUi<AppTrackerKey> = {
   var isEnabled by remember { mutableStateOf(false) }
@@ -103,32 +98,14 @@ fun appTrackerUi(
   }
 }
 
-@Tag private annotation class AppTracker
-
-@SuppressLint("NewApi")
-@Provide
-fun appTrackerNotification(
-  context: AppContext,
+private fun createNotification(
   currentApp: CurrentApp?,
-  notificationManager: @SystemService NotificationManager,
-  systemBuildInfo: SystemBuildInfo
-): @AppTracker Notification {
-  if (systemBuildInfo.sdk >= 26) {
-    notificationManager.createNotificationChannel(
-      NotificationChannel(
-        "app_tracker",
-        "App tracking",
-        NotificationManager.IMPORTANCE_LOW
-      )
-    )
+  @Inject factory: NotificationFactory
+): Notification =
+  factory.build("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
+    setSmallIcon(R.mipmap.ic_launcher)
+    setContentTitle("Current app: ${currentApp?.value}")
   }
-  return NotificationCompat.Builder(context, "app_tracker")
-    .apply {
-      setSmallIcon(R.mipmap.ic_launcher)
-      setContentTitle("Current app: $currentApp")
-    }
-    .build()
-}
 
 @Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>

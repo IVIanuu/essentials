@@ -17,8 +17,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,9 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -41,9 +36,10 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
@@ -54,12 +50,8 @@ object ForegroundKey : Key<Unit>
 
 @SuppressLint("NewApi")
 @Provide
-fun foregroundUi(
-  context: AppContext,
-  foregroundManager: ForegroundManager,
-  notificationManager: @SystemService NotificationManager,
-  systemBuildInfo: SystemBuildInfo
-): KeyUi<ForegroundKey> = {
+@Inject1<NotificationFactory>
+fun foregroundUi(foregroundManager: ForegroundManager): KeyUi<ForegroundKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
@@ -95,22 +87,14 @@ fun foregroundUi(
 @SuppressLint("NewApi") private fun createForegroundNotification(
   color: Color,
   count: Int,
-  @Inject context: AppContext,
-  notificationManager: @SystemService NotificationManager,
-  systemBuildInfo: SystemBuildInfo
-): Notification {
-  if (systemBuildInfo.sdk >= 26) {
-    notificationManager.createNotificationChannel(
-      NotificationChannel(
-        "foreground", "Foreground",
-        NotificationManager.IMPORTANCE_LOW
-      )
-    )
-  }
-  return NotificationCompat.Builder(context, "foreground")
-    .setSmallIcon(R.drawable.ic_home)
-    .setContentTitle("Foreground")
-    .setContentText("Current progress $count")
-    .setColor(color.toArgb())
-    .build()
+  @Inject notificationFactory: NotificationFactory
+) = notificationFactory.build(
+  "foreground",
+  "Foreground",
+  NotificationManager.IMPORTANCE_LOW
+) {
+  setSmallIcon(R.drawable.ic_home)
+  setContentTitle("Foreground")
+  setContentText("Current progress $count")
+  setColor(color.toArgb())
 }
