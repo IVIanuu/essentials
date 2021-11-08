@@ -33,14 +33,14 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.first
 
 data class WriteSecureSettingsKey(
@@ -86,25 +86,22 @@ data class WriteSecureSettingsKey(
   val grantPermissionsViaRoot: () -> Unit = {}
 )
 
-@Provide @Toasts fun writeSecureSettingsModel(
+@Provide @KeyUiContext<WriteSecureSettingsKey> @Toasts fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
-  key: WriteSecureSettingsKey,
-  navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: ComponentScope<KeyUiComponent>,
   shell: Shell
 ) = state(WriteSecureSettingsModel()) {
   action(WriteSecureSettingsModel.openPcInstructions()) {
-    if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
-      navigator.pop(key)
+    if (navigator.push(WriteSecureSettingsPcInstructionsKey(key<WriteSecureSettingsKey>().permissionKey)) == true)
+      navigator.pop(key<WriteSecureSettingsKey>())
   }
 
   action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
       .onSuccess {
-        if (permissionStateFactory(listOf(key.permissionKey)).first()) {
+        if (permissionStateFactory(listOf(key<WriteSecureSettingsKey>().permissionKey)).first()) {
           showToast(R.string.es_secure_settings_permission_granted)
-          navigator.pop(key)
+          navigator.pop(key<WriteSecureSettingsKey>())
         }
       }
       .onFailure {

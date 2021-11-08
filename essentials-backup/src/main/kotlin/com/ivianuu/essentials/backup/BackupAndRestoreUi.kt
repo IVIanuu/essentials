@@ -27,12 +27,11 @@ import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 object BackupAndRestoreKey : Key<Unit>
 
@@ -62,10 +61,9 @@ object BackupAndRestoreKey : Key<Unit>
   val restoreData: () -> Unit = {}
 )
 
-@Provide @Toasts fun backupAndRestoreModel(
+@Provide @KeyUiContext<BackupAndRestoreKey> @Toasts fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
-  restoreBackup: RestoreBackupUseCase,
-  scope: ComponentScope<KeyUiComponent>
+  restoreBackup: RestoreBackupUseCase
 ) = state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
       createBackup()

@@ -47,14 +47,14 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 object DonationKey : DialogKey<Unit>
 
@@ -122,14 +122,11 @@ data class UiDonation(
   val price: String
 )
 
-@Provide @Toasts fun donationModel(
+@Provide @KeyUiContext<DonationKey> @Toasts fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
-  key: DonationKey,
-  navigator: Navigator,
-  purchase: PurchaseUseCase,
-  scope: ComponentScope<KeyUiComponent>
+  purchase: PurchaseUseCase
 ) = state(DonationModel()) {
   produceResource({ copy(skus = it) }) {
     donations
@@ -145,7 +142,7 @@ data class UiDonation(
       }
   }
 
-  action(DonationModel.close()) { navigator.pop(key) }
+  action(DonationModel.close()) { navigator.pop(key<DonationKey>()) }
 
   action(DonationModel.purchase()) { donation ->
     purchase(donation.donation.sku, true, true)

@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -34,7 +35,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -67,7 +67,7 @@ interface Torch {
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
-      torchJob = scope.launch { handleTorchState(value) }
+      torchJob = launch { handleTorchState(value) }
     }
   }
 

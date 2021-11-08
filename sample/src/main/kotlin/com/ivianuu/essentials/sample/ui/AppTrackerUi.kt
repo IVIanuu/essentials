@@ -33,6 +33,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -47,6 +48,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
@@ -57,19 +59,18 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
 object AppTrackerKey : Key<Unit>
 
-@Provide @Toasts fun appTrackerUi(
+@Provide @Inject1<ComponentScope<KeyUiComponent>> @Toasts
+fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
   createNotification: (CurrentApp?) -> @AppTracker Notification,
   foregroundManager: ForegroundManager,
-  permissionRequester: PermissionRequester,
-  scope: ComponentScope<KeyUiComponent>
+  permissionRequester: PermissionRequester
 ): KeyUi<AppTrackerKey> = {
   var isEnabled by remember { mutableStateOf(false) }
 
@@ -90,7 +91,7 @@ object AppTrackerKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        launch {
           if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
             isEnabled = !isEnabled
           }

@@ -22,14 +22,14 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.first
 
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
@@ -83,20 +83,18 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   val openFullScreen: () -> Unit = {}
 )
 
-@Provide @Toasts fun floatingWindowsPickerModel(
-  appRepository: AppRepository,
-  key: FloatingWindowsPickerKey,
-  navigator: Navigator,
-  scope: ComponentScope<KeyUiComponent>
-) = state(FloatingWindowsPickerModel(key.actionTitle)) {
+@Provide @KeyUiContext<FloatingWindowsPickerKey> @Toasts
+fun floatingWindowsPickerModel(
+  appRepository: AppRepository
+) = state(FloatingWindowsPickerModel(key<FloatingWindowsPickerKey>().actionTitle)) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {
     if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
-      navigator.pop(key, true)
+      navigator.pop(key(), true)
     } else {
       showToast(R.string.es_floating_windows_not_installed)
       navigator.push(PlayStoreAppDetailsKey(FLOATING_WINDOWS_PACKAGE))
     }
   }
 
-  action(FloatingWindowsPickerModel.openFullScreen()) { navigator.pop(key, false) }
+  action(FloatingWindowsPickerModel.openFullScreen()) { navigator.pop(key(), false) }
 }

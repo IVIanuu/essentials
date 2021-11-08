@@ -19,6 +19,7 @@ package com.ivianuu.essentials.util
 import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Inject2
@@ -27,7 +28,6 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import kotlinx.coroutines.launch
 
 @Tag annotation class ToasterTag
 typealias Toaster = @ToasterTag (String) -> Unit
@@ -37,7 +37,7 @@ typealias Toaster = @ToasterTag (String) -> Unit
   mainDispatcher: MainDispatcher,
   scope: ComponentScope<AppComponent>
 ): Toaster = { message ->
-  scope.launch(mainDispatcher) {
+  launch(mainDispatcher) {
     Toast.makeText(
       context,
       message,

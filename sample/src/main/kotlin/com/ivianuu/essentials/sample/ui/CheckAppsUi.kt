@@ -21,6 +21,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.db.AbstractEntityDescriptor
 import com.ivianuu.essentials.db.AndroidDb
 import com.ivianuu.essentials.db.Db
@@ -32,24 +33,23 @@ import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 
 object CheckAppsKey : Key<Unit>
 
-@Provide fun checkAppsUi(
+@Provide @Inject1<ComponentScope<KeyUiComponent>> fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
-  launchableAppPredicate: LaunchableAppPredicate,
-  scope: ComponentScope<KeyUiComponent>
+  launchableAppPredicate: LaunchableAppPredicate
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(
@@ -57,7 +57,7 @@ object CheckAppsKey : Key<Unit>
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
-          scope.launch {
+          launch {
             db.transaction {
               db.deleteAll<CheckedAppEntity>()
               db.insertAll(

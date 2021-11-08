@@ -31,13 +31,13 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -77,17 +77,14 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-@Provide fun permissionRequestModel(
+@Provide @KeyUiContext<PermissionRequestKey> fun permissionRequestModel(
   appUiStarter: AppUiStarter,
-  key: PermissionRequestKey,
-  navigator: Navigator,
   permissions: Map<TypeKey<Permission>, Permission> = emptyMap(),
   permissionStateFactory: PermissionStateFactory,
-  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
-  scope: ComponentScope<KeyUiComponent>
+  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap()
 ) = state(PermissionRequestModel()) {
   combine(
-    key.permissionsKeys
+    key<PermissionRequestKey>().permissionsKeys
       .map { permissionKey ->
         permissionStateFactory(listOf(permissionKey))
           .map { state ->
@@ -99,11 +96,11 @@ data class UiPermission<P : Permission>(
 
   state
     .filter {
-      key.permissionsKeys
+      key<PermissionRequestKey>().permissionsKeys
         .all { permissionStateFactory(listOf(it)).first() }
     }
     .take(1)
-    .onEach { navigator.pop(key, true) }
+    .onEach { navigator.pop(key(), true) }
     .launchIn(this)
 
   action(PermissionRequestModel.grantPermission()) { permission ->

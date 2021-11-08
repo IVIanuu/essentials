@@ -43,12 +43,11 @@ import com.ivianuu.essentials.store.action
 import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -118,12 +117,10 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   val updateMediaApp: () -> Unit = {}
 )
 
-@Provide fun mediaActionSettingsModel(
+@Provide @KeyUiContext<MediaActionSettingsKey<*>> fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  navigator: Navigator,
-  pref: DataStore<MediaActionPrefs>,
-  scope: ComponentScope<KeyUiComponent>
+  pref: DataStore<MediaActionPrefs>
 ) = state(MediaActionSettingsModel()) {
   pref.data
     .map { it.mediaApp }

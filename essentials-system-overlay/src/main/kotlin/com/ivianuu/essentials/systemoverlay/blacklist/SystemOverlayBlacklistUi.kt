@@ -27,12 +27,12 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
@@ -106,12 +106,11 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   val updateDisableOnSecureScreens: (Boolean) -> Unit = {}
 )
 
-@Provide fun systemOverlayBlacklistModel(
-  key: SystemOverlayBlacklistKey,
-  navigator: Navigator,
-  pref: DataStore<SystemOverlayBlacklistPrefs>,
-  scope: ComponentScope<KeyUiComponent>
-) = state(SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)) {
+@Provide @KeyUiContext<SystemOverlayBlacklistKey> fun systemOverlayBlacklistModel(
+  pref: DataStore<SystemOverlayBlacklistPrefs>
+) = state(SystemOverlayBlacklistModel
+  (systemOverlayName = key<SystemOverlayBlacklistKey>().systemOverlayName
+)) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

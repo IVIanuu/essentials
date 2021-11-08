@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -58,9 +59,8 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide fun systemOverlayAppBlacklistModel(
-  pref: DataStore<SystemOverlayBlacklistPrefs>,
-  scope: ComponentScope<KeyUiComponent>
+@Provide @Inject1<ComponentScope<KeyUiComponent>> fun systemOverlayAppBlacklistModel(
+  pref: DataStore<SystemOverlayBlacklistPrefs>
 ) = state(SystemOverlayAppBlacklistModel()) {
   update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
   action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->

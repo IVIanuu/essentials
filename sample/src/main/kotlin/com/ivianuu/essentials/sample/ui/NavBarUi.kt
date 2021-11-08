@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
@@ -42,26 +43,22 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 
 object NavBarKey : Key<Unit>
 
-@Provide fun navBarUi(
+@Provide @KeyUiContext<NavBarKey> fun navBarUi(
   forceNavBarVisibleState: MutableStateFlow<ForceNavBarVisibleState>,
   navBarPref: DataStore<NavBarPrefs>,
-  navigator: Navigator,
   permissionState: Flow<PermissionState<NavBarPermission>>,
-  permissionRequester: PermissionRequester,
-  scope: ComponentScope<KeyUiComponent>,
+  permissionRequester: PermissionRequester
 ): KeyUi<NavBarKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -75,7 +72,7 @@ object NavBarKey : Key<Unit>
       // reshow nav bar when leaving the screen
       DisposableEffect(true) {
         onDispose {
-          scope.launch {
+          launch {
             navBarPref.updateData {
               copy(hideNavBar = false)
             }
@@ -110,13 +107,13 @@ object NavBarKey : Key<Unit>
       Button(
         onClick = {
           if (hasPermission) {
-            scope.launch {
+            launch {
               navBarPref.updateData {
                 copy(hideNavBar = !hideNavBar)
               }
             }
           } else {
-            scope.launch {
+            launch {
               permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
@@ -138,7 +135,7 @@ object NavBarKey : Key<Unit>
 
       Button(
         onClick = {
-          scope.launch {
+          launch {
             navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
           }
         }

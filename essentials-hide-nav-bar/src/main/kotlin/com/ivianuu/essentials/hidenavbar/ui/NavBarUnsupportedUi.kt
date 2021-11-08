@@ -32,12 +32,11 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 object NavBarUnsupportedKey : Key<Unit>
 
@@ -80,11 +79,8 @@ object NavBarUnsupportedKey : Key<Unit>
   val openRootMethod: () -> Unit = {}
 )
 
-@Provide fun navBarUnsupportedModel(
-  key: NavBarUnsupportedKey,
-  navigator: Navigator,
-  scope: ComponentScope<KeyUiComponent>
-) = state(NavBarUnsupportedModel()) {
+@Provide @KeyUiContext<NavBarUnsupportedKey>
+fun navBarUnsupportedModel() = state(NavBarUnsupportedModel()) {
   action(NavBarUnsupportedModel.openMoreInfos()) {
     navigator.push(
       UrlKey(

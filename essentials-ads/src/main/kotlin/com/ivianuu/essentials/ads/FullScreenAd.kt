@@ -5,6 +5,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -54,7 +54,7 @@ interface FullScreenAd {
   override suspend fun isLoaded() = getCurrentAd() != null
 
   override fun preload() {
-    scope.launch { load() }
+    launch { load() }
   }
 
   override suspend fun load(): Boolean {

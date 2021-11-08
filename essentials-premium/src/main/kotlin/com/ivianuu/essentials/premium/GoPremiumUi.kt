@@ -47,6 +47,7 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
+import com.ivianuu.essentials.coroutines.scope
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.getOrNull
@@ -56,10 +57,10 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -268,24 +269,21 @@ data class AppFeature(
   }
 }
 
-@Provide class GoPremiumModel(
+@Provide @KeyUiContext<GoPremiumKey> class GoPremiumModel(
   val features: List<AppFeature>,
   private val fullScreenAd: FullScreenAd,
-  private val key: GoPremiumKey,
-  private val navigator: Navigator,
-  private val premiumVersionManager: PremiumVersionManager,
-  private val scope: ComponentScope<KeyUiComponent>
+  private val premiumVersionManager: PremiumVersionManager
 ) {
   val premiumSkuDetails: Flow<Resource<SkuDetails>> = premiumVersionManager.premiumSkuDetails
     .flowAsResource()
 
   val showTryBasicOption: Boolean
-    get() = key.showTryBasicOption
+    get() = key<GoPremiumKey>().showTryBasicOption
 
   fun goPremium() {
     scope.launch {
       if (premiumVersionManager.purchasePremiumVersion()) {
-        navigator.pop(key, true)
+        navigator.pop(key(), true)
       }
     }
   }
@@ -293,7 +291,7 @@ data class AppFeature(
   fun tryBasicVersion() {
     scope.launch {
       fullScreenAd.loadAndShow()
-      navigator.pop(key, false)
+      navigator.pop(key(), false)
     }
   }
 }

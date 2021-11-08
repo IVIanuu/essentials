@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.launch
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
@@ -43,7 +43,7 @@ object ActionsKey : Key<Unit>
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  component: ComponentScope<UiComponent>
+  scope: ComponentScope<UiComponent>
 ): KeyUi<ActionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
@@ -51,7 +51,7 @@ object ActionsKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        component.launch {
+        launch {
           val actionId = navigator.push(ActionPickerKey())
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch

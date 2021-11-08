@@ -45,13 +45,13 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 data class ActionPickerKey(
   val showDefaultOption: Boolean = false,
@@ -146,13 +146,10 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide @Res fun actionPickerModel(
+@Provide @KeyUiContext<ActionPickerKey> @Res fun actionPickerModel(
   filter: ActionFilter,
-  key: ActionPickerKey,
-  navigator: Navigator,
   permissionRequester: PermissionRequester,
-  repository: ActionRepository,
-  scope: ComponentScope<KeyUiComponent>,
+  repository: ActionRepository
 ) = state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 
@@ -164,7 +161,7 @@ sealed class ActionPickerItem {
       if (!permissionRequester(action.permissions))
         return@action
     }
-    navigator.pop(key, result)
+    navigator.pop(key(), result)
   }
 }
 

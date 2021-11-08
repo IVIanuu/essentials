@@ -32,13 +32,12 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.flow
 
 object LicenseKey : Key<Unit>
@@ -59,10 +58,8 @@ object LicenseKey : Key<Unit>
   val openProject: (Project) -> Unit = {}
 )
 
-@Provide fun licenseModel(
-  licenseProjectRepository: LicenceProjectRepository,
-  navigator: Navigator,
-  scope: ComponentScope<KeyUiComponent>
+@Provide @KeyUiContext<LicenseKey> fun licenseModel(
+  licenseProjectRepository: LicenceProjectRepository
 ) = state(LicenseModel()) {
   flow { emit(licenseProjectRepository.getLicenseProjects()) }
     .flowAsResource()

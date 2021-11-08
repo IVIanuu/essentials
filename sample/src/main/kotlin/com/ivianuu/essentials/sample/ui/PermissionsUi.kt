@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -45,20 +46,17 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
 
 object PermissionsKey : Key<Unit>
 
-@Provide fun permissionUi(
-  permissionRequester: PermissionRequester,
-  scope: ComponentScope<KeyUiComponent>
+@Provide @KeyUiContext<PermissionsKey> fun permissionUi(
+  permissionRequester: PermissionRequester
 ): KeyUi<PermissionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
@@ -66,7 +64,7 @@ object PermissionsKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        launch {
           permissionRequester(
             listOf(
               typeKeyOf<SampleCameraPermission>(),

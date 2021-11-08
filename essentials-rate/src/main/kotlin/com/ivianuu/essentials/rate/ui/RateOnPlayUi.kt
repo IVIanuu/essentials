@@ -30,11 +30,11 @@ import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
 
 object RateOnPlayKey : DialogKey<Unit>
 
@@ -69,12 +69,9 @@ object RateOnPlayKey : DialogKey<Unit>
   val showNever: () -> Unit = {},
 )
 
-@Provide fun rateOnPlayModel(
+@Provide @KeyUiContext<RateOnPlayKey> fun rateOnPlayModel(
   displayShowNever: DisplayShowNeverUseCase,
-  key: RateOnPlayKey,
-  navigator: Navigator,
   rateOnPlay: RateOnPlayUseCase,
-  scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
 ) = state(RateOnPlayModel()) {
@@ -84,6 +81,6 @@ object RateOnPlayKey : DialogKey<Unit>
   action(RateOnPlayModel.showNever()) { showNever() }
   action(RateOnPlayModel.rate()) {
     rateOnPlay()
-    navigator.pop(key)
+    navigator.pop(key<RateOnPlayKey>())
   }
 }

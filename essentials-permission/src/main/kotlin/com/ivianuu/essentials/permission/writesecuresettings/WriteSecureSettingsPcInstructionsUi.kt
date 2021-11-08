@@ -44,9 +44,10 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.key
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
@@ -56,7 +57,6 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -217,16 +217,14 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
   .distinctUntilChanged()
 
-@Provide @Toasts fun writeSecureSettingsPcInstructionsModel(
+@Provide @KeyUiContext<WriteSecureSettingsPcInstructionsKey> @Toasts
+fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>,
   isCharging: Flow<IsCharging>,
-  key: WriteSecureSettingsPcInstructionsKey,
-  navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: ComponentScope<KeyUiComponent>
 ) = state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
   state
     .flatMapLatest { currentState ->
@@ -237,7 +235,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
         3 -> isCharging.map { it.value }
         4 -> flow {
           while (true) {
-            emit(permissionStateFactory(listOf(key.permissionKey)).first())
+            emit(permissionStateFactory(listOf(key<WriteSecureSettingsPcInstructionsKey>().permissionKey)).first())
             delay(1000)
           }
         }
@@ -248,7 +246,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
 
   action(WriteSecureSettingsPcInstructionsModel.continueStep()) {
     if (state.first().completedStep == 4)
-      navigator.pop(key, true)
+      navigator.pop(key(), true)
     else
       update { copy(currentStep = completedStep + 1, completedStep = completedStep + 1) }
   }

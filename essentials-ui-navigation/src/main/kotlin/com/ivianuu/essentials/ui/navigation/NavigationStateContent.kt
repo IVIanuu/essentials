@@ -30,6 +30,7 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.animation.AnimatedStack
@@ -41,7 +42,6 @@ import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 @Tag annotation class NavigationStateContentTag
@@ -65,7 +65,7 @@ typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modif
   }
 
   BackHandler(enabled = backStack.size > 1) {
-    appScope.launch {
+    launch {
       navigator.popTop()
     }
   }

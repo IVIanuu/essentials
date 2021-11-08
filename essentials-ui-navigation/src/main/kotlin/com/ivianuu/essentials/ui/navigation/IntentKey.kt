@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catchT
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
@@ -33,7 +34,6 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -66,7 +66,7 @@ typealias KeyHandler<R> = @KeyHandlerTag suspend (Key<R>, (R) -> Unit) -> Boolea
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler false
   val intent = intentFactory(key)
-  scope.launch {
+  launch {
     val activity = appUiStarter()
     withContext(dispatcher) {
       val result =

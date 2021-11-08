@@ -35,13 +35,12 @@ import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.first
 
 object NavBarKey : Key<Unit>
@@ -77,11 +76,9 @@ object NavBarKey : Key<Unit>
     get() = hideNavBar
 }
 
-@Provide @Res fun navBarModel(
-  navigator: Navigator,
+@Provide @KeyUiContext<NavBarKey> @Res fun navBarModel(
   permissionRequester: PermissionRequester,
-  pref: DataStore<NavBarPrefs>,
-  scope: ComponentScope<KeyUiComponent>,
+  pref: DataStore<NavBarPrefs>
 ) = state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)

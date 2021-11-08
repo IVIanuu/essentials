@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -36,22 +37,21 @@ import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @Provide val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
 
 object UnlockKey : Key<Unit>
 
-@Provide @Toasts fun unlockUi(
+@Provide @Inject1<ComponentScope<KeyUiComponent>> @Toasts fun unlockUi(
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker,
-  scope: ComponentScope<KeyUiComponent>
+  screenUnlocker: ScreenUnlocker
 ): KeyUi<UnlockKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
@@ -63,7 +63,7 @@ object UnlockKey : Key<Unit>
     ) {
       Button(
         onClick = {
-          scope.launch {
+          launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(3000)
@@ -77,7 +77,7 @@ object UnlockKey : Key<Unit>
 
       Button(
         onClick = {
-          scope.launch {
+          launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(3000)

@@ -102,7 +102,7 @@ class AndroidDb private constructor(
 
       val interceptor = suspendCancellableCoroutine<ContinuationInterceptor> { cont ->
         cont.invokeOnCancellation { controlJob.cancel() }
-        this@AndroidDb.launch {
+        launch {
           runBlocking {
             cont.resume(coroutineContext[ContinuationInterceptor]!!)
             controlJob.join()
