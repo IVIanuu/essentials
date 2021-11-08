@@ -1,8 +1,9 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.inject
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -21,7 +22,7 @@ interface Schema {
 
   suspend fun migrate(db: Db, from: Int, to: Int)
 
-  fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T>
+  @Inject1<TypeKey<T>> fun <T> descriptor(): EntityDescriptor<T>
 }
 
 fun Schema(
@@ -60,8 +61,8 @@ private class SchemaImpl(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
-    _entities[key]?.cast() ?: error("Unknown entity $key")
+  @Inject1<TypeKey<T>> override fun <T> descriptor(): EntityDescriptor<T> =
+    _entities[inject<TypeKey<T>>()]?.cast() ?: error("Unknown entity ${inject<TypeKey<T>>()}")
 }
 
 interface Migration {

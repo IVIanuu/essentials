@@ -45,7 +45,7 @@ import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.Inject2
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -60,11 +60,12 @@ import kotlin.reflect.KClass
 
 object AppTrackerKey : Key<Unit>
 
-@Provide @Inject1<ComponentScope<KeyUiComponent>> @Toasts
+@Provide
+@Inject2<ComponentScope<KeyUiComponent>, NotificationFactory>
+@Toasts
 fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
-  notificationFactory: NotificationFactory,
   permissionRequester: PermissionRequester
 ): KeyUi<AppTrackerKey> = {
   var isEnabled by remember { mutableStateOf(false) }

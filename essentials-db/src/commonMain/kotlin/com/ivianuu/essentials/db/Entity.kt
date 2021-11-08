@@ -1,6 +1,8 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.Inject2
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialInfo
@@ -16,10 +18,8 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
-abstract class AbstractEntityDescriptor<T>(
-  tableName: String,
-  @Inject typeKey: TypeKey<T>,
-  serializer: KSerializer<T>
+@Inject2<TypeKey<T>, KSerializer<T>> abstract class AbstractEntityDescriptor<T>(
+  tableName: String
 ) : EntityDescriptor<T> by EntityDescriptor(tableName)
 
 @Target(AnnotationTarget.PROPERTY)
@@ -32,9 +32,9 @@ annotation class AutoIncrement
 
 fun <T> EntityDescriptor(
   tableName: String,
-  @Inject typeKey: TypeKey<T>,
+  @Inject key: TypeKey<T>,
   serializer: KSerializer<T>
-): EntityDescriptor<T> = EntityDescriptorImpl(tableName, typeKey, serializer)
+): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
 private class EntityDescriptorImpl<T>(
   override val tableName: String,
@@ -79,7 +79,7 @@ data class Row(
   }
 }
 
-fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject key: TypeKey<T>): String = buildString {
+@Inject1<TypeKey<T>> fun <T> T.toSqlColumnsAndArgsString(schema: Schema): String = buildString {
   val descriptor = schema.descriptor<T>()
 
   val rowsWithValues = descriptor.rows.zip(
