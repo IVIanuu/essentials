@@ -54,7 +54,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object RateKey : DialogKey<Unit>
@@ -138,7 +137,7 @@ object RateKey : DialogKey<Unit>
   scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-): StateFlow<RateModel> = scope.state(RateModel(packageName = buildInfo.packageName)) {
+) = scope.state(RateModel(packageName = buildInfo.packageName)) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(RateModel.showLater()) { showLater() }

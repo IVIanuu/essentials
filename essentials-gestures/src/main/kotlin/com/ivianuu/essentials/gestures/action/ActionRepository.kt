@@ -1,10 +1,9 @@
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.singleActionIcon
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
@@ -22,15 +21,13 @@ interface ActionRepository {
   suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
 }
 
-@Provide class ActionRepositoryImpl(
+@Provide @Toasts class ActionRepositoryImpl(
   private val actions: () -> Map<String, () -> Action<*>> = { emptyMap() },
   private val actionFactories: () -> List<() -> ActionFactory> = { emptyList() },
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>> = { emptyMap() },
   private val actionSettings: () -> Map<String, () -> ActionSettingsKey<*>> = { emptyMap() },
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate> = { emptyList() },
-  private val dispatcher: DefaultDispatcher,
-  private val rp: ResourceProvider,
-  private val toaster: Toaster
+  private val dispatcher: DefaultDispatcher
 ) : ActionRepository {
   override suspend fun getAllActions() = withContext(dispatcher) {
     actions().values.map { it() }

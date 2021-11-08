@@ -33,7 +33,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
@@ -112,9 +111,7 @@ val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverla
   navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<SystemOverlayBlacklistModel> = scope.state(
-  SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)
-) {
+) = scope.state(SystemOverlayBlacklistModel(systemOverlayName = key.systemOverlayName)) {
   pref.data.update {
     copy(
       disableOnKeyboard = it.disableOnKeyboard,

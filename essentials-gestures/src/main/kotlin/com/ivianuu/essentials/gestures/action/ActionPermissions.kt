@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.action
 import android.accessibilityservice.AccessibilityService
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.loadResource
@@ -32,9 +32,7 @@ import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Provide
 import kotlin.reflect.KClass
 
-@Provide class ActionAccessibilityPermission(
-  private val rp: ResourceProvider
-) : AccessibilityServicePermission {
+@Provide @Res class ActionAccessibilityPermission : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
   override val title: String
@@ -47,9 +45,7 @@ import kotlin.reflect.KClass
     }
 }
 
-@Provide class ActionNotificationPolicyPermission(
-  private val rp: ResourceProvider
-) : NotificationPolicyPermission {
+@Provide @Res class ActionNotificationPolicyPermission : NotificationPolicyPermission {
   override val title: String
     get() = loadResource(R.string.es_action_notification_policy_permission_title)
   override val desc: String
@@ -58,16 +54,14 @@ import kotlin.reflect.KClass
     get() = { Icon(R.drawable.es_ic_notifications) }
 }
 
-@Provide class ActionRootPermission(private val rp: ResourceProvider) : RootPermission {
+@Provide @Res class ActionRootPermission : RootPermission {
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_adb) }
 }
 
-@Provide class ActionSystemOverlayPermission(
-  private val rp: ResourceProvider
-) : SystemOverlayPermission {
+@Provide @Res class ActionSystemOverlayPermission : SystemOverlayPermission {
   override val title: String
     get() = loadResource(R.string.es_action_system_overlay_permission_title)
   override val desc: String
@@ -76,9 +70,7 @@ import kotlin.reflect.KClass
     get() = { Icon(R.drawable.es_ic_adb) }
 }
 
-@Provide class ActionWriteSecureSettingsPermission(
-  private val rp: ResourceProvider
-) : WriteSecureSettingsPermission {
+@Provide @Res class ActionWriteSecureSettingsPermission : WriteSecureSettingsPermission {
   override val title: String
     get() = loadResource(R.string.es_action_write_secure_settings_permission_title)
   override val desc: String
@@ -87,9 +79,7 @@ import kotlin.reflect.KClass
     get() = { Icon(R.drawable.es_ic_settings) }
 }
 
-@Provide class ActionWriteSettingsPermission(
-  private val rp: ResourceProvider
-) : WriteSettingsPermission {
+@Provide @Res class ActionWriteSettingsPermission : WriteSettingsPermission {
   override val title: String
     get() = loadResource(R.string.es_action_write_settings_permission_title)
   override val desc: String

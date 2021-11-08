@@ -21,7 +21,7 @@ import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
-@Provide fun killCurrentAppAction(rp: ResourceProvider): Action<KillCurrentAppActionId> = Action(
+@Provide @Res fun killCurrentAppAction() = Action(
   id = KillCurrentAppActionId,
   title = loadResource(R.string.es_action_kill_current_app),
   icon = singleActionIcon(Icons.Default.Clear),

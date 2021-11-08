@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.coroutines.race
@@ -52,7 +51,7 @@ import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -60,7 +59,6 @@ import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -219,7 +217,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
   .distinctUntilChanged()
 
-@Provide fun writeSecureSettingsPcInstructionsModel(
+@Provide @Toasts fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -228,12 +226,8 @@ typealias AdbEnabled = @AdbEnabledTag Int
   key: WriteSecureSettingsPcInstructionsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
-  scope: ComponentScope<KeyUiComponent>,
-  rp: ResourceProvider,
-  toaster: Toaster
-): StateFlow<WriteSecureSettingsPcInstructionsModel> = scope.state(
-  WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)
-) {
+  scope: ComponentScope<KeyUiComponent>
+) = scope.state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
   state
     .flatMapLatest { currentState ->
       if (currentState.currentStep != currentState.completedStep) flowOf(false)

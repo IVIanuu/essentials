@@ -33,11 +33,10 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 @Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
@@ -77,10 +76,7 @@ object CounterKey : Key<Unit>
   val dec: () -> Unit = {}
 )
 
-@Provide fun counterModel(
-  scope: ComponentScope<KeyUiComponent>,
-  toaster: Toaster
-): StateFlow<CounterModel> = scope.state(CounterModel()) {
+@Provide @Toasts fun counterModel(scope: ComponentScope<KeyUiComponent>) = scope.state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {
     if (state.first().count > 0) update { copy(count = count.dec()) }

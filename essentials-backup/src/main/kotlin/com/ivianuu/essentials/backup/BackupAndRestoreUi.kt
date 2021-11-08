@@ -20,7 +20,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.store.action
@@ -30,11 +29,10 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 object BackupAndRestoreKey : Key<Unit>
 
@@ -64,13 +62,11 @@ object BackupAndRestoreKey : Key<Unit>
   val restoreData: () -> Unit = {}
 )
 
-@Provide fun backupAndRestoreModel(
+@Provide @Toasts fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
-  scope: ComponentScope<KeyUiComponent>,
-  rp: ResourceProvider,
-  toaster: Toaster,
-): StateFlow<BackupAndRestoreModel> = scope.state(BackupAndRestoreModel()) {
+  scope: ComponentScope<KeyUiComponent>
+) = scope.state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
       createBackup()
         .onFailure {

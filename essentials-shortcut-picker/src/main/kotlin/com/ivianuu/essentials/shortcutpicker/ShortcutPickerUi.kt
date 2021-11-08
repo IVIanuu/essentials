@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
@@ -45,11 +44,10 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 object ShortcutPickerKey : Key<Shortcut>
 
@@ -77,14 +75,12 @@ object ShortcutPickerKey : Key<Shortcut>
   val pickShortcut: (Shortcut) -> Unit = {}
 )
 
-@Provide fun shortcutPickerModel(
+@Provide @Toasts fun shortcutPickerModel(
   key: ShortcutPickerKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>,
-  shortcutRepository: ShortcutRepository,
-  rp: ResourceProvider,
-  toaster: Toaster
-): StateFlow<ShortcutPickerModel> = scope.state(ShortcutPickerModel()) {
+  shortcutRepository: ShortcutRepository
+) = scope.state(ShortcutPickerModel()) {
   shortcutRepository.shortcuts
     .flowAsResource()
     .update { copy(shortcuts = it) }

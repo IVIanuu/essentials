@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -40,7 +39,7 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -76,11 +75,7 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
 @Tag annotation class ActionRootCommandRunnerTag
 typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String) -> Unit
 
-@Provide fun actionRootCommandRunner(
-  shell: Shell,
-  rp: ResourceProvider,
-  toaster: Toaster
-): ActionRootCommandRunner = { command ->
+@Provide @Toasts fun actionRootCommandRunner(shell: Shell): ActionRootCommandRunner = { command ->
   catch { shell.run(command) }
     .onFailure {
       it.printStackTrace()
@@ -91,11 +86,8 @@ typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String)
 @Tag annotation class ActionIntentSenderTag
 typealias ActionIntentSender = @ActionIntentSenderTag (Intent, Boolean, Bundle?) -> Unit
 
-@Provide fun actionIntentSender(
-  context: AppContext,
-  rp: ResourceProvider,
-  toaster: Toaster
-): ActionIntentSender = { intent, isFloating, options ->
+@Provide @Toasts
+fun actionIntentSender(context: AppContext): ActionIntentSender = { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)

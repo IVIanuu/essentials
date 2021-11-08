@@ -53,9 +53,9 @@ fun showToast(message: String, @Inject toaster: Toaster) {
 }
 
 @Toasts fun showToast(messageRes: Int) {
-  showToast(loadResource<String>(messageRes))
+  showToast(message = loadResource(messageRes))
 }
 
 @Toasts fun showToast(messageRes: Int, vararg args: Any?) {
-  showToast(loadResource<String>(messageRes, *args))
+  showToast(message = loadResource(messageRes, *args))
 }

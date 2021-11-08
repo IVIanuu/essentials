@@ -20,7 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -36,9 +36,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
-@Provide class KeycodeActionFactory(
-  private val actionRootCommandRunner: ActionRootCommandRunner,
-  private val rp: ResourceProvider,
+@Provide @Res class KeycodeActionFactory(
+  private val actionRootCommandRunner: ActionRootCommandRunner
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -59,10 +58,8 @@ import com.ivianuu.injekt.common.typeKeyOf
   }
 }
 
-@Provide class KeycodeActionPickerDelegate(
-  private val navigator: Navigator,
-  private val rp: ResourceProvider,
-) : ActionPickerDelegate {
+@Provide @Res
+class KeycodeActionPickerDelegate(private val navigator: Navigator) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String

@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -30,14 +30,13 @@ import com.ivianuu.injekt.android.SystemService
 
 @Provide object AssistantActionId : ActionId("assistant")
 
-@Provide fun assistantAction(rp: ResourceProvider): Action<AssistantActionId> =
-  Action(
-    id = AssistantActionId,
-    title = loadResource(R.string.es_action_assistant),
-    closeSystemDialogs = true,
-    turnScreenOn = true,
-    icon = singleActionIcon(R.drawable.es_ic_google)
-  )
+@Provide @Res fun assistantAction() = Action(
+  id = AssistantActionId,
+  title = loadResource(R.string.es_action_assistant),
+  closeSystemDialogs = true,
+  turnScreenOn = true,
+  icon = singleActionIcon(R.drawable.es_ic_google)
+)
 
 @SuppressLint("DiscouragedPrivateApi")
 @Provide fun assistantActionExecutor(

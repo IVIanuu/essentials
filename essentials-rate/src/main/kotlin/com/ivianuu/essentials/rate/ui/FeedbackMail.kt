@@ -19,7 +19,7 @@ package com.ivianuu.essentials.rate.ui
 import android.content.Intent
 import android.net.Uri
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.IntentKey
 import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
@@ -27,10 +27,9 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackMailKey : IntentKey
 
-@Provide fun feedbackMailKeyIntentFactory(
+@Provide @Res fun feedbackMailKeyIntentFactory(
   context: AppContext,
-  email: DeveloperEmail,
-  rp: ResourceProvider
+  email: DeveloperEmail
 ): KeyIntentFactory<FeedbackMailKey> = {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")

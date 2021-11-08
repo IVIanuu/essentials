@@ -17,7 +17,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -34,10 +34,7 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object WifiActionId : ActionId("wifi")
 
-@Provide fun wifiAction(
-  icon: Flow<WifiIcon>,
-  rp: ResourceProvider,
-): Action<WifiActionId> = Action(
+@Provide @Res fun wifiAction(icon: Flow<WifiIcon>) = Action(
   id = WifiActionId,
   title = loadResource(R.string.es_action_wifi),
   icon = icon

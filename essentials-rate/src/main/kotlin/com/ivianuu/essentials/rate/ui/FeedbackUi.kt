@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 object FeedbackKey : DialogKey<Unit>
 
@@ -80,7 +79,7 @@ object FeedbackKey : DialogKey<Unit>
   scope: ComponentScope<KeyUiComponent>,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase
-): StateFlow<FeedbackModel> = scope.state(FeedbackModel()) {
+) = scope.state(FeedbackModel()) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(FeedbackModel.showLater()) { showLater() }

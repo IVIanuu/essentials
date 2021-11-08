@@ -21,7 +21,6 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
 import com.ivianuu.essentials.optics.Optics
@@ -37,12 +36,11 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 data class WriteSecureSettingsKey(
@@ -88,18 +86,14 @@ data class WriteSecureSettingsKey(
   val grantPermissionsViaRoot: () -> Unit = {}
 )
 
-@Provide fun writeSecureSettingsModel(
+@Provide @Toasts fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   key: WriteSecureSettingsKey,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   scope: ComponentScope<KeyUiComponent>,
-  shell: Shell,
-  rp: ResourceProvider,
-  toaster: Toaster,
-): StateFlow<WriteSecureSettingsModel> = scope.state(
-  WriteSecureSettingsModel()
-) {
+  shell: Shell
+) = scope.state(WriteSecureSettingsModel()) {
   action(WriteSecureSettingsModel.openPcInstructions()) {
     if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
       navigator.pop(key)

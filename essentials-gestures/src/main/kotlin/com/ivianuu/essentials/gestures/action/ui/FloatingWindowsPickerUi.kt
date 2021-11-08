@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
@@ -27,11 +26,10 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
@@ -85,16 +83,12 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   val openFullScreen: () -> Unit = {}
 )
 
-@Provide fun floatingWindowsPickerModel(
+@Provide @Toasts fun floatingWindowsPickerModel(
   appRepository: AppRepository,
   key: FloatingWindowsPickerKey,
   navigator: Navigator,
-  rp: ResourceProvider,
-  toaster: Toaster,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<FloatingWindowsPickerModel> = scope.state(
-  FloatingWindowsPickerModel(key.actionTitle)
-) {
+) = scope.state(FloatingWindowsPickerModel(key.actionTitle)) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {
     if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
       navigator.pop(key, true)

@@ -2,7 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -14,7 +14,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object NextAppActionId : ActionId("next_app")
 
-@Provide fun nextAppAction(rp: ResourceProvider): Action<NextAppActionId> = Action(
+@Provide @Res fun nextAppAction() = Action(
   id = NextAppActionId,
   title = loadResource(R.string.es_action_next_app),
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),

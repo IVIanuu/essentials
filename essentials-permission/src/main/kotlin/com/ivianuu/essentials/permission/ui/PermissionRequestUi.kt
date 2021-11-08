@@ -38,7 +38,6 @@ import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -86,7 +85,7 @@ data class UiPermission<P : Permission>(
   permissionStateFactory: PermissionStateFactory,
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<PermissionRequestModel> = scope.state(PermissionRequestModel()) {
+) = scope.state(PermissionRequestModel()) {
   combine(
     key.permissionsKeys
       .map { permissionKey ->

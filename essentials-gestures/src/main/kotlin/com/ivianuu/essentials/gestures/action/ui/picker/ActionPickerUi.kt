@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -52,7 +52,6 @@ import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 data class ActionPickerKey(
   val showDefaultOption: Boolean = false,
@@ -147,15 +146,14 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide fun actionPickerModel(
+@Provide @Res fun actionPickerModel(
   filter: ActionFilter,
   key: ActionPickerKey,
   navigator: Navigator,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
-  rp: ResourceProvider,
   scope: ComponentScope<KeyUiComponent>,
-): StateFlow<ActionPickerModel> = scope.state(ActionPickerModel()) {
+) = scope.state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 
   action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
@@ -170,11 +168,10 @@ sealed class ActionPickerItem {
   }
 }
 
-private suspend fun getActionPickerItems(
+@Res private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,
   key: ActionPickerKey,
-  repository: ActionRepository,
-  rp: ResourceProvider
+  repository: ActionRepository
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

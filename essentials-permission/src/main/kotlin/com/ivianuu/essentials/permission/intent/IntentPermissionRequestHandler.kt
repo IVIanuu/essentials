@@ -18,7 +18,6 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.onFailure
@@ -28,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -41,14 +40,12 @@ typealias PermissionIntentFactory<P> = @PermissionIntentFactoryTag (P) -> Intent
 
 @JvmInline value class ShowFindPermissionHint<P>(val value: Boolean)
 
-@Provide fun <P : Permission> intentPermissionRequestHandler(
+@Provide @Toasts fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
-  state: Flow<PermissionState<P>>,
-  rp: ResourceProvider,
-  toaster: Toaster
+  state: Flow<PermissionState<P>>
 ): PermissionRequestHandler<P> = { permission ->
   race(
     {

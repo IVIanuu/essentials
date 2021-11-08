@@ -20,9 +20,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -36,10 +35,8 @@ interface Clipboard {
   suspend fun updateText(value: String, showMessage: Boolean = true)
 }
 
-@Provide class ClipboardImpl(
-  private val clipboardManager: @SystemService ClipboardManager,
-  private val rp: ResourceProvider,
-  private val toaster: Toaster
+@Provide @Toasts class ClipboardImpl(
+  private val clipboardManager: @SystemService ClipboardManager
 ) : Clipboard {
   override val text: Flow<String?>
     get() = callbackFlow<String?> {
@@ -66,4 +63,3 @@ interface Clipboard {
       }
   }
 }
-

@@ -22,7 +22,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
-@Provide fun notificationsAction(rp: ResourceProvider): Action<NotificationsActionId> = Action(
+@Provide @Res fun notificationsAction() = Action(
   id = NotificationsActionId,
   title = loadResource(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,

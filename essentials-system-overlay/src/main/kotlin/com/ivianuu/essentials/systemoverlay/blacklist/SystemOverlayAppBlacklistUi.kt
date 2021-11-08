@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
@@ -30,18 +29,17 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
 
-@Provide fun systemOverlayAppBlacklistUi(
-  checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
-  rp: ResourceProvider
+@Provide @Toasts fun systemOverlayAppBlacklistUi(
+  checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {
     checkableAppsPageFactory(
@@ -63,10 +61,9 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<SystemOverlayAppBlacklistModel> =
-  scope.state(SystemOverlayAppBlacklistModel()) {
-    update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
-    action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
-      pref.updateData { copy(appBlacklist = appBlacklist) }
-    }
+) = scope.state(SystemOverlayAppBlacklistModel()) {
+  update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
+  action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
+    pref.updateData { copy(appBlacklist = appBlacklist) }
   }
+}

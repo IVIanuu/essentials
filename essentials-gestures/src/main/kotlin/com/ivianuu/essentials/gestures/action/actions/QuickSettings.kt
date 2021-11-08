@@ -23,7 +23,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 
-@Provide fun quickSettingsAction(rp: ResourceProvider): Action<QuickSettingsActionId> = Action(
+@Provide @Res fun quickSettingsAction() = Action(
   id = QuickSettingsActionId,
   title = loadResource(R.string.es_action_quick_settings),
   permissions = accessibilityActionPermissions,

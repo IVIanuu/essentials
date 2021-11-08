@@ -134,7 +134,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
   appRepository: AppRepository,
   params: CheckableAppsParams,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<CheckableAppsModel> = scope.state(
+) = scope.state(
   CheckableAppsModel(
     appPredicate = params.appPredicate,
     appBarTitle = params.appBarTitle

@@ -74,7 +74,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlin.reflect.KClass
 
@@ -183,7 +182,7 @@ data class UiNotification(
   permissionRequester: PermissionRequester,
   scope: ComponentScope<KeyUiComponent>,
   service: NotificationService
-): StateFlow<NotificationsModel> = scope.state(NotificationsModel()) {
+) = scope.state(NotificationsModel()) {
   service.notifications
     .map { notifications ->
       notifications

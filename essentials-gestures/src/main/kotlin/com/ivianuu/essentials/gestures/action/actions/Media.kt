@@ -49,7 +49,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -125,9 +124,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   navigator: Navigator,
   pref: DataStore<MediaActionPrefs>,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<MediaActionSettingsModel> = scope.state(
-  MediaActionSettingsModel()
-) {
+) = scope.state(MediaActionSettingsModel()) {
   pref.data
     .map { it.mediaApp }
     .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }

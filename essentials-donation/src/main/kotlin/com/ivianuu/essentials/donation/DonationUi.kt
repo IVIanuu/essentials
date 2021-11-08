@@ -30,7 +30,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.PurchaseUseCase
@@ -52,11 +51,10 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.Toasts
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 object DonationKey : DialogKey<Unit>
 
@@ -124,17 +122,15 @@ data class UiDonation(
   val price: String
 )
 
-@Provide fun donationModel(
+@Provide @Toasts fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
   key: DonationKey,
   navigator: Navigator,
   purchase: PurchaseUseCase,
-  scope: ComponentScope<KeyUiComponent>,
-  rp: ResourceProvider,
-  toaster: Toaster
-): StateFlow<DonationModel> = scope.state(DonationModel()) {
+  scope: ComponentScope<KeyUiComponent>
+) = scope.state(DonationModel()) {
   produceResource({ copy(skus = it) }) {
     donations
       .parMap { donation ->

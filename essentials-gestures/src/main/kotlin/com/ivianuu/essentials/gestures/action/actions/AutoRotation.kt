@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
@@ -37,10 +37,7 @@ import kotlinx.coroutines.flow.map
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
-@Provide fun autoRotationAction(
-  autoRotation: DataStore<AutoRotation>,
-  rp: ResourceProvider,
-): Action<AutoRotationActionId> = Action(
+@Provide @Res fun autoRotationAction(autoRotation: DataStore<AutoRotation>) = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),

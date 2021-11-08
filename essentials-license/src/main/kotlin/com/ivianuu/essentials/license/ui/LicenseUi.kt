@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
 object LicenseKey : Key<Unit>
@@ -64,7 +63,7 @@ object LicenseKey : Key<Unit>
   licenseProjectRepository: LicenceProjectRepository,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<LicenseModel> = scope.state(LicenseModel()) {
+) = scope.state(LicenseModel()) {
   flow { emit(licenseProjectRepository.getLicenseProjects()) }
     .flowAsResource()
     .update { copy(projects = it) }

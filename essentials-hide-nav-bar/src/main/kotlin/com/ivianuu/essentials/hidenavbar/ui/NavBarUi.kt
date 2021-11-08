@@ -19,7 +19,7 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -42,7 +42,6 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object NavBarKey : Key<Unit>
@@ -78,13 +77,12 @@ object NavBarKey : Key<Unit>
     get() = hideNavBar
 }
 
-@Provide fun navBarModel(
+@Provide @Res fun navBarModel(
   navigator: Navigator,
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
-  rp: ResourceProvider,
   scope: ComponentScope<KeyUiComponent>,
-): StateFlow<NavBarModel> = scope.state(NavBarModel()) {
+) = scope.state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
   }

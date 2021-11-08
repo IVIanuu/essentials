@@ -42,7 +42,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -77,7 +76,7 @@ object AppShortcutPickerKey : Key<AppShortcut>
   key: AppShortcutPickerKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<AppShortcutPickerModel> = scope.state(AppShortcutPickerModel()) {
+) = scope.state(AppShortcutPickerModel()) {
   appRepository.installedApps
     .flatMapLatest { apps ->
       combine(

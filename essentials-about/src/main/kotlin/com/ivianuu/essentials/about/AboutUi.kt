@@ -22,7 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Res
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
@@ -43,7 +43,6 @@ import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object AboutKey : Key<Unit>
@@ -172,13 +171,12 @@ object AboutKey : Key<Unit>
   }
 }
 
-@Provide fun aboutModel(
+@Provide @Res fun aboutModel(
   initial: @Initial AboutModel,
   navigator: Navigator,
   rateOnPlayUseCase: RateOnPlayUseCase,
-  scope: ComponentScope<KeyUiComponent>,
-  rp: ResourceProvider
-): StateFlow<AboutModel> = scope.state(initial) {
+  scope: ComponentScope<KeyUiComponent>
+) = scope.state<AboutModel>(initial) {
   action(AboutModel.donate()) { navigator.push(DonationKey) }
 
   action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }

@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 
 object NavBarUnsupportedKey : Key<Unit>
 
@@ -85,9 +84,7 @@ object NavBarUnsupportedKey : Key<Unit>
   key: NavBarUnsupportedKey,
   navigator: Navigator,
   scope: ComponentScope<KeyUiComponent>
-): StateFlow<NavBarUnsupportedModel> = scope.state(
-  NavBarUnsupportedModel()
-) {
+) = scope.state(NavBarUnsupportedModel()) {
   action(NavBarUnsupportedModel.openMoreInfos()) {
     navigator.push(
       UrlKey(
