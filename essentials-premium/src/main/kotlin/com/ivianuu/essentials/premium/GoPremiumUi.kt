@@ -47,7 +47,7 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
-import com.ivianuu.essentials.coroutines.scope
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.getOrNull
@@ -62,7 +62,6 @@ import com.ivianuu.essentials.ui.navigation.key
 import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 data class AppFeature(
   val title: String,
@@ -281,7 +280,7 @@ data class AppFeature(
     get() = key<GoPremiumKey>().showTryBasicOption
 
   fun goPremium() {
-    scope.launch {
+    launch {
       if (premiumVersionManager.purchasePremiumVersion()) {
         navigator.pop(key(), true)
       }
@@ -289,7 +288,7 @@ data class AppFeature(
   }
 
   fun tryBasicVersion() {
-    scope.launch {
+    launch {
       fullScreenAd.loadAndShow()
       navigator.pop(key(), false)
     }

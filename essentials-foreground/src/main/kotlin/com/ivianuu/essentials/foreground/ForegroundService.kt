@@ -23,9 +23,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
-  @Provide private val component: ForegroundServiceComponent by lazy {
+  private val component: ForegroundServiceComponent by lazy {
     createServiceComponent().entryPoint()
   }
+  @Provide val logger get() = component.logger
 
   private var previousStates = emptyList<ForegroundManagerImpl.ForegroundState>()
 
@@ -86,6 +87,6 @@ class ForegroundService : Service() {
 @EntryPoint<ServiceComponent> interface ForegroundServiceComponent {
   val foregroundManager: ForegroundManagerImpl
   val notificationManager: @SystemService NotificationManager
-  @Provide val logger: Logger
+  val logger: Logger
   val scope: ComponentScope<ServiceComponent>
 }
