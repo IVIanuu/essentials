@@ -45,6 +45,10 @@ class KeyboardVisibilityTest {
     keyboardHeight = 0
     advanceTimeBy(100)
 
-    collector.values.shouldContainExactly(false, true, false)
+    collector.values.shouldContainExactly(
+      KeyboardVisible(false),
+      KeyboardVisible(true),
+      KeyboardVisible(false)
+    )
   }
 }

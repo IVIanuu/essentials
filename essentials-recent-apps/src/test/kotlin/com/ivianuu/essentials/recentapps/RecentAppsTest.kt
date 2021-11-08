@@ -24,6 +24,7 @@ import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.injekt.provide
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Test
@@ -37,7 +38,7 @@ class RecentAppsTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = recentApps(accessibilityEvents, NoopLogger, recentAppsScope)
+    val collector = provide(NoopLogger) { recentApps(accessibilityEvents, recentAppsScope) }
       .testCollect(this)
 
     accessibilityEvents.emit(
@@ -86,23 +87,28 @@ class RecentAppsTest {
     )
 
     collector.values.shouldContainExactly(
-      listOf(),
-      listOf("a"),
-      listOf("b", "a"),
-      listOf("c", "b", "a")
+      RecentApps(listOf()),
+      RecentApps(listOf("a")),
+      RecentApps(listOf("b", "a")),
+      RecentApps(listOf("c", "b", "a"))
     )
   }
 
   @Test fun testCurrentApp() = runCancellingBlockingTest {
-    val recentApps = EventFlow<List<String>>()
+    val recentApps = EventFlow<RecentApps>()
     val collector = currentApp(recentApps).testCollect(this)
 
-    recentApps.emit(listOf("a", "b", "c"))
-    recentApps.emit(listOf("a", "b", "c"))
-    recentApps.emit(listOf("c", "a", "b"))
-    recentApps.emit(listOf("a", "b", "c"))
-    recentApps.emit(listOf("b", "c", "a"))
+    recentApps.emit(RecentApps(listOf("a", "b", "c")))
+    recentApps.emit(RecentApps(listOf("a", "b", "c")))
+    recentApps.emit(RecentApps(listOf("c", "a", "b")))
+    recentApps.emit(RecentApps(listOf("a", "b", "c")))
+    recentApps.emit(RecentApps(listOf("b", "c", "a")))
 
-    collector.values.shouldContainExactly("a", "c", "a", "b")
+    collector.values.shouldContainExactly(
+      CurrentApp("a"),
+      CurrentApp("c"),
+      CurrentApp("a"),
+      CurrentApp("b")
+    )
   }
 }

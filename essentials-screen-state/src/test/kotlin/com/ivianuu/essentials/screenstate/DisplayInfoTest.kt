@@ -57,7 +57,7 @@ class DisplayInfoTest {
     // config change
     currentWidth = 101
     currentHeight = 102
-    configChanges.tryEmit(Unit)
+    configChanges.tryEmit(ConfigChange)
     collector.values.shouldHaveSize(2)
     collector.values[1] shouldBe DisplayInfo(DisplayRotation.PORTRAIT_UP, 101, 102)
 
@@ -67,7 +67,7 @@ class DisplayInfoTest {
     collector.values[2] shouldBe DisplayInfo(DisplayRotation.LANDSCAPE_LEFT, 101, 102)
 
     // unrelated change
-    configChanges.tryEmit(Unit)
+    configChanges.tryEmit(ConfigChange)
     collector.values.shouldHaveSize(3)
   }
 }

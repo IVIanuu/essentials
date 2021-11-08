@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.injekt.Provide
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.async
@@ -30,10 +31,11 @@ class NavigatorTest {
   object KeyB : Key<Unit>
   object KeyC : Key<Unit>
 
+  @Provide val logger = NoopLogger
+
   @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      logger = NoopLogger,
       scope = this
     )
 
@@ -66,7 +68,6 @@ class NavigatorTest {
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      logger = NoopLogger,
       scope = this
     )
     val result = async { navigator.push(KeyWithResult) }
@@ -77,7 +78,6 @@ class NavigatorTest {
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      logger = NoopLogger,
       scope = this
     )
     val result = async { navigator.push(KeyWithResult) }

@@ -17,7 +17,7 @@
 package com.ivianuu.essentials
 
 @Suppress("UNCHECKED_CAST")
-inline fun <T> Any?.cast(): T = this as T
+inline fun <reified T> Any?.cast(): T = this as T
 
 @Suppress("UNCHECKED_CAST")
-inline fun <T> Any?.safeAs(): T? = this as? T
+inline fun <reified T> Any?.safeAs(): T? = this as? T

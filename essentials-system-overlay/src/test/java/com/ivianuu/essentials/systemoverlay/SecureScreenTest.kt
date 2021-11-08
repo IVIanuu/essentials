@@ -22,17 +22,15 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.injekt.provide
 import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.Test
 
 class SecureScreenTest {
   @Test fun testIsOnSecureScreen() = runCancellingBlockingTest {
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = isOnSecureScreen(
-      accessibilityEvents,
-      NoopLogger,
-      this
-    ).testCollect(this)
+    val collector = provide(NoopLogger) { isOnSecureScreen(accessibilityEvents, this) }
+      .testCollect(this)
 
     val idleEvent = AccessibilityEvent(
       AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
@@ -73,11 +71,11 @@ class SecureScreenTest {
     )
 
     collector.values.shouldContainExactly(
-      false,
-      true,
-      false,
-      true,
-      false
+      IsOnSecureScreen(false),
+      IsOnSecureScreen(true),
+      IsOnSecureScreen(false),
+      IsOnSecureScreen(true),
+      IsOnSecureScreen(false)
     )
   }
 }

@@ -38,8 +38,8 @@ class DiskDataStoreTest {
 
   private fun <T : Any> CoroutineScope.createStore(
     name: String,
-    @Inject type: KTypeT<T>,
     serializer: Serializer<T>? = null,
+    @Inject type: KTypeT<T>,
     @Provide defaultData: @Provide () -> @InitialOrDefault T
   ): Pair<DataStore<T>, File> = DiskDataStore(
     coroutineContext = coroutineContext,
