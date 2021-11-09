@@ -101,8 +101,5 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.injekt.coroutines.*"
 )
 class SampleApp : EsApp() {
-  init {
-    println("jllö")
-  }
   override fun buildAppComponent(): AppComponent = createAppComponent()
 }
