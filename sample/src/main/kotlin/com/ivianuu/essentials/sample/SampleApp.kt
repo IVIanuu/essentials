@@ -37,13 +37,10 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.essentials.backup.*",
   "com.ivianuu.essentials.billing.*",
   "com.ivianuu.essentials.boot.*",
-  "com.ivianuu.essentials.broadcast.*",
-  "com.ivianuu.essentials.clipboard.*",
   "com.ivianuu.essentials.coil.*",
   "com.ivianuu.essentials.colorpicker.*",
   "com.ivianuu.essentials.coroutines.*",
   "com.ivianuu.essentials.data.*",
-  "com.ivianuu.essentials.db.*",
   "com.ivianuu.essentials.donation.*",
   "com.ivianuu.essentials.foreground.*",
   "com.ivianuu.essentials.gestures.action.*",
@@ -104,5 +101,8 @@ import com.ivianuu.injekt.common.AppComponent
   "com.ivianuu.injekt.coroutines.*"
 )
 class SampleApp : EsApp() {
+  init {
+    println("jllö")
+  }
   override fun buildAppComponent(): AppComponent = createAppComponent()
 }
