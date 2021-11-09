@@ -36,7 +36,7 @@ fun interface BroadcastsFactory {
 @Provide fun broadcastsFactory(
   context: AppContext,
   mainDispatcher: MainDispatcher
-): BroadcastsFactory = BroadcastsFactory { actions ->
+) = BroadcastsFactory { actions ->
   callbackFlow<Intent> {
     val broadcastReceiver = object : BroadcastReceiver() {
       override fun onReceive(context: Context, intent: Intent) {
