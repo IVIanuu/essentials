@@ -2,7 +2,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.app.NotificationManager
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")
 
-@Provide @Res fun doNotDisturbAction(icon: Flow<DoNotDisturbIcon>) = Action(
+@Provide fun doNotDisturbAction(icon: Flow<DoNotDisturbIcon>, RP: ResourceProvider) = Action(
   id = DoNotDisturbAction,
   title = loadResource(R.string.es_action_do_not_disturb),
   icon = icon,

@@ -41,11 +41,9 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 
@@ -75,8 +73,10 @@ object ShortcutPickerKey : Key<Shortcut>
   val pickShortcut: (Shortcut) -> Unit = {}
 )
 
-@Provide @KeyUiContext<ShortcutPickerKey> @Toasts fun shortcutPickerModel(
-  shortcutRepository: ShortcutRepository
+@Provide fun shortcutPickerModel(
+  shortcutRepository: ShortcutRepository,
+  T: ToastContext,
+  ctx: KeyUiContext<ShortcutPickerKey>
 ) = state(ShortcutPickerModel()) {
   shortcutRepository.shortcuts
     .flowAsResource()
@@ -84,11 +84,11 @@ object ShortcutPickerKey : Key<Shortcut>
 
   action(ShortcutPickerModel.pickShortcut()) { shortcut ->
     catch {
-      val shortcutRequestResult = navigator.push(shortcut.intent.toIntentKey())
+      val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())
         ?.getOrNull()
         ?.data ?: return@catch
       val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
-      navigator.pop(key(), finalShortcut)
+      ctx.navigator.pop(ctx.key, finalShortcut)
     }.onFailure {
       it.printStackTrace()
       showToast(R.string.es_failed_to_pick_shortcut)

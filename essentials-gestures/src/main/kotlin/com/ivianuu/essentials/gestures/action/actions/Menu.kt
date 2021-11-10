@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -30,7 +30,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object MenuActionId : ActionId("menu")
 
-@Provide @Res fun menuAction() = Action(
+@Provide fun menuAction(RP: ResourceProvider) = Action(
   id = MenuActionId,
   title = loadResource(R.string.es_action_menu),
   icon = singleActionIcon(Icons.Default.MoreVert),

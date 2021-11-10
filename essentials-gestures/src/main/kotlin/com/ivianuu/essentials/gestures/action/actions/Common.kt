@@ -39,7 +39,7 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -75,7 +75,10 @@ operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this,
 @Tag annotation class ActionRootCommandRunnerTag
 typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String) -> Unit
 
-@Provide @Toasts fun actionRootCommandRunner(shell: Shell): ActionRootCommandRunner = { command ->
+@Provide fun actionRootCommandRunner(
+  shell: Shell,
+  T: ToastContext
+): ActionRootCommandRunner = { command ->
   catch { shell.run(command) }
     .onFailure {
       it.printStackTrace()
@@ -86,8 +89,10 @@ typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String)
 @Tag annotation class ActionIntentSenderTag
 typealias ActionIntentSender = @ActionIntentSenderTag (Intent, Boolean, Bundle?) -> Unit
 
-@Provide @Toasts
-fun actionIntentSender(context: AppContext): ActionIntentSender = { intent, isFloating, options ->
+@Provide fun actionIntentSender(
+  context: AppContext,
+  T: ToastContext
+): ActionIntentSender = { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)

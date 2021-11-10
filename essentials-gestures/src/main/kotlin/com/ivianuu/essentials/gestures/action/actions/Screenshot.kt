@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
@@ -34,8 +34,9 @@ import kotlinx.coroutines.delay
 
 @Provide object ScreenshotActionId : ActionId("screenshot")
 
-@Provide @Res fun screenshotAction(
-  systemBuildInfo: SystemBuildInfo
+@Provide fun screenshotAction(
+  systemBuildInfo: SystemBuildInfo,
+  RP: ResourceProvider
 ): Action<ScreenshotActionId> = Action(
   id = ScreenshotActionId,
   title = loadResource(R.string.es_action_screenshot),

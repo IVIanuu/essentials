@@ -25,9 +25,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -83,18 +81,19 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
   val openFullScreen: () -> Unit = {}
 )
 
-@Provide @KeyUiContext<FloatingWindowsPickerKey> @Toasts
-fun floatingWindowsPickerModel(
-  appRepository: AppRepository
-) = state(FloatingWindowsPickerModel(key<FloatingWindowsPickerKey>().actionTitle)) {
+@Provide fun floatingWindowsPickerModel(
+  appRepository: AppRepository,
+  T: ToastContext,
+  ctx: KeyUiContext<FloatingWindowsPickerKey>
+) = state(FloatingWindowsPickerModel(ctx.key.actionTitle)) {
   action(FloatingWindowsPickerModel.openFloatingWindow()) {
     if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
-      navigator.pop(key(), true)
+      ctx.navigator.pop(ctx.key, true)
     } else {
       showToast(R.string.es_floating_windows_not_installed)
-      navigator.push(PlayStoreAppDetailsKey(FLOATING_WINDOWS_PACKAGE))
+      ctx.navigator.push(PlayStoreAppDetailsKey(FLOATING_WINDOWS_PACKAGE))
     }
   }
 
-  action(FloatingWindowsPickerModel.openFullScreen()) { navigator.pop(key(), false) }
+  action(FloatingWindowsPickerModel.openFullScreen()) { ctx.navigator.pop(ctx.key, false) }
 }

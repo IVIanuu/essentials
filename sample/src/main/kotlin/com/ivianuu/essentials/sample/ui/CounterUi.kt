@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -75,7 +75,10 @@ object CounterKey : Key<Unit>
   val dec: () -> Unit = {}
 )
 
-@Provide @KeyUiContext<CounterKey> @Toasts fun counterModel() = state(CounterModel()) {
+@Provide fun counterModel(
+  T: ToastContext,
+  C: KeyUiContext<CounterKey>
+) = state(CounterModel()) {
   action(CounterModel.inc()) { update { copy(count = count.inc()) } }
   action(CounterModel.dec()) {
     if (state.first().count > 0) update { copy(count = count.dec()) }

@@ -21,16 +21,17 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.work.InjektWorker
 import kotlinx.coroutines.delay
 
-@Provide @InjektWorker @Log class TestWorker(
+@Provide @InjektWorker class TestWorker(
   appContext: AppContext,
-  params: WorkerParameters
+  params: WorkerParameters,
+  private val L: Logger
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     log { "start work" }

@@ -8,7 +8,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -47,13 +47,11 @@ fun switchToApp(
   }
 }
 
-@Provide
-@Scoped<AppComponent>(eager = true)
-@Log
-class AppSwitchManager(
+@Provide @Scoped<AppComponent>(eager = true) class AppSwitchManager(
   accessibilityEvents: Flow<AccessibilityEvent>,
   private val packageManager: PackageManager,
-  scope: ComponentScope<AppComponent>
+  scope: ComponentScope<AppComponent>,
+  private val L: Logger
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0

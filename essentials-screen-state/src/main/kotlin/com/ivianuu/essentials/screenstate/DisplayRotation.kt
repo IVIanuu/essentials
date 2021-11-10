@@ -18,7 +18,7 @@ package com.ivianuu.essentials.screenstate
 
 import android.view.Surface
 import android.view.WindowManager
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -50,11 +50,12 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Provide @Log fun displayRotation(
+@Provide fun displayRotation(
   configChanges: () -> Flow<ConfigChange>,
   rotationChanges: () -> Flow<RotationChange>,
   screenState: () -> Flow<ScreenState>,
-  windowManager: @SystemService WindowManager
+  WM: @SystemService WindowManager,
+  L: Logger
 ): Flow<DisplayRotation> = flow {
   screenState()
     .flatMapLatest { currentScreenState ->

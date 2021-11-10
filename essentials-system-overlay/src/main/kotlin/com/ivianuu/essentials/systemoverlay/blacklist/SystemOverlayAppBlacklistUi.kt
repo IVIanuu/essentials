@@ -29,8 +29,7 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.Toasts
-import com.ivianuu.injekt.Inject1
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -39,8 +38,9 @@ import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
 
-@Provide @Toasts fun systemOverlayAppBlacklistUi(
-  checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen
+@Provide fun systemOverlayAppBlacklistUi(
+  checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
+  T: ToastContext
 ): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
   remember {
     checkableAppsPageFactory(
@@ -59,8 +59,9 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide @Inject1<ComponentScope<KeyUiComponent>> fun systemOverlayAppBlacklistModel(
-  pref: DataStore<SystemOverlayBlacklistPrefs>
+@Provide fun systemOverlayAppBlacklistModel(
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  S: ComponentScope<KeyUiComponent>
 ) = state(SystemOverlayAppBlacklistModel()) {
   update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
   action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->

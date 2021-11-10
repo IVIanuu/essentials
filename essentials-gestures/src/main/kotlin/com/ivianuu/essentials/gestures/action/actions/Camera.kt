@@ -23,7 +23,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
@@ -31,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.injekt.Provide
@@ -44,7 +44,7 @@ import kotlin.coroutines.resume
 
 @Provide object CameraActionId : ActionId("camera")
 
-@Provide @Res fun cameraAction() = Action(
+@Provide fun cameraAction(RP: ResourceProvider) = Action(
   id = CameraActionId,
   title = loadResource(R.string.es_action_camera),
   icon = singleActionIcon(R.drawable.es_ic_photo_camera),
@@ -56,11 +56,12 @@ import kotlin.coroutines.resume
   closeSystemDialogs = true
 )
 
-@Provide @Log fun cameraActionExecutor(
+@Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
-  packageManager: PackageManager
+  packageManager: PackageManager,
+  L: Logger
 ): ActionExecutor<CameraActionId> = {
   val cameraApp = packageManager
     .resolveActivity(

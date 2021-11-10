@@ -46,13 +46,11 @@ import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -217,14 +215,15 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
   .distinctUntilChanged()
 
-@Provide @KeyUiContext<WriteSecureSettingsPcInstructionsKey> @Toasts
-fun writeSecureSettingsPcInstructionsModel(
+@Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>,
   isCharging: Flow<IsCharging>,
   permissionStateFactory: PermissionStateFactory,
+  T: ToastContext,
+  ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
 ) = state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
   state
     .flatMapLatest { currentState ->
@@ -235,7 +234,7 @@ fun writeSecureSettingsPcInstructionsModel(
         3 -> isCharging.map { it.value }
         4 -> flow {
           while (true) {
-            emit(permissionStateFactory(listOf(key<WriteSecureSettingsPcInstructionsKey>().permissionKey)).first())
+            emit(permissionStateFactory(listOf(ctx.key.permissionKey)).first())
             delay(1000)
           }
         }
@@ -246,7 +245,7 @@ fun writeSecureSettingsPcInstructionsModel(
 
   action(WriteSecureSettingsPcInstructionsModel.continueStep()) {
     if (state.first().completedStep == 4)
-      navigator.pop(key(), true)
+      ctx.navigator.pop(ctx.key, true)
     else
       update { copy(currentStep = completedStep + 1, completedStep = completedStep + 1) }
   }
@@ -263,7 +262,7 @@ fun writeSecureSettingsPcInstructionsModel(
     race(
       { developerModeSetting.data.first { it != 0 } },
       {
-        navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
+        ctx.navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
           ?.onFailure { showToast(R.string.open_phone_info_failed) }
       }
     )
@@ -273,7 +272,7 @@ fun writeSecureSettingsPcInstructionsModel(
   action(WriteSecureSettingsPcInstructionsModel.openDeveloperSettings()) {
     race(
       { adbEnabledSetting.data.first { it != 0 } },
-      { navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey()) }
+      { ctx.navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey()) }
     )
     appUiStarter()
   }

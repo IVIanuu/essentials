@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.ui.UiComponent
@@ -112,11 +112,12 @@ private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandle
 @Tag annotation class PermissionRequesterTag
 typealias PermissionRequester = @PermissionRequesterTag suspend (List<TypeKey<Permission>>) -> Boolean
 
-@Provide @Log fun permissionRequester(
+@Provide fun permissionRequester(
   appUiStarter: AppUiStarter,
   dispatcher: DefaultDispatcher,
   navigator: Navigator,
-  permissionStateFactory: PermissionStateFactory
+  permissionStateFactory: PermissionStateFactory,
+  L: Logger
 ): PermissionRequester = { requestedPermissions ->
   withContext(dispatcher) {
     log { "request permissions $requestedPermissions" }

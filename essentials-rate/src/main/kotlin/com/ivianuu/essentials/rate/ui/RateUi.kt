@@ -51,7 +51,6 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
@@ -129,11 +128,12 @@ object RateKey : DialogKey<Unit>
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-@Provide @KeyUiContext<RateKey> fun rateModel(
+@Provide fun rateModel(
   buildInfo: BuildInfo,
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
-  showNever: ShowNeverUseCase
+  showNever: ShowNeverUseCase,
+  ctx: KeyUiContext<RateKey>
 ) = state(RateModel(packageName = buildInfo.packageName)) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
@@ -143,9 +143,9 @@ object RateKey : DialogKey<Unit>
   action(RateModel.confirm()) {
     val rating = state.first().rating
     if (rating >= MIN_PLAY_RATING) {
-      navigator.replaceTop(RateOnPlayKey)
+      ctx.navigator.replaceTop(RateOnPlayKey)
     } else {
-      navigator.replaceTop(FeedbackKey)
+      ctx.navigator.replaceTop(FeedbackKey)
     }
   }
 }

@@ -21,7 +21,7 @@ import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 
@@ -31,7 +31,9 @@ interface RootPermission : Permission
   shell: Shell
 ): PermissionStateProvider<P> = { shell.isAvailable() }
 
-@Provide @Toasts
-fun <P : RootPermission> rootPermissionRequestHandler(shell: Shell): PermissionRequestHandler<P> = {
+@Provide fun <P : RootPermission> rootPermissionRequestHandler(
+  shell: Shell,
+  T: ToastContext
+): PermissionRequestHandler<P> = {
   if (!shell.isAvailable()) showToast(R.string.es_no_root)
 }

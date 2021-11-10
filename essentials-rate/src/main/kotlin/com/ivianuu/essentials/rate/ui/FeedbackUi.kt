@@ -32,8 +32,6 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 
 object FeedbackKey : DialogKey<Unit>
@@ -72,21 +70,22 @@ object FeedbackKey : DialogKey<Unit>
   val sendMail: () -> Unit = {},
 )
 
-@Provide @KeyUiContext<FeedbackKey> fun feedbackModel(
+@Provide fun feedbackModel(
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
-  showNever: ShowNeverUseCase
+  showNever: ShowNeverUseCase,
+  ctx: KeyUiContext<FeedbackKey>
 ) = state(FeedbackModel()) {
   produce({ copy(displayShowNever = it) }) { displayShowNever() }
 
   action(FeedbackModel.showLater()) { showLater() }
   action(FeedbackModel.showNever()) { showNever() }
   action(FeedbackModel.openReddit()) {
-    navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-    navigator.pop(key<FeedbackKey>())
+    ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    ctx.navigator.pop(ctx.key)
   }
   action(FeedbackModel.sendMail()) {
-    navigator.push(FeedbackMailKey)
-    navigator.pop(key<FeedbackKey>())
+    ctx.navigator.push(FeedbackMailKey)
+    ctx.navigator.pop(ctx.key)
   }
 }

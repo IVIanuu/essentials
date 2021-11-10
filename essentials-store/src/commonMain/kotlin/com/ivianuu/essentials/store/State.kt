@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.store
 
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.coroutines.scope
 import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.optics.Lens
 import com.ivianuu.essentials.resource.Resource
@@ -27,7 +26,7 @@ import com.ivianuu.essentials.tuples.Tuple3
 import com.ivianuu.essentials.tuples.Tuple4
 import com.ivianuu.essentials.tuples.Tuple5
 import com.ivianuu.essentials.tuples.tupleOf
-import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
@@ -41,9 +40,10 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.jvm.JvmName
 
-@Inject1<CoroutineScope> fun <S> state(
+fun <S> state(
   initial: S,
   context: CoroutineContext = EmptyCoroutineContext,
+  @Inject scope: CoroutineScope,
   block: suspend StateScope<S>.() -> Unit
 ): StateFlow<S> {
   val state = MutableStateFlow(initial)

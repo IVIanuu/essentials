@@ -19,15 +19,13 @@ package com.ivianuu.essentials.ui.navigation
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.coroutines.update2
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,12 +47,11 @@ interface Navigator {
   suspend fun clear()
 }
 
-@Inject1<Navigator> val navigator: Navigator get() = inject()
-
-@Provide @Scoped<AppComponent> @Log class NavigatorImpl(
+@Provide @Scoped<AppComponent> class NavigatorImpl(
   private val keyHandlers: List<KeyHandler<*>> = emptyList(),
   rootKey: RootKey? = null,
-  scope: ComponentScope<AppComponent>
+  private val L: Logger,
+  S: ComponentScope<AppComponent>
 ) : Navigator {
   private val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> get() = _backStack

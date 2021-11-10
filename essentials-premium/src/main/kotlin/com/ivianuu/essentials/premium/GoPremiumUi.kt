@@ -58,8 +58,6 @@ import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 
@@ -268,21 +266,22 @@ data class AppFeature(
   }
 }
 
-@Provide @KeyUiContext<GoPremiumKey> class GoPremiumModel(
+@Provide class GoPremiumModel(
   val features: List<AppFeature>,
   private val fullScreenAd: FullScreenAd,
-  private val premiumVersionManager: PremiumVersionManager
+  private val premiumVersionManager: PremiumVersionManager,
+  private val ctx: KeyUiContext<GoPremiumKey>
 ) {
   val premiumSkuDetails: Flow<Resource<SkuDetails>> = premiumVersionManager.premiumSkuDetails
     .flowAsResource()
 
   val showTryBasicOption: Boolean
-    get() = key<GoPremiumKey>().showTryBasicOption
+    get() = ctx.key.showTryBasicOption
 
   fun goPremium() {
     launch {
       if (premiumVersionManager.purchasePremiumVersion()) {
-        navigator.pop(key(), true)
+        ctx.navigator.pop(ctx.key, true)
       }
     }
   }
@@ -290,7 +289,7 @@ data class AppFeature(
   fun tryBasicVersion() {
     launch {
       fullScreenAd.loadAndShow()
-      navigator.pop(key(), false)
+      ctx.navigator.pop(ctx.key, false)
     }
   }
 }

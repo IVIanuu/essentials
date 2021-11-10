@@ -24,7 +24,6 @@ import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
-import com.ivianuu.injekt.provide
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Test

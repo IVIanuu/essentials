@@ -43,8 +43,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 
@@ -88,16 +86,17 @@ data class AppPickerKey(
     .map { it.filter(appPredicate) }
 }
 
-@Provide @KeyUiContext<AppPickerKey> fun appPickerModel(
-  appRepository: AppRepository
+@Provide fun appPickerModel(
+  appRepository: AppRepository,
+  ctx: KeyUiContext<AppPickerKey>
 ) = state(
   AppPickerModel(
-    appPredicate = key<AppPickerKey>().appPredicate,
-    title = key<AppPickerKey>().title
+    appPredicate = ctx.key.appPredicate,
+    title = ctx.key.title
   )
 ) {
   appRepository.installedApps
     .flowAsResource()
     .update { copy(allApps = it) }
-  action(AppPickerModel.pickApp()) { navigator.pop(key(), it) }
+  action(AppPickerModel.pickApp()) { ctx.navigator.pop(ctx.key, it) }
 }

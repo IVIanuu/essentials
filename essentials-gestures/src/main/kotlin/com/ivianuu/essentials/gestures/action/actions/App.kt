@@ -19,7 +19,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
@@ -41,10 +41,11 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-@Provide @Res class AppActionFactory(
+@Provide class AppActionFactory(
   private val actionIntentSender: ActionIntentSender,
   private val appRepository: AppRepository,
-  private val packageManager: PackageManager
+  private val packageManager: PackageManager,
+  private val RP: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -76,10 +77,11 @@ import kotlinx.coroutines.flow.first
   }
 }
 
-@Provide @Res class AppActionPickerDelegate(
+@Provide class AppActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
-  private val navigator: Navigator
+  private val navigator: Navigator,
+  private val RP: ResourceProvider
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

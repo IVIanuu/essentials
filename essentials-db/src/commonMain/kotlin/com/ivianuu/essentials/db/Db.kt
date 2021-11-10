@@ -1,7 +1,6 @@
 package com.ivianuu.essentials.db
 
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.common.Disposable
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
@@ -22,12 +21,13 @@ interface Db : Disposable {
   fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T>
 }
 
-@Inject1<TypeKey<T>> fun <T> Db.query(sql: String, tableName: String?): Flow<List<T>> =
+fun <T> Db.query(sql: String, tableName: String?, @Inject K: TypeKey<T>): Flow<List<T>> =
   query(sql, tableName) { it.toList(schema) }
 
-@Inject1<TypeKey<T>> suspend fun <T> Db.insert(
+suspend fun <T> Db.insert(
   entity: T,
-  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
+  @Inject K: TypeKey<T>
 ): Long {
   val descriptor = schema.descriptor<T>()
   return executeInsert(
@@ -42,9 +42,10 @@ interface Db : Disposable {
   )
 }
 
-@Inject1<TypeKey<T>> suspend fun <T> Db.insertAll(
+suspend fun <T> Db.insertAll(
   entities: List<T>,
-  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT
+  conflictStrategy: InsertConflictStrategy = InsertConflictStrategy.ABORT,
+  @Inject K: TypeKey<T>
 ) {
   entities.forEach { insert(it, conflictStrategy) }
 }
@@ -55,7 +56,7 @@ enum class InsertConflictStrategy {
   IGNORE
 }
 
-@Inject1<TypeKey<T>> fun <T> Db.selectAll(): Flow<List<T>> {
+fun <T> Db.selectAll(@Inject K: TypeKey<T>): Flow<List<T>> {
   val descriptor = schema.descriptor<T>()
   return query(
     "SELECT * FROM ${descriptor.tableName}",
@@ -63,7 +64,7 @@ enum class InsertConflictStrategy {
   )
 }
 
-@Inject1<TypeKey<T>> fun <T> Db.selectById(id: Any): Flow<T?> {
+fun <T> Db.selectById(id: Any, @Inject K: TypeKey<T>): Flow<T?> {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   return query<T>(
@@ -74,7 +75,7 @@ enum class InsertConflictStrategy {
     .map { it.singleOrNull() }
 }
 
-@Inject1<TypeKey<T>> suspend fun <T> Db.deleteById(vararg ids: Any) {
+suspend fun <T> Db.deleteById(vararg ids: Any, @Inject K: TypeKey<T>) {
   val descriptor = schema.descriptor<T>()
   val primaryKeyRow = descriptor.rows.single { it.isPrimaryKey }
   execute(
@@ -84,7 +85,7 @@ enum class InsertConflictStrategy {
   )
 }
 
-@Inject1<TypeKey<T>> suspend fun <T> Db.deleteAll() {
+suspend fun <T> Db.deleteAll(@Inject K: TypeKey<T>) {
   val tableName = schema.descriptor<T>().tableName
   execute("DELETE FROM $tableName", tableName)
 }
@@ -105,7 +106,7 @@ interface Cursor : Disposable {
   fun getColumnIndex(name: String): Int
 }
 
-@Inject1<TypeKey<T>> fun <T> Cursor.toList(schema: Schema): List<T> = buildList {
+fun <T> Cursor.toList(schema: Schema, @Inject K: TypeKey<T>): List<T> = buildList {
   while (next()) {
     val serializer = schema.descriptor<T>().serializer
     this += serializer.deserialize(

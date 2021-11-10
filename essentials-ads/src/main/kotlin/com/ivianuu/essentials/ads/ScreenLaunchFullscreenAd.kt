@@ -4,7 +4,7 @@ import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -30,13 +30,14 @@ import kotlinx.serialization.Serializable
   }
 }
 
-@Provide @Log fun screenLaunchFullScreenObserver(
+@Provide fun screenLaunchFullScreenObserver(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>,
-  showAds: Flow<ShowAds>
+  showAds: Flow<ShowAds>,
+  L: Logger
 ): ScopeWorker<UiComponent> = {
   showAds
     .flatMapLatest {

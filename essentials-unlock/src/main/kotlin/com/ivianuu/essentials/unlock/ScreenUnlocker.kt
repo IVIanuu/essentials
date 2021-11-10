@@ -18,7 +18,7 @@ package com.ivianuu.essentials.unlock
 
 import android.app.KeyguardManager
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -32,9 +32,10 @@ import java.util.concurrent.ConcurrentHashMap
 @Tag annotation class ScreenUnlockerTag
 typealias ScreenUnlocker = @ScreenUnlockerTag suspend () -> Boolean
 
-@Provide @Log fun screenUnlocker(
+@Provide fun screenUnlocker(
   context: AppContext,
   dispatcher: DefaultDispatcher,
+  L: Logger,
   keyguardManager: @SystemService KeyguardManager
 ): ScreenUnlocker = {
   withContext(dispatcher) {

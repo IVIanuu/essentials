@@ -22,8 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject3
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
@@ -81,6 +79,8 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   scope.ui()
 }
 
-typealias KeyUiContext<K> = Inject3<K, ComponentScope<KeyUiComponent>, Navigator>
-
-inline fun <K : Key<*>> key(@Inject x: K) = x
+@Provide data class KeyUiContext<K : Key<*>>(
+  @Provide val key: K,
+  @Provide val navigator: Navigator,
+  @Provide val scope: ComponentScope<KeyUiComponent>
+)

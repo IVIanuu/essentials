@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
@@ -37,12 +37,13 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @JvmInline value class SystemOverlayEnabled(val value: Boolean)
 
-@Provide @Log fun systemOverlayBlacklistState(
+@Provide fun systemOverlayBlacklistState(
   mainSwitchState: Flow<SystemOverlayEnabled>,
   keyboardState: @Private Flow<@Keyboard SystemOverlayBlacklistState>,
   lockScreenState: @Private Flow<@LockScreen SystemOverlayBlacklistState>,
   secureScreenState: @Private Flow<@SecureScreen SystemOverlayBlacklistState>,
-  userBlacklistState: @Private Flow<@UserBlacklist SystemOverlayBlacklistState>
+  userBlacklistState: @Private Flow<@UserBlacklist SystemOverlayBlacklistState>,
+  L: Logger
 ): Flow<SystemOverlayBlacklistState> = mainSwitchState
   // check the main state of the overlay
   .map {
@@ -73,9 +74,10 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @Tag private annotation class LockScreen
 
-@Provide @Log fun lockScreenState(
+@Provide fun lockScreenState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   screenState: Flow<ScreenState>,
+  L: Logger
 ): @Private Flow<@LockScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
@@ -98,10 +100,11 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @Tag private annotation class SecureScreen
 
-@Provide @Log fun secureScreenState(
+@Provide fun secureScreenState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   isOnSecureScreen: Flow<IsOnSecureScreen>,
-  screenState: Flow<ScreenState>
+  screenState: Flow<ScreenState>,
+  L: Logger
 ): @Private Flow<@SecureScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
@@ -133,10 +136,11 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @Tag private annotation class UserBlacklist
 
-@Provide @Log fun userBlacklistState(
+@Provide fun userBlacklistState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   currentApp: Flow<CurrentApp?>,
   screenState: Flow<ScreenState>,
+  L: Logger
 ): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
   .distinctUntilChanged()
@@ -169,9 +173,10 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @Tag private annotation class Keyboard
 
-@Provide @Log fun keyboardState(
+@Provide fun keyboardState(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   keyboardVisible: Flow<KeyboardVisible>,
+  L: Logger
 ): @Private Flow<@Keyboard SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()

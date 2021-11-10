@@ -19,5 +19,6 @@ package kotlinx.coroutines
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 
-// todo remove on next injekt update
-@Provide inline fun coroutinesScope(scope: ComponentScope<*>): CoroutineScope = scope
+object EsCoroutinesInjectables {
+  @Provide inline fun coroutinesScope(scope: ComponentScope<*>): CoroutineScope = scope
+}

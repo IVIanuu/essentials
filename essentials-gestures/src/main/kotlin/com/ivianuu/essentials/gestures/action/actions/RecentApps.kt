@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide object RecentAppsActionId : ActionId("recent_apps")
 
-@Provide @Res fun recentAppsAction() = Action(
+@Provide fun recentAppsAction(RP: ResourceProvider) = Action(
   id = RecentAppsActionId,
   title = loadResource(R.string.es_action_recent_apps),
   icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)

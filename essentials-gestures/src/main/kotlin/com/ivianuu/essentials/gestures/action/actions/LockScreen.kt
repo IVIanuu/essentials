@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
@@ -33,8 +33,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LockScreenActionId : ActionId("lock_screen")
 
-@Provide @Res fun lockScreenAction(
+@Provide fun lockScreenAction(
   systemBuildInfo: SystemBuildInfo,
+  RP: ResourceProvider
 ): Action<LockScreenActionId> = Action(
   id = LockScreenActionId,
   title = loadResource(R.string.es_action_lock_screen),

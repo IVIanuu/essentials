@@ -20,7 +20,7 @@ import android.content.ComponentName
 import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -32,7 +32,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object SearchActionId : ActionId("search")
 
-@Provide @Res fun searchAction() = Action(
+@Provide fun searchAction(RP: ResourceProvider) = Action(
   id = SearchActionId,
   title = loadResource(R.string.es_action_search),
   icon = singleActionIcon(Icons.Default.Search),

@@ -49,10 +49,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 
@@ -122,11 +120,13 @@ data class UiDonation(
   val price: String
 )
 
-@Provide @KeyUiContext<DonationKey> @Toasts fun donationModel(
+@Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
-  purchase: PurchaseUseCase
+  purchase: PurchaseUseCase,
+  T: ToastContext,
+  ctx: KeyUiContext<DonationKey>
 ) = state(DonationModel()) {
   produceResource({ copy(skus = it) }) {
     donations
@@ -142,7 +142,7 @@ data class UiDonation(
       }
   }
 
-  action(DonationModel.close()) { navigator.pop(key<DonationKey>()) }
+  action(DonationModel.close()) { ctx.navigator.pop(ctx.key) }
 
   action(DonationModel.purchase()) { donation ->
     purchase(donation.donation.sku, true, true)

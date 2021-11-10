@@ -20,7 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -31,7 +31,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide @Res fun homeAction() = Action(
+@Provide fun homeAction(RP: ResourceProvider) = Action(
   id = HomeActionId,
   title = loadResource(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()

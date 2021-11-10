@@ -33,7 +33,6 @@ import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
@@ -46,10 +45,11 @@ import kotlinx.serialization.Serializable
 
 object CheckAppsKey : Key<Unit>
 
-@Provide @Inject1<ComponentScope<KeyUiComponent>> fun checkAppsUi(
+@Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
-  launchableAppPredicate: LaunchableAppPredicate
+  launchableAppPredicate: LaunchableAppPredicate,
+  S: ComponentScope<KeyUiComponent>
 ): KeyUi<CheckAppsKey> = {
   remember {
     checkableAppsScreen(

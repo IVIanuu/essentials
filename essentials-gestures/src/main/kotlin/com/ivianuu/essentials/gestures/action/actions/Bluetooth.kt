@@ -18,7 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.bluetooth.BluetoothAdapter
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -34,7 +34,10 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
-@Provide @Res fun bluetoothAction(broadcastsFactory: BroadcastsFactory) = Action(
+@Provide fun bluetoothAction(
+  B: BroadcastsFactory,
+  RP: ResourceProvider
+) = Action(
   id = BluetoothActionId,
   title = loadResource(R.string.es_action_bluetooth),
   icon = bluetoothIcon(),

@@ -44,7 +44,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.essentials.xposed.IsXposedRunning
 import com.ivianuu.injekt.Provide
@@ -52,10 +52,11 @@ import kotlinx.coroutines.launch
 
 @Provide class HomeKey : RootKey
 
-@Provide @Toasts fun homeUi(
+@Provide fun homeUi(
   isXposedRunning: IsXposedRunning,
   navigator: Navigator,
-  itemsFactory: () -> List<HomeItem>
+  itemsFactory: () -> List<HomeItem>,
+  T: ToastContext
 ): KeyUi<HomeKey> = {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(

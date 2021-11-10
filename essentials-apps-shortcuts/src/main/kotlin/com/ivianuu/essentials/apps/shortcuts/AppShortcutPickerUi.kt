@@ -38,8 +38,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.catch
@@ -70,9 +68,10 @@ object AppShortcutPickerKey : Key<AppShortcut>
   val pickAppShortcut: (AppShortcut) -> Unit = {}
 )
 
-@Provide @KeyUiContext<AppShortcutPickerKey> fun appShortcutPickerModel(
+@Provide fun appShortcutPickerModel(
   appRepository: AppRepository,
-  appShortcutRepository: AppShortcutRepository
+  appShortcutRepository: AppShortcutRepository,
+  ctx: KeyUiContext<AppShortcutPickerKey>
 ) = state(AppShortcutPickerModel()) {
   appRepository.installedApps
     .flatMapLatest { apps ->
@@ -88,6 +87,6 @@ object AppShortcutPickerKey : Key<AppShortcut>
     .update { copy(appShortcuts = it) }
 
   action(AppShortcutPickerModel.pickAppShortcut()) { appShortcut ->
-    navigator.pop(key(), appShortcut)
+    ctx.navigator.pop(ctx.key, appShortcut)
   }
 }

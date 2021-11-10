@@ -18,14 +18,15 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.TypeKey
 
-@Provide @Log fun <C : @Component Any> scopeLogger(
-  componentKey: TypeKey<C>
+@Provide fun <C : @Component Any> scopeLogger(
+  componentKey: TypeKey<C>,
+  L: Logger
 ): ScopeWorker<C> = {
   log { "${componentKey.value} created" }
   onCancel { log { "${componentKey.value} disposed" } }

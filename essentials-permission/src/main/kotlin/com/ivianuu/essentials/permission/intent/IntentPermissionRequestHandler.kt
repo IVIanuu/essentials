@@ -27,7 +27,7 @@ import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -40,12 +40,13 @@ typealias PermissionIntentFactory<P> = @PermissionIntentFactoryTag (P) -> Intent
 
 @JvmInline value class ShowFindPermissionHint<P>(val value: Boolean)
 
-@Provide @Toasts fun <P : Permission> intentPermissionRequestHandler(
+@Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
-  state: Flow<PermissionState<P>>
+  state: Flow<PermissionState<P>>,
+  T: ToastContext
 ): PermissionRequestHandler<P> = { permission ->
   race(
     {

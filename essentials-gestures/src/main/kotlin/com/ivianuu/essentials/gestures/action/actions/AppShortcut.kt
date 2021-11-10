@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.shortcuts.AppShortcutPickerKey
 import com.ivianuu.essentials.apps.shortcuts.AppShortcutRepository
 import com.ivianuu.essentials.gestures.R
@@ -26,9 +26,10 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-@Provide @Res class AppShortcutActionFactory(
+@Provide class AppShortcutActionFactory(
   private val actionIntentSender: ActionIntentSender,
-  private val appShortcutRepository: AppShortcutRepository
+  private val appShortcutRepository: AppShortcutRepository,
+  private val RP: ResourceProvider
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -71,9 +72,10 @@ import kotlinx.coroutines.flow.first
   }
 }
 
-@Provide @Res class AppShortcutActionPickerDelegate(
+@Provide class AppShortcutActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
-  private val navigator: Navigator
+  private val navigator: Navigator,
+  private val RP: ResourceProvider
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

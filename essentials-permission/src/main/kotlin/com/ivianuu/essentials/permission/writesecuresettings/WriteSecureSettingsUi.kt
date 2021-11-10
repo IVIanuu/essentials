@@ -35,9 +35,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
@@ -86,22 +84,24 @@ data class WriteSecureSettingsKey(
   val grantPermissionsViaRoot: () -> Unit = {}
 )
 
-@Provide @KeyUiContext<WriteSecureSettingsKey> @Toasts fun writeSecureSettingsModel(
+@Provide fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
-  shell: Shell
+  shell: Shell,
+  T: ToastContext,
+  ctx: KeyUiContext<WriteSecureSettingsKey>
 ) = state(WriteSecureSettingsModel()) {
   action(WriteSecureSettingsModel.openPcInstructions()) {
-    if (navigator.push(WriteSecureSettingsPcInstructionsKey(key<WriteSecureSettingsKey>().permissionKey)) == true)
-      navigator.pop(key<WriteSecureSettingsKey>())
+    if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
+      ctx.navigator.pop(ctx.key)
   }
 
   action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
       .onSuccess {
-        if (permissionStateFactory(listOf(key<WriteSecureSettingsKey>().permissionKey)).first()) {
+        if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
           showToast(R.string.es_secure_settings_permission_granted)
-          navigator.pop(key<WriteSecureSettingsKey>())
+          ctx.navigator.pop(ctx.key)
         }
       }
       .onFailure {

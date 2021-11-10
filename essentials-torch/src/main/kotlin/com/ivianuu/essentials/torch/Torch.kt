@@ -13,14 +13,13 @@ import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.logging.Log
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -45,13 +44,15 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-@Provide @Scoped<AppComponent> @Log @Toasts class TorchImpl(
+@Provide @Scoped<AppComponent> class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
   private val mainDispatcher: MainDispatcher,
   private val notificationFactory: NotificationFactory,
-  private val scope: ComponentScope<AppComponent>
+  private val scope: ComponentScope<AppComponent>,
+  private val L: Logger,
+  private val T: ToastContext
 ) : Torch {
   private val _torchState = MutableStateFlow(false)
   override val torchState: StateFlow<Boolean> get() = _torchState

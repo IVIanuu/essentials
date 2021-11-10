@@ -46,7 +46,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlin.reflect.KClass
@@ -55,9 +54,7 @@ import kotlin.reflect.KClass
 
 object PermissionsKey : Key<Unit>
 
-@Provide @KeyUiContext<PermissionsKey> fun permissionUi(
-  permissionRequester: PermissionRequester
-): KeyUi<PermissionsKey> = {
+@Provide fun permissionUi(permissionRequester: PermissionRequester): KeyUi<PermissionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {

@@ -40,7 +40,6 @@ import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.FloatSliderListItem
 import com.ivianuu.essentials.ui.prefs.IntSliderListItem
@@ -55,8 +54,9 @@ import kotlinx.serialization.Serializable
 
 object PrefsKey : Key<Unit>
 
-@Provide @KeyUiContext<PrefsKey> fun prefsUi(
-  prefStore: DataStore<SamplePrefs>
+@Provide fun prefsUi(
+  prefStore: DataStore<SamplePrefs>,
+  ctx: KeyUiContext<PrefsKey>
 ): KeyUi<PrefsKey> = {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
@@ -132,7 +132,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newTextInput = navigator.push(
+              val newTextInput = ctx.navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
                   label = "Input",
@@ -156,7 +156,7 @@ object PrefsKey : Key<Unit>
         value = Color(prefs.color),
         onValueChangeRequest = {
           launch {
-            val newColor = navigator.push(
+            val newColor = ctx.navigator.push(
               ColorPickerKey(
                 initialColor = Color(prefs.color),
                 title = "Color"
@@ -178,7 +178,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newItems = navigator.push(
+              val newItems = ctx.navigator.push(
                 MultiChoiceListKey(
                   items = listOf(
                     MultiChoiceListKey.Item("A", "A"),
@@ -205,7 +205,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newItem = navigator.push(
+              val newItem = ctx.navigator.push(
                 SingleChoiceListKey(
                   items = listOf(
                     SingleChoiceListKey.Item("A", "A"),

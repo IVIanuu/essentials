@@ -22,7 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
@@ -170,35 +169,36 @@ object AboutKey : Key<Unit>
   }
 }
 
-@Provide @KeyUiContext<AboutKey> @Res fun aboutModel(
+@Provide fun aboutModel(
   initial: @Initial AboutModel,
-  navigator: Navigator,
-  rateOnPlayUseCase: RateOnPlayUseCase
+  rateOnPlayUseCase: RateOnPlayUseCase,
+  RP: ResourceProvider,
+  ctx: KeyUiContext<AboutKey>
 ) = state<AboutModel>(initial) {
-  action(AboutModel.donate()) { navigator.push(DonationKey) }
+  action(AboutModel.donate()) { ctx.navigator.push(DonationKey) }
 
-  action(AboutModel.openLicenses()) { navigator.push(LicenseKey) }
+  action(AboutModel.openLicenses()) { ctx.navigator.push(LicenseKey) }
 
   action(AboutModel.rate()) { rateOnPlayUseCase() }
 
   action(AboutModel.openMoreApps()) {
-    navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+    ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
   }
 
   action(AboutModel.openRedditPage()) {
-    navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+    ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
   }
 
   action(AboutModel.openGithubPage()) {
-    navigator.push(UrlKey("https://github.com/IVIanuu"))
+    ctx.navigator.push(UrlKey("https://github.com/IVIanuu"))
   }
 
   action(AboutModel.openTwitterPage()) {
-    navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+    ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu"))
   }
 
   action(AboutModel.openPrivacyPolicy()) {
-    navigator.push(
+    ctx.navigator.push(
       WebKey(
         loadResource(R.string.es_about_privacy_policy),
         state.first().privacyPolicyUrl!!.value
@@ -206,7 +206,7 @@ object AboutKey : Key<Unit>
     )
   }
 
-  action(AboutModel.sendMail()) { navigator.push(FeedbackMailKey) }
+  action(AboutModel.sendMail()) { ctx.navigator.push(FeedbackMailKey) }
 }
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)

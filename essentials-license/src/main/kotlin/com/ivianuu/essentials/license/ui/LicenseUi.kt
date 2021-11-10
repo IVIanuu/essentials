@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.flow
@@ -58,8 +57,9 @@ object LicenseKey : Key<Unit>
   val openProject: (Project) -> Unit = {}
 )
 
-@Provide @KeyUiContext<LicenseKey> fun licenseModel(
-  licenseProjectRepository: LicenceProjectRepository
+@Provide fun licenseModel(
+  licenseProjectRepository: LicenceProjectRepository,
+  ctx: KeyUiContext<LicenseKey>
 ) = state(LicenseModel()) {
   flow { emit(licenseProjectRepository.getLicenseProjects()) }
     .flowAsResource()
@@ -67,6 +67,6 @@ object LicenseKey : Key<Unit>
 
   action(LicenseModel.openProject()) { project ->
     if (project.url != null)
-      navigator.push(UrlKey(project.url))
+      ctx.navigator.push(UrlKey(project.url))
   }
 }

@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
@@ -39,11 +39,12 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 
 object ActionsKey : Key<Unit>
 
-@Provide @Toasts fun actionsUi(
+@Provide fun actionsUi(
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  scope: ComponentScope<UiComponent>
+  S: ComponentScope<UiComponent>,
+  T: Toaster
 ): KeyUi<ActionsKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }

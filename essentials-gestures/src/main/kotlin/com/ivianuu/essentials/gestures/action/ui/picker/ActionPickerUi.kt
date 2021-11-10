@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
@@ -47,8 +47,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -146,14 +144,16 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide @KeyUiContext<ActionPickerKey> @Res fun actionPickerModel(
+@Provide fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
-  repository: ActionRepository
+  repository: ActionRepository,
+  RP: ResourceProvider,
+  ctx: KeyUiContext<ActionPickerKey>
 ) = state(ActionPickerModel()) {
   produceResource({ copy(items = it) }) { getActionPickerItems() }
 
-  action(ActionPickerModel.openActionSettings()) { item -> navigator.push(item.settingsKey!!) }
+  action(ActionPickerModel.openActionSettings()) { item -> ctx.navigator.push(item.settingsKey!!) }
   action(ActionPickerModel.pickAction()) { item ->
     val result = item.getResult() ?: return@action
     if (result is ActionPickerKey.Result.Action) {
@@ -161,14 +161,15 @@ sealed class ActionPickerItem {
       if (!permissionRequester(action.permissions))
         return@action
     }
-    navigator.pop(key(), result)
+    ctx.navigator.pop(ctx.key, result)
   }
 }
 
-@Res private suspend fun getActionPickerItems(
+private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,
   key: ActionPickerKey,
-  repository: ActionRepository
+  repository: ActionRepository,
+  RP: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

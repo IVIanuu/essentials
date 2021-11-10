@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject2
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
@@ -46,16 +45,19 @@ typealias Toaster = @ToasterTag (String) -> Unit
   }
 }
 
-typealias Toasts = Inject2<Toaster, ResourceProvider>
+@Provide data class ToastContext(
+  @Provide val toaster: Toaster,
+  @Provide val resourceProvider: ResourceProvider
+)
 
 fun showToast(message: String, @Inject toaster: Toaster) {
   toaster(message)
 }
 
-@Toasts fun showToast(messageRes: Int) {
+fun showToast(messageRes: Int, @Inject T: Toaster, RP: ResourceProvider) {
   showToast(message = loadResource(messageRes))
 }
 
-@Toasts fun showToast(messageRes: Int, vararg args: Any?) {
+fun showToast(messageRes: Int, vararg args: Any?, @Inject T: Toaster, RP: ResourceProvider) {
   showToast(message = loadResource(messageRes, *args))
 }

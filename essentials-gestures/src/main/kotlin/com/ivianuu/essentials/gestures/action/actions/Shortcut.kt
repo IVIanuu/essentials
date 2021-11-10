@@ -24,7 +24,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -81,9 +81,10 @@ import java.io.ByteArrayOutputStream
   }
 }
 
-@Provide @Res class ShortcutActionPickerDelegate(
+@Provide class ShortcutActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
-  private val navigator: Navigator
+  private val navigator: Navigator,
+  private val RP: ResourceProvider
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

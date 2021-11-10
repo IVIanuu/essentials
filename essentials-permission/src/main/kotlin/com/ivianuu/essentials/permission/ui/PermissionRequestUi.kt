@@ -33,8 +33,6 @@ import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.key
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
@@ -77,14 +75,15 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-@Provide @KeyUiContext<PermissionRequestKey> fun permissionRequestModel(
+@Provide fun permissionRequestModel(
   appUiStarter: AppUiStarter,
   permissions: Map<TypeKey<Permission>, Permission> = emptyMap(),
   permissionStateFactory: PermissionStateFactory,
-  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap()
+  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
+  ctx: KeyUiContext<PermissionRequestKey>
 ) = state(PermissionRequestModel()) {
   combine(
-    key<PermissionRequestKey>().permissionsKeys
+    ctx.key.permissionsKeys
       .map { permissionKey ->
         permissionStateFactory(listOf(permissionKey))
           .map { state ->
@@ -96,11 +95,11 @@ data class UiPermission<P : Permission>(
 
   state
     .filter {
-      key<PermissionRequestKey>().permissionsKeys
+      ctx.key.permissionsKeys
         .all { permissionStateFactory(listOf(it)).first() }
     }
     .take(1)
-    .onEach { navigator.pop(key(), true) }
+    .onEach { ctx.navigator.pop(ctx.key, true) }
     .launchIn(this)
 
   action(PermissionRequestModel.grantPermission()) { permission ->

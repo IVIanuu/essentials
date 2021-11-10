@@ -45,7 +45,6 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.first
@@ -117,10 +116,11 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   val updateMediaApp: () -> Unit = {}
 )
 
-@Provide @KeyUiContext<MediaActionSettingsKey<*>> fun mediaActionSettingsModel(
+@Provide fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  pref: DataStore<MediaActionPrefs>
+  pref: DataStore<MediaActionPrefs>,
+  ctx: KeyUiContext<MediaActionSettingsKey<*>>
 ) = state(MediaActionSettingsModel()) {
   pref.data
     .map { it.mediaApp }
@@ -129,7 +129,7 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
     .update { copy(mediaApp = it) }
 
   action(MediaActionSettingsModel.updateMediaApp()) {
-    val newMediaApp = navigator.push(
+    val newMediaApp = ctx.navigator.push(
       AppPickerKey(
         intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
       )

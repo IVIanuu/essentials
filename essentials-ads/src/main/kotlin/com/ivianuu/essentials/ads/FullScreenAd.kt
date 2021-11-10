@@ -6,7 +6,7 @@ import com.google.android.gms.ads.InterstitialAd
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.logging.Log
+import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.injekt.Provide
@@ -41,12 +41,13 @@ interface FullScreenAd {
   suspend fun showIfLoaded(): Boolean
 }
 
-@Provide @Scoped<UiComponent> @Log class FullScreenAdImpl(
+@Provide @Scoped<UiComponent> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val mainDispatcher: MainDispatcher,
   private val scope: ComponentScope<AppComponent>,
-  private val showAds: Flow<ShowAds>
+  private val showAds: Flow<ShowAds>,
+  private val L: Logger
 ) : FullScreenAd {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Unit>? = null

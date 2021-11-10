@@ -21,7 +21,7 @@ import android.content.ClipboardManager
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -35,8 +35,9 @@ interface Clipboard {
   suspend fun updateText(value: String, showMessage: Boolean = true)
 }
 
-@Provide @Toasts class ClipboardImpl(
-  private val clipboardManager: @SystemService ClipboardManager
+@Provide class ClipboardImpl(
+  private val clipboardManager: @SystemService ClipboardManager,
+  private val T: ToastContext
 ) : Clipboard {
   override val text: Flow<String?>
     get() = callbackFlow<String?> {

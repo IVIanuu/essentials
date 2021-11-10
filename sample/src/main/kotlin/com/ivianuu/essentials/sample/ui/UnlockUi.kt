@@ -35,9 +35,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.delay
@@ -48,10 +47,12 @@ import kotlinx.coroutines.flow.first
 
 object UnlockKey : Key<Unit>
 
-@Provide @Inject1<ComponentScope<KeyUiComponent>> @Toasts fun unlockUi(
+@Provide fun unlockUi(
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker
+  screenUnlocker: ScreenUnlocker,
+  S: ComponentScope<KeyUiComponent>,
+  T: ToastContext
 ): KeyUi<UnlockKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }

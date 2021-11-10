@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.Toasts
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 
@@ -61,9 +61,11 @@ object BackupAndRestoreKey : Key<Unit>
   val restoreData: () -> Unit = {}
 )
 
-@Provide @KeyUiContext<BackupAndRestoreKey> @Toasts fun backupAndRestoreModel(
+@Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
-  restoreBackup: RestoreBackupUseCase
+  restoreBackup: RestoreBackupUseCase,
+  T: ToastContext,
+  ctx: KeyUiContext<BackupAndRestoreKey>
 ) = state(BackupAndRestoreModel()) {
     action(BackupAndRestoreModel.backupData()) {
       createBackup()

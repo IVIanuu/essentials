@@ -25,7 +25,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 
 inline fun <T> loadResource(
@@ -46,8 +45,6 @@ interface ResourceProvider {
 
   operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
 }
-
-typealias Res = Inject1<ResourceProvider>
 
 @Provide class ResourceProviderImpl(private val context: AppContext) : ResourceProvider {
   override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T =

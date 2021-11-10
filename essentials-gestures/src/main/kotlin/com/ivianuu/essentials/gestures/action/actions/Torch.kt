@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.map
 
 @Provide object TorchActionId : ActionId("torch")
 
-@Provide @Res fun torchAction(torch: Torch) = Action(
+@Provide fun torchAction(torch: Torch, RP: ResourceProvider) = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
   icon = torch.torchState.torchIcon()

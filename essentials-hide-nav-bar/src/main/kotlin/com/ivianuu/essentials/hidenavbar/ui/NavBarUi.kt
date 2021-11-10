@@ -19,7 +19,7 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.Res
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
@@ -37,7 +37,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -76,9 +75,11 @@ object NavBarKey : Key<Unit>
     get() = hideNavBar
 }
 
-@Provide @KeyUiContext<NavBarKey> @Res fun navBarModel(
+@Provide fun navBarModel(
   permissionRequester: PermissionRequester,
-  pref: DataStore<NavBarPrefs>
+  pref: DataStore<NavBarPrefs>,
+  RP: ResourceProvider,
+  ctx: KeyUiContext<NavBarKey>
 ) = state(NavBarModel()) {
   pref.data.update {
     copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
@@ -91,7 +92,7 @@ object NavBarKey : Key<Unit>
     }
   }
   action(NavBarModel.updateNavBarRotationMode()) {
-    navigator.push(
+    ctx.navigator.push(
       SingleChoiceListKey(
         items = NavBarRotationMode.values()
           .map { mode ->

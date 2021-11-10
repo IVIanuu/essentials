@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Inject1
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,9 +48,10 @@ import kotlinx.coroutines.isActive
 object ForegroundKey : Key<Unit>
 
 @SuppressLint("NewApi")
-@Provide
-@Inject1<NotificationFactory>
-fun foregroundUi(foregroundManager: ForegroundManager): KeyUi<ForegroundKey> = {
+@Provide fun foregroundUi(
+  foregroundManager: ForegroundManager,
+  N: NotificationFactory
+): KeyUi<ForegroundKey> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
@@ -84,7 +84,7 @@ fun foregroundUi(foregroundManager: ForegroundManager): KeyUi<ForegroundKey> = {
   }
 }
 
-@SuppressLint("NewApi") private fun createForegroundNotification(
+private fun createForegroundNotification(
   color: Color,
   count: Int,
   @Inject notificationFactory: NotificationFactory

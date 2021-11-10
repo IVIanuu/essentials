@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Inject1
+import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
@@ -24,14 +24,16 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-@Inject1<CoroutineScope> inline fun launch(
+inline fun launch(
   context: CoroutineContext = EmptyCoroutineContext,
   start: CoroutineStart = CoroutineStart.DEFAULT,
+  @Inject scope: CoroutineScope,
   noinline block: suspend CoroutineScope.() -> Unit
 ) = scope.launch(context, start, block)
 
-@Inject1<CoroutineScope> inline fun <T> async(
+inline fun <T> async(
   context: CoroutineContext = EmptyCoroutineContext,
   start: CoroutineStart = CoroutineStart.DEFAULT,
+  @Inject scope: CoroutineScope,
   noinline block: suspend CoroutineScope.() -> T
 ) = scope.async(context, start, block)

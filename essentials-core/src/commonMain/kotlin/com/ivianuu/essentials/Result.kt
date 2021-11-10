@@ -1,8 +1,6 @@
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject1
-import com.ivianuu.injekt.inject
-import com.ivianuu.injekt.provide
+import com.ivianuu.injekt.Inject
 
 sealed class Result<out V, out E>
 
@@ -88,34 +86,31 @@ inline fun <V> V.ok() = Ok(this)
 
 inline fun <E> E.err() = Err(this)
 
-inline fun <V> catch(@BuilderInference block: @ResultEffect<Throwable> () -> V): Result<V, Throwable> = try {
-  Ok(provide(ResultControlImpl as ResultControl<Throwable>, block))
+inline fun <V> catch(@BuilderInference block: (@Inject ResultControl<Throwable>) -> V): Result<V, Throwable> = try {
+  Ok(block(ResultControlImpl.cast()))
 } catch (e: Throwable) {
   Err(e.nonFatalOrThrow())
 }
 
-inline fun <V, reified T> catchT(@BuilderInference block: @ResultEffect<T> () -> V): Result<V, T> = try {
-  Ok(provide(ResultControlImpl as ResultControl<T>, block))
+inline fun <V, reified T> catchT(@BuilderInference block: (@Inject ResultControl<Throwable>) -> V): Result<V, T> = try {
+  Ok(block(ResultControlImpl.cast()))
 } catch (e: Throwable) {
   if (e is T) Err(e)
   else throw e
 }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <V, E> result(@BuilderInference block: @ResultEffect<E> () -> V): Result<V, E> = try {
-  Ok(provide(ResultControlImpl as ResultControl<E>, block))
+inline fun <V, E> result(@BuilderInference block: (@Inject ResultControl<E>) -> V): Result<V, E> = try {
+  Ok(block(ResultControlImpl.cast()))
 } catch (e: ResultControlImpl.ShortCircuitException) {
   e.error as Err<E>
 }
-
-typealias ResultEffect<A> = Inject1<ResultControl<A>>
 
 interface ResultControl<in A> {
   fun <T> bind(result: Result<T, A>): T
 }
 
-@ResultEffect<A> inline fun <T, A> Result<T, A>.bind(): T =
-  inject<ResultControl<A>>().bind(this)
+inline fun <T, A> Result<T, A>.bind(@Inject control: ResultControl<A>): T = control.bind(this)
 
 @PublishedApi internal object ResultControlImpl : ResultControl<Nothing> {
   override fun <T> bind(result: Result<T, Nothing>): T = when (result) {
