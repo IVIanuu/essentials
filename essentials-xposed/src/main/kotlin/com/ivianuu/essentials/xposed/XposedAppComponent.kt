@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.sample
+package com.ivianuu.essentials.xposed
 
-import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.android.createAppComponent
-import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Component
 
-class SampleApp : EsApp() {
-  override fun buildAppComponent(): AppComponent =
-    @Providers(
-      ".**",
-      "com.ivianuu.essentials.logging.AndroidLogger"
-    )
-    createAppComponent()
+@Component interface XposedAppComponent {
+  val hooks: () -> List<Hooks>
 }
