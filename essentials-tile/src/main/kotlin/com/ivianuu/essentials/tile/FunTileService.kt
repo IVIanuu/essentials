@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.ui.state.composedFlow
+import com.ivianuu.essentials.ui.state.asFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
@@ -67,7 +67,8 @@ abstract class AbstractFunTileService<T : Any>(
       .entryPoint<TileModelComponent>()
       .holder
       .also { this.tileModelHolder = it }
-    composedFlow { tileModelHolder.tileModel() }
+    tileModelHolder.tileModel
+      .asFlow()
       .onEach { applyModel(it) }
       .launchIn(tileModelHolder.scope)
   }

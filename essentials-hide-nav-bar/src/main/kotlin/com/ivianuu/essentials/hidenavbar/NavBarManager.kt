@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Context
 import android.graphics.Rect
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
@@ -29,6 +30,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
+import com.ivianuu.essentials.ui.state.asFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
@@ -44,7 +46,7 @@ import kotlinx.coroutines.flow.onEach
 @Provide fun navBarManager(
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
-  forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
+  forceNavBarVisibleState: @Composable () -> CombinedForceNavBarVisibleState,
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   permissionState: Flow<PermissionState<NavBarPermission>>,
@@ -57,6 +59,7 @@ import kotlinx.coroutines.flow.onEach
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
         forceNavBarVisibleState
+          .asFlow()
           .flatMapLatest { forceVisible ->
             pref.data
               .map {

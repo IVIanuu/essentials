@@ -24,9 +24,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -49,14 +52,12 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 
 object NavBarKey : Key<Unit>
 
 @Provide fun navBarUi(
-  forceNavBarVisibleState: MutableStateFlow<ForceNavBarVisibleState>,
   navigator: Navigator,
   navBarPref: DataStore<NavBarPrefs>,
   permissionState: Flow<PermissionState<NavBarPermission>>,
@@ -94,7 +95,7 @@ object NavBarKey : Key<Unit>
             if (navBarPrefs.hideNavBar) {
               "Nav bar hidden"
             } else {
-              if (forceNavBarVisibleState.collectAsState().value.value) {
+              if (forceNavBarVisible.value) {
                 "Nav bar forced shown"
               } else {
                 "Nav bar shown"
@@ -128,10 +129,7 @@ object NavBarKey : Key<Unit>
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = {
-          forceNavBarVisibleState.value =
-            ForceNavBarVisibleState(!forceNavBarVisibleState.value.value)
-        }
+        onClick = { forceNavBarVisible = ForceNavBarVisibleState(!forceNavBarVisible.value) }
       ) { Text("Toggle force nav bar") }
 
       Spacer(Modifier.height(8.dp))
@@ -147,4 +145,8 @@ object NavBarKey : Key<Unit>
   }
 }
 
-@Provide val sampleForceNavBarVisibleState = MutableStateFlow(ForceNavBarVisibleState(false))
+private var forceNavBarVisible by mutableStateOf(ForceNavBarVisibleState(false))
+
+@Provide val sampleForceNavBarVisibleState: @Composable () -> ForceNavBarVisibleState = {
+  forceNavBarVisible
+}

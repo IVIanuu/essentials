@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ads
 
+import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
@@ -8,7 +9,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.state.composedFlow
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -60,7 +60,7 @@ import kotlinx.serialization.Serializable
 
 private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
   var lastBackStack = backStack
-  return composedFlow { backStack }
+  return snapshotFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {
