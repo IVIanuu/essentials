@@ -18,16 +18,16 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
+import androidx.compose.runtime.State
+import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 
 interface NotificationService {
-  val notifications: Flow<List<StatusBarNotification>>
+  val notifications: List<StatusBarNotification>
 
   val events: Flow<NotificationEvent>
 
@@ -39,23 +39,24 @@ interface NotificationService {
 }
 
 @Provide class NotificationServiceImpl(
-  private val ref: Flow<EsNotificationListenerService?>
+  private val ref: State<EsNotificationListenerService?>
 ) : NotificationService {
-  override val notifications: Flow<List<StatusBarNotification>>
-    get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+  override val notifications: List<StatusBarNotification>
+    get() = ref.value?.notifications ?: emptyList()
 
   override val events: Flow<NotificationEvent>
-    get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
+    get() = snapshotFlow { ref.value }
+      .flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) {
     catch { notification.contentIntent.send() }
   }
 
   override suspend fun dismissNotification(key: String) {
-    catch { ref.first()!!.cancelNotification(key) }
+    catch { ref.value!!.cancelNotification(key) }
   }
 
   override suspend fun dismissAllNotifications() {
-    catch { ref.first()!!.cancelAllNotifications() }
+    catch { ref.value!!.cancelAllNotifications() }
   }
 }

@@ -16,27 +16,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 
 inline fun <T> MutableStateFlow<T>.update2(transform: T.() -> T): T = synchronized(this) {
   val currentValue = value
   val newValue = transform(currentValue)
   value = newValue
   newValue
-}
-
-fun <T, R> StateFlow<T>.mapState(transform: (T) -> R): StateFlow<R> = object : StateFlow<R> {
-  override val replayCache: List<R>
-    get() = this@mapState.replayCache.map(transform)
-  override val value: R
-    get() = transform(this@mapState.value)
-
-  override suspend fun collect(collector: FlowCollector<R>) {
-    this@mapState.collect {
-      collector.emit(transform(it))
-    }
-  }
 }

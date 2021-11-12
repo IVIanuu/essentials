@@ -20,25 +20,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.resourceState
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -46,7 +44,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 
 object AppShortcutPickerKey : Key<AppShortcut>
 
-@Provide val appShortcutPickerUi: ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> = {
+@Provide val appShortcutPickerUi: ModelKeyUi2<AppShortcutPickerKey, AppShortcutPickerModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.appShortcuts) { appShortcut ->
       ListItem(
@@ -63,17 +61,17 @@ object AppShortcutPickerKey : Key<AppShortcut>
   }
 }
 
-@Optics data class AppShortcutPickerModel(
-  val appShortcuts: Resource<List<AppShortcut>> = Idle,
-  val pickAppShortcut: (AppShortcut) -> Unit = {}
+data class AppShortcutPickerModel(
+  val appShortcuts: Resource<List<AppShortcut>>,
+  val pickAppShortcut: (AppShortcut) -> Unit
 )
 
-@Provide fun appShortcutPickerModel(
+@Provide @Composable fun appShortcutPickerModel(
   appRepository: AppRepository,
   appShortcutRepository: AppShortcutRepository,
   ctx: KeyUiContext<AppShortcutPickerKey>
-) = state(AppShortcutPickerModel()) {
-  appRepository.installedApps
+) = AppShortcutPickerModel(
+  appShortcuts = appRepository.installedApps
     .flatMapLatest { apps ->
       combine(
         apps
@@ -83,10 +81,8 @@ object AppShortcutPickerKey : Key<AppShortcut>
           }
       ) { it.toList().flatten() }
     }
-    .flowAsResource()
-    .update { copy(appShortcuts = it) }
-
-  action(AppShortcutPickerModel.pickAppShortcut()) { appShortcut ->
+    .resourceState(),
+  pickAppShortcut = action { appShortcut ->
     ctx.navigator.pop(ctx.key, appShortcut)
   }
-}
+)

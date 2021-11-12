@@ -18,11 +18,13 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.onSuccess
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
@@ -31,11 +33,10 @@ import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
-  private val _notifications = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-  val notifications: Flow<List<StatusBarNotification>> get() = _notifications
+  private val _notifications = mutableStateListOf<StatusBarNotification>()
+  val notifications: List<StatusBarNotification> get() = _notifications
 
   private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
   val events: Flow<NotificationEvent> get() = _events
@@ -87,8 +88,9 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.value = catch { activeNotifications!!.toList() }
-      .getOrElse { emptyList() }
+    _notifications.clear()
+    catch { activeNotifications!!.toList() }
+      .onSuccess { _notifications.addAll(it) }
   }
 }
 
@@ -101,5 +103,5 @@ sealed class NotificationEvent {
 @EntryPoint<ServiceComponent> interface EsNotificationListenerServiceComponent {
   val logger: Logger
   val notificationComponentFactory: NotificationComponentFactory
-  val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
+  val notificationServiceRef: MutableState<EsNotificationListenerService?>
 }
