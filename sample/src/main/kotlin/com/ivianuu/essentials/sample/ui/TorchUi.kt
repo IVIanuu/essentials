@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,14 +40,13 @@ import kotlinx.coroutines.launch
 object TorchKey : Key<Unit>
 
 @Provide fun torchUi(torch: Torch): KeyUi<TorchKey> = {
-  val torchEnabled by torch.torchState.collectAsState()
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
-        "Torch is ${if (torchEnabled) "enabled" else "disabled"}",
+        "Torch is ${if (torch.torchEnabled) "enabled" else "disabled"}",
         style = MaterialTheme.typography.h4
       )
       Spacer(Modifier.height(8.dp))
@@ -58,7 +55,7 @@ object TorchKey : Key<Unit>
       Button(
         onClick = {
           scope.launch {
-            torch.setTorchState(!torch.torchState.value)
+            torch.setTorchState(!torch.torchEnabled)
           }
         }
       ) {

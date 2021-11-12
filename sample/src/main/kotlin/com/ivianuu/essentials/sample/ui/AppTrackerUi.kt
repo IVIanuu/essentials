@@ -41,6 +41,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.state.state
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -49,10 +50,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
@@ -71,13 +68,13 @@ object AppTrackerKey : Key<Unit>
 
   if (isEnabled)
     LaunchedEffect(true) {
-      foregroundManager.startForeground(
-        24,
-        currentApp
-          .onEach { showToast("App changed $it") }
-          .map { createNotification(it) }
-          .stateIn(this, SharingStarted.Eagerly, createNotification(null))
-      )
+      foregroundManager.startForeground(24) {
+        val currentApp = currentApp.state(null)
+        LaunchedEffect(currentApp) {
+          showToast("App changed $currentApp")
+        }
+        AppTrackerNotification(currentApp)
+      }
     }
 
   Scaffold(
@@ -98,7 +95,7 @@ object AppTrackerKey : Key<Unit>
   }
 }
 
-private fun createNotification(
+private fun AppTrackerNotification(
   currentApp: CurrentApp?,
   @Inject factory: NotificationFactory
 ): Notification =

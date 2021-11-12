@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,23 +47,21 @@ import kotlin.reflect.KClass
 typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
-  appScope: ComponentScope<AppComponent>,
   navigator: Navigator,
   keyUiComponentFactory: KeyUiComponentFactory,
-  rootKey: RootKey? = null
+  rootKey: RootKey? = null,
+  S: ComponentScope<AppComponent>
 ): NavigationStateContent = { modifier ->
-  val backStack by navigator.backStack.collectAsState()
-
   val contentState = remember {
-    NavigationContentState(keyUiComponentFactory, backStack)
+    NavigationContentState(keyUiComponentFactory, navigator.backStack)
   }
 
-  DisposableEffect(backStack) {
-    contentState.updateBackStack(backStack)
+  DisposableEffect(navigator.backStack) {
+    contentState.updateBackStack(navigator.backStack)
     onDispose {  }
   }
 
-  BackHandler(enabled = backStack.size > 1) {
+  BackHandler(enabled = navigator.backStack.size > 1) {
     launch {
       navigator.popTop()
     }

@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 interface Torch {
-  val torchState: Boolean
+  val torchEnabled: Boolean
 
   suspend fun setTorchState(value: Boolean)
 }
@@ -55,7 +55,7 @@ interface Torch {
   private val L: Logger,
   private val T: ToastContext
 ) : Torch {
-  override var torchState by mutableStateOf(false)
+  override var torchEnabled by mutableStateOf(false)
     private set
 
   private val torchJobLock = Mutex()
@@ -72,7 +72,7 @@ interface Torch {
   private suspend fun handleTorchState(value: Boolean) {
     log { "handle torch state $value" }
     if (!value) {
-      torchState = false
+      torchEnabled = false
       return
     }
 
@@ -82,7 +82,7 @@ interface Torch {
           val cameraId = cameraManager.cameraIdList[0]
           log { "enable torch" }
           cameraManager.setTorchMode(cameraId, true)
-          torchState = true
+          torchEnabled = true
 
           onCancel(
             block = {
@@ -113,12 +113,12 @@ interface Torch {
 
               log { "torch unavailable" }
               catch { cameraManager.setTorchMode(cameraId, false) }
-              torchState = false
+              torchEnabled = false
             },
             onCancel = {
               log { "disable torch on cancel" }
               catch { cameraManager.setTorchMode(cameraId, false) }
-              torchState = false
+              torchEnabled = false
             }
           )
         }.onFailure {

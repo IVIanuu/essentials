@@ -150,7 +150,7 @@ val DefaultAppBarElevation = 0.dp
 @Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
   val component = LocalKeyUiComponent.current.entryPoint<AutoTopAppBarComponent>()
   val canGoBack = remember {
-    component.navigator.backStack.value.indexOf(component.key) > 0
+    component.navigator.backStack.indexOf(component.key) > 0
   }
   return when {
     canGoBack -> ({ BackButton() })

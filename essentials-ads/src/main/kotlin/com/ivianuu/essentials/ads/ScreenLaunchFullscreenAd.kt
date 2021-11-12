@@ -8,6 +8,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.state.composedFlow
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -58,8 +59,8 @@ import kotlinx.serialization.Serializable
 }
 
 private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
-  var lastBackStack = backStack.value
-  return backStack
+  var lastBackStack = backStack
+  return composedFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {

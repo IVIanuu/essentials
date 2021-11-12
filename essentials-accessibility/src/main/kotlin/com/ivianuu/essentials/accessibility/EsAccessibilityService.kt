@@ -20,6 +20,7 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
+import androidx.compose.runtime.MutableState
 import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -32,7 +33,6 @@ import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
@@ -106,7 +106,7 @@ class EsAccessibilityService : AccessibilityService() {
   val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>
   val accessibilityComponentFactory: AccessibilityComponentFactory
   val logger: Logger
-  val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
+  val accessibilityServiceRef: MutableState<EsAccessibilityService?>
 }
 
 @EntryPoint<AccessibilityComponent> interface EsAccessibilityServiceAccessibilityComponent {
