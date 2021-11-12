@@ -34,7 +34,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,19 +46,23 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
-import com.ivianuu.essentials.coroutines.launch
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.getOrNull
+import com.ivianuu.essentials.store.action
+import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.core.InsetsPadding
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.injekt.coroutines.ComponentScope
 
 data class AppFeature(
   val title: String,
@@ -74,7 +77,7 @@ data class AppFeature(
   }
 }
 
-@Provide fun goPremiumUi(model: GoPremiumModel): KeyUi<GoPremiumKey> = {
+@Provide val goPremiumUi: ModelKeyUi<GoPremiumKey, GoPremiumModel> = {
   Surface {
     InsetsPadding {
       Column(
@@ -88,10 +91,10 @@ data class AppFeature(
         Spacer(Modifier.weight(1f))
 
         PremiumUiFooter(
-          skuDetails = model.premiumSkuDetails.collectAsState(null).value?.getOrNull(),
+          skuDetails = model.premiumSkuDetails.getOrNull(),
           showTryBasicOption = model.showTryBasicOption,
-          onGoPremiumClick = { model.goPremium() },
-          onTryBasicVersionClick = { model.tryBasicVersion() }
+          onGoPremiumClick = model.goPremium,
+          onTryBasicVersionClick = model.tryBasicVersion
         )
       }
     }
@@ -266,30 +269,33 @@ data class AppFeature(
   }
 }
 
-@Provide class GoPremiumModel(
-  val features: List<AppFeature>,
-  private val fullScreenAd: FullScreenAd,
-  private val premiumVersionManager: PremiumVersionManager,
-  private val ctx: KeyUiContext<GoPremiumKey>
-) {
-  val premiumSkuDetails: Flow<Resource<SkuDetails>> = premiumVersionManager.premiumSkuDetails
+@Optics data class GoPremiumModel(
+  val features: List<AppFeature> = emptyList(),
+  val premiumSkuDetails: Resource<SkuDetails> = Idle,
+  val showTryBasicOption: Boolean = false,
+  val goPremium: () -> Unit = {},
+  val tryBasicVersion: () -> Unit = {}
+)
+
+@Provide fun goPremiumModel(
+  features: List<AppFeature>,
+  fullScreenAd: FullScreenAd,
+  key: GoPremiumKey,
+  navigator: Navigator,
+  premiumVersionManager: PremiumVersionManager,
+  S: ComponentScope<KeyUiComponent>
+) = state(GoPremiumModel(features = features, showTryBasicOption = key.showTryBasicOption)) {
+  premiumVersionManager.premiumSkuDetails
     .flowAsResource()
+    .update { copy(premiumSkuDetails = it) }
 
-  val showTryBasicOption: Boolean
-    get() = ctx.key.showTryBasicOption
-
-  fun goPremium() {
-    launch {
-      if (premiumVersionManager.purchasePremiumVersion()) {
-        ctx.navigator.pop(ctx.key, true)
-      }
-    }
+  action(GoPremiumModel.goPremium()) {
+    if (premiumVersionManager.purchasePremiumVersion())
+      navigator.pop(key, true)
   }
 
-  fun tryBasicVersion() {
-    launch {
-      fullScreenAd.loadAndShow()
-      ctx.navigator.pop(ctx.key, false)
-    }
+  action(GoPremiumModel.tryBasicVersion()) {
+    fullScreenAd.loadAndShow()
+    navigator.pop(key, false)
   }
 }
