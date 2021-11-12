@@ -35,12 +35,7 @@ import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -48,8 +43,10 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.produceResource
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -58,7 +55,7 @@ object DonationKey : DialogKey<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
-@Provide val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
+@Provide val donationUi: ModelKeyUi2<DonationKey, DonationModel> = {
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
@@ -108,10 +105,10 @@ data class Donation(val sku: Sku, val iconRes: Int)
   )
 }
 
-@Optics data class DonationModel(
-  val skus: Resource<List<UiDonation>> = Idle,
-  val close: () -> Unit = {},
-  val purchase: (UiDonation) -> Unit = {}
+data class DonationModel(
+  val skus: Resource<List<UiDonation>>,
+  val close: () -> Unit,
+  val purchase: (UiDonation) -> Unit
 )
 
 data class UiDonation(
@@ -120,15 +117,15 @@ data class UiDonation(
   val price: String
 )
 
-@Provide fun donationModel(
+@Provide @Composable fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
   purchase: PurchaseUseCase,
   T: ToastContext,
   ctx: KeyUiContext<DonationKey>
-) = state(DonationModel()) {
-  produceResource({ copy(skus = it) }) {
+) = DonationModel(
+  skus = produceResource {
     donations
       .parMap { donation ->
         val details = getSkuDetails(donation.sku)!!
@@ -140,13 +137,11 @@ data class UiDonation(
           details.price
         )
       }
-  }
-
-  action(DonationModel.close()) { ctx.navigator.pop(ctx.key) }
-
-  action(DonationModel.purchase()) { donation ->
+  },
+  close = action { ctx.navigator.pop(ctx.key) },
+  purchase = action { donation ->
     purchase(donation.donation.sku, true, true)
     consumePurchase(donation.donation.sku)
     showToast(R.string.es_donation_thanks)
   }
-}
+)

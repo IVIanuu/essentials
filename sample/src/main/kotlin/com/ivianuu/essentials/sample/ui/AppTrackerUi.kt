@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.state.state
+import com.ivianuu.essentials.ui.state.value
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -69,7 +69,7 @@ object AppTrackerKey : Key<Unit>
   if (isEnabled)
     LaunchedEffect(true) {
       foregroundManager.startForeground(24) {
-        val currentApp = currentApp.state(null)
+        val currentApp = currentApp.value(null)
         LaunchedEffect(currentApp) {
           showToast("App changed $currentApp")
         }

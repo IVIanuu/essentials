@@ -29,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -71,7 +70,7 @@ object CounterKey : Key<Unit>
   }
 }
 
-@Optics data class CounterModel(
+data class CounterModel(
   val count: Int,
   val inc: () -> Unit,
   val dec: () -> Unit

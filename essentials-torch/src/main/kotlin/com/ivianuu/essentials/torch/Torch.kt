@@ -77,59 +77,59 @@ interface Torch {
     }
 
     race(
-      {
-        catch {
-          val cameraId = cameraManager.cameraIdList[0]
-          log { "enable torch" }
-          cameraManager.setTorchMode(cameraId, true)
-          torchEnabled = true
-
-          onCancel(
-            block = {
-              withContext(mainDispatcher) {
-                suspendCancellableCoroutine<Unit> { cont ->
-                  val callback = object : CameraManager.TorchCallback() {
-                    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                      super.onTorchModeChanged(cameraId, enabled)
-                      if (!enabled) {
-                        cameraManager.unregisterTorchCallback(this)
-                        if (cont.isActive) cont.resume(Unit)
-                      }
-                    }
-                    override fun onTorchModeUnavailable(cameraId: String) {
-                      super.onTorchModeUnavailable(cameraId)
-                      cameraManager.unregisterTorchCallback(this)
-                      if (cont.isActive) cont.resume(Unit)
-                    }
-                  }
-
-                  cont.invokeOnCancellation {
-                    cameraManager.unregisterTorchCallback(callback)
-                  }
-
-                  cameraManager.registerTorchCallback(callback, null)
-                }
-              }
-
-              log { "torch unavailable" }
-              catch { cameraManager.setTorchMode(cameraId, false) }
-              torchEnabled = false
-            },
-            onCancel = {
-              log { "disable torch on cancel" }
-              catch { cameraManager.setTorchMode(cameraId, false) }
-              torchEnabled = false
-            }
-          )
-        }.onFailure {
-          log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-          showToast(R.string.es_failed_to_enable_torch)
-          setTorchState(false)
-        }
-      },
+      { enableTorch() },
       { broadcastsFactory(ACTION_DISABLE_TORCH).first() },
       { foregroundManager.startForeground(64578, createTorchNotification()) }
     )
+  }
+
+  private suspend fun enableTorch() = catch {
+    val cameraId = cameraManager.cameraIdList[0]
+    log { "enable torch" }
+    cameraManager.setTorchMode(cameraId, true)
+    torchEnabled = true
+
+    onCancel(
+      block = {
+        withContext(mainDispatcher) {
+          suspendCancellableCoroutine<Unit> { cont ->
+            val callback = object : CameraManager.TorchCallback() {
+              override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+                super.onTorchModeChanged(cameraId, enabled)
+                if (!enabled) {
+                  cameraManager.unregisterTorchCallback(this)
+                  if (cont.isActive) cont.resume(Unit)
+                }
+              }
+              override fun onTorchModeUnavailable(cameraId: String) {
+                super.onTorchModeUnavailable(cameraId)
+                cameraManager.unregisterTorchCallback(this)
+                if (cont.isActive) cont.resume(Unit)
+              }
+            }
+
+            cont.invokeOnCancellation {
+              cameraManager.unregisterTorchCallback(callback)
+            }
+
+            cameraManager.registerTorchCallback(callback, null)
+          }
+        }
+
+        log { "torch unavailable" }
+        catch { cameraManager.setTorchMode(cameraId, false) }
+        torchEnabled = false
+      },
+      onCancel = {
+        log { "disable torch on cancel" }
+        catch { cameraManager.setTorchMode(cameraId, false) }
+        torchEnabled = false
+      }
+    )
+  }.onFailure {
+    log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+    showToast(R.string.es_failed_to_enable_torch)
+    setTorchState(false)
   }
 
   @SuppressLint("LaunchActivityFromNotification")

@@ -19,14 +19,17 @@ package com.ivianuu.essentials.ui.state
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.flowAsResource
+import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -47,6 +50,14 @@ fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<
 
 @Composable fun <T> StateFlow<T>.asComposable(): @Composable () -> T =
   asComposable(value)
+
+@Composable fun <T> produceValue(
+  initialValue: T,
+  block: suspend ProduceStateScope<T>.() -> Unit
+) = produceState(initialValue, producer = block).value
+
+@Composable fun <T> produceResource(block: suspend () -> T) =
+  resourceFlow { emit(block()) }.value(Idle)
 
 fun <T> composedFlow(body: @Composable () -> T) = channelFlow<T> {
   composedState(
@@ -114,9 +125,9 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-@Composable fun <T> Flow<T>.state(initial: T) = collectAsState(initial).value
+@Composable fun <T> Flow<T>.value(initial: T) = collectAsState(initial).value
 
-@Composable fun <T> StateFlow<T>.state() = collectAsState(value).value
+@Composable fun <T> StateFlow<T>.value() = collectAsState(value).value
 
 @Composable fun <T> Flow<T>.resourceState() =
   remember { flowAsResource() }.collectAsState(Idle).value
