@@ -21,28 +21,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
 
 @Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
 
 object CounterKey : Key<Unit>
 
-@Provide val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
+@Provide val counterUi: ModelKeyUi2<CounterKey, CounterModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Counter") }) }
   ) {
@@ -70,18 +72,19 @@ object CounterKey : Key<Unit>
 }
 
 @Optics data class CounterModel(
-  val count: Int = 0,
-  val inc: () -> Unit = {},
-  val dec: () -> Unit = {}
+  val count: Int,
+  val inc: () -> Unit,
+  val dec: () -> Unit
 )
 
-@Provide fun counterModel(
-  T: ToastContext,
-  C: KeyUiContext<CounterKey>
-) = state(CounterModel()) {
-  action(CounterModel.inc()) { update { copy(count = count.inc()) } }
-  action(CounterModel.dec()) {
-    if (state.first().count > 0) update { copy(count = count.dec()) }
-    else showToast("Value cannot be less than 0!")
-  }
+@Provide @Composable fun counterModel(T: ToastContext): CounterModel {
+  var count by remember { mutableStateOf(0) }
+  return CounterModel(
+    count = count,
+    inc = action { count++ },
+    dec = action {
+      if (count > 0) count--
+      else showToast("Value cannot be less than 0!")
+    }
+  )
 }

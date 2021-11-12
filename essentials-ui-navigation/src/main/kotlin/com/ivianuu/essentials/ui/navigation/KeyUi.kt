@@ -79,6 +79,23 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   scope.ui()
 }
 
+@Tag annotation class ModelKeyUi2Tag
+
+typealias ModelKeyUi2<K, S> = @ModelKeyUi2Tag @Composable ModelKeyUiScope<K, S>.() -> Unit
+
+@Provide fun <@Spread U : ModelKeyUi2<K, S>, K, S> modelKeyUi2(
+  uiFactory: () -> U,
+  model: @Composable () -> S
+): KeyUi<K> = {
+  val currentModel = model()
+  val scope = object : ModelKeyUiScope<K, S> {
+    override val model: S
+      get() = currentModel
+  }
+  val ui = remember(uiFactory) as @Composable ModelKeyUiScope<K, S>.() -> Unit
+  scope.ui()
+}
+
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,

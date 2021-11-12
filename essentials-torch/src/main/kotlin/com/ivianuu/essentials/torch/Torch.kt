@@ -6,6 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
@@ -29,8 +32,6 @@ import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
@@ -39,7 +40,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 interface Torch {
-  val torchState: StateFlow<Boolean>
+  val torchState: Boolean
 
   suspend fun setTorchState(value: Boolean)
 }
@@ -50,12 +51,12 @@ interface Torch {
   private val foregroundManager: ForegroundManager,
   private val mainDispatcher: MainDispatcher,
   private val notificationFactory: NotificationFactory,
-  private val scope: ComponentScope<AppComponent>,
+  private val S: ComponentScope<AppComponent>,
   private val L: Logger,
   private val T: ToastContext
 ) : Torch {
-  private val _torchState = MutableStateFlow(false)
-  override val torchState: StateFlow<Boolean> get() = _torchState
+  override var torchState by mutableStateOf(false)
+    private set
 
   private val torchJobLock = Mutex()
   private var torchJob: Job? = null
@@ -71,7 +72,7 @@ interface Torch {
   private suspend fun handleTorchState(value: Boolean) {
     log { "handle torch state $value" }
     if (!value) {
-      _torchState.value = false
+      torchState = false
       return
     }
 
@@ -81,7 +82,7 @@ interface Torch {
           val cameraId = cameraManager.cameraIdList[0]
           log { "enable torch" }
           cameraManager.setTorchMode(cameraId, true)
-          _torchState.value = true
+          torchState = true
 
           onCancel(
             block = {
@@ -112,12 +113,12 @@ interface Torch {
 
               log { "torch unavailable" }
               catch { cameraManager.setTorchMode(cameraId, false) }
-              _torchState.value = false
+              torchState = false
             },
             onCancel = {
               log { "disable torch on cancel" }
               catch { cameraManager.setTorchMode(cameraId, false) }
-              _torchState.value = false
+              torchState = false
             }
           )
         }.onFailure {

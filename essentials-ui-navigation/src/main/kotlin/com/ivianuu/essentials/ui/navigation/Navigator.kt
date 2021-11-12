@@ -16,9 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.runtime.mutableStateListOf
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.coroutines.update2
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
@@ -27,12 +27,9 @@ import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 
 interface Navigator {
-  val backStack: StateFlow<List<Key<*>>>
+  val backStack: List<Key<*>>
 
   suspend fun <R> setRoot(key: Key<R>): R?
 
@@ -53,8 +50,9 @@ interface Navigator {
   private val L: Logger,
   S: ComponentScope<AppComponent>
 ) : Navigator {
-  private val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
-  override val backStack: StateFlow<List<Key<*>>> get() = _backStack
+  override var backStack = mutableStateListOf<Key<*>>()
+    .apply { rootKey?.let { this += it } }
+    private set
 
   private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
 
@@ -71,7 +69,8 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
-        updateBackStack { listOf(key) }
+        backStack.clear()
+        backStack += key
         results[key] = result.cast()
       }
     }
@@ -90,7 +89,8 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
-        updateBackStack { filter { it != key } + key }
+        backStack.remove(key)
+        backStack += key
         results[key] = result.cast()
       }
     }
@@ -110,13 +110,11 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
-        updateBackStack { dropLast(1) }
+        backStack.removeLastOrNull()
         results.remove(key)
       } else {
-        updateBackStack {
-          filter { it != key }
-            .dropLast(1) + key
-        }
+        backStack.removeLastOrNull()
+        backStack += key
         results[key] = result.cast()
       }
     }
@@ -124,41 +122,29 @@ interface Navigator {
     return result.await()
   }
 
-  override suspend fun <R> pop(key: Key<R>, result: R?) {
-    actor.act {
-      log { "pop $key" }
-      popKey(key, result)
-    }
+  override suspend fun <R> pop(key: Key<R>, result: R?) = actor.act {
+    log { "pop $key" }
+    popKey(key, result)
   }
 
-  override suspend fun popTop() {
-    actor.act {
-      val topKey = backStack.first().last()
-      log { "pop top $topKey" }
-      popKey(topKey, null)
-    }
+  override suspend fun popTop() = actor.act {
+    val topKey = backStack.last()
+    log { "pop top $topKey" }
+    popKey(topKey, null)
   }
 
-  override suspend fun clear() {
-    actor.act {
-      log { "clear" }
-      results.forEach { it.value.complete(null) }
-      results.clear()
-      _backStack.value = emptyList()
-    }
+  override suspend fun clear() = actor.act {
+    log { "clear" }
+    results.forEach { it.value.complete(null) }
+    results.clear()
+    backStack.clear()
   }
 
   private fun <R> popKey(key: Key<R>, result: R?) {
     @Suppress("UNCHECKED_CAST")
     val resultAction = results[key] as? CompletableDeferred<R?>
     resultAction?.complete(result)
-
-    updateBackStack { this - key }
+    backStack -= key
     results.remove(key)
-  }
-
-  private inline fun updateBackStack(update: List<Key<*>>.() -> List<Key<*>>) {
-    _backStack.update2(update)
-      .also { log { "back stack changed -> $it" } }
   }
 }
