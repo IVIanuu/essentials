@@ -17,16 +17,15 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.Icon
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Component
 import com.ivianuu.injekt.common.EntryPoint
-import kotlinx.coroutines.flow.StateFlow
 import kotlin.reflect.KClass
 
-@Optics data class TileModel<out T : AbstractFunTileService<*>>(
+data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,
   val iconRes: Int? = null,
   val label: String? = null,
@@ -44,13 +43,13 @@ import kotlin.reflect.KClass
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 @Provide
-class TileModuleElementModule<@com.ivianuu.injekt.Spread T : StateFlow<TileModel<S>>, S : AbstractFunTileService<*>> {
+class TileModuleElementModule<@com.ivianuu.injekt.Spread T : @Composable () -> TileModel<S>, S : AbstractFunTileService<*>> {
   @Provide fun element(
     serviceClass: KClass<S>,
     provider: () -> T
-  ): Pair<TileId, () -> StateFlow<TileModel<*>>> = TileId(serviceClass) to provider.cast()
+  ): Pair<TileId, () -> @Composable () -> TileModel<*>> = TileId(serviceClass) to provider.cast()
 
-  @Provide fun clazz(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+  @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 }
 
 @Component interface TileComponent

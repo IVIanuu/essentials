@@ -19,9 +19,12 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.ui.state.composedFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
@@ -30,7 +33,6 @@ import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -65,7 +67,7 @@ abstract class AbstractFunTileService<T : Any>(
       .entryPoint<TileModelComponent>()
       .holder
       .also { this.tileModelHolder = it }
-    tileModelHolder.tileModel
+    composedFlow { tileModelHolder.tileModel() }
       .onEach { applyModel(it) }
       .launchIn(tileModelHolder.scope)
   }
@@ -73,7 +75,7 @@ abstract class AbstractFunTileService<T : Any>(
   override fun onClick() {
     super.onClick()
     log { "$serviceClass on click" }
-    tileModelHolder?.tileModel?.value?.onTileClicked?.invoke()
+    tileModelHolder?.currentModel?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
@@ -89,6 +91,7 @@ abstract class AbstractFunTileService<T : Any>(
   }
 
   private fun applyModel(model: TileModel<*>) {
+    tileModelHolder?.currentModel = model
     val qsTile = qsTile ?: return
 
     qsTile.state = when (model.status) {
@@ -123,13 +126,16 @@ abstract class AbstractFunTileService<T : Any>(
 
 @Provide class TileModelHolder(
   tileId: TileId,
-  tileModelElements: List<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptyList(),
+  tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>> = emptyList(),
   val scope: ComponentScope<TileComponent>,
   val component: TileComponent
 ) {
-  val tileModel = tileModelElements.toMap()[tileId]
+  var currentModel: TileModel<*>? = null
+
+  val tileModel: @Composable () -> TileModel<*> = tileModelElements.toMap()[tileId]
     ?.invoke()
     ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
+      .cast()
 }
 
 @EntryPoint<TileComponent> interface TileModelComponent {
