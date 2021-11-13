@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.produceResource
@@ -55,7 +55,7 @@ object DonationKey : DialogKey<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
-@Provide val donationUi: ModelKeyUi2<DonationKey, DonationModel> = {
+@Provide val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
   DialogScaffold {
     Dialog(
       applyContentPadding = false,

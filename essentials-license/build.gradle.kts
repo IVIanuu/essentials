@@ -27,7 +27,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":essentials-android-core"))
-  api(project(":essentials-store"))
   api(project(":essentials-ui"))
   api(project(":essentials-serialization"))
 }

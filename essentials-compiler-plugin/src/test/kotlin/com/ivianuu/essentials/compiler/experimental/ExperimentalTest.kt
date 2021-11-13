@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.compiler.experimental
 
 import com.ivianuu.essentials.compiler.codegen
-import com.ivianuu.essentials.compiler.compilationShouldBeOk
 import org.junit.Test
 
 class ExperimentalTest {
@@ -26,7 +25,5 @@ class ExperimentalTest {
       fun invoke() = buildList<String> {
       }
     """
-  ) {
-    compilationShouldBeOk()
-  }
+  )
 }

@@ -19,16 +19,15 @@ package com.ivianuu.essentials.backup
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -56,9 +55,9 @@ object BackupAndRestoreKey : Key<Unit>
   }
 }
 
-@Optics data class BackupAndRestoreModel(
-  val backupData: () -> Unit = {},
-  val restoreData: () -> Unit = {}
+data class BackupAndRestoreModel(
+  val backupData: () -> Unit,
+  val restoreData: () -> Unit
 )
 
 @Provide fun backupAndRestoreModel(
@@ -66,19 +65,21 @@ object BackupAndRestoreKey : Key<Unit>
   restoreBackup: RestoreBackupUseCase,
   T: ToastContext,
   ctx: KeyUiContext<BackupAndRestoreKey>
-) = state(BackupAndRestoreModel()) {
-    action(BackupAndRestoreModel.backupData()) {
+): @Composable () -> BackupAndRestoreModel = {
+  BackupAndRestoreModel(
+    backupData = action {
       createBackup()
         .onFailure {
           it.printStackTrace()
           showToast(R.string.es_backup_error)
         }
-    }
-    action(BackupAndRestoreModel.restoreData()) {
+    },
+    restoreData = action {
       restoreBackup()
         .onFailure {
           it.printStackTrace()
           showToast(R.string.es_restore_error)
         }
     }
-  }
+  )
+}

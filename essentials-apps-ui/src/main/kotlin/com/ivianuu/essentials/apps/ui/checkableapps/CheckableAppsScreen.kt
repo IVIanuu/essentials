@@ -21,8 +21,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
@@ -30,43 +28,34 @@ import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.apps.ui.AppPredicate
-import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 
 @Tag annotation class CheckableAppsScreenTag
 typealias CheckableAppsScreen = @CheckableAppsScreenTag @Composable () -> Unit
 
 data class CheckableAppsParams(
-  val checkedApps: Flow<Set<String>>,
+  val checkedApps: @Composable () -> Set<String>,
   val onCheckedAppsChanged: (Set<String>) -> Unit,
   val appPredicate: AppPredicate,
   val appBarTitle: String
 )
 
-@Provide fun checkableAppsScreen(modelFlow: StateFlow<CheckableAppsModel>): CheckableAppsScreen = {
-  val model by modelFlow.collectAsState()
+@Provide fun checkableAppsScreen(models: @Composable () -> CheckableAppsModel): CheckableAppsScreen = {
+  val model = models()
   Scaffold(
     topBar = {
       TopAppBar(
@@ -107,14 +96,14 @@ data class CheckableAppsParams(
   }
 }
 
-@Optics data class CheckableAppsModel(
-  val allApps: Resource<List<AppInfo>> = Idle,
-  val checkedApps: Set<String> = emptySet(),
-  val appPredicate: AppPredicate = DefaultAppPredicate,
+data class CheckableAppsModel(
+  val allApps: Resource<List<AppInfo>>,
+  val checkedApps: Set<String>,
+  val appPredicate: AppPredicate,
   val appBarTitle: String,
-  val updateAppCheckedState: (CheckableApp, Boolean) -> Unit = { _, _ -> },
-  val selectAll: () -> Unit = {},
-  val deselectAll: () -> Unit = {}
+  val updateAppCheckedState: (CheckableApp, Boolean) -> Unit,
+  val selectAll: () -> Unit,
+  val deselectAll: () -> Unit
 ) {
   val checkableApps = allApps
     .map { it.filter(appPredicate) }
@@ -132,43 +121,34 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
 @Provide fun checkableAppsModel(
   appRepository: AppRepository,
-  params: CheckableAppsParams,
-  scope: ComponentScope<KeyUiComponent>
-) = state(
-  CheckableAppsModel(
-    appPredicate = params.appPredicate,
-    appBarTitle = params.appBarTitle
-  )
-) {
-  params.checkedApps.update { copy(checkedApps = it) }
+  params: CheckableAppsParams
+): @Composable () -> CheckableAppsModel = {
+  val checkedApps = params.checkedApps()
+  val allApps = resourceFromFlow { appRepository.installedApps }
 
-  appRepository.installedApps
-    .flowAsResource()
-    .update { copy(allApps = it) }
-
-  suspend fun pushNewCheckedApps(transform: Set<String>.(CheckableAppsModel) -> Set<String>) {
-    val currentState = state.first()
-    val newCheckedApps = currentState.checkableApps.get()
-      .filter { it.isChecked }
-      .mapTo(mutableSetOf()) { it.info.packageName }
-      .transform(currentState)
+  fun pushNewCheckedApps(transform: Set<String>.() -> Set<String>) {
+    val newCheckedApps = checkedApps.transform()
     params.onCheckedAppsChanged(newCheckedApps)
   }
 
-  action(CheckableAppsModel.updateAppCheckedState()) { app, isChecked ->
-    pushNewCheckedApps {
-      if (isChecked) this + app.info.packageName
-      else this - app.info.packageName
+  CheckableAppsModel(
+    allApps = allApps,
+    appPredicate = params.appPredicate,
+    appBarTitle = params.appBarTitle,
+    checkedApps = checkedApps,
+    updateAppCheckedState = action { app, isChecked ->
+      pushNewCheckedApps {
+        if (isChecked) this + app.info.packageName
+        else this - app.info.packageName
+      }
+    },
+    selectAll = action {
+      pushNewCheckedApps {
+        this + allApps.get().map { it.packageName }
+      }
+    },
+    deselectAll = action {
+      pushNewCheckedApps { emptySet() }
     }
-  }
-
-  action(CheckableAppsModel.selectAll()) {
-    pushNewCheckedApps { currentState ->
-      currentState.allApps.get().mapTo(mutableSetOf()) { it.packageName }
-    }
-  }
-
-  action(CheckableAppsModel.deselectAll()) {
-    pushNewCheckedApps { emptySet() }
-  }
+  )
 }

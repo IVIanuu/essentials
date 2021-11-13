@@ -33,6 +33,7 @@ import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.state.asComposable
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
@@ -55,7 +56,8 @@ object CheckAppsKey : Key<Unit>
     checkableAppsScreen(
       CheckableAppsParams(
         db.selectAll<CheckedAppEntity>()
-          .map { it.map { it.packageName }.toSet() },
+          .map { it.map { it.packageName }.toSet() }
+          .asComposable(emptySet()),
         { checkedApps ->
           launch {
             db.transaction {

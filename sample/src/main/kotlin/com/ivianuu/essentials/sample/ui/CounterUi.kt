@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -43,7 +43,7 @@ import com.ivianuu.injekt.Provide
 
 object CounterKey : Key<Unit>
 
-@Provide val counterUi: ModelKeyUi2<CounterKey, CounterModel> = {
+@Provide val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Counter") }) }
   ) {

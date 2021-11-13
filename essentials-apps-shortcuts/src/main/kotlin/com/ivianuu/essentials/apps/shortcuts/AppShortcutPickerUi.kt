@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.resourceFromFlow
@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 
 object AppShortcutPickerKey : Key<AppShortcut>
 
-@Provide val appShortcutPickerUi: ModelKeyUi2<AppShortcutPickerKey, AppShortcutPickerModel> = {
+@Provide val appShortcutPickerUi: ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.appShortcuts) { appShortcut ->
       ListItem(

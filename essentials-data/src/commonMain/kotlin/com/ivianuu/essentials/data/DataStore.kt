@@ -16,10 +16,8 @@
 
 package com.ivianuu.essentials.data
 
-import com.ivianuu.essentials.optics.Lens
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.updateAndGet
 
 interface DataStore<T> {
@@ -33,11 +31,4 @@ class TestDataStore<T>(initial: T) : DataStore<T> {
 
   override suspend fun updateData(transform: T.() -> T): T =
     data.updateAndGet(transform)
-}
-
-fun <T, S> DataStore<T>.lens(lens: Lens<T, S>): DataStore<S> = object : DataStore<S> {
-  override val data: Flow<S>
-    get() = this@lens.data.map { lens.get(it) }
-  override suspend fun updateData(transform: S.() -> S): S =
-    lens.get(this@lens.updateData { lens.set(this, transform(lens.get(this))) })
 }

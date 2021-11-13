@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.resourceFromFlow
@@ -49,7 +49,7 @@ data class AppPickerKey(
   val title: String? = null,
 ) : Key<AppInfo>
 
-@Provide val appPickerUi: ModelKeyUi2<AppPickerKey, AppPickerModel> = {
+@Provide val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
   Scaffold(
     topBar = {
       TopAppBar(

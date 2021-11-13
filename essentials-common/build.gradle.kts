@@ -30,7 +30,6 @@ kotlin {
         api(project(":essentials-coroutines"))
         api(project(":essentials-data"))
         api(project(":essentials-logging"))
-        api(project(":essentials-optics"))
         api(project(":essentials-time"))
       }
     }

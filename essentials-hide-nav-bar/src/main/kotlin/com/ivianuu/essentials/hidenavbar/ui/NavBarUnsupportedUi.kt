@@ -22,12 +22,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -35,6 +33,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.injekt.Provide
 
 object NavBarUnsupportedKey : Key<Unit>
@@ -73,26 +72,25 @@ object NavBarUnsupportedKey : Key<Unit>
   }
 }
 
-@Optics data class NavBarUnsupportedModel(
-  val openMoreInfos: () -> Unit = {},
-  val openRootMethod: () -> Unit = {}
-)
+data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMethod: () -> Unit)
 
 @Provide fun navBarUnsupportedModel(
   ctx: KeyUiContext<NavBarUnsupportedKey>
-) = state(NavBarUnsupportedModel()) {
-  action(NavBarUnsupportedModel.openMoreInfos()) {
-    ctx.navigator.push(
-      UrlKey(
-        "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
+): @Composable () -> NavBarUnsupportedModel = {
+  NavBarUnsupportedModel(
+    openMoreInfos = action {
+      ctx.navigator.push(
+        UrlKey(
+          "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
+        )
       )
-    )
-  }
-  action(NavBarUnsupportedModel.openRootMethod()) {
-    ctx.navigator.push(
-      UrlKey(
-        "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
+    },
+    openRootMethod = action {
+      ctx.navigator.push(
+        UrlKey(
+          "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
+        )
       )
-    )
-  }
+    }
+  )
 }

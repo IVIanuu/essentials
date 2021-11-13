@@ -17,21 +17,20 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.optics.Optics
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produce
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.produceValue
 import com.ivianuu.injekt.Provide
 
 object RateOnPlayKey : DialogKey<Unit>
@@ -60,11 +59,11 @@ object RateOnPlayKey : DialogKey<Unit>
   }
 }
 
-@Optics data class RateOnPlayModel(
-  val displayShowNever: Boolean = false,
-  val rate: () -> Unit = {},
-  val showLater: () -> Unit = {},
-  val showNever: () -> Unit = {},
+data class RateOnPlayModel(
+  val displayShowNever: Boolean,
+  val rate: () -> Unit,
+  val showLater: () -> Unit,
+  val showNever: () -> Unit,
 )
 
 @Provide fun rateOnPlayModel(
@@ -73,13 +72,14 @@ object RateOnPlayKey : DialogKey<Unit>
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateOnPlayKey>
-) = state(RateOnPlayModel()) {
-  produce({ copy(displayShowNever = it) }) { displayShowNever() }
-
-  action(RateOnPlayModel.showLater()) { showLater() }
-  action(RateOnPlayModel.showNever()) { showNever() }
-  action(RateOnPlayModel.rate()) {
-    rateOnPlay()
-    ctx.navigator.pop(ctx.key)
-  }
+): @Composable () -> RateOnPlayModel = {
+  RateOnPlayModel(
+    displayShowNever = produceValue(false) { displayShowNever() },
+    rate = action {
+      rateOnPlay()
+      ctx.navigator.pop(ctx.key)
+    },
+    showLater = action(showLater),
+    showNever = action(showNever)
+  )
 }

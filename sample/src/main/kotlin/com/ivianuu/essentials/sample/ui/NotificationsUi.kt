@@ -65,7 +65,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.resourceFromFlow
@@ -80,7 +80,7 @@ import kotlin.reflect.KClass
 
 object NotificationsKey : Key<Unit>
 
-@Provide val notificationsUi: ModelKeyUi2<NotificationsKey, NotificationsModel> = {
+@Provide val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {

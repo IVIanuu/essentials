@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.util.ToastContext
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.first
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
 @Provide
-val floatingWindowsPickerUi: ModelKeyUi2<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
+val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {

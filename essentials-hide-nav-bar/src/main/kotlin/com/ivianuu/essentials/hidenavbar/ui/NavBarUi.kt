@@ -18,6 +18,7 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.data.DataStore
@@ -26,10 +27,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -38,9 +36,10 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.valueFromFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
 
 object NavBarKey : Key<Unit>
 
@@ -65,11 +64,11 @@ object NavBarKey : Key<Unit>
   }
 }
 
-@Optics data class NavBarModel(
-  val hideNavBar: Boolean = false,
-  val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
-  val updateHideNavBar: (Boolean) -> Unit = {},
-  val updateNavBarRotationMode: () -> Unit = {}
+data class NavBarModel(
+  val hideNavBar: Boolean,
+  val navBarRotationMode: NavBarRotationMode,
+  val updateHideNavBar: (Boolean) -> Unit,
+  val updateNavBarRotationMode: () -> Unit
 ) {
   val canChangeNavBarRotationMode: Boolean
     get() = hideNavBar
@@ -80,32 +79,34 @@ object NavBarKey : Key<Unit>
   pref: DataStore<NavBarPrefs>,
   RP: ResourceProvider,
   ctx: KeyUiContext<NavBarKey>
-) = state(NavBarModel()) {
-  pref.data.update {
-    copy(hideNavBar = it.hideNavBar, navBarRotationMode = it.navBarRotationMode)
-  }
-  action(NavBarModel.updateHideNavBar()) { value ->
-    if (!value) {
-      pref.updateData { copy(hideNavBar = false) }
-    } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
-      pref.updateData { copy(hideNavBar = value) }
+): @Composable () -> NavBarModel = {
+  val prefs = valueFromFlow(NavBarPrefs()) { pref.data }
+  NavBarModel(
+    hideNavBar = prefs.hideNavBar,
+    navBarRotationMode = prefs.navBarRotationMode,
+    updateHideNavBar = action { value ->
+      if (!value) {
+        pref.updateData { copy(hideNavBar = false) }
+      } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
+        pref.updateData { copy(hideNavBar = value) }
+      }
+    },
+    updateNavBarRotationMode = action {
+      ctx.navigator.push(
+        SingleChoiceListKey(
+          items = NavBarRotationMode.values()
+            .map { mode ->
+              SingleChoiceListKey.Item(
+                title = loadResource(mode.titleRes),
+                value = mode
+              )
+            },
+          selectedItem = prefs.navBarRotationMode,
+          title = loadResource(R.string.es_pref_nav_bar_rotation_mode)
+        )
+      )?.let { newRotationMode ->
+        pref.updateData { copy(navBarRotationMode = newRotationMode) }
+      }
     }
-  }
-  action(NavBarModel.updateNavBarRotationMode()) {
-    ctx.navigator.push(
-      SingleChoiceListKey(
-        items = NavBarRotationMode.values()
-          .map { mode ->
-            SingleChoiceListKey.Item(
-              title = loadResource(mode.titleRes),
-              value = mode
-            )
-          },
-        selectedItem = state.first().navBarRotationMode,
-        title = loadResource(R.string.es_pref_nav_bar_rotation_mode)
-      )
-    )?.let { newRotationMode ->
-      pref.updateData { copy(navBarRotationMode = newRotationMode) }
-    }
-  }
+  )
 }

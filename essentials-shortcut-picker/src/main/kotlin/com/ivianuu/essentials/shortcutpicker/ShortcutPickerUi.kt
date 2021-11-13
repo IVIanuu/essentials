@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
@@ -47,7 +47,7 @@ import com.ivianuu.injekt.Provide
 
 object ShortcutPickerKey : Key<Shortcut>
 
-@Provide val shortcutPickerUi: ModelKeyUi2<ShortcutPickerKey, ShortcutPickerModel> = {
+@Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.shortcuts) { shortcut ->
       ListItem(

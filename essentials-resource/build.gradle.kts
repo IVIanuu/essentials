@@ -31,7 +31,6 @@ kotlin {
       dependencies {
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
-        api(project(":essentials-optics"))
       }
     }
     named("jvmTest") {

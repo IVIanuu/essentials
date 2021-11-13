@@ -122,11 +122,10 @@ fun <T> (@Composable () -> T).asFlow(): Flow<T> = composedFlow(body = this)
 fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
   composedStateFlow(body = this)
 
-@Composable fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
+fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
   { collectAsState(initial).value }
 
-@Composable fun <T> StateFlow<T>.asComposable(): @Composable () -> T =
-  asComposable(value)
+fun <T> StateFlow<T>.asComposable(): @Composable () -> T = asComposable(value)
 
 @Composable fun <T> produceValue(
   initialValue: T,

@@ -34,13 +34,8 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
-import com.ivianuu.essentials.store.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -48,6 +43,8 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.essentials.ui.state.action
+import com.ivianuu.essentials.ui.state.produceResource
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
@@ -81,10 +78,10 @@ data class ActionPickerKey(
   }
 }
 
-@Optics data class ActionPickerModel(
-  val items: Resource<List<ActionPickerItem>> = Idle,
-  val openActionSettings: (ActionPickerItem) -> Unit = {},
-  val pickAction: (ActionPickerItem) -> Unit = {}
+data class ActionPickerModel(
+  val items: Resource<List<ActionPickerItem>>,
+  val openActionSettings: (ActionPickerItem) -> Unit,
+  val pickAction: (ActionPickerItem) -> Unit
 )
 
 sealed class ActionPickerItem {
@@ -150,19 +147,20 @@ sealed class ActionPickerItem {
   repository: ActionRepository,
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
-) = state(ActionPickerModel()) {
-  produceResource({ copy(items = it) }) { getActionPickerItems() }
-
-  action(ActionPickerModel.openActionSettings()) { item -> ctx.navigator.push(item.settingsKey!!) }
-  action(ActionPickerModel.pickAction()) { item ->
-    val result = item.getResult() ?: return@action
-    if (result is ActionPickerKey.Result.Action) {
-      val action = repository.getAction(result.actionId)
-      if (!permissionRequester(action.permissions))
-        return@action
+): @Composable () -> ActionPickerModel = {
+  ActionPickerModel(
+    items = produceResource { getActionPickerItems() },
+    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+    pickAction = action { item ->
+      val result = item.getResult() ?: return@action
+      if (result is ActionPickerKey.Result.Action) {
+        val action = repository.getAction(result.actionId)
+        if (!permissionRequester(action.permissions))
+          return@action
+      }
+      ctx.navigator.pop(ctx.key, result)
     }
-    ctx.navigator.pop(ctx.key, result)
-  }
+  )
 }
 
 private suspend fun getActionPickerItems(

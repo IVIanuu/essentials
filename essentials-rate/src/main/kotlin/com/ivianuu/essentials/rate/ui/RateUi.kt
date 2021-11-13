@@ -50,14 +50,14 @@ import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.produceValue
 import com.ivianuu.injekt.Provide
 
 object RateKey : DialogKey<Unit>
 
-@Provide val rateUi: ModelKeyUi2<RateKey, RateModel> = {
+@Provide val rateUi: ModelKeyUi<RateKey, RateModel> = {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
