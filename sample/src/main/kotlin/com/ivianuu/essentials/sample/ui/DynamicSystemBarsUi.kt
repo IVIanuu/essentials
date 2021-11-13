@@ -29,11 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerPalette
 import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.core.isLight
-import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
 @Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }

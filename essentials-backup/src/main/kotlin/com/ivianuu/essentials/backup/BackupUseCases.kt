@@ -27,8 +27,8 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.ui.android.navigation.toIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent

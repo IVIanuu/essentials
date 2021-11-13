@@ -15,32 +15,32 @@
  */
 
 plugins {
-  id("com.android.library")
   id("com.ivianuu.essentials")
   id("org.jetbrains.compose")
-  kotlin("android")
+  kotlin("multiplatform")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
+kotlin {
+  jvm()
 
-dependencies {
-  api(Deps.Accompanist.flowLayout)
-  api(Deps.Accompanist.pager)
-  api(Deps.Accompanist.pagerIndicators)
-  api(Deps.Accompanist.swipeRefresh)
-  api(Deps.AndroidX.Activity.compose)
-  api(Deps.AndroidX.core)
-  api(Deps.AndroidX.Compose.core)
-  api(Deps.AndroidX.Compose.material)
-  api(Deps.AndroidX.ConstraintLayout.compose)
-  api(Deps.Injekt.android)
-  api(project(":essentials-app"))
-  api(project(":essentials-logging"))
-  api(project(":essentials-resource"))
-  api(project(":essentials-time"))
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(Deps.Compose.foundation)
+        api(Deps.Compose.material)
+        api(Deps.Compose.runtime)
+        api(project(":essentials-app"))
+        api(project(":essentials-logging"))
+        api(project(":essentials-resource"))
+        api(project(":essentials-time"))
+      }
+    }
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":essentials-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

@@ -39,7 +39,7 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
-import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.android.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf

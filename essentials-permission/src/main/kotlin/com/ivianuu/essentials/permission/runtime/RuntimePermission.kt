@@ -22,8 +22,8 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.ui.android.navigation.toIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 
 interface RuntimePermission : Permission {

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.first
@@ -38,7 +37,7 @@ typealias RateOnPlayUseCase = @RateOnPlayUseCaseTag suspend () -> Unit
   pref: DataStore<RatePrefs>
 ): RateOnPlayUseCase = {
   catch {
-    navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
+    navigator.push(com.ivianuu.essentials.ui.android.navigation.PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
 }

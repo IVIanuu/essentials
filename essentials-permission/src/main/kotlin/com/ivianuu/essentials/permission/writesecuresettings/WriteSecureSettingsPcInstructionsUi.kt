@@ -42,13 +42,13 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.ui.android.navigation.toIntentKey
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.ui.state.produceValue
 import com.ivianuu.essentials.ui.state.valueFromFlow

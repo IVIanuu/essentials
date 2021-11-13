@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.core.localHorizontalInsetsPadding
-import com.ivianuu.essentials.ui.core.localVerticalInsetsPadding
+import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
+import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag

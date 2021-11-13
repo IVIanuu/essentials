@@ -20,7 +20,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
@@ -29,9 +28,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 
 @Tag annotation class AppUiStarterTag
-typealias AppUiStarter = @AppUiStarterTag IntentAppUiStarter
+typealias AppUiStarter = @AppUiStarterTag com.ivianuu.essentials.ui.android.navigation.IntentAppUiStarter
 
-@Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
+@Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): com.ivianuu.essentials.ui.android.navigation.IntentAppUiStarter = appUiStarter
 
 @Provide fun appUiStarter(
   context: AppContext,

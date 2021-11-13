@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.ui.android.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -22,7 +24,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -32,7 +33,9 @@ import kotlinx.coroutines.flow.first
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
 @Provide
-val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
+fun floatingWindowsPickerUi(
+  commonStrings: CommonStrings
+): ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {
@@ -52,7 +55,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
           .clickable(onClick = model.openFloatingWindow)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
-        textResId = R.string.es_yes,
+        text = commonStrings.yes,
         style = MaterialTheme.typography.button
       )
 
@@ -65,7 +68,7 @@ val floatingWindowsPickerUi: ModelKeyUi<FloatingWindowsPickerKey, FloatingWindow
           .clickable(onClick = model.openFullScreen)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
-        textResId = R.string.es_no,
+        text = commonStrings.no,
         style = MaterialTheme.typography.button
       )
 
@@ -91,7 +94,11 @@ data class FloatingWindowsPickerModel(
       ctx.navigator.pop(ctx.key, true)
     } else {
       showToast(R.string.es_floating_windows_not_installed)
-      ctx.navigator.push(PlayStoreAppDetailsKey(FLOATING_WINDOWS_PACKAGE))
+      ctx.navigator.push(
+        PlayStoreAppDetailsKey(
+          FLOATING_WINDOWS_PACKAGE
+        )
+      )
     }
   },
   openFullScreen = action {

@@ -28,9 +28,10 @@ import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.UiComponentFactory
-import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.android.activityComponent
+import com.ivianuu.injekt.android.appComponent
 import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
@@ -45,7 +46,10 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
       finish()
     }
 
-    val component = activityComponent.entryPoint<UiComponentFactory>().uiComponent()
+    // initialize activity component
+    activityComponent
+
+    val component = appComponent.entryPoint<UiComponentFactory>().uiComponent()
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { component.dispose() }
     }
@@ -62,10 +66,6 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
         }
       }
     }
-  }
-
-  override fun onBackPressed() {
-    super.onBackPressed()
   }
 }
 

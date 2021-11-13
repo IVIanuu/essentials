@@ -27,13 +27,7 @@ gradlePlugin {
   plugins {
     create("essentialsPlugin") {
       id = "com.ivianuu.essentials"
-      implementationClass =
-        "com.ivianuu.essentials.gradle.EssentialsPlugin"
-    }
-    create("composePlugin") {
-      id = "com.ivianuu.essentials.compose"
-      implementationClass =
-        "com.ivianuu.essentials.gradle.ComposePlugin"
+      implementationClass = "com.ivianuu.essentials.gradle.EssentialsPlugin"
     }
   }
 }
@@ -42,7 +36,6 @@ buildConfig {
   className("BuildConfig")
   packageName("com.ivianuu.essentials.gradle")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
-  buildConfigField("String", "COMPOSE_VERSION", "\"${Deps.AndroidX.Compose.version}\"")
 }
 
 dependencies {

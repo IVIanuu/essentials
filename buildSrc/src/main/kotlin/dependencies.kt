@@ -45,15 +45,6 @@ object Deps {
 
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
-    object Compose {
-      const val version = "1.0.4"
-      const val core = "androidx.compose.ui:ui:$version"
-      const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:1.0.0-beta5"
-      const val material = "androidx.compose.material:material:$version"
-      const val runtime = "androidx.compose.runtime:runtime:$version"
-      const val test = "androidx.compose.test:test-core:$version"
-    }
-
     object ConstraintLayout {
       const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
     }
@@ -79,6 +70,14 @@ object Deps {
     private const val version = "1.3.2"
     const val coil = "io.coil-kt:coil:$version"
     const val coilCompose = "io.coil-kt:coil-compose:$version"
+  }
+
+  object Compose {
+    const val version = "1.0.0-beta5"
+    const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:$version"
+    const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
+    const val material = "org.jetbrains.compose.material:material:$version"
+    const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
   }
 
   const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
@@ -139,7 +138,7 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.11.0"
 
-  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.14.2"
+  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 
   object Play {
     const val billing = "com.android.billingclient:billing-ktx:3.0.2"

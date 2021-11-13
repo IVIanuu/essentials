@@ -21,8 +21,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -38,7 +38,7 @@ interface ForegroundActivityMarker
   activity: ComponentActivity,
   mainDispatcher: MainDispatcher,
   state: MutableStateFlow<ForegroundActivity>
-): ScopeWorker<ActivityComponent> = worker@ {
+): ScopeWorker<UiComponent> = worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))

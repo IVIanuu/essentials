@@ -15,20 +15,27 @@
  */
 
 plugins {
-  id("com.android.library")
   id("com.ivianuu.essentials")
   id("org.jetbrains.compose")
-  kotlin("android")
+  kotlin("multiplatform")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
+kotlin {
+  jvm()
 
-dependencies {
-  api(project(":essentials-ui-core"))
-  api(project(":essentials-ui-navigation"))
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(project(":essentials-ui-core"))
+        api(project(":essentials-ui-navigation"))
+      }
+    }
+    named("jvmTest") {
+      dependencies {
+        implementation(project(":essentials-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

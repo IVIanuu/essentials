@@ -48,7 +48,7 @@ import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors

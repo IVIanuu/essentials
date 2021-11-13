@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
 import com.ivianuu.essentials.ui.animation.transition.SharedElement
 import com.ivianuu.essentials.ui.animation.transition.SharedElementStackTransition
 import com.ivianuu.essentials.ui.animation.transition.VerticalStackTransition
-import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key

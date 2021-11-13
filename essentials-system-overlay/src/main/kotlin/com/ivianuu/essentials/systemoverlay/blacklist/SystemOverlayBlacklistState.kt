@@ -45,7 +45,7 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
   userBlacklistState: @Private Flow<@UserBlacklist SystemOverlayBlacklistState>,
   L: Logger
 ): Flow<SystemOverlayBlacklistState> = mainSwitchState
-  // check the main state of the overlay
+  // check the commonMain state of the overlay
   .map {
     if (it.value) SystemOverlayBlacklistState.ENABLED
     else SystemOverlayBlacklistState.DISABLED

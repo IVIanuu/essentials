@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
@@ -57,7 +58,7 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.image.toImageBitmap
+import com.ivianuu.essentials.ui.android.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
@@ -214,7 +215,7 @@ private fun StatusBarNotification.toUiNotification(
   @Inject context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
-    catch {
+    value = catch {
       notification.smallIcon
         .loadDrawable(context)
     }.recover {
@@ -222,6 +223,7 @@ private fun StatusBarNotification.toUiNotification(
         .loadDrawable(context)
     }
       .map { it.toBitmap().toImageBitmap() }
+      .getOrNull()
   }
 
   Image(

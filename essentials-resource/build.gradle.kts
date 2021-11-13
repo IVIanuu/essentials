@@ -22,9 +22,7 @@ plugins {
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 kotlin {
-  jvm {
-    withJava()
-  }
+  jvm()
 
   sourceSets {
     commonMain {

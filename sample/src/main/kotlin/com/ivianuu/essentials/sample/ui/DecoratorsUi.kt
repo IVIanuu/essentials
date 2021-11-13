@@ -14,8 +14,8 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.SimpleListScreen
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi

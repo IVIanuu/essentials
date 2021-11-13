@@ -17,7 +17,7 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
 import com.ivianuu.injekt.Provide
 

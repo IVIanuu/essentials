@@ -7,8 +7,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator

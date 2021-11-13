@@ -20,9 +20,7 @@ plugins {
 }
 
 kotlin {
-  jvm {
-    withJava()
-  }
+  jvm()
 
   sourceSets {
     commonMain {

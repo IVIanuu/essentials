@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.state.action
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
@@ -172,16 +171,16 @@ data class AboutModel(
     openLicenses = action { ctx.navigator.push(LicenseKey) },
     rate = action { rateOnPlayUseCase() },
     openMoreApps = action {
-      ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+      ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     },
     openRedditPage = action {
-      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+      ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     },
     openGithubPage = action {
-      ctx.navigator.push(UrlKey("https://github.com/IVIanuu"))
+      ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey("https://github.com/IVIanuu"))
     },
     openTwitterPage = action {
-      ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu"))
+      ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey("https://twitter.com/IVIanuu"))
     },
     openPrivacyPolicy = action {
       ctx.navigator.push(

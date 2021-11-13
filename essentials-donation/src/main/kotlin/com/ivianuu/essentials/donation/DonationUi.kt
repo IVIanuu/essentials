@@ -36,6 +36,7 @@ import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -55,7 +56,9 @@ object DonationKey : DialogKey<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
-@Provide val donationUi: ModelKeyUi<DonationKey, DonationModel> = {
+@Provide fun donationUi(
+  commonStrings: CommonStrings
+): ModelKeyUi<DonationKey, DonationModel> = {
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
@@ -81,7 +84,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       },
       buttons = {
         TextButton(onClick = model.close) {
-          Text(R.string.es_cancel)
+          Text(commonStrings.cancel)
         }
       }
     )
