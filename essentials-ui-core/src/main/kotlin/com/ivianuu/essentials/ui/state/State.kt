@@ -22,10 +22,12 @@ import androidx.compose.runtime.Composition
 import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.resource.Idle
@@ -121,6 +123,8 @@ fun <T> (@Composable () -> T).asFlow(): Flow<T> = composedFlow(body = this)
 
 fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
   composedStateFlow(body = this)
+
+fun <T> State<T>.asFlow() = snapshotFlow { value }
 
 fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
   { collectAsState(initial).value }
