@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.serialization.KTypeT
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.Inject
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.first
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
+import kotlin.reflect.KTypeT
 
 class DiskDataStoreTest {
   private val storeDir = Files.createTempDirectory("tmp").toFile()

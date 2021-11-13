@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceState
+import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -71,17 +71,18 @@ data class AppShortcutPickerModel(
   appShortcutRepository: AppShortcutRepository,
   ctx: KeyUiContext<AppShortcutPickerKey>
 ) = AppShortcutPickerModel(
-  appShortcuts = appRepository.installedApps
-    .flatMapLatest { apps ->
-      combine(
-        apps
-          .map { app ->
-            appShortcutRepository.appShortcuts(app.packageName)
-              .catch { emit(emptyList()) }
-          }
-      ) { it.toList().flatten() }
-    }
-    .resourceState(),
+  appShortcuts = resourceFromFlow {
+    appRepository.installedApps
+      .flatMapLatest { apps ->
+        combine(
+          apps
+            .map { app ->
+              appShortcutRepository.appShortcuts(app.packageName)
+                .catch { emit(emptyList()) }
+            }
+        ) { it.toList().flatten() }
+      }
+  },
   pickAppShortcut = action { appShortcut ->
     ctx.navigator.pop(ctx.key, appShortcut)
   }

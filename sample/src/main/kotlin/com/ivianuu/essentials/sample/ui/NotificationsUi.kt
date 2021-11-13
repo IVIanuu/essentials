@@ -68,7 +68,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceState
+import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -182,7 +182,7 @@ data class UiNotification(
   C: AppContext,
   S: ComponentScope<KeyUiComponent>
 ) = NotificationsModel(
-  hasPermissions = permissionState.resourceState(),
+  hasPermissions = resourceFromFlow { permissionState },
   notifications = service.notifications
     .map { it.toUiNotification() },
   requestPermissions = action {

@@ -19,6 +19,7 @@ package com.ivianuu.essentials.ui.state
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
+import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.collectAsState
@@ -28,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.resource.Idle
+import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.injekt.Inject
@@ -37,27 +39,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-
-fun <T> (@Composable () -> T).asFlow(): Flow<T> = composedFlow(body = this)
-
-fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
-  composedStateFlow(body = this)
-
-@Composable fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
-  { collectAsState(initial).value }
-
-@Composable fun <T> StateFlow<T>.asComposable(): @Composable () -> T =
-  asComposable(value)
-
-@Composable fun <T> produceValue(
-  initialValue: T,
-  block: suspend ProduceStateScope<T>.() -> Unit
-) = produceState(initialValue, producer = block).value
-
-@Composable fun <T> produceResource(block: suspend () -> T) =
-  resourceFlow { emit(block()) }.value(Idle)
+import kotlin.coroutines.EmptyCoroutineContext
 
 fun <T> composedFlow(body: @Composable () -> T) = channelFlow<T> {
   composedState(
@@ -90,11 +75,15 @@ fun <T> composedStateFlow(
 fun <T> composedState(
   emitter: (value: T) -> Unit,
   @Inject scope: CoroutineScope,
-  body: @Composable () -> T,
+  body: @Composable () -> T
 ) {
   val recomposer = Recomposer(scope.coroutineContext)
   val composition = Composition(UnitApplier, recomposer)
-  launch(start = CoroutineStart.UNDISPATCHED) {
+  launch(
+    context = if (scope.coroutineContext[MonotonicFrameClock] == null)
+     AndroidUiDispatcher.Main else EmptyCoroutineContext,
+    start = CoroutineStart.UNDISPATCHED
+  ) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
@@ -108,12 +97,15 @@ fun <T> composedState(
       }
     }
   }
-  scope.coroutineContext.job.invokeOnCompletion {
-    snapshotHandle.dispose()
+
+  Snapshot.global {
+    composition.setContent {
+      emitter(body())
+    }
   }
 
-  composition.setContent {
-    emitter(body())
+  scope.coroutineContext.job.invokeOnCompletion {
+    snapshotHandle.dispose()
   }
 }
 
@@ -125,12 +117,32 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-@Composable fun <T> Flow<T>.value(initial: T) = collectAsState(initial).value
+fun <T> (@Composable () -> T).asFlow(): Flow<T> = composedFlow(body = this)
 
-@Composable fun <T> StateFlow<T>.value() = collectAsState(value).value
+fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
+  composedStateFlow(body = this)
 
-@Composable fun <T> Flow<T>.resourceState() =
-  remember { flowAsResource() }.collectAsState(Idle).value
+@Composable fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
+  { collectAsState(initial).value }
+
+@Composable fun <T> StateFlow<T>.asComposable(): @Composable () -> T =
+  asComposable(value)
+
+@Composable fun <T> produceValue(
+  initialValue: T,
+  block: suspend ProduceStateScope<T>.() -> Unit
+) = produceState(initialValue, producer = block).value
+
+@Composable fun <T> produceResource(block: suspend () -> T) =
+  produceValue<Resource<T>>(Idle) {
+    resourceFlow { emit(block()) }.collect { value = it }
+  }
+
+@Composable fun <T> valueFromFlow(initial: T, block: () -> Flow<T>): T =
+  remember { block() }.collectAsState(initial).value
+
+@Composable fun <T> resourceFromFlow(block: () -> Flow<T>): Resource<T> =
+  remember { block().flowAsResource() }.collectAsState(Idle).value
 
 @Composable fun action(block: suspend () -> Unit): () -> Unit {
   val scope = rememberCoroutineScope()

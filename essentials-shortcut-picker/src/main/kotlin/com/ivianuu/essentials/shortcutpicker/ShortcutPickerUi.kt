@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceState
+import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -76,7 +76,7 @@ data class ShortcutPickerModel(
   T: ToastContext,
   ctx: KeyUiContext<ShortcutPickerKey>
 ) = ShortcutPickerModel(
-  shortcuts = shortcutRepository.shortcuts.resourceState(),
+  shortcuts = resourceFromFlow { shortcutRepository.shortcuts },
   pickShortcut = action { shortcut ->
     catch {
       val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())

@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
@@ -36,10 +37,11 @@ class NavigatorTest {
   @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      scope = this
+      S = this
     )
 
-    val collector = navigator.backStack.testCollect(this)
+    val collector = snapshotFlow { navigator.backStack }
+      .testCollect(this)
 
     launch { navigator.push(KeyA) }
     navigator.pop(KeyA)
@@ -68,7 +70,7 @@ class NavigatorTest {
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      scope = this
+      S = this
     )
     val result = async { navigator.push(KeyWithResult) }
     navigator.pop(KeyWithResult, "b")
@@ -78,7 +80,7 @@ class NavigatorTest {
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      scope = this
+      S = this
     )
     val result = async { navigator.push(KeyWithResult) }
     navigator.popTop()

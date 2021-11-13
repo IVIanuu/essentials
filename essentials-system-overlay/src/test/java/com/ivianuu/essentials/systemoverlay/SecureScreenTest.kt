@@ -21,12 +21,14 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
 import org.junit.Test
 
 class SecureScreenTest {
   @Test fun testIsOnSecureScreen() = runCancellingBlockingTest {
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = provide(NoopLogger) { isOnSecureScreen(accessibilityEvents, this) }
+    val collector = isOnSecureScreen(accessibilityEvents, this, NoopLogger)
       .testCollect(this)
 
     val idleEvent = AccessibilityEvent(

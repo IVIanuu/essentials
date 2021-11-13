@@ -32,7 +32,6 @@ dependencies {
   api(project(":essentials-ui-navigation"))
   api(project(":essentials-ui-popup"))
   api(project(":essentials-ui-prefs"))
-  api(project(":essentials-resource"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi2
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceState
+import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.injekt.Provide
 
 data class AppPickerKey(
@@ -88,10 +88,11 @@ data class AppPickerModel(
   appRepository: AppRepository,
   ctx: KeyUiContext<AppPickerKey>
 ): @Composable () -> AppPickerModel = {
+  println("compose on ${Thread.currentThread().name}")
   AppPickerModel(
     appPredicate = ctx.key.appPredicate,
     title = ctx.key.title,
-    allApps = appRepository.installedApps.resourceState(),
+    allApps = resourceFromFlow { appRepository.installedApps },
     pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
   )
 }

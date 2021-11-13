@@ -40,6 +40,7 @@ dependencies {
   api(project(":essentials-app"))
   api(project(":essentials-logging"))
   api(project(":essentials-optics"))
+  api(project(":essentials-resource"))
   api(project(":essentials-time"))
 }
 

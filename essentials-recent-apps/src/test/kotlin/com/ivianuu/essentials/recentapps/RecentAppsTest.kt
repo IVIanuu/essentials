@@ -37,7 +37,7 @@ class RecentAppsTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = provide(NoopLogger) { recentApps(accessibilityEvents, recentAppsScope) }
+    val collector = recentApps(accessibilityEvents, recentAppsScope, NoopLogger)
       .testCollect(this)
 
     accessibilityEvents.emit(

@@ -16,7 +16,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.logging.Logger
@@ -50,8 +52,7 @@ interface Navigator {
   private val L: Logger,
   S: ComponentScope<AppComponent>
 ) : Navigator {
-  override var backStack = mutableStateListOf<Key<*>>()
-    .apply { rootKey?.let { this += it } }
+  override var backStack by mutableStateOf(listOfNotNull<Key<*>>(rootKey))
     private set
 
   private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
@@ -69,8 +70,7 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
-        backStack.clear()
-        backStack += key
+        backStack = listOf(key)
         results[key] = result.cast()
       }
     }
@@ -89,8 +89,9 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
-        backStack.remove(key)
-        backStack += key
+        backStack = backStack
+          .filter { it != key }
+          .plus(key)
         results[key] = result.cast()
       }
     }
@@ -110,11 +111,12 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
-        backStack.removeLastOrNull()
+        backStack = backStack.filter { it != key }
         results.remove(key)
       } else {
-        backStack.removeLastOrNull()
-        backStack += key
+        backStack
+          .filter { it != key }
+          .plus(key)
         results[key] = result.cast()
       }
     }
@@ -137,7 +139,7 @@ interface Navigator {
     log { "clear" }
     results.forEach { it.value.complete(null) }
     results.clear()
-    backStack.clear()
+    backStack = emptyList()
   }
 
   private fun <R> popKey(key: Key<R>, result: R?) {
