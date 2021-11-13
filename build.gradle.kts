@@ -20,12 +20,14 @@ buildscript {
     google()
     mavenCentral()
     jcenter()
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://plugins.gradle.org/m2")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   }
 
   dependencies {
     classpath(Deps.androidGradlePlugin)
+    classpath(Deps.AndroidX.Compose.gradlePlugin)
     classpath(Deps.dexcountGradlePlugin)
     classpath(Deps.dokkaGradlePlugin)
     classpath(Deps.essentialsGradlePlugin)

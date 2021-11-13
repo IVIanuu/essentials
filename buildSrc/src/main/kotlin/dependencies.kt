@@ -47,8 +47,8 @@ object Deps {
 
     object Compose {
       const val version = "1.0.4"
-      const val compiler = "androidx.compose.compiler:compiler:$version"
       const val core = "androidx.compose.ui:ui:$version"
+      const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:1.0.0-beta5"
       const val material = "androidx.compose.material:material:$version"
       const val runtime = "androidx.compose.runtime:runtime:$version"
       const val test = "androidx.compose.test:test-core:$version"

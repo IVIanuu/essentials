@@ -20,12 +20,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.get
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.toResource
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -35,7 +34,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.produceValue
+import com.ivianuu.essentials.ui.state.produceResource
 import com.ivianuu.injekt.Provide
 
 object LicenseKey : Key<Unit>
@@ -61,10 +60,7 @@ data class LicenseModel(
   ctx: KeyUiContext<LicenseKey>
 ): @Composable () -> LicenseModel = {
   LicenseModel(
-    projects = produceValue(Idle) {
-      licenseProjectRepository.getLicenseProjects()
-        .toResource()
-    },
+    projects = produceResource { licenseProjectRepository.getLicenseProjects().get() },
     openProject = action { project ->
       if (project.url != null)
         ctx.navigator.push(UrlKey(project.url))
