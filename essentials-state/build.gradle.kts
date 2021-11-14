@@ -30,7 +30,6 @@ android {
 
 kotlin {
   jvm()
-
   android {
     publishLibraryVariants("release")
   }

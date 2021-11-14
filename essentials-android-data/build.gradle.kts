@@ -29,7 +29,8 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(Deps.Injekt.android)
   api(project(":essentials-android-core"))
-  api(project(":essentials-android-db"))
+  api(project(":essentials-cache"))
+  api(project(":essentials-db"))
   api(project(":essentials-data"))
   api(project(":essentials-serialization"))
   testImplementation(project(":essentials-android-test"))

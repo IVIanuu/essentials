@@ -14,27 +14,37 @@
  * limitations under the License.
  */
 plugins {
+  id("com.android.library")
+  id("com.ivianuu.essentials")
   kotlin("multiplatform")
   kotlin("plugin.serialization")
-  id("com.ivianuu.essentials")
+}
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+
+android {
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 kotlin {
   jvm()
+  android {
+    publishLibraryVariants("release")
+  }
 
   sourceSets {
     commonMain {
       dependencies {
+        api(project(":essentials-coroutines"))
+        api(project(":essentials-core"))
         api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
       }
     }
-    named("jvmTest") {
+    named("androidTest") {
       dependencies {
-        implementation(project(":essentials-test"))
+        implementation(project(":essentials-android-test"))
       }
     }
   }
