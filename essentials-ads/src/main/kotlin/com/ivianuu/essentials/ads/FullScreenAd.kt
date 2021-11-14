@@ -9,7 +9,7 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.state.asFlow
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
@@ -130,6 +130,6 @@ class AdLoadingException(val reason: Int) : RuntimeException()
   fullScreenAd: FullScreenAd,
   showAds: State<ShowAds>
 ): ScopeWorker<UiComponent> = {
-  showAds.asFlow()
+  showAds.asComposedFlow()
     .collect { fullScreenAd.preload() }
 }

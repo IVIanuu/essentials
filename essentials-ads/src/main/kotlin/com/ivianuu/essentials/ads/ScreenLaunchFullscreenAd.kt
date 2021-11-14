@@ -8,7 +8,7 @@ import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.state.asFlow
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
@@ -43,7 +43,7 @@ import kotlinx.serialization.Serializable
   L: Logger
 ): ScopeWorker<UiComponent> = {
   showAds
-    .asFlow()
+    .asComposedFlow()
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents(isFeatureEnabled)

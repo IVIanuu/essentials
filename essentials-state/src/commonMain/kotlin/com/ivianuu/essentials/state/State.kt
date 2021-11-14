@@ -20,6 +20,7 @@ import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.MonotonicFrameClock
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.State
@@ -35,17 +36,45 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.resume
+
+@Tag annotation class ComposedState {
+  companion object {
+    @Provide
+    inline fun <@Spread T : @ComposedState State<S>, S> composedState(state: T): @Composable () -> S = {
+      state.value
+    }
+
+    @Provide inline fun <@Spread T : @ComposedState State<S>, S> state(state: T): State<S> = state
+
+    @Provide inline fun <@Spread T : @ComposedState MutableState<S>, S> state(
+      state: T
+    ): MutableState<S> = state
+
+    @Provide inline fun <@Spread T : @ComposedState State<S>, S> value(
+      state: T
+    ): S = state.value
+  }
+}
 
 fun <T> composedFlow(body: @Composable () -> T) = channelFlow<T> {
   composedState(
@@ -122,12 +151,12 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-fun <T> (@Composable () -> T).asFlow(): Flow<T> = composedFlow(body = this)
+fun <T> (@Composable () -> T).asComposedFlow(): Flow<T> = composedFlow(body = this)
 
-fun <T> (@Composable () -> T).asStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
+fun <T> (@Composable () -> T).asComposedStateFlow(@Inject S: CoroutineScope): StateFlow<T> =
   composedStateFlow(body = this)
 
-fun <T> State<T>.asFlow() = snapshotFlow { value }
+fun <T> State<T>.asComposedFlow() = snapshotFlow { value }
 
 fun <T> Flow<T>.asComposable(initial: T): @Composable () -> T =
   { collectAsState(initial).value }

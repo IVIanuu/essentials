@@ -22,11 +22,11 @@ interface ActionRepository {
 }
 
 @Provide class ActionRepositoryImpl(
-  private val actions: () -> Map<String, () -> Action<*>> = { emptyMap() },
-  private val actionFactories: () -> List<() -> ActionFactory> = { emptyList() },
-  private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>> = { emptyMap() },
-  private val actionSettings: () -> Map<String, () -> ActionSettingsKey<*>> = { emptyMap() },
-  private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate> = { emptyList() },
+  private val actions: () -> Map<String, () -> Action<*>>,
+  private val actionFactories: () -> List<() -> ActionFactory>,
+  private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
+  private val actionSettings: () -> Map<String, () -> ActionSettingsKey<*>>,
+  private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
   private val dispatcher: DefaultDispatcher,
   private val T: ToastContext
 ) : ActionRepository {

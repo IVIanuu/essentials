@@ -22,6 +22,7 @@ import android.annotation.SuppressLint
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.runtime.State
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
@@ -54,11 +55,11 @@ fun quickSettingsActionExecutor(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  service: Flow<EsAccessibilityService?>,
+  service: State<EsAccessibilityService?>,
   systemBuildInfo: SystemBuildInfo
 ): ActionExecutor<QuickSettingsActionId> = {
   val targetState = if (systemBuildInfo.sdk < 28) true else catch {
-    val service = service.first()!!
+    val service = service.value!!
 
     val systemUiContext = context.createPackageContext(
       "com.android.systemui", 0

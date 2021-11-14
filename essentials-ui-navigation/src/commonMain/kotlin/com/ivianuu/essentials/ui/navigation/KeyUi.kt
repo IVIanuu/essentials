@@ -22,7 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.state.asStateFlow
+import com.ivianuu.essentials.state.asComposedStateFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
@@ -69,7 +69,7 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   model: @Composable () -> S,
   CS: ComponentScope<KeyUiComponent>
 ): KeyUi<K> = {
-  val currentModel by remember(model.cast()) { model.asStateFlow() }.collectAsState()
+  val currentModel by remember(model.cast()) { model.asComposedStateFlow() }.collectAsState()
   val scope = remember {
     object : ModelKeyUiScope<K, S> {
       override val model: S

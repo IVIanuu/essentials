@@ -16,6 +16,7 @@
 
 package com.ivianuu.essentials.billing
 
+import androidx.compose.runtime.Composable
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
@@ -27,6 +28,7 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -82,6 +84,7 @@ typealias PurchaseUseCase = @PurchaseUseCaseTag suspend (Sku, Boolean, Boolean) 
     val billingFlowParams = BillingFlowParams.newBuilder()
       .setSkuDetails(skuDetails)
       .build()
+
 
     val result = billingClient.launchBillingFlow(activity, billingFlowParams)
     if (result.responseCode != BillingClient.BillingResponseCode.OK)
@@ -149,11 +152,11 @@ typealias AcknowledgePurchaseUseCase = @AcknowledgePurchaseUseCaseTag suspend (S
 typealias IsPurchased = @IsPurchasedTag Boolean
 
 @Provide fun isPurchased(
-  appForegroundState: Flow<AppForegroundState>,
+  appForegroundState: @Composable () -> AppForegroundState,
   context: BillingContext,
   sku: Sku
 ): Flow<IsPurchased> = merge(
-  appForegroundState
+  appForegroundState.asComposedFlow()
     .filter { it == AppForegroundState.FOREGROUND },
   context.refreshes
 )

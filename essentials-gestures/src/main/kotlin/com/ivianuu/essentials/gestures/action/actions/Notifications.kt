@@ -21,6 +21,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.runtime.State
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
@@ -50,10 +51,10 @@ import kotlinx.coroutines.flow.first
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  service: Flow<EsAccessibilityService?>
+  service: State<EsAccessibilityService?>
 ): ActionExecutor<NotificationsActionId> = {
   val targetState = catch {
-    val service = service.first()!!
+    val service = service.value!!
 
     val systemUiContext = context.createPackageContext(
       "com.android.systemui", 0
