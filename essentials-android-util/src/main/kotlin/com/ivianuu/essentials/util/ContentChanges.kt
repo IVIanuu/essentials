@@ -22,6 +22,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Looper
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +30,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-typealias ContentChangesFactory = (Uri) -> Flow<Unit>
+@Tag annotation class ContentChangesFactoryTag
+typealias ContentChangesFactory = @ContentChangesFactoryTag (Uri) -> Flow<Unit>
 
 @Provide fun contentChangesFactory(
   contentResolver: ContentResolver,
