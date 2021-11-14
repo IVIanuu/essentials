@@ -3,6 +3,7 @@ package com.ivianuu.essentials.gestures.action
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -16,7 +17,7 @@ interface ActionRepository {
 
   suspend fun getActionExecutor(id: String): ActionExecutor<*>
 
-  suspend fun getActionSettingsKey(id: String): ActionSettingsKey<*>?
+  suspend fun getActionSettingsKey(id: String): Key<Unit>?
 
   suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
 }
@@ -25,7 +26,7 @@ interface ActionRepository {
   private val actions: () -> Map<String, () -> Action<*>>,
   private val actionFactories: () -> List<() -> ActionFactory>,
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
-  private val actionSettings: () -> Map<String, () -> ActionSettingsKey<*>>,
+  private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
   private val dispatcher: DefaultDispatcher,
   private val T: ToastContext

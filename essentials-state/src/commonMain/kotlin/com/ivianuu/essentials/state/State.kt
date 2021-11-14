@@ -53,20 +53,15 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 @Tag annotation class ComposedState {
   companion object {
-    @Provide
-    inline fun <@Spread T : @ComposedState State<S>, S> composedState(state: T): @Composable () -> S = {
-      state.value
-    }
+    @Provide @Composable inline fun <@Spread T : @ComposedState State<S>, S> value(
+      state: T
+    ): S = state.value
 
     @Provide inline fun <@Spread T : @ComposedState State<S>, S> state(state: T): State<S> = state
 
     @Provide inline fun <@Spread T : @ComposedState MutableState<S>, S> state(
       state: T
     ): MutableState<S> = state
-
-    @Provide inline fun <@Spread T : @ComposedState State<S>, S> value(
-      state: T
-    ): S = state.value
   }
 }
 

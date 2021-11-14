@@ -74,13 +74,12 @@ interface ActionFactory {
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
-@Tag annotation class ActionSettingsKeyTag<I : ActionId>
-typealias ActionSettingsKey<I> = @ActionSettingsKeyTag<I> Key<Unit>
+@Tag annotation class ActionSettingsKey<I : ActionId>
 
-@Provide fun <@Spread T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
+@Provide fun <@Spread T : @ActionSettingsKey<I> Key<Unit>, I : ActionId> actionSettingsKeyPair(
   id: I,
   provider: () -> T,
-): Pair<String, () -> ActionSettingsKey<*>> = id.value to provider
+): Pair<String, () -> @ActionSettingsKey<ActionId> Key<Unit>> = id.value to provider
 
 interface ActionPickerDelegate {
   val baseId: String

@@ -33,14 +33,13 @@ import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.injekt.Provide
@@ -87,10 +86,10 @@ private fun mediaIntentFor(
   }
 }
 
-class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
+class MediaActionSettingsKey : Key<Unit>
 
 @Provide
-val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
+val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey, MediaActionSettingsModel> = {
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
@@ -118,7 +117,7 @@ data class MediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>,
-  ctx: KeyUiContext<MediaActionSettingsKey<*>>
+  ctx: KeyUiContext<MediaActionSettingsKey>
 ): @Composable () -> MediaActionSettingsModel = {
   MediaActionSettingsModel(
     mediaApp = resourceFromFlow {
