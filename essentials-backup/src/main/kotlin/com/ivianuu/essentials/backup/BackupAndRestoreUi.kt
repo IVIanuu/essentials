@@ -55,10 +55,7 @@ object BackupAndRestoreKey : Key<Unit>
   }
 }
 
-data class BackupAndRestoreModel(
-  val backupData: () -> Unit,
-  val restoreData: () -> Unit
-)
+data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
 @Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
