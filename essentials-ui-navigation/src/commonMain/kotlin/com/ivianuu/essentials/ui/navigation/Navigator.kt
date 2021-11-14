@@ -47,7 +47,7 @@ interface Navigator {
 }
 
 @Provide @Scoped<AppComponent> class NavigatorImpl(
-  private val keyHandlers: List<KeyHandler<*>> = emptyList(),
+  private val keyHandlers: List<KeyHandler<*>>,
   rootKey: RootKey? = null,
   private val L: Logger,
   S: ComponentScope<AppComponent>

@@ -16,7 +16,10 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
 @Tag annotation class KeyHandlerTag
 typealias KeyHandler<R> = @KeyHandlerTag suspend (Key<R>, (R) -> Unit) -> Boolean
+
+@Provide fun defaultKeyHandlers() = emptyList<KeyHandler<*>>()

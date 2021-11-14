@@ -43,6 +43,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
@@ -84,7 +85,7 @@ data class WebKey(val title: String, val url: String) : Key<Unit>
             val scope = rememberCoroutineScope()
             IconButton(onClick = {
               scope.launch {
-                navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey(webViewRef!!.url!!))
+                navigator.push(UrlKey(webViewRef!!.url!!))
               }
             }) {
               Icon(R.drawable.es_ic_open_in_browser)

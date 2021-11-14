@@ -60,7 +60,7 @@ import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.resourceFromFlow
-import com.ivianuu.essentials.ui.android.toImageBitmap
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem

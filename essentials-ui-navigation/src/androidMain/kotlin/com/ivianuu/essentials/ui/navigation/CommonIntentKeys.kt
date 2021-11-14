@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.navigation
+package com.ivianuu.essentials.ui.navigation
 
 import android.content.Intent
 import android.content.pm.PackageManager

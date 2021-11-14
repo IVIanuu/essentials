@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 
@@ -62,7 +63,7 @@ data class LicenseModel(
     projects = produceResource { licenseProjectRepository.getLicenseProjects().get() },
     openProject = action { project ->
       if (project.url != null)
-        ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey(project.url))
+        ctx.navigator.push(UrlKey(project.url))
     }
   )
 }

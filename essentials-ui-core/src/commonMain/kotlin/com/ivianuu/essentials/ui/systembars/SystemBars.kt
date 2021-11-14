@@ -97,6 +97,8 @@ class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
 
 object SystemBarManagerProvider
 
+@Provide expect val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider>
+
 @Provide val systemBarManagerProviderLoadingOrder = LoadingOrder<UiDecorator<SystemBarManagerProvider>>()
   .after<UiDecorator<WindowInsetsProvider>>()
 

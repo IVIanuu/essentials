@@ -31,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.injekt.Provide
 
 @Composable fun InsetsPadding(
   modifier: Modifier = Modifier,
@@ -117,6 +119,8 @@ val LocalInsets = compositionLocalOf { Insets() }
 }
 
 object WindowInsetsProvider
+
+@Provide expect val windowInsetsProvider: UiDecorator<WindowInsetsProvider>
 
 @Composable fun localHorizontalInsetsPadding() = LocalInsets.current.toPaddingValues()
 

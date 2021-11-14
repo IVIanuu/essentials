@@ -26,7 +26,3 @@ val LocalComponent = compositionLocalOf<@Component Any> { error("No component pr
 val LocalUiComponent = compositionLocalOf<UiComponent> { error("No ui component provided") }
 
 @Component interface UiComponent
-
-@EntryPoint<AppComponent> interface UiComponentFactory {
-  fun uiComponent(): UiComponent
-}

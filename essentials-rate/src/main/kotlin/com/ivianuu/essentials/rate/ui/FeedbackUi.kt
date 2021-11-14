@@ -30,6 +30,7 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 
 object FeedbackKey : DialogKey<Unit>
@@ -79,7 +80,7 @@ data class FeedbackModel(
     showNever = action(showNever),
     showLater = action(showLater),
     openReddit = action {
-      ctx.navigator.push(com.ivianuu.essentials.ui.android.navigation.UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
       ctx.navigator.pop(ctx.key)
     },
     sendMail = action {

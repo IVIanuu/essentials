@@ -48,6 +48,8 @@ data class UiDecoratorElement(
       override fun key(item: UiDecoratorElement) = item.key
       override fun loadingOrder(item: UiDecoratorElement) = item.loadingOrder
     }
+
+    @Provide fun defaultElements() = emptyList<UiDecoratorElement>()
   }
 }
 
@@ -55,7 +57,7 @@ data class UiDecoratorElement(
 typealias DecorateUi = @DecorateUiTag @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateUi(
-  elements: List<UiDecoratorElement> = emptyList(),
+  elements: List<UiDecoratorElement>,
   L: Logger
 ): DecorateUi = { content ->
   remember {

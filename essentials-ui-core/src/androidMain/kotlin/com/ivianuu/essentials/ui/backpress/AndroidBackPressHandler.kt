@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.backpress
+package com.ivianuu.essentials.ui.backpress
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.CompositionLocalProvider
 import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.backpress.BackPressHandler
-import com.ivianuu.essentials.ui.backpress.BackPressHandlerProvider
-import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Disposable
 
-@Provide val androidBackPressHandlerProvider: UiDecorator<BackPressHandlerProvider> = { content ->
+@Provide actual val backPressHandlerProvider: UiDecorator<BackPressHandlerProvider> = { content ->
   CompositionLocalProvider(
     LocalBackPressHandler provides AndroidBackPressHandler(
       LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher

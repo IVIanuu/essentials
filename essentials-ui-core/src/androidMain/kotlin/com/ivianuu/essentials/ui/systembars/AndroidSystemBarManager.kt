@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.systembars
+package com.ivianuu.essentials.ui.systembars
 
 import android.os.Build
 import android.view.View
@@ -34,13 +34,9 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.setFlag
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.essentials.ui.systembars.LocalSystemBarManager
-import com.ivianuu.essentials.ui.systembars.SystemBarManager
-import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
-import com.ivianuu.essentials.ui.systembars.SystemBarStyle
 import com.ivianuu.injekt.Provide
 
-@Provide val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider> = { content ->
+@Provide actual val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider> = { content ->
   val systemBarManager = remember { AndroidSystemBarManager() }
   systemBarManager.Apply()
   CompositionLocalProvider(

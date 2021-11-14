@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.navigation
+package com.ivianuu.essentials.ui.navigation
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -28,8 +28,6 @@ import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyHandler
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag

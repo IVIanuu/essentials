@@ -15,13 +15,27 @@
  */
 
 plugins {
+  id("com.android.library")
   id("com.ivianuu.essentials")
   id("org.jetbrains.compose")
   kotlin("multiplatform")
 }
 
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+
+android {
+  sourceSets["main"].run {
+    manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    java.srcDirs("src/androidMain/java")
+  }
+}
+
 kotlin {
   jvm()
+  android {
+    publishLibraryVariants("release")
+  }
 
   sourceSets {
     commonMain {
@@ -35,6 +49,28 @@ kotlin {
         api(project(":essentials-time"))
       }
     }
+
+    val commonJvmMain by creating
+
+    val androidMain by getting
+    androidMain.dependsOn(commonJvmMain)
+
+    named("androidMain") {
+      dependencies {
+        api(Deps.Accompanist.flowLayout)
+        api(Deps.Accompanist.pager)
+        api(Deps.Accompanist.pagerIndicators)
+        api(Deps.Accompanist.swipeRefresh)
+        api(Deps.AndroidX.Activity.compose)
+        api(Deps.AndroidX.core)
+        api(Deps.AndroidX.ConstraintLayout.compose)
+        api(Deps.Injekt.android)
+      }
+    }
+
+    val jvmMain by getting
+    jvmMain.dependsOn(commonJvmMain)
+
     named("jvmTest") {
       dependencies {
         implementation(project(":essentials-test"))

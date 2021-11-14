@@ -23,16 +23,18 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
-typealias ForegroundActivity = ComponentActivity?
+@Tag annotation class ForegroundActivityTag
+
+typealias ForegroundActivity = @ForegroundActivityTag ComponentActivity?
 
 interface ForegroundActivityMarker
 
-@Provide val foregroundActivityState: MutableStateFlow<ForegroundActivity> =
-  MutableStateFlow(null)
+@Provide val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,

@@ -29,7 +29,7 @@ import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.resourceFromFlow
-import com.ivianuu.essentials.ui.android.toImageBitmap
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

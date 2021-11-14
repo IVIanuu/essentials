@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android
+package com.ivianuu.essentials.ui.backpress
 
-import android.graphics.Bitmap
-import androidx.compose.ui.graphics.AndroidImageBitmapAccessor
-import androidx.compose.ui.graphics.ImageBitmap
+import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.injekt.Provide
 
-fun Bitmap.toImageBitmap(): ImageBitmap =
-  AndroidImageBitmapAccessor.createAndroidImageBitmap(this)
-
-fun ImageBitmap.toBitmap(): Bitmap = AndroidImageBitmapAccessor.getBitmap(this)
+@Provide actual val backPressHandlerProvider: UiDecorator<BackPressHandlerProvider> = { it() }

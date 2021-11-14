@@ -33,6 +33,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.injekt.Provide
 
 object NavBarUnsupportedKey : Key<Unit>
@@ -79,14 +80,14 @@ data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMet
   NavBarUnsupportedModel(
     openMoreInfos = action {
       ctx.navigator.push(
-        com.ivianuu.essentials.ui.android.navigation.UrlKey(
+        UrlKey(
           "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
         )
       )
     },
     openRootMethod = action {
       ctx.navigator.push(
-        com.ivianuu.essentials.ui.android.navigation.UrlKey(
+        UrlKey(
           "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
         )
       )

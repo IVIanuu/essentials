@@ -48,6 +48,8 @@ data class KeyUiDecoratorElement(
       override fun key(item: KeyUiDecoratorElement) = item.key
       override fun loadingOrder(item: KeyUiDecoratorElement) = item.loadingOrder
     }
+
+    @Provide fun defaultElements() = emptyList<KeyUiDecoratorElement>()
   }
 }
 
@@ -55,7 +57,7 @@ data class KeyUiDecoratorElement(
 typealias DecorateKeyUi = @DecorateKeyUiTag @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateKeyUi(
-  elements: List<KeyUiDecoratorElement> = emptyList(),
+  elements: List<KeyUiDecoratorElement>,
   L: Logger
 ): DecorateKeyUi = { content ->
   remember {

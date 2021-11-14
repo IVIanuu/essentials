@@ -31,12 +31,12 @@ import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
 import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
 import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.ui.android.navigation.UrlKey
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
 

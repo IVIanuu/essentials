@@ -16,7 +16,6 @@ import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.ui.android.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.HorizontalDivider
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide

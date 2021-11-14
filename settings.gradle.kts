@@ -61,7 +61,6 @@ include(
     ":essentials-tuples",
     ":essentials-tuples:generator",
     ":essentials-ui",
-    ":essentials-ui-android",
     ":essentials-ui-animation",
     ":essentials-ui-core",
     ":essentials-ui-dialog",

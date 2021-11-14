@@ -46,12 +46,15 @@ data class ScopeInitializerElement<C : @Component Any>(
 
       override fun loadingOrder(item: ScopeInitializerElement<*>) = item.loadingOrder
     }
+
+    @Provide fun <C : @Component Any> defaultElements() =
+      emptyList<ScopeInitializerElement<C>>()
   }
 }
 
 @Provide fun <C : @Component Any> scopeInitializerRunner(
   componentKey: TypeKey<C>,
-  initializers: List<ScopeInitializerElement<C>> = emptyList(),
+  initializers: List<ScopeInitializerElement<C>>,
   workerRunner: ScopeWorkerRunner<C>,
   L: Logger
 ): ComponentObserver<C> = object : ComponentObserver<C> {

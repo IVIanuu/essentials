@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ui.android.toImageBitmap
+import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 

@@ -27,11 +27,11 @@ import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.UiComponentFactory
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.android.activityComponent
 import com.ivianuu.injekt.android.appComponent
+import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.dispose
 import com.ivianuu.injekt.common.entryPoint
@@ -49,7 +49,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     // initialize activity component
     activityComponent
 
-    val component = appComponent.entryPoint<UiComponentFactory>().uiComponent()
+    val component = appComponent.entryPoint<UiComponentFactory>().uiComponent(this)
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { component.dispose() }
     }
@@ -72,4 +72,8 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
 @EntryPoint<UiComponent> interface EsActivityComponent {
   val appUi: AppUi
   val decorateUi: DecorateUi
+}
+
+@EntryPoint<AppComponent> interface UiComponentFactory {
+  fun uiComponent(activity: ComponentActivity): UiComponent
 }

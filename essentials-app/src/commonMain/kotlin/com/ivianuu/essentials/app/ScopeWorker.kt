@@ -30,13 +30,16 @@ import kotlinx.coroutines.supervisorScope
 @Tag annotation class ScopeWorkerTag<C>
 typealias ScopeWorker<C> = @ScopeWorkerTag<C> suspend () -> Unit
 
+@Provide fun <C : @Component Any> defaultScopeWorkers() =
+  emptyList<ScopeWorker<C>>()
+
 @Tag annotation class ScopeWorkerRunnerTag<C>
 typealias ScopeWorkerRunner<C> = @ScopeWorkerRunnerTag<C> () -> Unit
 
 @Provide fun <C : @Component Any> scopeWorkerRunner(
   scope: ComponentScope<C>,
   scopeKey: TypeKey<C>,
-  workers: List<() -> ScopeWorker<C>> = emptyList(),
+  workers: () -> List<ScopeWorker<C>>,
   L: Logger
 ): ScopeWorkerRunner<C> = {
   log { "${scopeKey.value} run scope workers" }
@@ -44,10 +47,10 @@ typealias ScopeWorkerRunner<C> = @ScopeWorkerRunnerTag<C> () -> Unit
     guarantee(
       block = {
         supervisorScope {
-          workers
+          workers()
             .forEach { worker ->
               launch {
-                worker()()
+                worker()
               }
             }
         }

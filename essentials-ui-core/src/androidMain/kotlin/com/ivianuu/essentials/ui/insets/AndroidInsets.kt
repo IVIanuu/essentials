@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.insets
+package com.ivianuu.essentials.ui.insets
 
 import android.view.View
 import androidx.compose.runtime.DisposableEffect
@@ -26,13 +26,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
 import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.insets.Insets
-import com.ivianuu.essentials.ui.insets.InsetsProvider
-import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 
-@Provide val androidWindowInsetsProvider: UiDecorator<WindowInsetsProvider> = { content ->
+@Provide actual val windowInsetsProvider: UiDecorator<WindowInsetsProvider> = { content ->
   val ownerView = LocalView.current
   val density = LocalDensity.current
   var insets by remember { mutableStateOf(Insets()) }
