@@ -32,6 +32,8 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
@@ -39,8 +41,6 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 

@@ -28,6 +28,8 @@ import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
@@ -36,8 +38,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
-import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.valueFromFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 

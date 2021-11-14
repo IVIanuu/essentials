@@ -36,6 +36,8 @@ import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceResource
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -46,8 +48,6 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.produceResource
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide

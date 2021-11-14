@@ -30,10 +30,10 @@ import com.ivianuu.essentials.db.Schema
 import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
+import com.ivianuu.essentials.state.asComposable
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.state.asComposable
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent

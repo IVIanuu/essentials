@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.android.state
+package com.ivianuu.essentials.state
 
 import android.os.Looper
 import android.view.Choreographer
@@ -23,7 +23,12 @@ import androidx.core.os.HandlerCompat
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
+
+actual fun defaultFrameClockContext(): CoroutineContext = AndroidUiDispatcher.Main
 
 class AndroidUiDispatcher private constructor(
   val choreographer: Choreographer,
@@ -138,3 +143,23 @@ class AndroidUiDispatcher private constructor(
 }
 
 private fun isMainThread() = Looper.myLooper() === Looper.getMainLooper()
+
+class AndroidUiFrameClock(private val choreographer: Choreographer) : MonotonicFrameClock {
+  override suspend fun <R> withFrameNanos(onFrame: (Long) -> R): R {
+    val uiDispatcher = coroutineContext[ContinuationInterceptor] as? AndroidUiDispatcher
+    return suspendCancellableCoroutine { co ->
+      // Important: this callback won't throw, and AndroidUiDispatcher counts on it.
+      val callback = Choreographer.FrameCallback { frameTimeNanos ->
+        co.resumeWith(runCatching { onFrame(frameTimeNanos) })
+      }
+
+      if (uiDispatcher != null && uiDispatcher.choreographer == choreographer) {
+        uiDispatcher.postFrameCallback(callback)
+        co.invokeOnCancellation { uiDispatcher.removeFrameCallback(callback) }
+      } else {
+        choreographer.postFrameCallback(callback)
+        co.invokeOnCancellation { choreographer.removeFrameCallback(callback) }
+      }
+    }
+  }
+}

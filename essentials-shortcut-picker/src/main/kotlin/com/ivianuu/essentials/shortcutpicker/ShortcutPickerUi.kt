@@ -30,6 +30,8 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.android.navigation.toIntentKey
 import com.ivianuu.essentials.ui.android.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
@@ -39,8 +41,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.resourceFromFlow
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide

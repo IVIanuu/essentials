@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-  kotlin("multiplatform")
-  id("com.ivianuu.essentials")
+
+package com.ivianuu.essentials.state
+
+import androidx.compose.runtime.MonotonicFrameClock
+import kotlin.coroutines.CoroutineContext
+
+actual fun defaultFrameClockContext(): CoroutineContext = ImmediateFrameClock
+
+object ImmediateFrameClock : MonotonicFrameClock {
+  override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
+    onFrame(System.nanoTime())
 }
-
-kotlin {
-  jvm()
-
-  sourceSets {
-    commonMain {
-      dependencies {
-        api(project(":essentials-core"))
-        api(project(":essentials-coroutines"))
-        api(project(":essentials-logging"))
-        api(project(":essentials-state"))
-      }
-    }
-    named("jvmTest") {
-      dependencies {
-        implementation(project(":essentials-test"))
-      }
-    }
-  }
-}
-
-plugins.apply("com.vanniktech.maven.publish")

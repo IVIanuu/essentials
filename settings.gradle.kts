@@ -53,6 +53,7 @@ include(
     ":essentials-serialization",
     ":essentials-shell",
     ":essentials-shortcut-picker",
+    ":essentials-state",
     ":essentials-system-overlay",
     ":essentials-test",
     ":essentials-tile",

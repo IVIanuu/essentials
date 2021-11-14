@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui.state
+package com.ivianuu.essentials.state
 
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
@@ -44,6 +44,7 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 fun <T> composedFlow(body: @Composable () -> T) = channelFlow<T> {
@@ -74,6 +75,8 @@ fun <T> composedStateFlow(
   return flow!!
 }
 
+expect fun defaultFrameClockContext(): CoroutineContext
+
 fun <T> composedState(
   emitter: (T) -> Unit,
   @Inject scope: CoroutineScope,
@@ -83,7 +86,7 @@ fun <T> composedState(
   val composition = Composition(UnitApplier, recomposer)
   launch(
     context = if (scope.coroutineContext[MonotonicFrameClock] == null)
-     AndroidUiDispatcher.Main else EmptyCoroutineContext,
+     defaultFrameClockContext() else EmptyCoroutineContext,
     start = CoroutineStart.UNDISPATCHED
   ) {
     recomposer.runRecomposeAndApplyChanges()

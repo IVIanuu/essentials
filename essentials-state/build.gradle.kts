@@ -13,21 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-  kotlin("multiplatform")
+  id("com.android.library")
   id("com.ivianuu.essentials")
+  id("org.jetbrains.compose")
+  kotlin("multiplatform")
+}
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+
+android {
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 kotlin {
   jvm()
 
+  android {
+    publishLibraryVariants("release")
+  }
+
   sourceSets {
     commonMain {
       dependencies {
-        api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
-        api(project(":essentials-logging"))
-        api(project(":essentials-state"))
+        api(project(":essentials-resource"))
+        api(Deps.Compose.runtime)
+      }
+    }
+    named("androidMain") {
+      dependencies {
+        api(Deps.AndroidX.core)
       }
     }
     named("jvmTest") {

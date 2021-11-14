@@ -36,6 +36,8 @@ import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceResource
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -43,8 +45,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.ui.state.action
-import com.ivianuu.essentials.ui.state.produceResource
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
