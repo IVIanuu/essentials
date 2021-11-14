@@ -47,7 +47,7 @@ import kotlinx.coroutines.flow.first
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionIcon {
+      icon = {
         Image(
           modifier = LocalActionImageSizeModifier.current,
           bitmap = appShortcut.icon.toBitmap().toImageBitmap()

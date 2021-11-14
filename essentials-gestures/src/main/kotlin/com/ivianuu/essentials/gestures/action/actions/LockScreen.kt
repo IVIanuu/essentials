@@ -39,7 +39,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 ): Action<LockScreenActionId> = Action(
   id = LockScreenActionId,
   title = loadResource(R.string.es_action_lock_screen),
-  icon = singleActionIcon(R.drawable.es_ic_power_settings),
+  icon = staticActionIcon(R.drawable.es_ic_power_settings),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
     else typeKeyOf<ActionRootPermission>()

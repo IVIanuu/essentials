@@ -25,7 +25,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
 
 data class Action<I : ActionId>(
   val id: String,
@@ -35,7 +34,7 @@ data class Action<I : ActionId>(
   val closeSystemDialogs: Boolean = false,
   val turnScreenOn: Boolean = false,
   val enabled: Boolean = true,
-  val icon: Flow<ActionIcon>
+  val icon: ActionIcon
 ) {
   constructor(
     id: I,
@@ -45,7 +44,7 @@ data class Action<I : ActionId>(
     closeSystemDialogs: Boolean = false,
     turnScreenOn: Boolean = false,
     enabled: Boolean = true,
-    icon: Flow<ActionIcon>
+    icon: ActionIcon
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
 }
 
@@ -69,7 +68,9 @@ typealias ActionExecutor<I> = @ActionExecutorTag<I> suspend () -> Unit
 
 interface ActionFactory {
   suspend fun handles(id: String): Boolean
+
   suspend fun createAction(id: String): Action<*>
+
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 

@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
-import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -27,27 +26,21 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Provide object TorchActionId : ActionId("torch")
 
 @Provide fun torchAction(torch: Torch, RP: ResourceProvider) = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
-  icon = torchIcon(torch)
+  icon = torch.icon()
 )
 
 @Provide fun torchActionExecutor(torch: Torch): ActionExecutor<TorchActionId> =
   { torch.setTorchState(!torch.torchEnabled) }
 
-private fun torchIcon(torch: Torch): Flow<ActionIcon> = snapshotFlow { torch.torchEnabled }
-  .map {
-    if (it) R.drawable.es_ic_flashlight_on
+private fun Torch.icon(): ActionIcon = {
+  Icon(
+    if (torchEnabled) R.drawable.es_ic_flashlight_on
     else R.drawable.es_ic_flashlight_off
-  }
-  .map {
-    {
-      Icon(it)
-    }
-  }
+  )
+}

@@ -1,7 +1,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.actions.singleActionIcon
+import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -45,7 +45,7 @@ interface ActionRepository {
       ?: Action(
         id = "error",
         title = loadResource(R.string.es_error_action),
-        icon = singleActionIcon(R.drawable.es_ic_error)
+        icon = staticActionIcon(R.drawable.es_ic_error)
       )
   }
 

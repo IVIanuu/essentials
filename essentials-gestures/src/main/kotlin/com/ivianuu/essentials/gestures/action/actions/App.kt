@@ -59,7 +59,7 @@ import kotlinx.coroutines.flow.first
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionImage(AppIcon(packageName))
+      icon = staticActionImage(AppIcon(packageName))
     )
   }
 

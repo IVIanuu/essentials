@@ -18,6 +18,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.provider.Settings
 import androidx.compose.material.Icon
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
@@ -33,7 +34,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
@@ -53,14 +53,13 @@ import kotlinx.coroutines.flow.map
   rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 
-private fun Flow<AutoRotation>.autoRotationIcon(): Flow<ActionIcon> =
-  this
-    .map { it == 1 }
-    .map {
-      if (it) R.drawable.es_ic_screen_rotation
-      else R.drawable.es_ic_screen_lock_rotation
-    }
-    .map { { Icon(it) } }
+private fun Flow<AutoRotation>.autoRotationIcon(): ActionIcon = {
+  val enabled = collectAsState(1).value == 1
+  Icon(
+    if (enabled) R.drawable.es_ic_screen_rotation
+    else R.drawable.es_ic_screen_lock_rotation
+  )
+}
 
 @Tag annotation class AutoRotationTag
 internal typealias AutoRotation = @AutoRotationTag Int

@@ -24,17 +24,17 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @Provide object WifiActionId : ActionId("wifi")
 
-@Provide fun wifiAction(icon: Flow<WifiIcon>, RP: ResourceProvider) = Action(
+@Provide fun wifiAction(icon: WifiIcon, RP: ResourceProvider) = Action(
   id = WifiActionId,
   title = loadResource(R.string.es_action_wifi),
   icon = icon
@@ -53,19 +53,19 @@ typealias WifiIcon = @WifiIconTag ActionIcon
 @Provide fun wifiIcon(
   broadcastsFactory: BroadcastsFactory,
   wifiManager: @SystemService WifiManager,
-): Flow<WifiIcon> = broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
-  .map {
-    val state =
-      it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
-    state == WifiManager.WIFI_STATE_ENABLED
+): WifiIcon = {
+  val wifiEnabled = valueFromFlow(true) {
+    broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
+      .map {
+        val state =
+          it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
+        state == WifiManager.WIFI_STATE_ENABLED
+      }
+      .onStart { emit(wifiManager.isWifiEnabled) }
   }
-  .onStart { emit(wifiManager.isWifiEnabled) }
-  .map { wifiEnabled ->
+
+  Icon(
     if (wifiEnabled) R.drawable.es_ic_network_wifi
     else R.drawable.es_ic_signal_wifi_off
-  }
-  .map {
-    {
-      Icon(it)
-    }
-  }
+  )
+}

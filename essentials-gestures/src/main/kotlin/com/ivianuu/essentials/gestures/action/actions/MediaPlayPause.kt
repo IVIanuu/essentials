@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Provide
 @Provide fun playPauseMediaAction(RP: ResourceProvider) = Action(
   id = PlayPauseActionId,
   title = loadResource(R.string.es_action_media_play_pause),
-  icon = singleActionIcon(Icons.Default.PlayArrow)
+  icon = staticActionIcon(Icons.Default.PlayArrow)
 )
 
 @Provide fun playPauseMediaActionExecutor(

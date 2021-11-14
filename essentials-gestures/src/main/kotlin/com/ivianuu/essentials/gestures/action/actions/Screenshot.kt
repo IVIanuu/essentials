@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 ): Action<ScreenshotActionId> = Action(
   id = ScreenshotActionId,
   title = loadResource(R.string.es_action_screenshot),
-  icon = singleActionIcon(R.drawable.es_ic_photo_album),
+  icon = staticActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
     else typeKeyOf<ActionRootPermission>()

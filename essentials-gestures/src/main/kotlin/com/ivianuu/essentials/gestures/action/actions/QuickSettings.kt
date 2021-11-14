@@ -37,8 +37,6 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 
@@ -46,7 +44,7 @@ import kotlinx.coroutines.flow.first
   id = QuickSettingsActionId,
   title = loadResource(R.string.es_action_quick_settings),
   permissions = accessibilityActionPermissions,
-  icon = singleActionIcon(Icons.Default.Settings)
+  icon = staticActionIcon(Icons.Default.Settings)
 )
 
 @Provide

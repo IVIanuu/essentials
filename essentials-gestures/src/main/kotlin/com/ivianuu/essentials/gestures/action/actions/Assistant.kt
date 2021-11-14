@@ -35,7 +35,7 @@ import com.ivianuu.injekt.android.SystemService
   title = loadResource(R.string.es_action_assistant),
   closeSystemDialogs = true,
   turnScreenOn = true,
-  icon = singleActionIcon(R.drawable.es_ic_google)
+  icon = staticActionIcon(R.drawable.es_ic_google)
 )
 
 @SuppressLint("DiscouragedPrivateApi")

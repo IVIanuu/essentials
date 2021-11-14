@@ -31,7 +31,7 @@ import com.ivianuu.injekt.Provide
 @Provide fun recentAppsAction(RP: ResourceProvider) = Action(
   id = RecentAppsActionId,
   title = loadResource(R.string.es_action_recent_apps),
-  icon = singleActionIcon(R.drawable.es_ic_action_recent_apps)
+  icon = staticActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
 @Provide fun recentAppsActionExecutor(

@@ -23,7 +23,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.AppContext
@@ -44,26 +43,22 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
-fun singleActionImage(data: Any): Flow<ActionIcon> = flowOf {
+fun staticActionImage(data: Any): ActionIcon = {
   Image(
     painter = rememberImagePainter(data),
     modifier = LocalActionImageSizeModifier.current
   )
 }
 
-fun singleActionIcon(icon: @Composable () -> Unit): Flow<ActionIcon> = flowOf(icon)
-
-fun singleActionIcon(icon: ImageVector) = singleActionIcon {
+fun staticActionIcon(icon: ImageVector): ActionIcon = {
   Icon(
     imageVector = icon,
     modifier = LocalActionIconSizeModifier.current
   )
 }
 
-fun singleActionIcon(id: Int) = singleActionIcon {
+fun staticActionIcon(id: Int): ActionIcon = {
   Icon(
     painterResId = id,
     modifier = LocalActionIconSizeModifier.current

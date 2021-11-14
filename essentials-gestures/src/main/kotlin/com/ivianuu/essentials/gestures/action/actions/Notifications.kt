@@ -35,8 +35,6 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
@@ -44,7 +42,7 @@ import kotlinx.coroutines.flow.first
   id = NotificationsActionId,
   title = loadResource(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,
-  icon = singleActionIcon(Icons.Default.Notifications)
+  icon = staticActionIcon(Icons.Default.Notifications)
 )
 
 @Provide fun notificationsActionExecutor(

@@ -63,7 +63,7 @@ import java.io.ByteArrayOutputStream
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionIcon {
+      icon = {
         Image(
           modifier = LocalActionImageSizeModifier.current,
           bitmap = icon

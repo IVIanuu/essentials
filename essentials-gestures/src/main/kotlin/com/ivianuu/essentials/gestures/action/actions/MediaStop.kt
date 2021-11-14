@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 @Provide fun stopMediaAction(RP: ResourceProvider) = Action(
   id = StopActionId,
   title = loadResource(R.string.es_action_media_stop),
-  icon = singleActionIcon(R.drawable.es_ic_stop)
+  icon = staticActionIcon(R.drawable.es_ic_stop)
 )
 
 @Provide fun stopMediaActionExecutor(

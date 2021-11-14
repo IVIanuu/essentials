@@ -41,21 +41,15 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.coroutines.resume
 
 @Tag annotation class ComposedState {
   companion object {
@@ -111,6 +105,8 @@ fun <T> composedState(
   @Inject scope: CoroutineScope,
   body: @Composable () -> T
 ) {
+  if (!scope.coroutineContext.job.isActive) return
+
   val recomposer = Recomposer(scope.coroutineContext)
   val composition = Composition(UnitApplier, recomposer)
   launch(

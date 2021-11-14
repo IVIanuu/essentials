@@ -20,7 +20,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
   unlockScreen = true,
   closeSystemDialogs = true,
-  icon = singleActionIcon(R.drawable.es_ic_arrow_forward)
+  icon = staticActionIcon(R.drawable.es_ic_arrow_forward)
 )
 
 @Provide fun nextAppActionExecutor(

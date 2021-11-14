@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Provide
   id = PowerDialogActionId,
   title = loadResource(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,
-  icon = singleActionIcon(R.drawable.es_ic_power_settings_new)
+  icon = staticActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
 @Provide fun powerDialogActionExecutor(

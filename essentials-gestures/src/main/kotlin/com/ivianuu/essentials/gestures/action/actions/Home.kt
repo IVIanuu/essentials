@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Provide
   title = loadResource(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
-  icon = singleActionIcon(R.drawable.es_ic_action_home)
+  icon = staticActionIcon(R.drawable.es_ic_action_home)
 )
 
 @Provide fun homeActionExecutor(

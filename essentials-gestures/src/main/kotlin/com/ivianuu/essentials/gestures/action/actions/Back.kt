@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.Icon
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
@@ -33,9 +32,7 @@ import com.ivianuu.injekt.Provide
   id = BackActionId,
   title = loadResource(R.string.es_action_back),
   permissions = accessibilityActionPermissions,
-  icon = singleActionIcon {
-    Icon(painterResId = R.drawable.es_ic_action_back)
-  }
+  icon = staticActionIcon(R.drawable.es_ic_action_back)
 )
 
 @Provide fun backActionExecutor(
