@@ -84,8 +84,10 @@ interface ActionFactory {
 interface ActionPickerDelegate {
   val baseId: String
   val title: String
-  val icon: @Composable () -> Unit
   val settingsKey: Key<Unit>? get() = null
+
+  @Composable fun Icon()
+
   suspend fun pickAction(): ActionPickerKey.Result?
 }
 

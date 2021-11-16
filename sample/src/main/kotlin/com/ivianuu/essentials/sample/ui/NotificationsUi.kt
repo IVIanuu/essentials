@@ -236,6 +236,6 @@ private fun StatusBarNotification.toUiNotification(
   override val serviceClass: KClass<out NotificationListenerService>
     get() = EsNotificationListenerService::class
   override val title: String = "Notifications"
-  override val icon: @Composable (() -> Unit)?
-    get() = null
+  @Composable override fun Icon() {
+  }
 }

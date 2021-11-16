@@ -90,7 +90,8 @@ import java.io.ByteArrayOutputStream
     get() = BASE_ID
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
-  override val icon: @Composable () -> Unit = {
+
+  @Composable override fun Icon() {
     Icon(R.drawable.es_ic_content_cut)
   }
 

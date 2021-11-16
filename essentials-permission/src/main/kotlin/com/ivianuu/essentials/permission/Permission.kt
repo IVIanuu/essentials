@@ -41,7 +41,7 @@ import kotlinx.coroutines.withContext
 interface Permission {
   val title: String
   val desc: String? get() = null
-  val icon: @Composable (() -> Unit)?// get() = null // todo uncomment default value once fixed
+  @Composable fun Icon()
 }
 
 @Provide class PermissionModule<@com.ivianuu.injekt.Spread T : Permission> {

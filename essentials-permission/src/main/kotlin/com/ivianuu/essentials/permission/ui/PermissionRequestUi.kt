@@ -52,7 +52,7 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
             Text(it)
           }
         },
-        leading = permission.permission.icon,
+        leading = { permission.permission.Icon() },
         trailing = { Switch(checked = permission.isGranted, null) }
       )
     }
