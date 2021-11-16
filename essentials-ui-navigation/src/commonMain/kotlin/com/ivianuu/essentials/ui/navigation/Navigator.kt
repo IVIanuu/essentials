@@ -111,10 +111,11 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
-        backStack = backStack.filter { it != key }
+        backStack = backStack.dropLast(1)
         results.remove(key)
       } else {
-        backStack
+        backStack = backStack
+          .dropLast(1)
           .filter { it != key }
           .plus(key)
         results[key] = result.cast()
