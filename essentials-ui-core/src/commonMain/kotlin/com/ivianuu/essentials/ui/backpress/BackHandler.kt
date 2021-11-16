@@ -18,11 +18,17 @@ package com.ivianuu.essentials.ui.backpress
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 
 @Composable fun BackHandler(onBackPress: () -> Unit) {
+  val currentOnBack by rememberUpdatedState(onBackPress)
+
   val handler = LocalBackPressHandler.current
-  DisposableEffect(handler, onBackPress) {
-    val disposable = handler.registerCallback(onBackPress)
+  DisposableEffect(handler) {
+    val disposable = handler.registerCallback {
+      currentOnBack()
+    }
     onDispose { disposable.dispose() }
   }
 }

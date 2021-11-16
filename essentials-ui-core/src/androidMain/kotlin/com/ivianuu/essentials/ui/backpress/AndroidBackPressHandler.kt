@@ -20,15 +20,17 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Disposable
 
 @Provide actual val backPressHandlerProvider: UiDecorator<BackPressHandlerProvider> = { content ->
+  val dispatcher = LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher
   CompositionLocalProvider(
-    LocalBackPressHandler provides AndroidBackPressHandler(
-      LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher
-    ),
+    LocalBackPressHandler provides remember(dispatcher) {
+      AndroidBackPressHandler(dispatcher)
+    },
     content = content
   )
 }
