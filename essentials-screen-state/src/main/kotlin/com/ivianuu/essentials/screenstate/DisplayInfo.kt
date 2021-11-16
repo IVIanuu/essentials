@@ -50,7 +50,8 @@ data class DisplayInfo(
       screenWidth = metrics.widthPixels,
       screenHeight = metrics.heightPixels
     )
-  }.let { emitAll(it) }
+  }
+    .distinctUntilChanged()
+    .let { emitAll(it) }
 }
-  .distinctUntilChanged()
 
