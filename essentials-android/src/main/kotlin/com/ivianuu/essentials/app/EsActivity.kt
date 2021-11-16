@@ -42,27 +42,27 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    onBackPressedDispatcher.addCallback(this) {
+    onBackPressedDispatcher.addCallback {
       finish()
     }
 
     // initialize activity component
     activityComponent
 
-    val component = appComponent.entryPoint<UiComponentFactory>().uiComponent(this)
+    val uiComponent = appComponent.entryPoint<UiComponentFactory>().uiComponent(this)
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { component.dispose() }
+      onCancel { uiComponent.dispose() }
     }
 
-    val esActivityComponent = component.entryPoint<EsActivityComponent>()
+    val activityComponent = uiComponent.entryPoint<EsActivityComponent>()
 
     setContent {
       CompositionLocalProvider(
-        LocalComponent provides component,
-        LocalUiComponent provides component
+        LocalComponent provides uiComponent,
+        LocalUiComponent provides uiComponent
       ) {
-        esActivityComponent.decorateUi {
-          esActivityComponent.appUi()
+        activityComponent.decorateUi {
+          activityComponent.appUi()
         }
       }
     }
