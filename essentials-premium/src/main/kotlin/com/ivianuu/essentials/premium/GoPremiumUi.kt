@@ -274,25 +274,23 @@ data class GoPremiumModel(
   val tryBasicVersion: () -> Unit
 )
 
-@Provide fun goPremiumModel(
+@Provide @Composable fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   key: GoPremiumKey,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   S: ComponentScope<KeyUiComponent>
-): @Composable () -> GoPremiumModel = {
-  GoPremiumModel(
-    features = features,
-    premiumSkuDetails = resourceFromFlow { premiumVersionManager.premiumSkuDetails },
-    showTryBasicOption = key.showTryBasicOption,
-    goPremium = action {
-      if (premiumVersionManager.purchasePremiumVersion())
-        navigator.pop(key, true)
-    },
-    tryBasicVersion = action {
-      fullScreenAd.loadAndShow()
-      navigator.pop(key, false)
-    }
-  )
-}
+) = GoPremiumModel(
+  features = features,
+  premiumSkuDetails = resourceFromFlow { premiumVersionManager.premiumSkuDetails },
+  showTryBasicOption = key.showTryBasicOption,
+  goPremium = action {
+    if (premiumVersionManager.purchasePremiumVersion())
+      navigator.pop(key, true)
+  },
+  tryBasicVersion = action {
+    fullScreenAd.loadAndShow()
+    navigator.pop(key, false)
+  }
+)

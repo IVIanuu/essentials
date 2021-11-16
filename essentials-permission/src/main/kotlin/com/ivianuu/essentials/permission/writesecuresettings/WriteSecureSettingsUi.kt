@@ -83,30 +83,28 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-@Provide fun writeSecureSettingsModel(
+@Provide @Composable fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
   shell: Shell,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsKey>
-): @Composable () -> WriteSecureSettingsModel = {
-  WriteSecureSettingsModel(
-    openPcInstructions = action {
-      if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
-        ctx.navigator.pop(ctx.key)
-    },
-    grantPermissionsViaRoot = action {
-      shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
-        .onSuccess {
-          if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
-            showToast(R.string.es_secure_settings_permission_granted)
-            ctx.navigator.pop(ctx.key)
-          }
+) = WriteSecureSettingsModel(
+  openPcInstructions = action {
+    if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
+      ctx.navigator.pop(ctx.key)
+  },
+  grantPermissionsViaRoot = action {
+    shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+      .onSuccess {
+        if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
+          showToast(R.string.es_secure_settings_permission_granted)
+          ctx.navigator.pop(ctx.key)
         }
-        .onFailure {
-          it.printStackTrace()
-          showToast(R.string.es_secure_settings_no_root)
-        }
-    }
-  )
-}
+      }
+      .onFailure {
+        it.printStackTrace()
+        showToast(R.string.es_secure_settings_no_root)
+      }
+  }
+)

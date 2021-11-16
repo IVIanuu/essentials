@@ -141,27 +141,25 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide fun actionPickerModel(
+@Provide @Composable fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
-): @Composable () -> ActionPickerModel = {
-  ActionPickerModel(
-    items = produceResource { getActionPickerItems() },
-    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
-    pickAction = action { item ->
-      val result = item.getResult() ?: return@action
-      if (result is ActionPickerKey.Result.Action) {
-        val action = repository.getAction(result.actionId)
-        if (!permissionRequester(action.permissions))
-          return@action
-      }
-      ctx.navigator.pop(ctx.key, result)
+) = ActionPickerModel(
+  items = produceResource { getActionPickerItems() },
+  openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+  pickAction = action { item ->
+    val result = item.getResult() ?: return@action
+    if (result is ActionPickerKey.Result.Action) {
+      val action = repository.getAction(result.actionId)
+      if (!permissionRequester(action.permissions))
+        return@action
     }
-  )
-}
+    ctx.navigator.pop(ctx.key, result)
+  }
+)
 
 private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,

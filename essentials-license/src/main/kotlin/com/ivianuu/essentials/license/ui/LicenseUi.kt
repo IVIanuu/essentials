@@ -55,15 +55,13 @@ data class LicenseModel(
   val openProject: (Project) -> Unit
 )
 
-@Provide fun licenseModel(
+@Provide @Composable fun licenseModel(
   licenseProjectRepository: LicenceProjectRepository,
   ctx: KeyUiContext<LicenseKey>
-): @Composable () -> LicenseModel = {
-  LicenseModel(
-    projects = produceResource { licenseProjectRepository.getLicenseProjects().get() },
-    openProject = action { project ->
-      if (project.url != null)
-        ctx.navigator.push(UrlKey(project.url))
-    }
-  )
-}
+) = LicenseModel(
+  projects = produceResource { licenseProjectRepository.getLicenseProjects().get() },
+  openProject = action { project ->
+    if (project.url != null)
+      ctx.navigator.push(UrlKey(project.url))
+  }
+)

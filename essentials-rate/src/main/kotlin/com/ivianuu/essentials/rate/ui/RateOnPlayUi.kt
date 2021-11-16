@@ -66,20 +66,18 @@ data class RateOnPlayModel(
   val showNever: () -> Unit,
 )
 
-@Provide fun rateOnPlayModel(
+@Provide @Composable fun rateOnPlayModel(
   displayShowNever: DisplayShowNeverUseCase,
   rateOnPlay: RateOnPlayUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateOnPlayKey>
-): @Composable () -> RateOnPlayModel = {
-  RateOnPlayModel(
-    displayShowNever = produceValue(false) { displayShowNever() },
-    rate = action {
-      rateOnPlay()
-      ctx.navigator.pop(ctx.key)
-    },
-    showLater = action(showLater),
-    showNever = action(showNever)
-  )
-}
+) = RateOnPlayModel(
+  displayShowNever = produceValue(false) { displayShowNever() },
+  rate = action {
+    rateOnPlay()
+    ctx.navigator.pop(ctx.key)
+  },
+  showLater = action(showLater),
+  showNever = action(showNever)
+)

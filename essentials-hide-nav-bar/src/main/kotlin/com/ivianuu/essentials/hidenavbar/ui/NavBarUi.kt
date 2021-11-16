@@ -74,14 +74,14 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-@Provide fun navBarModel(
+@Provide @Composable fun navBarModel(
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
   RP: ResourceProvider,
   ctx: KeyUiContext<NavBarKey>
-): @Composable () -> NavBarModel = {
+): NavBarModel {
   val prefs = valueFromFlow(NavBarPrefs()) { pref.data }
-  NavBarModel(
+  return NavBarModel(
     hideNavBar = prefs.hideNavBar,
     navBarRotationMode = prefs.navBarRotationMode,
     updateHideNavBar = action { value ->

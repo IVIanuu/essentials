@@ -84,15 +84,12 @@ data class AppPickerModel(
     .map { it.filter(appPredicate) }
 }
 
-@Provide fun appPickerModel(
+@Provide @Composable fun appPickerModel(
   appRepository: AppRepository,
   ctx: KeyUiContext<AppPickerKey>
-): @Composable () -> AppPickerModel = {
-  println("compose on ${Thread.currentThread().name}")
-  AppPickerModel(
-    appPredicate = ctx.key.appPredicate,
-    title = ctx.key.title,
-    allApps = resourceFromFlow { appRepository.installedApps },
-    pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
-  )
-}
+) = AppPickerModel(
+  appPredicate = ctx.key.appPredicate,
+  title = ctx.key.title,
+  allApps = resourceFromFlow { appRepository.installedApps },
+  pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
+)

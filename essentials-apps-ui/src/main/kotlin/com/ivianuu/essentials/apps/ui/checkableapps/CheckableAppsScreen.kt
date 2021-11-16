@@ -119,10 +119,10 @@ data class CheckableAppsModel(
 
 data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
-@Provide fun checkableAppsModel(
+@Provide @Composable fun checkableAppsModel(
   appRepository: AppRepository,
   params: CheckableAppsParams
-): @Composable () -> CheckableAppsModel = {
+): CheckableAppsModel {
   val checkedApps = params.checkedApps()
   val allApps = resourceFromFlow { appRepository.installedApps }
 
@@ -131,7 +131,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
     params.onCheckedAppsChanged(newCheckedApps)
   }
 
-  CheckableAppsModel(
+  return CheckableAppsModel(
     allApps = allApps,
     appPredicate = params.appPredicate,
     appBarTitle = params.appBarTitle,

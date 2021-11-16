@@ -104,12 +104,12 @@ data class SystemOverlayBlacklistModel(
   val updateDisableOnSecureScreens: (Boolean) -> Unit
 )
 
-@Provide fun systemOverlayBlacklistModel(
+@Provide @Composable fun systemOverlayBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayBlacklistKey>
-): @Composable () -> SystemOverlayBlacklistModel = {
+): SystemOverlayBlacklistModel {
   val prefs = valueFromFlow(SystemOverlayBlacklistPrefs()) { pref.data }
-  SystemOverlayBlacklistModel(
+  return SystemOverlayBlacklistModel(
     systemOverlayName = ctx.key.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,
     disableOnLockScreen = prefs.disableOnLockScreen,
