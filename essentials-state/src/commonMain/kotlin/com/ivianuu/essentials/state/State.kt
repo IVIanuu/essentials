@@ -100,8 +100,6 @@ fun <T> composedState(
   @Inject scope: CoroutineScope,
   body: @Composable () -> T
 ) {
-  if (!scope.coroutineContext.job.isActive) return
-
   val recomposer = Recomposer(scope.coroutineContext)
   val composition = Composition(UnitApplier, recomposer)
   launch(
