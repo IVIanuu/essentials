@@ -101,7 +101,12 @@ fun <T> composedState(
   body: @Composable () -> T
 ) {
   val recomposer = Recomposer(scope.coroutineContext)
-  val composition = Composition(UnitApplier, recomposer)
+  Composition(UnitApplier, recomposer).run {
+    setContent {
+      emitter(body())
+    }
+  }
+
   launch(
     context = if (scope.coroutineContext[MonotonicFrameClock] == null)
      defaultFrameClockContext() else EmptyCoroutineContext,
@@ -118,12 +123,6 @@ fun <T> composedState(
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
-    }
-  }
-
-  Snapshot.global {
-    composition.setContent {
-      emitter(body())
     }
   }
 
