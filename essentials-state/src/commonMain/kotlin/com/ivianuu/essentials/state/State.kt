@@ -101,9 +101,11 @@ fun <T> composedState(
   body: @Composable () -> T
 ) {
   val recomposer = Recomposer(scope.coroutineContext)
-  Composition(UnitApplier, recomposer).run {
-    setContent {
-      emitter(body())
+  Snapshot.global {
+    Composition(UnitApplier, recomposer).run {
+      setContent {
+        emitter(body())
+      }
     }
   }
 
