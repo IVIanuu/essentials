@@ -87,8 +87,8 @@ typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Uni
   }
 }
 
-@Tag annotation class RestoreBackUseCaseTag
-typealias RestoreBackupUseCase = @RestoreBackUseCaseTag suspend () -> Result<Unit, Throwable>
+@Tag annotation class RestoreBackupUseCaseTag
+typealias RestoreBackupUseCase = @RestoreBackupUseCaseTag suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
