@@ -22,12 +22,13 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentName
 import com.ivianuu.injekt.common.TypeKey
 
-@Provide fun <C : @Component Any> scopeLogger(
-  componentKey: TypeKey<C>,
+@Provide fun <N : ComponentName> scopeLogger(
+  componentKey: TypeKey<N>,
   L: Logger
-): ScopeWorker<C> = {
+): ScopeWorker<N> = {
   log { "${componentKey.value} created" }
   onCancel { log { "${componentKey.value} disposed" } }
 }

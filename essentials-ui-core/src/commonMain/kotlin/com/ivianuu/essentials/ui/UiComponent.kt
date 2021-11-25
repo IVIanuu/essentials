@@ -17,12 +17,11 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.ComponentName
 
-val LocalComponent = compositionLocalOf<@Component Any> { error("No component provided") }
+val LocalComponent = compositionLocalOf<Component<*>> { error("No component provided") }
 
-val LocalUiComponent = compositionLocalOf<UiComponent> { error("No ui component provided") }
+val LocalUiComponent = compositionLocalOf<Component<UiComponent>> { error("No ui component provided") }
 
-@Component interface UiComponent
+object UiComponent : ComponentName

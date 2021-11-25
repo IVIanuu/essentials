@@ -13,17 +13,16 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.dispose
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
-  private val component: ForegroundServiceComponent by lazy {
-    createServiceComponent().entryPoint()
+  private val component by lazy {
+    createServiceComponent().element<ForegroundServiceComponent>()
   }
   @Provide val logger get() = component.logger
 
@@ -49,7 +48,7 @@ class ForegroundService : Service() {
 
   override fun onDestroy() {
     log { "stop foreground service" }
-    component.dispose()
+    component.component.dispose()
     super.onDestroy()
   }
 
@@ -82,9 +81,10 @@ class ForegroundService : Service() {
   override fun onBind(intent: Intent?): IBinder? = null
 }
 
-@EntryPoint<ServiceComponent> interface ForegroundServiceComponent {
-  val foregroundManager: ForegroundManagerImpl
-  val notificationManager: @SystemService NotificationManager
-  val logger: Logger
-  val scope: ComponentScope<ServiceComponent>
-}
+@Provide @ComponentElement<ServiceComponent> data class ForegroundServiceComponent(
+  val foregroundManager: ForegroundManagerImpl,
+  val notificationManager: @SystemService NotificationManager,
+  val logger: Logger,
+  val scope: ComponentScope<ServiceComponent>,
+  val component: Component<ServiceComponent>
+)

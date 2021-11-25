@@ -16,12 +16,13 @@
 
 package com.ivianuu.essentials.notificationlistener
 
+import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.ComponentName
 
-@Component interface NotificationComponent
-
-@EntryPoint<ServiceComponent> interface NotificationComponentFactory {
-  fun notificationComponent(): NotificationComponent
+object NotificationComponent : ComponentName {
+  @Provide @ComponentElement<ServiceComponent>
+  data class Factory(val create: () -> Component<NotificationComponent>)
 }

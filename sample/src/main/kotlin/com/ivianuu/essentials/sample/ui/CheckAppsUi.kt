@@ -78,7 +78,7 @@ object CheckAppsKey : Key<Unit>
 
 @Tag private annotation class CheckApps
 
-@Provide @Scoped<AppComponent> fun checkAppsDb(context: AppContext): @CheckApps Db = AndroidDb(
+@Provide fun checkAppsDb(context: AppContext): @Scoped<AppComponent> @CheckApps Db = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

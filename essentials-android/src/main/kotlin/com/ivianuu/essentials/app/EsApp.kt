@@ -19,13 +19,14 @@ package com.ivianuu.essentials.app
 import android.app.Application
 import com.ivianuu.injekt.android.AppComponentOwner
 import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Component
 
 abstract class EsApp : Application(), AppComponentOwner {
-  override lateinit var appComponent: AppComponent
+  override lateinit var appComponent: Component<AppComponent>
   override fun onCreate() {
     appComponent = buildAppComponent()
     super.onCreate()
   }
 
-  protected abstract fun buildAppComponent(): AppComponent
+  protected abstract fun buildAppComponent(): Component<AppComponent>
 }

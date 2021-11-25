@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -41,11 +41,11 @@ import kotlinx.coroutines.flow.transformLatest
 
 @JvmInline value class KeyboardVisible(val value: Boolean)
 
-@Provide @Scoped<AppComponent>(eager = true) fun keyboardVisible(
+@Provide fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
   keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
   scope: ComponentScope<AppComponent>
-): Flow<KeyboardVisible> = accessibilityEvents
+): @Eager<AppComponent> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&
         it.className == "android.inputmethodservice.SoftInputWindow"

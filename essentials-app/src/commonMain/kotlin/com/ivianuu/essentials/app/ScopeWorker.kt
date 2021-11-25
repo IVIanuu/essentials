@@ -22,26 +22,26 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentName
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-@Tag annotation class ScopeWorkerTag<C>
-typealias ScopeWorker<C> = @ScopeWorkerTag<C> suspend () -> Unit
+@Tag annotation class ScopeWorkerTag<N : ComponentName>
+typealias ScopeWorker<N> = @ScopeWorkerTag<N> suspend () -> Unit
 
-@Provide fun <C : @Component Any> defaultScopeWorkers() =
-  emptyList<ScopeWorker<C>>()
+@Provide fun <N : ComponentName> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
 
-@Tag annotation class ScopeWorkerRunnerTag<C>
-typealias ScopeWorkerRunner<C> = @ScopeWorkerRunnerTag<C> () -> Unit
+@Tag annotation class ScopeWorkerRunnerTag<N : ComponentName>
+typealias ScopeWorkerRunner<N> = @ScopeWorkerRunnerTag<N> () -> Unit
 
-@Provide fun <C : @Component Any> scopeWorkerRunner(
-  scope: ComponentScope<C>,
-  scopeKey: TypeKey<C>,
-  workers: () -> List<ScopeWorker<C>>,
+@Provide fun <N : ComponentName> scopeWorkerRunner(
+  scope: ComponentScope<N>,
+  scopeKey: TypeKey<N>,
+  workers: () -> List<ScopeWorker<N>>,
   L: Logger
-): ScopeWorkerRunner<C> = {
+): ScopeWorkerRunner<N> = {
   log { "${scopeKey.value} run scope workers" }
   scope.launch {
     guarantee(

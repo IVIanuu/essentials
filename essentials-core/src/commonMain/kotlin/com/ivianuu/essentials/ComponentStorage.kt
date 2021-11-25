@@ -2,29 +2,19 @@ package com.ivianuu.essentials
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentObserver
+import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.ComponentName
 import com.ivianuu.injekt.common.Disposable
-import com.ivianuu.injekt.common.EntryPoint
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.entryPoint
-import com.ivianuu.injekt.common.synchronized
 
-interface ComponentStorage<C : @Component Any> {
+interface ComponentStorage<N : ComponentName> {
   operator fun <T> get(key: Any): T?
 
   operator fun <T> set(key: Any, value: T)
 
   fun remove(key: Any)
 }
-
-@EntryPoint<C> interface ComponentStorageComponent<C : @Component Any> {
-  val componentStorage: ComponentStorage<C>
-}
-
-val <C : @Component Any> C.storage: ComponentStorage<C>
-  get() = entryPoint<ComponentStorageComponent<C>>().componentStorage
 
 inline fun <T> ComponentStorage<*>.scoped(key: Any, computation: () -> T): T {
   synchronized(this) {
@@ -50,15 +40,14 @@ inline fun <T> ComponentStorage<*>.scoped(
       (holder.value as? Disposable)?.dispose()
       holder.value = computation()
       holder.args = args
-      (holder.value as? ComponentObserver<*>)?.init()
     }
   }
 
   return holder.value as T
 }
 
-@Provide @Scoped<C>
-class ComponentStorageImpl<C : @Component Any> : ComponentStorage<C>, Disposable {
+@Provide @ComponentElement<N> @Scoped<N>
+class ComponentStorageImpl<N : ComponentName> : ComponentStorage<N>, Disposable {
   private val values = mutableMapOf<Any, Any?>()
 
   override operator fun <T> get(key: Any): T? = values[key] as? T

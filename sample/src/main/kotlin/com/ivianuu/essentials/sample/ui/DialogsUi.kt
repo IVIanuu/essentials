@@ -56,8 +56,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.launch
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
@@ -260,7 +259,7 @@ object DialogsKey : Key<Unit>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = LocalUiComponent.current.entryPoint<DialogLauncherComponent>()
+  val component = LocalUiComponent.current.element<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -281,7 +280,7 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = LocalUiComponent.current.entryPoint<DialogLauncherComponent>()
+  val component = LocalUiComponent.current.element<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {
@@ -309,6 +308,5 @@ data class DialogLauncherKey(
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 
-@EntryPoint<UiComponent> interface DialogLauncherComponent {
-  val navigator: Navigator
-}
+@Provide @ComponentElement<UiComponent>
+data class DialogLauncherComponent(val navigator: Navigator)

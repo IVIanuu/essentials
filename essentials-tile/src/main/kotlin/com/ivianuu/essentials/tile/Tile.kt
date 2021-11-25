@@ -22,7 +22,8 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.EntryPoint
+import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.ComponentName
 import kotlin.reflect.KClass
 
 data class TileModel<out T : AbstractFunTileService<*>>(
@@ -52,10 +53,9 @@ class TileModuleElementModule<@com.ivianuu.injekt.Spread T : @Composable () -> T
   @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 }
 
-@Component interface TileComponent
-
-@EntryPoint<ServiceComponent> interface TileComponentFactory {
-  fun tileComponent(tileId: TileId): TileComponent
+object TileComponent : ComponentName {
+  @Provide @ComponentElement<ServiceComponent>
+  data class Factory(val create: (TileId) -> Component<TileComponent>)
 }
 
 @JvmInline value class TileId(val clazz: KClass<*>)

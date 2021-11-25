@@ -9,10 +9,11 @@ import com.ivianuu.essentials.xposed.createXposedAppComponent
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Providers
+import com.ivianuu.injekt.common.Component
 
 class SampleXposedApp : EsXposedApp() {
   @Providers(".**")
-  override fun buildAppComponent(@Inject context: XposedContext): XposedAppComponent {
+  override fun buildAppComponent(@Inject context: XposedContext): Component<XposedAppComponent> {
     @Provide val logTag = XposedLogTag("EssentialsSample")
     @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")
     return createXposedAppComponent()

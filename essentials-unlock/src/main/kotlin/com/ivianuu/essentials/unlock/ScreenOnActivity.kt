@@ -14,9 +14,9 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.android.appComponent
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
@@ -34,7 +34,7 @@ class ScreenOnActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component = activityComponent.entryPoint<ScreenOnActivityComponent>()
+    @Provide val component = application.appComponent.element<ScreenOnActivityComponent>()
 
     log(logger = component.logger) { "turn screen on for $requestId" }
 
@@ -76,7 +76,8 @@ class ScreenOnActivity : ComponentActivity() {
   }
 }
 
-@EntryPoint<ActivityComponent> interface ScreenOnActivityComponent {
-  val logger: Logger
+@Provide @ComponentElement<AppComponent>
+data class ScreenOnActivityComponent(
+  val logger: Logger,
   val powerManager: @SystemService PowerManager
-}
+)

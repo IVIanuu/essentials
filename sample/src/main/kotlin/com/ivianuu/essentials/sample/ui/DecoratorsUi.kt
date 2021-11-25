@@ -19,9 +19,11 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.ComponentElement
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey }
 
@@ -41,7 +43,8 @@ object SampleListDecorator
 
 @Provide val sampleListDecorator: ListDecorator<SampleListDecorator> = {
   item(null) {
-    val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
+    val key = catch { LocalKeyUiComponent.current }.getOrNull()
+      ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -49,7 +52,8 @@ object SampleListDecorator
   content()
 
   item(null) {
-    val key = catch { LocalKeyUiComponent.current }.getOrNull()?.key
+    val key = catch { LocalKeyUiComponent.current }.getOrNull()
+      ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -58,7 +62,7 @@ object SampleListDecorator
 object SampleKeyUiDecorator
 
 @Provide val sampleKeyUiDecorator: KeyUiDecorator<SampleKeyUiDecorator> = decorator@ { content ->
-  val key = LocalKeyUiComponent.current.key
+  val key = LocalKeyUiComponent.current.element<SampleDecoratorComponent>().key
   if (key !is DecoratorsKey) {
     content()
     return@decorator
@@ -88,3 +92,6 @@ object SampleKeyUiDecorator
     }
   }
 }
+
+@Provide @ComponentElement<KeyUiComponent>
+data class SampleDecoratorComponent(val key: Key<*>)

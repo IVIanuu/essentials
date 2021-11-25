@@ -37,9 +37,8 @@ import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.dispose
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlin.reflect.KClass
 
@@ -48,7 +47,7 @@ typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modif
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
-  keyUiComponentFactory: KeyUiComponentFactory,
+  keyUiComponentFactory: KeyUiComponent.Factory,
   rootKey: RootKey? = null,
   S: ComponentScope<AppComponent>
 ): NavigationStateContent = { modifier ->
@@ -78,14 +77,15 @@ typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modif
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-@EntryPoint<KeyUiComponent> interface NavigationContentComponent {
-  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
-  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>
+@Provide @ComponentElement<KeyUiComponent>
+data class NavigationContentComponent(
+  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
+  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val decorateUi: DecorateKeyUi
-}
+)
 
 private class NavigationContentState(
-  var keyUiComponentFactory: KeyUiComponentFactory,
+  var keyUiComponentFactory: KeyUiComponent.Factory,
   initialBackStack: List<Key<*>>
 ) {
   private var children by mutableStateOf(emptyList<Child>())
@@ -108,8 +108,8 @@ private class NavigationContentState(
   @Suppress("UNCHECKED_CAST")
   private fun getOrCreateEntry(key: Key<*>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
-    val keyUiComponent = keyUiComponentFactory.keyUiComponent(key)
-    val navigationContentComponent = keyUiComponent.entryPoint<NavigationContentComponent>()
+    val keyUiComponent = keyUiComponentFactory.create(key)
+    val navigationContentComponent = keyUiComponent.element<NavigationContentComponent>()
     val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
     checkNotNull(content) { "No ui factory found for $key" }
     val decoratedContent: @Composable () -> Unit = { navigationContentComponent.decorateUi(content) }
@@ -121,7 +121,7 @@ private class NavigationContentState(
     val key: Key<*>,
     options: KeyUiOptions? = null,
     val content: @Composable () -> Unit,
-    val component: KeyUiComponent
+    val component: Component<KeyUiComponent>
   ) {
     val stackChild = AnimatedStackChild(
       key = key,

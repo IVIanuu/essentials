@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.launch
 
 @Composable fun PopupMenuButton(
@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = LocalUiComponent.current.entryPoint<PopupMenuButtonComponent>()
+  val component = LocalUiComponent.current.element<PopupMenuButtonComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
@@ -94,6 +94,5 @@ import kotlinx.coroutines.launch
     }
 }
 
-@EntryPoint<UiComponent> interface PopupMenuButtonComponent {
-  val navigator: Navigator
-}
+@Provide @ComponentElement<UiComponent>
+data class PopupMenuButtonComponent(val navigator: Navigator)

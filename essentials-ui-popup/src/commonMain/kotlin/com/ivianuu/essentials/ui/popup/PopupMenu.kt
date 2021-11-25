@@ -32,8 +32,8 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.launch
 
 object PopupMenu {
@@ -46,7 +46,7 @@ object PopupMenu {
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
     Column {
-      val component = LocalKeyUiComponent.current.entryPoint<PopupMenuComponent>()
+      val component = LocalKeyUiComponent.current.element<PopupMenuComponent>()
       val scope = rememberCoroutineScope()
       items.forEach { item ->
         key(item) {
@@ -63,10 +63,8 @@ object PopupMenu {
   }
 }
 
-@EntryPoint<KeyUiComponent> interface PopupMenuComponent {
-  val key: Key<*>
-  val navigator: Navigator
-}
+@Provide @ComponentElement<KeyUiComponent>
+data class PopupMenuComponent(val key: Key<*>, val navigator: Navigator)
 
 @Composable private fun PopupMenuItem(
   onSelected: () -> Unit,

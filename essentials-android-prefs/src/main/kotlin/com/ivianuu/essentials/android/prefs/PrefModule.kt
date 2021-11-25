@@ -34,13 +34,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
-  @Provide @Scoped<AppComponent> fun dataStore(
+  @Provide fun dataStore(
     prefsDataStore: DataStore<Map<String, String?>>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     scope: ComponentScope<AppComponent>
-  ): DataStore<T> {
+  ): @Scoped<AppComponent> DataStore<T> {
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
 

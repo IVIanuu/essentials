@@ -23,40 +23,38 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 object ScreenAdBanner
 
-@Provide @Scoped<KeyUiComponent> fun adBannerKeyUiDecorator(
+@Provide fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   showAds: State<ShowAds>,
   key: Key<*>
-): KeyUiDecorator<ScreenAdBanner> {
-  return (decorator@ { content ->
-    if (config == null) {
-      content()
-      return@decorator
+): @Scoped<KeyUiComponent> KeyUiDecorator<ScreenAdBanner> = decorator@ { content ->
+  if (config == null) {
+    content()
+    return@decorator
+  }
+
+  if (!isFeatureEnabled(key::class, ScreenAdBannerFeature)) {
+    content()
+    return@decorator
+  }
+
+  Column {
+    Box(modifier = Modifier.weight(1f)) {
+      val currentInsets = LocalInsets.current
+      CompositionLocalProvider(
+        LocalInsets provides if (showAds.value.value) currentInsets
+        else currentInsets.copy(bottom = 0.dp),
+        content = content
+      )
     }
 
-    if (!isFeatureEnabled(key::class, ScreenAdBannerFeature)) {
-      content()
-      return@decorator
-    }
-
-    Column {
-      Box(modifier = Modifier.weight(1f)) {
-        val currentInsets = LocalInsets.current
-        CompositionLocalProvider(
-          LocalInsets provides if (showAds.value.value) currentInsets
-          else currentInsets.copy(bottom = 0.dp),
-          content = content
-        )
-      }
-
-      if (showAds.value.value) {
-        Surface(elevation = 8.dp) {
-          InsetsPadding(top = false) {
-            AdBanner(config)
-          }
+    if (showAds.value.value) {
+      Surface(elevation = 8.dp) {
+        InsetsPadding(top = false) {
+          AdBanner(config)
         }
       }
     }
-  })
+  }
 }

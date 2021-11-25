@@ -13,7 +13,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -47,7 +47,7 @@ fun switchToApp(
   }
 }
 
-@Provide @Scoped<AppComponent>(eager = true) class AppSwitchManager(
+@Provide @Eager<AppComponent> class AppSwitchManager(
   accessibilityEvents: Flow<AccessibilityEvent>,
   private val packageManager: PackageManager,
   scope: ComponentScope<AppComponent>,

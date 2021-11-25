@@ -32,9 +32,9 @@ import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.android.appComponent
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -57,7 +57,7 @@ class UnlockScreenActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component = activityComponent.entryPoint<UnlockScreenComponent>()
+    @Provide val component = application.appComponent.element<UnlockScreenComponent>()
 
     log(logger = component.logger) { "unlock screen for $requestId" }
 
@@ -140,9 +140,10 @@ class UnlockScreenActivity : ComponentActivity() {
   }
 }
 
-@EntryPoint<ActivityComponent> interface UnlockScreenComponent {
-  val broadcastsFactory: BroadcastsFactory
-  val keyguardManager: @SystemService KeyguardManager
-  val logger: Logger
+@Provide @ComponentElement<AppComponent>
+data class UnlockScreenComponent(
+  val broadcastsFactory: BroadcastsFactory,
+  val keyguardManager: @SystemService KeyguardManager,
+  val logger: Logger,
   val systemBuildInfo: SystemBuildInfo
-}
+)
