@@ -63,7 +63,7 @@ object NavBarKey : Key<Unit>
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
   S: ComponentScope<KeyUiComponent>
-): KeyUi<NavBarKey> = {
+) = KeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
   ) {

@@ -78,10 +78,10 @@ interface PremiumVersionManager {
     isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
       combine(oldPremiumVersionSkus.map { isPurchased(it) }) {
-        it.any { it }
+        it.any { it.value }
       }
     else flowOf(false)
-  ) { a, b -> a || b }
+  ) { a, b -> a.value || b }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
   override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)

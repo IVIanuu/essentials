@@ -36,6 +36,6 @@ import com.ivianuu.injekt.android.SystemService
 
 @Provide fun inputMethodActionExecutor(
   inputMethodManager: @SystemService InputMethodManager
-): ActionExecutor<InputMethodActionId> = {
+) = ActionExecutor<InputMethodActionId> {
   inputMethodManager.showInputMethodPicker()
 }

@@ -30,9 +30,8 @@ data class KeyUiOptions(
   ) : this(transition, transition, opaque)
 }
 
-@Tag annotation class KeyUiOptionsFactoryTag
-typealias KeyUiOptionsFactory<K> = @KeyUiOptionsFactoryTag (K) -> KeyUiOptions
+fun interface KeyUiOptionsFactory<K : Key<*>> : (K) -> KeyUiOptions
 
-fun <K> noOpKeyUiOptionFactory(): KeyUiOptionsFactory<K> = { defaultKeyUiOptions }
+fun <K : Key<*>> noOpKeyUiOptionFactory() = KeyUiOptionsFactory<K> { defaultKeyUiOptions }
 
 private val defaultKeyUiOptions = KeyUiOptions()

@@ -25,11 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 
-@Provide actual val windowInsetsProvider: UiDecorator<WindowInsetsProvider> = { content ->
+@Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->
   val ownerView = LocalView.current
   val density = LocalDensity.current
   var insets by remember { mutableStateOf(Insets()) }

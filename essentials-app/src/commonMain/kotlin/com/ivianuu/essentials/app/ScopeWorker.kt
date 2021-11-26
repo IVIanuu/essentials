@@ -28,20 +28,18 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-@Tag annotation class ScopeWorkerTag<N : ComponentName>
-typealias ScopeWorker<N> = @ScopeWorkerTag<N> suspend () -> Unit
+fun interface ScopeWorker<N : ComponentName> : suspend () -> Unit
 
 @Provide fun <N : ComponentName> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
 
-@Tag annotation class ScopeWorkerRunnerTag<N : ComponentName>
-typealias ScopeWorkerRunner<N> = @ScopeWorkerRunnerTag<N> () -> Unit
+fun interface ScopeWorkerRunner<N : ComponentName> : () -> Unit
 
 @Provide fun <N : ComponentName> scopeWorkerRunner(
   scope: ComponentScope<N>,
   scopeKey: TypeKey<N>,
   workers: () -> List<ScopeWorker<N>>,
   L: Logger
-): ScopeWorkerRunner<N> = {
+) = ScopeWorkerRunner<N> {
   log { "${scopeKey.value} run scope workers" }
   scope.launch {
     guarantee(

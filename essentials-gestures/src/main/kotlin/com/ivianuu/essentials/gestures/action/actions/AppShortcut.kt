@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.first
 
     val appShortcut = appShortcutRepository.appShortcut(packageName, shortcutId).first()!!
 
-    return {
+    return ActionExecutor<ActionId> {
       actionIntentSender(
         appShortcut.intent,
         isFloating.toBoolean(),

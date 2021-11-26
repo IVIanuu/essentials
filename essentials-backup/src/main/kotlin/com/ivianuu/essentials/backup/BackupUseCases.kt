@@ -30,7 +30,6 @@ import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
@@ -40,8 +39,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-@Tag annotation class CreateBackupUseCaseTag
-typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Unit, Throwable>
+fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
   backupDir: BackupDir,
@@ -52,7 +50,7 @@ typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Uni
   navigator: Navigator,
   scope: ComponentScope<AppComponent>,
   L: Logger
-): CreateBackupUseCase = {
+) = CreateBackupUseCase {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
@@ -87,8 +85,7 @@ typealias CreateBackupUseCase = @CreateBackupUseCaseTag suspend () -> Result<Uni
   }
 }
 
-@Tag annotation class RestoreBackupUseCaseTag
-typealias RestoreBackupUseCase = @RestoreBackupUseCaseTag suspend () -> Result<Unit, Throwable>
+fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
@@ -98,7 +95,7 @@ typealias RestoreBackupUseCase = @RestoreBackupUseCaseTag suspend () -> Result<U
   processRestarter: ProcessRestarter,
   scope: ComponentScope<AppComponent>,
   L: Logger
-): RestoreBackupUseCase = {
+) = RestoreBackupUseCase {
   catch {
     withContext(scope.coroutineContext + dispatcher) {
       val uri = navigator.push(

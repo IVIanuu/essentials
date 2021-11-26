@@ -62,11 +62,9 @@ interface Permission {
   ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 }
 
-@Tag annotation class PermissionStateProviderTag
-typealias PermissionStateProvider<P> = @PermissionStateProviderTag suspend (P) -> Boolean
+fun interface PermissionStateProvider<P : Permission> : suspend (P) -> Boolean
 
-@Tag annotation class PermissionRequestHandlerTag
-typealias PermissionRequestHandler<P> = @PermissionRequestHandlerTag suspend (P) -> Unit
+fun interface PermissionRequestHandler<P : Permission> : suspend (P) -> Unit
 
 @Tag annotation class PermissionStateTag<P>
 typealias PermissionState<P> = @PermissionStateTag<P> Boolean
@@ -83,13 +81,11 @@ typealias PermissionState<P> = @PermissionStateTag<P> Boolean
     }
   }
 
-@Tag annotation class PermissionStateFactoryTag
-typealias PermissionStateFactory =
-    @PermissionStateFactoryTag (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
+fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
 @Provide fun permissionStateFactory(
   permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>> = { emptyMap() }
-): PermissionStateFactory = { permissions ->
+) = PermissionStateFactory { permissions ->
   if (permissions.isEmpty()) flowOf(true)
   else combine(
     *permissions
@@ -100,17 +96,16 @@ typealias PermissionStateFactory =
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
-@Provide fun permissionRefreshesWorker(): ScopeWorker<UiComponent> = {
+@Provide fun permissionRefreshesWorker() = ScopeWorker<UiComponent> {
   permissionRefreshes.emit(Unit)
 }
 
-private fun <P> PermissionRequestHandler<P>.intercept(): PermissionRequestHandler<P> = {
+private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
   this(it)
   permissionRefreshes.emit(Unit)
 }
 
-@Tag annotation class PermissionRequesterTag
-typealias PermissionRequester = @PermissionRequesterTag suspend (List<TypeKey<Permission>>) -> Boolean
+fun interface PermissionRequester : suspend (List<TypeKey<Permission>>) -> Boolean
 
 @Provide fun permissionRequester(
   appUiStarter: AppUiStarter,
@@ -118,7 +113,7 @@ typealias PermissionRequester = @PermissionRequesterTag suspend (List<TypeKey<Pe
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   L: Logger
-): PermissionRequester = { requestedPermissions ->
+) = PermissionRequester { requestedPermissions ->
   withContext(dispatcher) {
     log { "request permissions $requestedPermissions" }
 

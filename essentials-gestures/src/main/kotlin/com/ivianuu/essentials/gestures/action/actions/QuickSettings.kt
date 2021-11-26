@@ -55,7 +55,7 @@ fun quickSettingsActionExecutor(
   globalActionExecutor: GlobalActionExecutor,
   service: State<EsAccessibilityService?>,
   systemBuildInfo: SystemBuildInfo
-): ActionExecutor<QuickSettingsActionId> = {
+) = ActionExecutor<QuickSettingsActionId> {
   val targetState = if (systemBuildInfo.sdk < 28) true else catch {
     val service = service.value!!
 

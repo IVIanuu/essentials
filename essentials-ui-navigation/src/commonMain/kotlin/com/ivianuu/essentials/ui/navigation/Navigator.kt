@@ -69,7 +69,7 @@ interface Navigator {
       results.clear()
 
       @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
+      if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
         backStack = listOf(key)
         results[key] = result.cast()
       }
@@ -88,7 +88,7 @@ interface Navigator {
         ?.complete(null)
 
       @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.none { it(key) { result.complete(it as R) } }) {
+      if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
         backStack = backStack
           .filter { it != key }
           .plus(key)
@@ -110,7 +110,7 @@ interface Navigator {
         ?.complete(null)
 
       @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.any { it(key) { result.complete(it as R) } }) {
+      if (keyHandlers.any { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
         backStack = backStack.dropLast(1)
         results.remove(key)
       } else {

@@ -28,14 +28,13 @@ import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 
-@Tag annotation class ToasterTag
-typealias Toaster = @ToasterTag (String) -> Unit
+fun interface Toaster : (String) -> Unit
 
 @Provide fun toaster(
   context: AppContext,
   mainDispatcher: MainDispatcher,
   scope: ComponentScope<AppComponent>
-): Toaster = { message ->
+) = Toaster { message ->
   launch(mainDispatcher) {
     Toast.makeText(
       context,

@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onStart
   enabled = BluetoothAdapter.getDefaultAdapter() != null
 )
 
-@Provide val bluetoothActionExecutor: ActionExecutor<BluetoothActionId> = {
+@Provide val bluetoothActionExecutor = ActionExecutor<BluetoothActionId> {
   BluetoothAdapter.getDefaultAdapter()?.let {
     if (it.isEnabled) {
       it.disable()
@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.onStart
   }
 }
 
-private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory): ActionIcon = {
+private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory) = ActionIcon {
   val bluetoothEnabled = valueFromFlow(true) {
     broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
       .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }

@@ -29,19 +29,18 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-@Provide fun <@Spread T : UiDecorator<K>, K> uiDecoratorElement(
+@Provide fun <@Spread T : UiDecorator> uiDecoratorElement(
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-): UiDecoratorElement = UiDecoratorElement(key, instance as UiDecorator<*>, loadingOrder.cast())
+) = UiDecoratorElement(key, instance, loadingOrder.cast())
 
-@Tag annotation class UiDecoratorTag<K>
-typealias UiDecorator<K> = @UiDecoratorTag<K> @Composable (@Composable () -> Unit) -> Unit
+fun interface UiDecorator : @Composable (@Composable () -> Unit) -> Unit
 
 data class UiDecoratorElement(
-  val key: TypeKey<UiDecorator<*>>,
-  val decorator: UiDecorator<*>,
-  val loadingOrder: LoadingOrder<UiDecorator<*>>
+  val key: TypeKey<UiDecorator>,
+  val decorator: UiDecorator,
+  val loadingOrder: LoadingOrder<UiDecorator>
 ) {
   companion object {
     @Provide val treeDescriptor = object : LoadingOrder.Descriptor<UiDecoratorElement> {
@@ -53,13 +52,12 @@ data class UiDecoratorElement(
   }
 }
 
-@Tag annotation class DecorateUiTag
-typealias DecorateUi = @DecorateUiTag @Composable (@Composable () -> Unit) -> Unit
+fun interface DecorateUi : @Composable (@Composable () -> Unit) -> Unit
 
 @Provide fun decorateUi(
   elements: List<UiDecoratorElement>,
   L: Logger
-): DecorateUi = { content ->
+) = DecorateUi { content ->
   remember {
     elements
       .sortedWithLoadingOrder()
@@ -73,7 +71,7 @@ typealias DecorateUi = @DecorateUiTag @Composable (@Composable () -> Unit) -> Un
   }.invoke()
 }
 
-object AppTheme
+fun interface AppTheme : UiDecorator
 
-@Provide val appThemeConfig = LoadingOrder<UiDecorator<AppTheme>>()
-  .after<UiDecorator<SystemBarManagerProvider>>()
+@Provide val appThemeConfig = LoadingOrder<AppTheme>()
+  .after<SystemBarManagerProvider>()

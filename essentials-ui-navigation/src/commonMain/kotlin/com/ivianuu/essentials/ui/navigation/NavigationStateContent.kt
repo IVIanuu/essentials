@@ -42,15 +42,14 @@ import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlin.reflect.KClass
 
-@Tag annotation class NavigationStateContentTag
-typealias NavigationStateContent = @NavigationStateContentTag @Composable (Modifier) -> Unit
+fun interface NavigationStateContent : @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
   keyUiComponentFactory: KeyUiComponent.Factory,
   rootKey: RootKey? = null,
   S: ComponentScope<AppComponent>
-): NavigationStateContent = { modifier ->
+) = NavigationStateContent { modifier ->
   val contentState = remember {
     NavigationContentState(keyUiComponentFactory, navigator.backStack)
   }
@@ -112,7 +111,11 @@ private class NavigationContentState(
     val navigationContentComponent = keyUiComponent.element<NavigationContentComponent>()
     val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
     checkNotNull(content) { "No ui factory found for $key" }
-    val decoratedContent: @Composable () -> Unit = { navigationContentComponent.decorateUi(content) }
+    val decoratedContent: @Composable () -> Unit = {
+      navigationContentComponent.decorateUi {
+        content()
+      }
+    }
     val options = navigationContentComponent.optionFactories[key::class]?.invoke(key)
     return Child(key, options, decoratedContent, keyUiComponent)
   }

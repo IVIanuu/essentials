@@ -37,7 +37,7 @@ import org.json.JSONObject
   Donation(Sku("movie", Sku.Type.IN_APP), R.drawable.es_ic_popcorn)
 )
 
-@Provide val sampleGetSkuDetailsUseCase: GetSkuDetailsUseCase = {
+@Provide val sampleGetSkuDetailsUseCase = GetSkuDetailsUseCase {
   delay(2000)
   when (it.skuString) {
     "crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
@@ -48,12 +48,12 @@ import org.json.JSONObject
   }
 }
 
-@Provide val samplePurchaseUseCase: PurchaseUseCase = { _, _, _ ->
+@Provide val samplePurchaseUseCase = PurchaseUseCase { _, _, _ ->
   delay(3000)
   true
 }
 
-@Provide val sampleConsumePurchaseUseCase: ConsumePurchaseUseCase = { true }
+@Provide val sampleConsumePurchaseUseCase = ConsumePurchaseUseCase { true }
 
 private fun SkuDetails(
   sku: Sku,

@@ -31,7 +31,6 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -41,10 +40,9 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-@Tag annotation class GetSkuDetailsUseCaseTag
-typealias GetSkuDetailsUseCase = @GetSkuDetailsUseCaseTag suspend (Sku) -> SkuDetails?
+fun interface GetSkuDetailsUseCase : suspend (Sku) -> SkuDetails?
 
-@Provide fun getSkuDetailsUseCase(context: BillingContext): GetSkuDetailsUseCase = { sku ->
+@Provide fun getSkuDetailsUseCase(context: BillingContext) = GetSkuDetailsUseCase { sku ->
   context.withConnection {
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
@@ -53,8 +51,7 @@ typealias GetSkuDetailsUseCase = @GetSkuDetailsUseCaseTag suspend (Sku) -> SkuDe
   }
 }
 
-@Tag annotation class PurchaseUseCaseTag
-typealias PurchaseUseCase = @PurchaseUseCaseTag suspend (Sku, Boolean, Boolean) -> Boolean
+fun interface PurchaseUseCase : suspend (Sku, Boolean, Boolean) -> Boolean
 
 @Provide fun purchaseUseCase(
   acknowledgePurchase: AcknowledgePurchaseUseCase,
@@ -62,7 +59,7 @@ typealias PurchaseUseCase = @PurchaseUseCaseTag suspend (Sku, Boolean, Boolean) 
   context: BillingContext,
   consumePurchase: ConsumePurchaseUseCase,
   getSkuDetails: GetSkuDetailsUseCase
-): PurchaseUseCase = { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
+) = PurchaseUseCase { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
   context.withConnection {
     log {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
@@ -98,10 +95,9 @@ typealias PurchaseUseCase = @PurchaseUseCaseTag suspend (Sku, Boolean, Boolean) 
   } ?: false
 }
 
-@Tag annotation class ConsumePurchaseUseCaseTag
-typealias ConsumePurchaseUseCase = @ConsumePurchaseUseCaseTag suspend (Sku) -> Boolean
+fun interface ConsumePurchaseUseCase : suspend (Sku) -> Boolean
 
-@Provide fun consumePurchaseUseCase(context: BillingContext): ConsumePurchaseUseCase = { sku ->
+@Provide fun consumePurchaseUseCase(context: BillingContext) = ConsumePurchaseUseCase { sku ->
   context.withConnection {
     val purchase = getPurchase(sku) ?: return@withConnection false
 
@@ -116,40 +112,37 @@ typealias ConsumePurchaseUseCase = @ConsumePurchaseUseCaseTag suspend (Sku) -> B
     }
 
     val success = result.billingResult.responseCode == BillingClient.BillingResponseCode.OK
-    if (success) refreshes.emit(Unit)
+    if (success) refreshes.emit(BillingRefresh)
     return@withConnection success
   } ?: false
 }
 
-@Tag annotation class AcknowledgePurchaseUseCaseTag
-typealias AcknowledgePurchaseUseCase = @AcknowledgePurchaseUseCaseTag suspend (Sku) -> Boolean
+fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
 
-@Provide fun acknowledgePurchaseUseCase(context: BillingContext): AcknowledgePurchaseUseCase =
-  { sku ->
-    context.withConnection {
-      val purchase = getPurchase(sku)
-        ?: return@withConnection false
+@Provide fun acknowledgePurchaseUseCase(context: BillingContext) = AcknowledgePurchaseUseCase { sku ->
+  context.withConnection {
+    val purchase = getPurchase(sku)
+      ?: return@withConnection false
 
-      if (purchase.isAcknowledged) return@withConnection true
+    if (purchase.isAcknowledged) return@withConnection true
 
-      val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
-        .setPurchaseToken(purchase.purchaseToken)
-        .build()
+    val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
+      .setPurchaseToken(purchase.purchaseToken)
+      .build()
 
-      val result = billingClient.acknowledgePurchase(acknowledgeParams)
+    val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-      log {
-        "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
-      }
+    log {
+      "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
+    }
 
-      val success = result.responseCode == BillingClient.BillingResponseCode.OK
-      if (success) refreshes.emit(Unit)
-      return@withConnection success
-    } ?: false
-  }
+    val success = result.responseCode == BillingClient.BillingResponseCode.OK
+    if (success) refreshes.emit(BillingRefresh)
+    return@withConnection success
+  } ?: false
+}
 
-@Tag annotation class IsPurchasedTag
-typealias IsPurchased = @IsPurchasedTag Boolean
+@JvmInline value class IsPurchased(val value: Boolean)
 
 @Provide fun isPurchased(
   appForegroundState: @Composable () -> AppForegroundState,
@@ -163,8 +156,8 @@ typealias IsPurchased = @IsPurchasedTag Boolean
   .onStart { emit(Unit) }
   .map {
     context.withConnection {
-      getIsPurchased(sku)
-    } ?: false
+      IsPurchased(getIsPurchased(sku))
+    } ?: IsPurchased(false)
   }
   .distinctUntilChanged()
   .onEach { log { "is purchased flow for $sku -> $it" } }

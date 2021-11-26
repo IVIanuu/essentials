@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   actionIntentSender: ActionIntentSender,
   context: AppContext,
   packageManager: PackageManager
-): ActionExecutor<NextAppActionId> = {
+) = ActionExecutor<NextAppActionId> {
   appSwitchManager.nextApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_left, R.anim.es_slide_out_left) }
 }

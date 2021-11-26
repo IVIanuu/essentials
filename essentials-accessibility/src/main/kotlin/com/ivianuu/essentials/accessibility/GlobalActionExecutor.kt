@@ -18,10 +18,8 @@ package com.ivianuu.essentials.accessibility
 
 import androidx.compose.runtime.State
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 
-@Tag annotation class GlobalActionExecutorTag
-typealias GlobalActionExecutor = @GlobalActionExecutorTag suspend (Int) -> Boolean
+fun interface GlobalActionExecutor : suspend (Int) -> Boolean
 
-@Provide fun globalActionExecutor(ref: State<EsAccessibilityService?>): GlobalActionExecutor =
-  { action -> ref.value?.performGlobalAction(action) ?: false }
+@Provide fun globalActionExecutor(ref: State<EsAccessibilityService?>) =
+  GlobalActionExecutor { action -> ref.value?.performGlobalAction(action) ?: false }

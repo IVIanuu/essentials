@@ -77,7 +77,7 @@ import java.io.ByteArrayOutputStream
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
     val isFloating = tmp[4].toBoolean()
-    return { actionIntentSender(intent, isFloating, null) }
+    return ActionExecutor<ActionId> { actionIntentSender(intent, isFloating, null) }
   }
 }
 

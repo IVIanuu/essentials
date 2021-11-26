@@ -30,7 +30,6 @@ import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
@@ -47,18 +46,16 @@ interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
   keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
 
-@Tag annotation class KeyIntentFactoryTag
-typealias KeyIntentFactory<T> = @KeyIntentFactoryTag (T) -> Intent
+fun interface KeyIntentFactory<T> : (T) -> Intent
 
-@Tag annotation class IntentAppUiStarterTag
-typealias IntentAppUiStarter = @IntentAppUiStarterTag suspend () -> ComponentActivity
+fun interface IntentAppUiStarter : suspend () -> ComponentActivity
 
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
   scope: ComponentScope<AppComponent>
-): KeyHandler<Result<ActivityResult, Throwable>> = handler@ { key, onResult ->
+) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler false

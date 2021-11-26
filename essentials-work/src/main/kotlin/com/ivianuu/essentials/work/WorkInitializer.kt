@@ -30,7 +30,7 @@ object WorkInitializer : ScopeInitializerKey<AppComponent>
 @Provide fun workInitializer(
   context: AppContext,
   workerFactory: WorkerFactory
-): ScopeInitializer<WorkInitializer> = {
+) = ScopeInitializer<WorkInitializer> {
   WorkManager.initialize(
     context,
     Configuration.Builder()

@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   appSwitchManager: AppSwitchManager,
   context: AppContext,
   packageManager: PackageManager
-): ActionExecutor<LastAppActionId> = {
+) = ActionExecutor<LastAppActionId> {
   appSwitchManager.lastApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_right, R.anim.es_slide_out_right) }
 }

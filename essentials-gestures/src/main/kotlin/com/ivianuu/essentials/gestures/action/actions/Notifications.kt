@@ -50,7 +50,7 @@ import com.ivianuu.injekt.Provide
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
   service: State<EsAccessibilityService?>
-): ActionExecutor<NotificationsActionId> = {
+) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
     val service = service.value!!
 

@@ -53,7 +53,7 @@ import com.ivianuu.injekt.Provide
 
 data class CityDetailKey(val city: City) : Key<Unit>
 
-@Provide fun cityDetailUi(key: CityDetailKey): KeyUi<CityDetailKey> = {
+@Provide fun cityDetailUi(key: CityDetailKey) = KeyUi<CityDetailKey> {
   VerticalList(contentPadding = PaddingValues(0.dp)) {
     item {
       TopAppBar(
@@ -87,7 +87,7 @@ data class CityDetailKey(val city: City) : Key<Unit>
   }
 }
 
-@Provide val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
+@Provide val cityDetailUiOptionsFactory = KeyUiOptionsFactory<CityDetailKey> {
   val spec = defaultAnimationSpec(400.milliseconds, easing = FastOutSlowInEasing)
   KeyUiOptions(
     enterTransition = SharedElementStackTransition(

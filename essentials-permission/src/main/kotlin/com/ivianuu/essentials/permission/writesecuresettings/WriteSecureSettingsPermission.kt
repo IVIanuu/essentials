@@ -30,7 +30,7 @@ interface WriteSecureSettingsPermission : Permission
 
 @Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
   context: AppContext
-): PermissionStateProvider<P> = {
+) = PermissionStateProvider<P> {
   context.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
       PackageManager.PERMISSION_GRANTED
 }
@@ -38,6 +38,6 @@ interface WriteSecureSettingsPermission : Permission
 @Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
   navigator: Navigator,
   permissionKey: TypeKey<P>
-): PermissionRequestHandler<P> = {
+) = PermissionRequestHandler<P> {
   navigator.push(WriteSecureSettingsKey(permissionKey))
 }

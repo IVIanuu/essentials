@@ -41,7 +41,7 @@ import com.ivianuu.injekt.android.SystemService
 @SuppressLint("DiscouragedPrivateApi")
 @Provide fun assistantActionExecutor(
   searchManager: @SystemService SearchManager
-): ActionExecutor<AssistantActionId> = {
+) = ActionExecutor<AssistantActionId> {
   val launchAssist = searchManager.javaClass
     .getDeclaredMethod("launchAssist", Bundle::class.java)
   launchAssist.invoke(searchManager, Bundle())

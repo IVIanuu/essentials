@@ -50,13 +50,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Tag annotation class MediaActionSenderTag
-typealias MediaActionSender = @MediaActionSenderTag suspend (Int) -> Unit
+fun interface MediaActionSender : suspend (Int) -> Unit
 
 @Provide fun mediaActionSender(
   context: AppContext,
   prefs: DataStore<MediaActionPrefs>
-): MediaActionSender = { keycode ->
+) = MediaActionSender { keycode ->
   val currentPrefs = prefs.data.first()
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)

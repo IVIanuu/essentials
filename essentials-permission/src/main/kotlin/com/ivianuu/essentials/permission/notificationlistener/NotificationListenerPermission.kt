@@ -40,14 +40,14 @@ interface NotificationListenerPermission : Permission {
 @Provide fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
   context: AppContext,
   buildInfo: BuildInfo
-): PermissionStateProvider<P> = {
+) = PermissionStateProvider<P> {
   NotificationManagerCompat.getEnabledListenerPackages(context)
     .any { it == buildInfo.packageName }
 }
 
 @Provide fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = { permission ->
+) = PermissionIntentFactory<P> { permission ->
   Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
     val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
     putExtra(":settings:fragment_args_key", componentName)

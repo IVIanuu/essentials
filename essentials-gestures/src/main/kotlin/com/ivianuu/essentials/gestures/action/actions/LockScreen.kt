@@ -52,7 +52,7 @@ fun lockScreenActionExecutor(
   actionRootCommandRunner: ActionRootCommandRunner,
   globalActionExecutor: GlobalActionExecutor,
   systemBuildInfo: SystemBuildInfo,
-): ActionExecutor<LockScreenActionId> = {
+) = ActionExecutor<LockScreenActionId> {
   if (systemBuildInfo.sdk >= 28) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
   } else {

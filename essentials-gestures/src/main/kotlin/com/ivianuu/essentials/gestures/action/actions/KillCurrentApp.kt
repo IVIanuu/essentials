@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.first
   buildInfo: BuildInfo,
   currentAppFlow: Flow<CurrentApp?>,
   packageManager: PackageManager
-): ActionExecutor<KillCurrentAppActionId> = {
+) = ActionExecutor<KillCurrentAppActionId> {
   val currentApp = currentAppFlow.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&

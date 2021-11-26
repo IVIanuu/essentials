@@ -67,9 +67,9 @@ import com.ivianuu.injekt.Provide
   onGloballyPositioned { style.bounds = it.boundsInWindow() }
 }
 
-object RootSystemBarsStyle
+fun interface RootSystemBarsStyle : UiDecorator
 
-@Provide val rootSystemBarsStyle: UiDecorator<RootSystemBarsStyle> = { content ->
+@Provide val rootSystemBarsStyle = RootSystemBarsStyle { content ->
   Surface {
     Box(
       modifier = Modifier
@@ -95,16 +95,16 @@ class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
   var elevation by mutableStateOf(elevation)
 }
 
-object SystemBarManagerProvider
+fun interface SystemBarManagerProvider : UiDecorator
 
-@Provide expect val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider>
+@Provide expect val systemBarManagerProvider: SystemBarManagerProvider
 
-@Provide val systemBarManagerProviderLoadingOrder = LoadingOrder<UiDecorator<SystemBarManagerProvider>>()
-  .after<UiDecorator<WindowInsetsProvider>>()
+@Provide val systemBarManagerProviderLoadingOrder = LoadingOrder<SystemBarManagerProvider>()
+  .after<WindowInsetsProvider>()
 
-@Provide val rootSystemBarsStyleLoadingOrder = LoadingOrder<UiDecorator<RootSystemBarsStyle>>()
-  .after<UiDecorator<AppTheme>>()
-  .after<UiDecorator<SystemBarManagerProvider>>()
+@Provide val rootSystemBarsStyleLoadingOrder = LoadingOrder<RootSystemBarsStyle>()
+  .after<AppTheme>()
+  .after<SystemBarManagerProvider>()
 
 val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

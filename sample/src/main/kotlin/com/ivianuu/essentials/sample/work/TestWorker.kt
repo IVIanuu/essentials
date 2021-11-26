@@ -41,9 +41,8 @@ import kotlinx.coroutines.delay
   }
 }
 
-@Tag annotation class TestWorkSchedulerTag
-typealias TestWorkScheduler = @TestWorkSchedulerTag () -> Unit
+fun interface TestWorkScheduler : () -> Unit
 
-@Provide fun testWorkScheduler(workManager: WorkManager): TestWorkScheduler = {
+@Provide fun testWorkScheduler(workManager: WorkManager) = TestWorkScheduler {
   workManager.enqueue(OneTimeWorkRequestBuilder<TestWorker>().build())
 }

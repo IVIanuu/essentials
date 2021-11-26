@@ -16,7 +16,6 @@
 
 package com.ivianuu.essentials.ui.systembars
 
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.injekt.Provide
 
-@Provide actual val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider> = { it() }
+@Provide actual val systemBarManagerProvider = SystemBarManagerProvider { it() }

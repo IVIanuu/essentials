@@ -29,7 +29,7 @@ import com.ivianuu.injekt.common.ComponentElement
 
 object DecoratorsKey : Key<Unit>
 
-@Provide val decoratorsUi: KeyUi<DecoratorsKey> = {
+@Provide val decoratorsUi = KeyUi<DecoratorsKey> {
   SimpleListScreen("Decorators") {
     (1..10).forEach { itemIndex ->
       item {
@@ -39,19 +39,19 @@ object DecoratorsKey : Key<Unit>
   }
 }
 
-object SampleListDecorator
+fun interface SampleListDecorator : ListDecorator
 
-@Provide val sampleListDecorator: ListDecorator<SampleListDecorator> = {
-  item(null) {
+@Provide val sampleListDecorator = SampleListDecorator {
+  it.item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()
       ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
 
-  content()
+  it.content()
 
-  item(null) {
+  it.item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()
       ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
@@ -59,9 +59,9 @@ object SampleListDecorator
   }
 }
 
-object SampleKeyUiDecorator
+fun interface SampleKeyUiDecorator : KeyUiDecorator
 
-@Provide val sampleKeyUiDecorator: KeyUiDecorator<SampleKeyUiDecorator> = decorator@ { content ->
+@Provide val sampleKeyUiDecorator = SampleKeyUiDecorator decorator@ { content ->
   val key = LocalKeyUiComponent.current.element<SampleDecoratorComponent>().key
   if (key !is DecoratorsKey) {
     content()

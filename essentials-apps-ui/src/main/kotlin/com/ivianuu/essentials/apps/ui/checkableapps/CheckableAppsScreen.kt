@@ -42,10 +42,8 @@ import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 
-@Tag annotation class CheckableAppsScreenTag
-typealias CheckableAppsScreen = @CheckableAppsScreenTag @Composable () -> Unit
+fun interface CheckableAppsScreen : @Composable () -> Unit
 
 data class CheckableAppsParams(
   val checkedApps: @Composable () -> Set<String>,
@@ -54,7 +52,7 @@ data class CheckableAppsParams(
   val appBarTitle: String
 )
 
-@Provide fun checkableAppsScreen(models: @Composable () -> CheckableAppsModel): CheckableAppsScreen = {
+@Provide fun checkableAppsScreen(models: @Composable () -> CheckableAppsModel) = CheckableAppsScreen {
   val model = models()
   Scaffold(
     topBar = {

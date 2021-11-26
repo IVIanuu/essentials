@@ -25,8 +25,7 @@ import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.common.ComponentName
 import com.ivianuu.injekt.common.TypeKey
 
-@Tag annotation class ScopeInitializerTag<K : ScopeInitializerKey<*>>
-typealias ScopeInitializer<K> = @ScopeInitializerTag<K> () -> Unit
+fun interface ScopeInitializer<K : ScopeInitializerKey<*>> : () -> Unit
 interface ScopeInitializerKey<N : ComponentName>
 
 @Provide fun <@Spread T : ScopeInitializer<K>, K : ScopeInitializerKey<N>, N : ComponentName> scopeInitializerElement(
@@ -52,15 +51,14 @@ data class ScopeInitializerElement<N : ComponentName>(
   }
 }
 
-@Tag private annotation class ScopeInitializerRunnerTag
-typealias ScopeInitializerRunner = @ScopeInitializerRunnerTag () -> Unit
+fun interface ScopeInitializerRunner : () -> Unit
 
 @Provide fun <N : ComponentName> scopeInitializerRunner(
   componentKey: TypeKey<N>,
   initializers: List<ScopeInitializerElement<N>>,
   workerRunner: ScopeWorkerRunner<N>,
   L: Logger
-): @ComponentElement<N> ScopeInitializerRunner = {
+) = ScopeInitializerRunner {
   initializers
     .sortedWithLoadingOrder()
     .forEach {

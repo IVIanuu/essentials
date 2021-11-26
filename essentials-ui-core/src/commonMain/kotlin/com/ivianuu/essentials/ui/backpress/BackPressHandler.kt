@@ -31,6 +31,6 @@ interface BackPressHandler {
 
 val LocalBackPressHandler = staticCompositionLocalOf<BackPressHandler> { error("") }
 
-object BackPressHandlerProvider
+fun interface BackPressHandlerProvider : UiDecorator
 
-@Provide expect val backPressHandlerProvider: UiDecorator<BackPressHandlerProvider>
+@Provide expect val backPressHandlerProvider: BackPressHandlerProvider

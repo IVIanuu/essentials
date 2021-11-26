@@ -27,7 +27,7 @@ import com.ivianuu.injekt.common.AppComponent
   context: AppContext,
   packageManager: PackageManager,
   tileIds: List<TileId> = emptyList()
-): ScopeWorker<AppComponent> = {
+) = ScopeWorker<AppComponent> {
   for (tileId in tileIds) {
     val intent = Intent(context, tileId.clazz.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)

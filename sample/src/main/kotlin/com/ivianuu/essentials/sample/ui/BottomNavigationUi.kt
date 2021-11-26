@@ -48,7 +48,7 @@ import com.ivianuu.injekt.Provide
 
 object BottomNavigationKey : Key<Unit>
 
-@Provide val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
+@Provide val bottomNavigationUi = KeyUi<BottomNavigationKey> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
   Scaffold(

@@ -31,7 +31,7 @@ object FeedbackMailKey : IntentKey
   context: AppContext,
   email: DeveloperEmail,
   RP: ResourceProvider
-): KeyIntentFactory<FeedbackMailKey> = {
+) = KeyIntentFactory<FeedbackMailKey> {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
     putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))

@@ -41,7 +41,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide fun searchActionExecutor(
   intentSender: ActionIntentSender
-): ActionExecutor<SearchActionId> = {
+) = ActionExecutor<SearchActionId> {
   intentSender(
     Intent(Intent.ACTION_MAIN).apply {
       component = ComponentName(

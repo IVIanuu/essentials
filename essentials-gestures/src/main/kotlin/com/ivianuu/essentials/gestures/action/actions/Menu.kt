@@ -39,6 +39,6 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide fun menuActionExecutor(
   actionRootCommandRunner: ActionRootCommandRunner
-): ActionExecutor<MenuActionId> = {
+) = ActionExecutor<MenuActionId> {
   actionRootCommandRunner("input keyevent 82")
 }

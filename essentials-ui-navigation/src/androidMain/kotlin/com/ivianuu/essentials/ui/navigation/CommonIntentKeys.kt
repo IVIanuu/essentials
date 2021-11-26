@@ -26,11 +26,11 @@ data class DefaultIntentKey(val intent: Intent) : IntentKey
 
 fun Intent.toIntentKey() = DefaultIntentKey(this)
 
-@Provide val defaultIntentKeyIntentFactory: KeyIntentFactory<DefaultIntentKey> = { it.intent }
+@Provide val defaultIntentKeyIntentFactory = KeyIntentFactory<DefaultIntentKey> { it.intent }
 
 data class AppInfoKey(val packageName: String) : IntentKey
 
-@Provide val appInfoKeyIntentFactory: KeyIntentFactory<AppInfoKey> = { key ->
+@Provide val appInfoKeyIntentFactory = KeyIntentFactory<AppInfoKey> { key ->
   Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
     this.data = "package:${key.packageName}".toUri()
   }
@@ -38,14 +38,13 @@ data class AppInfoKey(val packageName: String) : IntentKey
 
 data class AppKey(val packageName: String) : IntentKey
 
-@Provide fun appKeyIntentFactory(packageManager: PackageManager): KeyIntentFactory<AppKey> =
-  { key ->
-    packageManager.getLaunchIntentForPackage(key.packageName)!!
-  }
+@Provide fun appKeyIntentFactory(packageManager: PackageManager) = KeyIntentFactory<AppKey> { key ->
+  packageManager.getLaunchIntentForPackage(key.packageName)!!
+}
 
 data class ShareKey(val text: String) : IntentKey
 
-@Provide val shareKeyIntentFactory: KeyIntentFactory<ShareKey> = { key ->
+@Provide val shareKeyIntentFactory = KeyIntentFactory<ShareKey> { key ->
   Intent.createChooser(
     Intent(Intent.ACTION_SEND).apply {
       type = "text/plain"
@@ -57,7 +56,7 @@ data class ShareKey(val text: String) : IntentKey
 
 data class UrlKey(val url: String) : IntentKey
 
-@Provide val urlKeyIntentFactory: KeyIntentFactory<UrlKey> = { key ->
+@Provide val urlKeyIntentFactory = KeyIntentFactory<UrlKey> { key ->
   Intent(Intent.ACTION_VIEW).apply { this.data = key.url.toUri() }
 }
 

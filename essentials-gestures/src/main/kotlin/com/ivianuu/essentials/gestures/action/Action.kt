@@ -48,8 +48,7 @@ data class Action<I : ActionId>(
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
 }
 
-@Tag annotation class ActionIconTag
-typealias ActionIcon = @ActionIconTag @Composable () -> Unit
+fun interface ActionIcon : @Composable () -> Unit
 
 abstract class ActionId(val value: String)
 
@@ -58,8 +57,7 @@ abstract class ActionId(val value: String)
   provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
 
-@Tag annotation class ActionExecutorTag<I : ActionId>
-typealias ActionExecutor<I> = @ActionExecutorTag<I> suspend () -> Unit
+fun interface ActionExecutor<I : ActionId> : suspend () -> Unit
 
 @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
   id: I,

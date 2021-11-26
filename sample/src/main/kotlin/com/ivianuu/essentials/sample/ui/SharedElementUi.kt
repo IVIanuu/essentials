@@ -58,7 +58,7 @@ data class SharedElementKey(val color: Color) : Key<Unit>
 @Provide fun sharedElementKeyUi(
   key: SharedElementKey,
   navigator: Navigator
-): KeyUi<SharedElementKey> = {
+) = KeyUi<SharedElementKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Shared Elements") }) }
   ) {
@@ -120,7 +120,7 @@ val cities = listOf(
   City("Tokyo", R.drawable.tokyo)
 )
 
-@Provide val sharedElementsNavigationOptionFactory: KeyUiOptionsFactory<SharedElementKey> = {
+@Provide val sharedElementsNavigationOptionFactory = KeyUiOptionsFactory<SharedElementKey> {
   KeyUiOptions(
     transition = SharedElementStackTransition(
       "title Shared element" to "title",

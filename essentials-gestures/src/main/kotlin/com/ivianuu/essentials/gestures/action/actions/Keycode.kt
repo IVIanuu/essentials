@@ -55,7 +55,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
     val keycode = id.removePrefix(BASE_ID)
-    return { actionRootCommandRunner("input keyevent $keycode") }
+    return ActionExecutor<ActionId> { actionRootCommandRunner("input keyevent $keycode") }
   }
 }
 

@@ -39,7 +39,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun playPauseMediaActionExecutor(
   mediaActionSender: MediaActionSender
-): ActionExecutor<PlayPauseActionId> = {
+) = ActionExecutor<PlayPauseActionId> {
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 

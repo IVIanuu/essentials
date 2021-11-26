@@ -67,7 +67,7 @@ import kotlinx.coroutines.flow.first
     val (packageName, isFloating) = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1].toBoolean() }
-    return {
+    return ActionExecutor<ActionId> {
       actionIntentSender(
         packageManager.getLaunchIntentForPackage(packageName)!!,
         isFloating,

@@ -32,11 +32,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowCompat
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.setFlag
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.injekt.Provide
 
-@Provide actual val systemBarManagerProvider: UiDecorator<SystemBarManagerProvider> = { content ->
+@Provide actual val systemBarManagerProvider = SystemBarManagerProvider { content ->
   val systemBarManager = remember { AndroidSystemBarManager() }
   systemBarManager.Apply()
   CompositionLocalProvider(

@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 
 @Provide fun lastAppNativeActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<LastAppNativeActionId> = {
+) = ActionExecutor<LastAppNativeActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
   delay(250)
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)

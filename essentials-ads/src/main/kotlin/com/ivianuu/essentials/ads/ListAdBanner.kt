@@ -16,15 +16,15 @@ import com.ivianuu.injekt.common.ComponentElement
 @Tag annotation class ListAdBannerConfigTag
 typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
-object ListAdBanner
+fun interface ListAdBanner : ListDecorator
 
 @Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
   showAds: State<ShowAds>
-): ListDecorator<ListAdBanner> = decorator@ {
-  if (config != null && isVertical) {
-    item(null) {
+) = ListAdBanner decorator@ {
+  if (config != null && it.isVertical) {
+    it.item(null) {
       val key = catch {
         LocalKeyUiComponent.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
@@ -33,7 +33,7 @@ object ListAdBanner
     }
   }
 
-  content()
+  it.content()
 }
 
 @Provide @ComponentElement<KeyUiComponent>

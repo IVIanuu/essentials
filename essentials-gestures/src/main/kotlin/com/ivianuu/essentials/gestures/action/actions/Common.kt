@@ -41,24 +41,23 @@ import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-fun staticActionImage(data: Any): ActionIcon = {
+fun staticActionImage(data: Any) = ActionIcon {
   Image(
     painter = rememberImagePainter(data),
     modifier = LocalActionImageSizeModifier.current
   )
 }
 
-fun staticActionIcon(icon: ImageVector): ActionIcon = {
+fun staticActionIcon(icon: ImageVector) = ActionIcon {
   Icon(
     imageVector = icon,
     modifier = LocalActionIconSizeModifier.current
   )
 }
 
-fun staticActionIcon(id: Int): ActionIcon = {
+fun staticActionIcon(id: Int) = ActionIcon {
   Icon(
     painterResId = id,
     modifier = LocalActionIconSizeModifier.current
@@ -67,13 +66,12 @@ fun staticActionIcon(id: Int): ActionIcon = {
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
-@Tag annotation class ActionRootCommandRunnerTag
-typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String) -> Unit
+fun interface ActionRootCommandRunner : suspend (String) -> Unit
 
 @Provide fun actionRootCommandRunner(
   shell: Shell,
   T: ToastContext
-): ActionRootCommandRunner = { command ->
+) = ActionRootCommandRunner { command ->
   catch { shell.run(command) }
     .onFailure {
       it.printStackTrace()
@@ -81,13 +79,12 @@ typealias ActionRootCommandRunner = @ActionRootCommandRunnerTag suspend (String)
     }
 }
 
-@Tag annotation class ActionIntentSenderTag
-typealias ActionIntentSender = @ActionIntentSenderTag (Intent, Boolean, Bundle?) -> Unit
+fun interface ActionIntentSender : (Intent, Boolean, Bundle?) -> Unit
 
 @Provide fun actionIntentSender(
   context: AppContext,
   T: ToastContext
-): ActionIntentSender = { intent, isFloating, options ->
+) = ActionIntentSender { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)
@@ -101,8 +98,7 @@ typealias ActionIntentSender = @ActionIntentSenderTag (Intent, Boolean, Bundle?)
   }
 }
 
-@Tag annotation class CloseSystemDialogsUseCaseTag
-typealias CloseSystemDialogsUseCase = @CloseSystemDialogsUseCaseTag suspend () -> Result<Unit, Throwable>
+fun interface CloseSystemDialogsUseCase : suspend () -> Result<Unit, Throwable>
 
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide
@@ -110,7 +106,7 @@ fun closeSystemDialogsUseCase(
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
   systemBuildInfo: SystemBuildInfo
-): CloseSystemDialogsUseCase = {
+) = CloseSystemDialogsUseCase {
   catch {
     if (systemBuildInfo.sdk >= 31)
       globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)

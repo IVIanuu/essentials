@@ -31,13 +31,11 @@ import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.DefaultDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-@Tag annotation class ExecuteActionUseCaseTag
-typealias ExecuteActionUseCase = @ExecuteActionUseCaseTag suspend (String) -> Result<Boolean, Throwable>
+fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
 @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
@@ -50,7 +48,7 @@ typealias ExecuteActionUseCase = @ExecuteActionUseCaseTag suspend (String) -> Re
   screenUnlocker: ScreenUnlocker,
   L: Logger,
   T: Toaster
-): ExecuteActionUseCase = { key ->
+) = ExecuteActionUseCase { key ->
   withContext(dispatcher) {
     catch {
       log { "execute $key" }

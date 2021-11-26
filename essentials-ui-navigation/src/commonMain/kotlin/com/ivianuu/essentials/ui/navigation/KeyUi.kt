@@ -29,18 +29,15 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlin.reflect.KClass
 
-@Tag annotation class KeyUiTag<K : Key<*>>
-typealias KeyUi<K> = @KeyUiTag<K> @Composable () -> Unit
+fun interface KeyUi<K : Key<*>> : @Composable () -> Unit
 
-@Tag annotation class KeyUiFactoryTag
-typealias KeyUiFactory<K> = @KeyUiFactoryTag (K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 
 @Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
     keyClass: KClass<K>,
-    keyUiFactory: (K) -> KeyUi<K>
-  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
-    (keyClass to keyUiFactory).cast()
+    keyUiFactory: KeyUiFactory<K>
+  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> = (keyClass to keyUiFactory).cast()
 
   @Provide fun keyUiOptionFactory(
     keyClass: KClass<K>,
@@ -60,15 +57,15 @@ typealias ModelKeyUi<K, S> = @Composable ModelKeyUiScope<K, S>.() -> Unit
   )
 }
 
-@Stable interface ModelKeyUiScope<K, S> {
+@Stable interface ModelKeyUiScope<K : Key<*>, S> {
   val model: S
 }
 
-@Provide fun <@Spread U : ModelKeyUi<K, S>, K, S> modelKeyUi(
+@Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   uiFactory: () -> U,
   model: @Composable () -> S,
   CS: ComponentScope<KeyUiComponent>
-): KeyUi<K> = {
+) = KeyUi<K> {
   val currentModel by remember(model.cast()) { model.asComposedStateFlow() }.collectAsState()
   val scope = remember {
     object : ModelKeyUiScope<K, S> {

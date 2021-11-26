@@ -61,7 +61,7 @@ data class HelpItem(
   val actions: (@Composable () -> Unit)? = null
 )
 
-@Provide fun helpUi(categories: List<HelpCategory>): KeyUi<HelpKey> = {
+@Provide fun helpUi(categories: List<HelpCategory>) = KeyUi<HelpKey> {
   var expandedItem: HelpItem? by remember {
     mutableStateOf(
       categories

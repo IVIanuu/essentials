@@ -41,7 +41,7 @@ import kotlinx.serialization.Serializable
   pref: DataStore<ScreenLaunchPrefs>,
   showAds: State<ShowAds>,
   L: Logger
-): ScopeWorker<UiComponent> = {
+) = ScopeWorker<UiComponent> {
   showAds
     .asComposedFlow()
     .flatMapLatest {

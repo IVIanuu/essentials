@@ -33,7 +33,7 @@ data class ShareBackupFileKey(val backupFilePath: String) :
   context: AppContext,
   buildInfo: BuildInfo,
   packageManager: PackageManager
-): KeyIntentFactory<ShareBackupFileKey> = { key ->
+) = KeyIntentFactory<ShareBackupFileKey> { key ->
   val uri = FileProvider.getUriForFile(
     context,
     "${buildInfo.packageName}.backupprovider",

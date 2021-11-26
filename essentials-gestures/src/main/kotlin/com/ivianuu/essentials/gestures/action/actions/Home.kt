@@ -44,7 +44,7 @@ import com.ivianuu.injekt.Provide
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-): ActionExecutor<HomeActionId> = {
+) = ActionExecutor<HomeActionId> {
   if (!needsHomeIntentWorkaround) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
   } else {

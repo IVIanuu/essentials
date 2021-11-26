@@ -36,7 +36,7 @@ import com.ivianuu.injekt.android.SystemService
 
 @Provide fun volumeActionExecutor(
   audioManager: @SystemService AudioManager
-): ActionExecutor<VolumeActionId> = {
+) = ActionExecutor<VolumeActionId> {
   audioManager.adjustStreamVolume(
     AudioManager.STREAM_MUSIC,
     AudioManager.ADJUST_SAME,

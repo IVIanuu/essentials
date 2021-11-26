@@ -54,7 +54,7 @@ data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Unit>
 
 @Provide fun containerTransformDetailsUi(
   storage: ComponentStorage<KeyUiComponent>
-): KeyUi<ContainerTransformDetailsKey> = {
+) = KeyUi<ContainerTransformDetailsKey> {
   var listInfo by storage.scoped("list_state") { mutableStateOf(0 to 0) }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = false) {
     Scaffold(topBar = { TopAppBar(title = { Text("Details") }) }) {
@@ -104,6 +104,6 @@ data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Unit>
 }
 
 @Provide
-val containerTransformDetailsOptionsFactory: KeyUiOptionsFactory<ContainerTransformDetailsKey> = {
+val containerTransformDetailsOptionsFactory = KeyUiOptionsFactory<ContainerTransformDetailsKey> {
   KeyUiOptions(ContainerTransformStackTransition(it.closedKey, "opened"))
 }

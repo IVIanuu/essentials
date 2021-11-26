@@ -67,7 +67,7 @@ object ContainerTransformKey : Key<Unit>
 @Provide fun containerTransformUi(
   navigator: Navigator,
   storage: ComponentStorage<KeyUiComponent>
-): KeyUi<ContainerTransformKey> = {
+) = KeyUi<ContainerTransformKey> {
   var listInfo by storage.scoped("list_state") { mutableStateOf(0 to 0) }
   ContainerTransformSurface(key = "opened", elevation = 8.dp, isOpened = true) {
     Scaffold(

@@ -32,7 +32,7 @@ interface SystemOverlayPermission : Permission
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
   context: AppContext
-): PermissionStateProvider<P> = { Settings.canDrawOverlays(context) }
+) = PermissionStateProvider<P> { Settings.canDrawOverlays(context) }
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayShowFindPermissionHint(
   systemBuildInfo: SystemBuildInfo
@@ -40,7 +40,7 @@ interface SystemOverlayPermission : Permission
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = {
+) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
     "package:${buildInfo.packageName}".toUri()

@@ -21,6 +21,6 @@ import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.ui.navigation.NavigationStateContent
 import com.ivianuu.injekt.Provide
 
-@Provide fun defaultAppUi(navigationStateContent: NavigationStateContent): AppUi = {
+@Provide fun defaultAppUi(navigationStateContent: NavigationStateContent) = AppUi {
   navigationStateContent(Modifier)
 }

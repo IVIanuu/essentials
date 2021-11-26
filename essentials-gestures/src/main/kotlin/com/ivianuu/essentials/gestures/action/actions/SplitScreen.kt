@@ -37,6 +37,6 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun splitScreenActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<SplitScreenActionId> = {
+) = ActionExecutor<SplitScreenActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

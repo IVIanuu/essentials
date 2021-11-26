@@ -53,7 +53,7 @@ fun screenshotActionExecutor(
   globalActionExecutor: GlobalActionExecutor,
   rootCommandRunner: ActionRootCommandRunner,
   systemBuildInfo: SystemBuildInfo,
-): ActionExecutor<ScreenshotActionId> = {
+) = ActionExecutor<ScreenshotActionId> {
   delay(500)
   if (systemBuildInfo.sdk >= 28) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)

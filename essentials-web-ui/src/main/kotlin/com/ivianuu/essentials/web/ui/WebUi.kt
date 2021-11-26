@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 
-@Provide fun webUi(key: WebKey, navigator: Navigator): KeyUi<WebKey> = {
+@Provide fun webUi(key: WebKey, navigator: Navigator) = KeyUi<WebKey> {
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {

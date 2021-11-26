@@ -59,7 +59,7 @@ object PermissionsKey : Key<Unit>
 @Provide fun permissionUi(
   permissionRequester: PermissionRequester,
   S: ComponentScope<KeyUiComponent>
-): KeyUi<PermissionsKey> = {
+) = KeyUi<PermissionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {

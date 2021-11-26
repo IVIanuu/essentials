@@ -29,7 +29,7 @@ object AdsKey : Key<Unit>
 @Provide fun adsUi(
   fullScreenAd: FullScreenAd,
   showAds: MutableState<ShowAds>
-): KeyUi<AdsKey> = {
+) = KeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(

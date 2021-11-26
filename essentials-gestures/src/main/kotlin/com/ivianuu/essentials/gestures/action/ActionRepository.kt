@@ -58,7 +58,7 @@ interface ActionRepository {
         .map { it() }
         .firstOrNull { it.handles(id) }
         ?.createExecutor(id)
-      ?: {
+      ?: ActionExecutor {
         showToast(R.string.es_error_action)
       }
   }

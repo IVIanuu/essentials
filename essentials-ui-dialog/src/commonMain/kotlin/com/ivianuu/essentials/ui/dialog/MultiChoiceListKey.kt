@@ -41,7 +41,7 @@ data class MultiChoiceListKey<T : Any>(
   key: MultiChoiceListKey<Any>,
   navigator: Navigator,
   strings: CommonStrings
-): KeyUi<MultiChoiceListKey<Any>> = {
+) = KeyUi<MultiChoiceListKey<Any>> {
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(key.selectedItems) }
 

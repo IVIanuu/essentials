@@ -58,7 +58,7 @@ data class PopupKey(
   val content: @Composable () -> Unit,
 ) : Key<Unit>
 
-@Provide fun popupUi(key: PopupKey, navigator: Navigator): KeyUi<PopupKey> = {
+@Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
 
   BoxWithConstraints {
@@ -103,7 +103,7 @@ data class PopupKey(
   }
 }
 
-@Provide val popupKeyOptionsFactory: KeyUiOptionsFactory<PopupKey> = {
+@Provide val popupKeyOptionsFactory = KeyUiOptionsFactory<PopupKey> {
   KeyUiOptions(opaque = true, transition = PopupStackTransition)
 }
 

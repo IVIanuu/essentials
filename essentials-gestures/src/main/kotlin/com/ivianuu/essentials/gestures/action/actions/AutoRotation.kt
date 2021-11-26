@@ -49,11 +49,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Provide fun autoRotationActionExecutor(
   rotationSetting: DataStore<AutoRotation>,
-): ActionExecutor<AutoRotationActionId> = {
+) = ActionExecutor<AutoRotationActionId> {
   rotationSetting.updateData { if (this != 1) 1 else 0 }
 }
 
-private fun Flow<AutoRotation>.autoRotationIcon(): ActionIcon = {
+private fun Flow<AutoRotation>.autoRotationIcon() = ActionIcon {
   val enabled = collectAsState(1).value == 1
   Icon(
     if (enabled) R.drawable.es_ic_screen_rotation

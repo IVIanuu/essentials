@@ -38,7 +38,7 @@ import kotlin.time.Duration
   clock: Clock,
   L: Logger,
   S: RateUiSchedule = RateUiSchedule()
-): ScopeWorker<UiComponent> = {
+) = ScopeWorker<UiComponent> {
   if (pref.data.first().installTime == 0L) {
     val now = clock()
     pref.updateData { copy(installTime = now.inWholeNanoseconds) }

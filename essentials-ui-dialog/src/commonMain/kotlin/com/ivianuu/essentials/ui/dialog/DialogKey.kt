@@ -24,6 +24,6 @@ import com.ivianuu.injekt.Provide
 
 interface DialogKey<T> : Key<T>
 
-@Provide fun <T : DialogKey<*>> dialogKeyUiOptionsFactory(): KeyUiOptionsFactory<T> = {
+@Provide fun <T : DialogKey<*>> dialogKeyUiOptionsFactory() = KeyUiOptionsFactory<T> {
   KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
 }

@@ -37,6 +37,6 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun powerDialogActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<PowerDialogActionId> = {
+) = ActionExecutor<PowerDialogActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

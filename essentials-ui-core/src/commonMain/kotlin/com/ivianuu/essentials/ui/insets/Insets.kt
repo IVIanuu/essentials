@@ -118,9 +118,9 @@ val LocalInsets = compositionLocalOf { Insets() }
   CompositionLocalProvider(LocalInsets provides insets, content = content)
 }
 
-object WindowInsetsProvider
+fun interface WindowInsetsProvider : UiDecorator
 
-@Provide expect val windowInsetsProvider: UiDecorator<WindowInsetsProvider>
+@Provide expect val windowInsetsProvider: WindowInsetsProvider
 
 @Composable fun localHorizontalInsetsPadding() = LocalInsets.current.toPaddingValues()
 

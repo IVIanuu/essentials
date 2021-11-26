@@ -62,7 +62,7 @@ import kotlin.coroutines.resume
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
   L: Logger
-): ActionExecutor<CameraActionId> = {
+) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(
       Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),

@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun skipNextMediaActionExecutor(
   mediaActionSender: MediaActionSender
-): ActionExecutor<SkipNextActionId> = {
+) = ActionExecutor<SkipNextActionId> {
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
 }
 

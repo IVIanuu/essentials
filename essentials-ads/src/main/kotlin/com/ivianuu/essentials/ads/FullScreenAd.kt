@@ -129,7 +129,7 @@ class AdLoadingException(val reason: Int) : RuntimeException()
 @Provide fun preloadFullScreenAdWorker(
   fullScreenAd: FullScreenAd,
   showAds: State<ShowAds>
-): ScopeWorker<UiComponent> = {
+) = ScopeWorker<UiComponent> {
   showAds.asComposedFlow()
     .collect { fullScreenAd.preload() }
 }

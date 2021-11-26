@@ -37,6 +37,6 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun backActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<BackActionId> = {
+) = ActionExecutor<BackActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
 }

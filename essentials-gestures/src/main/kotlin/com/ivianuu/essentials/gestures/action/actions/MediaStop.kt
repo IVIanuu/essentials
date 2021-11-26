@@ -37,7 +37,7 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun stopMediaActionExecutor(
   mediaActionSender: MediaActionSender
-): ActionExecutor<StopActionId> = {
+) = ActionExecutor<StopActionId> {
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 

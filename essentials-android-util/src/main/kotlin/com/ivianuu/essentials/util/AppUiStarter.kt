@@ -24,12 +24,10 @@ import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 
-@Tag annotation class AppUiStarterTag
-typealias AppUiStarter = @AppUiStarterTag IntentAppUiStarter
+fun interface AppUiStarter : IntentAppUiStarter
 
 @Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
 
@@ -38,7 +36,7 @@ typealias AppUiStarter = @AppUiStarterTag IntentAppUiStarter
   buildInfo: BuildInfo,
   foregroundActivity: @Composable () -> ForegroundActivity,
   packageManager: PackageManager,
-): AppUiStarter = {
+) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
   context.startActivity(
     intent.apply {

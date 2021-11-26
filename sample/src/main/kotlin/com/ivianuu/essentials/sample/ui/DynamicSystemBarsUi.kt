@@ -16,33 +16,17 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.colorpicker.ColorPickerPalette
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.systembars.systemBarStyle
-import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
 @Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }
 
 object DynamicSystemBarsKey : Key<Unit>
 
-@Provide val dynamicSystemBarsUi: KeyUi<DynamicSystemBarsKey> = {
-  Box {
-    val colors: List<Color> = rememberSaveable {
+@Provide val dynamicSystemBarsUi = KeyUi<DynamicSystemBarsKey> {
+  /*Box {
+    val colors = rememberSaveable {
       ColorPickerPalette.values()
         .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
         .flatMap { it.colors }
@@ -68,5 +52,5 @@ object DynamicSystemBarsKey : Key<Unit>
       elevation = 0.dp,
       title = { Text("Dynamic system bars") }
     )
-  }
+  }*/
 }

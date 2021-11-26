@@ -25,21 +25,18 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.R
-
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-@Tag annotation class PermissionIntentFactoryTag
-typealias PermissionIntentFactory<P> = @PermissionIntentFactoryTag (P) -> Intent
+fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 
-@JvmInline value class ShowFindPermissionHint<P>(val value: Boolean)
+@JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
 @Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
@@ -48,7 +45,7 @@ typealias PermissionIntentFactory<P> = @PermissionIntentFactoryTag (P) -> Intent
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   state: Flow<PermissionState<P>>,
   T: ToastContext
-): PermissionRequestHandler<P> = { permission ->
+) = PermissionRequestHandler<P> { permission ->
   race(
     {
       if (showFindPermissionHint.value)

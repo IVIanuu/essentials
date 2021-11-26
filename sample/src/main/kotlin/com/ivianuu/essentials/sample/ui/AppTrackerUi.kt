@@ -63,7 +63,7 @@ object AppTrackerKey : Key<Unit>
   N: NotificationFactory,
   S: ComponentScope<KeyUiComponent>,
   T: ToastContext
-): KeyUi<AppTrackerKey> = {
+) = KeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)

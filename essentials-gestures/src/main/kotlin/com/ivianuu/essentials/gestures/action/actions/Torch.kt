@@ -35,10 +35,10 @@ import com.ivianuu.injekt.Provide
   icon = torch.icon()
 )
 
-@Provide fun torchActionExecutor(torch: Torch): ActionExecutor<TorchActionId> =
+@Provide fun torchActionExecutor(torch: Torch) = ActionExecutor<TorchActionId>
   { torch.setTorchState(!torch.torchEnabled) }
 
-private fun Torch.icon(): ActionIcon = {
+private fun Torch.icon() = ActionIcon {
   Icon(
     if (torchEnabled) R.drawable.es_ic_flashlight_on
     else R.drawable.es_ic_flashlight_off

@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 
 object DialogsKey : Key<Unit>
 
-@Provide val dialogsUi: KeyUi<DialogsKey> = {
+@Provide val dialogsUi = KeyUi<DialogsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -304,7 +304,7 @@ data class DialogLauncherKey(
   val dialog: @Composable () -> Unit
 ) : DialogKey<Unit>
 
-@Provide fun dialogLauncherUi(key: DialogLauncherKey): KeyUi<DialogLauncherKey> = {
+@Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
 

@@ -33,7 +33,7 @@ interface NotificationPolicyPermission : Permission
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
   notificationManager: @SystemService NotificationManager
-): PermissionStateProvider<P> = { notificationManager.isNotificationPolicyAccessGranted }
+) = PermissionStateProvider<P> { notificationManager.isNotificationPolicyAccessGranted }
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionIntentFactory(
-): PermissionIntentFactory<P> = { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }
+) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }

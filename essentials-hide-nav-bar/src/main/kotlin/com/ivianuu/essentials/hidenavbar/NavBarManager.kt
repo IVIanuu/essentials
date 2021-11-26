@@ -53,7 +53,7 @@ import kotlinx.coroutines.flow.onEach
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater,
   L: Logger
-): ScopeWorker<AppComponent> = worker@ {
+) = ScopeWorker<AppComponent> worker@ {
   if (!navBarFeatureSupported.value) return@worker
   permissionState
     .flatMapLatest { hasPermission ->

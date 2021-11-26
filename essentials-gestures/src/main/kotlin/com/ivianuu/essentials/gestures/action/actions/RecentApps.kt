@@ -36,6 +36,6 @@ import com.ivianuu.injekt.Provide
 
 @Provide fun recentAppsActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<RecentAppsActionId> = {
+) = ActionExecutor<RecentAppsActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

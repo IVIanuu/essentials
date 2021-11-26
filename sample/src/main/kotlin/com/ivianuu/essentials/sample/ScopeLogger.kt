@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.TypeKey
 @Provide fun <N : ComponentName> scopeLogger(
   componentKey: TypeKey<N>,
   L: Logger
-): ScopeWorker<N> = {
+) = ScopeWorker<N> {
   log { "${componentKey.value} created" }
   onCancel { log { "${componentKey.value} disposed" } }
 }

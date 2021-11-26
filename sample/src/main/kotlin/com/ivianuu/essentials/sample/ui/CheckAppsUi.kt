@@ -51,7 +51,7 @@ object CheckAppsKey : Key<Unit>
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
   S: ComponentScope<KeyUiComponent>
-): KeyUi<CheckAppsKey> = {
+) = KeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(

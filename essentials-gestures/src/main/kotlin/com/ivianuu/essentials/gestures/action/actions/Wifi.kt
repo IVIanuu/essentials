@@ -42,18 +42,17 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide fun wifiActionExecutor(
   wifiManager: @SystemService WifiManager
-): ActionExecutor<WifiActionId> = {
+) = ActionExecutor<WifiActionId> {
   @Suppress("DEPRECATION")
   wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
 }
 
-@Tag annotation class WifiIconTag
-typealias WifiIcon = @WifiIconTag ActionIcon
+fun interface WifiIcon : ActionIcon
 
 @Provide fun wifiIcon(
   broadcastsFactory: BroadcastsFactory,
   wifiManager: @SystemService WifiManager,
-): WifiIcon = {
+) = WifiIcon {
   val wifiEnabled = valueFromFlow(true) {
     broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
       .map {

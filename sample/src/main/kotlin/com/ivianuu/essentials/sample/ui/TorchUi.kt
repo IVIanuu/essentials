@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 object TorchKey : Key<Unit>
 
-@Provide fun torchUi(torch: Torch): KeyUi<TorchKey> = {
+@Provide fun torchUi(torch: Torch) = KeyUi<TorchKey> {
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),

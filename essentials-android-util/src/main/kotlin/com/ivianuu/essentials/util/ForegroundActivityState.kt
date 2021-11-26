@@ -44,7 +44,7 @@ val foregroundActivityState: @ComposedState MutableState<ForegroundActivity> =
   activity: ComponentActivity,
   mainDispatcher: MainDispatcher,
   state: MutableState<ForegroundActivity>
-): ScopeWorker<UiComponent> = worker@ {
+) = ScopeWorker<UiComponent> worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))

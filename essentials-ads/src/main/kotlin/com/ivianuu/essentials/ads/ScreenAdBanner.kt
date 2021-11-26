@@ -21,14 +21,14 @@ import com.ivianuu.injekt.common.Scoped
 @Tag annotation class ScreenAdBannerConfigTag
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
-object ScreenAdBanner
+fun interface ScreenAdBanner : KeyUiDecorator
 
 @Provide fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   showAds: State<ShowAds>,
   key: Key<*>
-): @Scoped<KeyUiComponent> KeyUiDecorator<ScreenAdBanner> = decorator@ { content ->
+): @Scoped<KeyUiComponent> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
   if (config == null) {
     content()
     return@decorator
