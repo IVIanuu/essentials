@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Provide
 
 object NavBarUnsupportedKey : Key<Unit>
 
-@Provide val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
+@Provide val navBarUnsupportedUi = ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_unsupported_title) }) }
   ) {

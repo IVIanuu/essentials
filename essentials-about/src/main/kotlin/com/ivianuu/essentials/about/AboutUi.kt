@@ -42,7 +42,7 @@ import com.ivianuu.injekt.Provide
 
 object AboutKey : Key<Unit>
 
-@Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
+@Provide val aboutUi = ModelKeyUi<AboutKey, AboutModel> {
   SimpleListScreen(R.string.es_about_title) {
     item {
       ListItem(

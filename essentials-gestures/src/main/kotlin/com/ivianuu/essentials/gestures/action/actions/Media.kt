@@ -88,7 +88,7 @@ private fun mediaIntentFor(
 class MediaActionSettingsKey : Key<Unit>
 
 @Provide
-val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey, MediaActionSettingsModel> = {
+val mediaActionSettingsUi = ModelKeyUi<MediaActionSettingsKey, MediaActionSettingsModel> {
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(

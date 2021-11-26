@@ -42,16 +42,16 @@ object DecoratorsKey : Key<Unit>
 fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
-  it.item(null) {
+  item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()
       ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
 
-  it.content()
+  content()
 
-  it.item(null) {
+  item(null) {
     val key = catch { LocalKeyUiComponent.current }.getOrNull()
       ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)

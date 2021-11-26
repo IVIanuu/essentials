@@ -34,7 +34,7 @@ import com.ivianuu.injekt.Provide
 
 object BackupAndRestoreKey : Key<Unit>
 
-@Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
+@Provide val backupAndRestoreUi = ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> {
   SimpleListScreen(R.string.es_backup_and_restore_title) {
     item {
       ListItem(

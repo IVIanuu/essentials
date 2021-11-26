@@ -43,7 +43,7 @@ import com.ivianuu.injekt.Provide
 
 object CounterKey : Key<Unit>
 
-@Provide val counterUi: ModelKeyUi<CounterKey, CounterModel> = {
+@Provide val counterUi = ModelKeyUi<CounterKey, CounterModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Counter") }) }
   ) {

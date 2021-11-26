@@ -44,7 +44,7 @@ data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Provide val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
+@Provide val writeSecureSettingsUi = ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> {
   SimpleListScreen(R.string.es_secure_settings_title) {
     item {
       SecureSettingsHeader(

@@ -16,6 +16,11 @@
 
 package com.ivianuu.essentials.sample.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Text
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Provide
@@ -25,8 +30,8 @@ import com.ivianuu.injekt.Provide
 object DynamicSystemBarsKey : Key<Unit>
 
 @Provide val dynamicSystemBarsUi = KeyUi<DynamicSystemBarsKey> {
-  /*Box {
-    val colors = rememberSaveable {
+  Box {
+    /*val colors = rememberSaveable {
       ColorPickerPalette.values()
         .filter { it != ColorPickerPalette.BLACK && it != ColorPickerPalette.WHITE }
         .flatMap { it.colors }
@@ -45,12 +50,12 @@ object DynamicSystemBarsKey : Key<Unit>
             )
         )
       }
-    }
+    }*/
 
     TopAppBar(
       backgroundColor = Color.Transparent,
       elevation = 0.dp,
       title = { Text("Dynamic system bars") }
     )
-  }*/
+  }
 }

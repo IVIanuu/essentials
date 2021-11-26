@@ -39,7 +39,7 @@ import com.ivianuu.injekt.Provide
 
 object LicenseKey : Key<Unit>
 
-@Provide val licenseUi: ModelKeyUi<LicenseKey, LicenseModel> = {
+@Provide val licenseUi = ModelKeyUi<LicenseKey, LicenseModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
     ResourceVerticalListFor(model.projects) { project ->
       ListItem(

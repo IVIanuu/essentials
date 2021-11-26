@@ -74,7 +74,7 @@ data class AppFeature(
   }
 }
 
-@Provide val goPremiumUi: ModelKeyUi<GoPremiumKey, GoPremiumModel> = {
+@Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
   Surface {
     InsetsPadding {
       Column(

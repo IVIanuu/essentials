@@ -70,8 +70,8 @@ data class WriteSecureSettingsPcInstructionsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Provide val writeSecureSettingsPcInstructionsUi: ModelKeyUi<WriteSecureSettingsPcInstructionsKey,
-    WriteSecureSettingsPcInstructionsModel> = {
+@Provide val writeSecureSettingsPcInstructionsUi =
+  ModelKeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {
   SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
     item {
       SecureSettingsHeader(

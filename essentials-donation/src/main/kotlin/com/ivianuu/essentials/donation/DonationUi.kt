@@ -58,7 +58,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
 
 @Provide fun donationUi(
   commonStrings: CommonStrings
-): ModelKeyUi<DonationKey, DonationModel> = {
+) = ModelKeyUi<DonationKey, DonationModel> {
   DialogScaffold {
     Dialog(
       applyContentPadding = false,

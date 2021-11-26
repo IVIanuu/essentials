@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Provide
 
 object RateOnPlayKey : DialogKey<Unit>
 
-@Provide val rateOnPlayUi: ModelKeyUi<RateOnPlayKey, RateOnPlayModel> = {
+@Provide val rateOnPlayUi = ModelKeyUi<RateOnPlayKey, RateOnPlayModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_rate_on_play_title) },

@@ -59,7 +59,7 @@ data class ActionPickerKey(
   }
 }
 
-@Provide val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
+@Provide val actionPickerUi = ModelKeyUi<ActionPickerKey, ActionPickerModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {

@@ -23,8 +23,8 @@ fun interface ListAdBanner : ListDecorator
   config: ListAdBannerConfig? = null,
   showAds: State<ShowAds>
 ) = ListAdBanner decorator@ {
-  if (config != null && it.isVertical) {
-    it.item(null) {
+  if (config != null && isVertical) {
+    item(null) {
       val key = catch {
         LocalKeyUiComponent.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
@@ -33,7 +33,7 @@ fun interface ListAdBanner : ListDecorator
     }
   }
 
-  it.content()
+  content()
 }
 
 @Provide @ComponentElement<KeyUiComponent>

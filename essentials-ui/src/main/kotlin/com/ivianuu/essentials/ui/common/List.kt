@@ -25,7 +25,13 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-fun interface ListDecorator : (ListDecoratorScope) -> Unit
+fun interface ListDecorator {
+  operator fun ListDecoratorScope.invoke()
+  // todo remove once fixed
+  fun execute(scope: ListDecoratorScope) = with(scope) {
+    invoke()
+  }
+}
 
 interface ListDecoratorScope : LazyListScope {
   val isVertical: Boolean
@@ -128,7 +134,7 @@ private fun LazyListScope.decoratedContent(
     .reversed()
     .fold(content) { acc, element ->
       {
-        element.decorator(
+        element.decorator.execute(
           object : ListDecoratorScope, LazyListScope by this {
             override val isVertical: Boolean
               get() = isVertical

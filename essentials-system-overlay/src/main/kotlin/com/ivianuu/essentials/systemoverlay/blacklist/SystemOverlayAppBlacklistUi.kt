@@ -39,7 +39,7 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
   T: ToastContext
-): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
+) = ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> {
   remember {
     checkableAppsPageFactory(
       CheckableAppsParams(

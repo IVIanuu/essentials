@@ -43,7 +43,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 object NavBarKey : Key<Unit>
 
-@Provide val navBarUi: ModelKeyUi<NavBarKey, NavBarModel> = {
+@Provide val navBarUi = ModelKeyUi<NavBarKey, NavBarModel> {
   SimpleListScreen(R.string.es_nav_bar_title) {
     item {
       SwitchListItem(

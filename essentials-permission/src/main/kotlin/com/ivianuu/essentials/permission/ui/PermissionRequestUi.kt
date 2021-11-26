@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.first
 
 data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
 
-@Provide val permissionRequestUi: ModelKeyUi<PermissionRequestKey, PermissionRequestModel> = {
+@Provide val permissionRequestUi = ModelKeyUi<PermissionRequestKey, PermissionRequestModel> {
   SimpleListScreen(R.string.es_request_permission_title) {
     items(model.permissions) { permission ->
       ListItem(

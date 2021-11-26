@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 
 object AppShortcutPickerKey : Key<AppShortcut>
 
-@Provide val appShortcutPickerUi: ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> = {
+@Provide val appShortcutPickerUi = ModelKeyUi<AppShortcutPickerKey, AppShortcutPickerModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_app_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.appShortcuts) { appShortcut ->
       ListItem(

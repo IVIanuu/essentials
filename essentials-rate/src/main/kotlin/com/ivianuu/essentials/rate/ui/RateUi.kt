@@ -57,7 +57,7 @@ import com.ivianuu.injekt.Provide
 
 object RateKey : DialogKey<Unit>
 
-@Provide val rateUi: ModelKeyUi<RateKey, RateModel> = {
+@Provide val rateUi = ModelKeyUi<RateKey, RateModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {

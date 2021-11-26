@@ -32,10 +32,9 @@ import kotlinx.coroutines.flow.first
 
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
-@Provide
-fun floatingWindowsPickerUi(
+@Provide fun floatingWindowsPickerUi(
   commonStrings: CommonStrings
-): ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> = {
+) = ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {

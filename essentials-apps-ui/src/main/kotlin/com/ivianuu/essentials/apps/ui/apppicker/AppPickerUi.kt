@@ -49,7 +49,7 @@ data class AppPickerKey(
   val title: String? = null,
 ) : Key<AppInfo>
 
-@Provide val appPickerUi: ModelKeyUi<AppPickerKey, AppPickerModel> = {
+@Provide val appPickerUi = ModelKeyUi<AppPickerKey, AppPickerModel> {
   Scaffold(
     topBar = {
       TopAppBar(

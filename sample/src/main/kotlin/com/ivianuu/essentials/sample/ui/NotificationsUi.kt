@@ -81,7 +81,7 @@ import kotlin.reflect.KClass
 
 object NotificationsKey : Key<Unit>
 
-@Provide val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
+@Provide val notificationsUi = ModelKeyUi<NotificationsKey, NotificationsModel> {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {

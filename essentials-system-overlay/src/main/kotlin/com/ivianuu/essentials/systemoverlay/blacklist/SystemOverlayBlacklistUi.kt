@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Provide
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
 @Provide
-val systemOverlayBlacklistUi: ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> = {
+val systemOverlayBlacklistUi = ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> {
   SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
     item {
       ListItem(

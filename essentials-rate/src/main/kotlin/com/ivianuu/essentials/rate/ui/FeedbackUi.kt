@@ -35,7 +35,7 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackKey : DialogKey<Unit>
 
-@Provide val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
+@Provide val feedbackUi = ModelKeyUi<FeedbackKey, FeedbackModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_feedback_title) },
