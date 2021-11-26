@@ -52,9 +52,8 @@ private class RefImpl<T>(
     get() = _value.value
     set(value) {
       _value.loop { oldValue ->
-        if (!policy.equivalent(oldValue, value)) {
-          _value.compareAndSet(oldValue, value)
-        }
+        if (policy.equivalent(oldValue, value) || _value.compareAndSet(oldValue, value))
+          return
       }
     }
 }
