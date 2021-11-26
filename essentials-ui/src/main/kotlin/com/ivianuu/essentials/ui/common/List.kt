@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
 fun interface ListDecorator {
@@ -55,6 +54,8 @@ data class ListDecoratorElement(
       override fun key(item: ListDecoratorElement) = item.key
       override fun loadingOrder(item: ListDecoratorElement) = item.loadingOrder
     }
+
+    @Provide val defaultElements: Collection<ListDecoratorElement> get() = emptyList()
   }
 }
 
@@ -65,7 +66,7 @@ val LocalListDecorators = staticCompositionLocalOf<() -> List<ListDecoratorEleme
 fun interface ListDecoratorsProvider : UiDecorator
 
 @Provide fun listDecoratorsProvider(
-  decorators: () -> List<ListDecoratorElement> = { emptyList() }
+  decorators: () -> List<ListDecoratorElement>
 ) = ListDecoratorsProvider { content ->
   CompositionLocalProvider(
     LocalListDecorators provides decorators,

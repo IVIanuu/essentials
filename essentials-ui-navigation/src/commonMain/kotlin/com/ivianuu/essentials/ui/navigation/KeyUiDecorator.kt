@@ -25,7 +25,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
 @Provide fun <@Spread T : KeyUiDecorator> keyUiDecoratorElement(
@@ -47,7 +46,7 @@ data class KeyUiDecoratorElement(
       override fun loadingOrder(item: KeyUiDecoratorElement) = item.loadingOrder
     }
 
-    @Provide fun defaultElements() = emptyList<KeyUiDecoratorElement>()
+    @Provide val defaultElements: Collection<KeyUiDecoratorElement> get() = emptyList()
   }
 }
 

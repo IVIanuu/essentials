@@ -60,6 +60,17 @@ interface Permission {
     permissionKey: TypeKey<T>,
     state: Flow<PermissionState<T>>
   ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
+
+  companion object {
+    @Provide val defaultPermissions: Collection<Pair<TypeKey<Permission>, Permission>>
+      get() = emptyList()
+
+    @Provide val defaultRequestHandlers: Collection<Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>>
+      get() = emptyList()
+
+    @Provide val defaultStates: Collection<Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>>>
+      get() = emptyList()
+  }
 }
 
 fun interface PermissionStateProvider<P : Permission> : suspend (P) -> Boolean
@@ -84,7 +95,7 @@ typealias PermissionState<P> = @PermissionStateTag<P> Boolean
 fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
 
 @Provide fun permissionStateFactory(
-  permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>> = { emptyMap() }
+  permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>
 ) = PermissionStateFactory { permissions ->
   if (permissions.isEmpty()) flowOf(true)
   else combine(

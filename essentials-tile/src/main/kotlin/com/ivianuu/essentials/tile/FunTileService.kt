@@ -122,7 +122,7 @@ data class FunTileServiceComponent(
 @Provide @Element<TileScope>
 data class TileModelComponent(
   val tileId: TileId,
-  val tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>> = emptyList(),
+  val tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>>,
   val coroutineScope: NamedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {

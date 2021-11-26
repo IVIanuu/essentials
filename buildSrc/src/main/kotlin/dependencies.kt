@@ -64,7 +64,11 @@ object Deps {
     const val work = "androidx.work:work-runtime-ktx:2.7.0"
   }
 
-  const val atomicFuGradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.16.3"
+  object AtomicFu {
+    private const val version = "0.16.3"
+    const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
+    const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
+  }
 
   const val autoService = "com.google.auto.service:auto-service:1.0-rc7"
 

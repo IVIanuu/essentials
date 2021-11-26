@@ -26,7 +26,7 @@ import com.ivianuu.injekt.Provide
 @Provide fun tileServiceDeclarationChecker(
   context: AppContext,
   packageManager: PackageManager,
-  tileIds: List<TileId> = emptyList()
+  tileIds: List<TileId>
 ) = ScopeWorker<AppScope> {
   for (tileId in tileIds) {
     val intent = Intent(context, tileId.clazz.java)

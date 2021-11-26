@@ -44,7 +44,12 @@ import kotlinx.coroutines.launch
 @Tag annotation class PremiumVersionSkuTag
 typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 
-@Tag annotation class OldPremiumVersionSkuTag
+@Tag annotation class OldPremiumVersionSkuTag {
+  companion object {
+    @Provide val defaultOldPermissionVersionSkus: List<OldPremiumVersionSku>
+      get() = emptyList()
+  }
+}
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 interface PremiumVersionManager {
@@ -65,7 +70,7 @@ interface PremiumVersionManager {
   private val getSkuDetails: GetSkuDetailsUseCase,
   private val navigator: Navigator,
   private val premiumVersionSku: PremiumVersionSku,
-  oldPremiumVersionSkus: List<OldPremiumVersionSku> = emptyList(),
+  oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,

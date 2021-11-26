@@ -47,6 +47,13 @@ class TileModuleElementModule<@com.ivianuu.injekt.Spread T : @Composable () -> T
   ): Pair<TileId, () -> @Composable () -> TileModel<*>> = TileId(serviceClass) to provider.cast()
 
   @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+
+  companion object {
+    @Provide val defaultElements: Collection<Pair<TileId, () -> @Composable () -> TileModel<*>>>
+      get() = emptyList()
+
+    @Provide val defaultTileIds: Collection<TileId> get() = emptyList()
+  }
 }
 
 object TileScope

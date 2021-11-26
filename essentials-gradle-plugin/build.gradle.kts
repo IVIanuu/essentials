@@ -45,6 +45,8 @@ dependencies {
   implementation(Deps.Kotlin.gradlePlugin)
   implementation(Deps.Kotlin.gradlePluginApi)
 
+  api(Deps.AtomicFu.gradlePlugin)
+  api(Deps.Compose.gradlePlugin)
   api(Deps.androidGradlePlugin)
   api(Deps.KotlinSerialization.gradlePlugin)
   api(Deps.Injekt.gradlePlugin)

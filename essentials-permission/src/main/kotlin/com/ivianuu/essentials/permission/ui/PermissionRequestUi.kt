@@ -72,9 +72,9 @@ data class UiPermission<P : Permission>(
 
 @Provide @Composable fun permissionRequestModel(
   appUiStarter: AppUiStarter,
-  permissions: Map<TypeKey<Permission>, Permission> = emptyMap(),
+  permissions: Map<TypeKey<Permission>, Permission>,
   permissionStateFactory: PermissionStateFactory,
-  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>> = emptyMap(),
+  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
   ctx: KeyUiContext<PermissionRequestKey>
 ): PermissionRequestModel {
   val model = PermissionRequestModel(

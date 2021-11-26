@@ -26,7 +26,6 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
 @Provide fun <@Spread T : UiDecorator> uiDecoratorElement(
@@ -48,7 +47,7 @@ data class UiDecoratorElement(
       override fun loadingOrder(item: UiDecoratorElement) = item.loadingOrder
     }
 
-    @Provide fun defaultElements() = emptyList<UiDecoratorElement>()
+    @Provide val defaultElements get() = emptyList<UiDecoratorElement>()
   }
 }
 
