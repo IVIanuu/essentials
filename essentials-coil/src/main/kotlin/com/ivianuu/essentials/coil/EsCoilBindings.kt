@@ -23,9 +23,9 @@ import coil.fetch.Fetcher
 import coil.intercept.Interceptor
 import coil.map.Mapper
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlin.reflect.KClass
 
@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
   fetchers: List<FetcherPair<*>>,
   interceptors: List<Interceptor>,
   mappers: List<MapperPair<*>>,
-): @Scoped<AppComponent> ImageLoader = ImageLoader.Builder(context)
+): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }
     interceptors.forEach { add(it) }

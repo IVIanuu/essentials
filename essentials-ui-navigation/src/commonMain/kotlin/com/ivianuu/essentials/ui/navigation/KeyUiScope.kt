@@ -17,17 +17,14 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.common.ComponentName
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
 
-val LocalKeyUiComponent = compositionLocalOf<Component<KeyUiComponent>> {
+val LocalKeyUiElements = compositionLocalOf<Elements<KeyUiScope>> {
   error("No key ui component provided")
 }
 
-object KeyUiComponent : ComponentName {
-  @Provide @ComponentElement<UiComponent>
-  data class Factory(val create: (Key<*>) -> Component<KeyUiComponent>)
-}
+object KeyUiScope

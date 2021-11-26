@@ -25,7 +25,7 @@ import com.ivianuu.essentials.rate.ui.RateKey
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.days
 import com.ivianuu.essentials.time.milliseconds
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -38,7 +38,7 @@ import kotlin.time.Duration
   clock: Clock,
   L: Logger,
   S: RateUiSchedule = RateUiSchedule()
-) = ScopeWorker<UiComponent> {
+) = ScopeWorker<UiScope> {
   if (pref.data.first().installTime == 0L) {
     val now = clock()
     pref.updateData { copy(installTime = now.inWholeNanoseconds) }

@@ -46,11 +46,11 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
@@ -62,7 +62,7 @@ object NavBarKey : Key<Unit>
   navBarPref: DataStore<NavBarPrefs>,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
-  S: ComponentScope<KeyUiComponent>
+  S: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }

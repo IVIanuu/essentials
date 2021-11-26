@@ -23,7 +23,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
@@ -96,7 +96,7 @@ fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<Permi
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
-@Provide fun permissionRefreshesWorker() = ScopeWorker<UiComponent> {
+@Provide fun permissionRefreshesWorker() = ScopeWorker<UiScope> {
   permissionRefreshes.emit(Unit)
 }
 

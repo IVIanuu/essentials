@@ -28,30 +28,30 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.ui.LocalComponent
+import com.ivianuu.essentials.ui.LocalElements
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlin.reflect.KClass
 
 fun interface NavigationStateContent : @Composable (Modifier) -> Unit
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
-  keyUiComponentFactory: KeyUiComponent.Factory,
+  keyUiElementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
   rootKey: RootKey? = null,
-  S: ComponentScope<AppComponent>
+  S: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
   val contentState = remember {
-    NavigationContentState(keyUiComponentFactory, navigator.backStack)
+    NavigationContentState(keyUiElementsFactory, navigator.backStack)
   }
 
   DisposableEffect(navigator.backStack) {
@@ -76,7 +76,7 @@ fun interface NavigationStateContent : @Composable (Modifier) -> Unit
   AnimatedStack(modifier = modifier, children = contentState.stackChildren)
 }
 
-@Provide @ComponentElement<KeyUiComponent>
+@Provide @Element<KeyUiScope>
 data class NavigationContentComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
@@ -84,7 +84,7 @@ data class NavigationContentComponent(
 )
 
 private class NavigationContentState(
-  var keyUiComponentFactory: KeyUiComponent.Factory,
+  var keyUiElementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
   initialBackStack: List<Key<*>>
 ) {
   private var children by mutableStateOf(emptyList<Child>())
@@ -107,8 +107,9 @@ private class NavigationContentState(
   @Suppress("UNCHECKED_CAST")
   private fun getOrCreateEntry(key: Key<*>): Child {
     children.firstOrNull { it.key == key }?.let { return it }
-    val keyUiComponent = keyUiComponentFactory.create(key)
-    val navigationContentComponent = keyUiComponent.element<NavigationContentComponent>()
+    val scope = Scope<KeyUiScope>()
+    val elements = keyUiElementsFactory(scope, key)
+    val navigationContentComponent = elements<NavigationContentComponent>()
     val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
     checkNotNull(content) { "No ui factory found for $key" }
     val decoratedContent: @Composable () -> Unit = {
@@ -117,14 +118,15 @@ private class NavigationContentState(
       }
     }
     val options = navigationContentComponent.optionFactories[key::class]?.invoke(key)
-    return Child(key, options, decoratedContent, keyUiComponent)
+    return Child(key, options, decoratedContent, elements, scope)
   }
 
   private class Child(
     val key: Key<*>,
     options: KeyUiOptions? = null,
     val content: @Composable () -> Unit,
-    val component: Component<KeyUiComponent>
+    val elements: Elements<KeyUiScope>,
+    val scope: Scope<KeyUiScope>
   ) {
     val stackChild = AnimatedStackChild(
       key = key,
@@ -142,8 +144,8 @@ private class NavigationContentState(
       }
 
       CompositionLocalProvider(
-        LocalComponent provides component,
-        LocalKeyUiComponent provides component,
+        LocalElements provides elements,
+        LocalKeyUiElements provides elements,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {
         content()
@@ -159,8 +161,7 @@ private class NavigationContentState(
       }
     }
 
-    private var savedState =
-      mutableMapOf<Any, Map<String, List<Any?>>>()
+    private var savedState = mutableMapOf<Any, Map<String, List<Any?>>>()
 
     private var isComposing = false
     private var isDetached = false
@@ -175,7 +176,7 @@ private class NavigationContentState(
       if (isFinalized) return
       if (isComposing || !isDetached) return
       isFinalized = true
-      component.dispose()
+      scope.dispose()
     }
   }
 }

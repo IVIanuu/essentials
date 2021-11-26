@@ -16,14 +16,5 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.common.ComponentName
-
-object AccessibilityComponent : ComponentName {
-  @Provide @ComponentElement<ServiceComponent>
-  data class Factory(val create: () -> Component<AccessibilityComponent>)
-}
+object AccessibilityScope
 

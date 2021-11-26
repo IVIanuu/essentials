@@ -16,16 +16,16 @@
 
 package com.ivianuu.essentials.recentapps
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -38,9 +38,9 @@ import kotlinx.coroutines.flow.shareIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
-@Provide @Eager<AppComponent> fun recentApps(
+@Provide @Eager<AppScope> fun recentApps(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  scope: ComponentScope<AppComponent>,
+  scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ): Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }

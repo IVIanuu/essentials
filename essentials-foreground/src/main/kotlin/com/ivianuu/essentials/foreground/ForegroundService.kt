@@ -5,34 +5,40 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.composedFlow
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
   private val component by lazy {
-    createServiceComponent().element<ForegroundServiceComponent>()
+    application
+      .cast<AppElementsOwner>()
+      .appElements<ForegroundServiceComponent>()
   }
+
   @Provide val logger get() = component.logger
 
   private var previousStates = emptyList<Pair<ForegroundManagerImpl.ForegroundState, Notification>>()
+
+  private var job: Job? = null
 
   override fun onCreate() {
     super.onCreate()
     log { "start foreground service" }
 
-    component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
+    job = component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(
         block = {
           composedFlow {
@@ -48,7 +54,7 @@ class ForegroundService : Service() {
 
   override fun onDestroy() {
     log { "stop foreground service" }
-    component.component.dispose()
+    job?.cancel()
     super.onDestroy()
   }
 
@@ -81,10 +87,9 @@ class ForegroundService : Service() {
   override fun onBind(intent: Intent?): IBinder? = null
 }
 
-@Provide @ComponentElement<ServiceComponent> data class ForegroundServiceComponent(
+@Provide @Element<AppScope> data class ForegroundServiceComponent(
   val foregroundManager: ForegroundManagerImpl,
   val notificationManager: @SystemService NotificationManager,
   val logger: Logger,
-  val scope: ComponentScope<ServiceComponent>,
-  val component: Component<ServiceComponent>
+  val scope: NamedCoroutineScope<AppScope>
 )

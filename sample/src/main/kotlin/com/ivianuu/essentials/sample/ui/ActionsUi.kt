@@ -22,7 +22,7 @@ import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
@@ -43,7 +43,7 @@ object ActionsKey : Key<Unit>
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  S: ComponentScope<UiComponent>,
+  S: NamedCoroutineScope<UiScope>,
   T: Toaster
 ) = KeyUi<ActionsKey> {
   Scaffold(

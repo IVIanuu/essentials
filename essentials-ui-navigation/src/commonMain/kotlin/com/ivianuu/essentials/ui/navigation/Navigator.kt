@@ -19,15 +19,15 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CompletableDeferred
 
 interface Navigator {
@@ -46,11 +46,11 @@ interface Navigator {
   suspend fun clear()
 }
 
-@Provide @Scoped<AppComponent> class NavigatorImpl(
+@Provide @Scoped<AppScope> class NavigatorImpl(
   private val keyHandlers: List<KeyHandler<*>>,
   rootKey: RootKey? = null,
   private val L: Logger,
-  S: ComponentScope<AppComponent>
+  S: NamedCoroutineScope<AppScope>
 ) : Navigator {
   override var backStack by mutableStateOf(listOfNotNull<Key<*>>(rootKey))
     private set

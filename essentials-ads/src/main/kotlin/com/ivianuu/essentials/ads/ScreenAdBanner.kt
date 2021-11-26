@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -28,7 +28,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
   config: ScreenAdBannerConfig? = null,
   showAds: State<ShowAds>,
   key: Key<*>
-): @Scoped<KeyUiComponent> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
+): @Scoped<KeyUiScope> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
   if (config == null) {
     content()
     return@decorator

@@ -20,10 +20,6 @@ import android.graphics.drawable.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.common.ComponentName
 import kotlin.reflect.KClass
 
 data class TileModel<out T : AbstractFunTileService<*>>(
@@ -53,9 +49,6 @@ class TileModuleElementModule<@com.ivianuu.injekt.Spread T : @Composable () -> T
   @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 }
 
-object TileComponent : ComponentName {
-  @Provide @ComponentElement<ServiceComponent>
-  data class Factory(val create: (TileId) -> Component<TileComponent>)
-}
+object TileScope
 
 @JvmInline value class TileId(val clazz: KClass<*>)

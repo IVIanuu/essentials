@@ -18,6 +18,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
@@ -33,12 +34,11 @@ import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.state.asComposable
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 
@@ -50,7 +50,7 @@ object CheckAppsKey : Key<Unit>
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  S: ComponentScope<KeyUiComponent>
+  S: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
@@ -78,7 +78,7 @@ object CheckAppsKey : Key<Unit>
 
 @Tag private annotation class CheckApps
 
-@Provide fun checkAppsDb(context: AppContext): @Scoped<AppComponent> @CheckApps Db = AndroidDb(
+@Provide fun checkAppsDb(context: AppContext): @Scoped<AppScope> @CheckApps Db = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

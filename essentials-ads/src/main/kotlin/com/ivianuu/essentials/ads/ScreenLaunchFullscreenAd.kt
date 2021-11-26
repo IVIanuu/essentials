@@ -9,7 +9,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.asComposedFlow
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +41,7 @@ import kotlinx.serialization.Serializable
   pref: DataStore<ScreenLaunchPrefs>,
   showAds: State<ShowAds>,
   L: Logger
-) = ScopeWorker<UiComponent> {
+) = ScopeWorker<UiScope> {
   showAds
     .asComposedFlow()
     .flatMapLatest {

@@ -67,13 +67,13 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
 
@@ -181,7 +181,7 @@ data class UiNotification(
   permissionRequester: PermissionRequester,
   service: NotificationService,
   C: AppContext,
-  S: ComponentScope<KeyUiComponent>
+  S: NamedCoroutineScope<KeyUiScope>
 ) = NotificationsModel(
   hasPermissions = resourceFromFlow { permissionState },
   notifications = service.notifications

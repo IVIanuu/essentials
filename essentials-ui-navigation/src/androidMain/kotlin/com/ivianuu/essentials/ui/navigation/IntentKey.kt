@@ -21,6 +21,7 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catchT
@@ -30,9 +31,8 @@ import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -41,7 +41,7 @@ import kotlin.reflect.KClass
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
-@Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> keyIntentFactoryElement(
+@Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
   keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
@@ -54,7 +54,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   appUiStarter: IntentAppUiStarter,
   dispatcher: MainDispatcher,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  scope: ComponentScope<AppComponent>
+  scope: NamedCoroutineScope<AppScope>
 ) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key, onResult ->
   if (key !is IntentKey) return@handler false
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]

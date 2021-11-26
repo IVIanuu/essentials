@@ -22,18 +22,20 @@ import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.LocalComponent
-import com.ivianuu.essentials.ui.LocalUiComponent
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.LocalElements
+import com.ivianuu.essentials.ui.LocalUiElements
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.appComponent
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
@@ -45,28 +47,38 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
       finish()
     }
 
-    val uiComponent = appComponent.element<UiComponentFactory>().create(this)
-    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { uiComponent.dispose() }
-    }
+    val uiScope = Scope<UiScope>()
 
-    val activityComponent = uiComponent.element<EsActivityComponent>()
+    val uiComponent = application
+      .cast<AppElementsOwner>()
+      .appElements<EsActivityComponent>()
+      .uiComponent(uiScope, this)
+
+    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+      onCancel { uiScope.dispose() }
+    }
 
     setContent {
       CompositionLocalProvider(
-        LocalComponent provides uiComponent,
-        LocalUiComponent provides uiComponent
+        LocalElements provides uiComponent.elements,
+        LocalUiElements provides uiComponent.elements
       ) {
-        activityComponent.decorateUi {
-          activityComponent.appUi()
+        uiComponent.decorateUi {
+          uiComponent.appUi()
         }
       }
     }
   }
 }
 
-@Provide @ComponentElement<UiComponent>
-data class EsActivityComponent(val appUi: AppUi, val decorateUi: DecorateUi)
+@Provide @Element<AppScope>
+data class EsActivityComponent(
+  val uiComponent: (Scope<UiScope>, ComponentActivity) -> UiComponent
+)
 
-@Provide @ComponentElement<AppComponent>
-data class UiComponentFactory(val create: (ComponentActivity) -> Component<UiComponent>)
+@Provide data class UiComponent(
+  val appUi: AppUi,
+  val decorateUi: DecorateUi,
+  val elements: Elements<UiScope>
+)
+

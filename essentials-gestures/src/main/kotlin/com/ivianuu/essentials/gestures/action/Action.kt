@@ -93,7 +93,7 @@ interface ActionPickerDelegate {
   companion object {
     @Provide fun floatingWindowActionsEnabled(
       systemBuildInfo: SystemBuildInfo
-    ) = FloatingWindowActionsEnabled(systemBuildInfo.sdk >= 29   )
+    ) = FloatingWindowActionsEnabled(systemBuildInfo.sdk >= 29)
   }
 }
 

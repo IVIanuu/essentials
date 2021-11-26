@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.android.prefs
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.coroutines.childCoroutineContext
@@ -9,10 +10,9 @@ import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.essentials.data.ReplaceDataCorruptionHandler
 import com.ivianuu.essentials.data.Serializer
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
@@ -20,8 +20,8 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
     initial: () -> @Initial T = default,
     serializerFactory: () -> Serializer<T>,
     prefsDir: () -> PrefsDir,
-    scope: ComponentScope<AppComponent>
-  ): @Scoped<AppComponent> DataStore<T> = DiskDataStore(
+    scope: NamedCoroutineScope<AppScope>
+  ): @Scoped<AppScope> DataStore<T> = DiskDataStore(
     coroutineContext = scope.coroutineContext.childCoroutineContext(dispatcher),
     produceFile = { prefsDir().resolve(name) },
     produceSerializer = serializerFactory,

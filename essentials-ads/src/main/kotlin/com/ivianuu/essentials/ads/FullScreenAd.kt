@@ -5,17 +5,17 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.asComposedFlow
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
@@ -40,11 +40,11 @@ interface FullScreenAd {
   suspend fun showIfLoaded(): Boolean
 }
 
-@Provide @Scoped<UiComponent> class FullScreenAdImpl(
+@Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val mainDispatcher: MainDispatcher,
-  private val scope: ComponentScope<AppComponent>,
+  private val scope: NamedCoroutineScope<AppScope>,
   private val showAds: State<ShowAds>,
   private val L: Logger
 ) : FullScreenAd {
@@ -129,7 +129,7 @@ class AdLoadingException(val reason: Int) : RuntimeException()
 @Provide fun preloadFullScreenAdWorker(
   fullScreenAd: FullScreenAd,
   showAds: State<ShowAds>
-) = ScopeWorker<UiComponent> {
+) = ScopeWorker<UiScope> {
   showAds.asComposedFlow()
     .collect { fullScreenAd.preload() }
 }

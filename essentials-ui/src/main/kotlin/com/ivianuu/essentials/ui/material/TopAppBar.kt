@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.BackButton
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.Element
 
 enum class AppBarStyle { PRIMARY, SURFACE }
 
@@ -148,7 +148,7 @@ private val DefaultAppBarHeight = 64.dp
 val DefaultAppBarElevation = 0.dp
 
 @Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
-  val component = LocalKeyUiComponent.current.element<AutoTopAppBarComponent>()
+  val component = LocalKeyUiElements.current<AutoTopAppBarComponent>()
   val canGoBack = remember {
     component.navigator.backStack.indexOf(component.key) > 0
   }
@@ -158,5 +158,5 @@ val DefaultAppBarElevation = 0.dp
   }
 }
 
-@Provide @ComponentElement<KeyUiComponent>
+@Provide @Element<KeyUiScope>
 data class AutoTopAppBarComponent(val key: Key<*>, val navigator: Navigator)

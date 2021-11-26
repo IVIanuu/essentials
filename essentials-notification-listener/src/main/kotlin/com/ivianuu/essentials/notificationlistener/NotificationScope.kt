@@ -16,13 +16,4 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.common.ComponentName
-
-object NotificationComponent : ComponentName {
-  @Provide @ComponentElement<ServiceComponent>
-  data class Factory(val create: () -> Component<NotificationComponent>)
-}
+object NotificationScope

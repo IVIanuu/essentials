@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.ui
+package com.ivianuu.essentials.xposed
 
-import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentName
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Element
 
-val LocalComponent = compositionLocalOf<Component<*>> { error("No component provided") }
+object XposedScope
 
-val LocalUiComponent = compositionLocalOf<Component<UiComponent>> { error("No ui component provided") }
-
-object UiComponent : ComponentName
+@Provide @Element<XposedScope>
+data class XposedHooksComponent(val hooks: () -> List<Hooks>)

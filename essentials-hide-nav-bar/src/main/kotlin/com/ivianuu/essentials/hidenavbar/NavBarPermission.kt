@@ -24,7 +24,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.ui.UiComponent
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.first
   navBarFeatureSupported: NavBarFeatureSupported,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>
-) = ScopeWorker<UiComponent> {
+) = ScopeWorker<UiScope> {
   if (navBarFeatureSupported.value && !permissionState.first())
     pref.updateData { copy(hideNavBar = false) }
 }

@@ -20,6 +20,8 @@ import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
@@ -27,11 +29,9 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ServiceComponent
-import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -49,26 +49,26 @@ class FunTileService9 : AbstractFunTileService<FunTileService9>()
 abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
-  private val component by lazy {
-    createServiceComponent().element<FunTileServiceComponent>()
+  private val serviceComponent by lazy {
+    application
+      .cast<AppElementsOwner>()
+      .appElements<FunTileServiceComponent>()
   }
 
   @Provide private val logger
-    get() = component.logger
+    get() = serviceComponent.logger
 
   private var tileComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
     log { "$serviceClass on start listening" }
-    val tileModelComponent = component.tileComponentFactory
-      .create(TileId(serviceClass))
-      .element<TileModelComponent>()
+    val tileModelComponent = serviceComponent.tileModelComponent(Scope(), TileId(serviceClass))
       .also { this.tileComponent = it }
     tileModelComponent.tileModel
       .asComposedFlow()
       .onEach { applyModel(it) }
-      .launchIn(tileModelComponent.scope)
+      .launchIn(tileModelComponent.coroutineScope)
   }
 
   override fun onClick() {
@@ -78,15 +78,10 @@ abstract class AbstractFunTileService<T : Any>(
   }
 
   override fun onStopListening() {
-    tileComponent?.component?.dispose()
+    tileComponent?.scope?.dispose()
     tileComponent = null
     log { "$serviceClass on stop listening" }
     super.onStopListening()
-  }
-
-  override fun onDestroy() {
-    component.component.dispose()
-    super.onDestroy()
   }
 
   private fun applyModel(model: TileModel<*>) {
@@ -105,32 +100,31 @@ abstract class AbstractFunTileService<T : Any>(
     }
     qsTile.label = when {
       model.label != null -> model.label
-      model.labelRes != null -> component.resourceProvider<String>(model.labelRes)
+      model.labelRes != null -> serviceComponent.resourceProvider<String>(model.labelRes)
       else -> null
     }
     qsTile.contentDescription = when {
       model.description != null -> model.description
-      model.descriptionRes != null -> component.resourceProvider<String>(model.descriptionRes)
+      model.descriptionRes != null -> serviceComponent.resourceProvider<String>(model.descriptionRes)
       else -> null
     }
     qsTile.updateTile()
   }
 }
 
-@Provide @ComponentElement<ServiceComponent>
+@Provide @Element<AppScope>
 data class FunTileServiceComponent(
   val logger: Logger,
   val resourceProvider: ResourceProvider,
-  val tileComponentFactory: TileComponent.Factory,
-  val component: Component<ServiceComponent>
+  val tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
 )
 
-@Provide @ComponentElement<TileComponent>
+@Provide @Element<TileScope>
 data class TileModelComponent(
   val tileId: TileId,
   val tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>> = emptyList(),
-  val scope: ComponentScope<TileComponent>,
-  val component: Component<TileComponent>
+  val coroutineScope: NamedCoroutineScope<TileScope>,
+  val scope: Scope<TileScope>
 ) {
   var currentModel: TileModel<*>? = null
 

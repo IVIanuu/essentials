@@ -19,6 +19,7 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
@@ -30,9 +31,8 @@ import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.IODispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.withContext
 import java.util.Date
 import java.util.zip.ZipEntry
@@ -48,7 +48,7 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
   dataDir: DataDir,
   dispatcher: IODispatcher,
   navigator: Navigator,
-  scope: ComponentScope<AppComponent>,
+  scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = CreateBackupUseCase {
   catch {
@@ -93,7 +93,7 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
   dispatcher: IODispatcher,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: ComponentScope<AppComponent>,
+  scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = RestoreBackupUseCase {
   catch {

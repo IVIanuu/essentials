@@ -27,11 +27,11 @@ import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
@@ -59,7 +59,7 @@ data class SystemOverlayAppBlacklistModel(
 
 @Provide @Composable fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  S: ComponentScope<KeyUiComponent>
+  S: NamedCoroutineScope<KeyUiScope>
 ) = SystemOverlayAppBlacklistModel(
   appBlacklist = {
     valueFromFlow(emptySet()) { pref.data.map { it.appBlacklist } }

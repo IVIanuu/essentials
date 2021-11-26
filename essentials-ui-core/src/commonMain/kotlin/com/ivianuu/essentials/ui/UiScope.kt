@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package kotlinx.coroutines
+package com.ivianuu.essentials.ui
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import androidx.compose.runtime.compositionLocalOf
+import com.ivianuu.injekt.common.Elements
 
-object EsCoroutinesInjectables {
-  @Provide inline fun coroutinesScope(scope: NamedCoroutineScope<*>): CoroutineScope = scope
-}
+object UiScope
+
+val LocalElements = compositionLocalOf<Elements<*>> { error("No elements provided") }
+
+val LocalUiElements = compositionLocalOf<Elements<UiScope>> { error("No ui elements provided") }

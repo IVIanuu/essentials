@@ -19,15 +19,15 @@ package com.ivianuu.essentials.tile
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 
 @Provide fun tileServiceDeclarationChecker(
   context: AppContext,
   packageManager: PackageManager,
   tileIds: List<TileId> = emptyList()
-) = ScopeWorker<AppComponent> {
+) = ScopeWorker<AppScope> {
   for (tileId in tileIds) {
     val intent = Intent(context, tileId.clazz.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)

@@ -55,11 +55,11 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 
 data class AppFeature(
   val title: String,
@@ -280,7 +280,7 @@ data class GoPremiumModel(
   key: GoPremiumKey,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
-  S: ComponentScope<KeyUiComponent>
+  S: NamedCoroutineScope<KeyUiScope>
 ) = GoPremiumModel(
   features = features,
   premiumSkuDetails = resourceFromFlow { premiumVersionManager.premiumSkuDetails },

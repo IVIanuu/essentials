@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
@@ -28,9 +29,8 @@ import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -59,7 +59,7 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-@Provide @Scoped<AppComponent> class PremiumVersionManagerImpl(
+@Provide @Scoped<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val getSkuDetails: GetSkuDetailsUseCase,
@@ -69,7 +69,7 @@ interface PremiumVersionManager {
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
-  private val scope: ComponentScope<AppComponent>
+  private val scope: NamedCoroutineScope<AppScope>
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }

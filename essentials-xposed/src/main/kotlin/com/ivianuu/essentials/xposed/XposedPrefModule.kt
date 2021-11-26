@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ComponentStorage
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
@@ -14,13 +14,12 @@ import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.scoped
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.coroutines.IODispatcher
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
@@ -46,9 +45,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     serializerFactory: () -> KSerializer<T>,
-    scope: ComponentScope<AppComponent>,
-    storage: ComponentStorage<AppComponent>
-  ): @Scoped<AppComponent> DataStore<T> {
+    scope: NamedCoroutineScope<AppScope>,
+    appScope: Scope<AppScope>
+  ): @Scoped<AppScope> DataStore<T> {
     val sharedPrefs by lazy {
       context.getSharedPreferences(prefName, Context.MODE_WORLD_READABLE)
     }
@@ -66,7 +65,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
 
     val data = callbackFlow<T> {
-      val listener = storage.scoped {
+      val listener = appScope {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
           scope.launch(dispatcher) {
             context.sendBroadcast(Intent(prefsChangedAction(packageName)))

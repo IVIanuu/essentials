@@ -25,8 +25,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.state.asComposedStateFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlin.reflect.KClass
 
 fun interface KeyUi<K : Key<*>> : @Composable () -> Unit
@@ -78,7 +77,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   uiFactory: () -> U,
   model: @Composable () -> S,
-  CS: ComponentScope<KeyUiComponent>
+  CS: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<K> {
   val currentModel by remember(model.cast()) { model.asComposedStateFlow() }.collectAsState()
   val scope = remember {
@@ -94,5 +93,5 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val scope: ComponentScope<KeyUiComponent>
+  @Provide val scope: NamedCoroutineScope<KeyUiScope>
 )

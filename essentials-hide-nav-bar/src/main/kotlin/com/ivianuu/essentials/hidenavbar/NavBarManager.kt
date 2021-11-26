@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Rect
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
@@ -33,7 +34,6 @@ import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -53,7 +53,7 @@ import kotlinx.coroutines.flow.onEach
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater,
   L: Logger
-) = ScopeWorker<AppComponent> worker@ {
+) = ScopeWorker<AppScope> worker@ {
   if (!navBarFeatureSupported.value) return@worker
   permissionState
     .flatMapLatest { hasPermission ->

@@ -19,11 +19,11 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiComponent
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.Element
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey }
 
@@ -43,8 +43,8 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val key = catch { LocalKeyUiComponent.current }.getOrNull()
-      ?.element<SampleDecoratorComponent>()?.key
+    val key = catch { LocalKeyUiElements.current }.getOrNull()
+      ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -52,8 +52,8 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val key = catch { LocalKeyUiComponent.current }.getOrNull()
-      ?.element<SampleDecoratorComponent>()?.key
+    val key = catch { LocalKeyUiElements.current }.getOrNull()
+      ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -62,7 +62,7 @@ fun interface SampleListDecorator : ListDecorator
 fun interface SampleKeyUiDecorator : KeyUiDecorator
 
 @Provide val sampleKeyUiDecorator = SampleKeyUiDecorator decorator@ { content ->
-  val key = LocalKeyUiComponent.current.element<SampleDecoratorComponent>().key
+  val key = LocalKeyUiElements.current<SampleDecoratorComponent>().key
   if (key !is DecoratorsKey) {
     content()
     return@decorator
@@ -93,5 +93,5 @@ fun interface SampleKeyUiDecorator : KeyUiDecorator
   }
 }
 
-@Provide @ComponentElement<KeyUiComponent>
+@Provide @Element<KeyUiScope>
 data class SampleDecoratorComponent(val key: Key<*>)

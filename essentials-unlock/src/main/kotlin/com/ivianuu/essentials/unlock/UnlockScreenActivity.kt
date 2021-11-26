@@ -24,17 +24,17 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.ActivityComponent
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.android.appComponent
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.Element
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -57,7 +57,9 @@ class UnlockScreenActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component = application.appComponent.element<UnlockScreenComponent>()
+    @Provide val component = application
+      .cast<AppElementsOwner>()
+      .appElements<UnlockScreenComponent>()
 
     log(logger = component.logger) { "unlock screen for $requestId" }
 
@@ -140,7 +142,7 @@ class UnlockScreenActivity : ComponentActivity() {
   }
 }
 
-@Provide @ComponentElement<AppComponent>
+@Provide @Element<AppScope>
 data class UnlockScreenComponent(
   val broadcastsFactory: BroadcastsFactory,
   val keyguardManager: @SystemService KeyguardManager,

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.essentials.xposed
+package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentElement
-import com.ivianuu.injekt.common.ComponentName
+import com.ivianuu.injekt.common.Elements
 
-object XposedAppComponent : ComponentName
+object AppScope
 
-@Provide @ComponentElement<XposedAppComponent>
-data class XposedHooksComponent(val hooks: () -> List<Hooks>)
+interface AppElementsOwner {
+  val appElements: Elements<AppScope>
+}

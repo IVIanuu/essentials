@@ -18,14 +18,14 @@ package com.ivianuu.essentials.util
 
 import android.widget.Toast
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 
 fun interface Toaster : (String) -> Unit
@@ -33,7 +33,7 @@ fun interface Toaster : (String) -> Unit
 @Provide fun toaster(
   context: AppContext,
   mainDispatcher: MainDispatcher,
-  scope: ComponentScope<AppComponent>
+  scope: NamedCoroutineScope<AppScope>
 ) = Toaster { message ->
   launch(mainDispatcher) {
     Toast.makeText(

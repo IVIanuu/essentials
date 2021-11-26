@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.awaitCancellation
@@ -24,7 +24,7 @@ interface ForegroundManager {
 suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
   startForeground(id) { notification }
 
-@Provide @Scoped<AppComponent> class ForegroundManagerImpl(
+@Provide @Scoped<AppScope> class ForegroundManagerImpl(
   private val context: AppContext,
   private val L: Logger
 ) : ForegroundManager {

@@ -16,17 +16,18 @@
 
 package com.ivianuu.essentials.sample
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.EsApp
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.android.createAppComponent
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.inject
 
 class SampleApp : EsApp() {
-  override fun buildAppComponent(): Component<AppComponent> =
+  override fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope> =
     @Providers(
       ".**",
       "com.ivianuu.essentials.logging.AndroidLogger"
-    )
-    createAppComponent()
+    ) inject()
 }

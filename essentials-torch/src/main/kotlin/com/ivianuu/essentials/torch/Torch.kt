@@ -9,6 +9,7 @@ import android.hardware.camera2.CameraManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
@@ -27,9 +28,8 @@ import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.ComponentScope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
@@ -45,13 +45,13 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-@Provide @Scoped<AppComponent> class TorchImpl(
+@Provide @Scoped<AppScope> class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
   private val mainDispatcher: MainDispatcher,
   private val notificationFactory: NotificationFactory,
-  private val S: ComponentScope<AppComponent>,
+  private val S: NamedCoroutineScope<AppScope>,
   private val L: Logger,
   private val T: ToastContext
 ) : Torch {

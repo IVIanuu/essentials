@@ -17,16 +17,21 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.injekt.android.AppComponentOwner
-import com.ivianuu.injekt.common.AppComponent
-import com.ivianuu.injekt.common.Component
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
 
-abstract class EsApp : Application(), AppComponentOwner {
-  override lateinit var appComponent: Component<AppComponent>
+abstract class EsApp : Application(), AppElementsOwner {
+  @Provide private val scope = Scope<AppScope>()
+
+  override lateinit var appElements: Elements<AppScope>
   override fun onCreate() {
-    appComponent = buildAppComponent()
+    appElements = buildAppElements()
     super.onCreate()
   }
 
-  protected abstract fun buildAppComponent(): Component<AppComponent>
+  protected abstract fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope>
 }
