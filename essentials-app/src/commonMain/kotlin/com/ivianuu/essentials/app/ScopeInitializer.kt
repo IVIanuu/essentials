@@ -26,14 +26,14 @@ import com.ivianuu.injekt.common.TypeKey
 fun interface ScopeInitializer<N> : () -> Unit
 
 @Provide fun <@Spread T : ScopeInitializer<N>, N> scopeInitializerElement(
-  factory: () -> T,
+  initializer: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-): ScopeInitializerElement<N> = ScopeInitializerElement(key, factory, loadingOrder)
+): ScopeInitializerElement<N> = ScopeInitializerElement(key, initializer, loadingOrder)
 
 data class ScopeInitializerElement<N>(
   val key: TypeKey<*>,
-  val factory: () -> ScopeInitializer<*>,
+  val initializer: ScopeInitializer<*>,
   val loadingOrder: LoadingOrder<out ScopeInitializer<*>>
 ) {
   companion object {
@@ -47,7 +47,7 @@ data class ScopeInitializerElement<N>(
   }
 }
 
-@Provide @Eager<N> class ScopeInitializerRunner<N>(
+class ScopeInitializerRunner<N> @Provide @Eager<N> constructor(
   nameKey: TypeKey<N>,
   initializers: List<ScopeInitializerElement<N>>,
   workerRunner: ScopeWorkerRunner<N>,
@@ -58,7 +58,7 @@ data class ScopeInitializerElement<N>(
       .sortedWithLoadingOrder()
       .forEach {
         log { "${nameKey.value} initialize ${it.key.value}" }
-        it.factory()()
+        it.initializer()
       }
     workerRunner()
   }
