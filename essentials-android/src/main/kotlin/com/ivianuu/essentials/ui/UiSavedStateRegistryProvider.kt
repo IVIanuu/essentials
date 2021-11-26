@@ -21,9 +21,9 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import com.ivianuu.injekt.Provide
 
-object SavableStateRegistryProvider
+fun interface SavableStateRegistryProvider : UiDecorator
 
-@Provide val savableStateRegistryProvider: UiDecorator<SavableStateRegistryProvider> = { content ->
+@Provide val savableStateRegistryProvider = SavableStateRegistryProvider { content ->
   CompositionLocalProvider(
     LocalSaveableStateRegistry provides SaveableStateRegistry(emptyMap()) { true },
     content = content

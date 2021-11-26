@@ -25,15 +25,14 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
-@Tag annotation class ProcessRestarterTag
-typealias ProcessRestarter = @ProcessRestarterTag suspend () -> Unit
+fun interface ProcessRestarter : suspend () -> Unit
 
 @Provide fun processRestarter(
   buildInfo: BuildInfo,
   context: AppContext,
   L: Logger,
   packageManager: PackageManager,
-): ProcessRestarter = {
+) = ProcessRestarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
   log { "restart process $intent" }

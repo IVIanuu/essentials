@@ -30,11 +30,11 @@ interface WriteSettingsPermission : Permission
 
 @Provide fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
   context: AppContext
-): PermissionStateProvider<P> = { Settings.System.canWrite(context) }
+) = PermissionStateProvider<P> { Settings.System.canWrite(context) }
 
 @Provide fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = {
+) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_MANAGE_WRITE_SETTINGS,
     "package:${buildInfo.packageName}".toUri()

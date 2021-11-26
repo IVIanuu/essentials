@@ -34,13 +34,13 @@ interface InstallUnknownAppsPermission : Permission
 fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionStateProvider(
   packageManager: PackageManager,
   systemBuildInfo: SystemBuildInfo
-): PermissionStateProvider<P> = {
+) = PermissionStateProvider<P> {
   systemBuildInfo.sdk < 26 || packageManager.canRequestPackageInstalls()
 }
 
 @Provide fun <P : InstallUnknownAppsPermission> installUnknownAppsPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = {
+) = PermissionIntentFactory<P> {
   Intent(
     "android.settings.MANAGE_UNKNOWN_APP_SOURCES",
     Uri.parse("package:${buildInfo.packageName}")

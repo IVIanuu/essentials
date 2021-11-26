@@ -29,15 +29,14 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-@Tag annotation class ScreenUnlockerTag
-typealias ScreenUnlocker = @ScreenUnlockerTag suspend () -> Boolean
+fun interface ScreenUnlocker : suspend () -> Boolean
 
 @Provide fun screenUnlocker(
   context: AppContext,
   dispatcher: DefaultDispatcher,
   L: Logger,
   keyguardManager: @SystemService KeyguardManager
-): ScreenUnlocker = {
+) = ScreenUnlocker {
   withContext(dispatcher) {
     log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) {

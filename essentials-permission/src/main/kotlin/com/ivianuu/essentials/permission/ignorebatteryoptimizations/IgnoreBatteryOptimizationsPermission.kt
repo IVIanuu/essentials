@@ -34,7 +34,7 @@ interface IgnoreBatteryOptimizationsPermission : Permission
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
   buildInfo: BuildInfo,
   powerManager: @SystemService PowerManager
-): PermissionStateProvider<P> = {
+) = PermissionStateProvider<P> {
   powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
 }
 
@@ -42,7 +42,7 @@ fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermiss
 @Provide
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = {
+) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
     "package:${buildInfo.packageName}".toUri()

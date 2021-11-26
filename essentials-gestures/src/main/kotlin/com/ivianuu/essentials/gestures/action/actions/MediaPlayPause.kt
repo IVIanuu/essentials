@@ -24,7 +24,9 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSettingsKey
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Provide
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
@@ -32,14 +34,14 @@ import com.ivianuu.injekt.Provide
 @Provide fun playPauseMediaAction(RP: ResourceProvider) = Action(
   id = PlayPauseActionId,
   title = loadResource(R.string.es_action_media_play_pause),
-  icon = singleActionIcon(Icons.Default.PlayArrow)
+  icon = staticActionIcon(Icons.Default.PlayArrow)
 )
 
 @Provide fun playPauseMediaActionExecutor(
   mediaActionSender: MediaActionSender
-): ActionExecutor<PlayPauseActionId> = {
+) = ActionExecutor<PlayPauseActionId> {
   mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
-@Provide inline val playPauseMediaActionSettingsKey: MediaActionSettingsKey<PlayPauseActionId>
+@Provide inline val playPauseMediaActionSettingsKey: @ActionSettingsKey<PlayPauseActionId> Key<Unit>
   get() = MediaActionSettingsKey()

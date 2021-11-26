@@ -29,48 +29,44 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.first
 
-@Tag annotation class RateOnPlayUseCaseTag
-typealias RateOnPlayUseCase = @RateOnPlayUseCaseTag suspend () -> Unit
+fun interface RateOnPlayUseCase : suspend () -> Unit
 
 @Provide fun rateOnPlayUseCase(
   buildInfo: BuildInfo,
   navigator: Navigator,
   pref: DataStore<RatePrefs>
-): RateOnPlayUseCase = {
+) = RateOnPlayUseCase {
   catch {
     navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
 }
 
-@Tag internal annotation class DisplayShowNeverUseCaseTag
-internal typealias DisplayShowNeverUseCase = @DisplayShowNeverUseCaseTag suspend () -> Boolean
+fun interface DisplayShowNeverUseCase : suspend () -> Boolean
 
-@Provide fun displayShowNeverUseCase(pref: DataStore<RatePrefs>): DisplayShowNeverUseCase = {
+@Provide fun displayShowNeverUseCase(pref: DataStore<RatePrefs>) = DisplayShowNeverUseCase {
   pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
 }
 
-@Tag internal annotation class ShowNeverUseCaseTag
-internal typealias ShowNeverUseCase = @ShowNeverUseCaseTag suspend () -> Unit
+fun interface ShowNeverUseCase : suspend () -> Unit
 
 @Provide fun showNeverUseCase(
   key: Key<*>,
   navigator: Navigator,
   pref: DataStore<RatePrefs>
-): ShowNeverUseCase = {
+) = ShowNeverUseCase {
   pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
   navigator.pop(key)
 }
 
-@Tag internal annotation class ShowLaterUseCaseTag
-internal typealias ShowLaterUseCase = @ShowLaterUseCaseTag suspend () -> Unit
+fun interface ShowLaterUseCase : suspend () -> Unit
 
 @Provide fun showLaterUseCase(
   key: Key<*>,
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
   clock: Clock
-): ShowLaterUseCase = {
+) = ShowLaterUseCase {
   val now = clock()
   pref.updateData {
     copy(

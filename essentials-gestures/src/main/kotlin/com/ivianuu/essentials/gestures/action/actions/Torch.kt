@@ -26,27 +26,21 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Provide object TorchActionId : ActionId("torch")
 
 @Provide fun torchAction(torch: Torch, RP: ResourceProvider) = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
-  icon = torch.torchState.torchIcon()
+  icon = torch.icon()
 )
 
-@Provide fun torchActionExecutor(torch: Torch): ActionExecutor<TorchActionId> =
-  { torch.setTorchState(!torch.torchState.value) }
+@Provide fun torchActionExecutor(torch: Torch) = ActionExecutor<TorchActionId>
+  { torch.setTorchState(!torch.torchEnabled) }
 
-private fun Flow<Boolean>.torchIcon(): Flow<ActionIcon> = this
-  .map {
-    if (it) R.drawable.es_ic_flashlight_on
+private fun Torch.icon() = ActionIcon {
+  Icon(
+    if (torchEnabled) R.drawable.es_ic_flashlight_on
     else R.drawable.es_ic_flashlight_off
-  }
-  .map {
-    {
-      Icon(it)
-    }
-  }
+  )
+}

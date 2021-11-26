@@ -25,6 +25,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,11 +40,11 @@ import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceValue
+import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
@@ -59,17 +64,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 data class WriteSecureSettingsPcInstructionsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Provide val writeSecureSettingsPcInstructionsUi: ModelKeyUi<WriteSecureSettingsPcInstructionsKey,
-    WriteSecureSettingsPcInstructionsModel> = {
+@Provide val writeSecureSettingsPcInstructionsUi =
+  ModelKeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {
   SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
     item {
       SecureSettingsHeader(
@@ -170,16 +172,16 @@ data class WriteSecureSettingsPcInstructionsKey(
   }
 }
 
-@Optics data class WriteSecureSettingsPcInstructionsModel(
-  val currentStep: Int = 1,
-  val completedStep: Int = 1,
-  val canContinueStep: Boolean = false,
-  val packageName: String = "",
-  val openPhoneInfo: () -> Unit = {},
-  val openDeveloperSettings: () -> Unit = {},
-  val continueStep: () -> Unit = {},
-  val openStep: (Int) -> Unit = {},
-  val cancelStep: () -> Unit = {}
+data class WriteSecureSettingsPcInstructionsModel(
+  val currentStep: Int,
+  val completedStep: Int,
+  val canContinueStep: Boolean,
+  val packageName: String,
+  val openPhoneInfo: () -> Unit,
+  val openDeveloperSettings: () -> Unit,
+  val continueStep: () -> Unit,
+  val openStep: (Int) -> Unit,
+  val cancelStep: () -> Unit
 ) {
   val adbCommand = "pm grant $packageName android.permission.WRITE_SECURE_SETTINGS"
 }
@@ -215,7 +217,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
   .distinctUntilChanged()
 
-@Provide fun writeSecureSettingsPcInstructionsModel(
+@Provide @Composable fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -224,56 +226,58 @@ typealias AdbEnabled = @AdbEnabledTag Int
   permissionStateFactory: PermissionStateFactory,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
-) = state(WriteSecureSettingsPcInstructionsModel(packageName = buildInfo.packageName)) {
-  state
-    .flatMapLatest { currentState ->
-      if (currentState.currentStep != currentState.completedStep) flowOf(false)
-      else when (currentState.completedStep) {
-        1 -> developerModeSetting.data.map { it != 0 }
-        2 -> adbEnabledSetting.data.map { it != 0 }
-        3 -> isCharging.map { it.value }
-        4 -> flow {
-          while (true) {
-            emit(permissionStateFactory(listOf(ctx.key.permissionKey)).first())
-            delay(1000)
-          }
-        }
-        else -> flowOf(true)
+): WriteSecureSettingsPcInstructionsModel {
+  var currentStep by remember { mutableStateOf(1) }
+  var completedStep by remember { mutableStateOf(1) }
+
+  val canContinueStep = if (currentStep != completedStep) false
+  else when (completedStep) {
+    1 -> valueFromFlow(false) { developerModeSetting.data.map { it != 0 } }
+    2 -> valueFromFlow(false) { adbEnabledSetting.data.map { it != 0 } }
+    3 -> valueFromFlow(false) { isCharging.map { it.value } }
+    4 -> produceValue(false) {
+      while (true) {
+        value = permissionStateFactory(listOf(ctx.key.permissionKey)).first()
+        delay(1000)
       }
     }
-    .update { copy(canContinueStep = it) }
-
-  action(WriteSecureSettingsPcInstructionsModel.continueStep()) {
-    if (state.first().completedStep == 4)
-      ctx.navigator.pop(ctx.key, true)
-    else
-      update { copy(currentStep = completedStep + 1, completedStep = completedStep + 1) }
+    else -> true
   }
 
-  action(WriteSecureSettingsPcInstructionsModel.openStep()) {
-    update { copy(currentStep = it) }
-  }
-
-  action(WriteSecureSettingsPcInstructionsModel.cancelStep()) {
-    update { copy(currentStep = completedStep - 1, completedStep = completedStep - 1) }
-  }
-
-  action(WriteSecureSettingsPcInstructionsModel.openPhoneInfo()) {
-    race(
-      { developerModeSetting.data.first { it != 0 } },
-      {
-        ctx.navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
-          ?.onFailure { showToast(R.string.open_phone_info_failed) }
+  return WriteSecureSettingsPcInstructionsModel(
+    packageName = buildInfo.packageName,
+    currentStep = currentStep,
+    completedStep = completedStep,
+    canContinueStep = canContinueStep,
+    continueStep = action {
+      if (completedStep == 4)
+        ctx.navigator.pop(ctx.key, true)
+      else {
+        completedStep++
+        currentStep = completedStep
       }
-    )
-    appUiStarter()
-  }
-
-  action(WriteSecureSettingsPcInstructionsModel.openDeveloperSettings()) {
-    race(
-      { adbEnabledSetting.data.first { it != 0 } },
-      { ctx.navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey()) }
-    )
-    appUiStarter()
-  }
+    },
+    openStep = { currentStep = it },
+    cancelStep = {
+      currentStep = completedStep - 1
+      completedStep = currentStep
+    },
+    openPhoneInfo = action {
+      race(
+        { developerModeSetting.data.first { it != 0 } },
+        {
+          ctx.navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
+            ?.onFailure { showToast(R.string.open_phone_info_failed) }
+        }
+      )
+      appUiStarter()
+    },
+    openDeveloperSettings = action {
+      race(
+        { adbEnabledSetting.data.first { it != 0 } },
+        { ctx.navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey()) }
+      )
+      appUiStarter()
+    }
+  )
 }

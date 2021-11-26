@@ -26,9 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.screenstate.DisplayInfo
-import com.ivianuu.essentials.ui.core.systemBarStyle
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 
@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.Flow
 
 object DisplayRotationKey : Key<Unit>
 
-@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>): KeyUi<DisplayRotationKey> = {
+@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) = KeyUi<DisplayRotationKey> {
   Box(
     modifier = Modifier.fillMaxSize()
       .background(MaterialTheme.colors.primary)

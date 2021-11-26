@@ -27,13 +27,13 @@ import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalComponent
 import com.ivianuu.essentials.ui.LocalUiComponent
 import com.ivianuu.essentials.ui.UiComponent
-import com.ivianuu.essentials.ui.UiComponentFactory
-import com.ivianuu.essentials.ui.core.AppUi
+import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
-import com.ivianuu.injekt.android.activityComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.dispose
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.appComponent
+import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
@@ -41,35 +41,32 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    onBackPressedDispatcher.addCallback(this) {
+    onBackPressedDispatcher.addCallback {
       finish()
     }
 
-    val component = activityComponent.entryPoint<UiComponentFactory>().uiComponent()
+    val uiComponent = appComponent.element<UiComponentFactory>().create(this)
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { component.dispose() }
+      onCancel { uiComponent.dispose() }
     }
 
-    val esActivityComponent = component.entryPoint<EsActivityComponent>()
+    val activityComponent = uiComponent.element<EsActivityComponent>()
 
     setContent {
       CompositionLocalProvider(
-        LocalComponent provides component,
-        LocalUiComponent provides component
+        LocalComponent provides uiComponent,
+        LocalUiComponent provides uiComponent
       ) {
-        esActivityComponent.decorateUi {
-          esActivityComponent.appUi()
+        activityComponent.decorateUi {
+          activityComponent.appUi()
         }
       }
     }
   }
-
-  override fun onBackPressed() {
-    super.onBackPressed()
-  }
 }
 
-@EntryPoint<UiComponent> interface EsActivityComponent {
-  val appUi: AppUi
-  val decorateUi: DecorateUi
-}
+@Provide @ComponentElement<UiComponent>
+data class EsActivityComponent(val appUi: AppUi, val decorateUi: DecorateUi)
+
+@Provide @ComponentElement<AppComponent>
+data class UiComponentFactory(val create: (ComponentActivity) -> Component<UiComponent>)

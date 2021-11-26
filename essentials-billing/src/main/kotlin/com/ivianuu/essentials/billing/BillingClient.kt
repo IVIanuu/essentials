@@ -20,21 +20,19 @@ import com.android.billingclient.api.BillingClient
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-@Provide @Scoped<AppComponent> fun billingClient(
+@Provide fun billingClient(
   context: AppContext,
   refreshes: MutableSharedFlow<BillingRefresh>
-): BillingClient = BillingClient
+): @Scoped<AppComponent> BillingClient = BillingClient
   .newBuilder(context)
   .enablePendingPurchases()
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
   .build()
 
-@Tag annotation class BillingRefreshTag
-typealias BillingRefresh = @BillingRefreshTag Unit
+object BillingRefresh
 
 @Provide val billingRefreshes = EventFlow<BillingRefresh>()

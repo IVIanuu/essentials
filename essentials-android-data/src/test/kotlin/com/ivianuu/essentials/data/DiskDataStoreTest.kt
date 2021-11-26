@@ -17,7 +17,6 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.serialization.KTypeT
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import com.ivianuu.injekt.Inject
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.first
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
+import kotlin.reflect.KTypeT
 
 class DiskDataStoreTest {
   private val storeDir = Files.createTempDirectory("tmp").toFile()
@@ -49,7 +49,7 @@ class DiskDataStoreTest {
   ) to storeDir.resolve(name)
 
   @Test fun testWrite() = runCancellingBlockingTest {
-    val (store, file) = createStore("test") { 0 }
+    val (store, file) = createStore("jvmTest") { 0 }
     store.updateData { 1 }
     store.data.first() shouldBe 1
     file.readText().toInt() shouldBe 1
@@ -59,7 +59,7 @@ class DiskDataStoreTest {
   }
 
   @Test fun testSingleCollector() = runCancellingBlockingTest {
-    val (store) = createStore("test") { 0 }
+    val (store) = createStore("jvmTest") { 0 }
 
     val collector = store.data.testCollect(this)
 
@@ -73,7 +73,7 @@ class DiskDataStoreTest {
   }
 
   @Test fun testMultipleCollector() = runCancellingBlockingTest {
-    val (store) = createStore("test") { 0 }
+    val (store) = createStore("jvmTest") { 0 }
 
     val collector1 = store.data.testCollect(this)
     val collector2 = store.data.testCollect(this)
@@ -91,7 +91,7 @@ class DiskDataStoreTest {
   }
 
   @Test fun testReadErrorWillBePropagatedToObservers() = runCancellingBlockingTest {
-    val (store, file) = createStore("test") { 0 }
+    val (store, file) = createStore("jvmTest") { 0 }
     file.writeText("corrupt_data")
 
     val collector = store.data.testCollect(this)
@@ -100,7 +100,7 @@ class DiskDataStoreTest {
 
   @Test fun testWriteErrorWillBePropagatedToCaller() = runCancellingBlockingTest {
     val (store) = createStore(
-      "test",
+      "jvmTest",
       serializer = object : Serializer<Int> {
         override val defaultData: Int
           get() = 0

@@ -39,7 +39,7 @@ import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
   @SuppressLint("WorldReadableFiles")
-  @Provide @Scoped<AppComponent> fun dataStore(
+  @Provide fun dataStore(
     context: AppContext,
     dispatcher: IODispatcher,
     jsonFactory: () -> Json,
@@ -48,7 +48,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     serializerFactory: () -> KSerializer<T>,
     scope: ComponentScope<AppComponent>,
     storage: ComponentStorage<AppComponent>
-  ): DataStore<T> {
+  ): @Scoped<AppComponent> DataStore<T> {
     val sharedPrefs by lazy {
       context.getSharedPreferences(prefName, Context.MODE_WORLD_READABLE)
     }

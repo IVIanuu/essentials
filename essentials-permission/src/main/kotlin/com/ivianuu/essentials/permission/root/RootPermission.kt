@@ -29,11 +29,11 @@ interface RootPermission : Permission
 
 @Provide fun <P : RootPermission> rootPermissionStateProvider(
   shell: Shell
-): PermissionStateProvider<P> = { shell.isAvailable() }
+) = PermissionStateProvider<P> { shell.isAvailable() }
 
 @Provide fun <P : RootPermission> rootPermissionRequestHandler(
   shell: Shell,
   T: ToastContext
-): PermissionRequestHandler<P> = {
+) = PermissionRequestHandler<P> {
   if (!shell.isAvailable()) showToast(R.string.es_no_root)
 }

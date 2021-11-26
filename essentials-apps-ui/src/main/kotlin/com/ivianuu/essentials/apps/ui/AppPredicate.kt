@@ -20,27 +20,23 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
 
-@Tag annotation class AppPredicateTag
-typealias AppPredicate = @AppPredicateTag (AppInfo) -> Boolean
+fun interface AppPredicate : (AppInfo) -> Boolean
 
-val DefaultAppPredicate: AppPredicate = { true }
+val DefaultAppPredicate = AppPredicate { true }
 
-@Tag annotation class LaunchableAppPredicateTag
-typealias LaunchableAppPredicate = @LaunchableAppPredicateTag AppPredicate
+fun interface LaunchableAppPredicate : AppPredicate
 
 @Provide fun launchableAppPredicate(packageManager: PackageManager): LaunchableAppPredicate {
   val cache = mutableMapOf<String, Boolean>()
-  return { app ->
+  return LaunchableAppPredicate { app ->
     cache.getOrPut(app.packageName) {
       packageManager.getLaunchIntentForPackage(app.packageName) != null
     }
   }
 }
 
-@Tag annotation class IntentAppPredicateTag
-typealias IntentAppPredicate = @IntentAppPredicateTag AppPredicate
+fun interface IntentAppPredicate : AppPredicate
 
 @Provide fun intentAppPredicate(
   packageManager: PackageManager,
@@ -50,5 +46,5 @@ typealias IntentAppPredicate = @IntentAppPredicateTag AppPredicate
     packageManager.queryIntentActivities(intent, 0)
       .map { it.activityInfo.applicationInfo.packageName }
   }
-  return { app -> app.packageName in apps }
+  return IntentAppPredicate { app -> app.packageName in apps }
 }

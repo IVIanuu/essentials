@@ -45,7 +45,7 @@ object ActionsKey : Key<Unit>
   navigator: Navigator,
   S: ComponentScope<UiComponent>,
   T: Toaster
-): KeyUi<ActionsKey> = {
+) = KeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {

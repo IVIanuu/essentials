@@ -35,8 +35,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.AppBarStyle
 import com.ivianuu.essentials.ui.material.LocalAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -45,12 +44,13 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 
-@Provide fun webUi(key: WebKey, navigator: Navigator): KeyUi<WebKey> = {
+@Provide fun webUi(key: WebKey, navigator: Navigator) = KeyUi<WebKey> {
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {

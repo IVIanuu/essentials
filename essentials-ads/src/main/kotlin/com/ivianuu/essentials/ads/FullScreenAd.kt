@@ -1,5 +1,6 @@
 package com.ivianuu.essentials.ads
 
+import androidx.compose.runtime.State
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -8,6 +9,7 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
@@ -16,10 +18,7 @@ import com.ivianuu.injekt.coroutines.ComponentScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -46,7 +45,7 @@ interface FullScreenAd {
   private val context: AppContext,
   private val mainDispatcher: MainDispatcher,
   private val scope: ComponentScope<AppComponent>,
-  private val showAds: Flow<ShowAds>,
+  private val showAds: State<ShowAds>,
   private val L: Logger
 ) : FullScreenAd {
   private val lock = Mutex()
@@ -59,13 +58,13 @@ interface FullScreenAd {
   }
 
   override suspend fun load(): Boolean {
-    if (!showAds.first().value) return false
+    if (!showAds.value.value) return false
     getOrCreateCurrentAd()
     return true
   }
 
   override suspend fun loadAndShow(): Boolean {
-    if (!showAds.first().value) return false
+    if (!showAds.value.value) return false
     getOrCreateCurrentAd().invoke()
     preload()
     return true
@@ -129,9 +128,8 @@ class AdLoadingException(val reason: Int) : RuntimeException()
 
 @Provide fun preloadFullScreenAdWorker(
   fullScreenAd: FullScreenAd,
-  showAds: Flow<ShowAds>
-): ScopeWorker<UiComponent> = {
-  showAds
-    .filter { it.value }
+  showAds: State<ShowAds>
+) = ScopeWorker<UiComponent> {
+  showAds.asComposedFlow()
     .collect { fullScreenAd.preload() }
 }

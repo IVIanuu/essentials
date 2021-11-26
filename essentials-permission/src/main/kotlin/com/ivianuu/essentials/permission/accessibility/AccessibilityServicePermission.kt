@@ -37,7 +37,7 @@ interface AccessibilityServicePermission : Permission {
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
   context: AppContext
-): PermissionStateProvider<P> = provider@{ permission ->
+) = PermissionStateProvider<P> provider@ { permission ->
   val expectedComponentName = ComponentName(context, permission.serviceClass.java)
 
   val enabledServicesSetting = Settings.Secure.getString(
@@ -62,7 +62,7 @@ interface AccessibilityServicePermission : Permission {
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = { permission ->
+) = PermissionIntentFactory<P> { permission ->
   Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
     val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
     putExtra(":settings:fragment_args_key", componentName)

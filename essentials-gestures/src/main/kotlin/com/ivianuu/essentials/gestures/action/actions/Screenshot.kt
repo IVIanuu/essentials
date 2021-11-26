@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 ): Action<ScreenshotActionId> = Action(
   id = ScreenshotActionId,
   title = loadResource(R.string.es_action_screenshot),
-  icon = singleActionIcon(R.drawable.es_ic_photo_album),
+  icon = staticActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
     else typeKeyOf<ActionRootPermission>()
@@ -53,7 +53,7 @@ fun screenshotActionExecutor(
   globalActionExecutor: GlobalActionExecutor,
   rootCommandRunner: ActionRootCommandRunner,
   systemBuildInfo: SystemBuildInfo,
-): ActionExecutor<ScreenshotActionId> = {
+) = ActionExecutor<ScreenshotActionId> {
   delay(500)
   if (systemBuildInfo.sdk >= 28) {
     globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)

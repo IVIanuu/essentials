@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 object TabsKey : Key<Unit>
 
-@Provide val tabsUi: KeyUi<TabsKey> = {
+@Provide val tabsUi = KeyUi<TabsKey> {
   val pagerState = rememberPagerState()
   val scope = rememberCoroutineScope()
   Scaffold(

@@ -29,13 +29,13 @@ import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import kotlin.reflect.KClass
 
-@Provide @Scoped<AppComponent> fun imageLoader(
+@Provide fun imageLoader(
   context: AppContext,
-  decoders: List<Decoder> = emptyList(),
-  fetchers: List<FetcherPair<*>> = emptyList(),
-  interceptors: List<Interceptor> = emptyList(),
-  mappers: List<MapperPair<*>> = emptyList(),
-): ImageLoader = ImageLoader.Builder(context)
+  decoders: List<Decoder>,
+  fetchers: List<FetcherPair<*>>,
+  interceptors: List<Interceptor>,
+  mappers: List<MapperPair<*>>,
+): @Scoped<AppComponent> ImageLoader = ImageLoader.Builder(context)
   .componentRegistry {
     decoders.forEach { add(it) }
     interceptors.forEach { add(it) }
@@ -60,6 +60,8 @@ data class FetcherPair<T : Any>(
   val type: KClass<T>
 )
 
+@Provide fun defaultFetchers() = emptyList<FetcherPair<*>>()
+
 @Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperPair(
   instance: M,
   typeClass: KClass<T>
@@ -69,3 +71,9 @@ data class MapperPair<T : Any>(
   val mapper: Mapper<T, *>,
   val type: KClass<T>
 )
+
+@Provide fun defaultMappers() = emptyList<MapperPair<*>>()
+
+@Provide fun defaultDecoders() = emptyList<Decoder>()
+
+@Provide fun defaultInterceptors() = emptyList<Interceptor>()

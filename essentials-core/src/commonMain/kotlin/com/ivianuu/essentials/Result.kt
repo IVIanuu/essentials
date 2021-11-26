@@ -36,7 +36,7 @@ inline fun <V, E, U> Result<V, E>.flatMap(transform: (V) -> Result<U, E>): Resul
 
 fun <V> Result<V, *>.get(): V = when (this) {
   is Ok -> value
-  is Err -> throw IllegalStateException("Called get() on a Err type $error")
+  is Err -> error("Called get() on a Err type $error")
 }
 
 inline fun <V, E> Result<V, E>.getOrElse(defaultValue: (E) -> V): V = when (this) {
@@ -47,7 +47,7 @@ inline fun <V, E> Result<V, E>.getOrElse(defaultValue: (E) -> V): V = when (this
 fun <V> Result<V, *>.getOrNull(): V? = getOrElse { null }
 
 fun <E> Result<*, E>.getError(): E = when (this) {
-  is Ok -> throw IllegalStateException("Called getError() on a Ok type $value")
+  is Ok -> error("Called getError() on a Ok type $value")
   is Err -> error
 }
 

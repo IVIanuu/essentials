@@ -34,6 +34,7 @@ import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -49,10 +50,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
@@ -66,18 +63,18 @@ object AppTrackerKey : Key<Unit>
   N: NotificationFactory,
   S: ComponentScope<KeyUiComponent>,
   T: ToastContext
-): KeyUi<AppTrackerKey> = {
+) = KeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
     LaunchedEffect(true) {
-      foregroundManager.startForeground(
-        24,
-        currentApp
-          .onEach { showToast("App changed $it") }
-          .map { createNotification(it) }
-          .stateIn(this, SharingStarted.Eagerly, createNotification(null))
-      )
+      foregroundManager.startForeground(24) {
+        val currentApp = valueFromFlow(null) { currentApp }
+        LaunchedEffect(currentApp) {
+          showToast("App changed $currentApp")
+        }
+        AppTrackerNotification(currentApp)
+      }
     }
 
   Scaffold(
@@ -98,7 +95,7 @@ object AppTrackerKey : Key<Unit>
   }
 }
 
-private fun createNotification(
+private fun AppTrackerNotification(
   currentApp: CurrentApp?,
   @Inject factory: NotificationFactory
 ): Notification =
@@ -112,6 +109,6 @@ private fun createNotification(
     get() = EsAccessibilityService::class
   override val title: String = "Accessibility"
   override val desc: String = "Needs the permission to track the current app"
-  override val icon: @Composable (() -> Unit)?
-    get() = null
+  @Composable override fun Icon() {
+  }
 }

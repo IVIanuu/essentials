@@ -17,7 +17,7 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
+  id("org.jetbrains.compose")
   kotlin("android")
 }
 
@@ -32,7 +32,6 @@ dependencies {
   api(project(":essentials-ui-navigation"))
   api(project(":essentials-ui-popup"))
   api(project(":essentials-ui-prefs"))
-  api(project(":essentials-resource"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

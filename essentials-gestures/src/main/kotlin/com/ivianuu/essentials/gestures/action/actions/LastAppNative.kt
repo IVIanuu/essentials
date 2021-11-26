@@ -35,12 +35,12 @@ import kotlinx.coroutines.delay
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
   closeSystemDialogs = true,
-  icon = singleActionIcon(R.drawable.es_ic_repeat)
+  icon = staticActionIcon(R.drawable.es_ic_repeat)
 )
 
 @Provide fun lastAppNativeActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<LastAppNativeActionId> = {
+) = ActionExecutor<LastAppNativeActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
   delay(250)
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)

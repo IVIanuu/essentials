@@ -17,6 +17,7 @@
 package com.ivianuu.essentials.accessibility
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.injekt.Provide
 
 data class AccessibilityConfig(
   val eventTypes: Int = 0,
@@ -24,4 +25,8 @@ data class AccessibilityConfig(
   val packageNames: Set<String>? = null,
   val feedbackType: Int = AccessibilityServiceInfo.FEEDBACK_GENERIC,
   val notificationTimeout: Long = 0L,
-)
+) {
+  companion object {
+    @Provide val defaultConfigs: Collection<AccessibilityConfig> get() = emptyList()
+  }
+}

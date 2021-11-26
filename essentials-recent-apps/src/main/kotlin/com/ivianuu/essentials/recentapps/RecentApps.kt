@@ -23,6 +23,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +38,7 @@ import kotlinx.coroutines.flow.shareIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
-@Provide @Scoped<AppComponent>(eager = true) fun recentApps(
+@Provide @Eager<AppComponent> fun recentApps(
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: ComponentScope<AppComponent>,
   L: Logger

@@ -17,20 +17,21 @@ plugins {
   kotlin("multiplatform")
   kotlin("plugin.serialization")
   id("com.ivianuu.essentials")
+  id("org.jetbrains.compose")
 }
 
 kotlin {
-  jvm {
-    withJava()
-  }
+  jvm()
 
   sourceSets {
     commonMain {
       dependencies {
         api(project(":essentials-db"))
+        api(project(":essentials-resource"))
         api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))
-        api(project(":essentials-store"))
+        api(project(":essentials-state"))
+        api(compose.runtime)
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)

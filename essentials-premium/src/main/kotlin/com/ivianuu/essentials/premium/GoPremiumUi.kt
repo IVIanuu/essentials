@@ -46,14 +46,11 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
-import com.ivianuu.essentials.ui.core.InsetsPadding
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
@@ -77,7 +74,7 @@ data class AppFeature(
   }
 }
 
-@Provide val goPremiumUi: ModelKeyUi<GoPremiumKey, GoPremiumModel> = {
+@Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
   Surface {
     InsetsPadding {
       Column(
@@ -269,33 +266,31 @@ data class AppFeature(
   }
 }
 
-@Optics data class GoPremiumModel(
-  val features: List<AppFeature> = emptyList(),
-  val premiumSkuDetails: Resource<SkuDetails> = Idle,
-  val showTryBasicOption: Boolean = false,
-  val goPremium: () -> Unit = {},
-  val tryBasicVersion: () -> Unit = {}
+data class GoPremiumModel(
+  val features: List<AppFeature>,
+  val premiumSkuDetails: Resource<SkuDetails>,
+  val showTryBasicOption: Boolean,
+  val goPremium: () -> Unit,
+  val tryBasicVersion: () -> Unit
 )
 
-@Provide fun goPremiumModel(
+@Provide @Composable fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   key: GoPremiumKey,
   navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   S: ComponentScope<KeyUiComponent>
-) = state(GoPremiumModel(features = features, showTryBasicOption = key.showTryBasicOption)) {
-  premiumVersionManager.premiumSkuDetails
-    .flowAsResource()
-    .update { copy(premiumSkuDetails = it) }
-
-  action(GoPremiumModel.goPremium()) {
+) = GoPremiumModel(
+  features = features,
+  premiumSkuDetails = resourceFromFlow { premiumVersionManager.premiumSkuDetails },
+  showTryBasicOption = key.showTryBasicOption,
+  goPremium = action {
     if (premiumVersionManager.purchasePremiumVersion())
       navigator.pop(key, true)
-  }
-
-  action(GoPremiumModel.tryBasicVersion()) {
+  },
+  tryBasicVersion = action {
     fullScreenAd.loadAndShow()
     navigator.pop(key, false)
   }
-}
+)

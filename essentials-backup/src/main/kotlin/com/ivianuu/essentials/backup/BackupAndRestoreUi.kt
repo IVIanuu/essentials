@@ -19,11 +19,10 @@ package com.ivianuu.essentials.backup
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
@@ -35,7 +34,7 @@ import com.ivianuu.injekt.Provide
 
 object BackupAndRestoreKey : Key<Unit>
 
-@Provide val backupAndRestoreUi: ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> = {
+@Provide val backupAndRestoreUi = ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> {
   SimpleListScreen(R.string.es_backup_and_restore_title) {
     item {
       ListItem(
@@ -56,29 +55,26 @@ object BackupAndRestoreKey : Key<Unit>
   }
 }
 
-@Optics data class BackupAndRestoreModel(
-  val backupData: () -> Unit = {},
-  val restoreData: () -> Unit = {}
-)
+data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide fun backupAndRestoreModel(
+@Provide @Composable fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
   T: ToastContext,
   ctx: KeyUiContext<BackupAndRestoreKey>
-) = state(BackupAndRestoreModel()) {
-    action(BackupAndRestoreModel.backupData()) {
-      createBackup()
-        .onFailure {
-          it.printStackTrace()
-          showToast(R.string.es_backup_error)
-        }
-    }
-    action(BackupAndRestoreModel.restoreData()) {
-      restoreBackup()
-        .onFailure {
-          it.printStackTrace()
-          showToast(R.string.es_restore_error)
-        }
-    }
+) = BackupAndRestoreModel(
+  backupData = action {
+    createBackup()
+      .onFailure {
+        it.printStackTrace()
+        showToast(R.string.es_backup_error)
+      }
+  },
+  restoreData = action {
+    restoreBackup()
+      .onFailure {
+        it.printStackTrace()
+        showToast(R.string.es_restore_error)
+      }
   }
+)

@@ -35,13 +35,13 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Provide fun searchAction(RP: ResourceProvider) = Action(
   id = SearchActionId,
   title = loadResource(R.string.es_action_search),
-  icon = singleActionIcon(Icons.Default.Search),
+  icon = staticActionIcon(Icons.Default.Search),
   permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
 )
 
 @Provide fun searchActionExecutor(
   intentSender: ActionIntentSender
-): ActionExecutor<SearchActionId> = {
+) = ActionExecutor<SearchActionId> {
   intentSender(
     Intent(Intent.ACTION_MAIN).apply {
       component = ComponentName(

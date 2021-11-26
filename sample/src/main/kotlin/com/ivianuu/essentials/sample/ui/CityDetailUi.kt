@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.animation.util.fractionalTranslation
 import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
@@ -53,7 +53,7 @@ import com.ivianuu.injekt.Provide
 
 data class CityDetailKey(val city: City) : Key<Unit>
 
-@Provide fun cityDetailUi(key: CityDetailKey): KeyUi<CityDetailKey> = {
+@Provide fun cityDetailUi(key: CityDetailKey) = KeyUi<CityDetailKey> {
   VerticalList(contentPadding = PaddingValues(0.dp)) {
     item {
       TopAppBar(
@@ -87,7 +87,7 @@ data class CityDetailKey(val city: City) : Key<Unit>
   }
 }
 
-@Provide val cityDetailUiOptionsFactory: KeyUiOptionsFactory<CityDetailKey> = {
+@Provide val cityDetailUiOptionsFactory = KeyUiOptionsFactory<CityDetailKey> {
   val spec = defaultAnimationSpec(400.milliseconds, easing = FastOutSlowInEasing)
   KeyUiOptions(
     enterTransition = SharedElementStackTransition(

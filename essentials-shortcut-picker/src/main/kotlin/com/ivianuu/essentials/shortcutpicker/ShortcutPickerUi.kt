@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -28,12 +29,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -49,7 +47,7 @@ import com.ivianuu.injekt.Provide
 
 object ShortcutPickerKey : Key<Shortcut>
 
-@Provide val shortcutPickerUi: ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> = {
+@Provide val shortcutPickerUi = ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
     ResourceVerticalListFor(model.shortcuts) { shortcut ->
       ListItem(
@@ -68,21 +66,18 @@ object ShortcutPickerKey : Key<Shortcut>
   }
 }
 
-@Optics data class ShortcutPickerModel(
-  val shortcuts: Resource<List<Shortcut>> = Idle,
-  val pickShortcut: (Shortcut) -> Unit = {}
+data class ShortcutPickerModel(
+  val shortcuts: Resource<List<Shortcut>>,
+  val pickShortcut: (Shortcut) -> Unit
 )
 
-@Provide fun shortcutPickerModel(
+@Provide @Composable fun shortcutPickerModel(
   shortcutRepository: ShortcutRepository,
   T: ToastContext,
   ctx: KeyUiContext<ShortcutPickerKey>
-) = state(ShortcutPickerModel()) {
-  shortcutRepository.shortcuts
-    .flowAsResource()
-    .update { copy(shortcuts = it) }
-
-  action(ShortcutPickerModel.pickShortcut()) { shortcut ->
+) = ShortcutPickerModel(
+  shortcuts = resourceFromFlow { shortcutRepository.shortcuts },
+  pickShortcut = action { shortcut ->
     catch {
       val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())
         ?.getOrNull()
@@ -94,4 +89,4 @@ object ShortcutPickerKey : Key<Shortcut>
       showToast(R.string.es_failed_to_pick_shortcut)
     }
   }
-}
+)

@@ -18,17 +18,16 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
@@ -45,7 +44,7 @@ data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : Key<Boolean>
 
-@Provide val writeSecureSettingsUi: ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> = {
+@Provide val writeSecureSettingsUi = ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> {
   SimpleListScreen(R.string.es_secure_settings_title) {
     item {
       SecureSettingsHeader(
@@ -79,24 +78,23 @@ data class WriteSecureSettingsKey(
   }
 }
 
-@Optics data class WriteSecureSettingsModel(
-  val openPcInstructions: () -> Unit = {},
-  val grantPermissionsViaRoot: () -> Unit = {}
+data class WriteSecureSettingsModel(
+  val openPcInstructions: () -> Unit,
+  val grantPermissionsViaRoot: () -> Unit
 )
 
-@Provide fun writeSecureSettingsModel(
+@Provide @Composable fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
   shell: Shell,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsKey>
-) = state(WriteSecureSettingsModel()) {
-  action(WriteSecureSettingsModel.openPcInstructions()) {
+) = WriteSecureSettingsModel(
+  openPcInstructions = action {
     if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
       ctx.navigator.pop(ctx.key)
-  }
-
-  action(WriteSecureSettingsModel.grantPermissionsViaRoot()) {
+  },
+  grantPermissionsViaRoot = action {
     shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
       .onSuccess {
         if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
@@ -109,4 +107,4 @@ data class WriteSecureSettingsKey(
         showToast(R.string.es_secure_settings_no_root)
       }
   }
-}
+)

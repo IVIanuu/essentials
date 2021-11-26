@@ -34,13 +34,10 @@ import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produceResource
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceResource
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -62,7 +59,7 @@ data class ActionPickerKey(
   }
 }
 
-@Provide val actionPickerUi: ModelKeyUi<ActionPickerKey, ActionPickerModel> = {
+@Provide val actionPickerUi = ModelKeyUi<ActionPickerKey, ActionPickerModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {
@@ -81,10 +78,10 @@ data class ActionPickerKey(
   }
 }
 
-@Optics data class ActionPickerModel(
-  val items: Resource<List<ActionPickerItem>> = Idle,
-  val openActionSettings: (ActionPickerItem) -> Unit = {},
-  val pickAction: (ActionPickerItem) -> Unit = {}
+data class ActionPickerModel(
+  val items: Resource<List<ActionPickerItem>>,
+  val openActionSettings: (ActionPickerItem) -> Unit,
+  val pickAction: (ActionPickerItem) -> Unit
 )
 
 sealed class ActionPickerItem {
@@ -111,7 +108,7 @@ sealed class ActionPickerItem {
 
     @Composable override fun Icon(modifier: Modifier) {
       Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        delegate.icon()
+        delegate.Icon()
       }
     }
 
@@ -144,17 +141,16 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide fun actionPickerModel(
+@Provide @Composable fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
-) = state(ActionPickerModel()) {
-  produceResource({ copy(items = it) }) { getActionPickerItems() }
-
-  action(ActionPickerModel.openActionSettings()) { item -> ctx.navigator.push(item.settingsKey!!) }
-  action(ActionPickerModel.pickAction()) { item ->
+) = ActionPickerModel(
+  items = produceResource { getActionPickerItems() },
+  openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+  pickAction = action { item ->
     val result = item.getResult() ?: return@action
     if (result is ActionPickerKey.Result.Action) {
       val action = repository.getAction(result.actionId)
@@ -163,7 +159,7 @@ sealed class ActionPickerItem {
     }
     ctx.navigator.pop(ctx.key, result)
   }
-}
+)
 
 private suspend fun getActionPickerItems(
   @Inject filter: ActionFilter,

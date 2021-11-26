@@ -26,13 +26,14 @@ import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.injekt.Provide
 import java.io.File
 
-data class ShareBackupFileKey(val backupFilePath: String) : IntentKey
+data class ShareBackupFileKey(val backupFilePath: String) :
+  IntentKey
 
 @Provide fun shareBackupFileKeyIntentFactory(
   context: AppContext,
   buildInfo: BuildInfo,
   packageManager: PackageManager
-): KeyIntentFactory<ShareBackupFileKey> = { key ->
+) = KeyIntentFactory<ShareBackupFileKey> { key ->
   val uri = FileProvider.getUriForFile(
     context,
     "${buildInfo.packageName}.backupprovider",

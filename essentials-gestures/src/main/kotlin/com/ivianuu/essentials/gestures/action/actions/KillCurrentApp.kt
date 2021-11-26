@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.first
 @Provide fun killCurrentAppAction(RP: ResourceProvider) = Action(
   id = KillCurrentAppActionId,
   title = loadResource(R.string.es_action_kill_current_app),
-  icon = singleActionIcon(Icons.Default.Clear),
+  icon = staticActionIcon(Icons.Default.Clear),
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.first
   buildInfo: BuildInfo,
   currentAppFlow: Flow<CurrentApp?>,
   packageManager: PackageManager
-): ActionExecutor<KillCurrentAppActionId> = {
+) = ActionExecutor<KillCurrentAppActionId> {
   val currentApp = currentAppFlow.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&

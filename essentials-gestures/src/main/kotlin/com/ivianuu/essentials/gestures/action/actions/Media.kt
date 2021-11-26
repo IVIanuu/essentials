@@ -21,6 +21,7 @@ import android.provider.MediaStore
 import android.view.KeyEvent
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
@@ -32,17 +33,13 @@ import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.injekt.Provide
@@ -53,13 +50,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Tag annotation class MediaActionSenderTag
-typealias MediaActionSender = @MediaActionSenderTag suspend (Int) -> Unit
+fun interface MediaActionSender : suspend (Int) -> Unit
 
 @Provide fun mediaActionSender(
   context: AppContext,
   prefs: DataStore<MediaActionPrefs>
-): MediaActionSender = { keycode ->
+) = MediaActionSender { keycode ->
   val currentPrefs = prefs.data.first()
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
   context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
@@ -89,10 +85,10 @@ private fun mediaIntentFor(
   }
 }
 
-class MediaActionSettingsKey<I : ActionId> : ActionSettingsKey<I>
+class MediaActionSettingsKey : Key<Unit>
 
 @Provide
-val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSettingsModel> = {
+val mediaActionSettingsUi = ModelKeyUi<MediaActionSettingsKey, MediaActionSettingsModel> {
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
@@ -111,31 +107,29 @@ val mediaActionSettingsUi: ModelKeyUi<MediaActionSettingsKey<*>, MediaActionSett
   }
 }
 
-@Optics data class MediaActionSettingsModel(
-  val mediaApp: Resource<AppInfo?> = Idle,
-  val updateMediaApp: () -> Unit = {}
+data class MediaActionSettingsModel(
+  val mediaApp: Resource<AppInfo?>,
+  val updateMediaApp: () -> Unit
 )
 
-@Provide fun mediaActionSettingsModel(
+@Provide @Composable fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>,
-  ctx: KeyUiContext<MediaActionSettingsKey<*>>
-) = state(MediaActionSettingsModel()) {
-  pref.data
-    .map { it.mediaApp }
-    .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
-    .flowAsResource()
-    .update { copy(mediaApp = it) }
-
-  action(MediaActionSettingsModel.updateMediaApp()) {
+  ctx: KeyUiContext<MediaActionSettingsKey>
+) = MediaActionSettingsModel(
+  mediaApp = resourceFromFlow {
+    pref.data
+      .map { it.mediaApp }
+      .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
+  },
+  updateMediaApp = action {
     val newMediaApp = ctx.navigator.push(
       AppPickerKey(
         intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
       )
     )
-    if (newMediaApp != null) {
+    if (newMediaApp != null)
       pref.updateData { copy(mediaApp = newMediaApp.packageName) }
-    }
   }
-}
+)

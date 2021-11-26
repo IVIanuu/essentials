@@ -17,6 +17,7 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
+  id("org.jetbrains.compose")
   kotlin("android")
 }
 

@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
   navigator: Navigator,
   itemsFactory: () -> List<HomeItem>,
   T: ToastContext
-): KeyUi<HomeKey> = {
+) = KeyUi<HomeKey> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",

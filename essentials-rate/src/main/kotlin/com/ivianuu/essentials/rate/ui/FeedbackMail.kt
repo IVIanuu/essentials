@@ -31,10 +31,10 @@ object FeedbackMailKey : IntentKey
   context: AppContext,
   email: DeveloperEmail,
   RP: ResourceProvider
-): KeyIntentFactory<FeedbackMailKey> = {
+) = KeyIntentFactory<FeedbackMailKey> {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
-    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+    putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))
     putExtra(
       Intent.EXTRA_SUBJECT,
       "Feedback for ${loadResource<String>(context.applicationInfo.labelRes)}"

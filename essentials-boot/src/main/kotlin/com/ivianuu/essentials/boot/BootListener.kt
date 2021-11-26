@@ -16,7 +16,8 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.Provide
 
-@Tag annotation class BootListenerTag
-typealias BootListener = @BootListenerTag () -> Unit
+fun interface BootListener : () -> Unit
+
+@Provide val defaultBootListeners: Collection<BootListener> get() = emptyList()

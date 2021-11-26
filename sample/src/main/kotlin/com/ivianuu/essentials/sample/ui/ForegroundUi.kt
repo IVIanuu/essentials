@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.coroutines.mapState
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
@@ -40,7 +39,6 @@ import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
@@ -51,7 +49,7 @@ object ForegroundKey : Key<Unit>
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
   N: NotificationFactory
-): KeyUi<ForegroundKey> = {
+) = KeyUi<ForegroundKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
@@ -60,18 +58,16 @@ object ForegroundKey : Key<Unit>
 
     if (isEnabled)
       LaunchedEffect(true) {
-        val count = MutableStateFlow(0)
+        var count by mutableStateOf(0)
         par(
           {
-            foregroundManager.startForeground(
-              5,
-              count
-                .mapState { createForegroundNotification(primaryColor, it) }
-            )
+            foregroundManager.startForeground(5) {
+              ForegroundNotification(primaryColor, count)
+            }
           },
           {
             while (isActive) {
-              count.value++
+              count++
               delay(1000)
             }
           }
@@ -84,7 +80,7 @@ object ForegroundKey : Key<Unit>
   }
 }
 
-private fun createForegroundNotification(
+private fun ForegroundNotification(
   color: Color,
   count: Int,
   @Inject notificationFactory: NotificationFactory

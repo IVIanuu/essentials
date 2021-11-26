@@ -32,11 +32,11 @@ import com.ivianuu.injekt.Provide
   id = SplitScreenActionId,
   title = loadResource(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,
-  icon = singleActionIcon(R.drawable.es_ic_view_agenda)
+  icon = staticActionIcon(R.drawable.es_ic_view_agenda)
 )
 
 @Provide fun splitScreenActionExecutor(
   globalActionExecutor: GlobalActionExecutor
-): ActionExecutor<SplitScreenActionId> = {
+) = ActionExecutor<SplitScreenActionId> {
   globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

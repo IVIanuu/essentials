@@ -19,20 +19,18 @@ package com.ivianuu.essentials.about
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
 import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
@@ -41,11 +39,10 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
 
 object AboutKey : Key<Unit>
 
-@Provide val aboutUi: ModelKeyUi<AboutKey, AboutModel> = {
+@Provide val aboutUi = ModelKeyUi<AboutKey, AboutModel> {
   SimpleListScreen(R.string.es_about_title) {
     item {
       ListItem(
@@ -139,74 +136,61 @@ object AboutKey : Key<Unit>
   }
 }
 
-@Optics data class AboutModel(
-  val version: String = "",
-  val email: DeveloperEmail = DeveloperEmail(""),
-  val privacyPolicyUrl: PrivacyPolicyUrl? = null,
-  val showDonate: Boolean = false,
-  val donate: () -> Unit = {},
-  val rate: () -> Unit = {},
-  val openLicenses: () -> Unit = {},
-  val openMoreApps: () -> Unit = {},
-  val openRedditPage: () -> Unit = {},
-  val openGithubPage: () -> Unit = {},
-  val openTwitterPage: () -> Unit = {},
-  val openPrivacyPolicy: () -> Unit = {},
-  val sendMail: () -> Unit = {}
-) {
-  companion object {
-    @Provide fun initial(
-      buildInfo: BuildInfo,
-      privacyPolicyUrl: PrivacyPolicyUrl? = null,
-      donations: (() -> List<Donation>)? = null,
-      email: DeveloperEmail
-    ): @Initial AboutModel = AboutModel(
-      version = buildInfo.versionName,
-      email = email,
-      privacyPolicyUrl = privacyPolicyUrl,
-      showDonate = donations != null
-    )
-  }
-}
+data class AboutModel(
+  val version: String,
+  val email: DeveloperEmail,
+  val privacyPolicyUrl: PrivacyPolicyUrl?,
+  val showDonate: Boolean,
+  val donate: () -> Unit,
+  val rate: () -> Unit,
+  val openLicenses: () -> Unit,
+  val openMoreApps: () -> Unit,
+  val openRedditPage: () -> Unit,
+  val openGithubPage: () -> Unit,
+  val openTwitterPage: () -> Unit,
+  val openPrivacyPolicy: () -> Unit,
+  val sendMail: () -> Unit
+)
 
-@Provide fun aboutModel(
-  initial: @Initial AboutModel,
+@JvmInline value class PrivacyPolicyUrl(val value: String)
+
+@Provide @Composable fun aboutModel(
+  buildInfo: BuildInfo,
+  privacyPolicyUrl: PrivacyPolicyUrl? = null,
+  donations: (() -> List<Donation>)? = null,
+  email: DeveloperEmail,
   rateOnPlayUseCase: RateOnPlayUseCase,
   RP: ResourceProvider,
   ctx: KeyUiContext<AboutKey>
-) = state<AboutModel>(initial) {
-  action(AboutModel.donate()) { ctx.navigator.push(DonationKey) }
-
-  action(AboutModel.openLicenses()) { ctx.navigator.push(LicenseKey) }
-
-  action(AboutModel.rate()) { rateOnPlayUseCase() }
-
-  action(AboutModel.openMoreApps()) {
+) = AboutModel(
+  version = buildInfo.versionName,
+  email = email,
+  privacyPolicyUrl = privacyPolicyUrl,
+  showDonate = donations != null,
+  donate = action { ctx.navigator.push(DonationKey) },
+  openLicenses = action { ctx.navigator.push(LicenseKey) },
+  rate = action { rateOnPlayUseCase() },
+  openMoreApps = action {
     ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
-  }
-
-  action(AboutModel.openRedditPage()) {
+  },
+  openRedditPage = action {
     ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-  }
-
-  action(AboutModel.openGithubPage()) {
+  },
+  openGithubPage = action {
     ctx.navigator.push(UrlKey("https://github.com/IVIanuu"))
-  }
-
-  action(AboutModel.openTwitterPage()) {
+  },
+  openTwitterPage = action {
     ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu"))
-  }
-
-  action(AboutModel.openPrivacyPolicy()) {
+  },
+  openPrivacyPolicy = action {
     ctx.navigator.push(
       WebKey(
         loadResource(R.string.es_about_privacy_policy),
-        state.first().privacyPolicyUrl!!.value
+        privacyPolicyUrl!!.value
       )
     )
+  },
+  sendMail = action {
+    ctx.navigator.push(FeedbackMailKey)
   }
-
-  action(AboutModel.sendMail()) { ctx.navigator.push(FeedbackMailKey) }
-}
-
-@JvmInline value class PrivacyPolicyUrl(val value: String)
+)

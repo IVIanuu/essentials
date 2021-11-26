@@ -22,12 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -39,7 +38,7 @@ import com.ivianuu.injekt.Provide
 
 object NavBarUnsupportedKey : Key<Unit>
 
-@Provide val navBarUnsupportedUi: ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> = {
+@Provide val navBarUnsupportedUi = ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_unsupported_title) }) }
   ) {
@@ -73,26 +72,23 @@ object NavBarUnsupportedKey : Key<Unit>
   }
 }
 
-@Optics data class NavBarUnsupportedModel(
-  val openMoreInfos: () -> Unit = {},
-  val openRootMethod: () -> Unit = {}
-)
+data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMethod: () -> Unit)
 
-@Provide fun navBarUnsupportedModel(
+@Provide @Composable fun navBarUnsupportedModel(
   ctx: KeyUiContext<NavBarUnsupportedKey>
-) = state(NavBarUnsupportedModel()) {
-  action(NavBarUnsupportedModel.openMoreInfos()) {
+) = NavBarUnsupportedModel(
+  openMoreInfos = action {
     ctx.navigator.push(
       UrlKey(
         "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
       )
     )
-  }
-  action(NavBarUnsupportedModel.openRootMethod()) {
+  },
+  openRootMethod = action {
     ctx.navigator.push(
       UrlKey(
         "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
       )
     )
   }
-}
+)

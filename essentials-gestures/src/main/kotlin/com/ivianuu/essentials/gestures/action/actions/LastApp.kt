@@ -20,7 +20,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
   unlockScreen = true,
   closeSystemDialogs = true,
-  icon = singleActionIcon(R.drawable.es_ic_arrow_back)
+  icon = staticActionIcon(R.drawable.es_ic_arrow_back)
 )
 
 @Provide fun lastAppActionExecutor(
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.common.typeKeyOf
   appSwitchManager: AppSwitchManager,
   context: AppContext,
   packageManager: PackageManager
-): ActionExecutor<LastAppActionId> = {
+) = ActionExecutor<LastAppActionId> {
   appSwitchManager.lastApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_right, R.anim.es_slide_out_right) }
 }

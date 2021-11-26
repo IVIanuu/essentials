@@ -25,7 +25,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
 
 data class Action<I : ActionId>(
   val id: String,
@@ -35,7 +34,7 @@ data class Action<I : ActionId>(
   val closeSystemDialogs: Boolean = false,
   val turnScreenOn: Boolean = false,
   val enabled: Boolean = true,
-  val icon: Flow<ActionIcon>
+  val icon: ActionIcon
 ) {
   constructor(
     id: I,
@@ -45,12 +44,11 @@ data class Action<I : ActionId>(
     closeSystemDialogs: Boolean = false,
     turnScreenOn: Boolean = false,
     enabled: Boolean = true,
-    icon: Flow<ActionIcon>
+    icon: ActionIcon
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
 }
 
-@Tag annotation class ActionIconTag
-typealias ActionIcon = @ActionIconTag @Composable () -> Unit
+fun interface ActionIcon : @Composable () -> Unit
 
 abstract class ActionId(val value: String)
 
@@ -59,8 +57,7 @@ abstract class ActionId(val value: String)
   provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
 
-@Tag annotation class ActionExecutorTag<I : ActionId>
-typealias ActionExecutor<I> = @ActionExecutorTag<I> suspend () -> Unit
+fun interface ActionExecutor<I : ActionId> : suspend () -> Unit
 
 @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
   id: I,
@@ -69,23 +66,26 @@ typealias ActionExecutor<I> = @ActionExecutorTag<I> suspend () -> Unit
 
 interface ActionFactory {
   suspend fun handles(id: String): Boolean
+
   suspend fun createAction(id: String): Action<*>
+
   suspend fun createExecutor(id: String): ActionExecutor<*>
 }
 
-@Tag annotation class ActionSettingsKeyTag<I : ActionId>
-typealias ActionSettingsKey<I> = @ActionSettingsKeyTag<I> Key<Unit>
+@Tag annotation class ActionSettingsKey<I : ActionId>
 
-@Provide fun <@Spread T : ActionSettingsKey<I>, I : ActionId> actionSettingsKeyPair(
+@Provide fun <@Spread T : @ActionSettingsKey<I> Key<Unit>, I : ActionId> actionSettingsKeyPair(
   id: I,
   provider: () -> T,
-): Pair<String, () -> ActionSettingsKey<*>> = id.value to provider
+): Pair<String, () -> @ActionSettingsKey<ActionId> Key<Unit>> = id.value to provider
 
 interface ActionPickerDelegate {
   val baseId: String
   val title: String
-  val icon: @Composable () -> Unit
   val settingsKey: Key<Unit>? get() = null
+
+  @Composable fun Icon()
+
   suspend fun pickAction(): ActionPickerKey.Result?
 }
 

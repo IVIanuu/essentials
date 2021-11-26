@@ -19,18 +19,19 @@ package com.ivianuu.essentials.tile
 import android.graphics.drawable.Icon
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.dispose
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -48,47 +49,48 @@ class FunTileService9 : AbstractFunTileService<FunTileService9>()
 abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
-  private val component: FunTileServiceComponent by lazy {
-    createServiceComponent().entryPoint()
+  private val component by lazy {
+    createServiceComponent().element<FunTileServiceComponent>()
   }
 
   @Provide private val logger
     get() = component.logger
 
-  private var tileModelHolder: TileModelHolder? = null
+  private var tileComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
     log { "$serviceClass on start listening" }
-    val tileModelHolder = component.tileComponentFactory
-      .tileComponent(TileId(serviceClass))
-      .entryPoint<TileModelComponent>()
-      .holder
-      .also { this.tileModelHolder = it }
-    tileModelHolder.tileModel
+    val tileModelComponent = component.tileComponentFactory
+      .create(TileId(serviceClass))
+      .element<TileModelComponent>()
+      .also { this.tileComponent = it }
+    tileModelComponent.tileModel
+      .asComposedFlow()
       .onEach { applyModel(it) }
-      .launchIn(tileModelHolder.scope)
+      .launchIn(tileModelComponent.scope)
   }
 
   override fun onClick() {
     super.onClick()
     log { "$serviceClass on click" }
-    tileModelHolder?.tileModel?.value?.onTileClicked?.invoke()
+    tileComponent?.currentModel?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
-    tileModelHolder?.component?.dispose()
-    tileModelHolder = null
+    tileComponent?.component?.dispose()
+    tileComponent = null
     log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
   override fun onDestroy() {
-    component.dispose()
+    component.component.dispose()
     super.onDestroy()
   }
 
   private fun applyModel(model: TileModel<*>) {
+    tileComponent?.currentModel = model
     val qsTile = qsTile ?: return
 
     qsTile.state = when (model.status) {
@@ -115,23 +117,25 @@ abstract class AbstractFunTileService<T : Any>(
   }
 }
 
-@EntryPoint<ServiceComponent> interface FunTileServiceComponent {
-  val logger: Logger
-  val resourceProvider: ResourceProvider
-  val tileComponentFactory: TileComponentFactory
-}
+@Provide @ComponentElement<ServiceComponent>
+data class FunTileServiceComponent(
+  val logger: Logger,
+  val resourceProvider: ResourceProvider,
+  val tileComponentFactory: TileComponent.Factory,
+  val component: Component<ServiceComponent>
+)
 
-@Provide class TileModelHolder(
-  tileId: TileId,
-  tileModelElements: List<Pair<TileId, () -> StateFlow<TileModel<*>>>> = emptyList(),
+@Provide @ComponentElement<TileComponent>
+data class TileModelComponent(
+  val tileId: TileId,
+  val tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>> = emptyList(),
   val scope: ComponentScope<TileComponent>,
-  val component: TileComponent
+  val component: Component<TileComponent>
 ) {
-  val tileModel = tileModelElements.toMap()[tileId]
+  var currentModel: TileModel<*>? = null
+
+  val tileModel: @Composable () -> TileModel<*> = tileModelElements.toMap()[tileId]
     ?.invoke()
     ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
-}
-
-@EntryPoint<TileComponent> interface TileModelComponent {
-  val holder: TileModelHolder
+      .cast()
 }

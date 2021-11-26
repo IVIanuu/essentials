@@ -16,8 +16,12 @@
 
 package com.ivianuu.essentials.xposed
 
+import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.ComponentName
 
-@Component interface XposedAppComponent {
-  val hooks: () -> List<Hooks>
-}
+object XposedAppComponent : ComponentName
+
+@Provide @ComponentElement<XposedAppComponent>
+data class XposedHooksComponent(val hooks: () -> List<Hooks>)

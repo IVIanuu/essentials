@@ -59,7 +59,7 @@ import kotlinx.coroutines.flow.first
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionImage(AppIcon(packageName))
+      icon = staticActionImage(AppIcon(packageName))
     )
   }
 
@@ -67,7 +67,7 @@ import kotlinx.coroutines.flow.first
     val (packageName, isFloating) = id.removePrefix(BASE_ID)
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1].toBoolean() }
-    return {
+    return ActionExecutor<ActionId> {
       actionIntentSender(
         packageManager.getLaunchIntentForPackage(packageName)!!,
         isFloating,
@@ -89,7 +89,7 @@ import kotlinx.coroutines.flow.first
   override val title: String
     get() = loadResource(R.string.es_action_app)
 
-  override val icon: @Composable () -> Unit = {
+  @Composable override fun Icon() {
     Icon(R.drawable.es_ic_apps)
   }
 

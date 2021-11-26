@@ -19,7 +19,6 @@ package com.ivianuu.essentials.gestures.action.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +31,7 @@ import com.ivianuu.essentials.gestures.action.Action
     propagateMinConstraints = true,
     contentAlignment = Alignment.Center
   ) {
-    action.icon.collectAsState(null).value?.invoke()
+    action.icon()
   }
 }
 

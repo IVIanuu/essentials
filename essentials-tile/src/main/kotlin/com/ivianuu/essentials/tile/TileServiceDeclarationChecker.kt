@@ -27,12 +27,11 @@ import com.ivianuu.injekt.common.AppComponent
   context: AppContext,
   packageManager: PackageManager,
   tileIds: List<TileId> = emptyList()
-): ScopeWorker<AppComponent> = {
-  tileIds.forEach { tileId ->
+) = ScopeWorker<AppComponent> {
+  for (tileId in tileIds) {
     val intent = Intent(context, tileId.clazz.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)
-    if (resolveInfo.isEmpty()) {
+    if (resolveInfo.isEmpty())
       throw IllegalStateException("A model for tile ${tileId.clazz} was provided but not declared in the manifest")
-    }
   }
 }

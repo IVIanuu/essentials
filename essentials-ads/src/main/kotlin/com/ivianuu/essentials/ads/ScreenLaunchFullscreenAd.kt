@@ -1,11 +1,14 @@
 package com.ivianuu.essentials.ads
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.UiComponent
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
@@ -36,10 +39,11 @@ import kotlinx.serialization.Serializable
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>,
-  showAds: Flow<ShowAds>,
+  showAds: State<ShowAds>,
   L: Logger
-): ScopeWorker<UiComponent> = {
+) = ScopeWorker<UiComponent> {
   showAds
+    .asComposedFlow()
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents(isFeatureEnabled)
@@ -58,8 +62,8 @@ import kotlinx.serialization.Serializable
 }
 
 private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
-  var lastBackStack = backStack.value
-  return backStack
+  var lastBackStack = backStack
+  return snapshotFlow { backStack }
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {

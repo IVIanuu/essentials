@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.accessibility
 
+import androidx.compose.runtime.mutableStateOf
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)
+@Provide val accessibilityServiceRef = mutableStateOf<EsAccessibilityService?>(null)

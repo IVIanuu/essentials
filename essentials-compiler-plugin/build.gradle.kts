@@ -56,7 +56,6 @@ dependencies {
   testImplementation(Deps.kotestAssertions)
   testImplementation(project(":essentials-core"))
   testImplementation(project(":essentials-coroutines"))
-  testImplementation(project(":essentials-optics"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

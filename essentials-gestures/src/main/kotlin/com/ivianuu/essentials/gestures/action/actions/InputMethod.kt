@@ -31,11 +31,11 @@ import com.ivianuu.injekt.android.SystemService
 @Provide fun inputMethodAction(RP: ResourceProvider) = Action(
   id = InputMethodActionId,
   title = loadResource(R.string.es_action_input_method),
-  icon = singleActionIcon(R.drawable.es_ic_keyboard_hide)
+  icon = staticActionIcon(R.drawable.es_ic_keyboard_hide)
 )
 
 @Provide fun inputMethodActionExecutor(
   inputMethodManager: @SystemService InputMethodManager
-): ActionExecutor<InputMethodActionId> = {
+) = ActionExecutor<InputMethodActionId> {
   inputMethodManager.showInputMethodPicker()
 }

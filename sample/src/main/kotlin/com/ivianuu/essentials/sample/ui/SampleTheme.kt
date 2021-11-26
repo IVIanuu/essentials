@@ -24,7 +24,7 @@ import com.ivianuu.essentials.ui.material.EsTypography
 import com.ivianuu.essentials.ui.material.editEach
 import com.ivianuu.injekt.Provide
 
-@Provide val sampleTheme: UiDecorator<AppTheme> = { content ->
+@Provide val sampleTheme = AppTheme { content ->
   EsTheme(
     typography = EsTypography.editEach { copy(fontFamily = Rubik) },
     content = content

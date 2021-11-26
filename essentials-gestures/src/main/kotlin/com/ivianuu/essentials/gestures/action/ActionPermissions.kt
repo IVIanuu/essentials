@@ -39,10 +39,10 @@ import kotlin.reflect.KClass
     get() = loadResource(R.string.es_action_accessibility_permission_title)
   override val desc: String
     get() = loadResource(R.string.es_action_accessibility_permission_title)
-  override val icon: @Composable () -> Unit
-    get() = {
-      Icon(R.drawable.es_ic_accessibility)
-    }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_accessibility)
+  }
 }
 
 @Provide class ActionNotificationPolicyPermission(private val RP: ResourceProvider) : NotificationPolicyPermission {
@@ -50,15 +50,19 @@ import kotlin.reflect.KClass
     get() = loadResource(R.string.es_action_notification_policy_permission_title)
   override val desc: String
     get() = loadResource(R.string.es_action_notification_policy_permission_desc)
-  override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_notifications) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_notifications)
+  }
 }
 
 @Provide class ActionRootPermission(private val RP: ResourceProvider) : RootPermission {
   override val title: String
     get() = loadResource(R.string.es_action_root_permission_title)
-  override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_adb) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_adb)
+  }
 }
 
 @Provide class ActionSystemOverlayPermission(private val RP: ResourceProvider) : SystemOverlayPermission {
@@ -66,8 +70,10 @@ import kotlin.reflect.KClass
     get() = loadResource(R.string.es_action_system_overlay_permission_title)
   override val desc: String
     get() = loadResource(R.string.es_action_system_overlay_permission_desc)
-  override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_adb) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_adb)
+  }
 }
 
 @Provide class ActionWriteSecureSettingsPermission(private val RP: ResourceProvider) : WriteSecureSettingsPermission {
@@ -75,8 +81,10 @@ import kotlin.reflect.KClass
     get() = loadResource(R.string.es_action_write_secure_settings_permission_title)
   override val desc: String
     get() = loadResource(R.string.es_action_write_secure_settings_permission_desc)
-  override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_settings) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_settings)
+  }
 }
 
 @Provide class ActionWriteSettingsPermission(private val RP: ResourceProvider) : WriteSettingsPermission {
@@ -84,7 +92,9 @@ import kotlin.reflect.KClass
     get() = loadResource(R.string.es_action_write_settings_permission_title)
   override val desc: String
     get() = loadResource(R.string.es_action_write_settings_permission_desc)
-  override val icon: @Composable () -> Unit
-    get() = { Icon(R.drawable.es_ic_settings) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_settings)
+  }
 }
 

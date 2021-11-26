@@ -36,13 +36,13 @@ interface DeviceAdminPermission : Permission {
 @Provide fun <P : DeviceAdminPermission> deviceAdminPermissionStateProvider(
   context: AppContext,
   devicePolicyManager: @SystemService DevicePolicyManager
-): PermissionStateProvider<P> = { permission ->
+) = PermissionStateProvider<P> { permission ->
   devicePolicyManager.isAdminActive(ComponentName(context, permission.deviceAdminClass.java))
 }
 
 @Provide fun <P : DeviceAdminPermission> deviceAdminPermissionIntentFactory(
   context: AppContext
-): PermissionIntentFactory<P> = { permission ->
+) = PermissionIntentFactory<P> { permission ->
   Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
     putExtra(
       DevicePolicyManager.EXTRA_DEVICE_ADMIN,

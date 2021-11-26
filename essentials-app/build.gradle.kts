@@ -19,9 +19,7 @@ plugins {
 }
 
 kotlin {
-  jvm {
-    withJava()
-  }
+  jvm()
 
   sourceSets {
     commonMain {
@@ -29,6 +27,7 @@ kotlin {
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
         api(project(":essentials-logging"))
+        api(project(":essentials-state"))
       }
     }
     named("jvmTest") {

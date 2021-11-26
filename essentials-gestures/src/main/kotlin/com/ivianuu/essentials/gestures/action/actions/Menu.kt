@@ -33,12 +33,12 @@ import com.ivianuu.injekt.common.typeKeyOf
 @Provide fun menuAction(RP: ResourceProvider) = Action(
   id = MenuActionId,
   title = loadResource(R.string.es_action_menu),
-  icon = singleActionIcon(Icons.Default.MoreVert),
+  icon = staticActionIcon(Icons.Default.MoreVert),
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
 @Provide fun menuActionExecutor(
   actionRootCommandRunner: ActionRootCommandRunner
-): ActionExecutor<MenuActionId> = {
+) = ActionExecutor<MenuActionId> {
   actionRootCommandRunner("input keyevent 82")
 }

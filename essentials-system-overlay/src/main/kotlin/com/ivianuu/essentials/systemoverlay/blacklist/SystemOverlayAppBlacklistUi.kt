@@ -16,15 +16,15 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.optics.Optics
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
@@ -32,8 +32,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.ComponentScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
@@ -41,7 +39,7 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
   T: ToastContext
-): ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> = {
+) = ModelKeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> {
   remember {
     checkableAppsPageFactory(
       CheckableAppsParams(
@@ -54,17 +52,19 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
   }.invoke()
 }
 
-@Optics data class SystemOverlayAppBlacklistModel(
-  val appBlacklist: Flow<Set<String>> = emptyFlow(),
+data class SystemOverlayAppBlacklistModel(
+  val appBlacklist: @Composable () -> Set<String>,
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide fun systemOverlayAppBlacklistModel(
+@Provide @Composable fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   S: ComponentScope<KeyUiComponent>
-) = state(SystemOverlayAppBlacklistModel()) {
-  update { copy(appBlacklist = pref.data.map { it.appBlacklist }) }
-  action(SystemOverlayAppBlacklistModel.updateAppBlacklist()) { appBlacklist ->
+) = SystemOverlayAppBlacklistModel(
+  appBlacklist = {
+    valueFromFlow(emptySet()) { pref.data.map { it.appBlacklist } }
+  },
+  updateAppBlacklist = action { appBlacklist ->
     pref.updateData { copy(appBlacklist = appBlacklist) }
   }
-}
+)

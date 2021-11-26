@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
-    id("com.ivianuu.essentials")
+  id("com.android.library")
+  id("com.ivianuu.essentials")
+  kotlin("multiplatform")
+  kotlin("plugin.serialization")
+}
+
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
+
+android {
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 kotlin {
-    jvm {
-        withJava()
-    }
+  jvm()
+  android {
+    publishLibraryVariants("release")
+  }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":essentials-tuples"))
-                api(project(":essentials-serialization"))
-                api(project(":essentials-store"))
-                api(Deps.Coroutines.core)
-                api(Deps.Injekt.core)
-                api(Deps.Injekt.common)
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(project(":essentials-test"))
-            }
-        }
+  sourceSets {
+    commonMain {
+      dependencies {
+        api(project(":essentials-coroutines"))
+        api(project(":essentials-core"))
+        api(project(":essentials-tuples"))
+        api(project(":essentials-serialization"))
+      }
     }
+    named("androidTest") {
+      dependencies {
+        implementation(project(":essentials-android-test"))
+      }
+    }
+  }
 }
 
 plugins.apply("com.vanniktech.maven.publish")

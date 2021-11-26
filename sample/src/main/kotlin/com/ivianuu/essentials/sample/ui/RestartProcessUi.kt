@@ -37,7 +37,7 @@ object RestartProcessKey : Key<Unit>
 @Provide fun restartProcessUi(
   processRestarter: ProcessRestarter,
   S: ComponentScope<KeyUiComponent>
-): KeyUi<RestartProcessKey> = {
+) = KeyUi<RestartProcessKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Restart process") }) }
   ) {

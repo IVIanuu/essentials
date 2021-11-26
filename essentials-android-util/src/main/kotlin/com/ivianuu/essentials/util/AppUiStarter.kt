@@ -18,36 +18,31 @@ package com.ivianuu.essentials.util
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.state.asComposedFlow
 import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onStart
 
-@Tag annotation class AppUiStarterTag
-typealias AppUiStarter = @AppUiStarterTag IntentAppUiStarter
+fun interface AppUiStarter : IntentAppUiStarter
 
 @Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
 
 @Provide fun appUiStarter(
   context: AppContext,
   buildInfo: BuildInfo,
-  foregroundActivity: Flow<ForegroundActivity>,
+  foregroundActivity: @Composable () -> ForegroundActivity,
   packageManager: PackageManager,
-): AppUiStarter = {
+) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
-  foregroundActivity
-    .onStart {
-      context.startActivity(
-        intent.apply {
-          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-      )
+  context.startActivity(
+    intent.apply {
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-    .filterNotNull()
-    .first()
+  )
+
+  foregroundActivity.asComposedFlow().filterNotNull().first()
 }

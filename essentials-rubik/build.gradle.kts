@@ -17,7 +17,7 @@
 plugins {
   id("com.android.library")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
+  id("org.jetbrains.compose")
   kotlin("android")
   kotlin("plugin.serialization")
 }

@@ -63,7 +63,7 @@ import java.io.ByteArrayOutputStream
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionIcon {
+      icon = {
         Image(
           modifier = LocalActionImageSizeModifier.current,
           bitmap = icon
@@ -77,7 +77,7 @@ import java.io.ByteArrayOutputStream
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
     val isFloating = tmp[4].toBoolean()
-    return { actionIntentSender(intent, isFloating, null) }
+    return ActionExecutor<ActionId> { actionIntentSender(intent, isFloating, null) }
   }
 }
 
@@ -90,7 +90,8 @@ import java.io.ByteArrayOutputStream
     get() = BASE_ID
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
-  override val icon: @Composable () -> Unit = {
+
+  @Composable override fun Icon() {
     Icon(R.drawable.es_ic_content_cut)
   }
 

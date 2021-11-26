@@ -45,15 +45,6 @@ object Deps {
 
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
-    object Compose {
-      const val version = "1.0.4"
-      const val compiler = "androidx.compose.compiler:compiler:$version"
-      const val core = "androidx.compose.ui:ui:$version"
-      const val material = "androidx.compose.material:material:$version"
-      const val runtime = "androidx.compose.runtime:runtime:$version"
-      const val test = "androidx.compose.test:test-core:$version"
-    }
-
     object ConstraintLayout {
       const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
     }
@@ -81,6 +72,14 @@ object Deps {
     const val coilCompose = "io.coil-kt:coil-compose:$version"
   }
 
+  object Compose {
+    const val version = "1.0.0-beta5"
+    const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:$version"
+    const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
+    const val material = "org.jetbrains.compose.material:material:$version"
+    const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
+  }
+
   const val compileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.3.6"
 
   object Coroutines {
@@ -95,7 +94,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1016"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1017"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:18.3.0"
@@ -104,7 +103,7 @@ object Deps {
   }
 
   object Injekt {
-    private const val version = "0.0.1-dev659"
+    private const val version = "0.0.1-dev667"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"
@@ -139,7 +138,7 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.11.0"
 
-  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.14.2"
+  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 
   object Play {
     const val billing = "com.android.billingclient:billing-ktx:3.0.2"

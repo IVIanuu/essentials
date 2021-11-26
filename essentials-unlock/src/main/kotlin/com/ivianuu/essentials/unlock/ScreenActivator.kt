@@ -13,15 +13,14 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-@Tag annotation class ScreenActivatorTag
-typealias ScreenActivator = @ScreenActivatorTag suspend () -> Boolean
+fun interface ScreenActivator : suspend () -> Boolean
 
 @Provide fun screenActivator(
   context: AppContext,
   dispatcher: DefaultDispatcher,
   L: Logger,
   powerManager: @SystemService PowerManager
-): ScreenActivator = {
+) = ScreenActivator {
   withContext(dispatcher) {
     log { "on request is off ? ${!powerManager.isInteractive}" }
     if (powerManager.isInteractive){

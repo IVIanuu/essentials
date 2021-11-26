@@ -1,6 +1,7 @@
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.Provide
 
-@Tag annotation class HooksTag
-typealias Hooks = @HooksTag XposedContext.() -> Unit
+fun interface Hooks : (@Provide XposedContext) -> Unit
+
+@Provide val defaultHooks: Collection<Hooks> get() = emptyList()

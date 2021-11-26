@@ -2,7 +2,8 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.ResourceProvider
@@ -19,7 +20,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsKey }
@@ -28,13 +28,13 @@ object AdsKey : Key<Unit>
 
 @Provide fun adsUi(
   fullScreenAd: FullScreenAd,
-  showAdsState: MutableStateFlow<ShowAds>
-): KeyUi<AdsKey> = {
+  showAds: MutableState<ShowAds>
+) = KeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
-        value = showAdsState.collectAsState().value.value,
-        onValueChange = { showAdsState.value = ShowAds(it) },
+        value = showAds.value.value,
+        onValueChange = { showAds.value = ShowAds(it) },
         title = { Text("Show ads") }
       )
     }
@@ -63,4 +63,4 @@ object AdsKey : Key<Unit>
 @Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
   get() = ScreenLaunchFullscreenAdConfig(4)
 
-@Provide val showAdsState = MutableStateFlow(ShowAds(false))
+@Provide val showAdsState = mutableStateOf(ShowAds(false))

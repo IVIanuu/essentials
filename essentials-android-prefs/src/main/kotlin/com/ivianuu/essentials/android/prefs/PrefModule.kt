@@ -23,7 +23,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
-import com.ivianuu.injekt.coroutines.IODispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,14 +34,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
-  @Provide @Scoped<AppComponent> fun dataStore(
+  @Provide fun dataStore(
     prefsDataStore: DataStore<Map<String, String?>>,
-    dispatcher: IODispatcher,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     serializerFactory: () -> KSerializer<T>,
     scope: ComponentScope<AppComponent>
-  ): DataStore<T> {
+  ): @Scoped<AppComponent> DataStore<T> {
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
 

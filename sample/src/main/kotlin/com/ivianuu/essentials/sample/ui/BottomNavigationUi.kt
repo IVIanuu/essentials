@@ -34,21 +34,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.animation.AnimatedBox
-import com.ivianuu.essentials.ui.core.InsetsPadding
-import com.ivianuu.essentials.ui.core.isLight
-import com.ivianuu.essentials.ui.core.overlaySystemBarBgColor
-import com.ivianuu.essentials.ui.core.systemBarStyle
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.systembars.overlaySystemBarBgColor
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
 @Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
 
 object BottomNavigationKey : Key<Unit>
 
-@Provide val bottomNavigationUi: KeyUi<BottomNavigationKey> = {
+@Provide val bottomNavigationUi = KeyUi<BottomNavigationKey> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
   Scaffold(

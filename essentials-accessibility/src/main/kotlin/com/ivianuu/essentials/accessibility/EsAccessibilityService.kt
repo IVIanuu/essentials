@@ -20,38 +20,37 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
+import androidx.compose.runtime.MutableState
 import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.ServiceComponent
 import com.ivianuu.injekt.android.createServiceComponent
-import com.ivianuu.injekt.common.EntryPoint
-import com.ivianuu.injekt.common.dispose
-import com.ivianuu.injekt.common.entryPoint
+import com.ivianuu.injekt.common.Component
+import com.ivianuu.injekt.common.ComponentElement
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class EsAccessibilityService : AccessibilityService() {
-  private val component: EsAccessibilityServiceComponent by lazy {
-    createServiceComponent().entryPoint()
+  private val component by lazy {
+    createServiceComponent().element<EsAccessibilityServiceComponent>()
   }
 
   @Provide private val logger get() = component.logger
 
-  private var accessibilityComponent: AccessibilityComponent? = null
+  private var accessibilityComponent: Component<AccessibilityComponent>? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
-    accessibilityComponent = component.accessibilityComponentFactory.accessibilityComponent()
+    accessibilityComponent = component.accessibilityComponentFactory.create()
     component.accessibilityServiceRef.value = this
 
     val accessibilityServiceComponent =
-      accessibilityComponent!!.entryPoint<EsAccessibilityServiceAccessibilityComponent>()
+      accessibilityComponent!!.element<EsAccessibilityServiceAccessibilityComponent>()
 
     accessibilityServiceComponent.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       log { "update config from ${accessibilityServiceComponent.configs}" }
@@ -96,20 +95,22 @@ class EsAccessibilityService : AccessibilityService() {
     log { "service disconnected" }
     accessibilityComponent?.dispose()
     accessibilityComponent = null
-    component.dispose()
+    component.component.dispose()
     component.accessibilityServiceRef.value = null
     return super.onUnbind(intent)
   }
 }
 
-@EntryPoint<ServiceComponent> interface EsAccessibilityServiceComponent {
-  val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>
-  val accessibilityComponentFactory: AccessibilityComponentFactory
-  val logger: Logger
-  val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
-}
+@Provide @ComponentElement<ServiceComponent> data class EsAccessibilityServiceComponent(
+  val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
+  val accessibilityComponentFactory: AccessibilityComponent.Factory,
+  val logger: Logger,
+  val accessibilityServiceRef: MutableState<EsAccessibilityService?>,
+  val component: Component<AccessibilityComponent>
+)
 
-@EntryPoint<AccessibilityComponent> interface EsAccessibilityServiceAccessibilityComponent {
-  val configs: List<AccessibilityConfig> get() = emptyList()
+@Provide @ComponentElement<AccessibilityComponent>
+data class EsAccessibilityServiceAccessibilityComponent(
+  val configs: List<AccessibilityConfig>,
   val scope: ComponentScope<AccessibilityComponent>
-}
+)

@@ -30,21 +30,23 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.apps.ui.AppIcon
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produce
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceValue
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -52,11 +54,10 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
 
 object RateKey : DialogKey<Unit>
 
-@Provide val rateUi: ModelKeyUi<RateKey, RateModel> = {
+@Provide val rateUi = ModelKeyUi<RateKey, RateModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -116,38 +117,41 @@ object RateKey : DialogKey<Unit>
   }
 }
 
-@Optics data class RateModel(
-  val displayShowNever: Boolean = false,
-  val packageName: String = "",
-  val rating: Int = 0,
-  val confirm: () -> Unit = {},
-  val showLater: () -> Unit = {},
-  val showNever: () -> Unit = {},
-  val updateRating: (Int) -> Unit = {},
+data class RateModel(
+  val displayShowNever: Boolean,
+  val packageName: String,
+  val rating: Int,
+  val confirm: () -> Unit,
+  val showLater: () -> Unit,
+  val showNever: () -> Unit,
+  val updateRating: (Int) -> Unit,
 ) {
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-@Provide fun rateModel(
+@Provide @Composable fun rateModel(
   buildInfo: BuildInfo,
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateKey>
-) = state(RateModel(packageName = buildInfo.packageName)) {
-  produce({ copy(displayShowNever = it) }) { displayShowNever() }
-
-  action(RateModel.showLater()) { showLater() }
-  action(RateModel.showNever()) { showNever() }
-  action(RateModel.updateRating()) { value -> update { copy(rating = value) } }
-  action(RateModel.confirm()) {
-    val rating = state.first().rating
-    if (rating >= MIN_PLAY_RATING) {
-      ctx.navigator.replaceTop(RateOnPlayKey)
-    } else {
-      ctx.navigator.replaceTop(FeedbackKey)
+): RateModel {
+  var rating by remember { mutableStateOf(0) }
+  return RateModel(
+    displayShowNever = produceValue(false) { displayShowNever() },
+    packageName = buildInfo.packageName,
+    rating = rating,
+    showLater = action { showLater() },
+    showNever = action { showNever() },
+    updateRating = action { value -> rating = value },
+    confirm = action {
+      if (rating >= MIN_PLAY_RATING) {
+        ctx.navigator.replaceTop(RateOnPlayKey)
+      } else {
+        ctx.navigator.replaceTop(FeedbackKey)
+      }
     }
-  }
+  )
 }
 
 private const val MIN_PLAY_RATING = 4

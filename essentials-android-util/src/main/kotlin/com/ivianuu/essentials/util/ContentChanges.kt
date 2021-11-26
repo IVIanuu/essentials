@@ -29,12 +29,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-typealias ContentChangesFactory = (Uri) -> Flow<Unit>
+fun interface ContentChangesFactory : (Uri) -> Flow<Unit>
 
 @Provide fun contentChangesFactory(
   contentResolver: ContentResolver,
   mainDispatcher: MainDispatcher,
-): ContentChangesFactory = { uri ->
+) = ContentChangesFactory { uri ->
   callbackFlow<Unit> {
     val observer = withContext(mainDispatcher) {
       object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {

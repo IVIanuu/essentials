@@ -19,7 +19,7 @@ import com.ivianuu.essentials.gradle.withLicenses
 plugins {
   id("com.android.application")
   id("com.ivianuu.essentials")
-  id("com.ivianuu.essentials.compose")
+  id("org.jetbrains.compose")
   kotlin("android")
   kotlin("plugin.serialization")
 }
@@ -47,6 +47,7 @@ dependencies {
   implementation(project(":essentials-android-core"))
   implementation(project(":essentials-android-prefs"))
   implementation(project(":essentials-android-settings"))
+  implementation(project(":essentials-android-util"))
   implementation(project(":essentials-about"))
   implementation(project(":essentials-accessibility"))
   implementation(project(":essentials-ads"))
@@ -57,6 +58,7 @@ dependencies {
   implementation(project(":essentials-billing"))
   implementation(project(":essentials-boot"))
   implementation(project(":essentials-cache"))
+  implementation(project(":essentials-color-picker"))
   implementation(project(":essentials-donation"))
   implementation(project(":essentials-foreground"))
   implementation(project(":essentials-gestures"))

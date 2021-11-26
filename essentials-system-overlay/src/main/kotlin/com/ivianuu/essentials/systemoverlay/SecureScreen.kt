@@ -23,6 +23,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.AppComponent
+import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
@@ -35,12 +36,11 @@ import kotlinx.coroutines.flow.stateIn
 
 @JvmInline value class IsOnSecureScreen(val value: Boolean)
 
-@Provide @Scoped<AppComponent>(eager = true)
-fun isOnSecureScreen(
+@Provide fun isOnSecureScreen(
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: ComponentScope<AppComponent>,
   L: Logger
-): Flow<IsOnSecureScreen> = accessibilityEvents
+): @Eager<AppComponent> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .map { it.packageName to it.className }
   .filter { it.second != "android.inputmethodservice.SoftInputWindow" }

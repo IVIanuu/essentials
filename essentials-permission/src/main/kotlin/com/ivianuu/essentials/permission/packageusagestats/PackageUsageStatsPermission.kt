@@ -39,7 +39,7 @@ interface PackageUsageStatsPermission : Permission
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
   appOpsManager: @SystemService AppOpsManager,
   buildInfo: BuildInfo,
-): PermissionStateProvider<P> = {
+) = PermissionStateProvider<P> {
   appOpsManager.checkOpNoThrow(
     AppOpsManager.OPSTR_GET_USAGE_STATS,
     Process.myUid(),
@@ -49,7 +49,7 @@ fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
 
 @Provide fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
   buildInfo: BuildInfo
-): PermissionIntentFactory<P> = {
+) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_USAGE_ACCESS_SETTINGS,
     Uri.parse("package:${buildInfo.packageName}")

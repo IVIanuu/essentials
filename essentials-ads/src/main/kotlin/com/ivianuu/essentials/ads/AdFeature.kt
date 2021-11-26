@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.Tag
 import kotlin.reflect.KClass
 
 interface AdFeature
@@ -39,11 +38,10 @@ interface AdFeature
   features: AdFeatures<K>
 ): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features).cast()
 
-@Tag annotation class IsAdFeatureEnabledUseCaseTag
-typealias IsAdFeatureEnabledUseCase = @IsAdFeatureEnabledUseCaseTag (KClass<out Key<*>>, AdFeature) -> Boolean
+fun interface IsAdFeatureEnabledUseCase : (KClass<out Key<*>>, AdFeature) -> Boolean
 
 @Provide fun isAdFeatureEnabledUseCase(
   featuresByKey: Map<KClass<out Key<*>>, AdFeatures<*>>
-): IsAdFeatureEnabledUseCase = { keyClass, feature ->
+) = IsAdFeatureEnabledUseCase { keyClass, feature ->
   featuresByKey[keyClass]?.value?.contains(feature) == true
 }

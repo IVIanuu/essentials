@@ -27,4 +27,4 @@ object CoilInitializer : ScopeInitializerKey<AppComponent>
 
 @Provide fun coilInitializer(
   imageLoaderFactory: () -> ImageLoader
-): ScopeInitializer<CoilInitializer> = { Coil.setImageLoader(imageLoaderFactory) }
+) = ScopeInitializer<CoilInitializer> { Coil.setImageLoader(imageLoaderFactory) }

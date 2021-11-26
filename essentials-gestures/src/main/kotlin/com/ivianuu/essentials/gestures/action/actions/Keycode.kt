@@ -47,7 +47,7 @@ import com.ivianuu.injekt.common.typeKeyOf
     return Action<ActionId>(
       id = id,
       title = loadResource(R.string.es_action_keycode_suffix, keycode),
-      icon = singleActionIcon(R.drawable.es_ic_keyboard),
+      icon = staticActionIcon(R.drawable.es_ic_keyboard),
       permissions = listOf(typeKeyOf<ActionRootPermission>()),
       enabled = true
     )
@@ -55,7 +55,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
     val keycode = id.removePrefix(BASE_ID)
-    return { actionRootCommandRunner("input keyevent $keycode") }
+    return ActionExecutor<ActionId> { actionRootCommandRunner("input keyevent $keycode") }
   }
 }
 
@@ -67,8 +67,10 @@ import com.ivianuu.injekt.common.typeKeyOf
     get() = BASE_ID
   override val title: String
     get() = loadResource(R.string.es_action_keycode)
-  override val icon: @Composable () -> Unit =
-    { Icon(R.drawable.es_ic_keyboard) }
+
+  @Composable override fun Icon() {
+    Icon(R.drawable.es_ic_keyboard)
+  }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(

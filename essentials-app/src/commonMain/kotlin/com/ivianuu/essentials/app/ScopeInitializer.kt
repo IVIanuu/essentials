@@ -21,21 +21,20 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Component
-import com.ivianuu.injekt.common.ComponentObserver
+import com.ivianuu.injekt.common.ComponentElement
+import com.ivianuu.injekt.common.ComponentName
 import com.ivianuu.injekt.common.TypeKey
 
-@Tag annotation class ScopeInitializerTag<K : ScopeInitializerKey<*>>
-typealias ScopeInitializer<K> = @ScopeInitializerTag<K> () -> Unit
-interface ScopeInitializerKey<C : @Component Any>
+fun interface ScopeInitializer<K : ScopeInitializerKey<*>> : () -> Unit
+interface ScopeInitializerKey<N : ComponentName>
 
-@Provide fun <@Spread T : ScopeInitializer<K>, K : ScopeInitializerKey<C>, C : @Component Any> scopeInitializerElement(
+@Provide fun <@Spread T : ScopeInitializer<K>, K : ScopeInitializerKey<N>, N : ComponentName> scopeInitializerElement(
   factory: () -> T,
   key: TypeKey<K>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-): ScopeInitializerElement<C> = ScopeInitializerElement(key, factory, loadingOrder)
+): ScopeInitializerElement<N> = ScopeInitializerElement(key, factory, loadingOrder)
 
-data class ScopeInitializerElement<C : @Component Any>(
+data class ScopeInitializerElement<N : ComponentName>(
   val key: TypeKey<*>,
   val factory: () -> ScopeInitializer<*>,
   val loadingOrder: LoadingOrder<out ScopeInitializer<*>>
@@ -46,25 +45,25 @@ data class ScopeInitializerElement<C : @Component Any>(
 
       override fun loadingOrder(item: ScopeInitializerElement<*>) = item.loadingOrder
     }
+
+    @Provide fun <N : ComponentName> defaultElements() =
+      emptyList<ScopeInitializerElement<N>>()
   }
 }
 
-@Provide fun <C : @Component Any> scopeInitializerRunner(
-  componentKey: TypeKey<C>,
-  initializers: List<ScopeInitializerElement<C>> = emptyList(),
-  workerRunner: ScopeWorkerRunner<C>,
-  L: Logger
-): ComponentObserver<C> = object : ComponentObserver<C> {
-  override fun init() {
-    initializers
-      .sortedWithLoadingOrder()
-      .forEach {
-        log { "${componentKey.value} initialize ${it.key.value}" }
-        it.factory()()
-      }
-    workerRunner()
-  }
+fun interface ScopeInitializerRunner : () -> Unit
 
-  override fun dispose() {
-  }
+@Provide fun <N : ComponentName> scopeInitializerRunner(
+  componentKey: TypeKey<N>,
+  initializers: List<ScopeInitializerElement<N>>,
+  workerRunner: ScopeWorkerRunner<N>,
+  L: Logger
+) = ScopeInitializerRunner {
+  initializers
+    .sortedWithLoadingOrder()
+    .forEach {
+      log { "${componentKey.value} initialize ${it.key.value}" }
+      it.factory()()
+    }
+  workerRunner()
 }

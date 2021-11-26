@@ -17,14 +17,13 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.optics.Optics
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
 import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
 import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.produce
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceValue
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -36,7 +35,7 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackKey : DialogKey<Unit>
 
-@Provide val feedbackUi: ModelKeyUi<FeedbackKey, FeedbackModel> = {
+@Provide val feedbackUi = ModelKeyUi<FeedbackKey, FeedbackModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_feedback_title) },
@@ -62,30 +61,29 @@ object FeedbackKey : DialogKey<Unit>
   }
 }
 
-@Optics data class FeedbackModel(
-  val displayShowNever: Boolean = false,
-  val showNever: () -> Unit = {},
-  val showLater: () -> Unit = {},
-  val openReddit: () -> Unit = {},
-  val sendMail: () -> Unit = {},
+data class FeedbackModel(
+  val displayShowNever: Boolean,
+  val showNever: () -> Unit,
+  val showLater: () -> Unit,
+  val openReddit: () -> Unit,
+  val sendMail: () -> Unit
 )
 
-@Provide fun feedbackModel(
+@Provide @Composable fun feedbackModel(
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<FeedbackKey>
-) = state(FeedbackModel()) {
-  produce({ copy(displayShowNever = it) }) { displayShowNever() }
-
-  action(FeedbackModel.showLater()) { showLater() }
-  action(FeedbackModel.showNever()) { showNever() }
-  action(FeedbackModel.openReddit()) {
+) = FeedbackModel(
+  displayShowNever = produceValue(false) { displayShowNever() },
+  showNever = action(showNever),
+  showLater = action(showLater),
+  openReddit = action {
     ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     ctx.navigator.pop(ctx.key)
-  }
-  action(FeedbackModel.sendMail()) {
+  },
+  sendMail = action {
     ctx.navigator.push(FeedbackMailKey)
     ctx.navigator.pop(ctx.key)
   }
-}
+)

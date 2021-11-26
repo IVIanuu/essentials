@@ -22,16 +22,13 @@ plugins {
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 kotlin {
-  jvm {
-    withJava()
-  }
+  jvm()
 
   sourceSets {
     commonMain {
       dependencies {
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
-        api(project(":essentials-optics"))
       }
     }
     named("jvmTest") {

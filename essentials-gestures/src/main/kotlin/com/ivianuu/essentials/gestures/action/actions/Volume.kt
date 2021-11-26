@@ -31,12 +31,12 @@ import com.ivianuu.injekt.android.SystemService
 @Provide fun volumeAction(RP: ResourceProvider) = Action(
   id = VolumeActionId,
   title = loadResource(R.string.es_action_volume),
-  icon = singleActionIcon(R.drawable.es_ic_volume_up)
+  icon = staticActionIcon(R.drawable.es_ic_volume_up)
 )
 
 @Provide fun volumeActionExecutor(
   audioManager: @SystemService AudioManager
-): ActionExecutor<VolumeActionId> = {
+) = ActionExecutor<VolumeActionId> {
   audioManager.adjustStreamVolume(
     AudioManager.STREAM_MUSIC,
     AudioManager.ADJUST_SAME,

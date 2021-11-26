@@ -42,7 +42,7 @@ import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
 import com.ivianuu.essentials.ui.animation.transition.SharedElement
 import com.ivianuu.essentials.ui.animation.transition.SharedElementStackTransition
 import com.ivianuu.essentials.ui.animation.transition.VerticalStackTransition
-import com.ivianuu.essentials.ui.core.LocalInsets
+import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
@@ -108,7 +108,7 @@ enum class TransitionKey(
 @Provide fun transitionUi(
   key: TransitionKey,
   navigator: Navigator
-): KeyUi<TransitionKey> = {
+) = KeyUi<TransitionKey> {
   Scaffold(
     topBar = {
       SharedElement(key = "app bar", isStart = false) {
@@ -163,7 +163,7 @@ enum class TransitionKey(
   }
 }
 
-@Provide val transitionUiOptionsFactory: KeyUiOptionsFactory<TransitionKey> = { key ->
+@Provide val transitionUiOptionsFactory = KeyUiOptionsFactory<TransitionKey> { key ->
   val (enterTransition, exitTransition) = when (key) {
     TransitionKey.VERTICAL -> VerticalStackTransition() to VerticalStackTransition()
     TransitionKey.CIRCULAR -> CircularRevealStackTransition("fab") to

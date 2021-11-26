@@ -30,6 +30,7 @@ import com.ivianuu.essentials.db.Schema
 import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
+import com.ivianuu.essentials.state.asComposable
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
@@ -50,12 +51,13 @@ object CheckAppsKey : Key<Unit>
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
   S: ComponentScope<KeyUiComponent>
-): KeyUi<CheckAppsKey> = {
+) = KeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(
         db.selectAll<CheckedAppEntity>()
-          .map { it.map { it.packageName }.toSet() },
+          .map { it.map { it.packageName }.toSet() }
+          .asComposable(emptySet()),
         { checkedApps ->
           launch {
             db.transaction {
@@ -76,7 +78,7 @@ object CheckAppsKey : Key<Unit>
 
 @Tag private annotation class CheckApps
 
-@Provide @Scoped<AppComponent> fun checkAppsDb(context: AppContext): @CheckApps Db = AndroidDb(
+@Provide fun checkAppsDb(context: AppContext): @Scoped<AppComponent> @CheckApps Db = AndroidDb(
   context = context,
   name = "checked_apps.db",
   schema = Schema(

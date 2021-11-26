@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 /*
  * Copyright 2021 Manuel Wrage
  *
@@ -20,12 +22,14 @@ buildscript {
     google()
     mavenCentral()
     jcenter()
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://plugins.gradle.org/m2")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   }
 
   dependencies {
     classpath(Deps.androidGradlePlugin)
+    classpath(Deps.Compose.gradlePlugin)
     classpath(Deps.dexcountGradlePlugin)
     classpath(Deps.dokkaGradlePlugin)
     classpath(Deps.essentialsGradlePlugin)
@@ -44,5 +48,10 @@ allprojects {
     mavenCentral()
     jcenter()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
+  }
+
+  plugins.withId("com.vanniktech.maven.publish") {
+    extensions.getByType<com.vanniktech.maven.publish.MavenPublishPluginExtension>()
+      .sonatypeHost = SonatypeHost.S01
   }
 }

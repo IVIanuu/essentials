@@ -47,7 +47,7 @@ import kotlinx.coroutines.flow.first
       closeSystemDialogs = true,
       enabled = true,
       permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>()),
-      icon = singleActionIcon {
+      icon = {
         Image(
           modifier = LocalActionImageSizeModifier.current,
           bitmap = appShortcut.icon.toBitmap().toImageBitmap()
@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.first
 
     val appShortcut = appShortcutRepository.appShortcut(packageName, shortcutId).first()!!
 
-    return {
+    return ActionExecutor<ActionId> {
       actionIntentSender(
         appShortcut.intent,
         isFloating.toBoolean(),
@@ -83,7 +83,7 @@ import kotlinx.coroutines.flow.first
   override val title: String
     get() = loadResource(R.string.es_action_app_shortcut)
 
-  override val icon: @Composable () -> Unit = {
+  @Composable override fun Icon() {
     Icon(R.drawable.es_ic_apps)
   }
 

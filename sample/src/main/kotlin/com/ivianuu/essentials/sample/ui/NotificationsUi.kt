@@ -30,35 +30,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.fold
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
-import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.recover
-import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.store.action
-import com.ivianuu.essentials.store.state
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.resourceFromFlow
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -69,19 +70,18 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiComponent
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceBox
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.ComponentScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlin.reflect.KClass
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
 object NotificationsKey : Key<Unit>
 
-@Provide val notificationsUi: ModelKeyUi<NotificationsKey, NotificationsModel> = {
+@Provide val notificationsUi = ModelKeyUi<NotificationsKey, NotificationsModel> {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {
@@ -100,44 +100,44 @@ object NotificationsKey : Key<Unit>
 @Composable private fun NotificationsList(
   onNotificationClick: (UiNotification) -> Unit,
   onDismissNotificationClick: (UiNotification) -> Unit,
-  notifications: Resource<List<UiNotification>>
+  notifications: List<UiNotification>
 ) {
-  ResourceVerticalListFor(
-    resource = notifications,
-    successEmpty = {
-      Text(
-        text = "No notifications",
-        style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.center()
-      )
-    },
-    successItemContent = { notification ->
-      ListItem(
-        modifier = Modifier.clickable { onNotificationClick(notification) },
-        title = { Text(notification.title) },
-        subtitle = { Text(notification.text) },
-        leading = {
-          Box(
-            modifier = Modifier.size(40.dp)
-              .background(
-                color = notification.color,
-                shape = CircleShape
-              )
-              .padding(all = 8.dp)
-          ) {
-            notification.icon()
-          }
-        },
-        trailing = if (notification.isClearable) {
-          {
-            IconButton(onClick = { onDismissNotificationClick(notification) }) {
-              Icon(R.drawable.es_ic_clear)
+  if (notifications.isEmpty()) {
+    Text(
+      text = "No notifications",
+      style = MaterialTheme.typography.subtitle1,
+      modifier = Modifier.center()
+    )
+  } else {
+    LazyColumn {
+      items(notifications) { notification ->
+        ListItem(
+          modifier = Modifier.clickable { onNotificationClick(notification) },
+          title = { Text(notification.title) },
+          subtitle = { Text(notification.text) },
+          leading = {
+            Box(
+              modifier = Modifier.size(40.dp)
+                .background(
+                  color = notification.color,
+                  shape = CircleShape
+                )
+                .padding(all = 8.dp)
+            ) {
+              notification.icon()
             }
-          }
-        } else null
-      )
+          },
+          trailing = if (notification.isClearable) {
+            {
+              IconButton(onClick = { onDismissNotificationClick(notification) }) {
+                Icon(R.drawable.es_ic_clear)
+              }
+            }
+          } else null
+        )
+      }
     }
-  )
+  }
 }
 
 @Composable private fun NotificationPermissions(
@@ -159,12 +159,12 @@ object NotificationsKey : Key<Unit>
   }
 }
 
-@Optics data class NotificationsModel(
-  val hasPermissions: Resource<Boolean> = Idle,
-  val notifications: Resource<List<UiNotification>> = Idle,
-  val requestPermissions: () -> Unit = {},
-  val openNotification: (UiNotification) -> Unit = {},
-  val dismissNotification: (UiNotification) -> Unit = {}
+data class NotificationsModel(
+  val hasPermissions: Resource<Boolean>,
+  val notifications: List<UiNotification>,
+  val requestPermissions: () -> Unit,
+  val openNotification: (UiNotification) -> Unit,
+  val dismissNotification: (UiNotification) -> Unit
 )
 
 data class UiNotification(
@@ -176,69 +176,66 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Provide fun notificationsModel(
-  context: AppContext,
+@Provide @Composable fun notificationsModel(
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
   service: NotificationService,
+  C: AppContext,
   S: ComponentScope<KeyUiComponent>
-) = state(NotificationsModel()) {
-  service.notifications
-    .map { notifications ->
-      notifications
-        .parMap { it.toUiNotification(context) }
-    }
-    .flowAsResource()
-    .update { copy(notifications = it) }
-  permissionState
-    .flowAsResource()
-    .update { copy(hasPermissions = it) }
-  action(NotificationsModel.requestPermissions()) {
+) = NotificationsModel(
+  hasPermissions = resourceFromFlow { permissionState },
+  notifications = service.notifications
+    .map { it.toUiNotification() },
+  requestPermissions = action {
     permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
-  }
-  action(NotificationsModel.openNotification()) { notification ->
+  },
+  openNotification = action { notification ->
     service.openNotification(notification.sbn.notification)
-  }
-  action(NotificationsModel.dismissNotification()) { notification ->
+  },
+  dismissNotification = action { notification ->
     service.dismissNotification(notification.sbn.key)
   }
-}
+)
 
-private fun StatusBarNotification.toUiNotification(context: AppContext) = UiNotification(
+private fun StatusBarNotification.toUiNotification(
+  @Suppress("UNUSED_PARAMETER") @Inject C: AppContext
+) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
     ?.toString() ?: "",
-  icon = catch {
-    notification.smallIcon
-      .loadDrawable(context)
-  }.recover {
-    notification.getLargeIcon()
-      .loadDrawable(context)
-  }
-    .map { it.toBitmap().toImageBitmap() }
-    .fold(
-      success = { bitmap ->
-        {
-          Image(
-            modifier = Modifier.size(24.dp),
-            bitmap = bitmap
-          )
-        }
-      },
-      failure = {
-        { Icon(R.drawable.es_ic_error) }
-      }
-    ),
+  icon = { NotificationIcon(notification) },
   color = Color(notification.color),
   isClearable = isClearable,
   sbn = this
 )
 
+@Composable private fun NotificationIcon(
+  notification: Notification,
+  @Inject context: AppContext
+) {
+  val icon by produceState<ImageBitmap?>(null) {
+    value = catch {
+      notification.smallIcon
+        .loadDrawable(context)
+    }.recover {
+      notification.getLargeIcon()
+        .loadDrawable(context)
+    }
+      .map { it.toBitmap().toImageBitmap() }
+      .getOrNull()
+  }
+
+  Image(
+    modifier = Modifier.size(24.dp),
+    bitmap = icon ?: return
+  )
+}
+
 @Provide object SampleNotificationsPermission : NotificationListenerPermission {
   override val serviceClass: KClass<out NotificationListenerService>
     get() = EsNotificationListenerService::class
   override val title: String = "Notifications"
-  override val icon: @Composable (() -> Unit)?
-    get() = null
+  @Composable override fun Icon() {
+  }
 }

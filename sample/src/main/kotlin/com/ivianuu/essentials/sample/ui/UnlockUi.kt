@@ -53,7 +53,7 @@ object UnlockKey : Key<Unit>
   screenUnlocker: ScreenUnlocker,
   S: ComponentScope<KeyUiComponent>,
   T: ToastContext
-): KeyUi<UnlockKey> = {
+) = KeyUi<UnlockKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {
