@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.TextStyle
 import com.ivianuu.essentials.ui.util.isDark
 
-inline fun Typography.editEach(edit: TextStyle.() -> TextStyle) = Typography(
+fun Typography.editEach(edit: TextStyle.() -> TextStyle) = Typography(
   h1 = edit(h1),
   h2 = edit(h2),
   h3 = edit(h3),

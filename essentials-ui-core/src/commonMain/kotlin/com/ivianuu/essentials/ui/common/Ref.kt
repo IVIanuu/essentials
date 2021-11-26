@@ -19,6 +19,8 @@ package com.ivianuu.essentials.ui.common
 import androidx.compose.runtime.SnapshotMutationPolicy
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.structuralEqualityPolicy
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.loop
 import kotlin.reflect.KProperty
 
 fun <T> refOf(
@@ -45,12 +47,14 @@ private class RefImpl<T>(
   value: T,
   val policy: SnapshotMutationPolicy<T>
 ) : Ref<T> {
-  override var value: T = value
-    get() = synchronized(this) { field }
+  private val _value = atomic(value)
+  override var value: T
+    get() = _value.value
     set(value) {
-      val oldValue = synchronized(this) { field }
-      if (!policy.equivalent(oldValue, value)) {
-        synchronized(this) { field = value }
+      _value.loop { oldValue ->
+        if (!policy.equivalent(oldValue, value)) {
+          _value.compareAndSet(oldValue, value)
+        }
       }
     }
 }
