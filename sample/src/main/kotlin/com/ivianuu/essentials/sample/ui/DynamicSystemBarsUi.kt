@@ -48,7 +48,7 @@ object DynamicSystemBarsKey : Key<Unit>
         .shuffled()
     }
     VerticalList(contentPadding = PaddingValues(0.dp)) {
-      // use items once fixed
+      // todo use items once fixed
       for (color in colors) {
         item {
           Box(
