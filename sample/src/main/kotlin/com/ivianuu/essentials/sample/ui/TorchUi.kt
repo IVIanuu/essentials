@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,7 @@ object TorchKey : Key<Unit>
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
-        "Torch is ${if (torch.torchEnabled) "enabled" else "disabled"}",
+        "Torch is ${if (torch.torchEnabled.collectAsState().value) "enabled" else "disabled"}",
         style = MaterialTheme.typography.h4
       )
       Spacer(Modifier.height(8.dp))
@@ -55,7 +56,7 @@ object TorchKey : Key<Unit>
       Button(
         onClick = {
           scope.launch {
-            torch.setTorchState(!torch.torchEnabled)
+            torch.setTorchState(!torch.torchEnabled.value)
           }
         }
       ) {

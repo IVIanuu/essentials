@@ -66,5 +66,5 @@ fun interface DecorateKeyUi : @Composable (@Composable () -> Unit) -> Unit
           element.decorator(acc)
         }
       }
-  }.invoke()
+  }()
 }

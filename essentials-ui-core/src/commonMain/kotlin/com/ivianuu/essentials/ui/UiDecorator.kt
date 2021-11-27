@@ -67,7 +67,7 @@ fun interface DecorateUi : @Composable (@Composable () -> Unit) -> Unit
           element.decorator(acc)
         }
       }
-  }.invoke()
+  }()
 }
 
 fun interface AppTheme : UiDecorator

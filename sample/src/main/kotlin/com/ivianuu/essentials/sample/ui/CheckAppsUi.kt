@@ -73,7 +73,7 @@ object CheckAppsKey : Key<Unit>
         "Send check apps"
       )
     )
-  }.invoke()
+  }()
 }
 
 @Tag private annotation class CheckApps

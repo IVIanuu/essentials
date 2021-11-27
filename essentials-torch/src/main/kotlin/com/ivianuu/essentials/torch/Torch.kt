@@ -6,16 +6,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -29,10 +25,11 @@ import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.coroutines.MainDispatcher
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -40,7 +37,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 interface Torch {
-  val torchEnabled: Boolean
+  val torchEnabled: StateFlow<Boolean>
 
   suspend fun setTorchState(value: Boolean)
 }
@@ -55,8 +52,8 @@ interface Torch {
   private val L: Logger,
   private val T: ToastContext
 ) : Torch {
-  override var torchEnabled by mutableStateOf(false)
-    private set
+  private val _torchEnabled = MutableStateFlow(false)
+  override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
 
   private val torchJobLock = Mutex()
   private var torchJob: Job? = null
@@ -72,7 +69,7 @@ interface Torch {
   private suspend fun handleTorchState(value: Boolean) {
     log { "handle torch state $value" }
     if (!value) {
-      torchEnabled = false
+      _torchEnabled.value = false
       return
     }
 
@@ -87,7 +84,7 @@ interface Torch {
     val cameraId = cameraManager.cameraIdList[0]
     log { "enable torch" }
     cameraManager.setTorchMode(cameraId, true)
-    torchEnabled = true
+    _torchEnabled.value = true
 
     onCancel(
       block = {
@@ -118,12 +115,12 @@ interface Torch {
 
         log { "torch unavailable" }
         catch { cameraManager.setTorchMode(cameraId, false) }
-        torchEnabled = false
+        _torchEnabled.value = false
       },
       onCancel = {
         log { "disable torch on cancel" }
         catch { cameraManager.setTorchMode(cameraId, false) }
-        torchEnabled = false
+        _torchEnabled.value = false
       }
     )
   }.onFailure {

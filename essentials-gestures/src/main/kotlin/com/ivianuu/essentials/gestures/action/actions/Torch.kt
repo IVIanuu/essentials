@@ -17,11 +17,11 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
+import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.torch.Torch
@@ -32,15 +32,13 @@ import com.ivianuu.injekt.Provide
 @Provide fun torchAction(torch: Torch, RP: ResourceProvider) = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
-  icon = torch.icon()
+  icon = {
+    Icon(
+      if (torch.torchEnabled.collectAsState().value) R.drawable.es_ic_flashlight_on
+      else R.drawable.es_ic_flashlight_off
+    )
+  }
 )
 
 @Provide fun torchActionExecutor(torch: Torch) = ActionExecutor<TorchActionId>
-  { torch.setTorchState(!torch.torchEnabled) }
-
-private fun Torch.icon() = ActionIcon {
-  Icon(
-    if (torchEnabled) R.drawable.es_ic_flashlight_on
-    else R.drawable.es_ic_flashlight_off
-  )
-}
+  { torch.setTorchState(!torch.torchEnabled.collectAsState().value) }
