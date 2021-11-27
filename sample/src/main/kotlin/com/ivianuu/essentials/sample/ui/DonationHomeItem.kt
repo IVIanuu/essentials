@@ -30,7 +30,7 @@ import org.json.JSONObject
 
 @Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
 
-@Provide val sampleDonations = setOf(
+@Provide val sampleDonations = listOf(
   Donation(Sku("crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),
   Donation(Sku("coffee", Sku.Type.IN_APP), R.drawable.es_ic_free_breakfast),
   Donation(Sku("burger_menu", Sku.Type.IN_APP), R.drawable.es_ic_lunch_dining),
