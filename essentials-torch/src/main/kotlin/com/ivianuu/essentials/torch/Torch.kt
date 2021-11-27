@@ -12,6 +12,7 @@ import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -30,6 +31,7 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

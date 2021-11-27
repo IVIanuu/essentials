@@ -32,6 +32,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
 
