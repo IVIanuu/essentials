@@ -26,10 +26,6 @@ import com.ivianuu.injekt.common.TypeKey
 
 fun interface ListDecorator {
   operator fun ListDecoratorScope.invoke()
-  // todo remove once fixed
-  fun execute(scope: ListDecoratorScope) = with(scope) {
-    invoke()
-  }
 }
 
 interface ListDecoratorScope : LazyListScope {
@@ -134,9 +130,9 @@ private fun LazyListScope.decoratedContent(
   decorators
     .reversed()
     .fold(content) { acc, element ->
-      {
-        element.decorator.execute(
-          object : ListDecoratorScope, LazyListScope by this {
+      decorator@ {
+        with(element.decorator) {
+          val scope =  object : ListDecoratorScope, LazyListScope by this@decorator {
             override val isVertical: Boolean
               get() = isVertical
 
@@ -144,7 +140,10 @@ private fun LazyListScope.decoratedContent(
               acc()
             }
           }
-        )
+          with(scope) {
+            invoke()
+          }
+        }
       }
     }
     .invoke(this)

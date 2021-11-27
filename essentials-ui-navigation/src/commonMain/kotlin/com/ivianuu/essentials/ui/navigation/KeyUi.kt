@@ -48,8 +48,6 @@ typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 // todo make fun interface once compose is fixed
 interface ModelKeyUi<K : Key<*>, S> {
   @Composable operator fun ModelKeyUiScope<K, S>.invoke()
-  // todo remove once fixed
-  @Composable fun execute(scope: ModelKeyUiScope<K, S>) = with(scope) { invoke() }
 }
 inline operator fun <K : Key<*>, S> ModelKeyUi(
   crossinline block: @Composable ModelKeyUiScope<K, S>.() -> Unit
@@ -87,7 +85,11 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
     }
   }
   val ui = remember(uiFactory)
-  ui.execute(scope)
+  with(ui) {
+    with(scope) {
+      invoke()
+    }
+  }
 }
 
 @Provide data class KeyUiContext<K : Key<*>>(
