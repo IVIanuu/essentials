@@ -145,7 +145,6 @@ private class NavigationContentState(
 
       CompositionLocalProvider(
         LocalElements provides elements,
-        LocalKeyUiElements provides elements,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {
         content()

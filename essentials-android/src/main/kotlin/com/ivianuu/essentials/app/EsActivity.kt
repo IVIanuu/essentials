@@ -28,7 +28,6 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalElements
-import com.ivianuu.essentials.ui.LocalUiElements
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
@@ -59,10 +58,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     }
 
     setContent {
-      CompositionLocalProvider(
-        LocalElements provides uiComponent.elements,
-        LocalUiElements provides uiComponent.elements
-      ) {
+      CompositionLocalProvider(LocalElements provides uiComponent.elements) {
         uiComponent.decorateUi {
           uiComponent.appUi()
         }

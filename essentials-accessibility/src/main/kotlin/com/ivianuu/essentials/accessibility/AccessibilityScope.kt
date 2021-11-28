@@ -17,4 +17,3 @@
 package com.ivianuu.essentials.accessibility
 
 object AccessibilityScope
-

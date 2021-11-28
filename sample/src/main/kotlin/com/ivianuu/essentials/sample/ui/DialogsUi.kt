@@ -39,7 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
-import com.ivianuu.essentials.ui.LocalUiElements
+import com.ivianuu.essentials.ui.LocalElements
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -259,7 +259,7 @@ object DialogsKey : Key<Unit>
   onClick: () -> Unit = {},
   text: String
 ) {
-  val component = LocalUiElements.current<DialogLauncherComponent>()
+  val component = LocalElements.current<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
@@ -280,7 +280,7 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = LocalUiElements.current<DialogLauncherComponent>()
+  val component = LocalElements.current<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {
