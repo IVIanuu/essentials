@@ -37,7 +37,7 @@ interface FullScreenAd {
 @Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
-  private val mainDispatcher: MainDispatcher,
+  private val mainContext: MainContext,
   private val scope: NamedCoroutineScope<AppScope>,
   private val showAds: State<ShowAds>,
   private val L: Logger
@@ -79,7 +79,7 @@ interface FullScreenAd {
   private suspend fun getOrCreateCurrentAd(): suspend () -> Unit = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
-    } ?: scope.async(mainDispatcher) {
+    } ?: scope.async(mainContext) {
       val ad = InterstitialAd(context).apply {
         adUnitId = id.value
       }
@@ -108,7 +108,7 @@ interface FullScreenAd {
       val result: suspend () -> Unit = {
         log { "show ad" }
         lock.withLock { deferredAd = null }
-        withContext(mainDispatcher) {
+        withContext(mainContext) {
           ad.show()
         }
       }

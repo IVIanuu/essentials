@@ -11,12 +11,13 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
+import kotlin.coroutines.*
 
 object ConfigChange
 
 @Provide fun configChanges(
   context: AppContext,
-  mainDispatcher: MainDispatcher,
+  coroutineContext: MainContext,
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -31,4 +32,4 @@ object ConfigChange
   }
   context.registerComponentCallbacks(callbacks)
   awaitClose { context.unregisterComponentCallbacks(callbacks) }
-}.flowOn(mainDispatcher)
+}.flowOn(coroutineContext)

@@ -13,13 +13,13 @@ import com.ivianuu.injekt.coroutines.*
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
-    dispatcher: IODispatcher,
+    context: IOContext,
     initial: () -> @Initial T = default,
     serializerFactory: () -> Serializer<T>,
     prefsDir: () -> PrefsDir,
     scope: NamedCoroutineScope<AppScope>
   ): @Scoped<AppScope> DataStore<T> = DiskDataStore(
-    coroutineContext = scope.coroutineContext.childCoroutineContext(dispatcher),
+    coroutineContext = scope.coroutineContext.childCoroutineContext(context),
     produceFile = { prefsDir().resolve(name) },
     produceSerializer = serializerFactory,
     corruptionHandler = ReplaceDataCorruptionHandler { _, error ->

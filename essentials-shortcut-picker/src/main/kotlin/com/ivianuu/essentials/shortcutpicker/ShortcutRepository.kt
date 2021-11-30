@@ -19,13 +19,13 @@ import kotlinx.coroutines.flow.*
 interface ShortcutRepository {
   val shortcuts: Flow<List<Shortcut>>
 
-  fun extractShortcut(shortcutRequestResult: Intent): Shortcut
+  suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut
 }
 
 @Provide class ShortcutRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val context: AppContext,
-  private val dispatcher: IODispatcher,
+  private val coroutineContext: IOContext,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>>
@@ -37,7 +37,7 @@ interface ShortcutRepository {
     )
       .onStart<Any?> { emit(Unit) }
       .mapLatest {
-        withContext(dispatcher) {
+        withContext(coroutineContext) {
           val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
           packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
@@ -61,7 +61,7 @@ interface ShortcutRepository {
       }
       .distinctUntilChanged()
 
-  override fun extractShortcut(shortcutRequestResult: Intent): Shortcut {
+  override suspend fun extractShortcut(shortcutRequestResult: Intent) = withContext(coroutineContext) {
     val intent =
       shortcutRequestResult.getParcelableExtra<Intent>(Intent.EXTRA_SHORTCUT_INTENT)!!
     val name = shortcutRequestResult.getStringExtra(Intent.EXTRA_SHORTCUT_NAME)!!
@@ -82,6 +82,6 @@ interface ShortcutRepository {
       else -> error("No icon provided $shortcutRequestResult")
     }
 
-    return Shortcut(intent, name, icon)
+    Shortcut(intent, name, icon)
   }
 }

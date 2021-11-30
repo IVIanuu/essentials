@@ -16,7 +16,7 @@ object RotationChange
 
 @Provide fun rotationChanges(
   context: AppContext,
-  mainDispatcher: MainDispatcher,
+  coroutineContext: MainContext,
 ): Flow<RotationChange> = callbackFlow<RotationChange> {
   val listener = object :
     OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
@@ -26,4 +26,4 @@ object RotationChange
   }
   listener.enable()
   awaitClose { listener.disable() }
-}.flowOn(mainDispatcher)
+}.flowOn(coroutineContext)

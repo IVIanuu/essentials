@@ -24,7 +24,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   @SuppressLint("WorldReadableFiles")
   @Provide fun dataStore(
     context: AppContext,
-    dispatcher: IODispatcher,
+    coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
@@ -51,7 +51,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     val data = callbackFlow<T> {
       val listener = appScope {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-          scope.launch(dispatcher) {
+          scope.launch(coroutineContext) {
             context.sendBroadcast(Intent(prefsChangedAction(packageName)))
             send(readData())
           }
@@ -62,10 +62,10 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
       .onStart { emit(readData()) }
       .distinctUntilChanged()
-      .flowOn(dispatcher)
+      .flowOn(coroutineContext)
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
-    val actor = actor(dispatcher)
+    val actor = actor(coroutineContext)
 
     return object : DataStore<T> {
       override val data: Flow<T>
@@ -85,7 +85,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
 
   @Provide fun xposedPrefFlow(
     broadcastsFactory: BroadcastsFactory,
-    dispatcher: IODispatcher,
+    coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
@@ -110,7 +110,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart<Any?> { emit(Unit) }
       .map { readData() }
       .distinctUntilChanged()
-      .flowOn(dispatcher)
+      .flowOn(coroutineContext)
   }
 
   @Provide

@@ -32,7 +32,7 @@ interface Torch {
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
-  private val mainDispatcher: MainDispatcher,
+  private val mainContext: MainContext,
   private val notificationFactory: NotificationFactory,
   private val S: NamedCoroutineScope<AppScope>,
   private val L: Logger,
@@ -74,7 +74,7 @@ interface Torch {
 
     onCancel(
       block = {
-        withContext(mainDispatcher) {
+        withContext(mainContext) {
           suspendCancellableCoroutine<Unit> { cont ->
             val callback = object : CameraManager.TorchCallback() {
               override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {

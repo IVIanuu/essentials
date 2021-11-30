@@ -18,10 +18,10 @@ interface LicenceProjectRepository {
 
 @Provide class LicenceProjectRepositoryImpl(
   private val context: AppContext,
-  private val dispatcher: IODispatcher,
+  private val coroutineContext: IOContext,
   private val json: Json
 ) : LicenceProjectRepository{
-  override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(dispatcher) {
+  override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {
     catch {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()

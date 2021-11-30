@@ -21,8 +21,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 
 @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  context: AppContext,
-  dispatcher: DefaultDispatcher,
+  coroutineContext: DefaultContext,
   permissionRequester: PermissionRequester,
   permissionStateFactory: PermissionStateFactory,
   repository: ActionRepository,
@@ -31,7 +30,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   L: Logger,
   T: Toaster
 ) = ExecuteActionUseCase { key ->
-  withContext(dispatcher) {
+  withContext(coroutineContext) {
     catch {
       log { "execute $key" }
       val action = repository.getAction(key)

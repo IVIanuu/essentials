@@ -23,14 +23,14 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
   backupDir: BackupDir,
   backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
+  context: IOContext,
   dataDir: DataDir,
-  dispatcher: IODispatcher,
   navigator: Navigator,
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = CreateBackupUseCase {
   catch {
-    withContext(scope.coroutineContext + dispatcher) {
+    withContext(scope.coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
         "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -67,15 +67,15 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
+  context: IOContext,
   dataDir: DataDir,
-  dispatcher: IODispatcher,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = RestoreBackupUseCase {
   catch {
-    withContext(scope.coroutineContext + dispatcher) {
+    withContext(scope.coroutineContext + context) {
       val uri = navigator.push(
         Intent.createChooser(
           Intent(Intent.ACTION_GET_CONTENT).apply {

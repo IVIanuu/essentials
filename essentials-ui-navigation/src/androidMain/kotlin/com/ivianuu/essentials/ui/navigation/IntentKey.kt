@@ -19,8 +19,7 @@ import com.ivianuu.essentials.ok
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -40,7 +39,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
 
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
-  dispatcher: MainDispatcher,
+  context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
   scope: NamedCoroutineScope<AppScope>
 ) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key, onResult ->
@@ -50,7 +49,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   val intent = intentFactory(key)
   launch {
     val activity = appUiStarter()
-    withContext(dispatcher) {
+    withContext(context) {
       val result =
         suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
           val launcher = activity.activityResultRegistry.register(

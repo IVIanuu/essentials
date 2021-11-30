@@ -27,7 +27,7 @@ interface BillingContext {
 
 @Provide @Scoped<AppScope> class BillingContextImpl(
   override val billingClient: BillingClient,
-  private val dispatcher: IODispatcher,
+  private val context: IOContext,
   override val logger: Logger,
   override val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: NamedCoroutineScope<AppScope>
@@ -36,7 +36,7 @@ interface BillingContext {
   private val connectionLock = Mutex()
 
   override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
-    withContext(scope.coroutineContext + dispatcher) {
+    withContext(scope.coroutineContext + context) {
       ensureConnected()
       block()
     }

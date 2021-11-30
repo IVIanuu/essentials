@@ -16,12 +16,12 @@ interface Shell {
   suspend fun run(vararg commands: String): Result<List<String>, Throwable>
 }
 
-@Provide class ShellImpl(private val dispatcher: IODispatcher) : Shell {
-  override suspend fun isAvailable() = withContext(dispatcher) {
+@Provide class ShellImpl(private val context: IOContext) : Shell {
+  override suspend fun isAvailable() = withContext(context) {
     catch { SU.available() }.getOrElse { false }
   }
 
-  override suspend fun run(vararg commands: String) = withContext(dispatcher) {
+  override suspend fun run(vararg commands: String) = withContext(context) {
     catch { SU.run(commands)!! }
   }
 }

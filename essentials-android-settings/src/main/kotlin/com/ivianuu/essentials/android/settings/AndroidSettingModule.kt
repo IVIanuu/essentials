@@ -24,7 +24,7 @@ class AndroidSettingModule<T : S, S>(
     adapter: AndroidSettingAdapter<S>,
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
-    dispatcher: IODispatcher,
+    context: IOContext,
     scope: NamedCoroutineScope<AppScope>
   ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
@@ -36,7 +36,7 @@ class AndroidSettingModule<T : S, S>(
     )
       .onStart { emit(Unit) }
       .map {
-        withContext(dispatcher) {
+        withContext(context) {
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }

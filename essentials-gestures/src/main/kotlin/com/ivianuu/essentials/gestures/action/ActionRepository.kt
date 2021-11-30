@@ -31,14 +31,14 @@ interface ActionRepository {
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val dispatcher: DefaultDispatcher,
+  private val context: DefaultContext,
   private val T: ToastContext
 ) : ActionRepository {
-  override suspend fun getAllActions() = withContext(dispatcher) {
+  override suspend fun getAllActions() = withContext(context) {
     actions().values.map { it() }
   }
 
-  override suspend fun getAction(id: String) = withContext(dispatcher) {
+  override suspend fun getAction(id: String) = withContext(context) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -53,7 +53,7 @@ interface ActionRepository {
       )
   }
 
-  override suspend fun getActionExecutor(id: String) = withContext(dispatcher) {
+  override suspend fun getActionExecutor(id: String) = withContext(context) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -67,8 +67,8 @@ interface ActionRepository {
   }
 
   override suspend fun getActionSettingsKey(id: String) =
-    withContext(dispatcher) { actionSettings()[id]?.invoke() }
+    withContext(context) { actionSettings()[id]?.invoke() }
 
   override suspend fun getActionPickerDelegates() =
-    withContext(dispatcher) { actionPickerDelegates().map { it() } }
+    withContext(context) { actionPickerDelegates().map { it() } }
 }

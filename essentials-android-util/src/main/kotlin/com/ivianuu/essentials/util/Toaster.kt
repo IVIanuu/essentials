@@ -14,10 +14,10 @@ fun interface Toaster : (String) -> Unit
 
 @Provide fun toaster(
   context: AppContext,
-  mainDispatcher: MainDispatcher,
+  coroutineContext: MainContext,
   scope: NamedCoroutineScope<AppScope>
 ) = Toaster { message ->
-  launch(mainDispatcher) {
+  launch(coroutineContext) {
     Toast.makeText(
       context,
       message,

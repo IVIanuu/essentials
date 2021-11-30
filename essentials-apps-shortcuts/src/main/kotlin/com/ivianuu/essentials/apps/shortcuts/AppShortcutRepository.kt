@@ -21,7 +21,7 @@ interface AppShortcutRepository {
 @Provide class AppShortcutRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val context: AppContext,
-  private val dispatcher: IODispatcher
+  private val coroutineContext: IOContext
 ) : AppShortcutRepository {
   override fun appShortcuts(packageName: String): Flow<List<AppShortcut>> = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,
@@ -31,7 +31,7 @@ interface AppShortcutRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(dispatcher) {
+      withContext(coroutineContext) {
         val resources = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY)
           .resources
         parseAppShortcutMetadata(context, packageName)

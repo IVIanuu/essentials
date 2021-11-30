@@ -19,10 +19,10 @@ fun interface ContentChangesFactory : (Uri) -> Flow<Unit>
 
 @Provide fun contentChangesFactory(
   contentResolver: ContentResolver,
-  mainDispatcher: MainDispatcher,
+  coroutineContext: MainContext,
 ) = ContentChangesFactory { uri ->
   callbackFlow<Unit> {
-    val observer = withContext(mainDispatcher) {
+    val observer = withContext(coroutineContext) {
       object : ContentObserver(android.os.Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
           super.onChange(selfChange)
@@ -32,7 +32,7 @@ fun interface ContentChangesFactory : (Uri) -> Flow<Unit>
     }
     contentResolver.registerContentObserver(uri, false, observer)
     awaitClose { contentResolver.unregisterContentObserver(observer) }
-  }.flowOn(mainDispatcher)
+  }.flowOn(coroutineContext)
 }
 
 @Provide inline fun contentResolver(application: Application): ContentResolver =

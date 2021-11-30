@@ -62,13 +62,13 @@ fun interface PermissionRequestHandler<P : Permission> : suspend (P) -> Unit
 typealias PermissionState<P> = @PermissionStateTag<P> Boolean
 
 @Provide fun <P : Permission> permissionState(
-  dispatcher: DefaultDispatcher,
+  context: DefaultContext,
   permission: P,
   stateProvider: PermissionStateProvider<P>
 ): Flow<PermissionState<P>> = permissionRefreshes
   .onStart<Any?> { emit(Unit) }
   .map {
-    withContext(dispatcher) {
+    withContext(context) {
       stateProvider(permission)
     }
   }
@@ -101,12 +101,12 @@ fun interface PermissionRequester : suspend (List<TypeKey<Permission>>) -> Boole
 
 @Provide fun permissionRequester(
   appUiStarter: AppUiStarter,
-  dispatcher: DefaultDispatcher,
+  context: DefaultContext,
   navigator: Navigator,
   permissionStateFactory: PermissionStateFactory,
   L: Logger
 ) = PermissionRequester { requestedPermissions ->
-  withContext(dispatcher) {
+  withContext(context) {
     log { "request permissions $requestedPermissions" }
 
     if (requestedPermissions.all { permissionStateFactory(listOf(it)).first() })

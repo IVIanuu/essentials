@@ -33,11 +33,11 @@ enum class ScreenState(val isOn: Boolean) {
 @Tag private annotation class CurrentScreenStateProvider
 
 @Provide fun currentScreenStateProvider(
-  dispatcher: DefaultDispatcher,
+  context: DefaultContext,
   keyguardManager: @SystemService KeyguardManager,
   powerManager: @SystemService PowerManager,
 ): @CurrentScreenStateProvider suspend () -> ScreenState = {
-  withContext(dispatcher) {
+  withContext(context) {
     if (powerManager.isInteractive) {
       if (keyguardManager.isDeviceLocked) {
         ScreenState.LOCKED

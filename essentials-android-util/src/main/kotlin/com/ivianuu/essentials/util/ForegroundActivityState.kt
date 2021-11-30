@@ -27,7 +27,7 @@ val foregroundActivityState: @ComposedState MutableState<ForegroundActivity> =
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
-  mainDispatcher: MainDispatcher,
+  coroutineContext: MainContext,
   state: MutableState<ForegroundActivity>
 ) = ScopeWorker<UiScope> worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
@@ -35,7 +35,7 @@ val foregroundActivityState: @ComposedState MutableState<ForegroundActivity> =
     state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
       activity else null
   }
-  withContext(mainDispatcher) {
+  withContext(coroutineContext) {
     activity.lifecycle.addObserver(observer)
     onCancel { activity.lifecycle.removeObserver(observer) }
   }

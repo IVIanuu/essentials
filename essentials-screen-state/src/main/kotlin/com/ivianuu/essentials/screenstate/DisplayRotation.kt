@@ -51,9 +51,9 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 }
 
 private suspend fun getCurrentDisplayRotation(
-  @Inject dispatcher: IODispatcher,
+  @Inject context: IOContext,
   windowManager: @SystemService WindowManager,
-) = withContext(dispatcher) {
+) = withContext(context) {
   when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
     Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
