@@ -1,34 +1,15 @@
 /*
- * Copyright 2021 Manuel Wrage
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2021 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package com.ivianuu.essentials.logging
 
-import android.util.Log
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.SystemBuildInfo
-import com.ivianuu.essentials.logging.Logger.Priority
-import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
-import com.ivianuu.essentials.logging.Logger.Priority.ERROR
-import com.ivianuu.essentials.logging.Logger.Priority.INFO
-import com.ivianuu.essentials.logging.Logger.Priority.VERBOSE
-import com.ivianuu.essentials.logging.Logger.Priority.WARN
-import com.ivianuu.essentials.logging.Logger.Priority.WTF
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlin.math.min
+import android.util.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.Logger.*
+import com.ivianuu.essentials.logging.Logger.Priority.*
+import com.ivianuu.injekt.*
+import kotlin.math.*
 
 @Provide class AndroidLogger(
   override val isEnabled: LoggingEnabled,

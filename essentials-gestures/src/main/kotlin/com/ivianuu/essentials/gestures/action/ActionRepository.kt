@@ -1,14 +1,17 @@
+/*
+ * Copyright 2021 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+ */
+
 package com.ivianuu.essentials.gestures.action
 
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.DefaultDispatcher
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.gestures.action.actions.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 
 interface ActionRepository {
   suspend fun getAllActions(): List<Action<*>>

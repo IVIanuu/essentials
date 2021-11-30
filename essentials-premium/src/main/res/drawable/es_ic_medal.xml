@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2021 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="36dp" android:width="36dp" android:viewportWidth="36" android:viewportHeight="36">
     <group>
         <clip-path android:pathData="M0,0h36v36h-36z"/>

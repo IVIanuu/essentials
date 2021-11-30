@@ -1,36 +1,23 @@
 /*
- * Copyright 2021 Manuel Wrage
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2021 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
 package com.ivianuu.essentials.gestures.action
 
-import android.accessibilityservice.AccessibilityService
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import android.accessibilityservice.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.permission.notificationpolicy.NotificationPolicyPermission
-import com.ivianuu.essentials.permission.root.RootPermission
-import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.permission.accessibility.*
+import com.ivianuu.essentials.permission.notificationpolicy.*
+import com.ivianuu.essentials.permission.root.*
+import com.ivianuu.essentials.permission.systemoverlay.*
+import com.ivianuu.essentials.permission.writesecuresettings.*
+import com.ivianuu.essentials.permission.writesettings.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 @Provide class ActionAccessibilityPermission(private val RP: ResourceProvider) : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
