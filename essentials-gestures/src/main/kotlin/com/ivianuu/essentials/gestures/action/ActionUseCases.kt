@@ -28,6 +28,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
   L: Logger,
+  RP: ResourceProvider,
   T: Toaster
 ) = ExecuteActionUseCase { key ->
   withContext(coroutineContext) {
