@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.ui.LocalElements
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
@@ -144,7 +143,7 @@ private class NavigationContentState(
       }
 
       CompositionLocalProvider(
-        LocalElements provides elements,
+        LocalKeyUiElements provides elements,
         LocalSaveableStateRegistry provides savableStateRegistry
       ) {
         content()

@@ -39,8 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
-import com.ivianuu.essentials.ui.LocalElements
-import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogKey
@@ -55,15 +53,15 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 import kotlinx.coroutines.launch
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
 
 object DialogsKey : Key<Unit>
 
-@Provide val dialogsUi = KeyUi<DialogsKey> {
+@Provide fun dialogsUi(navigator: Navigator) = KeyUi<DialogsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -257,15 +255,15 @@ object DialogsKey : Key<Unit>
 @Composable private fun DialogCloseButton(
   enabled: Boolean = true,
   onClick: () -> Unit = {},
-  text: String
+  text: String,
+  @Inject navigator: Navigator
 ) {
-  val component = LocalElements.current<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
     onClick = {
       onClick()
-      scope.launch { component.navigator.popTop() }
+      scope.launch { navigator.popTop() }
     }
   ) {
     Text(text)
@@ -275,22 +273,21 @@ object DialogsKey : Key<Unit>
 @Composable private fun DialogLauncherButton(
   text: String,
   dismissible: Boolean = true,
+  @Inject navigator: Navigator,
   dialog: @Composable (() -> Unit) -> Unit
 ) {
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val component = LocalElements.current<DialogLauncherComponent>()
   val scope = rememberCoroutineScope()
   Button(
     onClick = {
       scope.launch {
-        component.navigator.push(
+        navigator.push(
           DialogLauncherKey(dismissible) {
             dialog {
-              if (dismissible) {
+              if (dismissible)
                 onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
-              }
             }
           }
         )
@@ -307,6 +304,3 @@ data class DialogLauncherKey(
 @Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }
-
-@Provide @Element<UiScope>
-data class DialogLauncherComponent(val navigator: Navigator)

@@ -21,4 +21,4 @@ import com.ivianuu.injekt.common.Elements
 
 object UiScope
 
-val LocalElements = compositionLocalOf<Elements<*>> { error("No elements provided") }
+val LocalUiElements = compositionLocalOf<Elements<UiScope>> { error("No ui elements provided") }

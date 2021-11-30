@@ -27,7 +27,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.LocalElements
+import com.ivianuu.essentials.ui.LocalUiElements
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
@@ -48,17 +48,17 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
 
     val uiScope = Scope<UiScope>()
 
+    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
+      onCancel { uiScope.dispose() }
+    }
+
     val uiComponent = application
       .cast<AppElementsOwner>()
       .appElements<EsActivityComponent>()
       .uiComponent(uiScope, this)
 
-    lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      onCancel { uiScope.dispose() }
-    }
-
     setContent {
-      CompositionLocalProvider(LocalElements provides uiComponent.elements) {
+      CompositionLocalProvider(LocalUiElements provides uiComponent.elements) {
         uiComponent.decorateUi {
           uiComponent.appUi()
         }
@@ -77,4 +77,3 @@ data class EsActivityComponent(
   val decorateUi: DecorateUi,
   val elements: Elements<UiScope>
 )
-

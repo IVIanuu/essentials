@@ -39,7 +39,7 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalElements
+import com.ivianuu.essentials.ui.LocalUiElements
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = LocalElements.current<PopupMenuButtonComponent>()
+  val component = LocalUiElements.current<PopupMenuButtonComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
