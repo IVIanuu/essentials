@@ -4,14 +4,11 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
+import android.content.Intent.*
+import android.content.pm.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
 
 fun interface ProcessRestarter : suspend () -> Unit
 

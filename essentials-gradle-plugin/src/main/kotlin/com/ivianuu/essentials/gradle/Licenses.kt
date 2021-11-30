@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.jaredsburrows.license.LicensePlugin
-import com.jaredsburrows.license.LicenseReportExtension
+import com.jaredsburrows.license.*
 
 fun EssentialsExtension.withLicenses() {
   project.plugins.apply(LicensePlugin::class.java)

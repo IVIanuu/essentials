@@ -4,16 +4,13 @@
 
 package com.ivianuu.essentials.util
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import androidx.core.app.NotificationCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemBuildInfo
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
+import android.annotation.*
+import android.app.*
+import android.content.*
+import androidx.core.app.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 interface NotificationFactory {
   fun build(

@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.util
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.graphics.drawable.Icon
+import android.annotation.*
+import android.app.*
+import android.graphics.drawable.*
 
 @SuppressLint("DiscouragedPrivateApi")
 fun Notification.setSmallIcon(icon: Icon) {

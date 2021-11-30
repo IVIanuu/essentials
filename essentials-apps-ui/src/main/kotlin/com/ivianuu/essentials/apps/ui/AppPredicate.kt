@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import com.ivianuu.essentials.apps.AppInfo
-import com.ivianuu.injekt.Provide
+import android.content.*
+import android.content.pm.*
+import com.ivianuu.essentials.apps.*
+import com.ivianuu.injekt.*
 
 fun interface AppPredicate : (AppInfo) -> Boolean
 

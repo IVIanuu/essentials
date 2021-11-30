@@ -4,30 +4,18 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.ui.common.ListDecorator
-import com.ivianuu.essentials.ui.common.SimpleListScreen
-import com.ivianuu.essentials.ui.insets.InsetsPadding
-import com.ivianuu.essentials.ui.insets.LocalInsets
-import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey }
 

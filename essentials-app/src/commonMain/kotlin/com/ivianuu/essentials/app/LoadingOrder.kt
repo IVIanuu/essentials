@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 sealed class LoadingOrder<T> {
   sealed class Static<T> : LoadingOrder<T>() {

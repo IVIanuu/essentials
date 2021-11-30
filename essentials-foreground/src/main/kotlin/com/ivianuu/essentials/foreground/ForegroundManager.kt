@@ -4,22 +4,17 @@
 
 package com.ivianuu.essentials.foreground
 
-import android.app.Notification
-import android.content.Intent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.core.content.ContextCompat
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.bracket
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import android.app.*
+import android.content.*
+import androidx.compose.runtime.*
+import androidx.core.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
 
 interface ForegroundManager {
   suspend fun startForeground(id: Int, notification: @Composable () -> Notification): Nothing

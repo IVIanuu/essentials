@@ -4,9 +4,7 @@
 
 package com.ivianuu.essentials.time
 
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import kotlin.time.*
 
 inline val Int.nanoseconds get() = toDuration(DurationUnit.NANOSECONDS)
 

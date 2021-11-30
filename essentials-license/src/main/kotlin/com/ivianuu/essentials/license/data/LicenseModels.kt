@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.license.data
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable data class Project(
   @SerialName("project") val project: String,

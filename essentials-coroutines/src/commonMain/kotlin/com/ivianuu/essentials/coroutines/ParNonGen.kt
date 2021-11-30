@@ -4,16 +4,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.jvm.JvmInline
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
 
 suspend fun <T> par(
   vararg blocks: suspend () -> T,

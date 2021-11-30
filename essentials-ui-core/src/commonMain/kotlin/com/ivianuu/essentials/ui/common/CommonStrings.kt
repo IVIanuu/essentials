@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.common
 
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 interface CommonStrings {
   val cancel: String

@@ -4,12 +4,12 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.Intent
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.state.produceValue
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.first
+import android.content.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @JvmInline value class ForceNavBarVisibleState(val value: Boolean)
 

@@ -4,19 +4,15 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.app.KeyguardManager
-import android.content.Intent
-import android.os.PowerManager
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.DefaultDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.withContext
+import android.app.*
+import android.content.*
+import android.os.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 enum class ScreenState(val isOn: Boolean) {
   OFF(false), LOCKED(true), UNLOCKED(true)

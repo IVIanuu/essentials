@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.*
 
 inline fun <R> nullable(block: (@Inject NullableControl) -> R): R? = try {
   block(NullableControlImpl)

@@ -4,16 +4,14 @@
 
 package com.ivianuu.essentials.ide
 
-import com.intellij.ide.ApplicationInitializedListener
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
-import com.intellij.openapi.project.ProjectManagerListener
-import com.ivianuu.essentials.kotlin.compiler.exhaustive.exhaustive
-import com.ivianuu.essentials.kotlin.compiler.experimental.experimental
+import com.intellij.ide.*
+import com.intellij.openapi.application.*
+import com.intellij.openapi.project.*
+import com.ivianuu.essentials.kotlin.compiler.exhaustive.*
+import com.ivianuu.essentials.kotlin.compiler.experimental.*
 import com.ivianuu.essentials.kotlin.compiler.optics.optics
-import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
-import org.jetbrains.kotlin.utils.addToStdlib.cast
+import com.ivianuu.essentials.kotlin.compiler.serializationfix.*
+import org.jetbrains.kotlin.utils.addToStdlib.*
 
 @Suppress("UnstableApiUsage")
 class AppInitializer : ApplicationInitializedListener {

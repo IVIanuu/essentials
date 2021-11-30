@@ -4,23 +4,16 @@
 
 package com.ivianuu.essentials.permission.intent
 
-import android.content.Intent
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.race
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionState
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 

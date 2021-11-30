@@ -6,14 +6,13 @@
 
 package com.ivianuu.essentials
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Typeface
-import androidx.compose.ui.unit.dp
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import androidx.core.content.res.*
+import androidx.core.graphics.drawable.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.injekt.*
 
 inline fun <T> loadResource(
   id: Int,

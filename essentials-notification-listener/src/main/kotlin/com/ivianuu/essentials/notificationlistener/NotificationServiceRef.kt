@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import androidx.compose.runtime.mutableStateOf
-import com.ivianuu.injekt.Provide
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
 
 @Provide val notificationListenerRef =
   mutableStateOf<EsNotificationListenerService?>(null)

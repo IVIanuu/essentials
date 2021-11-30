@@ -4,18 +4,15 @@
 
 package com.ivianuu.essentials.coil
 
-import coil.CoilAccessor
-import coil.ImageLoader
-import coil.decode.Decoder
-import coil.fetch.Fetcher
-import coil.intercept.Interceptor
-import coil.map.Mapper
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.Scoped
-import kotlin.reflect.KClass
+import coil.*
+import coil.decode.*
+import coil.fetch.*
+import coil.intercept.*
+import coil.map.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlin.reflect.*
 
 @Provide fun imageLoader(
   context: AppContext,

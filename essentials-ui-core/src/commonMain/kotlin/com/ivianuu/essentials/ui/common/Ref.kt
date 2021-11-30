@@ -4,12 +4,9 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.runtime.SnapshotMutationPolicy
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.structuralEqualityPolicy
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.loop
-import kotlin.reflect.KProperty
+import androidx.compose.runtime.*
+import kotlinx.atomicfu.*
+import kotlin.reflect.*
 
 fun <T> refOf(
   value: T,

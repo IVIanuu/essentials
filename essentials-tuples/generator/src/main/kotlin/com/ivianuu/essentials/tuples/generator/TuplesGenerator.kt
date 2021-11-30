@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.tuples.generator
 
-import java.io.File
+import java.io.*
 
 fun generateTuples(genDir: File) {
   val file = genDir.resolve("Tuples.kt")

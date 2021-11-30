@@ -4,15 +4,13 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.hardware.SensorManager
-import android.view.OrientationEventListener
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.MainDispatcher
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import android.hardware.*
+import android.view.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 object RotationChange
 

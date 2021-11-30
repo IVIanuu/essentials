@@ -4,17 +4,14 @@
 
 package com.ivianuu.essentials.permission.deviceadmin
 
-import android.app.admin.DeviceAdminReceiver
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
-import android.content.Intent
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
-import kotlin.reflect.KClass
+import android.app.admin.*
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import kotlin.reflect.*
 
 interface DeviceAdminPermission : Permission {
   val deviceAdminClass: KClass<out DeviceAdminReceiver>

@@ -4,42 +4,21 @@
 
 package com.ivianuu.essentials.xposed
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.actAndReply
-import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Scope
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.common.invoke
-import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import de.robv.android.xposed.XSharedPreferences
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.Json
+import android.annotation.*
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import de.robv.android.xposed.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
   @SuppressLint("WorldReadableFiles")

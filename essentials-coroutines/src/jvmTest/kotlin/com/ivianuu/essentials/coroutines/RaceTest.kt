@@ -5,11 +5,9 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.delay
-import org.junit.Test
+import io.kotest.matchers.*
+import kotlinx.coroutines.*
+import org.junit.*
 
 class RaceTest {
   @Test fun testFirstOneWins() = runCancellingBlockingTest {

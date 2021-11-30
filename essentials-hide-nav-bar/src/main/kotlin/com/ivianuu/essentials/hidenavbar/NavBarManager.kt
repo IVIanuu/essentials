@@ -4,32 +4,19 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.Context
-import android.graphics.Rect
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.screenstate.DisplayRotation
-import com.ivianuu.essentials.state.asComposedFlow
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import android.content.*
+import android.graphics.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.screenstate.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide fun navBarManager(
   context: AppContext,

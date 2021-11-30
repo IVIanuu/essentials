@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.boot
 
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 fun interface BootListener : () -> Unit
 

@@ -4,17 +4,13 @@
 
 package com.ivianuu.essentials.sample.work
 
-import androidx.work.CoroutineWorker
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
-import com.ivianuu.essentials.AppContext
+import androidx.work.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.work.InjektWorker
-import kotlinx.coroutines.delay
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.work.*
+import kotlinx.coroutines.*
 
 @Provide @InjektWorker class TestWorker(
   appContext: AppContext,

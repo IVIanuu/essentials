@@ -4,30 +4,22 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.annotation.SuppressLint
-import android.app.NotificationManager
+import android.annotation.*
+import android.app.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.coroutines.par
-import com.ivianuu.essentials.foreground.ForegroundManager
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 

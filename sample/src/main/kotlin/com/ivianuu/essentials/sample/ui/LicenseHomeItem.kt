@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.license.ui.LicenseKey
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.license.ui.*
+import com.ivianuu.injekt.*
 
 @Provide val licenseHomeItem = HomeItem("License") { LicenseKey }

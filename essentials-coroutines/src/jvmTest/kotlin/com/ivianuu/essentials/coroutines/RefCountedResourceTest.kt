@@ -5,10 +5,9 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.kotest.matchers.types.shouldNotBeSameInstanceAs
-import org.junit.Test
+import io.kotest.matchers.*
+import io.kotest.matchers.types.*
+import org.junit.*
 
 class RefCountedResourceTest {
   @Test fun testRefCountedResource() = runCancellingBlockingTest {

@@ -4,18 +4,16 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.os.PowerManager
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.DefaultDispatcher
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.withContext
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
+import android.os.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
+import java.util.*
+import java.util.concurrent.*
+import kotlin.collections.set
 
 fun interface ScreenActivator : suspend () -> Boolean
 

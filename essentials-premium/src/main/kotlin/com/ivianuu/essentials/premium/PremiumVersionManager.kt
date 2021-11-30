@@ -4,30 +4,18 @@
 
 package com.ivianuu.essentials.premium
 
-import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ads.ShowAds
-import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
-import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
-import com.ivianuu.essentials.billing.IsPurchased
-import com.ivianuu.essentials.billing.PurchaseUseCase
-import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.AppUiStarter
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
+import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ads.*
+import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.unlock.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Tag annotation class PremiumVersionSkuTag
 typealias PremiumVersionSku = @PremiumVersionSkuTag Sku

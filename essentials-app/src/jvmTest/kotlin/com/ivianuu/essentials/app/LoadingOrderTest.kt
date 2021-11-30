@@ -4,12 +4,10 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.common.typeKeyOf
-import io.kotest.matchers.collections.shouldContainInOrder
-import org.junit.Test
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import io.kotest.matchers.collections.*
+import org.junit.*
 
 class LoadingOrderTest {
   @Test fun testAfter() {

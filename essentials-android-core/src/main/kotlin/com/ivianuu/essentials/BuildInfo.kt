@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials
 
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
+import android.content.pm.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 data class BuildInfo(
   val isDebug: Boolean,

@@ -4,13 +4,11 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrElse
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IODispatcher
-import eu.chainfire.libsuperuser.Shell.SU
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
+import eu.chainfire.libsuperuser.Shell.*
+import kotlinx.coroutines.*
 
 interface Shell {
   suspend fun isAvailable(): Boolean

@@ -4,17 +4,13 @@
 
 package com.ivianuu.essentials.gradle
 
-import com.google.auto.service.AutoService
-import com.ivianuu.injekt.gradle.InjektPlugin
-import org.gradle.api.Project
-import org.gradle.api.provider.Provider
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
-import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
-import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
+import com.google.auto.service.*
+import com.ivianuu.injekt.gradle.*
+import org.gradle.api.*
+import org.gradle.api.provider.*
+import org.jetbrains.kotlin.gradle.dsl.*
+import org.jetbrains.kotlin.gradle.plugin.*
+import org.jetbrains.kotlin.gradle.plugin.mpp.*
 
 @AutoService(KotlinCompilerPluginSupportPlugin::class)
 open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {

@@ -4,34 +4,25 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.resourceFromFlow
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.*
+import androidx.compose.ui.unit.*
+import androidx.core.graphics.drawable.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.toIntentKey
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 object ShortcutPickerKey : Key<Shortcut>
 

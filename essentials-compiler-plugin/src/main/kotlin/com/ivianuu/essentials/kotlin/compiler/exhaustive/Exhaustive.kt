@@ -4,30 +4,20 @@
 
 package com.ivianuu.essentials.kotlin.compiler.exhaustive
 
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.container.StorageComponentContainer
-import org.jetbrains.kotlin.container.useInstance
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.ModuleDescriptor
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
-import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.diagnostics.Severity
-import org.jetbrains.kotlin.diagnostics.WhenMissingCase
-import org.jetbrains.kotlin.diagnostics.rendering.DefaultErrorMessages
-import org.jetbrains.kotlin.diagnostics.rendering.DiagnosticFactoryToRendererMap
-import org.jetbrains.kotlin.diagnostics.rendering.MultiRenderer
-import org.jetbrains.kotlin.extensions.StorageComponentContainerContributor
+import org.jetbrains.kotlin.builtins.*
+import org.jetbrains.kotlin.cfg.*
+import org.jetbrains.kotlin.com.intellij.openapi.project.*
+import org.jetbrains.kotlin.com.intellij.psi.*
+import org.jetbrains.kotlin.container.*
+import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.diagnostics.*
+import org.jetbrains.kotlin.diagnostics.rendering.*
+import org.jetbrains.kotlin.extensions.*
 import org.jetbrains.kotlin.platform.TargetPlatform
-import org.jetbrains.kotlin.psi.KtDeclaration
-import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.DescriptorUtils
-import org.jetbrains.kotlin.resolve.checkers.DeclarationChecker
-import org.jetbrains.kotlin.resolve.checkers.DeclarationCheckerContext
-import org.jetbrains.kotlin.types.TypeUtils
+import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.resolve.*
+import org.jetbrains.kotlin.resolve.checkers.*
+import org.jetbrains.kotlin.types.*
 
 fun exhaustive(project: Project) {
   StorageComponentContainerContributor.registerExtension(

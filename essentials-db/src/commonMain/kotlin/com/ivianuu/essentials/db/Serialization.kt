@@ -4,17 +4,10 @@
 
 package com.ivianuu.essentials.db
 
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.StringFormat
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.SerialKind
-import kotlinx.serialization.encoding.AbstractDecoder
-import kotlinx.serialization.encoding.AbstractEncoder
-import kotlinx.serialization.encoding.CompositeDecoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.encoding.*
+import kotlinx.serialization.modules.*
 
 class OneLevelEmittingEncoder(
   override val serializersModule: SerializersModule,

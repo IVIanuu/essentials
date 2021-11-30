@@ -5,10 +5,9 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
-import io.kotest.matchers.shouldBe
-import org.junit.Test
+import io.kotest.matchers.*
+import io.kotest.matchers.booleans.*
+import org.junit.*
 
 class AtomicTest {
   @Test fun testGet() = runCancellingBlockingTest {

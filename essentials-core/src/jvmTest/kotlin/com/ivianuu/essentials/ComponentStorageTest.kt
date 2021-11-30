@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.common.Disposable
-import io.kotest.matchers.shouldBe
-import org.junit.Test
+import com.ivianuu.injekt.common.*
+import io.kotest.matchers.*
+import org.junit.*
 
 class ComponentStorageTest {
   @Test fun testBasic() {

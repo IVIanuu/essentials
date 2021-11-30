@@ -4,15 +4,12 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.popup.PopupMenu
-import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.*
+import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.ui.popup.*
 
 @Composable fun SimpleListScreen(
   title: String,

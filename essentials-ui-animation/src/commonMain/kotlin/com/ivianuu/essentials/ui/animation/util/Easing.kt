@@ -4,15 +4,9 @@
 
 package com.ivianuu.essentials.ui.animation.util
 
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.lerp
-import com.ivianuu.essentials.lerp
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.asin
-import kotlin.math.cos
-import kotlin.math.sign
-import kotlin.math.sin
+import androidx.compose.ui.geometry.*
+import com.ivianuu.essentials.*
+import kotlin.math.*
 
 fun interval(
   start: Float,

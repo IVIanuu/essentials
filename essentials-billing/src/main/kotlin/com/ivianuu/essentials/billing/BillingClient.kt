@@ -4,13 +4,12 @@
 
 package com.ivianuu.essentials.billing
 
-import com.android.billingclient.api.BillingClient
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.android.billingclient.api.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide fun billingClient(
   context: AppContext,

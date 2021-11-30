@@ -4,28 +4,20 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 @Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
 

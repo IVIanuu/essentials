@@ -4,22 +4,16 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.elementNames
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.EmptySerializersModule
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
 
 class PrefModule<T : Any>(private val default: () -> T) {
   @Provide fun dataStore(

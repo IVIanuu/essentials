@@ -4,31 +4,19 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.runtime.remember
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
-import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.db.AbstractEntityDescriptor
-import com.ivianuu.essentials.db.AndroidDb
-import com.ivianuu.essentials.db.Db
-import com.ivianuu.essentials.db.PrimaryKey
-import com.ivianuu.essentials.db.Schema
-import com.ivianuu.essentials.db.deleteAll
-import com.ivianuu.essentials.db.insertAll
-import com.ivianuu.essentials.db.selectAll
-import com.ivianuu.essentials.state.asComposable
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.map
-import kotlinx.serialization.Serializable
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.apps.ui.*
+import com.ivianuu.essentials.apps.ui.checkableapps.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.db.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
 
 @Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
 

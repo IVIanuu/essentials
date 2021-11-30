@@ -4,13 +4,9 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.LayoutModifier
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.constrain
+import androidx.compose.ui.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.*
 
 fun Modifier.squared(fit: SquareFit) = this.then(SquaredModifier(fit))
 

@@ -5,21 +5,14 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.rate.R
-import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
-import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
-import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.produceValue
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogKey
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.rate.domain.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.UrlKey
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 object FeedbackKey : DialogKey<Unit>
 

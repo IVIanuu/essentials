@@ -4,40 +4,25 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.time.milliseconds
-import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
-import com.ivianuu.essentials.ui.animation.animationElement
-import com.ivianuu.essentials.ui.animation.transition.SharedElement
-import com.ivianuu.essentials.ui.animation.transition.SharedElementStackTransition
-import com.ivianuu.essentials.ui.animation.transition.animate
-import com.ivianuu.essentials.ui.animation.transition.defaultAnimationSpec
-import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
-import com.ivianuu.essentials.ui.animation.transition.toElementModifier
-import com.ivianuu.essentials.ui.animation.util.fractionalTranslation
-import com.ivianuu.essentials.ui.common.VerticalList
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.animation.util.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiOptions
-import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 data class CityDetailKey(val city: City) : Key<Unit>
 

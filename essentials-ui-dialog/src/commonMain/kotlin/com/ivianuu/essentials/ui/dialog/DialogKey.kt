@@ -4,11 +4,9 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiOptions
-import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 interface DialogKey<T> : Key<T>
 

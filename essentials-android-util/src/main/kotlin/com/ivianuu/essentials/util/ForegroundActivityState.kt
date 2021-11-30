@@ -4,19 +4,16 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.state.ComposedState
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.coroutines.MainDispatcher
-import kotlinx.coroutines.withContext
+import androidx.activity.*
+import androidx.compose.runtime.*
+import androidx.lifecycle.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 
 @Tag annotation class ForegroundActivityTag
 

@@ -9,13 +9,11 @@ import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.time.seconds
-import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.delay
+import io.kotest.assertions.throwables.*
+import io.kotest.matchers.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.launch
-import org.junit.Test
+import org.junit.*
 
 class CacheTest {
   @Test fun testGetAndPut() = runCancellingBlockingTest {

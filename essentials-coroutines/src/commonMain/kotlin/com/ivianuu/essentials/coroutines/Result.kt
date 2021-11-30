@@ -4,15 +4,8 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.Err
-import com.ivianuu.essentials.Ok
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.err
-import com.ivianuu.essentials.nonFatalOrThrow
-import com.ivianuu.essentials.ok
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import com.ivianuu.essentials.*
+import kotlinx.coroutines.flow.*
 
 fun <T> Flow<T>.catchResult(): Flow<Result<T, Throwable>> = flow {
   try {

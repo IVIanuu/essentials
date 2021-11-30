@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.*
 
 interface Atomic<T> {
   suspend fun get(): T

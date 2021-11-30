@@ -3,9 +3,8 @@
  */
 package com.ivianuu.essentials.apps.shortcuts
 
-import android.content.ComponentName
-import android.content.Intent
-import android.graphics.drawable.Drawable
+import android.content.*
+import android.graphics.drawable.*
 
 data class AppShortcut(
   val id: String,

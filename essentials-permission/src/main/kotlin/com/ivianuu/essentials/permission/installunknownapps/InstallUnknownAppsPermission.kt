@@ -4,16 +4,14 @@
 
 package com.ivianuu.essentials.permission.installunknownapps
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.SystemBuildInfo
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.injekt.Provide
+import android.annotation.*
+import android.content.*
+import android.content.pm.*
+import android.net.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.injekt.*
 
 interface InstallUnknownAppsPermission : Permission
 

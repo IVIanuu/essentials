@@ -5,14 +5,11 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onEach
-import org.junit.Test
+import io.kotest.matchers.*
+import io.kotest.matchers.collections.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.junit.*
 
 class LaunchOnTest {
   @Test fun testLaunchOnStart() = runCancellingBlockingTest {

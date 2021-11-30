@@ -4,19 +4,16 @@
 
 package com.ivianuu.essentials.cache
 
-import com.ivianuu.essentials.nonFatalOrThrow
-import com.ivianuu.essentials.time.Clock
-import com.ivianuu.injekt.Inject
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.coroutines.coroutineContext
-import kotlin.time.Duration
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
+import kotlin.coroutines.*
+import kotlin.time.*
 
 interface Cache<K : Any, V : Any> {
   suspend fun get(key: K): V?

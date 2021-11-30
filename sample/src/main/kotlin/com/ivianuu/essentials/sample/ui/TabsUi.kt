@@ -10,20 +10,17 @@ import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.google.accompanist.pager.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Provide val tabsHomeItem = HomeItem("Tabs") { TabsKey }
 

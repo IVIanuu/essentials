@@ -4,42 +4,27 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.colorpicker.ColorPickerPalette
-import com.ivianuu.essentials.ui.animation.transition.CircularRevealStackTransition
-import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
-import com.ivianuu.essentials.ui.animation.transition.FlipStackTransition
-import com.ivianuu.essentials.ui.animation.transition.HorizontalStackTransition
-import com.ivianuu.essentials.ui.animation.transition.SharedElement
-import com.ivianuu.essentials.ui.animation.transition.SharedElementStackTransition
-import com.ivianuu.essentials.ui.animation.transition.VerticalStackTransition
-import com.ivianuu.essentials.ui.insets.LocalInsets
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.colorpicker.*
+import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
-import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiOptions
-import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 @Provide val transitionHomeItem = HomeItem("Transition") { TransitionKey.VERTICAL }
 

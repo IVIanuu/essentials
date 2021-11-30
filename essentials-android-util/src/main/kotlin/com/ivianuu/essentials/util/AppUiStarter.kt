@@ -4,16 +4,14 @@
 
 package com.ivianuu.essentials.util
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.state.asComposedFlow
-import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import android.content.*
+import android.content.pm.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 fun interface AppUiStarter : IntentAppUiStarter
 

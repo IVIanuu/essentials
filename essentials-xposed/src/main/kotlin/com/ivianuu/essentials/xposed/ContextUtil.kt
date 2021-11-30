@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.xposed
 
-import android.app.Application
-import android.content.Context
+import android.app.*
+import android.content.*
 
 fun hookAppContextOnce(block: (Application) -> Unit) {
   hookAllMethods(Application::class, "onCreate") {

@@ -4,12 +4,11 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import com.ivianuu.essentials.accessibility.AccessibilityEvent
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.collections.shouldContainExactly
-import org.junit.Test
+import com.ivianuu.essentials.accessibility.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.collections.*
+import org.junit.*
 
 class KeyboardVisibilityTest {
   @Test fun testKeyboardVisibility() = runCancellingBlockingTest {

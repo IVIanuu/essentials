@@ -4,32 +4,22 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.screenstate.ScreenState
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.unlock.ScreenActivator
-import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.unlock.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
 

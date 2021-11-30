@@ -4,26 +4,15 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ui.LocalUiElements
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
-import kotlinx.coroutines.launch
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
 
 object PopupMenu {
   data class Item(

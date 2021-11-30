@@ -4,31 +4,21 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.runtime.State
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.state.asComposedFlow
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.MainDispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import androidx.compose.runtime.*
+import com.google.android.gms.ads.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
+import kotlin.coroutines.*
 
 @JvmInline value class FullScreenAdId(val value: String)
 

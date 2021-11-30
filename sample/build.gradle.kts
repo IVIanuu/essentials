@@ -2,7 +2,7 @@
  * Copyright 2021 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-import com.ivianuu.essentials.gradle.withLicenses
+import com.ivianuu.essentials.gradle.*
 
 plugins {
   id("com.android.application")

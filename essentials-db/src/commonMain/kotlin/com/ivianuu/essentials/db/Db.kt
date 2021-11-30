@@ -4,13 +4,10 @@
 
 package com.ivianuu.essentials.db
 
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.Disposable
-import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlin.coroutines.CoroutineContext
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
+import kotlin.coroutines.*
 
 interface Db : Disposable {
   val schema: Schema

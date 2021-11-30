@@ -4,18 +4,16 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.app.ScopeWorker
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.writesecuresettings.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide class NavBarPermission(private val RP: ResourceProvider) : WriteSecureSettingsPermission {
   override val title: String

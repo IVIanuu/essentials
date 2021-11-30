@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.shortcutpicker
 
-import android.content.Intent
-import android.graphics.drawable.Drawable
+import android.content.*
+import android.graphics.drawable.*
 
 data class Shortcut(val intent: Intent, val name: String, val icon: Drawable)

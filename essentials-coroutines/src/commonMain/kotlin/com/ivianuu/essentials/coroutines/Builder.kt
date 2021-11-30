@@ -4,13 +4,9 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 
 inline fun launch(
   context: CoroutineContext = EmptyCoroutineContext,

@@ -4,42 +4,25 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
-import com.ivianuu.essentials.hidenavbar.NavBarPermission
-import com.ivianuu.essentials.hidenavbar.NavBarPrefs
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionState
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.hidenavbar.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
 

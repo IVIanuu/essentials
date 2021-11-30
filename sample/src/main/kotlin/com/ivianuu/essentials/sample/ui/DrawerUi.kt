@@ -7,14 +7,13 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.layout.center
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
 
 @Provide val drawerHomeItem = HomeItem("Drawer") { DrawerKey }
 

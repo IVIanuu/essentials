@@ -3,15 +3,11 @@
  */
 package com.ivianuu.essentials.apps.shortcuts
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.AssetManager
-import android.content.res.Resources
-import android.net.Uri
-import org.xmlpull.v1.XmlPullParser
+import android.content.*
+import android.content.pm.*
+import android.content.res.*
+import android.net.*
+import org.xmlpull.v1.*
 
 private const val NAMESPACE_ANDROID = "http://schemas.android.com/apk/res/android"
 private const val TAG_SHORTCUTS = "shortcuts"

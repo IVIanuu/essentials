@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.time
 
-import kotlin.time.Duration
+import kotlin.time.*
 
 actual fun Long.toDuration(): Duration =
   Duration::class.java.getDeclaredConstructor(Long::class.java)

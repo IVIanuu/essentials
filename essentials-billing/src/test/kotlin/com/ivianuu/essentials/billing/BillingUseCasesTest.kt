@@ -4,14 +4,14 @@
 
 package com.ivianuu.essentials.billing
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.injekt.Provide
-import io.kotest.matchers.booleans.shouldBeTrue
-import io.mockk.mockk
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
+import androidx.test.ext.junit.runners.*
+import com.ivianuu.essentials.test.*
+import com.ivianuu.injekt.*
+import io.kotest.matchers.booleans.*
+import io.mockk.*
+import org.junit.*
+import org.junit.runner.*
+import org.robolectric.annotation.*
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])

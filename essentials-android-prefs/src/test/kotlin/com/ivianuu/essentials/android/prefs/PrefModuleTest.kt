@@ -5,15 +5,13 @@
 package com.ivianuu.essentials.android.prefs
 
 import com.ivianuu.essentials.data.TestDataStore
-import com.ivianuu.essentials.test.dispatcher
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.serialization.Serializable
-import org.junit.Test
-import java.nio.file.Files
+import com.ivianuu.essentials.test.*
+import io.kotest.matchers.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
+import org.junit.*
+import java.nio.file.*
 
 class PrefModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {

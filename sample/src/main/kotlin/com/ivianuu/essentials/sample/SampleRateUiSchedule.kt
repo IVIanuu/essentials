@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.rate.domain.RateUiSchedule
-import com.ivianuu.essentials.time.minutes
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.rate.domain.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.injekt.*
 
 @Provide val sampleRateUiSchedule = RateUiSchedule(
   minInstallDuration = 1.minutes,

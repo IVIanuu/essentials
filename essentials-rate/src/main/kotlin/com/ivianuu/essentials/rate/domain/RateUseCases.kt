@@ -4,18 +4,13 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.rate.data.RatePrefs
-import com.ivianuu.essentials.time.Clock
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.rate.data.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 fun interface RateOnPlayUseCase : suspend () -> Unit
 

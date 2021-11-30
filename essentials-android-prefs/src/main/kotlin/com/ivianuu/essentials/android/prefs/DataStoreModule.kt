@@ -4,19 +4,12 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.coroutines.childCoroutineContext
-import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.data.DiskDataStore
-import com.ivianuu.essentials.data.PrefsDir
-import com.ivianuu.essentials.data.ReplaceDataCorruptionHandler
-import com.ivianuu.essentials.data.Serializer
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.IODispatcher
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(

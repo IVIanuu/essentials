@@ -4,18 +4,16 @@
 
 package com.ivianuu.essentials.permission.packageusagestats
 
-import android.app.AppOpsManager
-import android.content.Intent
-import android.net.Uri
-import android.os.Process
-import android.provider.Settings
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionStateProvider
-import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
-import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
+import android.app.*
+import android.content.*
+import android.net.*
+import android.os.*
+import android.provider.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.intent.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 interface PackageUsageStatsPermission : Permission
 

@@ -4,15 +4,13 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.material.Text
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.ui.dialog.DialogKey
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class ColorPickerKey(
   val initialColor: Color,

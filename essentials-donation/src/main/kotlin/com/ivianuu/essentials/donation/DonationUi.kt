@@ -4,41 +4,31 @@
 
 package com.ivianuu.essentials.donation
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
-import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
-import com.ivianuu.essentials.billing.PurchaseUseCase
-import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.produceResource
-import com.ivianuu.essentials.ui.common.CommonStrings
-import com.ivianuu.essentials.ui.dialog.Dialog
-import com.ivianuu.essentials.ui.dialog.DialogKey
-import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.layout.center
-import com.ivianuu.essentials.ui.material.ListItem
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.common.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.ui.resource.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
 
 object DonationKey : DialogKey<Unit>
 

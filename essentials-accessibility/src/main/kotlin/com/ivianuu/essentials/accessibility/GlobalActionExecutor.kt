@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.accessibility
 
-import androidx.compose.runtime.State
-import com.ivianuu.injekt.Provide
+import androidx.compose.runtime.*
+import com.ivianuu.injekt.*
 
 fun interface GlobalActionExecutor : suspend (Int) -> Boolean
 

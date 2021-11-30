@@ -4,17 +4,10 @@
 
 package com.ivianuu.essentials.sample.xposed
 
-import com.ivianuu.essentials.logging.XposedLogTag
-import com.ivianuu.essentials.xposed.EsXposedApp
-import com.ivianuu.essentials.xposed.ModulePackageName
-import com.ivianuu.essentials.xposed.XposedScope
-import com.ivianuu.essentials.xposed.XposedContext
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
-import com.ivianuu.injekt.inject
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.xposed.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 class SampleXposedApp : EsXposedApp() {
   @Providers(".**") override fun buildXposedElements(

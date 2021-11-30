@@ -4,16 +4,11 @@
 
 package com.ivianuu.essentials.boot
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import com.ivianuu.essentials.AppElementsOwner
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
+import android.content.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {

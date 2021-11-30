@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.*
 
 sealed class Result<out V, out E>
 

@@ -4,12 +4,9 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.selects.select
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.selects.*
+import kotlin.coroutines.*
 
 @Deprecated(message = "A race needs racers", level = DeprecationLevel.ERROR)
 suspend fun <T> race(context: CoroutineContext = EmptyCoroutineContext) {

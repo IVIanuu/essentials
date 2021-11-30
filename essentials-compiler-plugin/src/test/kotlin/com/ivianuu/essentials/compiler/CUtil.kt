@@ -6,20 +6,16 @@
 
 package com.ivianuu.essentials.compiler
 
-import com.ivianuu.essentials.kotlin.compiler.EssentialsCommandLineProcessor
-import com.ivianuu.essentials.kotlin.compiler.EssentialsComponentRegistrar
-import com.ivianuu.injekt.compiler.transform.dumpAllFiles
-import com.tschuchort.compiletesting.KotlinCompilation
-import com.tschuchort.compiletesting.SourceFile
-import com.tschuchort.compiletesting.SourceFileAccessor
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldNotContain
-import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.name.FqName
-import java.net.URLClassLoader
-import java.nio.file.Files
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.kotlin.compiler.*
+import com.ivianuu.injekt.compiler.transform.*
+import com.tschuchort.compiletesting.*
+import io.kotest.matchers.*
+import io.kotest.matchers.string.*
+import org.intellij.lang.annotations.*
+import org.jetbrains.kotlin.name.*
+import java.net.*
+import java.nio.file.*
+import kotlin.reflect.*
 
 var fileIndex = 0
 

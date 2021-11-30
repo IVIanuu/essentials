@@ -4,12 +4,9 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.Eager
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 fun interface ScopeInitializer<N> : () -> Unit
 
