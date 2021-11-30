@@ -57,6 +57,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.common.invoke
 import kotlinx.coroutines.launch
 
 @Provide val containerTransformHomeItem = HomeItem("Container transform") { ContainerTransformKey }

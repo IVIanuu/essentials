@@ -48,6 +48,7 @@ import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.common.invoke
 
 data class ContainerTransformDetailsKey(val closedKey: Any) : Key<Unit>
 
