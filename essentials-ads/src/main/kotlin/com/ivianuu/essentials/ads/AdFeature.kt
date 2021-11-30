@@ -16,17 +16,15 @@
 
 package com.ivianuu.essentials.ads
 
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.ui.dialog.DialogKey
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import kotlin.reflect.KClass
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<K>(val value: List<AdFeature>)
+@JvmInline value class AdFeatures<K : Key<*>>(val value: List<AdFeature>)
 
 @Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
   AdFeatures(allFeatures)

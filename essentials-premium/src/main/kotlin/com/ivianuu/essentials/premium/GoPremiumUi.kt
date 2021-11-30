@@ -16,15 +16,7 @@
 
 package com.ivianuu.essentials.premium
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -32,34 +24,23 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.ads.AdFeatures
-import com.ivianuu.essentials.ads.FullScreenAd
-import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.billing.toIso8601Duration
-import com.ivianuu.essentials.billing.toReadableString
-import com.ivianuu.essentials.billing.toSkuType
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.resourceFromFlow
-import com.ivianuu.essentials.ui.insets.InsetsPadding
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import com.android.billingclient.api.*
+import com.ivianuu.essentials.ads.*
+import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.resource.*
+import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
-import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 
 data class AppFeature(
   val title: String,
@@ -68,7 +49,7 @@ data class AppFeature(
   val inBasic: Boolean
 )
 
-@Provide data class GoPremiumKey(val showTryBasicOption: Boolean) : Key<Boolean> {
+data class GoPremiumKey(val showTryBasicOption: Boolean) : Key<Boolean> {
   companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
   }
