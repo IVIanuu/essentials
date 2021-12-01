@@ -114,7 +114,7 @@ interface Navigator {
   }
 
   override suspend fun <R> pop(key: Key<R>, result: R?) = actor.act {
-    log { "pop $key" }
+    log { "pop $key with $result" }
     popKey(key, result)
   }
 
