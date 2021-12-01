@@ -4,16 +4,13 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.material.Icon
-import androidx.compose.runtime.collectAsState
-import com.ivianuu.essentials.ResourceProvider
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.torch.Torch
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.torch.*
+import com.ivianuu.injekt.*
 
 @Provide object TorchActionId : ActionId("torch")
 
@@ -29,4 +26,4 @@ import com.ivianuu.injekt.Provide
 )
 
 @Provide fun torchActionExecutor(torch: Torch) = ActionExecutor<TorchActionId>
-  { torch.setTorchState(!torch.torchEnabled.collectAsState().value) }
+  { torch.setTorchState(!torch.torchEnabled.value) }
