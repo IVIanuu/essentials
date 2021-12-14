@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
+import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
@@ -56,16 +57,17 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   uiFactory: () -> U,
-  model: @Composable () -> S
+  model: @Composable () -> S,
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<K> {
-  val currentModel = model()
-  val scope = object : ModelKeyUiScope<K, S> {
+  val currentModel by remember { composedStateFlow(scope) { model() } }.collectAsState()
+  val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel
   }
   val ui = remember(uiFactory)
   with(ui) {
-    with(scope) {
+    with(uiScope) {
       invoke()
     }
   }

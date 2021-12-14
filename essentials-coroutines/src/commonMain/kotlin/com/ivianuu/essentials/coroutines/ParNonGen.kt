@@ -51,6 +51,6 @@ suspend fun <T> Iterable<T>.parForEach(
   parMap(context) { action(it) }
 }
 
-@JvmInline value class Concurrency(val value: Int)
+inline class Concurrency(val value: Int)
 
 @Provide internal expect val defaultConcurrency: Concurrency

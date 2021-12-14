@@ -48,10 +48,9 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
-@JvmName("flowResultAsResource")
-fun <T> Flow<Result<T, Throwable>>.flowAsResource(): Flow<Resource<T>> = flow {
+fun <T> Flow<Result<T, Throwable>>.flowResultAsResource(): Flow<Resource<T>> = flow {
   emit(Loading)
-  this@flowAsResource
+  this@flowResultAsResource
     .map { it.toResource() }
     .let { emitAll(it) }
 }
