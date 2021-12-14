@@ -4,10 +4,13 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
-@Provide @Composable fun androidAppForegroundState(
-  foregroundActivity: ForegroundActivity
-) = if (foregroundActivity != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND
+@Provide fun androidAppForegroundState(
+  foregroundActivity: Flow<ForegroundActivity>
+): Flow<AppForegroundState> =
+  foregroundActivity.map {
+    if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND
+  }

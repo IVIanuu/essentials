@@ -25,7 +25,7 @@ class NavigatorTest {
       S = this
     )
 
-    val collector = snapshotFlow { navigator.backStack }
+    val collector = snapshotFlow { navigator._backStack }
       .testCollect(this)
 
     launch { navigator.push(KeyA) }

@@ -14,6 +14,7 @@ import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Tag annotation class ForegroundActivityTag
 
@@ -22,13 +23,12 @@ typealias ForegroundActivity = @ForegroundActivityTag ComponentActivity?
 interface ForegroundActivityMarker
 
 @Provide
-val foregroundActivityState: @ComposedState MutableState<ForegroundActivity> =
-  mutableStateOf(null)
+val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
   coroutineContext: MainContext,
-  state: MutableState<ForegroundActivity>
+  state: MutableStateFlow<ForegroundActivity>
 ) = ScopeWorker<UiScope> worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->

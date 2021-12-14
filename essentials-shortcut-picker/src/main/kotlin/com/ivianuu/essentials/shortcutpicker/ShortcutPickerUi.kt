@@ -50,12 +50,12 @@ data class ShortcutPickerModel(
   val pickShortcut: (Shortcut) -> Unit
 )
 
-@Provide @Composable fun shortcutPickerModel(
+@Provide fun shortcutPickerModel(
   shortcutRepository: ShortcutRepository,
   T: ToastContext,
   ctx: KeyUiContext<ShortcutPickerKey>
 ) = ShortcutPickerModel(
-  shortcuts = resourceFromFlow { shortcutRepository.shortcuts },
+  shortcuts = shortcutRepository.shortcuts.bindResource(),
   pickShortcut = action { shortcut ->
     catch {
       val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())

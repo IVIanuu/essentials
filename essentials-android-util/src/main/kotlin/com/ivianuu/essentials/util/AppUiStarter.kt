@@ -6,9 +6,7 @@ package com.ivianuu.essentials.util
 
 import android.content.*
 import android.content.pm.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -20,7 +18,7 @@ fun interface AppUiStarter : IntentAppUiStarter
 @Provide fun appUiStarter(
   context: AppContext,
   buildInfo: BuildInfo,
-  foregroundActivity: @Composable () -> ForegroundActivity,
+  foregroundActivity: Flow<ForegroundActivity>,
   packageManager: PackageManager,
 ) = AppUiStarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
@@ -30,5 +28,5 @@ fun interface AppUiStarter : IntentAppUiStarter
     }
   )
 
-  foregroundActivity.asComposedFlow().filterNotNull().first()
+  foregroundActivity.filterNotNull().first()
 }

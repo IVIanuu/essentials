@@ -10,7 +10,6 @@ import android.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import com.ivianuu.injekt.common.*
@@ -27,7 +26,7 @@ class ForegroundService : Service() {
 
   @Provide val logger get() = component.logger
 
-  private var previousStates = emptyList<Pair<ForegroundManagerImpl.ForegroundState, Notification>>()
+  private var previousStates = emptyList<ForegroundManagerImpl.ForegroundState>()
 
   private var job: Job? = null
 
@@ -38,10 +37,13 @@ class ForegroundService : Service() {
     job = component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(
         block = {
-          composedFlow {
-            component.foregroundManager.states
-              .map { it to it.notification() }
-          }
+          component.foregroundManager.states
+            .flatMapLatest { states ->
+              combine(
+                states
+                  .map { it.notification }
+              ) { states }
+            }
             .collect { applyState(it) }
         },
         finalizer = { applyState(emptyList()) }
@@ -55,20 +57,20 @@ class ForegroundService : Service() {
     super.onDestroy()
   }
 
-  private fun applyState(states: List<Pair<ForegroundManagerImpl.ForegroundState, Notification>>) {
+  private fun applyState(states: List<ForegroundManagerImpl.ForegroundState>) {
     log { "apply states: $states" }
 
     previousStates
-      .filter { state -> states.none { state.first.id == it.first.id } }
-      .forEach { component.notificationManager.cancel(it.first.id) }
+      .filter { state -> states.none { state.id == it.id } }
+      .forEach { component.notificationManager.cancel(it.id) }
 
     if (states.isNotEmpty()) {
       states
-        .forEachIndexed { index, (state, notification) ->
+        .forEachIndexed { index, state ->
           if (index == 0) {
-            startForeground(state.id, notification)
+            startForeground(state.id, state.notification.value)
           } else {
-            component.notificationManager.notify(state.id, notification)
+            component.notificationManager.notify(state.id, state.notification.value)
           }
         }
     } else {
@@ -76,9 +78,9 @@ class ForegroundService : Service() {
       stopSelf()
     }
 
-    states.forEach { it.first.seen.complete(Unit) }
-
     previousStates = states
+
+    states.forEach { it.seen.complete(Unit) }
   }
 
   override fun onBind(intent: Intent?): IBinder? = null

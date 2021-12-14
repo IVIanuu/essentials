@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
 
@@ -57,10 +58,12 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   uiFactory: () -> U,
-  model: @Composable () -> S,
-  scope: NamedCoroutineScope<KeyUiScope>
+  model: (StateScope) -> S,
+  coroutineScope: NamedCoroutineScope<KeyUiScope>,
+  scope: Scope<KeyUiScope>,
+  sKey: TypeKey<S>
 ) = KeyUi<K> {
-  val currentModel by remember { composedStateFlow(scope) { model() } }.collectAsState()
+  val currentModel by scope { state(block = model, scope = coroutineScope) }.collectAsState()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel
@@ -76,5 +79,6 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val scope: NamedCoroutineScope<KeyUiScope>
+  @Provide val scope: NamedCoroutineScope<KeyUiScope>,
+  @Provide val stateScope: StateScope
 )

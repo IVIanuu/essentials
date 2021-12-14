@@ -47,7 +47,7 @@ data class RateOnPlayModel(
   val showNever: () -> Unit,
 )
 
-@Provide @Composable fun rateOnPlayModel(
+@Provide fun rateOnPlayModel(
   displayShowNever: DisplayShowNeverUseCase,
   rateOnPlay: RateOnPlayUseCase,
   showLater: ShowLaterUseCase,
@@ -59,6 +59,6 @@ data class RateOnPlayModel(
     rateOnPlay()
     ctx.navigator.pop(ctx.key)
   },
-  showLater = action(showLater),
-  showNever = action(showNever)
+  showLater = action(block = showLater),
+  showNever = action(block = showNever)
 )

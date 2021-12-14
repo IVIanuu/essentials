@@ -4,21 +4,15 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.bluetooth.BluetoothAdapter
-import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import android.bluetooth.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.state.valueFromFlow
-import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
@@ -43,7 +37,7 @@ import kotlinx.coroutines.flow.onStart
 }
 
 private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory) = ActionIcon {
-  val bluetoothEnabled = valueFromFlow(true) {
+  val bluetoothEnabled by remember {
     broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
       .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
       .onStart {
@@ -53,6 +47,7 @@ private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory) = Action
       }
       .map { it == BluetoothAdapter.STATE_ON || it == BluetoothAdapter.STATE_TURNING_ON }
   }
+    .collectAsState(false)
 
   Icon(
     if (bluetoothEnabled) R.drawable.es_ic_bluetooth

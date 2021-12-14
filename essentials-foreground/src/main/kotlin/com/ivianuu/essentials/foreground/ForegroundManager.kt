@@ -6,7 +6,6 @@ package com.ivianuu.essentials.foreground
 
 import android.app.*
 import android.content.*
-import androidx.compose.runtime.*
 import androidx.core.content.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
@@ -14,14 +13,15 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 
 interface ForegroundManager {
-  suspend fun startForeground(id: Int, notification: @Composable () -> Notification): Nothing
+  suspend fun startForeground(id: Int, notification: StateFlow<Notification>): Nothing
 }
 
 suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
-  startForeground(id) { notification }
+  startForeground(id, MutableStateFlow(notification))
 
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   private val context: AppContext,
@@ -29,18 +29,17 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
 ) : ForegroundManager {
   private val lock = Mutex()
 
-  internal var states = mutableStateListOf<ForegroundState>()
-    private set
+  internal val states = MutableStateFlow(emptyList<ForegroundState>())
 
   override suspend fun startForeground(
     id: Int,
-    notification: @Composable () -> Notification
+    notification: StateFlow<Notification>
   ): Nothing = bracket(
     acquire = {
       lock.withLock {
         ForegroundState(id, notification)
           .also {
-            states += it
+            states.value = states.value + it
             log { "start foreground $id $states" }
           }
       }
@@ -59,13 +58,13 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
       state.seen.await()
 
       lock.withLock {
-        states -= state
+        states.value = states.value - state
         log { "stop foreground ${state.id} $states" }
       }
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: @Composable () -> Notification) {
+  internal class ForegroundState(val id: Int, val notification: StateFlow<Notification>) {
     val seen = CompletableDeferred<Unit>()
   }
 }

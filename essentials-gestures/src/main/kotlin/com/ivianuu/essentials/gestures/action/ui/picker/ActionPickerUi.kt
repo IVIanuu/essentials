@@ -119,7 +119,7 @@ sealed class ActionPickerItem {
   abstract suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide @Composable fun actionPickerModel(
+@Provide fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,

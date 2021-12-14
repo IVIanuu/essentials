@@ -186,7 +186,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
   .distinctUntilChanged()
 
-@Provide @Composable fun writeSecureSettingsPcInstructionsModel(
+@Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -196,14 +196,14 @@ typealias AdbEnabled = @AdbEnabledTag Int
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
 ): WriteSecureSettingsPcInstructionsModel {
-  var currentStep by remember { mutableStateOf(1) }
-  var completedStep by remember { mutableStateOf(1) }
+  var currentStep by memo { stateVar(1) }
+  var completedStep by memo { stateVar(1) }
 
   val canContinueStep = if (currentStep != completedStep) false
   else when (completedStep) {
-    1 -> valueFromFlow(false) { developerModeSetting.data.map { it != 0 } }
-    2 -> valueFromFlow(false) { adbEnabledSetting.data.map { it != 0 } }
-    3 -> valueFromFlow(false) { isCharging.map { it.value } }
+    1 -> developerModeSetting.data.map { it != 0 }.bind(false)
+    2 -> adbEnabledSetting.data.map { it != 0 }.bind(false)
+    3 -> isCharging.map { it.value }.bind(false)
     4 -> produceValue(false) {
       while (true) {
         value = permissionStateFactory(listOf(ctx.key.permissionKey)).first()

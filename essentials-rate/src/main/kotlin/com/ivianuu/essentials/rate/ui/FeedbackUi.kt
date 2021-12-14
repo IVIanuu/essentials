@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*
 import com.ivianuu.essentials.state.*
@@ -50,15 +49,15 @@ data class FeedbackModel(
   val sendMail: () -> Unit
 )
 
-@Provide @Composable fun feedbackModel(
+@Provide fun feedbackModel(
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<FeedbackKey>
 ) = FeedbackModel(
   displayShowNever = produceValue(false) { displayShowNever() },
-  showNever = action(showNever),
-  showLater = action(showLater),
+  showNever = action(block = showNever),
+  showLater = action(block = showLater),
   openReddit = action {
     ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     ctx.navigator.pop(ctx.key)

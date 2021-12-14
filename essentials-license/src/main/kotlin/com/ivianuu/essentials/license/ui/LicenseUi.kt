@@ -39,7 +39,7 @@ data class LicenseModel(
   val openProject: (Project) -> Unit
 )
 
-@Provide @Composable fun licenseModel(
+@Provide fun licenseModel(
   licenseProjectRepository: LicenceProjectRepository,
   ctx: KeyUiContext<LicenseKey>
 ) = LicenseModel(

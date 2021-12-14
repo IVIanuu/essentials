@@ -13,13 +13,15 @@ import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 
@@ -28,7 +30,8 @@ object ForegroundKey : Key<Unit>
 @SuppressLint("NewApi")
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
-  N: NotificationFactory
+  N: NotificationFactory,
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<ForegroundKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
@@ -38,19 +41,11 @@ object ForegroundKey : Key<Unit>
 
     if (isEnabled)
       LaunchedEffect(true) {
-        var count by mutableStateOf(0)
-        par(
-          {
-            foregroundManager.startForeground(5) {
-              ForegroundNotification(primaryColor, count)
-            }
-          },
-          {
-            while (isActive) {
-              count++
-              delay(1000)
-            }
-          }
+        foregroundManager.startForeground(
+          5,
+          timer(1.seconds)
+            .map { ForegroundNotification(primaryColor, it.toInt()) }
+            .stateIn(scope, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
         )
       }
 

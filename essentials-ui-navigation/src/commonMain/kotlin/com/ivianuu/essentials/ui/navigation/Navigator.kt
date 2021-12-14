@@ -4,9 +4,6 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.actor
@@ -17,9 +14,10 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.*
 
 interface Navigator {
-  val backStack: List<Key<*>>
+  val backStack: StateFlow<List<Key<*>>>
 
   suspend fun <R> setRoot(key: Key<R>): R?
 
@@ -40,8 +38,8 @@ interface Navigator {
   private val L: Logger,
   S: NamedCoroutineScope<AppScope>
 ) : Navigator {
-  override var backStack by mutableStateOf(listOfNotNull<Key<*>>(rootKey))
-    private set
+  val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
+  override val backStack: StateFlow<List<Key<*>>> by this::_backStack
 
   private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
 
@@ -58,7 +56,7 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        backStack = listOf(key)
+        _backStack.value = listOf(key)
         results[key] = result.cast()
       }
     }
@@ -77,7 +75,7 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        backStack = backStack
+        _backStack.value = _backStack.value
           .filter { it != key }
           .plus(key)
         results[key] = result.cast()
@@ -99,10 +97,11 @@ interface Navigator {
 
       @Suppress("UNCHECKED_CAST")
       if (keyHandlers.any { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        backStack = backStack.dropLast(1)
+        _backStack.value = _backStack.value.dropLast(1)
         results.remove(key)
       } else {
-        backStack = backStack
+        _backStack.value = _backStack
+          .value
           .dropLast(1)
           .filter { it != key }
           .plus(key)
@@ -119,7 +118,7 @@ interface Navigator {
   }
 
   override suspend fun popTop() = actor.act {
-    val topKey = backStack.last()
+    val topKey = _backStack.value.last()
     log { "pop top $topKey" }
     popKey(topKey, null)
   }
@@ -128,14 +127,14 @@ interface Navigator {
     log { "clear" }
     results.forEach { it.value.complete(null) }
     results.clear()
-    backStack = emptyList()
+    _backStack.value = emptyList()
   }
 
   private fun <R> popKey(key: Key<R>, result: R?) {
     @Suppress("UNCHECKED_CAST")
     val resultAction = results[key] as? CompletableDeferred<R?>
     resultAction?.complete(result)
-    backStack -= key
+    _backStack.value = _backStack.value - key
     results.remove(key)
   }
 }

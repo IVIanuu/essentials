@@ -6,7 +6,6 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.donation.*
@@ -134,7 +133,7 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-@Provide @Composable fun aboutModel(
+@Provide fun aboutModel(
   buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,

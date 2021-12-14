@@ -47,23 +47,22 @@ data class AppShortcutPickerModel(
   val pickAppShortcut: (AppShortcut) -> Unit
 )
 
-@Provide @Composable fun appShortcutPickerModel(
+@Provide fun appShortcutPickerModel(
   appRepository: AppRepository,
   appShortcutRepository: AppShortcutRepository,
   ctx: KeyUiContext<AppShortcutPickerKey>
 ) = AppShortcutPickerModel(
-  appShortcuts = resourceFromFlow {
-    appRepository.installedApps
-      .flatMapLatest { apps ->
-        combine(
-          apps
-            .map { app ->
-              appShortcutRepository.appShortcuts(app.packageName)
-                .catch { emit(emptyList()) }
-            }
-        ) { it.toList().flatten() }
-      }
-  },
+  appShortcuts = appRepository.installedApps
+    .flatMapLatest { apps ->
+      combine(
+        apps
+          .map { app ->
+            appShortcutRepository.appShortcuts(app.packageName)
+              .catch { emit(emptyList()) }
+          }
+      ) { it.toList().flatten() }
+    }
+    .bindResource(),
   pickAppShortcut = action { appShortcut ->
     ctx.navigator.pop(ctx.key, appShortcut)
   }

@@ -66,7 +66,7 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-@Provide @Composable fun writeSecureSettingsModel(
+@Provide fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
   shell: Shell,

@@ -36,17 +36,15 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
 }
 
 data class SystemOverlayAppBlacklistModel(
-  val appBlacklist: @Composable () -> Set<String>,
+  val appBlacklist: Flow<Set<String>>,
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide @Composable fun systemOverlayAppBlacklistModel(
+@Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
-  S: NamedCoroutineScope<KeyUiScope>
+  ctx: KeyUiContext<SystemOverlayAppBlacklistKey>
 ) = SystemOverlayAppBlacklistModel(
-  appBlacklist = {
-    valueFromFlow(emptySet()) { pref.data.map { it.appBlacklist } }
-  },
+  appBlacklist = pref.data.map { it.appBlacklist },
   updateAppBlacklist = action { appBlacklist ->
     pref.updateData { copy(appBlacklist = appBlacklist) }
   }

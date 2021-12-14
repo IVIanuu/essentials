@@ -52,7 +52,7 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-@Provide @Composable fun permissionRequestModel(
+@Provide fun permissionRequestModel(
   appUiStarter: AppUiStarter,
   permissions: Map<TypeKey<Permission>, Permission>,
   permissionStateFactory: PermissionStateFactory,
@@ -62,11 +62,13 @@ data class UiPermission<P : Permission>(
   val model = PermissionRequestModel(
     permissions = ctx.key.permissionsKeys
       .map { permissionKey ->
-        UiPermission(
-          permissionKey,
-          permissions[permissionKey]!!,
-          valueFromFlow(false) { permissionStateFactory(listOf(permissionKey)) }
-        )
+        withKeys(permissionKey.value) {
+          UiPermission(
+            permissionKey,
+            permissions[permissionKey]!!,
+            permissionStateFactory(listOf(permissionKey)).bind(false)
+          )
+        }
       },
     grantPermission = action { permission ->
       requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
@@ -74,7 +76,7 @@ data class UiPermission<P : Permission>(
     }
   )
 
-  LaunchedEffect(model) {
+  memoLaunch(model) {
     if (ctx.key.permissionsKeys
         .all { permissionStateFactory(listOf(it)).first() }) {
       ctx.navigator.pop(ctx.key, true)

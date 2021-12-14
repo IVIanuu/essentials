@@ -23,8 +23,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.resourceFromFlow
+import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
@@ -100,17 +99,16 @@ data class MediaActionSettingsModel(
   val updateMediaApp: () -> Unit
 )
 
-@Provide @Composable fun mediaActionSettingsModel(
+@Provide fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>,
   ctx: KeyUiContext<MediaActionSettingsKey>
 ) = MediaActionSettingsModel(
-  mediaApp = resourceFromFlow {
-    pref.data
-      .map { it.mediaApp }
-      .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
-  },
+  mediaApp = pref.data
+    .map { it.mediaApp }
+    .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
+    .bindResource(),
   updateMediaApp = action {
     val newMediaApp = ctx.navigator.push(
       AppPickerKey(

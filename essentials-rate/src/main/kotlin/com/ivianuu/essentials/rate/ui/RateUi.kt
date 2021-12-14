@@ -101,14 +101,14 @@ data class RateModel(
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-@Provide @Composable fun rateModel(
+@Provide fun rateModel(
   buildInfo: BuildInfo,
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateKey>
 ): RateModel {
-  var rating by remember { mutableStateOf(0) }
+  var rating by memo { stateVar(0) }
   return RateModel(
     displayShowNever = produceValue(false) { displayShowNever() },
     packageName = buildInfo.packageName,

@@ -5,6 +5,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.net.wifi.WifiManager
 import androidx.compose.material.Icon
+import androidx.compose.runtime.*
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -12,7 +13,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.state.valueFromFlow
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -41,7 +41,7 @@ fun interface WifiIcon : ActionIcon
   broadcastsFactory: BroadcastsFactory,
   wifiManager: @SystemService WifiManager,
 ) = WifiIcon {
-  val wifiEnabled = valueFromFlow(true) {
+  val wifiEnabled by remember {
     broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
       .map {
         val state =
@@ -49,7 +49,7 @@ fun interface WifiIcon : ActionIcon
         state == WifiManager.WIFI_STATE_ENABLED
       }
       .onStart { emit(wifiManager.isWifiEnabled) }
-  }
+  }.collectAsState(false)
 
   Icon(
     if (wifiEnabled) R.drawable.es_ic_network_wifi

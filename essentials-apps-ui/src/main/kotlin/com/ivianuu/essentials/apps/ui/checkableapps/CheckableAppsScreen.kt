@@ -20,21 +20,25 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.flow.*
 
 fun interface CheckableAppsScreen : @Composable () -> Unit
 
 data class CheckableAppsParams(
-  val checkedApps: @Composable () -> Set<String>,
+  val checkedApps: Flow<Set<String>>,
   val onCheckedAppsChanged: (Set<String>) -> Unit,
   val appPredicate: AppPredicate,
   val appBarTitle: String
 )
 
-@Provide fun checkableAppsScreen(models: @Composable () -> CheckableAppsModel) = CheckableAppsScreen {
-  val model = models()
+@Provide fun checkableAppsScreen(models: StateFlow<CheckableAppsModel>) = CheckableAppsScreen {
+  val model by models.collectAsState()
   Scaffold(
     topBar = {
       TopAppBar(
@@ -98,19 +102,20 @@ data class CheckableAppsModel(
 
 data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 
-@Provide @Composable fun checkableAppsModel(
+@Provide fun checkableAppsModel(
   appRepository: AppRepository,
-  params: CheckableAppsParams
-): CheckableAppsModel {
-  val checkedApps = params.checkedApps()
-  val allApps = resourceFromFlow { appRepository.installedApps }
+  params: CheckableAppsParams,
+  S: NamedCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = state {
+  val checkedApps = params.checkedApps.bind(emptySet())
+  val allApps = appRepository.installedApps.bindResource()
 
   fun pushNewCheckedApps(transform: Set<String>.() -> Set<String>) {
     val newCheckedApps = checkedApps.transform()
     params.onCheckedAppsChanged(newCheckedApps)
   }
 
-  return CheckableAppsModel(
+  CheckableAppsModel(
     allApps = allApps,
     appPredicate = params.appPredicate,
     appBarTitle = params.appBarTitle,

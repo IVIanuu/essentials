@@ -26,6 +26,7 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-app"))
+        api(project(":essentials-coroutines"))
         api(project(":essentials-ui-animation"))
         api(project(":essentials-ui-core"))
       }

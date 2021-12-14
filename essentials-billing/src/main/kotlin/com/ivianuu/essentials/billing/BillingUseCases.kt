@@ -118,11 +118,11 @@ fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
 @JvmInline value class IsPurchased(val value: Boolean)
 
 @Provide fun isPurchased(
-  appForegroundState: @Composable () -> AppForegroundState,
+  appForegroundState: Flow<AppForegroundState>,
   context: BillingContext,
   sku: Sku
 ): Flow<IsPurchased> = merge(
-  appForegroundState.asComposedFlow()
+  appForegroundState
     .filter { it == AppForegroundState.FOREGROUND },
   context.refreshes
 )

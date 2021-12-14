@@ -4,13 +4,11 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -37,11 +35,10 @@ import kotlinx.serialization.*
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>,
-  showAds: State<ShowAds>,
+  showAds: Flow<ShowAds>,
   L: Logger
 ) = ScopeWorker<UiScope> {
   showAds
-    .asComposedFlow()
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents(isFeatureEnabled)
@@ -60,8 +57,8 @@ import kotlinx.serialization.*
 }
 
 private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
-  var lastBackStack = backStack
-  return snapshotFlow { backStack }
+  var lastBackStack = backStack.value
+  return backStack
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {

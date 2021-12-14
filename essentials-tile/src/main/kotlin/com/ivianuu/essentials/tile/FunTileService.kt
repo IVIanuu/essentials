@@ -6,7 +6,6 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
 import android.service.quicksettings.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.state.*
@@ -46,7 +45,6 @@ abstract class AbstractFunTileService<T : Any>(
     val tileModelComponent = serviceComponent.tileModelComponent(Scope(), TileId(serviceClass))
       .also { this.tileComponent = it }
     tileModelComponent.tileModel
-      .asComposedFlow()
       .onEach { applyModel(it) }
       .launchIn(tileModelComponent.coroutineScope)
   }
@@ -102,14 +100,15 @@ data class FunTileServiceComponent(
 @Provide @Element<TileScope>
 data class TileModelComponent(
   val tileId: TileId,
-  val tileModelElements: List<Pair<TileId, () -> @Composable () -> TileModel<*>>>,
+  val tileModelElements: List<Pair<TileId, (StateScope) -> TileModel<*>>>,
   val coroutineScope: NamedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel: @Composable () -> TileModel<*> = tileModelElements.toMap()[tileId]
-    ?.invoke()
-    ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
-      .cast()
+  val tileModel = state(
+    block = tileModelElements.toMap()[tileId]
+      ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
+        .cast()
+  )
 }

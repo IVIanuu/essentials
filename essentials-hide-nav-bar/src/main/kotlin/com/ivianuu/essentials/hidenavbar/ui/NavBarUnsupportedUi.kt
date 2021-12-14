@@ -56,7 +56,7 @@ object NavBarUnsupportedKey : Key<Unit>
 
 data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMethod: () -> Unit)
 
-@Provide @Composable fun navBarUnsupportedModel(
+@Provide fun navBarUnsupportedModel(
   ctx: KeyUiContext<NavBarUnsupportedKey>
 ) = NavBarUnsupportedModel(
   openMoreInfos = action {

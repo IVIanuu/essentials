@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.*
 @Provide fun navBarManager(
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
-  forceNavBarVisibleState: @Composable () -> CombinedForceNavBarVisibleState,
+  forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
   permissionState: Flow<PermissionState<NavBarPermission>>,
@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.*
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
         forceNavBarVisibleState
-          .asComposedFlow()
           .flatMapLatest { forceVisible ->
             pref.data
               .map {

@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 
 data class AppFeature(
   val title: String,
@@ -243,23 +242,21 @@ data class GoPremiumModel(
   val tryBasicVersion: () -> Unit
 )
 
-@Provide @Composable fun goPremiumModel(
+@Provide fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
-  key: GoPremiumKey,
-  navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
-  S: NamedCoroutineScope<KeyUiScope>
+  ctx: KeyUiContext<GoPremiumKey>
 ) = GoPremiumModel(
   features = features,
-  premiumSkuDetails = resourceFromFlow { premiumVersionManager.premiumSkuDetails },
-  showTryBasicOption = key.showTryBasicOption,
+  premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
+  showTryBasicOption = ctx.key.showTryBasicOption,
   goPremium = action {
     if (premiumVersionManager.purchasePremiumVersion())
-      navigator.pop(key, true)
+      ctx.navigator.pop(ctx.key, true)
   },
   tryBasicVersion = action {
     fullScreenAd.loadAndShow()
-    navigator.pop(key, false)
+    ctx.navigator.pop(ctx.key, false)
   }
 )

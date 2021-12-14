@@ -7,7 +7,6 @@ package com.ivianuu.essentials.apps.ui.apppicker
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -64,12 +63,12 @@ data class AppPickerModel(
     .map { it.filter(appPredicate) }
 }
 
-@Provide @Composable fun appPickerModel(
+@Provide fun appPickerModel(
   appRepository: AppRepository,
   ctx: KeyUiContext<AppPickerKey>
 ) = AppPickerModel(
   appPredicate = ctx.key.appPredicate,
   title = ctx.key.title,
-  allApps = resourceFromFlow { appRepository.installedApps },
+  allApps = appRepository.installedApps.bindResource(),
   pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
 )

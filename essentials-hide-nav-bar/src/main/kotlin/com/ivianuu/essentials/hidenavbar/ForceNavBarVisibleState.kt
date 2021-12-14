@@ -5,8 +5,6 @@
 package com.ivianuu.essentials.hidenavbar
 
 import android.content.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -18,20 +16,15 @@ import kotlinx.coroutines.flow.*
  */
 @Provide fun systemShutdownForceNavBarVisibleState(
   broadcastsFactory: BroadcastsFactory
-): @Composable () -> ForceNavBarVisibleState = {
-  produceValue(ForceNavBarVisibleState(false)) {
-    broadcastsFactory(Intent.ACTION_SHUTDOWN).first()
-    ForceNavBarVisibleState(true)
-  }
-}
+): Flow<ForceNavBarVisibleState> = broadcastsFactory(Intent.ACTION_SHUTDOWN)
+  .take(1)
+  .map { ForceNavBarVisibleState(true) }
+  .onStart { emit(ForceNavBarVisibleState(false)) }
 
 @JvmInline value class CombinedForceNavBarVisibleState(val value: Boolean)
 
 @Provide fun combinedForceNavBarVisibleState(
-  forceNavbarVisibleStates: List<@Composable () -> ForceNavBarVisibleState>
-): @Composable () -> CombinedForceNavBarVisibleState = {
-  CombinedForceNavBarVisibleState(
-    forceNavbarVisibleStates
-      .any { it().value }
-  )
+  forceNavbarVisibleStates: List<Flow<ForceNavBarVisibleState>>
+): Flow<CombinedForceNavBarVisibleState> = combine(forceNavbarVisibleStates) { states ->
+  CombinedForceNavBarVisibleState(states.any { it.value })
 }

@@ -4,17 +4,9 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.currentCompositeKeyHash
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.launch
@@ -37,16 +29,18 @@ fun interface NavigationStateContent : @Composable (Modifier) -> Unit
   rootKey: RootKey? = null,
   S: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
+  val backStack by navigator.backStack.collectAsState()
+
   val contentState = remember {
-    NavigationContentState(keyUiElementsFactory, navigator.backStack)
+    NavigationContentState(keyUiElementsFactory, backStack)
   }
 
-  DisposableEffect(navigator.backStack) {
-    contentState.updateBackStack(navigator.backStack)
+  DisposableEffect(backStack) {
+    contentState.updateBackStack(backStack)
     onDispose {  }
   }
 
-  if (navigator.backStack.size > 1)
+  if (backStack.size > 1)
     BackHandler {
       launch {
         navigator.popTop()

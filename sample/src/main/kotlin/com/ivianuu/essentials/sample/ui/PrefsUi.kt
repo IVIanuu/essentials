@@ -19,6 +19,7 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 
@@ -28,7 +29,8 @@ object PrefsKey : Key<Unit>
 
 @Provide fun prefsUi(
   prefStore: DataStore<SamplePrefs>,
-  ctx: KeyUiContext<PrefsKey>
+  navigator: Navigator,
+  S: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<PrefsKey> {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
@@ -104,7 +106,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newTextInput = ctx.navigator.push(
+              val newTextInput = navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
                   label = "Input",
@@ -128,7 +130,7 @@ object PrefsKey : Key<Unit>
         value = Color(prefs.color),
         onValueChangeRequest = {
           launch {
-            val newColor = ctx.navigator.push(
+            val newColor = navigator.push(
               ColorPickerKey(
                 initialColor = Color(prefs.color),
                 title = "Color"
@@ -150,7 +152,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newItems = ctx.navigator.push(
+              val newItems = navigator.push(
                 MultiChoiceListKey(
                   items = listOf(
                     MultiChoiceListKey.Item("A", "A"),
@@ -177,7 +179,7 @@ object PrefsKey : Key<Unit>
         modifier = Modifier
           .clickable {
             launch {
-              val newItem = ctx.navigator.push(
+              val newItem = navigator.push(
                 SingleChoiceListKey(
                   items = listOf(
                     SingleChoiceListKey.Item("A", "A"),

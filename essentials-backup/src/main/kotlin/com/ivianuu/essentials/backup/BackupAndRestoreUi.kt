@@ -6,7 +6,6 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.state.*
@@ -41,7 +40,7 @@ object BackupAndRestoreKey : Key<Unit>
 
 data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide @Composable fun backupAndRestoreModel(
+@Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
   T: ToastContext,
