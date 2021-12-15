@@ -23,7 +23,7 @@ data class TextInputKey(
   val label: String,
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
-  val predicate: (String) -> Boolean
+  val predicate: (String) -> Boolean = { true }
 ) : DialogKey<String>
 
 @Provide fun textInputUi(
