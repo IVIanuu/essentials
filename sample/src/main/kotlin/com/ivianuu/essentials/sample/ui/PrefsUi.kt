@@ -111,7 +111,7 @@ object PrefsKey : Key<Unit>
                   initial = prefs.textInput,
                   label = "Input",
                   title = "Text input",
-                  allowEmpty = false
+                  predicate = { it.isNotEmpty() }
                 )
               ) ?: return@launch
               launch {

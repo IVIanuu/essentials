@@ -23,7 +23,7 @@ data class TextInputKey(
   val label: String,
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
-  val allowEmpty: Boolean = true,
+  val predicate: (String) -> Boolean
 ) : DialogKey<String>
 
 @Provide fun textInputUi(
@@ -47,8 +47,10 @@ data class TextInputKey(
           Text(strings.cancel)
         }
 
+        val currentValueIsOk = remember(currentValue) { key.predicate(currentValue) }
+
         TextButton(
-          enabled = key.allowEmpty || currentValue.isNotEmpty(),
+          enabled = currentValueIsOk,
           onClick = {
             scope.launch { navigator.pop(key, currentValue) }
           }
