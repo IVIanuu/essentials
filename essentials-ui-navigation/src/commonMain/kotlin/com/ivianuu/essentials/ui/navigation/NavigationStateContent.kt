@@ -19,6 +19,7 @@ import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.*
 import kotlin.reflect.KClass
 
 fun interface NavigationStateContent : @Composable (Modifier) -> Unit
@@ -49,7 +50,14 @@ fun interface NavigationStateContent : @Composable (Modifier) -> Unit
 
   LaunchedEffect(true) {
     onCancel {
-      if (rootKey != null) navigator.setRoot(rootKey)
+      // it's important to clear the state
+      // to prevent memory leaks
+      contentState.updateBackStack(emptyList())
+
+      if (rootKey != null)
+        withTimeoutOrNull(100) {
+          navigator.setRoot(rootKey)
+        }
       else navigator.clear()
     }
   }
