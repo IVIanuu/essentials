@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+import kotlin.time.*
 
 interface RefCountedResource<K, T> {
   suspend fun acquire(key: K): T
@@ -18,11 +18,20 @@ interface RefCountedResource<K, T> {
 fun <K, T> RefCountedResource(
   create: suspend (K) -> T,
   release: (suspend (K, T) -> Unit)? = null
-): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release)
+): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, Duration.ZERO, null)
+
+fun <K, T> RefCountedResource(
+  timeout: Duration,
+  @Inject scope: CoroutineScope,
+  create: suspend (K) -> T,
+  release: (suspend (K, T) -> Unit)? = null,
+): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout)
 
 private class RefCountedReleaseImpl<K, T>(
   private val create: suspend (K) -> T,
-  private val release: (suspend (K, T) -> Unit)?
+  private val release: (suspend (K, T) -> Unit)?,
+  private val timeout: Duration,
+  @Inject private val scope: CoroutineScope?
 ) : RefCountedResource<K, T> {
   private val lock = Mutex()
   private val values = mutableMapOf<K, Item>()
@@ -33,15 +42,23 @@ private class RefCountedReleaseImpl<K, T>(
   }.value
 
   override suspend fun release(key: K) {
-    lock.withLock {
-      val item = values[key] ?: return@withLock null
-      item.refCount--
-      if (item.refCount == 0) values.remove(key) else null
-    }?.let { removedItem ->
-      if (release != null)
-        withContext(NonCancellable) {
-          release.invoke(key, removedItem.value)
-        }
+    suspend fun releaseImpl() {
+      lock.withLock {
+        val item = values[key] ?: return@withLock null
+        item.refCount--
+        if (item.refCount == 0) values.remove(key) else null
+      }?.let { removedItem ->
+        if (release != null)
+          withContext(NonCancellable) {
+            release.invoke(key, removedItem.value)
+          }
+      }
+    }
+
+    if (timeout == Duration.ZERO) releaseImpl()
+    else scope!!.launch {
+      delay(timeout)
+      releaseImpl()
     }
   }
 
