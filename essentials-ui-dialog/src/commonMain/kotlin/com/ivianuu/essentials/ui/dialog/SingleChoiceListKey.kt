@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 data class SingleChoiceListKey<T : Any>(
   val items: List<Item<T>>,
   val selectedItem: T,
-  val title: String
+  val title: String? = null
 ) : DialogKey<T> {
   data class Item<T : Any>(val value: T, val title: String)
 }
@@ -41,7 +41,7 @@ data class SingleChoiceListKey<T : Any>(
       item = { item ->
         Text(key.items.single { it.value == item }.title)
       },
-      title = { Text(key.title) },
+      title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = {
           scope.launch { navigator.pop(key, null) }

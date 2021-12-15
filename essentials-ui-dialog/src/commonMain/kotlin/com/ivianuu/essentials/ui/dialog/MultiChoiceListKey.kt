@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 data class MultiChoiceListKey<T : Any>(
   val items: List<Item<T>>,
   val selectedItems: Set<T>,
-  val title: String
+  val title: String? = null
 ) : DialogKey<Set<T>> {
   data class Item<T>(val value: T, val title: String)
 }
@@ -43,7 +43,7 @@ data class MultiChoiceListKey<T : Any>(
       item = { item ->
         Text(key.items.single { it.value == item }.title)
       },
-      title = { Text(key.title) },
+      title = key.title?.let { { Text(it) } },
       buttons = {
         val scope = rememberCoroutineScope()
         TextButton(onClick = {
