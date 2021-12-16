@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.safeAs
@@ -27,7 +27,7 @@ interface Navigator {
 
   suspend fun <R> pop(key: Key<R>, result: R? = null)
 
-  suspend fun popTop()
+  suspend fun popTop(): Boolean
 
   suspend fun clear()
 }
@@ -117,10 +117,11 @@ interface Navigator {
     popKey(key, result)
   }
 
-  override suspend fun popTop() = actor.act {
-    val topKey = _backStack.value.last()
+  override suspend fun popTop() = actor.actAndReply {
+    val topKey = _backStack.value.lastOrNull() ?: return@actAndReply false
     log { "pop top $topKey" }
     popKey(topKey, null)
+    true
   }
 
   override suspend fun clear() = actor.act {
