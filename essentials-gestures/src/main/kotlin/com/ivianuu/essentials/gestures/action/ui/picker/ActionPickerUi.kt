@@ -30,10 +30,10 @@ data class ActionPickerKey(
   val showDefaultOption: Boolean = false,
   val showNoneOption: Boolean = false,
 ) : Key<ActionPickerKey.Result> {
-  sealed class Result {
-    data class Action(val actionId: String) : Result()
-    object Default : Result()
-    object None : Result()
+  sealed interface Result {
+    data class Action(val actionId: String) : Result
+    object Default : Result
+    object None : Result
   }
 }
 
@@ -62,11 +62,11 @@ data class ActionPickerModel(
   val pickAction: (ActionPickerItem) -> Unit
 )
 
-sealed class ActionPickerItem {
-  data class ActionItem(
+sealed interface ActionPickerItem {
+  class ActionItem(
     val action: Action<*>,
     override val settingsKey: Key<Unit>?,
-  ) : ActionPickerItem() {
+  ) : ActionPickerItem {
     override val title: String
       get() = action.title
 
@@ -77,7 +77,7 @@ sealed class ActionPickerItem {
     override suspend fun getResult() = ActionPickerKey.Result.Action(action.id)
   }
 
-  data class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem() {
+  class PickerDelegate(val delegate: ActionPickerDelegate) : ActionPickerItem {
     override val title: String
       get() = delegate.title
 
@@ -93,10 +93,10 @@ sealed class ActionPickerItem {
     override suspend fun getResult() = delegate.pickAction()
   }
 
-  data class SpecialOption(
+  class SpecialOption(
     override val title: String,
     val getResult: () -> ActionPickerKey.Result?
-  ) : ActionPickerItem() {
+  ) : ActionPickerItem {
     override val settingsKey: Key<Unit>?
       get() = null
 
@@ -107,16 +107,16 @@ sealed class ActionPickerItem {
     override suspend fun getResult() = getResult.invoke()
   }
 
-  abstract val title: String
-  abstract val settingsKey: Key<Unit>?
+  val title: String
+  val settingsKey: Key<Unit>?
 
   @Composable fun Icon() {
     Icon(Modifier)
   }
 
-  @Composable abstract fun Icon(modifier: Modifier)
+  @Composable fun Icon(modifier: Modifier)
 
-  abstract suspend fun getResult(): ActionPickerKey.Result?
+  suspend fun getResult(): ActionPickerKey.Result?
 }
 
 @Provide fun actionPickerModel(

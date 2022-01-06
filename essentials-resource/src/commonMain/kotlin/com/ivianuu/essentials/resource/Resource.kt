@@ -9,19 +9,19 @@ package com.ivianuu.essentials.resource
 import com.ivianuu.essentials.*
 import kotlinx.coroutines.flow.*
 
-sealed class Resource<out T>
+sealed interface Resource<out T>
 
-object Idle : Resource<Nothing>() {
+object Idle : Resource<Nothing> {
   override fun toString(): String = "Idle"
 }
 
-object Loading : Resource<Nothing>() {
+object Loading : Resource<Nothing> {
   override fun toString(): String = "Loading"
 }
 
-data class Success<T>(val value: T) : Resource<T>()
+data class Success<T>(val value: T) : Resource<T>
 
-data class Error(val error: Throwable) : Resource<Nothing>()
+data class Error(val error: Throwable) : Resource<Nothing>
 
 fun <T> Resource<T>.get(): T = if (this is Success) value else error("Called get() on a $this")
 

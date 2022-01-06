@@ -106,19 +106,19 @@ private class DiskDataStoreImpl<T>(
     }
   }
 
-  private sealed class State<out T> {
-    data class Data<T>(val value: T) : State<T>()
-    data class ReadError<T>(val error: Throwable) : State<T>()
-    data class Final<T>(val error: Throwable) : State<T>()
-    object Uninitialized : State<Nothing>()
+  private sealed interface State<out T> {
+    data class Data<T>(val value: T) : State<T>
+    data class ReadError<T>(val error: Throwable) : State<T>
+    data class Final<T>(val error: Throwable) : State<T>
+    object Uninitialized : State<Nothing>
   }
 
-  private sealed class Message<out T> {
+  private sealed interface Message<out T> {
     data class UpdateData<T>(
       val transform: (T) -> T,
       val newData: CompletableDeferred<T>
-    ) : Message<T>()
-    data class ReadData<T>(val lastState: State<T>) : Message<T>()
+    ) : Message<T>
+    data class ReadData<T>(val lastState: State<T>) : Message<T>
   }
 
   override suspend fun updateData(transform: (t: T) -> T): T {

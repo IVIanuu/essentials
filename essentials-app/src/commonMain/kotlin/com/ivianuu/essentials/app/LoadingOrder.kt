@@ -8,13 +8,13 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
-sealed class LoadingOrder<T> {
-  sealed class Static<T> : LoadingOrder<T>() {
-    class First<T> : Static<T>()
+sealed interface LoadingOrder<T> {
+  sealed interface Static<T> : LoadingOrder<T> {
+    class First<T> : Static<T>
 
-    class Last<T> : Static<T>()
+    class Last<T> : Static<T>
 
-    class None<T> : LoadingOrder<T>() {
+    class None<T> : LoadingOrder<T> {
       fun first() = First<T>()
 
       fun last() = Last<T>()
@@ -26,12 +26,12 @@ sealed class LoadingOrder<T> {
     }
   }
 
-  sealed class Topological<T> : LoadingOrder<T>() {
-    data class Before<T>(val key: TypeKey<T>) : Topological<T>()
+  sealed interface Topological<T> : LoadingOrder<T> {
+    data class Before<T>(val key: TypeKey<T>) : Topological<T>
 
-    data class After<T>(val key: TypeKey<T>) : Topological<T>()
+    data class After<T>(val key: TypeKey<T>) : Topological<T>
 
-    data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>()
+    data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
 
     operator fun plus(other: Topological<T>): Combined<T> = Combined(this, other)
 

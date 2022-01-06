@@ -62,11 +62,9 @@ import kotlinx.coroutines.flow.*
     .collect { it.apply(context, nonSdkInterfaceDetectionDisabler, setOverscan) }
 }
 
-private sealed class NavBarState {
-  data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) :
-    NavBarState()
-
-  object Visible : NavBarState()
+private sealed interface NavBarState {
+  data class Hidden(val rotationMode: NavBarRotationMode, val rotation: DisplayRotation) : NavBarState
+  object Visible : NavBarState
 }
 
 private suspend fun NavBarState.apply(

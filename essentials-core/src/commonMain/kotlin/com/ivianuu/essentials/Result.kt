@@ -6,10 +6,10 @@ package com.ivianuu.essentials
 
 import com.ivianuu.injekt.*
 
-sealed class Result<out V, out E>
+sealed interface Result<out V, out E>
 
-data class Ok<V>(val value: V) : Result<V, Nothing>()
-data class Err<E>(val error: E) : Result<Nothing, E>()
+data class Ok<V>(val value: V) : Result<V, Nothing>
+data class Err<E>(val error: E) : Result<Nothing, E>
 
 inline val Result<*, *>.isOk: Boolean get() = this is Ok
 inline val Result<*, *>.isErr: Boolean get() = this is Err

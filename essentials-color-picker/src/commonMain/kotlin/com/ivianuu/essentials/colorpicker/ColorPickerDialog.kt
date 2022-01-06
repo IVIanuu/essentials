@@ -238,9 +238,9 @@ import com.ivianuu.injekt.Provide
   }
 }
 
-private sealed class ColorGridItem {
-  object Back : ColorGridItem()
-  data class Color(val color: androidx.compose.ui.graphics.Color) : ColorGridItem()
+private sealed interface ColorGridItem {
+  object Back : ColorGridItem
+  data class Color(val color: androidx.compose.ui.graphics.Color) : ColorGridItem
 }
 
 @Composable private fun ColorGridItem(

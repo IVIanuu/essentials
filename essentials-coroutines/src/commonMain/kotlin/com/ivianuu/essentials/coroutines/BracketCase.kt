@@ -4,19 +4,16 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.nonFatalOrThrow
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.withContext
+import com.ivianuu.essentials.*
+import kotlinx.coroutines.*
 
-sealed class ExitCase {
-  object Completed : ExitCase() {
+sealed interface ExitCase {
+  object Completed : ExitCase {
     override fun toString(): String = "ExitCase.Completed"
   }
 
-  data class Cancelled(val exception: CancellationException) : ExitCase()
-  data class Failure(val failure: Throwable) : ExitCase()
+  data class Cancelled(val exception: CancellationException) : ExitCase
+  data class Failure(val failure: Throwable) : ExitCase
 }
 
 suspend inline fun onCancel(

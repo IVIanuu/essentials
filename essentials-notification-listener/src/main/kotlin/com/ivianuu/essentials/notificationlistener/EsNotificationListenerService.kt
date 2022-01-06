@@ -76,10 +76,10 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 }
 
-sealed class NotificationEvent {
-  data class NotificationPosted(val sbn: StatusBarNotification) : NotificationEvent()
-  data class NotificationRemoved(val sbn: StatusBarNotification) : NotificationEvent()
-  data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent()
+sealed interface NotificationEvent {
+  data class NotificationPosted(val sbn: StatusBarNotification) : NotificationEvent
+  data class NotificationRemoved(val sbn: StatusBarNotification) : NotificationEvent
+  data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent
 }
 
 @Provide @Element<AppScope>
