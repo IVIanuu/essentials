@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.runtime.*
 import com.google.android.gms.ads.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
@@ -38,7 +37,7 @@ interface FullScreenAd {
   private val context: AppContext,
   private val mainContext: MainContext,
   private val scope: NamedCoroutineScope<AppScope>,
-  private val showAds: State<ShowAds>,
+  private val showAds: Flow<ShowAds>,
   private val L: Logger
 ) : FullScreenAd {
   private val lock = Mutex()
@@ -51,13 +50,13 @@ interface FullScreenAd {
   }
 
   override suspend fun load(): Boolean {
-    if (!showAds.value.value) return false
+    if (!showAds.first().value) return false
     getOrCreateCurrentAd()
     return true
   }
 
   override suspend fun loadAndShow(): Boolean {
-    if (!showAds.value.value) return false
+    if (!showAds.first().value) return false
     getOrCreateCurrentAd().invoke()
     preload()
     return true
