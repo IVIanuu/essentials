@@ -30,7 +30,7 @@ class EsAccessibilityService : AccessibilityService() {
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
-    val accessibilityComponent = serviceComponent.accessibilityComponentFactory(Scope())
+    val accessibilityComponent = serviceComponent.accessibilityComponentFactory(Scope(), this)
       .also { this.accessibilityComponent = it }
     serviceComponent.accessibilityServiceRef.value = this
 
@@ -85,7 +85,7 @@ class EsAccessibilityService : AccessibilityService() {
 @Provide @Element<AppScope>
 data class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
-  val accessibilityComponentFactory: (Scope<AccessibilityScope>) -> AccessibilityComponent,
+  val accessibilityComponentFactory: (Scope<AccessibilityScope>, EsAccessibilityService) -> AccessibilityComponent,
   val logger: Logger,
   val accessibilityServiceRef: MutableState<EsAccessibilityService?>
 )

@@ -35,7 +35,7 @@ class EsNotificationListenerService : NotificationListenerService() {
     log { "listener connected" }
     val scope = Scope<NotificationScope>()
       .also { this.notificationScope = it }
-    component.notificationElementsFactory(scope)
+    component.notificationElementsFactory(scope, this)
     component.notificationServiceRef.value = this
     updateNotifications()
   }
@@ -85,6 +85,6 @@ sealed class NotificationEvent {
 @Provide @Element<AppScope>
 data class EsNotificationListenerServiceComponent(
   val logger: Logger,
-  val notificationElementsFactory: (Scope<NotificationScope>) -> Elements<NotificationScope>,
+  val notificationElementsFactory: (Scope<NotificationScope>, EsNotificationListenerService) -> Elements<NotificationScope>,
   val notificationServiceRef: MutableState<EsNotificationListenerService?>
 )
