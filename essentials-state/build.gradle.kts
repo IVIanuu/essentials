@@ -5,6 +5,7 @@
 plugins {
   id("com.ivianuu.essentials")
   id("org.jetbrains.compose")
+  id("kotlinx-atomicfu")
   kotlin("multiplatform")
 }
 
@@ -16,6 +17,7 @@ kotlin {
       dependencies {
         api(project(":essentials-coroutines"))
         api(project(":essentials-resource"))
+        api(Deps.AtomicFu.runtime)
         api(Deps.Compose.runtime)
       }
     }
