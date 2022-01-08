@@ -19,7 +19,6 @@ package com.ivianuu.essentials.state
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
-import kotlinx.atomicfu.locks.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
@@ -36,7 +35,7 @@ fun <S> state(
 ): StateFlow<S> {
   val refreshes = MutableSharedFlow<Unit>()
 
-  val stateScope = object : StateScope, SynchronizedObject(), CoroutineScope by scope {
+  val stateScope = object : StateScope, CoroutineScope by scope {
     private val states = mutableMapOf<Any, MemoizedState>()
     private var iteration = 0
 
@@ -68,9 +67,9 @@ fun <S> state(
       }
     }
 
-    fun run(): S = synchronized(this) {
+    fun run(): S {
       iteration++
-      block()
+      return block()
         .also {
           states
             .filterValues { it.lastUsed < iteration }
