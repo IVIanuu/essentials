@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.*
 
 @JvmInline value class RecentApps(val values: List<String>)
 
-@Provide @Eager<AppScope> fun recentApps(
+@Provide fun recentApps(
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
-): Flow<RecentApps> = accessibilityEvents
+): @Eager<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }
   .filter { it.className != "android.inputmethodservice.SoftInputWindow" }
