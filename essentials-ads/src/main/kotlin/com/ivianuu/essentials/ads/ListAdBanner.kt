@@ -22,14 +22,15 @@ fun interface ListAdBanner : ListDecorator
 @Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
-  showAds: MutableStateFlow<ShowAds>
+  showAdsFlow: Flow<ShowAds>
 ) = ListAdBanner decorator@ {
   if (config != null && isVertical) {
     item(null) {
       val key = catch {
         LocalKeyUiElements.current<ListAdBannerComponent>().key::class
       }.getOrNull()
-      if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) && showAds.value.value)
+      if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
+        showAdsFlow.collectAsState(ShowAds(false)).value.value)
         AdBanner(config)
     }
   }

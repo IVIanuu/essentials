@@ -25,7 +25,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
 @Provide fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
-  showAdsFlow: MutableStateFlow<ShowAds>,
+  showAdsFlow: Flow<ShowAds>,
   key: Key<*>
 ): @Scoped<KeyUiScope> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
   if (config == null) {
@@ -39,7 +39,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
   }
 
   Column {
-    val showAds by showAdsFlow.collectAsState()
+    val showAds by showAdsFlow.collectAsState(ShowAds(false))
 
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
