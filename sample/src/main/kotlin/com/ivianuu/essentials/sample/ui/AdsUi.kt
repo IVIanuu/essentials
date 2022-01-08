@@ -49,7 +49,7 @@ object AdsKey : Key<Unit>
 @Provide fun listAdBannerConfig(RP: ResourceProvider) = ListAdBannerConfig(
     id = loadResource(R.string.es_test_ad_unit_id_banner),
     size = AdSize.LARGE_BANNER
-  )
+)
 
 @Provide fun fullScreenAdId(RP: ResourceProvider) =
   FullScreenAdId(loadResource(R.string.es_test_ad_unit_id_interstitial))
