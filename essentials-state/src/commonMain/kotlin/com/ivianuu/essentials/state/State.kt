@@ -17,21 +17,11 @@
 package com.ivianuu.essentials.state
 
 import com.ivianuu.essentials.resource.*
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.common.SourceKey
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.job
-import kotlinx.coroutines.launch
-import kotlin.reflect.KProperty
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.reflect.*
 
 interface StateScope : CoroutineScope {
   fun <T> memo(vararg args: Any?, @Inject key: StateKey, init: () -> T): T
@@ -77,10 +67,9 @@ fun <S> state(
       }
     }
 
-    fun run(): S {
+    fun run(): S = synchronized(this) {
       iteration++
-
-      return block()
+      block()
         .also {
           states
             .filterValues { it.lastUsed < iteration }

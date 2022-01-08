@@ -82,5 +82,5 @@ interface PremiumVersionManager {
   }
 }
 
-@Provide fun showAdsState(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
+@Provide fun showAds(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
   premiumVersionManager.isPremiumVersion.map { ShowAds(!it) }

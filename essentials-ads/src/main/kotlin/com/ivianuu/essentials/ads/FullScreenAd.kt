@@ -122,5 +122,7 @@ class AdLoadingException(val reason: Int) : RuntimeException()
   fullScreenAd: FullScreenAd,
   showAds: Flow<ShowAds>
 ) = ScopeWorker<UiScope> {
-  showAds.collect { fullScreenAd.preload() }
+  showAds
+    .filter { it.value }
+    .collect { fullScreenAd.preload() }
 }
