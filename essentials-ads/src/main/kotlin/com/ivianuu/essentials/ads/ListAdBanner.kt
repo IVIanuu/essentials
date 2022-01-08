@@ -10,6 +10,7 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide object ListAdBannerFeature : AdFeature
 
@@ -21,7 +22,7 @@ fun interface ListAdBanner : ListDecorator
 @Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
-  showAds: State<ShowAds>
+  showAds: MutableStateFlow<ShowAds>
 ) = ListAdBanner decorator@ {
   if (config != null && isVertical) {
     item(null) {

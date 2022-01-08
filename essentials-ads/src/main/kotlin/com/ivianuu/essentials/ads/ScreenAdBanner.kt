@@ -13,6 +13,7 @@ import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
@@ -24,7 +25,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
 @Provide fun adBannerKeyUiDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
-  showAds: State<ShowAds>,
+  showAdsFlow: MutableStateFlow<ShowAds>,
   key: Key<*>
 ): @Scoped<KeyUiScope> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
   if (config == null) {
@@ -38,16 +39,18 @@ fun interface ScreenAdBanner : KeyUiDecorator
   }
 
   Column {
+    val showAds by showAdsFlow.collectAsState()
+
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (showAds.value.value) currentInsets
+        LocalInsets provides if (showAds.value) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (showAds.value.value) {
+    if (showAds.value) {
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

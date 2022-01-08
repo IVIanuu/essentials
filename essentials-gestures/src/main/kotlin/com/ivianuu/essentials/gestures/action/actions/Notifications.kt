@@ -4,25 +4,17 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.view.accessibility.AccessibilityNodeInfo
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.runtime.State
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import android.accessibilityservice.*
+import android.view.accessibility.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.getOrElse
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.injekt.Provide
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
@@ -37,10 +29,10 @@ import com.ivianuu.injekt.Provide
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  service: State<EsAccessibilityService?>
+  serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
-    val service = service.value!!
+    val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(
       "com.android.systemui", 0

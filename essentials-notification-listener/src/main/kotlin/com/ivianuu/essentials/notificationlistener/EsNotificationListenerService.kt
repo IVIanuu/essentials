@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -14,8 +13,8 @@ import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
 class EsNotificationListenerService : NotificationListenerService() {
-  private val _notifications = mutableStateListOf<StatusBarNotification>()
-  val notifications: List<StatusBarNotification> get() = _notifications
+  private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
+  val notifications: Flow<List<StatusBarNotification>> get() = _notifications
 
   private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
   val events: Flow<NotificationEvent> get() = _events
@@ -70,9 +69,8 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.clear()
-    catch { activeNotifications!!.toList() }
-      .onSuccess { _notifications.addAll(it) }
+    _notifications.value = catch { activeNotifications!!.toList() }
+      .getOrElse { emptyList() }
   }
 }
 
@@ -86,5 +84,5 @@ sealed interface NotificationEvent {
 data class EsNotificationListenerServiceComponent(
   val logger: Logger,
   val notificationElementsFactory: (Scope<NotificationScope>, EsNotificationListenerService) -> Elements<NotificationScope>,
-  val notificationServiceRef: MutableState<EsNotificationListenerService?>
+  val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
 )

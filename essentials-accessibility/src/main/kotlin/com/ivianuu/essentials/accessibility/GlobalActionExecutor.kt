@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.accessibility
 
-import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
 fun interface GlobalActionExecutor : suspend (Int) -> Boolean
 
-@Provide fun globalActionExecutor(ref: State<EsAccessibilityService?>) =
-  GlobalActionExecutor { action -> ref.value?.performGlobalAction(action) ?: false }
+@Provide fun globalActionExecutor(ref: Flow<EsAccessibilityService?>) =
+  GlobalActionExecutor { action -> ref.first()?.performGlobalAction(action) ?: false }

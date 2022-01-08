@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.accessibility
 
-import androidx.compose.runtime.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.flow.*
 
-@Provide val accessibilityServiceRef = mutableStateOf<EsAccessibilityService?>(null)
+@Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)

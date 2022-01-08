@@ -15,6 +15,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsKey }
 
@@ -22,12 +23,12 @@ object AdsKey : Key<Unit>
 
 @Provide fun adsUi(
   fullScreenAd: FullScreenAd,
-  showAds: MutableState<ShowAds>
+  showAds: MutableStateFlow<ShowAds>
 ) = KeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
-        value = showAds.value.value,
+        value = showAds.collectAsState().value.value,
         onValueChange = { showAds.value = ShowAds(it) },
         title = { Text("Show ads") }
       )
@@ -57,4 +58,4 @@ object AdsKey : Key<Unit>
 @Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
   get() = ScreenLaunchFullscreenAdConfig(4)
 
-@Provide val showAdsState = mutableStateOf(ShowAds(false))
+@Provide val showAds = MutableStateFlow(ShowAds(false))

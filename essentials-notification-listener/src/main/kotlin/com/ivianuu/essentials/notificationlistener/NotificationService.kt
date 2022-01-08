@@ -6,13 +6,12 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.*
 import android.service.notification.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 interface NotificationService {
-  val notifications: List<StatusBarNotification>
+  val notifications: Flow<List<StatusBarNotification>>
 
   val events: Flow<NotificationEvent>
 
@@ -24,13 +23,14 @@ interface NotificationService {
 }
 
 @Provide class NotificationServiceImpl(
-  private val ref: State<EsNotificationListenerService?>
+  private val ref: Flow<EsNotificationListenerService?>
 ) : NotificationService {
-  override val notifications: List<StatusBarNotification>
-    get() = ref.value?.notifications ?: emptyList()
+  override val notifications: Flow<List<StatusBarNotification>>
+    get() = ref
+      .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
   override val events: Flow<NotificationEvent>
-    get() = snapshotFlow { ref.value }
+    get() = ref
       .flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) {
@@ -38,10 +38,10 @@ interface NotificationService {
   }
 
   override suspend fun dismissNotification(key: String) {
-    catch { ref.value!!.cancelNotification(key) }
+    catch { ref.first()!!.cancelNotification(key) }
   }
 
   override suspend fun dismissAllNotifications() {
-    catch { ref.value!!.cancelAllNotifications() }
+    catch { ref.first()!!.cancelAllNotifications() }
   }
 }

@@ -7,7 +7,6 @@ package com.ivianuu.essentials.accessibility
 import android.accessibilityservice.*
 import android.content.*
 import android.view.accessibility.AccessibilityEvent
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
@@ -87,7 +86,7 @@ data class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
   val accessibilityComponentFactory: (Scope<AccessibilityScope>, EsAccessibilityService) -> AccessibilityComponent,
   val logger: Logger,
-  val accessibilityServiceRef: MutableState<EsAccessibilityService?>
+  val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
 )
 
 @Provide data class AccessibilityComponent(
