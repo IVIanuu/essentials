@@ -17,17 +17,6 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-@Tag annotation class PremiumVersionSkuTag
-typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
-
-@Tag annotation class OldPremiumVersionSkuTag {
-  companion object {
-    @Provide val defaultOldPermissionVersionSkus: List<OldPremiumVersionSku>
-      get() = emptyList()
-  }
-}
-typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
-
 interface PremiumVersionManager {
   val premiumSkuDetails: Flow<SkuDetails>
 
@@ -81,6 +70,17 @@ interface PremiumVersionManager {
     return null
   }
 }
+
+@Tag annotation class PremiumVersionSkuTag
+typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
+
+@Tag annotation class OldPremiumVersionSkuTag {
+  companion object {
+    @Provide val defaultOldPermissionVersionSkus: List<OldPremiumVersionSku>
+      get() = emptyList()
+  }
+}
+typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 @Provide fun showAds(
   premiumVersionManager: PremiumVersionManager,
