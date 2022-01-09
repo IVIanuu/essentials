@@ -22,7 +22,7 @@ fun interface ListAdBanner : ListDecorator
 @Provide fun adBannerListDecorator(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null,
-  showAdsFlow: Flow<ShowAds>
+  showAdsFlow: StateFlow<ShowAds>
 ) = ListAdBanner decorator@ {
   if (config != null && isVertical) {
     item(null) {
@@ -30,7 +30,7 @@ fun interface ListAdBanner : ListDecorator
         LocalKeyUiElements.current<ListAdBannerComponent>().key::class
       }.getOrNull()
       if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
-        showAdsFlow.collectAsState(ShowAds(false)).value.value)
+        showAdsFlow.collectAsState().value.value)
         AdBanner(config)
     }
   }
