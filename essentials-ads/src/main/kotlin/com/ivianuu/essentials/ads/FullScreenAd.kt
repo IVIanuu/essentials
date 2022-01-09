@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ads
 import com.google.android.gms.ads.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
@@ -46,7 +45,7 @@ interface FullScreenAd {
   override suspend fun isLoaded() = getCurrentAd() != null
 
   override fun preload() {
-    launch { load() }
+    scope.launch { load() }
   }
 
   override suspend fun load(): Boolean {

@@ -18,6 +18,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
 
@@ -27,7 +28,7 @@ object ActionsKey : Key<Unit>
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  S: NamedCoroutineScope<UiScope>,
+  scope: NamedCoroutineScope<UiScope>,
   T: Toaster
 ) = KeyUi<ActionsKey> {
   Scaffold(
@@ -36,7 +37,7 @@ object ActionsKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        launch {
+        scope.launch {
           val actionId = navigator.push(ActionPickerKey())
             ?.let { it as? ActionPickerKey.Result.Action }
             ?.actionId ?: return@launch

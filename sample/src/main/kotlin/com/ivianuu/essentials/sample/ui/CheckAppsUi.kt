@@ -8,12 +8,12 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.apps.ui.*
 import com.ivianuu.essentials.apps.ui.checkableapps.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.db.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 
@@ -25,7 +25,7 @@ object CheckAppsKey : Key<Unit>
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate,
-  S: NamedCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
@@ -33,7 +33,7 @@ object CheckAppsKey : Key<Unit>
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
-          launch {
+          scope.launch {
             db.transaction {
               db.deleteAll<CheckedAppEntity>()
               db.insertAll(

@@ -30,7 +30,7 @@ object PrefsKey : Key<Unit>
 @Provide fun prefsUi(
   prefStore: DataStore<SamplePrefs>,
   navigator: Navigator,
-  S: NamedCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<PrefsKey> {
   val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
@@ -38,7 +38,7 @@ object PrefsKey : Key<Unit>
       SwitchListItem(
         value = prefs.switch,
         onValueChange = {
-          launch {
+          scope.launch {
             prefStore.updateData { copy(switch = it) }
           }
         },
@@ -53,7 +53,7 @@ object PrefsKey : Key<Unit>
       RadioButtonListItem(
         value = prefs.radioButton,
         onValueChange = {
-          launch {
+          scope.launch {
             prefStore.updateData { copy(radioButton = it) }
           }
         },
@@ -67,7 +67,7 @@ object PrefsKey : Key<Unit>
       IntSliderListItem(
         value = prefs.slider,
         onValueChange = {
-          launch {
+          scope.launch {
             prefStore.updateData { copy(slider = it) }
           }
         },
@@ -83,7 +83,7 @@ object PrefsKey : Key<Unit>
       FloatSliderListItem(
         value = prefs.steppedSlider,
         onValueChange = {
-          launch {
+          scope.launch {
             prefStore.updateData { copy(steppedSlider = it) }
           }
         },
@@ -105,7 +105,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
+            scope.launch {
               val newTextInput = navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
@@ -129,7 +129,7 @@ object PrefsKey : Key<Unit>
       ColorListItem(
         value = Color(prefs.color),
         onValueChangeRequest = {
-          launch {
+          scope.launch {
             val newColor = navigator.push(
               ColorPickerKey(
                 initialColor = Color(prefs.color),
@@ -151,7 +151,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
+            scope.launch {
               val newItems = navigator.push(
                 MultiChoiceListKey(
                   items = listOf(
@@ -178,7 +178,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
+            scope.launch {
               val newItem = navigator.push(
                 SingleChoiceListKey(
                   items = listOf(

@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.*
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
@@ -36,8 +36,8 @@ object AppTrackerKey : Key<Unit>
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
+  scope: NamedCoroutineScope<KeyUiScope>,
   N: NotificationFactory,
-  S: NamedCoroutineScope<KeyUiScope>,
   T: ToastContext
 ) = KeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
@@ -48,7 +48,7 @@ object AppTrackerKey : Key<Unit>
         24,
         currentApp
           .map { AppTrackerNotification(it) }
-          .stateIn(S, SharingStarted.Eagerly, AppTrackerNotification(null))
+          .stateIn(scope, SharingStarted.Eagerly, AppTrackerNotification(null))
       )
     }
 
@@ -58,7 +58,7 @@ object AppTrackerKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        launch {
+        scope.launch {
           if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
             isEnabled = !isEnabled
           }

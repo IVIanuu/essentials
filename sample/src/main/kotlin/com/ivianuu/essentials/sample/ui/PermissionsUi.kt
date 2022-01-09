@@ -36,6 +36,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlin.reflect.*
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
@@ -44,7 +45,7 @@ object PermissionsKey : Key<Unit>
 
 @Provide fun permissionUi(
   permissionRequester: PermissionRequester,
-  S: NamedCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<PermissionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
@@ -52,7 +53,7 @@ object PermissionsKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        launch {
+        scope.launch {
           permissionRequester(
             listOf(
               typeKeyOf<SampleCameraPermission>(),

@@ -9,7 +9,6 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
@@ -28,7 +27,7 @@ fun interface NavigationStateContent : @Composable (Modifier) -> Unit
   navigator: Navigator,
   keyUiElementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
   rootKey: RootKey? = null,
-  S: NamedCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
   val backStack by navigator.backStack.collectAsState()
 
@@ -43,7 +42,7 @@ fun interface NavigationStateContent : @Composable (Modifier) -> Unit
 
   if (backStack.size > 1)
     BackHandler {
-      launch {
+      scope.launch {
         navigator.popTop()
       }
     }

@@ -29,7 +29,7 @@ object UnlockKey : Key<Unit>
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  S: NamedCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyUiScope>,
   T: ToastContext
 ) = KeyUi<UnlockKey> {
   Scaffold(
@@ -42,7 +42,7 @@ object UnlockKey : Key<Unit>
     ) {
       Button(
         onClick = {
-          launch {
+          scope.launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(3000)
@@ -56,7 +56,7 @@ object UnlockKey : Key<Unit>
 
       Button(
         onClick = {
-          launch {
+          scope.launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(3000)

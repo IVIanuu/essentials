@@ -4,27 +4,17 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.catchT
-import com.ivianuu.essentials.coroutines.launch
-import com.ivianuu.essentials.err
-import com.ivianuu.essentials.ok
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
+import android.content.*
+import androidx.activity.*
+import androidx.activity.result.*
+import androidx.activity.result.contract.*
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.reflect.KClass
+import kotlinx.coroutines.*
+import java.util.*
+import kotlin.coroutines.*
+import kotlin.reflect.*
 
 interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
@@ -47,7 +37,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler false
   val intent = intentFactory(key)
-  launch {
+  scope.launch {
     val activity = appUiStarter()
     withContext(context) {
       val result =

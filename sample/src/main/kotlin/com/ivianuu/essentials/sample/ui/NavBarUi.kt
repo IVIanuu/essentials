@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.hidenavbar.*
 import com.ivianuu.essentials.permission.*
@@ -22,6 +21,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
@@ -33,7 +33,7 @@ object NavBarKey : Key<Unit>
   navBarPref: DataStore<NavBarPrefs>,
   permissionState: Flow<PermissionState<NavBarPermission>>,
   permissionRequester: PermissionRequester,
-  S: NamedCoroutineScope<KeyUiScope>
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -47,7 +47,7 @@ object NavBarKey : Key<Unit>
       // reshow nav bar when leaving the screen
       DisposableEffect(true) {
         onDispose {
-          launch {
+          scope.launch {
             navBarPref.updateData {
               copy(hideNavBar = false)
             }
@@ -82,13 +82,13 @@ object NavBarKey : Key<Unit>
       Button(
         onClick = {
           if (hasPermission) {
-            launch {
+            scope.launch {
               navBarPref.updateData {
                 copy(hideNavBar = !hideNavBar)
               }
             }
           } else {
-            launch {
+            scope.launch {
               permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
@@ -107,7 +107,7 @@ object NavBarKey : Key<Unit>
 
       Button(
         onClick = {
-          launch {
+          scope.launch {
             navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
           }
         }

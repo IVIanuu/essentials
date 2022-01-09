@@ -34,7 +34,7 @@ interface Torch {
   private val foregroundManager: ForegroundManager,
   private val mainContext: MainContext,
   private val notificationFactory: NotificationFactory,
-  private val S: NamedCoroutineScope<AppScope>,
+  private val scope: NamedCoroutineScope<AppScope>,
   private val L: Logger,
   private val T: ToastContext
 ) : Torch {
@@ -48,7 +48,7 @@ interface Torch {
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
-      torchJob = launch { handleTorchState(value) }
+      torchJob = scope.launch { handleTorchState(value) }
     }
   }
 
