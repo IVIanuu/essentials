@@ -39,7 +39,8 @@ class ForegroundService : Service() {
         block = {
           component.foregroundManager.states
             .flatMapLatest { states ->
-              combine(
+              if (states.isEmpty()) flowOf(emptyList())
+              else combine(
                 states
                   .map { it.notification }
               ) { states }

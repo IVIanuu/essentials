@@ -40,7 +40,7 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
         ForegroundState(id, notification)
           .also {
             states.value = states.value + it
-            log { "start foreground $id $states" }
+            log { "start foreground $id ${states.value}" }
           }
       }
     },
@@ -59,7 +59,7 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
 
       lock.withLock {
         states.value = states.value - state
-        log { "stop foreground ${state.id} $states" }
+        log { "stop foreground ${state.id} ${states.value}" }
       }
     }
   )
