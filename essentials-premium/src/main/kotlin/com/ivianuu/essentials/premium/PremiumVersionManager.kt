@@ -82,5 +82,9 @@ interface PremiumVersionManager {
   }
 }
 
-@Provide fun showAds(premiumVersionManager: PremiumVersionManager): Flow<ShowAds> =
-  premiumVersionManager.isPremiumVersion.map { ShowAds(!it) }
+@Provide fun showAds(
+  premiumVersionManager: PremiumVersionManager,
+  scope: NamedCoroutineScope<AppScope>
+): StateFlow<ShowAds> = premiumVersionManager.isPremiumVersion
+  .map { ShowAds(!it) }
+  .stateIn(scope, SharingStarted.Eagerly, ShowAds(false))
