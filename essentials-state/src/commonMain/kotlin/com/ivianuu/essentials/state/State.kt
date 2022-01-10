@@ -21,7 +21,7 @@ fun <S> state(
   @Inject scope: CoroutineScope,
   block: StateScope.() -> S
 ): StateFlow<S> {
-  val refreshes = MutableSharedFlow<Unit>()
+  val invalidations = MutableSharedFlow<Unit>(extraBufferCapacity = Int.MAX_VALUE)
 
   val stateScope = object : StateScope, CoroutineScope by scope {
     private val states = mutableMapOf<Any, MemoizedState>()
@@ -51,7 +51,7 @@ fun <S> state(
 
     override fun invalidate() {
       launch {
-        refreshes.emit(Unit)
+        invalidations.emit(Unit)
       }
     }
 
@@ -66,7 +66,7 @@ fun <S> state(
     }
   }
 
-  return refreshes
+  return invalidations
     .map { stateScope.run() }
     .stateIn(scope, SharingStarted.Eagerly, stateScope.run())
 }
@@ -75,9 +75,9 @@ fun <T> memo(vararg args: Any?, @Inject key: StateKey, scope: StateScope, init: 
   scope.memo(*args, init = init)
 
 fun memoLaunch(vararg args: Any?, @Inject key: StateKey, scope: StateScope, block: suspend CoroutineScope.() -> Unit) {
-  val scope = memoScope(*args)
-  memo(scope) {
-    scope.launch(block = block)
+  val coroutineScope = memoScope(*args)
+  memo(coroutineScope) {
+    coroutineScope.launch(block = block)
   }
 }
 
