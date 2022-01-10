@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.ui.util
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.*
 
 actual fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
   if (includeAlpha) "00000000" else "000000"
@@ -24,10 +23,10 @@ actual fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
 
 actual fun String.toColor(): Color {
   val finalColorString = if (startsWith("#")) this else "#$this"
-  var color: Long = finalColorString.substring(1).toLong(16)
-  if (length == 7) {
+  var color = finalColorString.substring(1).toLong(16)
+  if (finalColorString.length == 7) {
     // Set the alpha value
     color = color or -0x1000000
-  } else require(length == 9) { "Unknown color" }
+  } else require(finalColorString.length == 9) { "Unknown color" }
   return Color(color.toInt())
 }
