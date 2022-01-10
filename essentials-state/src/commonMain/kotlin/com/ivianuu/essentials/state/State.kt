@@ -8,6 +8,7 @@ import com.ivianuu.essentials.resource.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
@@ -21,7 +22,7 @@ fun <S> state(
   @Inject scope: CoroutineScope,
   block: StateScope.() -> S
 ): StateFlow<S> {
-  val invalidations = MutableSharedFlow<Unit>(extraBufferCapacity = Int.MAX_VALUE)
+  val invalidations = Channel<Unit>(capacity = Channel.UNLIMITED)
 
   val stateScope = object : StateScope, CoroutineScope by scope {
     private val states = mutableMapOf<Any, MemoizedState>()
@@ -51,7 +52,7 @@ fun <S> state(
 
     override fun invalidate() {
       launch {
-        invalidations.emit(Unit)
+        invalidations.send(Unit)
       }
     }
 
@@ -67,6 +68,7 @@ fun <S> state(
   }
 
   return invalidations
+    .receiveAsFlow()
     .map { stateScope.run() }
     .stateIn(scope, SharingStarted.Eagerly, stateScope.run())
 }
