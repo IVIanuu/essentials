@@ -63,18 +63,12 @@ object NavBarKey : Key<Unit>
       ) {
         Text(
           text = if (hasPermission) {
-            if (navBarPrefs.hideNavBar) {
-              "Nav bar hidden"
-            } else {
-              if (forceNavBarVisible.value) {
-                "Nav bar forced shown"
-              } else {
-                "Nav bar shown"
-              }
+            when {
+              sampleForceNavBarVisibleState.collectAsState().value.value -> "Nav bar forced shown"
+              navBarPrefs.hideNavBar -> "Nav bar hidden"
+              else -> "Nav bar shown"
             }
-          } else {
-            "Unknown nav bar state"
-          },
+          } else "Unknown nav bar state",
           style = MaterialTheme.typography.h3
         )
       }
@@ -100,7 +94,10 @@ object NavBarKey : Key<Unit>
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = { forceNavBarVisible = ForceNavBarVisibleState(!forceNavBarVisible.value) }
+        onClick = {
+          sampleForceNavBarVisibleState.value =
+            ForceNavBarVisibleState(!sampleForceNavBarVisibleState.value.value)
+        }
       ) { Text("Toggle force nav bar") }
 
       Spacer(Modifier.height(8.dp))
@@ -116,8 +113,5 @@ object NavBarKey : Key<Unit>
   }
 }
 
-private var forceNavBarVisible by mutableStateOf(ForceNavBarVisibleState(false))
-
-@Provide val sampleForceNavBarVisibleState: @Composable () -> ForceNavBarVisibleState = {
-  forceNavBarVisible
-}
+@Provide val sampleForceNavBarVisibleState =
+  MutableStateFlow(ForceNavBarVisibleState(false))

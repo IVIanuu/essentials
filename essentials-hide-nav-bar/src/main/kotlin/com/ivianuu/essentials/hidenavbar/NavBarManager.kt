@@ -36,6 +36,8 @@ import kotlinx.coroutines.flow.*
         forceNavBarVisibleState
           .flatMapLatest { forceVisible ->
             pref.data
+              // we wanna ignore changes to the wasNavBarHidden state
+              .distinctUntilChangedBy { it.copy(wasNavBarHidden = false) }
               .map {
                 if (!forceVisible.value) it
                 else it.copy(hideNavBar = false)
