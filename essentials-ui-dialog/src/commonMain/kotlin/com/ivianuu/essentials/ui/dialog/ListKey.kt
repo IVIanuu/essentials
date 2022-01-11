@@ -9,17 +9,15 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class ListKey<T : Any>(
   val items: List<Item<T>>,
   val title: String? = null
-) : DialogKey<T> {
+) : PopupKey<T> {
   data class Item<T>(val value: T, val title: String)
 }
 

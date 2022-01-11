@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ads
 
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -17,7 +16,7 @@ interface AdFeature
 @Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
   AdFeatures(allFeatures)
 
-@Provide fun <K : DialogKey<*>> defaultDialogAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
+@Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
 @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
   keyClass: KClass<K>,

@@ -9,8 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
@@ -18,7 +17,7 @@ data class SingleChoiceListKey<T : Any>(
   val items: List<Item<T>>,
   val selectedItem: T,
   val title: String? = null
-) : DialogKey<T> {
+) : PopupKey<T> {
   data class Item<T : Any>(val value: T, val title: String)
 }
 

@@ -26,7 +26,7 @@ data class PopupKey(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : Key<Unit>
+) : com.ivianuu.essentials.ui.navigation.PopupKey<Unit>
 
 @Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey> {
   var previousConstraints by remember { refOf<Constraints?>(null) }

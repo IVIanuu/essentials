@@ -269,7 +269,7 @@ object DialogsKey : Key<Unit>
 data class DialogLauncherKey(
   val dismissible: Boolean = true,
   val dialog: @Composable () -> Unit
-) : DialogKey<Unit>
+) : PopupKey<Unit>
 
 @Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }

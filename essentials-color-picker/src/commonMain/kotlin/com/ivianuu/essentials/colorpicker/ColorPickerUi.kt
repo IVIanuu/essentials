@@ -18,7 +18,7 @@ data class ColorPickerKey(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : DialogKey<Color>
+) : PopupKey<Color>
 
 @Provide fun colorPickerUi(
   key: ColorPickerKey,

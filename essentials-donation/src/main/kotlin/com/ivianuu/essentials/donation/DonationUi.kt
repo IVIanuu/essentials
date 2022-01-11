@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 
-object DonationKey : DialogKey<Unit>
+object DonationKey : PopupKey<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 

@@ -4,6 +4,15 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.injekt.*
+
 interface Key<T>
 
 interface RootKey : Key<Unit>
+
+interface PopupKey<T> : Key<T>
+
+@Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> {
+  KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
+}

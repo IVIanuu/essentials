@@ -12,8 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
@@ -21,7 +20,7 @@ data class MultiChoiceListKey<T : Any>(
   val items: List<Item<T>>,
   val selectedItems: Set<T>,
   val title: String? = null
-) : DialogKey<Set<T>> {
+) : PopupKey<Set<T>> {
   data class Item<T>(val value: T, val title: String)
 }
 

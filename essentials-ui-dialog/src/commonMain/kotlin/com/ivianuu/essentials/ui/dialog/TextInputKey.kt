@@ -13,8 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
@@ -24,7 +23,7 @@ data class TextInputKey(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : DialogKey<String>
+) : PopupKey<String>
 
 @Provide fun textInputUi(
   key: TextInputKey,

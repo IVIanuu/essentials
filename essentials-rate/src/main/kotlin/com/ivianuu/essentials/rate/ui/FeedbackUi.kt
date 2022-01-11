@@ -13,7 +13,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-object FeedbackKey : DialogKey<Unit>
+object FeedbackKey : PopupKey<Unit>
 
 @Provide val feedbackUi = ModelKeyUi<FeedbackKey, FeedbackModel> {
   DialogScaffold(dismissible = false) {

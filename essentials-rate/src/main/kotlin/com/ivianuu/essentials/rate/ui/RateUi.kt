@@ -27,7 +27,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 
-object RateKey : DialogKey<Unit>
+object RateKey : PopupKey<Unit>
 
 @Provide val rateUi = ModelKeyUi<RateKey, RateModel> {
   DialogScaffold(dismissible = false) {
