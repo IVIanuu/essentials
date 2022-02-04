@@ -4,31 +4,23 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
-import android.os.Handler
-import android.os.Looper
-import android.provider.MediaStore
-import com.ivianuu.essentials.ResourceProvider
+import android.content.*
+import android.content.pm.*
+import android.hardware.camera2.*
+import android.os.*
+import android.provider.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.recentapps.*
+import com.ivianuu.essentials.screenstate.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.coroutines.*
 
 @Provide object CameraActionId : ActionId("camera")
 
@@ -49,6 +41,7 @@ import kotlin.coroutines.resume
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
+  screenState: Flow<ScreenState>,
   L: Logger
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
@@ -68,6 +61,7 @@ import kotlin.coroutines.resume
     }
 
   val frontFacing = if (frontCamera != null &&
+    screenState.first() != ScreenState.OFF &&
     cameraApp.activityInfo!!.packageName == currentApp.first()?.value)
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
@@ -75,14 +69,14 @@ import kotlin.coroutines.resume
             super.onCameraAvailable(cameraId)
             cameraManager.unregisterAvailabilityCallback(this)
             if (cameraId == frontCamera)
-              cont.resume(true)
+              catch { cont.resume(true) }
           }
 
           override fun onCameraUnavailable(cameraId: String) {
             super.onCameraUnavailable(cameraId)
             cameraManager.unregisterAvailabilityCallback(this)
             if (cameraId == frontCamera)
-              cont.resume(false)
+              catch { cont.resume(false) }
           }
         }, Handler(Looper.getMainLooper()))
       }
