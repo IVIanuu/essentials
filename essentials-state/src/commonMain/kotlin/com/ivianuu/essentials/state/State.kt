@@ -24,11 +24,14 @@ fun <S> state(
   @Inject scope: CoroutineScope,
   block: StateScope.() -> S
 ): StateFlow<S> {
+  val invalidations = Channel<Unit>(capacity = Channel.UNLIMITED)
+  val invalidationsFlow = MutableSharedFlow<Unit>(extraBufferCapacity = Channel.UNLIMITED)
+
   val stateScope = object : StateScope, CoroutineScope by scope {
     private val states = mutableMapOf<Any, MemoizedState>()
     private var iteration = 0
 
-    override val invalidations = MutableSharedFlow<Unit>(extraBufferCapacity = Channel.UNLIMITED)
+    override val invalidations = invalidationsFlow
 
     override fun <T> memo(vararg args: Any?, @Inject key: StateKey, init: () -> T): T {
       val state = states[key]
@@ -54,7 +57,7 @@ fun <S> state(
 
     override fun invalidate() {
       launch {
-        invalidations.emit(Unit)
+        invalidations.send(Unit)
       }
     }
 
@@ -69,9 +72,17 @@ fun <S> state(
     }
   }
 
-  return stateScope.invalidations
-    .map { stateScope.run() }
-    .stateIn(scope, SharingStarted.Eagerly, stateScope.run())
+  fun run(): S = stateScope.run()
+    .also {
+      stateScope.launch {
+        invalidationsFlow.emit(Unit)
+      }
+    }
+
+  return invalidations
+    .receiveAsFlow()
+    .map { run() }
+    .stateIn(scope, SharingStarted.Eagerly, run())
 }
 
 fun <T> invalidationFlow(@Inject scope: StateScope, block: (@Inject StateScope) -> T): Flow<T> =
