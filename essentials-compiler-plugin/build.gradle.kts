@@ -15,7 +15,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/ja
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-compiler-args.gradle")
 
 val shadowJar = tasks.getByName<ShadowJar>("shadowJar") {
-  configurations = listOf(project.configurations.getByName("compileOnly"))
   relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
   dependencies {
     exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
@@ -33,9 +32,8 @@ artifacts {
 }
 
 dependencies {
-  api(Deps.KotlinSerialization.json)
-  api(Deps.Kotlin.compilerEmbeddable)
-  api(Deps.Injekt.compilerPlugin)
+  compileOnly(Deps.Kotlin.compilerEmbeddable)
+  compileOnly(Deps.Injekt.compilerPlugin)
   implementation(Deps.autoService)
   kapt(Deps.autoService)
   testImplementation(Deps.compileTesting)

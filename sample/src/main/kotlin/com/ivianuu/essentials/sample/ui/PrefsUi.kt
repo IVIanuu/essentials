@@ -11,10 +11,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.colorpicker.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
@@ -28,18 +28,18 @@ import kotlinx.serialization.*
 object PrefsKey : Key<Unit>
 
 @Provide fun prefsUi(
-  prefStore: DataStore<SamplePrefs>,
+  pref: DataStore<SamplePrefs>,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
 ) = KeyUi<PrefsKey> {
-  val prefs by prefStore.data.collectAsState(remember { SamplePrefs() })
+  val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
     item {
       SwitchListItem(
         value = prefs.switch,
         onValueChange = {
           scope.launch {
-            prefStore.updateData { copy(switch = it) }
+            pref.updateData { copy(switch = it) }
           }
         },
         leading = { IconPlaceholder() },
@@ -54,7 +54,7 @@ object PrefsKey : Key<Unit>
         value = prefs.radioButton,
         onValueChange = {
           scope.launch {
-            prefStore.updateData { copy(radioButton = it) }
+            pref.updateData { copy(radioButton = it) }
           }
         },
         modifier = Modifier.interactive(prefs.switch),
@@ -68,7 +68,7 @@ object PrefsKey : Key<Unit>
         value = prefs.slider,
         onValueChange = {
           scope.launch {
-            prefStore.updateData { copy(slider = it) }
+            pref.updateData { copy(slider = it) }
           }
         },
         modifier = Modifier.interactive(prefs.switch),
@@ -84,7 +84,7 @@ object PrefsKey : Key<Unit>
         value = prefs.steppedSlider,
         onValueChange = {
           scope.launch {
-            prefStore.updateData { copy(steppedSlider = it) }
+            pref.updateData { copy(steppedSlider = it) }
           }
         },
         modifier = Modifier.interactive(prefs.switch),
@@ -115,7 +115,7 @@ object PrefsKey : Key<Unit>
                 )
               ) ?: return@launch
               launch {
-                prefStore.updateData { copy(textInput = newTextInput) }
+                pref.updateData { copy(textInput = newTextInput) }
               }
             }
           }
@@ -137,7 +137,7 @@ object PrefsKey : Key<Unit>
               )
             ) ?: return@launch
             launch {
-              prefStore.updateData { copy(color = newColor.toArgb()) }
+              pref.updateData { copy(color = newColor.toArgb()) }
             }
           }
         },
@@ -164,7 +164,7 @@ object PrefsKey : Key<Unit>
                 )
               ) ?: return@launch
               launch {
-                prefStore.updateData { copy(multiChoice = newItems) }
+                pref.updateData { copy(multiChoice = newItems) }
               }
             }
           }
@@ -191,7 +191,7 @@ object PrefsKey : Key<Unit>
                 )
               ) ?: return@launch
               launch {
-                prefStore.updateData { copy(singleChoice = newItem) }
+                pref.updateData { copy(singleChoice = newItem) }
               }
             }
           }
