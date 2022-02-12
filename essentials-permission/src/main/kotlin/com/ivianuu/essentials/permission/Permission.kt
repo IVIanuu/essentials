@@ -25,7 +25,7 @@ interface Permission {
   @Composable fun Icon()
 }
 
-@Provide class PermissionModule<@com.ivianuu.injekt.Spread T : Permission> {
+@Provide class PermissionModule<@Spread T : Permission> {
   @Provide fun permissionSetElement(
     permissionKey: TypeKey<T>,
     permission: T

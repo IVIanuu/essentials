@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
@@ -29,7 +28,7 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 @Provide
-class TileModuleElementModule<@com.ivianuu.injekt.Spread T : TileModel<S>, S : AbstractFunTileService<*>> {
+class TileModuleElementModule<@Spread T : TileModel<S>, S : AbstractFunTileService<*>> {
   @Provide fun element(
     serviceClass: KClass<S>,
     provider: (StateScope) -> T
