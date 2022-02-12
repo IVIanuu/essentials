@@ -72,6 +72,10 @@ class EsNotificationListenerService : NotificationListenerService() {
     _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
+
+  companion object {
+    @Provide val notificationListenerRef = MutableStateFlow<EsNotificationListenerService?>(null)
+  }
 }
 
 sealed interface NotificationEvent {

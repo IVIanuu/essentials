@@ -10,18 +10,18 @@ import com.ivianuu.injekt.common.*
 
 fun interface ScopeInitializer<N> : () -> Unit
 
-@Provide fun <@Spread T : ScopeInitializer<N>, N> scopeInitializerElement(
-  initializer: T,
-  key: TypeKey<T>,
-  loadingOrder: LoadingOrder<T> = LoadingOrder()
-): ScopeInitializerElement<N> = ScopeInitializerElement(key, initializer, loadingOrder)
-
 data class ScopeInitializerElement<N>(
   val key: TypeKey<*>,
   val initializer: ScopeInitializer<*>,
   val loadingOrder: LoadingOrder<out ScopeInitializer<*>>
 ) {
   companion object {
+    @Provide fun <@Spread T : ScopeInitializer<N>, N> scopeInitializerElement(
+      initializer: T,
+      key: TypeKey<T>,
+      loadingOrder: LoadingOrder<T> = LoadingOrder()
+    ): ScopeInitializerElement<N> = ScopeInitializerElement(key, initializer, loadingOrder)
+
     @Provide val descriptor = object : LoadingOrder.Descriptor<ScopeInitializerElement<*>> {
       override fun key(item: ScopeInitializerElement<*>) = item.key
 

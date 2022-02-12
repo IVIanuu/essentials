@@ -11,9 +11,11 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-fun interface ScopeWorker<N> : suspend () -> Unit
-
-@Provide fun <N> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
+fun interface ScopeWorker<N> : suspend () -> Unit {
+  companion object {
+    @Provide fun <N> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
+  }
+}
 
 fun interface ScopeWorkerRunner<N> : () -> Unit
 

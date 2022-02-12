@@ -79,6 +79,10 @@ class EsAccessibilityService : AccessibilityService() {
     serviceComponent.accessibilityServiceRef.value = null
     return super.onUnbind(intent)
   }
+
+  companion object {
+    @Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)
+  }
 }
 
 @Provide @Element<AppScope>
