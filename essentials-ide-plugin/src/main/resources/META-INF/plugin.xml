@@ -19,8 +19,9 @@
     <depends>com.intellij.java</depends>
     <depends>org.jetbrains.kotlin</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationInitializedListener implementation="com.ivianuu.essentials.ide.AppInitializer" />
-    </extensions>
+    <applicationListeners>
+        <listener class="com.ivianuu.essentials.ide.EssentialsProjectInitializer"
+            topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
 
 </idea-plugin>
