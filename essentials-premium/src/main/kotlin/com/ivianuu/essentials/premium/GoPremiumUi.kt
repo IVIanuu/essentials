@@ -22,6 +22,7 @@ import com.ivianuu.essentials.ads.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.backpress.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
@@ -36,13 +37,19 @@ data class AppFeature(
   val inBasic: Boolean
 )
 
-data class GoPremiumKey(val showTryBasicOption: Boolean) : Key<Boolean> {
+data class GoPremiumKey(
+  val showTryBasicOption: Boolean,
+  val allowBackNavigation: Boolean = true
+) : Key<Boolean> {
   companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
   }
 }
 
 @Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
+  if (!model.allowBackNavigation)
+    BackHandler {  }
+
   Surface {
     InsetsPadding {
       Column(
@@ -238,6 +245,7 @@ data class GoPremiumModel(
   val features: List<AppFeature>,
   val premiumSkuDetails: Resource<SkuDetails>,
   val showTryBasicOption: Boolean,
+  val allowBackNavigation: Boolean,
   val goPremium: () -> Unit,
   val tryBasicVersion: () -> Unit
 )
@@ -251,6 +259,7 @@ data class GoPremiumModel(
   features = features,
   premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
   showTryBasicOption = ctx.key.showTryBasicOption,
+  allowBackNavigation = ctx.key.allowBackNavigation,
   goPremium = action {
     if (premiumVersionManager.purchasePremiumVersion())
       ctx.navigator.pop(ctx.key, true)
