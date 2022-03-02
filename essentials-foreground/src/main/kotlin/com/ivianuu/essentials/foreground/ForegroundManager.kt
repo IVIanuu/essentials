@@ -53,7 +53,7 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
       awaitCancellation()
     },
     release = { state, _ ->
-      // we ensure that the foreground se#rvice has seen this foreground request
+      // we ensure that the foreground service has seen this foreground request
       // to prevent a crash in the android system
       state.seen.await()
 
