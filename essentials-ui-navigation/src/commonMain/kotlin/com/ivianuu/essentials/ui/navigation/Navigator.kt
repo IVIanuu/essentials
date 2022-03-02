@@ -18,7 +18,7 @@ interface Navigator {
 
   val results: Flow<Pair<Key<*>, Any?>>
 
-  suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>)
+  suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?> = emptyMap())
 }
 
 suspend fun <R> Navigator.awaitResult(key: Key<R>): R? = results
@@ -26,17 +26,17 @@ suspend fun <R> Navigator.awaitResult(key: Key<R>): R? = results
   ?.second as? R
 
 suspend fun <R> Navigator.setRoot(key: Key<R>): R? {
-  setBackStack(listOf(key), emptyMap())
+  setBackStack(listOf(key))
   return awaitResult(key)
 }
 
 suspend fun <R> Navigator.push(key: Key<R>): R? {
-  setBackStack(backStack.value + key, emptyMap())
+  setBackStack(backStack.value + key)
   return awaitResult(key)
 }
 
 suspend fun <R> Navigator.replaceTop(key: Key<R>): R? {
-  setBackStack(backStack.value.dropLast(1) + key, emptyMap())
+  setBackStack(backStack.value.dropLast(1) + key)
   return awaitResult(key)
 }
 
@@ -47,12 +47,12 @@ suspend fun <R> Navigator.pop(key: Key<R>, result: R? = null) {
 suspend fun Navigator.popTop(): Boolean {
   val currentBackStack = backStack.value
   if (currentBackStack.isNotEmpty())
-    setBackStack(currentBackStack.dropLast(1), emptyMap())
+    setBackStack(currentBackStack.dropLast(1))
   return currentBackStack.isNotEmpty()
 }
 
 suspend fun Navigator.clear() {
-  setBackStack(emptyList(), emptyMap())
+  setBackStack(emptyList())
 }
 
 @Provide @Scoped<AppScope> class NavigatorImpl(
