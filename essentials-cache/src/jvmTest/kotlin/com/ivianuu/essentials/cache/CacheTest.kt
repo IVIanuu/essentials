@@ -4,15 +4,13 @@
 
 package com.ivianuu.essentials.cache
 
-import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.coroutines.par
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.time.seconds
 import io.kotest.assertions.throwables.*
 import io.kotest.matchers.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.launch
 import org.junit.*
 
 class CacheTest {

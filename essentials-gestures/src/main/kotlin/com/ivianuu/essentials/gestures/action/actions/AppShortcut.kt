@@ -4,31 +4,24 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.apps.shortcuts.AppShortcutPickerKey
-import com.ivianuu.essentials.apps.shortcuts.AppShortcutRepository
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.core.graphics.drawable.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.apps.shortcuts.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
-import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.ui.image.toImageBitmap
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.gestures.action.ui.picker.*
+import com.ivianuu.essentials.ui.image.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.component3
 
 @Provide class AppShortcutActionFactory(
   private val actionIntentSender: ActionIntentSender,

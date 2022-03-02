@@ -4,32 +4,26 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.AccessibilityService
-import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.Bundle
-import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
-import androidx.compose.ui.graphics.vector.ImageVector
-import coil.compose.rememberImagePainter
-import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.SystemBuildInfo
-import com.ivianuu.essentials.accessibility.GlobalActionExecutor
-import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
+import android.accessibilityservice.*
+import android.annotation.*
+import android.app.*
+import android.content.*
+import android.os.*
+import androidx.compose.foundation.*
+import androidx.compose.material.*
+import androidx.compose.ui.graphics.vector.*
+import coil.compose.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.accessibility.*
+import com.ivianuu.essentials.floatingwindows.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ActionIcon
-import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
-import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
-import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.shell.*
+import com.ivianuu.essentials.util.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(

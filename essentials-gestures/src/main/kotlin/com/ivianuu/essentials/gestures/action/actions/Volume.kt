@@ -4,15 +4,12 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.media.AudioManager
-import com.ivianuu.essentials.ResourceProvider
+import android.media.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.android.*
 
 @Provide object VolumeActionId : ActionId("volume")
 

@@ -5,21 +5,18 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.ui.animation.AnimatedStack
-import com.ivianuu.essentials.ui.animation.AnimatedStackChild
-import com.ivianuu.essentials.ui.backpress.BackHandler
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import androidx.compose.runtime.saveable.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.backpress.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
-import kotlin.reflect.KClass
+import kotlin.collections.set
+import kotlin.reflect.*
 
 fun interface NavigationStateContent : @Composable (Modifier) -> Unit
 

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.*

@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
 
 fun FlipStackTransition(
   direction: FlipDirection = FlipDirection.RIGHT,

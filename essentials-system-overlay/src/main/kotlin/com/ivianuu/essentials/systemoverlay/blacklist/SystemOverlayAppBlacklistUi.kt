@@ -14,7 +14,6 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 
 object SystemOverlayAppBlacklistKey : Key<Unit>

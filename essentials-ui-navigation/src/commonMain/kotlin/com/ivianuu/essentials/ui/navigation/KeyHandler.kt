@@ -4,8 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.*
 
 fun interface KeyHandler<R> : suspend (Key<R>, (R) -> Unit) -> Boolean
 

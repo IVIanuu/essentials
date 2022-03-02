@@ -6,7 +6,6 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*

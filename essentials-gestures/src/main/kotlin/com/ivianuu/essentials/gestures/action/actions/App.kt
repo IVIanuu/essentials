@@ -4,30 +4,21 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.PackageManager
-import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.ui.AppIcon
-import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
-import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
+import android.content.pm.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.apps.*
+import com.ivianuu.essentials.apps.ui.*
+import com.ivianuu.essentials.apps.ui.apppicker.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionFactory
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
-import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
-import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
-import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.gestures.action.ui.*
+import com.ivianuu.essentials.gestures.action.ui.picker.*
+import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide class AppActionFactory(
   private val actionIntentSender: ActionIntentSender,

@@ -4,29 +4,8 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.tuples.Tuple10
-import com.ivianuu.essentials.tuples.Tuple11
-import com.ivianuu.essentials.tuples.Tuple12
-import com.ivianuu.essentials.tuples.Tuple13
-import com.ivianuu.essentials.tuples.Tuple14
-import com.ivianuu.essentials.tuples.Tuple15
-import com.ivianuu.essentials.tuples.Tuple16
-import com.ivianuu.essentials.tuples.Tuple17
-import com.ivianuu.essentials.tuples.Tuple18
-import com.ivianuu.essentials.tuples.Tuple19
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.Tuple20
-import com.ivianuu.essentials.tuples.Tuple21
-import com.ivianuu.essentials.tuples.Tuple3
-import com.ivianuu.essentials.tuples.Tuple4
-import com.ivianuu.essentials.tuples.Tuple5
-import com.ivianuu.essentials.tuples.Tuple6
-import com.ivianuu.essentials.tuples.Tuple7
-import com.ivianuu.essentials.tuples.Tuple8
-import com.ivianuu.essentials.tuples.Tuple9
-import com.ivianuu.essentials.tuples.tupleOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import com.ivianuu.essentials.tuples.*
+import kotlinx.coroutines.flow.*
 
 fun <A, B> combine(flowA: Flow<A>, flowB: Flow<B>): Flow<Tuple2<A, B>> {
   return combine(flowA, flowB) { a, b -> tupleOf(a, b) }

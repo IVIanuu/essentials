@@ -11,7 +11,6 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
-import kotlin.coroutines.*
 
 object ConfigChange
 

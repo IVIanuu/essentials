@@ -4,7 +4,7 @@
 
 package kotlinx.serialization.json
 
-import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.*
 
 object JsonInjectables {
   @Provide val json = Json { ignoreUnknownKeys = true }

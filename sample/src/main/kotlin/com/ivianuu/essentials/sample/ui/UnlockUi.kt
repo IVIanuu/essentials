@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold

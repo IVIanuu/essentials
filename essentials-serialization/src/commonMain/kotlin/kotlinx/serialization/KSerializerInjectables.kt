@@ -4,9 +4,9 @@
 
 package kotlinx.serialization
 
-import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Provide
-import kotlin.reflect.KTypeT
+import com.ivianuu.essentials.*
+import com.ivianuu.injekt.*
+import kotlin.reflect.*
 
 object SerializationInjectables {
   @Provide inline fun <T> kSerializer(type: KTypeT<T>): KSerializer<T> =

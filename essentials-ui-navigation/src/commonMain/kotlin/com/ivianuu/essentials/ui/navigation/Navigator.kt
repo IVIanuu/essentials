@@ -10,40 +10,49 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlin.collections.List
-import kotlin.collections.any
-import kotlin.collections.buildList
-import kotlin.collections.dropLast
-import kotlin.collections.emptyList
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.lastOrNull
-import kotlin.collections.listOf
-import kotlin.collections.listOfNotNull
-import kotlin.collections.minus
-import kotlin.collections.mutableMapOf
-import kotlin.collections.none
-import kotlin.collections.plus
 import kotlin.collections.set
 
 interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
 
-  suspend fun setBackStack(backStack: List<Key<*>>)
+  val results: Flow<Pair<Key<*>, Any?>>
 
-  suspend fun <R> setRoot(key: Key<R>): R?
+  suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>)
+}
 
-  suspend fun <R> push(key: Key<R>): R?
+suspend fun <R> Navigator.awaitResult(key: Key<R>): R? = results
+  .firstOrNull { it.first == key }
+  ?.second as? R
 
-  suspend fun <R> replaceTop(key: Key<R>): R?
+suspend fun <R> Navigator.setRoot(key: Key<R>): R? {
+  setBackStack(listOf(key), emptyMap())
+  return awaitResult(key)
+}
 
-  suspend fun <R> pop(key: Key<R>, result: R? = null)
+suspend fun <R> Navigator.push(key: Key<R>): R? {
+  setBackStack(backStack.value + key, emptyMap())
+  return awaitResult(key)
+}
 
-  suspend fun popTop(): Boolean
+suspend fun <R> Navigator.replaceTop(key: Key<R>): R? {
+  setBackStack(backStack.value.dropLast(1) + key, emptyMap())
+  return awaitResult(key)
+}
 
-  suspend fun clear()
+suspend fun <R> Navigator.pop(key: Key<R>, result: R? = null) {
+  setBackStack(backStack.value.filter { it != key }, mapOf(key to result))
+}
+
+suspend fun Navigator.popTop(): Boolean {
+  val currentBackStack = backStack.value
+  if (currentBackStack.isNotEmpty())
+    setBackStack(currentBackStack.dropLast(1), emptyMap())
+  return currentBackStack.isNotEmpty()
+}
+
+suspend fun Navigator.clear() {
+  setBackStack(emptyList(), emptyMap())
 }
 
 @Provide @Scoped<AppScope> class NavigatorImpl(
@@ -55,118 +64,29 @@ interface Navigator {
   val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> by this::_backStack
 
-  private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
+  private val _results = EventFlow<Pair<Key<*>, Any?>>()
+  override val results: Flow<Pair<Key<*>, Any?>> by this::_results
 
   private val actor = actor()
 
-  override suspend fun setBackStack(backStack: List<Key<*>>) {
+  override suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>) {
     actor.act {
-      results.forEach { it.value.complete(null) }
-      results.clear()
-
+      val finalResults = results.toMutableMap()
       _backStack.value = buildList {
-        backStack.forEach { key ->
+        for (key in backStack) {
           @Suppress("UNCHECKED_CAST")
           key as Key<Any?>
-          if (keyHandlers.none { (it as KeyHandler<Any?>).invoke(key) {  }}) {
+          if (keyHandlers.none {
+              (it as KeyHandler<Any?>)(key) {
+                finalResults[key] = it
+              }
+          }) {
             add(key)
           }
         }
       }
+
+      finalResults.forEach { _results.emit(it.key to it.value) }
     }
-  }
-
-  override suspend fun <R> setRoot(key: Key<R>): R? {
-    val result = CompletableDeferred<R?>()
-
-    actor.act {
-      log { "set root $key" }
-
-      results.forEach { it.value.complete(null) }
-      results.clear()
-
-      @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        _backStack.value = listOf(key)
-        results[key] = result.cast()
-      }
-    }
-
-    return result.await()
-  }
-
-  override suspend fun <R> push(key: Key<R>): R? {
-    val result = CompletableDeferred<R?>()
-
-    actor.act {
-      log { "push $key" }
-      results[key]
-        ?.safeAs<CompletableDeferred<Any?>>()
-        ?.complete(null)
-
-      @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.none { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        _backStack.value = _backStack.value
-          .filter { it != key }
-          .plus(key)
-        results[key] = result.cast()
-      }
-    }
-
-    return result.await()
-  }
-
-  override suspend fun <R> replaceTop(key: Key<R>): R? {
-    val result = CompletableDeferred<R?>()
-
-    actor.act {
-      log { "replace top $key" }
-
-      results[key]
-        ?.safeAs<CompletableDeferred<Any?>>()
-        ?.complete(null)
-
-      @Suppress("UNCHECKED_CAST")
-      if (keyHandlers.any { (it as KeyHandler<R>).invoke(key) { result.complete(it as R) } }) {
-        _backStack.value = _backStack.value.dropLast(1)
-        results.remove(key)
-      } else {
-        _backStack.value = _backStack
-          .value
-          .dropLast(1)
-          .filter { it != key }
-          .plus(key)
-        results[key] = result.cast()
-      }
-    }
-
-    return result.await()
-  }
-
-  override suspend fun <R> pop(key: Key<R>, result: R?) = actor.act {
-    log { "pop $key with $result" }
-    popKey(key, result)
-  }
-
-  override suspend fun popTop() = actor.actAndReply {
-    val topKey = _backStack.value.lastOrNull() ?: return@actAndReply false
-    log { "pop top $topKey" }
-    popKey(topKey, null)
-    true
-  }
-
-  override suspend fun clear() = actor.act {
-    log { "clear" }
-    results.forEach { it.value.complete(null) }
-    results.clear()
-    _backStack.value = emptyList()
-  }
-
-  private fun <R> popKey(key: Key<R>, result: R?) {
-    @Suppress("UNCHECKED_CAST")
-    val resultAction = results[key] as? CompletableDeferred<R?>
-    resultAction?.complete(result)
-    _backStack.value = _backStack.value - key
-    results.remove(key)
   }
 }

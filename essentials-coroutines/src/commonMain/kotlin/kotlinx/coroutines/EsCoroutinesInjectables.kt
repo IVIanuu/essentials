@@ -4,8 +4,8 @@
 
 package kotlinx.coroutines
 
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.coroutines.*
 
 object EsCoroutinesInjectables {
   @Provide inline fun coroutinesScope(scope: NamedCoroutineScope<*>): CoroutineScope = scope

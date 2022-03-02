@@ -6,7 +6,6 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.processrestart.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Button

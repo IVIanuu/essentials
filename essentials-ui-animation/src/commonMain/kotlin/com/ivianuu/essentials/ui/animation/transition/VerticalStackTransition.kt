@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ui.animation.util.fractionalTranslation
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import com.ivianuu.essentials.ui.animation.util.*
 
 fun VerticalStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec(easing = FastOutSlowInEasing)

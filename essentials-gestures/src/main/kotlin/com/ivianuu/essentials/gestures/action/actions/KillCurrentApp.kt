@@ -4,24 +4,17 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import android.content.*
+import android.content.pm.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.Action
-import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
-import com.ivianuu.essentials.gestures.action.ActionExecutor
-import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.essentials.recentapps.CurrentApp
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import com.ivianuu.essentials.gestures.action.*
+import com.ivianuu.essentials.recentapps.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import kotlinx.coroutines.flow.*
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 

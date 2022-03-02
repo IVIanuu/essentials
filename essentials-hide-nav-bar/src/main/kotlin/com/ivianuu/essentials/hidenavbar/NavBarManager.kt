@@ -6,7 +6,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.*
 import android.graphics.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
@@ -14,7 +13,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 

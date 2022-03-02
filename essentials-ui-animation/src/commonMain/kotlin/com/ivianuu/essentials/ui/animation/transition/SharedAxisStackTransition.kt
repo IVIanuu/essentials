@@ -4,17 +4,14 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.lerp
-import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
-import com.ivianuu.essentials.ui.animation.util.interval
+import androidx.compose.animation.core.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.*
+import com.ivianuu.essentials.ui.animation.*
+import com.ivianuu.essentials.ui.animation.util.*
 
 fun HorizontalSharedAxisStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec()

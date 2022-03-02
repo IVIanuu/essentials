@@ -14,7 +14,6 @@ import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.*
 import kotlin.collections.set
-import kotlin.coroutines.*
 
 fun interface ScreenActivator : suspend () -> Boolean
 

@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*
 import com.ivianuu.essentials.state.*

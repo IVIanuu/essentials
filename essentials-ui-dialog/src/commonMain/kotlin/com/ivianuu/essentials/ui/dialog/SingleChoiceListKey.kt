@@ -5,13 +5,12 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import com.ivianuu.essentials.ui.common.CommonStrings
+import androidx.compose.runtime.*
+import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
+import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class SingleChoiceListKey<T : Any>(
   val items: List<Item<T>>,

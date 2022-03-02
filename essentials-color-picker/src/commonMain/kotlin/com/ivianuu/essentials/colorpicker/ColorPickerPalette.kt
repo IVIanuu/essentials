@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.colorpicker
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 
 enum class ColorPickerPalette {
   RED {

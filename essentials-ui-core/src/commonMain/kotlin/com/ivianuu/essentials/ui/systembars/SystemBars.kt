@@ -4,32 +4,19 @@
 
 package com.ivianuu.essentials.ui.systembars
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.app.LoadingOrder
-import com.ivianuu.essentials.ui.AppTheme
-import com.ivianuu.essentials.ui.UiDecorator
-import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
-import com.ivianuu.essentials.ui.util.isLight
-import com.ivianuu.injekt.Provide
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.geometry.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.ui.*
+import com.ivianuu.essentials.ui.insets.*
+import com.ivianuu.essentials.ui.util.*
+import com.ivianuu.injekt.*
 
 @Composable fun overlaySystemBarBgColor(color: Color) =
   if (color.isLight) Color.White.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.2f)
