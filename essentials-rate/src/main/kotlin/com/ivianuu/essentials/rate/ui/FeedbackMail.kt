@@ -27,6 +27,8 @@ object FeedbackMailKey : IntentKey
   }
 }
 
-@JvmInline value class DeveloperEmail(val value: String)
-
-@Provide val developerEmail = DeveloperEmail("ivianuu@gmail.com")
+@JvmInline value class DeveloperEmail(val value: String) {
+  companion object {
+    @Provide val defaultDeveloperEmail = DeveloperEmail("ivianuu@gmail.com")
+  }
+}

@@ -22,7 +22,7 @@ interface EntityDescriptor<T> {
 abstract class AbstractEntityDescriptor<T>(
   tableName: String,
   @Inject K: TypeKey<T>,
-  S : KSerializer<T>
+  @Inject S : KSerializer<T>
 ) : EntityDescriptor<T> by EntityDescriptor(tableName)
 
 @Target(AnnotationTarget.PROPERTY)
@@ -36,7 +36,7 @@ annotation class AutoIncrement
 fun <T> EntityDescriptor(
   tableName: String,
   @Inject key: TypeKey<T>,
-  serializer: KSerializer<T>
+  @Inject serializer: KSerializer<T>
 ): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
 
 private class EntityDescriptorImpl<T>(

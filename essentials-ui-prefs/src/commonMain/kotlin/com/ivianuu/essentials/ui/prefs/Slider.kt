@@ -114,6 +114,31 @@ import kotlin.time.*
   }
 }
 
+@Composable fun <T : Comparable<T>> SliderListItem(
+  value: Value<T>,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  valueRange: ClosedRange<T>,
+  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
+  valueText: @Composable ((T) -> Unit)? = null,
+  modifier: Modifier = Modifier,
+  @Inject converter: SliderValueConverter<T>
+) {
+  SliderListItem(
+    value = value.current,
+    onValueChange = value.updater,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    valueRange = valueRange,
+    stepPolicy = stepPolicy,
+    valueText = valueText,
+    modifier = modifier,
+    converter = converter
+  )
+}
+
 interface SliderValueConverter<T : Comparable<T>> {
   fun toFloat(value: T): Float
   fun toValue(floatValue: Float): T

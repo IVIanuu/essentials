@@ -14,6 +14,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api(project(":essentials-data"))
         api(project(":essentials-ui-core"))
         api(project(":essentials-ui-navigation"))
       }

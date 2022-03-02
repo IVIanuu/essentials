@@ -63,8 +63,8 @@ private class SchemaImpl(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  override fun <T> descriptor(@Inject K: TypeKey<T>): EntityDescriptor<T> =
-    _entities[inject<TypeKey<T>>()]?.cast() ?: error("Unknown entity ${inject<TypeKey<T>>()}")
+  override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
+    _entities[key]?.cast() ?: error("Unknown entity $key")
 }
 
 interface Migration {

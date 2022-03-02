@@ -15,7 +15,7 @@ import kotlin.math.*
   override val isEnabled: LoggingEnabled,
   private val systemBuildInfo: SystemBuildInfo
 ) : Logger {
-  override fun log(priority: Priority, @Inject tag: LoggingTag, message: String) {
+  override fun log(message: String, priority: Priority, @Inject tag: LoggingTag) {
     val trimmedTag = if (tag.value.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
       tag.value
     } else {

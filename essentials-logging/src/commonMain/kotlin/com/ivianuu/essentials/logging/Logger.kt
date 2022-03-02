@@ -11,7 +11,7 @@ import com.ivianuu.injekt.common.*
 interface Logger {
   val isEnabled: LoggingEnabled
 
-  fun log(priority: Priority = DEBUG, @Inject tag: LoggingTag, message: String)
+  fun log(message: String, priority: Priority = DEBUG, @Inject tag: LoggingTag)
 
   enum class Priority {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
@@ -21,10 +21,10 @@ interface Logger {
 inline fun log(
   priority: Logger.Priority = DEBUG,
   @Inject tag: LoggingTag,
-  logger: Logger,
+  @Inject logger: Logger,
   message: () -> String
 ) {
-  if (logger.isEnabled.value) logger.log(priority, tag, message())
+  if (logger.isEnabled.value) logger.log(message(), priority, tag)
 }
 
 expect fun Throwable.asLog(): String
@@ -33,12 +33,12 @@ object NoopLogger : Logger {
   override val isEnabled: LoggingEnabled
     get() = LoggingEnabled(false)
 
-  override fun log(priority: Logger.Priority, @Inject tag: LoggingTag, message: String) {
+  override fun log(message: String, priority: Logger.Priority, @Inject tag: LoggingTag) {
   }
 }
 
 @Provide class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
-  override fun log(priority: Logger.Priority, @Inject tag: LoggingTag, message: String) {
+  override fun log(message: String, priority: Logger.Priority, @Inject tag: LoggingTag) {
     println("[${priority.name}] $tag $message")
   }
 }

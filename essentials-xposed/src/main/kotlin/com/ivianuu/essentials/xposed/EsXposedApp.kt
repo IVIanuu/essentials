@@ -28,6 +28,6 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
 
   protected abstract fun buildXposedElements(
     @Inject context: XposedContext,
-    scope: Scope<XposedScope>
+    @Inject scope: Scope<XposedScope>
   ): Elements<XposedScope>
 }

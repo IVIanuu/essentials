@@ -30,3 +30,20 @@ import com.ivianuu.essentials.ui.material.*
     }
   )
 }
+
+@Composable fun SwitchListItem(
+  value: Value<Boolean>,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  modifier: Modifier = Modifier
+) {
+  SwitchListItem(
+    value = value.current,
+    onValueChange = value.updater,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    modifier = modifier
+  )
+}

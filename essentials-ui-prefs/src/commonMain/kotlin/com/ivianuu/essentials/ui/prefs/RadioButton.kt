@@ -31,3 +31,20 @@ import com.ivianuu.essentials.ui.material.*
     }
   )
 }
+
+@Composable fun RadioButtonListItem(
+  value: Value<Boolean>,
+  title: @Composable (() -> Unit)? = null,
+  subtitle: @Composable (() -> Unit)? = null,
+  leading: @Composable (() -> Unit)? = null,
+  modifier: Modifier = Modifier
+) {
+  RadioButtonListItem(
+    value = value.current,
+    onValueChange = value.updater,
+    title = title,
+    subtitle = subtitle,
+    leading = leading,
+    modifier = modifier
+  )
+}

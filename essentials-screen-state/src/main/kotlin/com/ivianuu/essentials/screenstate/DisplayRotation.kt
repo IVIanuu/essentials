@@ -52,7 +52,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 private suspend fun getCurrentDisplayRotation(
   @Inject context: IOContext,
-  windowManager: @SystemService WindowManager,
+  @Inject windowManager: @SystemService WindowManager,
 ) = withContext(context) {
   when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP

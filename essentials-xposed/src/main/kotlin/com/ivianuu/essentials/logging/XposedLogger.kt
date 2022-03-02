@@ -10,7 +10,7 @@ import com.ivianuu.injekt.*
   override val isEnabled: LoggingEnabled
     get() = LoggingEnabled(true)
 
-  override fun log(priority: Logger.Priority, @Inject tag: LoggingTag, message: String) {
+  override fun log(message: String, priority: Logger.Priority, @Inject tag: LoggingTag) {
     println("${logTag.value}: [${priority.name}] ${tag.value} $message")
   }
 }

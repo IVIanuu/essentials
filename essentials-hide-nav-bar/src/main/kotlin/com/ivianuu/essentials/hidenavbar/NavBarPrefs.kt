@@ -6,10 +6,11 @@ package com.ivianuu.essentials.hidenavbar
 
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.prefs.*
+import com.ivianuu.essentials.optics.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
-@Serializable data class NavBarPrefs(
+@Serializable @Optics data class NavBarPrefs(
   @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
   @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
   @SerialName("was_nav_bar_hidden") val wasNavBarHidden: Boolean = false

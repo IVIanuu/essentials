@@ -91,17 +91,17 @@ fun <T> invalidationFlow(@Inject scope: StateScope, block: (@Inject StateScope) 
     .map { block() }
     .distinctUntilChanged()
 
-fun <T> memo(vararg args: Any?, @Inject key: StateKey, scope: StateScope, init: () -> T): T =
+fun <T> memo(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, init: () -> T): T =
   scope.memo(*args, init = init)
 
-fun memoLaunch(vararg args: Any?, @Inject key: StateKey, scope: StateScope, block: suspend CoroutineScope.() -> Unit) {
+fun memoLaunch(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, block: suspend CoroutineScope.() -> Unit) {
   val coroutineScope = memoScope(*args)
   memo(coroutineScope) {
     coroutineScope.launch(block = block)
   }
 }
 
-fun memoScope(vararg args: Any?, @Inject key: StateKey, scope: StateScope): CoroutineScope =
+fun memoScope(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): CoroutineScope =
   memo(*args) {
     object : CoroutineScope, MemoObserver {
       override val coroutineContext = scope.coroutineContext + Job(scope.coroutineContext.job)
@@ -111,7 +111,7 @@ fun memoScope(vararg args: Any?, @Inject key: StateKey, scope: StateScope): Coro
     }
   }
 
-fun <T> Flow<T>.bind(initial: T, vararg args: Any?, @Inject key: StateKey, scope: StateScope): T {
+fun <T> Flow<T>.bind(initial: T, vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): T {
   val state = memo(*args) { stateVar(initial) }
 
   memoLaunch(state) {
@@ -121,10 +121,10 @@ fun <T> Flow<T>.bind(initial: T, vararg args: Any?, @Inject key: StateKey, scope
   return state.value
 }
 
-fun <T> StateFlow<T>.bind(vararg args: Any?, @Inject key: StateKey, scope: StateScope): T =
+fun <T> StateFlow<T>.bind(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): T =
   bind(initial = value, args = *args)
 
-fun <T> Flow<T>.bindResource(vararg args: Any?, @Inject key: StateKey, scope: StateScope): Resource<T> =
+fun <T> Flow<T>.bindResource(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): Resource<T> =
   memo(*args) { flowAsResource() }
     .bind(initial = Idle)
 
@@ -136,7 +136,7 @@ fun <T> produceValue(
   initial: T,
   vararg args: Any?,
   @Inject key: StateKey,
-  scope: StateScope,
+  @Inject scope: StateScope,
   block: suspend ProduceValueScope<T>.() -> Unit
 ): T {
   val state = memo(*args) { stateVar(initial) }
@@ -152,7 +152,7 @@ fun <T> produceValue(
   return state.value
 }
 
-fun <T> produceResource(vararg args: Any?, @Inject key: StateKey, scope: StateScope, block: suspend () -> T): Resource<T> =
+fun <T> produceResource(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, block: suspend () -> T): Resource<T> =
   memo(*args) { resourceFlow { emit(block()) } }.bind(Idle)
 
 fun action(@Inject scope: StateScope, block: suspend () -> Unit): () -> Unit = {
@@ -214,7 +214,7 @@ inline operator fun <T> StateVar<T>.setValue(thisObj: Any?, property: KProperty<
 inline fun <R> withKeys(
   vararg args: Any?,
   @Inject scope: StateScope,
-  key: StateKey,
+  @Inject key: StateKey,
   block: (@Inject StateKey) -> R
 ) = block(key + args.map { SourceKey(it.toString()) })
 

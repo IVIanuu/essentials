@@ -126,7 +126,7 @@ sealed interface ActionPickerItem {
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
 ) = ActionPickerModel(
-  items = produceResource { getActionPickerItems() },
+  items = produceResource { getActionPickerItems(ctx.key, filter) },
   openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
   pickAction = action { item ->
     val result = item.getResult() ?: return@action
@@ -140,10 +140,10 @@ sealed interface ActionPickerItem {
 )
 
 private suspend fun getActionPickerItems(
-  @Inject filter: ActionFilter,
   key: ActionPickerKey,
-  repository: ActionRepository,
-  RP: ResourceProvider
+  filter: ActionFilter,
+  @Inject repository: ActionRepository,
+  @Inject RP: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
