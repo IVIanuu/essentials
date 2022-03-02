@@ -4,20 +4,34 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.safeAs
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.CompletableDeferred
+import com.ivianuu.essentials.logging.*
+import com.ivianuu.injekt.*
+import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.collections.List
+import kotlin.collections.any
+import kotlin.collections.buildList
+import kotlin.collections.dropLast
+import kotlin.collections.emptyList
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.lastOrNull
+import kotlin.collections.listOf
+import kotlin.collections.listOfNotNull
+import kotlin.collections.minus
+import kotlin.collections.mutableMapOf
+import kotlin.collections.none
+import kotlin.collections.plus
+import kotlin.collections.set
 
 interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
+
+  suspend fun setBackStack(backStack: List<Key<*>>)
 
   suspend fun <R> setRoot(key: Key<R>): R?
 
@@ -44,6 +58,23 @@ interface Navigator {
   private val results = mutableMapOf<Key<*>, CompletableDeferred<Any?>>()
 
   private val actor = actor()
+
+  override suspend fun setBackStack(backStack: List<Key<*>>) {
+    actor.act {
+      results.forEach { it.value.complete(null) }
+      results.clear()
+
+      _backStack.value = buildList {
+        backStack.forEach { key ->
+          @Suppress("UNCHECKED_CAST")
+          key as Key<Any?>
+          if (keyHandlers.none { (it as KeyHandler<Any?>).invoke(key) {  }}) {
+            add(key)
+          }
+        }
+      }
+    }
+  }
 
   override suspend fun <R> setRoot(key: Key<R>): R? {
     val result = CompletableDeferred<R?>()

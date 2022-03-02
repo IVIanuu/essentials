@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.*
 import com.ivianuu.injekt.*
+import io.kotest.matchers.*
+import io.kotest.matchers.collections.*
 import kotlinx.coroutines.*
 import org.junit.*
 
@@ -25,7 +25,7 @@ class NavigatorTest {
       S = this
     )
 
-    val collector = snapshotFlow { navigator._backStack }
+    val collector = navigator._backStack
       .testCollect(this)
 
     launch { navigator.push(KeyA) }
@@ -35,6 +35,7 @@ class NavigatorTest {
     navigator.popTop()
     launch { navigator.push(KeyB) }
     launch { navigator.setRoot(KeyA) }
+    navigator.setBackStack(listOf(KeyC, KeyA, KeyB))
     navigator.clear()
 
     collector.values.shouldContainExactly(
@@ -46,6 +47,7 @@ class NavigatorTest {
       listOf(),
       listOf(KeyB),
       listOf(KeyA),
+      listOf(KeyC, KeyA, KeyB),
       listOf()
     )
   }
