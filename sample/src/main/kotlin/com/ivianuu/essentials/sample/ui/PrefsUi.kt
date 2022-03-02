@@ -64,7 +64,7 @@ object PrefsKey : Key<Unit>
       )
     }
     item {
-      IntSliderListItem(
+      SliderListItem(
         value = prefs.slider,
         onValueChange = {
           scope.launch {
@@ -80,7 +80,7 @@ object PrefsKey : Key<Unit>
       )
     }
     item {
-      FloatSliderListItem(
+      SliderListItem(
         value = prefs.steppedSlider,
         onValueChange = {
           scope.launch {
