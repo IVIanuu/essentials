@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.permission.writesecuresettings
 
 import android.content.*
-import android.os.*
 import android.provider.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.*
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -173,25 +171,11 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-@JvmInline value class IsCharging(val value: Boolean)
-
-@Provide fun isCharging(
-  broadcastsFactory: BroadcastsFactory
-): Flow<IsCharging> = broadcastsFactory(Intent.ACTION_BATTERY_CHANGED)
-  .map {
-    IsCharging(
-      it.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ==
-          BatteryManager.BATTERY_STATUS_CHARGING
-    )
-  }
-  .distinctUntilChanged()
-
 @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>,
-  isCharging: Flow<IsCharging>,
   permissionStateFactory: PermissionStateFactory,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
@@ -203,7 +187,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   else when (completedStep) {
     1 -> developerModeSetting.data.map { it != 0 }.bind(false)
     2 -> adbEnabledSetting.data.map { it != 0 }.bind(false)
-    3 -> isCharging.map { it.value }.bind(false)
+    3 -> true
     4 -> produceValue(false) {
       while (true) {
         value = permissionStateFactory(listOf(ctx.key.permissionKey)).first()
