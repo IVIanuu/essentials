@@ -1,7 +1,3 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
-
 include(
     ":essentials-about",
     ":essentials-accessibility",
@@ -45,6 +41,7 @@ include(
     ":essentials-logging",
     ":essentials-logging-android",
     ":essentials-notification-listener",
+    ":essentials-optics",
     ":essentials-permission",
     ":essentials-premium",
     ":essentials-process-restart",

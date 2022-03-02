@@ -36,6 +36,7 @@ dependencies {
   compileOnly(Deps.Injekt.compilerPlugin)
   implementation(Deps.autoService)
   kapt(Deps.autoService)
+  testImplementation(Deps.Injekt.compilerPlugin)
   testImplementation(Deps.junit)
   testImplementation(Deps.Kotlin.compilerEmbeddable)
   testImplementation(Deps.kotlinCompileTesting)
