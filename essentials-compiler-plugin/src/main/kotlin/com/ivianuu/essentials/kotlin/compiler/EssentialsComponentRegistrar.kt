@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.kotlin.compiler
 
 import com.google.auto.service.*
-import com.ivianuu.essentials.kotlin.compiler.experimental.*
+import com.ivianuu.essentials.kotlin.compiler.composefix.*
 import com.ivianuu.essentials.kotlin.compiler.optics.*
 import com.ivianuu.essentials.kotlin.compiler.serializationfix.*
 import org.jetbrains.kotlin.backend.common.extensions.*
@@ -21,7 +21,7 @@ class EssentialsComponentRegistrar : ComponentRegistrar {
     project: MockProject,
     configuration: CompilerConfiguration
   ) {
-    experimental(project)
+    composeFix(project)
     optics(project)
     serializationFix(project)
   }
