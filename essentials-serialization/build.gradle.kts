@@ -15,8 +15,6 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-core"))
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
         api(Deps.KotlinSerialization.json)
       }
     }

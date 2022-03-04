@@ -13,12 +13,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api(project(":essentials-core"))
-        api(project(":essentials-time"))
-        api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
-        api(Deps.Injekt.coroutines)
+        api(Deps.AtomicFu.runtime)
       }
     }
     named("jvmTest") {

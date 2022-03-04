@@ -22,8 +22,6 @@ dependencies {
 
   api(Deps.Coroutines.android)
 
-  api(Deps.Injekt.android)
-
   api(project(":essentials-common"))
   api(project(":essentials-android-core"))
   api(project(":essentials-android-data"))

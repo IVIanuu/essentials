@@ -52,7 +52,6 @@ kotlin {
         api(Deps.Accompanist.pagerIndicators)
         api(Deps.AndroidX.Activity.compose)
         api(Deps.AndroidX.core)
-        api(Deps.Injekt.android)
       }
     }
 

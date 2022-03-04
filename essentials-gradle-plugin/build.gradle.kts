@@ -37,7 +37,6 @@ dependencies {
   api(Deps.Compose.gradlePlugin)
   api(Deps.androidGradlePlugin)
   api(Deps.KotlinSerialization.gradlePlugin)
-  api(Deps.Injekt.gradlePlugin)
   api(Deps.licenseGradlePlugin)
 }
 

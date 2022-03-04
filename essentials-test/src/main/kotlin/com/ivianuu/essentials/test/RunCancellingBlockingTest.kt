@@ -53,5 +53,5 @@ fun TestCoroutineScope.runCancellingBlockingTest(
   }
 }
 
-val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
+@OptIn(ExperimentalStdlibApi::class) val TestCoroutineScope.dispatcher: TestCoroutineDispatcher
   get() = coroutineContext[CoroutineDispatcher]!! as TestCoroutineDispatcher

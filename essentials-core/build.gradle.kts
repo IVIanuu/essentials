@@ -12,8 +12,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
+        api(project(":essentials-di"))
         api(project(":essentials-optics"))
         api(Deps.kotlinResult)
       }

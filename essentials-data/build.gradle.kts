@@ -19,8 +19,6 @@ kotlin {
         api(project(":essentials-state"))
         api(compose.runtime)
         api(Deps.Coroutines.core)
-        api(Deps.Injekt.core)
-        api(Deps.Injekt.common)
       }
     }
     named("jvmTest") {
