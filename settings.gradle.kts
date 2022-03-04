@@ -26,6 +26,7 @@ include(
     ":essentials-core",
     ":essentials-coroutines",
     ":essentials-data",
+    ":essentials-di",
     ":essentials-donation",
     ":essentials-floating-windows",
     ":essentials-font",
