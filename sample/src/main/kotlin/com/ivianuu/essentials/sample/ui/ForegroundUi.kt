@@ -10,10 +10,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -21,6 +19,7 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
@@ -43,8 +42,13 @@ object ForegroundKey : Key<Unit>
       LaunchedEffect(true) {
         foregroundManager.startForeground(
           5,
-          timer(1.seconds)
-            .map { ForegroundNotification(primaryColor, it.toInt()) }
+          flow {
+            var i = 0
+            while (currentCoroutineContext().isActive) {
+              emit(ForegroundNotification(primaryColor, i++))
+              delay(1000)
+            }
+          }
             .stateIn(scope, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
         )
       }

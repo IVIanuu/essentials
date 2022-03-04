@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui.animation
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import com.ivianuu.essentials.*
 import kotlin.collections.set
 
 @Stable class AnimationElement(val key: Any) {
@@ -56,7 +55,7 @@ fun Modifier.animationElement(
   vararg props: Pair<AnimationElementPropKey<*>, Any?>
 ): Modifier = composed {
   val element = rememberAnimationElementFor(key)
-  props.forEach { element[it.first.cast<AnimationElementPropKey<Any?>>()] = it.second }
+  props.forEach { element[it.first as AnimationElementPropKey<Any?>] = it.second }
   element.modifiers.toSet().fold(Modifier as Modifier) { acc, modifier ->
     acc.then(modifier.value)
   }

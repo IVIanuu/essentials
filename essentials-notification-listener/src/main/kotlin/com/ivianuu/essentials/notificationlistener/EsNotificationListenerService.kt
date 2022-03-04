@@ -21,7 +21,7 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   private val component by lazy {
     application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<EsNotificationListenerServiceComponent>()
   }
 
@@ -69,7 +69,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.value = catch { activeNotifications!!.toList() }
+    _notifications.value = runCatching { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 

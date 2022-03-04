@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 
@@ -20,9 +19,9 @@ sealed interface LoadingOrder<T> {
       fun last() = Last<T>()
 
       fun <S> before(@Inject other: TypeKey<S>): Topological.Before<T> =
-        Topological.Before(other.cast())
+        Topological.Before(other as TypeKey<T>)
 
-      fun <S> after(@Inject other: TypeKey<S>): Topological.After<T> = Topological.After(other.cast())
+      fun <S> after(@Inject other: TypeKey<S>): Topological.After<T> = Topological.After(other as TypeKey<T>)
     }
   }
 
@@ -35,9 +34,9 @@ sealed interface LoadingOrder<T> {
 
     operator fun plus(other: Topological<T>): Combined<T> = Combined(this, other)
 
-    fun <S> before(@Inject other: TypeKey<S>): Combined<T> = Combined(this, Before(other).cast())
+    fun <S> before(@Inject other: TypeKey<S>): Combined<T> = Combined(this, Before(other) as Topological<T>)
 
-    fun <S> after(@Inject other: TypeKey<S>): Combined<T> = Combined(this, After(other).cast())
+    fun <S> after(@Inject other: TypeKey<S>): Combined<T> = Combined(this, After(other) as Topological<T>)
   }
 
   interface Descriptor<in T> {

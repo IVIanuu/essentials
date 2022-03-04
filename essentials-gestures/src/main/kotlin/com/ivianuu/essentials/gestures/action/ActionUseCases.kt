@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.*
@@ -31,7 +32,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   T: Toaster
 ) = ExecuteActionUseCase { key ->
   withContext(coroutineContext) {
-    catch {
+    com.github.michaelbull.result.runCatching {
       log { "execute $key" }
       val action = repository.getAction(key)
 
@@ -40,18 +41,18 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
         log { "didn't had permissions for $key ${action.permissions}" }
         screenUnlocker()
         permissionRequester(action.permissions)
-        return@catch false
+        return@runCatching false
       }
 
       if (action.turnScreenOn && !screenActivator()) {
         log { "couldn't turn screen on for $key" }
-        return@catch false
+        return@runCatching false
       }
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {
         log { "couldn't unlock screen for $key" }
-        return@catch false
+        return@runCatching false
       }
 
       // close system dialogs
@@ -62,7 +63,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 
       // fire
       repository.getActionExecutor(key)()
-      return@catch true
+      return@runCatching true
     }.onFailure {
       it.printStackTrace()
       showToast(R.string.es_action_execution_failed, key)

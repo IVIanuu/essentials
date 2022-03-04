@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.insets.*
@@ -30,7 +29,7 @@ interface ListDecoratorScope : LazyListScope {
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-) = ListDecoratorElement(key, instance, loadingOrder.cast())
+) = ListDecoratorElement(key, instance, loadingOrder as LoadingOrder<ListDecorator>)
 
 data class ListDecoratorElement(
   val key: TypeKey<ListDecorator>,

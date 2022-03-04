@@ -20,14 +20,11 @@ interface StateScope : CoroutineScope {
   fun invalidate()
 }
 
-fun <S> state(
-  @Inject scope: CoroutineScope,
-  block: StateScope.() -> S
-): StateFlow<S> {
+fun <S> CoroutineScope.state(block: StateScope.() -> S): StateFlow<S> {
   val invalidations = Channel<Unit>(capacity = Channel.UNLIMITED)
   val invalidationsFlow = MutableSharedFlow<Unit>(extraBufferCapacity = Channel.UNLIMITED)
 
-  val stateScope = object : StateScope, CoroutineScope by scope {
+  val stateScope = object : StateScope, CoroutineScope by this {
     private val states = mutableMapOf<Any, MemoizedState>()
     private var iteration = 0
 
@@ -82,7 +79,7 @@ fun <S> state(
   return invalidations
     .receiveAsFlow()
     .map { run() }
-    .stateIn(scope, SharingStarted.Eagerly, run())
+    .stateIn(this, SharingStarted.Eagerly, run())
 }
 
 fun <T> invalidationFlow(@Inject scope: StateScope, block: (@Inject StateScope) -> T): Flow<T> =

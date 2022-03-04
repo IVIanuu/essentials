@@ -8,6 +8,7 @@ import androidx.activity.*
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.test.*
+import io.kotest.matchers.collections.*
 import io.mockk.*
 import kotlinx.coroutines.flow.*
 import org.junit.*

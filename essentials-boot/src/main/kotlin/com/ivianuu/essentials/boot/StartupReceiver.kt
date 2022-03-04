@@ -13,7 +13,8 @@ import com.ivianuu.injekt.common.*
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    val component = context.applicationContext.cast<AppElementsOwner>()
+    val component = context.applicationContext
+      .let { it as AppElementsOwner }
       .appElements<StartupReceiverComponent>()
 
     log(logger = component.logger) { "on system boot" }

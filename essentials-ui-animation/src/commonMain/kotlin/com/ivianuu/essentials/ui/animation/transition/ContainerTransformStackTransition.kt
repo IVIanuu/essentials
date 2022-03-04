@@ -34,7 +34,7 @@ fun ContainerTransformStackTransition(
 
   attachTo()
 
-  val (fromBounds, toBounds) = parTupled(
+  val (fromBounds, toBounds) = par(
     { fromModifier.awaitLayoutCoordinates().boundsInWindow() },
     { toModifier.awaitLayoutCoordinates().boundsInWindow() }
   )

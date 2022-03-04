@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.systembars.*
@@ -16,7 +15,7 @@ import com.ivianuu.injekt.common.*
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-) = UiDecoratorElement(key, instance, loadingOrder.cast())
+) = UiDecoratorElement(key, instance, loadingOrder as LoadingOrder<UiDecorator>)
 
 fun interface UiDecorator : @Composable (@Composable () -> Unit) -> Unit
 

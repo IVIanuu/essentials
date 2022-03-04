@@ -26,7 +26,6 @@ kotlin {
       dependencies {
         api(project(":essentials-coroutines"))
         api(project(":essentials-core"))
-        api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))
       }
     }

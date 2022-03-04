@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -32,7 +31,7 @@ class TileModuleElementModule<@Spread T : TileModel<S>, S : AbstractFunTileServi
   @Provide fun element(
     serviceClass: KClass<S>,
     provider: (StateScope) -> T
-  ): Pair<TileId, (StateScope) -> TileModel<*>> = TileId(serviceClass) to provider.cast()
+  ): Pair<TileId, (StateScope) -> TileModel<*>> = TileId(serviceClass) to provider as (StateScope) -> TileModel<*>
 
   @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 

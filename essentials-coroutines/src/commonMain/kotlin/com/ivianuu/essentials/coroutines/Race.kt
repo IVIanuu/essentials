@@ -8,10 +8,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.*
 import kotlin.coroutines.*
 
-@Deprecated(message = "A race needs racers", level = DeprecationLevel.ERROR)
-suspend fun <T> race(context: CoroutineContext = EmptyCoroutineContext) {
-}
-
 suspend fun <T> race(
   vararg racers: suspend CoroutineScope.() -> T,
   context: CoroutineContext = EmptyCoroutineContext

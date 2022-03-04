@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import de.robv.android.xposed.*
 import java.lang.reflect.*
@@ -97,13 +96,13 @@ class MethodHookScopeImpl(private val param: XC_MethodHook.MethodHookParam) : Me
   override fun `this`(): Any = param.thisObject
 }
 
-inline fun <reified T> MethodHookScope.arg(index: Int): T = args[index].cast()
+inline fun <reified T> MethodHookScope.arg(index: Int): T = args[index] as T
 
-inline fun <reified T> MethodHookScope.`this`(): T = `this`().cast()
+inline fun <reified T> MethodHookScope.`this`(): T = `this`() as T
 
-inline fun <reified T> MethodHookScope.result(): T = result.cast()
+inline fun <reified T> MethodHookScope.result(): T = result as T
 
-inline fun <reified T : Throwable> MethodHookScope.throwable(): T = throwable.cast()
+inline fun <reified T : Throwable> MethodHookScope.throwable(): T = throwable as T
 
 inline fun hookMethod(
   method: Method,

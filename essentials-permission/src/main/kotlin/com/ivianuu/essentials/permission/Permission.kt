@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.permission
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -35,7 +34,7 @@ interface Permission {
     permissionKey: TypeKey<T>,
     requestHandler: PermissionRequestHandler<T>
   ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
-    (permissionKey to requestHandler.intercept()).cast()
+    (permissionKey to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
   @Provide fun permissionState(
     permissionKey: TypeKey<T>,

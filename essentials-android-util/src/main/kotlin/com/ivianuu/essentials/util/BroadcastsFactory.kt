@@ -29,7 +29,7 @@ fun interface BroadcastsFactory {
       actions.forEach { addAction(it) }
     })
     awaitClose {
-      catch {
+      runCatching {
         context.unregisterReceiver(broadcastReceiver)
       }
     }

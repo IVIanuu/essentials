@@ -6,6 +6,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.*
 import android.graphics.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
@@ -74,8 +75,8 @@ private suspend fun NavBarState.apply(
   @Inject L: Logger
 ) {
   log { "apply nav bar state $this" }
-  catch {
-    catch {
+  runCatching {
+    runCatching {
       // ensure that we can access non sdk interfaces
       disableNonSdkInterfaceDetection()
     }.onFailure { it.printStackTrace() }

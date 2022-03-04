@@ -35,7 +35,7 @@ class UnlockScreenActivity : ComponentActivity() {
     }
 
     @Provide val component = application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<UnlockScreenComponent>()
 
     log(logger = component.logger) { "unlock screen for $requestId" }

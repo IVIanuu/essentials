@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
@@ -12,9 +11,9 @@ import kotlin.coroutines.*
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency
+  concurrency: Int = DEFAULT_CONCURRENCY
 ): List<T> = coroutineScope {
-  val semaphore = Semaphore(concurrency.value)
+  val semaphore = Semaphore(concurrency)
   blocks.map { block ->
     async(context) {
       semaphore.withPermit {
@@ -26,10 +25,10 @@ suspend fun <T> par(
 
 suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
+  concurrency: Int = DEFAULT_CONCURRENCY,
   transform: suspend (T) -> R
 ): List<R> = coroutineScope {
-  val semaphore = Semaphore(concurrency.value)
+  val semaphore = Semaphore(concurrency)
   map { item ->
     async(context) {
       semaphore.withPermit { transform(item) }
@@ -37,20 +36,12 @@ suspend fun <T, R> Iterable<T>.parMap(
   }.awaitAll()
 }
 
-suspend fun <T> Iterable<T>.parFilter(
-  context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
-  predicate: suspend (T) -> Boolean
-): List<T> = parMap(context) { if (predicate(it)) it else null }.filterNotNull()
-
 suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
+  concurrency: Int = DEFAULT_CONCURRENCY,
   action: suspend (T) -> Unit
 ) {
-  parMap(context) { action(it) }
+  parMap(context, concurrency) { action(it) }
 }
 
-inline class Concurrency(val value: Int)
-
-@Provide internal expect val defaultConcurrency: Concurrency
+const val DEFAULT_CONCURRENCY = 64

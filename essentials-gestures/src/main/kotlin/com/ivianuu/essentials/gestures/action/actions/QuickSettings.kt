@@ -9,6 +9,7 @@ import android.annotation.*
 import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
@@ -34,7 +35,7 @@ fun quickSettingsActionExecutor(
   serviceFlow: Flow<EsAccessibilityService?>,
   systemBuildInfo: SystemBuildInfo
 ) = ActionExecutor<QuickSettingsActionId> {
-  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
+  val targetState = if (systemBuildInfo.sdk < 28) true else runCatching {
     val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(
@@ -54,7 +55,7 @@ fun quickSettingsActionExecutor(
         .any { getChild(it).isQuickSettingsPanelVisibleRecursive() }
     }
 
-    return@catch !service.rootInActiveWindow.isQuickSettingsPanelVisibleRecursive()
+    return@runCatching !service.rootInActiveWindow.isQuickSettingsPanelVisibleRecursive()
   }.getOrElse { true }
 
   if (targetState)

@@ -8,6 +8,7 @@ import android.accessibilityservice.*
 import android.view.accessibility.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.*
   globalActionExecutor: GlobalActionExecutor,
   serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {
-  val targetState = catch {
+  val targetState = runCatching {
     val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(
@@ -49,7 +50,7 @@ import kotlinx.coroutines.flow.*
         .any { getChild(it).isNotificationShadeVisibleRecursive() }
     }
 
-    return@catch !service.rootInActiveWindow.isNotificationShadeVisibleRecursive()
+    return@runCatching !service.rootInActiveWindow.isNotificationShadeVisibleRecursive()
   }.getOrElse { true }
 
   if (targetState)

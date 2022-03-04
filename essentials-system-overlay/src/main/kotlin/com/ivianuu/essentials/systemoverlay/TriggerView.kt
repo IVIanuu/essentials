@@ -7,7 +7,6 @@ package com.ivianuu.essentials.systemoverlay
 import android.annotation.*
 import android.view.*
 import android.widget.*
-import com.ivianuu.essentials.*
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
@@ -49,7 +48,7 @@ class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {
     }
 
     // compose crashes in some situations
-    return catch { delegate.dispatchTouchEvent(ev) }
+    return runCatching { delegate.dispatchTouchEvent(ev) }
       .onFailure { it.printStackTrace() }
       .getOrElse { false }
   }

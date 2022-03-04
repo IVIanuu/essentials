@@ -8,6 +8,7 @@ import android.content.*
 import android.content.pm.*
 import android.graphics.*
 import androidx.core.graphics.drawable.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.util.*
@@ -34,14 +35,13 @@ interface ShortcutRepository {
       Intent.ACTION_PACKAGE_REMOVED,
       Intent.ACTION_PACKAGE_CHANGED,
       Intent.ACTION_PACKAGE_REPLACED
-    )
-      .onStart<Any?> { emit(Unit) }
+    ).onStart<Any?> { emit(Unit) }
       .mapLatest {
         withContext(coroutineContext) {
           val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
           packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
-              catch {
+              runCatching {
                 Shortcut(
                   intent = Intent().apply {
                     action = Intent.ACTION_CREATE_SHORTCUT
@@ -53,7 +53,7 @@ interface ShortcutRepository {
                   name = resolveInfo.loadLabel(packageManager).toString(),
                   icon = resolveInfo.loadIcon(packageManager)
                 )
-              }.getOrNull()
+              }.getOrElse { null }
             }
             .filterNotNull()
             .sortedBy { it.name }

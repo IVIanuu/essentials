@@ -30,7 +30,7 @@ abstract class AbstractFunTileService<T : Any>(
 ) : TileService() {
   private val serviceComponent by lazy {
     application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<FunTileServiceComponent>()
   }
 
@@ -106,9 +106,8 @@ data class TileModelComponent(
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel = state(
+  val tileModel = coroutineScope.state(
     block = tileModelElements.toMap()[tileId]
       ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
-        .cast()
   )
 }

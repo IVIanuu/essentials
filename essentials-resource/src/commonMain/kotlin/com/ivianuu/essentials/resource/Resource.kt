@@ -6,8 +6,10 @@
 
 package com.ivianuu.essentials.resource
 
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.*
 import kotlinx.coroutines.flow.*
+import kotlin.onFailure
+import kotlin.runCatching
 
 sealed interface Resource<out T>
 
@@ -48,32 +50,11 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
-fun <T> Flow<Result<T, Throwable>>.flowResultAsResource(): Flow<Resource<T>> = flow {
-  emit(Loading)
-  this@flowResultAsResource
-    .map { it.toResource() }
-    .let { emitAll(it) }
-}
-
-fun <T> Flow<Resource<T>>.unwrapResource(): Flow<T> = flow {
-  this@unwrapResource.collect { value ->
-    when (value) {
-      is Success -> emit(value.value)
-      is Error -> throw value.error
-      else -> {}
-    }
-  }
-}
-
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)
-    catch {
-      block(object : FlowCollector<T> {
-        override suspend fun emit(value: T) {
-          this@flow.emit(Success(value))
-        }
-      })
+    runCatching {
+      block(FlowCollector<T> { value -> this@flow.emit(Success(value)) })
     }.onFailure { emit(Error(it)) }
   }
 

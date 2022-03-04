@@ -105,8 +105,8 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 @Provide fun checkableAppsModel(
   appRepository: AppRepository,
   params: CheckableAppsParams,
-  S: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = state {
+  scope: NamedCoroutineScope<KeyUiScope>
+): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state {
   val checkedApps = params.checkedApps.bind(emptySet())
   val allApps = appRepository.installedApps.bindResource()
 

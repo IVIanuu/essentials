@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -20,13 +19,13 @@ typealias KeyUiFactory<K> = (K) -> KeyUi<K>
   @Provide fun keyUi(
     keyClass: KClass<K>,
     keyUiFactory: KeyUiFactory<K>
-  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> = (keyClass to keyUiFactory).cast()
+  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> = (keyClass to keyUiFactory) as Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>>
 
   @Provide fun keyUiOptionFactory(
     keyClass: KClass<K>,
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
-    (keyClass to keyUiOptionsFactory).cast()
+    (keyClass to keyUiOptionsFactory) as Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
 }
 
 // todo make fun interface once compose is fixed
@@ -63,7 +62,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   scope: Scope<KeyUiScope>,
   sKey: TypeKey<S>
 ) = KeyUi<K> {
-  val currentModel by scope { state(block = model, scope = coroutineScope) }.collectAsState()
+  val currentModel by scope { coroutineScope.state { model(this) } }.collectAsState()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel

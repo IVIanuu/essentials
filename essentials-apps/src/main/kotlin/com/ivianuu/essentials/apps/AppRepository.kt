@@ -6,7 +6,7 @@ package com.ivianuu.essentials.apps
 
 import android.content.*
 import android.content.pm.*
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
@@ -60,9 +60,9 @@ interface AppRepository {
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(context) {
-        val applicationInfo = catch {
+        val applicationInfo = runCatching {
           packageManager.getApplicationInfo(packageName, 0)
-        }.getOrNull() ?: return@withContext null
+        }.getOrElse { null } ?: return@withContext null
         AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
       }
     }
@@ -75,7 +75,7 @@ interface AppRepository {
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(context) {
-        catch { packageManager.getApplicationInfo(packageName, 0) }
+        runCatching { packageManager.getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }
     }

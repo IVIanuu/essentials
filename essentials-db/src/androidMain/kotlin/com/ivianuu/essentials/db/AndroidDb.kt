@@ -9,6 +9,7 @@ import android.database.sqlite.*
 import com.ivianuu.essentials.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
 
 class AndroidDb private constructor(
@@ -107,14 +108,15 @@ class AndroidDb private constructor(
 
     val changedTableNames = mutableSetOf<String?>()
 
-    private val refs = Atomic(0)
+    private var refs = 0
+    private val refsLock = Mutex()
 
     suspend fun acquire() {
-      refs.update { it.inc() }
+      refsLock.withLock { refs++ }
     }
 
     suspend fun release() {
-      if (refs.update { it.dec() } == 0) {
+      if (refsLock.withLock { refs-- } == 0) {
         controlJob.cancel()
         this@AndroidDb.launch {
           synchronized(changedTableNames) { changedTableNames.toList() }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.key
 import androidx.compose.ui.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import kotlinx.coroutines.*
@@ -111,7 +110,7 @@ private class AnimatedStackWithItemsState<T>(
     }
 
     state.animationOverlays.toList().forEach { overlay ->
-      key(overlay.cast()) { overlay() }
+      key(overlay as Any) { overlay() }
     }
   }
 }

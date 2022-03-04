@@ -12,6 +12,7 @@ import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
 import io.mockk.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.*
 import org.junit.*
 
 class DisplayInfoTest {

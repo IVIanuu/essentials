@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ads
 
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
@@ -21,7 +20,7 @@ interface AdFeature
 @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
   keyClass: KClass<K>,
   features: AdFeatures<K>
-): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features).cast()
+): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features) as Pair<KClass<out Key<*>>, AdFeatures<*>>
 
 fun interface IsAdFeatureEnabledUseCase : (KClass<out Key<*>>, AdFeature) -> Boolean
 

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.rate.domain
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.rate.data.*
@@ -19,7 +20,7 @@ fun interface RateOnPlayUseCase : suspend () -> Unit
   navigator: Navigator,
   pref: DataStore<RatePrefs>
 ) = RateOnPlayUseCase {
-  catch {
+  runCatching {
     navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }

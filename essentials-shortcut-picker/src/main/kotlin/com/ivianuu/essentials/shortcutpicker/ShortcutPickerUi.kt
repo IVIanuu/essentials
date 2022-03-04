@@ -12,7 +12,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.painter.*
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.drawable.*
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.image.*
@@ -23,6 +23,8 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
+import kotlin.onFailure
+import kotlin.runCatching
 
 object ShortcutPickerKey : Key<Shortcut>
 
@@ -57,10 +59,10 @@ data class ShortcutPickerModel(
 ) = ShortcutPickerModel(
   shortcuts = shortcutRepository.shortcuts.bindResource(),
   pickShortcut = action { shortcut ->
-    catch {
+    runCatching {
       val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())
-        ?.getOrNull()
-        ?.data ?: return@catch
+        ?.getOrElse { null }
+        ?.data ?: return@runCatching
       val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
       ctx.navigator.pop(ctx.key, finalShortcut)
     }.onFailure {

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.backup
 
 import android.content.*
 import android.icu.text.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
@@ -29,7 +30,7 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = CreateBackupUseCase {
-  catch {
+  runCatching {
     withContext(scope.coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
@@ -74,7 +75,7 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = RestoreBackupUseCase {
-  catch {
+  runCatching {
     withContext(scope.coroutineContext + context) {
       val uri = navigator.push(
         Intent.createChooser(
@@ -83,7 +84,7 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
           },
           ""
         ).toIntentKey()
-      )?.getOrNull()?.data?.data ?: return@withContext
+      )?.getOrElse { null }?.data?.data ?: return@withContext
 
       val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 

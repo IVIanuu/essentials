@@ -7,5 +7,5 @@ package com.ivianuu.essentials
 import kotlin.coroutines.cancellation.*
 
 actual fun Throwable.isFatal(): Boolean =
-  this is CancellationException || this is ControlException || this is VirtualMachineError ||
+  this is CancellationException || this is VirtualMachineError ||
       this is ThreadDeath || this is InterruptedException || this is LinkageError

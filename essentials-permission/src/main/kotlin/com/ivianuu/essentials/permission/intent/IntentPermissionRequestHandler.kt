@@ -32,7 +32,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
       if (showFindPermissionHint.value)
         showToast(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
-      catch { navigator.push(intentFactory(permission).toIntentKey()) }
+      runCatching { navigator.push(intentFactory(permission).toIntentKey()) }
         .onFailure { showToast(R.string.es_grant_permission_manually) }
     },
     {

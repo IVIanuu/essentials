@@ -5,11 +5,11 @@
 package com.ivianuu.essentials.db
 
 import androidx.test.core.app.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.test.*
 import io.kotest.matchers.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.*
 import kotlinx.serialization.*
 import org.junit.*
 import org.junit.runner.*
@@ -65,7 +65,7 @@ class AndroidDbTest {
     )
 
     db.insert(MyEntity("Manuel", 25))
-    catch { db.insert(MyEntity("Manuel", 24), InsertConflictStrategy.ABORT) }
+    runCatching { db.insert(MyEntity("Manuel", 24), InsertConflictStrategy.ABORT) }
 
     db.selectAll<MyEntity>().first() shouldBe listOf(MyEntity("Manuel", 25))
 
@@ -589,7 +589,7 @@ class AndroidDbTest {
       )
     )
 
-    catch {
+    runCatching {
       db.transaction {
         val entity = MyEntity("Manuel", 25)
         db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}", "MyEntity")
@@ -612,7 +612,7 @@ class AndroidDbTest {
       )
     )
 
-    catch {
+    runCatching {
       db.transaction {
         val entity = MyEntity("Manuel", 25)
         db.execute("INSERT INTO MyEntity ${entity.toSqlColumnsAndArgsString(db.schema)}", "MyEntity")

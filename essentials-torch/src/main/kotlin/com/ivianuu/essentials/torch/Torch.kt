@@ -8,6 +8,7 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import android.hardware.camera2.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*
@@ -66,7 +67,7 @@ interface Torch {
     )
   }
 
-  private suspend fun enableTorch() = catch {
+  private suspend fun enableTorch() = runCatching {
     val cameraId = cameraManager.cameraIdList[0]
     log { "enable torch" }
     cameraManager.setTorchMode(cameraId, true)
@@ -100,12 +101,12 @@ interface Torch {
         }
 
         log { "torch unavailable" }
-        catch { cameraManager.setTorchMode(cameraId, false) }
+        runCatching { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       },
       onCancel = {
         log { "disable torch on cancel" }
-        catch { cameraManager.setTorchMode(cameraId, false) }
+        runCatching { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     )

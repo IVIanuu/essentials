@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlin.coroutines.*
@@ -15,13 +14,12 @@ interface Actor<T> : CoroutineScope {
   fun tryAct(message: T): ChannelResult<Unit>
 }
 
-fun <T> actor(
+fun <T> CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
-  @Inject scope: CoroutineScope,
   block: suspend ActorScope<T>.() -> Unit
-): Actor<T> = ActorImpl(scope.coroutineContext + context, capacity, start, block)
+): Actor<T> = ActorImpl(coroutineContext + context, capacity, start, block)
 
 interface ActorScope<T> : CoroutineScope, ReceiveChannel<T>
 
@@ -47,10 +45,9 @@ private class ActorImpl<T>(
   }
 }
 
-fun actor(
+fun CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
-  capacity: Int = 64,
-  @Inject S: CoroutineScope
+  capacity: Int = 64
 ): Actor<suspend () -> Unit> = actor(context, capacity) {
   for (block in this) block()
 }

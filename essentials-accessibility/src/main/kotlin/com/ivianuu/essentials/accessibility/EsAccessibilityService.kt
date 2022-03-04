@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.*
 class EsAccessibilityService : AccessibilityService() {
   private val serviceComponent by lazy {
     application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<EsAccessibilityServiceComponent>()
   }
 

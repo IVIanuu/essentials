@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.*
 class ForegroundService : Service() {
   private val component by lazy {
     application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<ForegroundServiceComponent>()
   }
 

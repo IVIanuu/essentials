@@ -8,6 +8,7 @@ import android.content.*
 import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
@@ -21,7 +22,7 @@ interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 @Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
   keyClass: KClass<K>
-): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory).cast()
+): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory) as Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
 
 fun interface KeyIntentFactory<T> : (T) -> Intent
 
@@ -46,10 +47,13 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
             UUID.randomUUID().toString(),
             ActivityResultContracts.StartActivityForResult()
           ) {
-            if (continuation.isActive) continuation.resume(it.ok())
+            if (continuation.isActive) continuation.resume(Ok(it))
           }
-          catchT<Unit, ActivityNotFoundException> { launcher.launch(intent) }
-            .onFailure { continuation.resume(it.err()) }
+          try {
+            launcher.launch(intent)
+          } catch (e: ActivityNotFoundException) {
+            continuation.resume(Err(e))
+          }
           continuation.invokeOnCancellation { launcher.unregister() }
         }
       onResult(result)

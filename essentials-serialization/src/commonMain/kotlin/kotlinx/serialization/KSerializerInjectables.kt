@@ -4,11 +4,10 @@
 
 package kotlinx.serialization
 
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 object SerializationInjectables {
   @Provide inline fun <T> kSerializer(type: KTypeT<T>): KSerializer<T> =
-    serializer(type).cast()
+    serializer(type) as KSerializer<T>
 }

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.license.domain
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.license.data.*
 import com.ivianuu.injekt.*
@@ -22,7 +23,7 @@ interface LicenceProjectRepository {
   private val json: Json
 ) : LicenceProjectRepository{
   override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {
-    catch {
+    runCatching {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()
         .let { String(it) }

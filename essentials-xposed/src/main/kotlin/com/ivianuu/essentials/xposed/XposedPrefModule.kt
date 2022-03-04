@@ -42,7 +42,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     fun readData(): T {
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        catch { json.decodeFromString(serializer, serialized) }
+        runCatching { json.decodeFromString(serializer, serialized) }
           .onFailure { it.printStackTrace() }
           .getOrNull()
       } ?: initial()
@@ -65,7 +65,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .flowOn(coroutineContext)
       .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
-    val actor = actor(coroutineContext)
+    val actor = scope.actor(coroutineContext)
 
     return object : DataStore<T> {
       override val data: Flow<T>
@@ -100,8 +100,8 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       sharedPrefs.reload()
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        catch { json.decodeFromString(serializer, serialized) }
-          .getOrNull()
+        runCatching { json.decodeFromString(serializer, serialized) }
+          .getOrElse { null }
       } ?: initial()
     }
 

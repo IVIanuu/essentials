@@ -4,14 +4,16 @@
 
 package com.ivianuu.essentials.data
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.fold
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import java.io.*
 import kotlin.coroutines.*
+import kotlin.fold
+import kotlin.runCatching
 
 interface Serializer<T> {
   val defaultData: T
@@ -82,7 +84,7 @@ private class DiskDataStoreImpl<T>(
     for (message in this) {
       when (message) {
         is Message.UpdateData -> {
-          catch {
+          runCatching {
             val currentData = readData()
             val newData = message.transform(currentData)
             if (newData != currentData) {
@@ -92,13 +94,13 @@ private class DiskDataStoreImpl<T>(
             newData
           }
             .fold(
-              success = { message.newData.complete(it) },
-              failure = { message.newData.completeExceptionally(it) }
+              onSuccess = { message.newData.complete(it) },
+              onFailure = { message.newData.completeExceptionally(it) }
             )
         }
         is Message.ReadData -> {
           if (message.lastState is State.Uninitialized) {
-            state.value = catch { readData() }
+            state.value = runCatching { readData() }
               .fold({ State.Data(it) }, { State.ReadError(it) })
           }
         }

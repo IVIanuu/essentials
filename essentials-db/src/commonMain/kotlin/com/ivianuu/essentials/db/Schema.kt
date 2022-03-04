@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.db
 
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.serialization.*
@@ -64,7 +63,7 @@ private class SchemaImpl(
   }
 
   override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
-    _entities[key]?.cast() ?: error("Unknown entity $key")
+    _entities[key]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 
 interface Migration {

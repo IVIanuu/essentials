@@ -7,12 +7,12 @@ package com.ivianuu.essentials.android.settings
 import android.content.*
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.*
 import io.kotest.matchers.*
 import io.kotest.matchers.collections.*
 import io.mockk.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
 import org.junit.*
 import org.junit.runner.*
 import org.robolectric.annotation.*
@@ -49,7 +49,7 @@ class AndroidSettingsStateTest {
     val setting = module.dataStore(
       scope = this,
       adapter = adapter,
-      dispatcher = coroutineContext.get(CoroutineDispatcher.Key)!!,
+      context = coroutineContext.get(CoroutineDispatcher.Key)!!,
       contentChangesFactory = { contentChanges },
       contentResolver = mockk()
     )

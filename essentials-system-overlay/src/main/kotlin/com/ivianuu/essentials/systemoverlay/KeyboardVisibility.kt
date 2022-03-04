@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.systemoverlay
 
 import android.view.inputmethod.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.injekt.*
@@ -48,8 +49,8 @@ import kotlinx.coroutines.flow.*
 @Provide fun keyboardHeightProvider(
   inputMethodManager: @SystemService InputMethodManager
 ): @KeyboardHeightProvider () -> Int? = {
-  catch {
+  runCatching {
     val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
     method.invoke(inputMethodManager) as Int
-  }.getOrNull()
+  }.getOrElse { null }
 }

@@ -16,14 +16,13 @@ import java.nio.file.*
 class PrefModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {
     val prefsDataStore = prefsDataStoreModule.dataStore(
-      dispatcher = dispatcher,
+      context = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       scope = this,
       initial = { emptyMap() }
     )
 
     val dataStore = PrefModule { MyPrefs() }.dataStore(
-      dispatcher = dispatcher,
       prefsDataStore = prefsDataStore,
       scope = this
     )
@@ -55,7 +54,6 @@ class PrefModuleTest {
 
   @Test fun testNullableFieldWithDefaultValue() = runCancellingBlockingTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
-      dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
       scope = this
     )
@@ -65,7 +63,6 @@ class PrefModuleTest {
 
   @Test fun testNullableFieldWithDefaultValueWhichIsNull() = runCancellingBlockingTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
-      dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
       scope = this
     )
@@ -77,7 +74,6 @@ class PrefModuleTest {
 
   @Test fun testNullableFieldWithDefaultValue2() = runCancellingBlockingTest {
     val dataStore = PrefModule { NullableWithDefault() }.dataStore(
-      dispatcher = dispatcher,
       prefsDataStore = TestDataStore(emptyMap()),
       scope = this
     )

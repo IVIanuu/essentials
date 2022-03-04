@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.shell
 
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import eu.chainfire.libsuperuser.Shell.*
@@ -18,10 +18,10 @@ interface Shell {
 
 @Provide class ShellImpl(private val context: IOContext) : Shell {
   override suspend fun isAvailable() = withContext(context) {
-    catch { SU.available() }.getOrElse { false }
+    runCatching { SU.available() }.getOrElse { false }
   }
 
   override suspend fun run(vararg commands: String) = withContext(context) {
-    catch { SU.run(commands)!! }
+    runCatching { SU.run(commands)!! }
   }
 }

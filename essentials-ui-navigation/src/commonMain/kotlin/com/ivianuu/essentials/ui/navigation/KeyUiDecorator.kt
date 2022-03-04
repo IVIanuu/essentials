@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.injekt.*
@@ -15,7 +14,7 @@ import com.ivianuu.injekt.common.*
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
-) = KeyUiDecoratorElement(key, instance, loadingOrder.cast())
+) = KeyUiDecoratorElement(key, instance, loadingOrder as LoadingOrder<KeyUiDecorator>)
 
 fun interface KeyUiDecorator : @Composable (@Composable () -> Unit) -> Unit
 

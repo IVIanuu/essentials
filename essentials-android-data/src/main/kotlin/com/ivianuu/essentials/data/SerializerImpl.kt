@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.data
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.serialization.*
@@ -17,7 +18,7 @@ import kotlinx.serialization.json.*
   override val defaultData: T
     get() = _defaultData()
 
-  override fun deserialize(serializedData: String): T = catch {
+  override fun deserialize(serializedData: String): T = com.github.michaelbull.result.runCatching {
     json.decodeFromString(serializer, serializedData)
   }.getOrElse { throw SerializerException("Couldn't deserialize data", it) }
 

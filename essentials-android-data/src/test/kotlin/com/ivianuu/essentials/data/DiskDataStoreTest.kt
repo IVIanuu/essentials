@@ -25,8 +25,8 @@ class DiskDataStoreTest {
     name: String,
     serializer: Serializer<T>? = null,
     @Inject type: KTypeT<T>,
-    scope: CoroutineScope,
-    @Provide defaultData: @Provide () -> @InitialOrDefault T
+    @Inject scope: CoroutineScope,
+    @Inject defaultData: @Provide () -> @InitialOrDefault T
   ): Pair<DataStore<T>, File> = DiskDataStore(
     coroutineContext = scope.coroutineContext,
     produceFile = { File(storeDir, name) },

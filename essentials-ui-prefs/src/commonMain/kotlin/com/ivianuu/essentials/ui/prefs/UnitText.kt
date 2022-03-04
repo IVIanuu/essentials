@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlin.math.*
 
@@ -19,11 +18,11 @@ import kotlin.math.*
 }
 
 enum class ValueUnit(val picker: UnitStrings.(Any) -> String) {
-  DP({ dp(it.cast()) }),
-  MILLIS({ millis(it.cast()) }),
-  PERCENTAGE({ percentage(it.cast()) }),
-  PX({ px(it.cast()) }),
-  SECONDS({ seconds(it.cast()) })
+  DP({ dp(it as Int) }),
+  MILLIS({ millis(it as Long) }),
+  PERCENTAGE({ percentage(it as Int) }),
+  PX({ px(it as Int) }),
+  SECONDS({ seconds(it as Int) })
 }
 
 interface UnitStrings {

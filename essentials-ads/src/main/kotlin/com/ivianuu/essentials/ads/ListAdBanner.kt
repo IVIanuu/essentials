@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
@@ -26,9 +25,9 @@ fun interface ListAdBanner : ListDecorator
 ) = ListAdBanner decorator@ {
   if (config != null && isVertical) {
     item(null) {
-      val key = catch {
+      val key = runCatching {
         LocalKeyUiElements.current<ListAdBannerComponent>().key::class
-      }.getOrNull()
+      }.getOrElse { null }
       if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
         showAdsFlow.collectAsState().value.value)
         AdBanner(config)

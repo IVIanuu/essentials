@@ -7,7 +7,7 @@ package com.ivianuu.essentials.license.ui
 import androidx.compose.foundation.*
 import androidx.compose.material.Text
 import androidx.compose.ui.*
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.*
 import com.ivianuu.essentials.license.domain.*
@@ -42,7 +42,7 @@ data class LicenseModel(
   licenseProjectRepository: LicenceProjectRepository,
   ctx: KeyUiContext<LicenseKey>
 ) = LicenseModel(
-  projects = produceResource { licenseProjectRepository.getLicenseProjects().get() },
+  projects = produceResource { licenseProjectRepository.getLicenseProjects().getOrThrow() },
   openProject = action { project ->
     if (project.url != null)
       ctx.navigator.push(UrlKey(project.url))

@@ -180,7 +180,7 @@ private fun StatusBarNotification.toUiNotification(
   @Inject context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
-    value = catch {
+    value = runCatching {
       notification.smallIcon
         .loadDrawable(context)
     }.recover {

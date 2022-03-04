@@ -32,7 +32,7 @@ class ScreenOnActivity : ComponentActivity() {
     }
 
     @Provide val component = application
-      .cast<AppElementsOwner>()
+      .let { it as AppElementsOwner }
       .appElements<ScreenOnActivityComponent>()
 
     log(logger = component.logger) { "turn screen on for $requestId" }
