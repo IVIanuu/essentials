@@ -50,10 +50,8 @@ kotlin {
         api(Deps.Accompanist.flowLayout)
         api(Deps.Accompanist.pager)
         api(Deps.Accompanist.pagerIndicators)
-        api(Deps.Accompanist.swipeRefresh)
         api(Deps.AndroidX.Activity.compose)
         api(Deps.AndroidX.core)
-        api(Deps.AndroidX.ConstraintLayout.compose)
         api(Deps.Injekt.android)
       }
     }

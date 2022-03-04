@@ -19,7 +19,6 @@ object Deps {
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
-    const val swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:$version"
   }
 
   const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
@@ -33,9 +32,7 @@ object Deps {
 
     const val core = "androidx.core:core-ktx:1.5.0-alpha05"
 
-    object ConstraintLayout {
-      const val compose = "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
-    }
+    const val dataStore = "androidx.datastore:datastore:1.0.0"
 
     object Lifecycle {
       private const val version = "2.3.1"
