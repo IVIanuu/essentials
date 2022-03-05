@@ -9,7 +9,6 @@ plugins {
   kotlin("kapt")
   kotlin("plugin.serialization")
   id("com.github.johnrengelman.shadow")
-  id("org.jetbrains.compose")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
@@ -35,11 +34,8 @@ artifacts {
 dependencies {
   compileOnly(Deps.Kotlin.compilerEmbeddable)
   compileOnly(Deps.Injekt.compilerPlugin)
-  compileOnly(Deps.Compose.compiler)
   implementation(Deps.autoService)
   kapt(Deps.autoService)
-  testImplementation(Deps.Compose.compiler)
-  testImplementation(Deps.Compose.runtime)
   testImplementation(Deps.Injekt.compilerPlugin)
   testImplementation(Deps.junit)
   testImplementation(Deps.Kotlin.compilerEmbeddable)

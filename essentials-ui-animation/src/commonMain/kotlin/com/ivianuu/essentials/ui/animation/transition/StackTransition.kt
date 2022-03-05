@@ -55,13 +55,6 @@ suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
 val LayoutCoordinates.rootCoordinates: LayoutCoordinates
   get() = parentCoordinates?.rootCoordinates ?: this
 
-fun StackTransitionScope.overlay(overlay: @Composable () -> Unit): Job = launch(
-  start = CoroutineStart.UNDISPATCHED
-) {
-  state.animationOverlays += overlay
-  onCancel { state.animationOverlays -= overlay }
-}
-
 suspend fun StackTransitionScope.animate(
   spec: AnimationSpec<Float> = defaultAnimationSpec(),
   block: (Float) -> Unit

@@ -30,7 +30,6 @@ fun source(
   name = name,
   contents = buildString {
     appendLine("package $packageFqName")
-    appendLine("import androidx.compose.runtime.*")
     appendLine()
 
     append(source)
