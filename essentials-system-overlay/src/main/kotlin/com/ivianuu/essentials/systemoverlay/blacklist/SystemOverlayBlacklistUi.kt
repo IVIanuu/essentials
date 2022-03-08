@@ -6,6 +6,7 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.state.*
@@ -88,7 +89,7 @@ data class SystemOverlayBlacklistModel(
   val updateDisableOnSecureScreens: (Boolean) -> Unit
 )
 
-@Provide fun systemOverlayBlacklistModel(
+@Provide @Composable fun systemOverlayBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayBlacklistKey>
 ): SystemOverlayBlacklistModel {

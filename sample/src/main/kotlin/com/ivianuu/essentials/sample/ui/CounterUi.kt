@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.state.*
@@ -51,8 +52,9 @@ object CounterKey : Key<Unit>
 
 data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-@Provide fun counterModel(SS: StateScope, T: ToastContext): CounterModel {
-  var count by memo { stateVar(0) }
+@Provide @Composable fun counterModel(T: ToastContext): CounterModel {
+  var count by remember { mutableStateOf(0) }
+  println("current thread ${Thread.currentThread().name}")
   return CounterModel(
     count = count,
     inc = action { count++ },

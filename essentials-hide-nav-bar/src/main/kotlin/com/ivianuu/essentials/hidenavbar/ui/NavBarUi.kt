@@ -6,6 +6,7 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
@@ -54,7 +55,7 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-@Provide fun navBarModel(
+@Provide @Composable fun navBarModel(
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
   RP: ResourceProvider,

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.license.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.license.R
@@ -38,7 +39,7 @@ data class LicenseModel(
   val openProject: (Project) -> Unit
 )
 
-@Provide fun licenseModel(
+@Provide @Composable fun licenseModel(
   licenseProjectRepository: LicenceProjectRepository,
   ctx: KeyUiContext<LicenseKey>
 ) = LicenseModel(

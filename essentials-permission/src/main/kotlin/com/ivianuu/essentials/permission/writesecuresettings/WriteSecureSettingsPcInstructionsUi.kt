@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.*
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -172,7 +173,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-@Provide fun writeSecureSettingsPcInstructionsModel(
+@Provide @Composable fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -181,8 +182,8 @@ typealias AdbEnabled = @AdbEnabledTag Int
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
 ): WriteSecureSettingsPcInstructionsModel {
-  var currentStep by memo { stateVar(1) }
-  var completedStep by memo { stateVar(1) }
+  var currentStep by remember { mutableStateOf(1) }
+  var completedStep by remember { mutableStateOf(1) }
 
   val canContinueStep = if (currentStep != completedStep) false
   else when (completedStep) {

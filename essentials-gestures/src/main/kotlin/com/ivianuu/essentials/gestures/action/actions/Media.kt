@@ -9,6 +9,7 @@ import android.provider.*
 import android.view.*
 import androidx.compose.foundation.*
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
@@ -90,7 +91,7 @@ data class MediaActionSettingsModel(
   val updateMediaApp: () -> Unit
 )
 
-@Provide fun mediaActionSettingsModel(
+@Provide @Composable fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>,

@@ -139,13 +139,12 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Provide fun notificationsModel(
+@Provide @Composable fun notificationsModel(
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
   service: NotificationService,
   C: AppContext,
-  S: NamedCoroutineScope<KeyUiScope>,
-  SS: StateScope
+  S: NamedCoroutineScope<KeyUiScope>
 ) = NotificationsModel(
   hasPermissions = permissionState.bindResource(),
   notifications = service.notifications

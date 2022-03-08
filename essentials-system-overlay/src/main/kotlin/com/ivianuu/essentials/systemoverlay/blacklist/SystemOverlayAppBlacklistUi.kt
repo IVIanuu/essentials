@@ -39,7 +39,7 @@ data class SystemOverlayAppBlacklistModel(
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide fun systemOverlayAppBlacklistModel(
+@Provide @Composable fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayAppBlacklistKey>
 ) = SystemOverlayAppBlacklistModel(

@@ -52,7 +52,7 @@ data class ShortcutPickerModel(
   val pickShortcut: (Shortcut) -> Unit
 )
 
-@Provide fun shortcutPickerModel(
+@Provide @Composable fun shortcutPickerModel(
   shortcutRepository: ShortcutRepository,
   T: ToastContext,
   ctx: KeyUiContext<ShortcutPickerKey>

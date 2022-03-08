@@ -4,143 +4,102 @@
 
 package com.ivianuu.essentials.state
 
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.*
 import com.ivianuu.essentials.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
-import kotlin.reflect.*
+import kotlin.coroutines.*
 
-interface StateScope : CoroutineScope {
-  val invalidations: Flow<Unit>
+expect val StateContext: CoroutineContext
 
-  fun <T> memo(vararg args: Any?, @Inject key: StateKey, init: () -> T): T
+fun <T> CoroutineScope.state(body: @Composable () -> T): StateFlow<T> {
+  var flow: MutableStateFlow<T>? = null
 
-  fun invalidate()
-}
-
-fun <S> CoroutineScope.state(block: StateScope.() -> S): StateFlow<S> {
-  val invalidations = Channel<Unit>(capacity = Channel.UNLIMITED)
-  val invalidationsFlow = MutableSharedFlow<Unit>(extraBufferCapacity = Channel.UNLIMITED)
-
-  val stateScope = object : StateScope, CoroutineScope by this {
-    private val states = mutableMapOf<Any, MemoizedState>()
-    private var iteration = 0
-
-    override val invalidations = invalidationsFlow
-
-    override fun <T> memo(vararg args: Any?, @Inject key: StateKey, init: () -> T): T {
-      val state = states[key]
-      return if (state != null) {
-        state.lastUsed = iteration
-        if (!args.contentEquals(state.args)) {
-          val value = init()
-          state.args = args
-          (state.value as? MemoObserver)?.onDispose()
-          state.value = value
-          (value as? MemoObserver)?.onInit()
-          value
-        } else {
-          state.value as T
-        }
+  state(
+    emitter = { value ->
+      val outputFlow = flow
+      if (outputFlow != null) {
+        outputFlow.value = value
       } else {
-        val value = init()
-        states[key] = MemoizedState(args, value, iteration)
-        (value as? MemoObserver)?.onInit()
-        value
+        flow = MutableStateFlow(value)
       }
-    }
+    },
+    body = body,
+  )
 
-    override fun invalidate() {
+  return flow!!
+}
+
+private fun <T> CoroutineScope.state(
+  emitter: (value: T) -> Unit,
+  body: @Composable () -> T,
+) {
+  val recomposer = Recomposer(coroutineContext)
+  val composition = Composition(UnitApplier, recomposer)
+  launch(start = CoroutineStart.UNDISPATCHED) {
+    recomposer.runRecomposeAndApplyChanges()
+  }
+
+  var applyScheduled = false
+  val snapshotHandle = Snapshot.registerGlobalWriteObserver {
+    if (!applyScheduled) {
+      applyScheduled = true
       launch {
-        invalidations.send(Unit)
+        applyScheduled = false
+        Snapshot.sendApplyNotifications()
       }
-    }
-
-    fun run(): S {
-      iteration++
-      return block()
-        .also {
-          states
-            .filterValues { it.lastUsed < iteration }
-            .forEach { states.remove(it.key) }
-        }
     }
   }
+  coroutineContext.job.invokeOnCompletion {
+    composition.dispose()
+    snapshotHandle.dispose()
+  }
 
-  fun run(): S = stateScope.run()
-    .also {
-      stateScope.launch {
-        invalidationsFlow.emit(Unit)
-      }
-    }
-
-  return invalidations
-    .receiveAsFlow()
-    .map { run() }
-    .stateIn(this, SharingStarted.Eagerly, run())
-}
-
-fun <T> invalidationFlow(@Inject scope: StateScope, block: (@Inject StateScope) -> T): Flow<T> =
-  scope.invalidations
-    .onStart { emit(Unit) }
-    .map { block() }
-    .distinctUntilChanged()
-
-fun <T> memo(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, init: () -> T): T =
-  scope.memo(*args, init = init)
-
-fun memoLaunch(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, block: suspend CoroutineScope.() -> Unit) {
-  val coroutineScope = memoScope(*args)
-  memo(coroutineScope) {
-    coroutineScope.launch(block = block)
+  composition.setContent {
+    emitter(body())
   }
 }
 
-fun memoScope(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): CoroutineScope =
-  memo(*args) {
-    object : CoroutineScope, MemoObserver {
-      override val coroutineContext = scope.coroutineContext + Job(scope.coroutineContext.job)
-      override fun onDispose() {
-        cancel()
-      }
-    }
-  }
+private object UnitApplier : AbstractApplier<Unit>(Unit) {
+  override fun insertBottomUp(index: Int, instance: Unit) {}
+  override fun insertTopDown(index: Int, instance: Unit) {}
+  override fun move(from: Int, to: Int, count: Int) {}
+  override fun remove(index: Int, count: Int) {}
+  override fun onClear() {}
+}
 
-fun <T> Flow<T>.bind(initial: T, vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): T {
-  val state = memo(*args) { stateVar(initial) }
+@Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
+  val state = remember(*args) { mutableStateOf(initial) }
 
-  memoLaunch(state) {
+  LaunchedEffect(state) {
     collect { state.value = it }
   }
 
   return state.value
 }
 
-fun <T> StateFlow<T>.bind(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): T =
+@Composable fun <T> StateFlow<T>.bind(vararg args: Any?): T =
   bind(initial = value, args = *args)
 
-fun <T> Flow<T>.bindResource(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope): Resource<T> =
-  memo(*args) { flowAsResource() }
+@Composable fun <T> Flow<T>.bindResource(vararg args: Any?): Resource<T> =
+  remember(*args) { flowAsResource() }
     .bind(initial = Idle)
 
 interface ProduceValueScope<T> : CoroutineScope {
   var value: T
 }
 
-fun <T> produceValue(
+@Composable fun <T> produceValue(
   initial: T,
   vararg args: Any?,
-  @Inject key: StateKey,
-  @Inject scope: StateScope,
   block: suspend ProduceValueScope<T>.() -> Unit
 ): T {
-  val state = memo(*args) { stateVar(initial) }
+  val state = remember(*args) { mutableStateOf(initial) }
 
-  memoLaunch(state) {
+  LaunchedEffect(state) {
     block(
-      object : ProduceValueScope<T>, CoroutineScope by scope {
+      object : ProduceValueScope<T>, CoroutineScope by this {
         override var value by state
       }
     )
@@ -149,84 +108,59 @@ fun <T> produceValue(
   return state.value
 }
 
-fun <T> produceResource(vararg args: Any?, @Inject key: StateKey, @Inject scope: StateScope, block: suspend () -> T): Resource<T> =
-  memo(*args) { resourceFlow { emit(block()) } }.bind(Idle)
+@Composable fun <T> produceResource(vararg args: Any?, block: suspend () -> T): Resource<T> =
+  remember(*args) { resourceFlow { emit(block()) } }.bind(Idle)
 
-fun action(@Inject scope: StateScope, block: suspend () -> Unit): () -> Unit = {
-  scope.launch {
-    block()
+@Composable fun action(block: suspend () -> Unit): () -> Unit {
+  val scope = rememberCoroutineScope()
+  return {
+    scope.launch {
+      block()
+    }
   }
 }
 
-fun <P1> action(@Inject scope: StateScope, block: suspend (P1) -> Unit): (P1) -> Unit = { p1 ->
-  scope.launch {
-    block(p1)
+@Composable fun <P1> action(block: suspend (P1) -> Unit): (P1) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1 ->
+    scope.launch {
+      block(p1)
+    }
   }
 }
 
-fun <P1, P2> action(@Inject scope: StateScope, block: suspend (P1, P2) -> Unit): (P1, P2) -> Unit =
-  { p1, p2 ->
+@Composable fun <P1, P2> action(block: suspend (P1, P2) -> Unit): (P1, P2) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2 ->
     scope.launch {
       block(p1, p2)
     }
   }
+}
 
-fun <P1, P2, P3> action(@Inject scope: StateScope, block: suspend (P1, P2, P3) -> Unit): (P1, P2, P3) -> Unit =
-  { p1, p2, p3 ->
+@Composable fun <P1, P2, P3> action(block: suspend (P1, P2, P3) -> Unit): (P1, P2, P3) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3 ->
     scope.launch {
       block(p1, p2, p3)
     }
   }
+}
 
-fun <P1, P2, P3, P4> action(@Inject scope: StateScope, block: suspend (P1, P2, P3, P4) -> Unit): (P1, P2, P3, P4) -> Unit =
-  { p1, p2, p3, p4 ->
+@Composable fun <P1, P2, P3, P4> action(block: suspend (P1, P2, P3, P4) -> Unit): (P1, P2, P3, P4) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3, p4 ->
     scope.launch {
       block(p1, p2, p3, p4)
     }
   }
+}
 
-fun <P1, P2, P3, P4, P5> action(@Inject scope: StateScope, block: suspend (P1, P2, P3, P4, P5) -> Unit): (P1, P2, P3, P4, P5) -> Unit =
-  { p1, p2, p3, p4, p5 ->
+@Composable fun <P1, P2, P3, P4, P5> action(block: suspend (P1, P2, P3, P4, P5) -> Unit): (P1, P2, P3, P4, P5) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3, p4, p5 ->
     scope.launch {
       block(p1, p2, p3, p4, p5)
     }
   }
-
-fun <T> stateVar(initial: T, @Inject scope: StateScope) = StateVar(initial)
-
-class StateVar<T>(initial: T, @Inject private val scope: StateScope) {
-  var value = initial
-    set(value) {
-      field = value
-      scope.invalidate()
-    }
 }
-
-inline operator fun <T> StateVar<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
-
-inline operator fun <T> StateVar<T>.setValue(thisObj: Any?, property: KProperty<*>, value: T) {
-  this.value = value
-}
-
-inline fun <R> withKeys(
-  vararg args: Any?,
-  @Inject scope: StateScope,
-  @Inject key: StateKey,
-  block: (@Inject StateKey) -> R
-) = block(key + args.map { SourceKey(it.toString()) })
-
-interface MemoObserver {
-  fun onInit() {
-  }
-
-  fun onDispose() {
-  }
-}
-
-private class MemoizedState(
-  var args: Array<out Any?>,
-  var value: Any?,
-  var lastUsed: Int
-)
-
-typealias StateKey = List<SourceKey>

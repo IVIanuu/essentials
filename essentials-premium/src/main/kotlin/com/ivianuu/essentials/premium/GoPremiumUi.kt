@@ -250,7 +250,7 @@ data class GoPremiumModel(
   val tryBasicVersion: () -> Unit
 )
 
-@Provide fun goPremiumModel(
+@Provide @Composable fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   premiumVersionManager: PremiumVersionManager,

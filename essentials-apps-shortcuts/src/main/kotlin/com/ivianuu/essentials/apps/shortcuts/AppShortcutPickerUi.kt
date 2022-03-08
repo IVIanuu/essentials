@@ -47,7 +47,7 @@ data class AppShortcutPickerModel(
   val pickAppShortcut: (AppShortcut) -> Unit
 )
 
-@Provide fun appShortcutPickerModel(
+@Provide @Composable fun appShortcutPickerModel(
   appRepository: AppRepository,
   appShortcutRepository: AppShortcutRepository,
   ctx: KeyUiContext<AppShortcutPickerKey>

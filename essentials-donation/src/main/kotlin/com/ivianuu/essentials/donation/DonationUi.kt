@@ -98,7 +98,7 @@ data class UiDonation(
   val price: String
 )
 
-@Provide fun donationModel(
+@Provide @Composable fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,

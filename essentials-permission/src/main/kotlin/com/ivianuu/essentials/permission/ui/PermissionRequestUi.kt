@@ -7,6 +7,7 @@ package com.ivianuu.essentials.permission.ui
 import androidx.compose.foundation.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
@@ -51,7 +52,7 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-@Provide fun permissionRequestModel(
+@Provide @Composable fun permissionRequestModel(
   appUiStarter: AppUiStarter,
   permissions: Map<TypeKey<Permission>, Permission>,
   permissionStateFactory: PermissionStateFactory,
@@ -61,7 +62,7 @@ data class UiPermission<P : Permission>(
   val model = PermissionRequestModel(
     permissions = ctx.key.permissionsKeys
       .map { permissionKey ->
-        withKeys(permissionKey.value) {
+        key(permissionKey.value) {
           UiPermission(
             permissionKey,
             permissions[permissionKey]!!,
@@ -75,7 +76,7 @@ data class UiPermission<P : Permission>(
     }
   )
 
-  memoLaunch(model) {
+  LaunchedEffect(model) {
     if (ctx.key.permissionsKeys
         .all { permissionStateFactory(listOf(it)).first() }) {
       ctx.navigator.pop(ctx.key, true)

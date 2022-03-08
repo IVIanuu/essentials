@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.*
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
@@ -66,7 +67,7 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-@Provide fun writeSecureSettingsModel(
+@Provide @Composable fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
   shell: Shell,
