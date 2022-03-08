@@ -63,11 +63,24 @@ interface ProviderRegistry {
   override fun <T> getProvider(
     key: TypeKey<T>,
     requestingScope: ProviderScope
-  ): ProviderScope.() -> T {
+  ): ProviderScope.() -> T = frameworkProviderOrNull(key)
+     ?: providers[key] as? ProviderScope.() -> T
+     ?: parent?.getProvider(key, this)
+     ?: throw NoProviderFoundException(key)
+
+  override fun <T> collectListProviders(
+    key: TypeKey<T>,
+    providers: MutableList<ProviderScope.() -> T>
+  ) {
+    listProviders[key]?.let { providers += it as List<ProviderScope.() -> T> }
+    parent?.collectListProviders(key, providers)
+  }
+
+  private fun <T> frameworkProviderOrNull(key: TypeKey<T>): (ProviderScope.() -> T)? =
     when {
       key.classifierFqName == "kotlin.collections.List" -> {
         val elementKey = key.arguments[0]
-        return {
+        {
           buildList { collectListProviders(elementKey, this) }
             .map { it(this) } as T
         }
@@ -76,7 +89,7 @@ interface ProviderRegistry {
         when (key.classifierFqName) {
           "kotlin.Function0" -> {
             val valueKey = key.arguments[0]
-            return {
+            {
               {
                 get(valueKey)
               } as T
@@ -85,7 +98,7 @@ interface ProviderRegistry {
           "kotlin.Function1" -> {
             val p1Key = key.arguments[0] as TypeKey<Any?>
             val valueKey = key.arguments[1]
-            return {
+            {
               { p1: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -97,7 +110,7 @@ interface ProviderRegistry {
             val p1Key = key.arguments[0] as TypeKey<Any?>
             val p2Key = key.arguments[1] as TypeKey<Any?>
             val valueKey = key.arguments[2]
-            return {
+            {
               { p1: Any?, p2: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -111,7 +124,7 @@ interface ProviderRegistry {
             val p2Key = key.arguments[1] as TypeKey<Any?>
             val p3Key = key.arguments[2] as TypeKey<Any?>
             val valueKey = key.arguments[3]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -127,7 +140,7 @@ interface ProviderRegistry {
             val p3Key = key.arguments[2] as TypeKey<Any?>
             val p4Key = key.arguments[3] as TypeKey<Any?>
             val valueKey = key.arguments[4]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -145,7 +158,7 @@ interface ProviderRegistry {
             val p4Key = key.arguments[3] as TypeKey<Any?>
             val p5Key = key.arguments[4] as TypeKey<Any?>
             val valueKey = key.arguments[5]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any?, p5: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -165,7 +178,7 @@ interface ProviderRegistry {
             val p5Key = key.arguments[4] as TypeKey<Any?>
             val p6Key = key.arguments[5] as TypeKey<Any?>
             val valueKey = key.arguments[6]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any?, p5: Any?, p6: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -187,7 +200,7 @@ interface ProviderRegistry {
             val p6Key = key.arguments[5] as TypeKey<Any?>
             val p7Key = key.arguments[6] as TypeKey<Any?>
             val valueKey = key.arguments[7]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any?, p5: Any?, p6: Any?, p7: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -211,7 +224,7 @@ interface ProviderRegistry {
             val p7Key = key.arguments[6] as TypeKey<Any?>
             val p8Key = key.arguments[7] as TypeKey<Any?>
             val valueKey = key.arguments[8]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any?, p5: Any?, p6: Any?, p7: Any?, p8: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -237,7 +250,7 @@ interface ProviderRegistry {
             val p8Key = key.arguments[7] as TypeKey<Any?>
             val p9Key = key.arguments[8] as TypeKey<Any?>
             val valueKey = key.arguments[9]
-            return {
+            {
               { p1: Any?, p2: Any?, p3: Any?, p4: Any?, p5: Any?, p6: Any?, p7: Any?, p8: Any?, p9: Any? ->
                 buildChildInstance(valueKey) {
                   provide(p1Key) { p1 }
@@ -256,20 +269,8 @@ interface ProviderRegistry {
           else -> throw IllegalArgumentException("Unsupported ")
         }
       }
+      else -> null
     }
-
-    return providers[key] as? ProviderScope.() -> T
-      ?: parent?.getProvider(key, this)
-      ?: throw NoProviderFoundException(key)
-  }
-
-  override fun <T> collectListProviders(
-    key: TypeKey<T>,
-    providers: MutableList<ProviderScope.() -> T>
-  ) {
-    listProviders[key]?.let { providers += it as List<ProviderScope.() -> T> }
-    parent?.collectListProviders(key, providers)
-  }
 }
 
 class DuplicatedProviderException(
