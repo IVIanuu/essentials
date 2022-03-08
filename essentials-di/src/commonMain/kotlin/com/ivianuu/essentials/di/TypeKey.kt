@@ -4,9 +4,7 @@
 
 package com.ivianuu.essentials.di
 
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
+import kotlin.reflect.*
 
 data class TypeKey<T> internal constructor(
   val classifierFqName: String,
@@ -40,7 +38,10 @@ data class TypeKey<T> internal constructor(
   }
 }
 
-inline fun <reified T> typeKeyOf(): TypeKey<T> = typeOf<T>().asTypeKey()
+inline fun <reified T> typeKeyOf(): TypeKey<T> = typeOf<T>().asTypeKey(null)
+
+inline fun <reified T> typeKeyOf(arguments: Array<TypeKey<*>>): TypeKey<T> =
+  typeOf<T>().asTypeKey(arguments)
 
 fun <T> typeKeyOf(
   classifierFqName: String,
@@ -52,16 +53,17 @@ fun <T> typeKeyOf(
   arguments = arguments
 )
 
-@PublishedApi internal fun <T> KType.asTypeKey(): TypeKey<T> {
-  val args = arrayOfNulls<TypeKey<Any?>>(arguments.size)
-
-  for (index in arguments.indices) {
-    args[index] = arguments[index].type?.asTypeKey() ?: typeKeyOf("*", isNullable = true)
+@PublishedApi internal fun <T> KType.asTypeKey(arguments: Array<TypeKey<*>>?): TypeKey<T> {
+  val finalArguments = arguments ?: arrayOfNulls<TypeKey<Any?>>(this.arguments.size).apply {
+    for (index in this@asTypeKey.arguments.indices) {
+      this[index] = this@asTypeKey.arguments[index].type?.asTypeKey(null)
+        ?: typeKeyOf("*", isNullable = true)
+    }
   }
 
   return TypeKey(
     classifierFqName = (classifier as? KClass<Any>)?.qualifiedName ?: "*",
-    arguments = args as Array<TypeKey<*>>,
+    arguments = arguments as Array<TypeKey<*>>,
     isNullable = isMarkedNullable
   )
 }
