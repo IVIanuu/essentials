@@ -38,26 +38,13 @@ data class TypeKey<T> internal constructor(
   }
 }
 
-inline fun <reified T> typeKeyOf(): TypeKey<T> = typeOf<T>().asTypeKey(null)
+inline fun <reified T> typeKeyOf(): TypeKey<T> = typeOf<T>().asTypeKey()
 
-inline fun <reified T> typeKeyOf(arguments: Array<TypeKey<*>>): TypeKey<T> =
-  typeOf<T>().asTypeKey(arguments)
-
-fun <T> typeKeyOf(
-  classifierFqName: String,
-  isNullable: Boolean = false,
-  arguments: Array<TypeKey<*>> = emptyArray()
-): TypeKey<T> = TypeKey(
-  classifierFqName = classifierFqName,
-  isNullable = isNullable,
-  arguments = arguments
-)
-
-@PublishedApi internal fun <T> KType.asTypeKey(arguments: Array<TypeKey<*>>?): TypeKey<T> {
-  val finalArguments = arguments ?: arrayOfNulls<TypeKey<Any?>>(this.arguments.size).apply {
+@PublishedApi internal fun <T> KType.asTypeKey(): TypeKey<T> {
+  val arguments = arrayOfNulls<TypeKey<Any?>>(this.arguments.size).apply {
     for (index in this@asTypeKey.arguments.indices) {
-      this[index] = this@asTypeKey.arguments[index].type?.asTypeKey(null)
-        ?: typeKeyOf("*", isNullable = true)
+      this[index] = this@asTypeKey.arguments[index].type?.asTypeKey()
+        ?: TypeKey("*", true, emptyArray())
     }
   }
 

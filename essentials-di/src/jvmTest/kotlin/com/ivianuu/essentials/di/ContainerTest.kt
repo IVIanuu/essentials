@@ -15,6 +15,9 @@ class ContainerTest {
       add { resolve(::AppComponent) }
       add { resolve(::ActivityComponent) }
       addScoped(AppScope) { resolve(::ActivityService) }
+
+      elements<AppScope>()
+      element(AppScope) { resolve(::MyAppElement) }
     }
 
     val r = container.get<AppComponent>()
@@ -23,11 +26,16 @@ class ContainerTest {
   }
 }
 
+class MyAppElement(val scope: Scope<AppScope>)
+
 class App
 
 object AppScope
 
-class AppComponent(val activityComponent: (Scope<ActivityScope>) -> ActivityComponent)
+class AppComponent(
+  val activityComponent: (Scope<ActivityScope>) -> ActivityComponent,
+  val elements: Elements<AppScope>
+)
 
 object ActivityScope
 

@@ -31,26 +31,11 @@ private class ScopeImpl<N> : SynchronizedObject(), Scope<N>, Disposable {
   }
 }
 
-inline fun <reified N, reified T : Any> ContainerBuilder.addScoped(
+inline fun <reified N, T : Any> ContainerBuilder.addScoped(
   scopeName: N,
-  noinline factory: Container.() -> T
-) = addScoped<N, T>(factory)
-
-inline fun <reified N, reified T : Any> ContainerBuilder.addScoped(
-  noinline factory: Container.() -> T
-) = addScoped(typeKeyOf(), typeKeyOf<N>(), factory)
-
-fun <N, T : Any> ContainerBuilder.addScoped(
   key: TypeKey<T>,
-  scopeKey: TypeKey<N>,
-  factory: Container.() -> T
+  crossinline factory: Container.() -> T
 ) = add(key) {
-  val scope = get(
-    typeKeyOf<Scope<N>>(
-      classifierFqName = Scope::class.qualifiedName!!,
-      arguments = arrayOf(scopeKey)
-    )
-  )
-
+  val scope = get<Scope<N>>()
   scope(key) { factory() }
 }
