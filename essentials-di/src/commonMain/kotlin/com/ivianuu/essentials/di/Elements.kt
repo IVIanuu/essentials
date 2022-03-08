@@ -27,13 +27,13 @@ class ElementsImpl<N>(
 
 class Element<N>(val value: Any, val key: TypeKey<*>)
 
-inline fun <reified N> ContainerBuilder.elements() {
-  add<Elements<N>> { resolve(::ElementsImpl) }
+inline fun <reified N> ProviderRegistry.elements() {
+  provide<Elements<N>> { ElementsImpl(typeKeyOf(), get()) }
 }
 
-inline fun <reified N, reified T : Any> ContainerBuilder.element(
+inline fun <reified N, reified T : Any> ProviderRegistry.element(
   scopeName: N,
-  noinline factory: Container.() -> T
+  noinline factory: ProviderScope.() -> T
 ) {
-  add { Element<N>(factory(), typeKeyOf<T>()) }
+  provide { Element<N>(factory(), typeKeyOf<T>()) }
 }

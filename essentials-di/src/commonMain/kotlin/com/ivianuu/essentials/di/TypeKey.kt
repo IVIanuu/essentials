@@ -28,7 +28,7 @@ data class TypeKey<T> internal constructor(
       ""
     }
 
-    return "Key(type=${classifierFqName}${if (isNullable) "?" else ""}$params)"
+    return "${classifierFqName}$params${if (isNullable) "?" else ""}"
   }
 
   private fun generateHashCode(): Int {

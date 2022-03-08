@@ -31,11 +31,10 @@ private class ScopeImpl<N> : SynchronizedObject(), Scope<N>, Disposable {
   }
 }
 
-inline fun <reified N, T : Any> ContainerBuilder.addScoped(
+inline fun <reified N, reified T : Any> ProviderScope.scoped(
   scopeName: N,
-  key: TypeKey<T>,
-  crossinline factory: Container.() -> T
-) = add(key) {
+  crossinline factory: ProviderScope.() -> T
+): T {
   val scope = get<Scope<N>>()
-  scope(key) { factory() }
+  return scope { factory() }
 }
