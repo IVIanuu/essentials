@@ -10,7 +10,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.rate.data.*
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 fun interface RateOnPlayUseCase : suspend () -> Unit

@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 
 object DonationKey : PopupKey<Unit>
 

@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
 @Serializable data class SystemOverlayBlacklistPrefs(

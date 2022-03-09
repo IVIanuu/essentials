@@ -16,8 +16,6 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 import kotlin.collections.component1
 import kotlin.collections.component2

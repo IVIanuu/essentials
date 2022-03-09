@@ -7,7 +7,6 @@ package com.ivianuu.essentials.hidenavbar
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.optics.*
-import com.ivianuu.injekt.*
 import kotlinx.serialization.*
 
 @Serializable @Optics data class NavBarPrefs(

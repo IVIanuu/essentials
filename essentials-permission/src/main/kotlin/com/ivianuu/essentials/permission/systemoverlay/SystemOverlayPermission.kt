@@ -10,7 +10,6 @@ import androidx.core.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.injekt.*
 
 interface SystemOverlayPermission : Permission
 

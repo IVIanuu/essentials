@@ -11,7 +11,6 @@ import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

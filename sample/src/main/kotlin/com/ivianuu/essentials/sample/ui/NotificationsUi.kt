@@ -34,9 +34,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
@@ -162,7 +159,7 @@ data class UiNotification(
 )
 
 private fun StatusBarNotification.toUiNotification(
-  @Suppress("UNUSED_PARAMETER") @Inject C: AppContext
+  @Suppress("UNUSED_PARAMETER") C: AppContext
 ) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
@@ -176,7 +173,7 @@ private fun StatusBarNotification.toUiNotification(
 
 @Composable private fun NotificationIcon(
   notification: Notification,
-  @Inject context: AppContext
+  context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
     value = runCatching {

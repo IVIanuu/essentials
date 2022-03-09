@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
 
 data class ActionPickerKey(
   val showDefaultOption: Boolean = false,
@@ -142,8 +141,8 @@ sealed interface ActionPickerItem {
 private suspend fun getActionPickerItems(
   key: ActionPickerKey,
   filter: ActionFilter,
-  @Inject repository: ActionRepository,
-  @Inject RP: ResourceProvider
+  repository: ActionRepository,
+  RP: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

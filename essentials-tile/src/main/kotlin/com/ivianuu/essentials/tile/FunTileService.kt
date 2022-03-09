@@ -10,9 +10,6 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.state.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
 
@@ -27,7 +24,7 @@ class FunTileService8 : AbstractFunTileService<FunTileService8>()
 class FunTileService9 : AbstractFunTileService<FunTileService9>()
 
 abstract class AbstractFunTileService<T : Any>(
-  @Inject private val serviceClass: KClass<T>
+  private val serviceClass: KClass<T>
 ) : TileService() {
   private val serviceComponent by lazy {
     application

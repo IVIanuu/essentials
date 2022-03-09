@@ -7,8 +7,6 @@ package com.ivianuu.essentials.screenstate
 import android.hardware.*
 import android.view.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 

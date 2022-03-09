@@ -7,10 +7,9 @@ import android.net.wifi.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.flow.*
 

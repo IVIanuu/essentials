@@ -17,8 +17,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -62,7 +60,7 @@ object ForegroundKey : Key<Unit>
 private fun ForegroundNotification(
   color: Color,
   count: Int,
-  @Inject notificationFactory: NotificationFactory
+  notificationFactory: NotificationFactory
 ) = notificationFactory.build(
   "foreground",
   "Foreground",

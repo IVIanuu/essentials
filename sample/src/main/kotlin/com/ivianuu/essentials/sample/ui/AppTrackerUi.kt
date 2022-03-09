@@ -21,9 +21,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.*
@@ -72,7 +69,7 @@ object AppTrackerKey : Key<Unit>
 
 private fun AppTrackerNotification(
   currentApp: CurrentApp?,
-  @Inject factory: NotificationFactory
+  factory: NotificationFactory
 ): Notification =
   factory.build("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
     setSmallIcon(R.mipmap.ic_launcher)

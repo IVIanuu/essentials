@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
 
 data class AccessibilityEvent(
   val type: Int,

@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.data
 
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
 import java.io.*
 
 @Tag annotation class DataDirTag

@@ -11,7 +11,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 

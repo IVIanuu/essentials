@@ -9,7 +9,6 @@ import androidx.activity.result.contract.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 interface RuntimePermission : Permission {
   val permissionName: String

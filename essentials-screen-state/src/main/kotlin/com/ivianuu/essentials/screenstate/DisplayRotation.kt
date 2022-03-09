@@ -6,9 +6,7 @@ package com.ivianuu.essentials.screenstate
 
 import android.view.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
@@ -51,8 +49,8 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 }
 
 private suspend fun getCurrentDisplayRotation(
-  @Inject context: IOContext,
-  @Inject windowManager: @SystemService WindowManager,
+  context: IOContext,
+  windowManager: @SystemService WindowManager,
 ) = withContext(context) {
   when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP

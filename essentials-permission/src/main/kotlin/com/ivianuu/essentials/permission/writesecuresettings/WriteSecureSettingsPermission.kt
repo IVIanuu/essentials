@@ -9,8 +9,6 @@ import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 interface WriteSecureSettingsPermission : Permission
 

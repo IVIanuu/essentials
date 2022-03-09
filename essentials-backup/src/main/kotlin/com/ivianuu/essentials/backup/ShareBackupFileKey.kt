@@ -9,7 +9,6 @@ import android.content.pm.*
 import androidx.core.content.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import java.io.*
 
 data class ShareBackupFileKey(val backupFilePath: String) :

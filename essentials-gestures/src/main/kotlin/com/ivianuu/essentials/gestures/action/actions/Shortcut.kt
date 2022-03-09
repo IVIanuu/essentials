@@ -19,8 +19,6 @@ import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.shortcutpicker.*
 import com.ivianuu.essentials.ui.image.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import java.io.*
 
 @Provide class ShortcutActionFactory(

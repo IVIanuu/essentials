@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
 
 data class AppPickerKey(
   val appPredicate: AppPredicate = DefaultAppPredicate,

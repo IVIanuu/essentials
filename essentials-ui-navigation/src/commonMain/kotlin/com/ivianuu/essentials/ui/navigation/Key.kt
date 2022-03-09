@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.injekt.*
 
 interface Key<T>
 

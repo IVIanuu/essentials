@@ -80,10 +80,13 @@ interface ProviderRegistry {
     when {
       key.classifierFqName == "kotlin.collections.List" -> {
         val elementKey = key.arguments[0]
-        {
-          buildList { collectListProviders(elementKey, this) }
+        val providers = mutableListOf<ProviderScope.() -> Any?>()
+        collectListProviders(elementKey as TypeKey<Any?>, providers)
+        if (providers.isEmpty()) null
+        else ({
+          providers
             .map { it(this) } as T
-        }
+        })
       }
       key.classifierFqName.startsWith("kotlin.Function") -> {
         when (key.classifierFqName) {

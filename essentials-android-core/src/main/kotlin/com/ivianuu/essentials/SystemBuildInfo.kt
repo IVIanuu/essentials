@@ -5,7 +5,6 @@
 package com.ivianuu.essentials
 
 import android.os.*
-import com.ivianuu.injekt.*
 
 data class SystemBuildInfo(val sdk: Int) {
   companion object {

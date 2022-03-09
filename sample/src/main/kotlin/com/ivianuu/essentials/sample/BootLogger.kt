@@ -5,6 +5,5 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
 
 @Provide fun bootLogger(L: Logger): () -> Unit = { log { "booted!" } }

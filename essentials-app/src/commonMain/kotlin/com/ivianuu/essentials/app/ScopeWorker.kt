@@ -6,20 +6,13 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
-fun interface ScopeWorker<N> : suspend () -> Unit {
-  companion object {
-    @Provide fun <N> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
-  }
-}
+fun interface ScopeWorker<N> : suspend () -> Unit
 
 fun interface ScopeWorkerRunner<N> : () -> Unit
 
-@Provide fun <N> scopeWorkerRunner(
+fun <N> scopeWorkerRunner(
   scope: NamedCoroutineScope<N>,
   nameKey: TypeKey<N>,
   workers: () -> List<ScopeWorker<N>>,

@@ -37,3 +37,9 @@ inline fun <reified N, reified T : Any> ProviderRegistry.element(
 ) {
   provide { Element<N>(factory(), typeKeyOf<T>()) }
 }
+
+inline fun <reified N, reified T : Any> ProviderRegistry.eagerInit(scopeName: N) {
+  element(scopeName) { EagerInit<T>(get<T>()) }
+}
+
+@PublishedApi @JvmInline internal value class EagerInit<T>(val value: Any)

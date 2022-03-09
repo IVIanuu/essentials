@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.time.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import kotlin.time.*
@@ -19,13 +18,13 @@ interface RateLimiter {
 fun RateLimiter(
   eventsPerInterval: Int,
   interval: Duration,
-  @Inject clock: Clock
-): RateLimiter = RateLimiterImpl(eventsPerInterval, interval)
+  clock: Clock
+): RateLimiter = RateLimiterImpl(eventsPerInterval, interval, clock)
 
 internal class RateLimiterImpl(
   eventsPerInterval: Int,
   interval: Duration,
-  @Inject private val clock: Clock
+  private val clock: Clock
 ) : RateLimiter {
   private val lock = Mutex()
   private val permitDuration = interval / eventsPerInterval

@@ -15,8 +15,6 @@ import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
 import com.ivianuu.essentials.ui.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 enum class AppBarStyle { PRIMARY, SURFACE }
 

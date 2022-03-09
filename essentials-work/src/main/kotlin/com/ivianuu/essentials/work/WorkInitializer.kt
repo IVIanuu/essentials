@@ -7,7 +7,6 @@ package com.ivianuu.essentials.work
 import androidx.work.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
 
 fun interface WorkInitializer : ScopeInitializer<AppScope>
 

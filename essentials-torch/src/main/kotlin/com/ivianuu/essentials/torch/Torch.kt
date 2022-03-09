@@ -14,10 +14,7 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*

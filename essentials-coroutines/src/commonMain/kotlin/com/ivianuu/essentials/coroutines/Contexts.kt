@@ -5,31 +5,29 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.di.*
+import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-@JvmInline value class DefaultContext(override val _value: Any?) : Tag<CoroutineContext> {
+@JvmInline value class DefaultContext(val value: CoroutineContext) {
   companion object {
-    @Provide inline val context: DefaultContext
+    inline val context: DefaultContext
       get() = DefaultContext(Dispatchers.Default)
   }
 }
 
-@JvmInline value class MainContext(override val _value: Any?) : Tag<CoroutineContext> {
+@JvmInline value class MainContext(val value: CoroutineContext) {
   companion object {
-    @Provide inline val context: MainContext
+    inline val context: MainContext
       get() = MainContext(Dispatchers.Main)
   }
 }
 
-@JvmInline value class ImmediateMainContext(override val _value: Any?) : Tag<CoroutineContext> {
-  companion object {
-    @Provide inline val context: ImmediateMainContext
-      get() = ImmediateMainContext(Dispatchers.Main.immediate)
-  }
+@JvmInline value class IOContext(val value: CoroutineContext)
+
+fun ProviderRegistry.coroutineContexts() {
+  provide { DefaultContext(Dispatchers.Default) }
+  provide { MainContext(Dispatchers.Main) }
+  ioContext()
 }
 
-@JvmInline value class IOContext(override val _value: Any?) : Tag<CoroutineContext>
-
-expect object IOInjectables {
-  @Provide val context: IOContext
-}
+expect fun ProviderRegistry.ioContext()

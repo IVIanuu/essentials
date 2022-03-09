@@ -14,7 +14,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide fun navBarManager(
@@ -72,7 +71,7 @@ private suspend fun NavBarState.apply(
   context: Context,
   disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
   setOverscan: OverscanUpdater,
-  @Inject L: Logger
+  L: Logger
 ) {
   log { "apply nav bar state $this" }
   runCatching {

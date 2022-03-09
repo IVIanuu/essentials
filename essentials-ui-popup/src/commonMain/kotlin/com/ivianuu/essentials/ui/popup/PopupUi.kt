@@ -19,7 +19,6 @@ import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class PopupKey(

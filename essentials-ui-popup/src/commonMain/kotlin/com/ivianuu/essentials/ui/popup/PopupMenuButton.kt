@@ -17,8 +17,6 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
 @Composable fun PopupMenuButton(

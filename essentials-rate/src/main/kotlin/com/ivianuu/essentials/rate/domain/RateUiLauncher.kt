@@ -14,7 +14,6 @@ import com.ivianuu.essentials.time.days
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration
 
@@ -37,10 +36,10 @@ import kotlin.time.Duration
 }
 
 private suspend fun shouldShowRateDialog(
-  @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule,
-  @Inject clock: Clock,
-  @Inject L: Logger
+  pref: DataStore<RatePrefs>,
+  schedule: RateUiSchedule,
+  clock: Clock,
+  L: Logger
 ): Boolean {
   val prefs = pref.data.first()
 

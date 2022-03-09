@@ -10,8 +10,6 @@ import coil.fetch.*
 import coil.intercept.*
 import coil.map.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlin.reflect.*
 
 @Provide fun imageLoader(

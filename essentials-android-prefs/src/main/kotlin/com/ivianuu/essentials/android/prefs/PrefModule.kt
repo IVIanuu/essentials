@@ -6,9 +6,6 @@ package com.ivianuu.essentials.android.prefs
 
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*

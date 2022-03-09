@@ -11,9 +11,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.backpress.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlin.collections.set
 import kotlin.reflect.*

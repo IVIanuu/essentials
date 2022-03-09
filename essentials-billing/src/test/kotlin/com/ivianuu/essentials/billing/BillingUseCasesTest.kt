@@ -6,7 +6,6 @@ package com.ivianuu.essentials.billing
 
 import androidx.test.ext.junit.runners.*
 import com.ivianuu.essentials.test.*
-import com.ivianuu.injekt.*
 import io.kotest.matchers.booleans.*
 import io.mockk.*
 import org.junit.*

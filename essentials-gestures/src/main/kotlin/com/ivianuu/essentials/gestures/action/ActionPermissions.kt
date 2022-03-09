@@ -16,7 +16,6 @@ import com.ivianuu.essentials.permission.root.*
 import com.ivianuu.essentials.permission.systemoverlay.*
 import com.ivianuu.essentials.permission.writesecuresettings.*
 import com.ivianuu.essentials.permission.writesettings.*
-import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 @Provide class ActionAccessibilityPermission(private val RP: ResourceProvider) : AccessibilityServicePermission {

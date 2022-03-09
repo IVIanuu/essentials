@@ -11,18 +11,15 @@ import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 
 fun switchToApp(
   packageName: String,
   enterAnimResId: Int,
   exitAnimResId: Int,
-  @Inject actionIntentSender: ActionIntentSender,
-  @Inject context: AppContext,
-  @Inject packageManager: PackageManager
+  actionIntentSender: ActionIntentSender,
+  context: AppContext,
+  packageManager: PackageManager
 ) {
   runCatching {
     val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@runCatching

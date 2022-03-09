@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ads
 
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 interface AdFeature

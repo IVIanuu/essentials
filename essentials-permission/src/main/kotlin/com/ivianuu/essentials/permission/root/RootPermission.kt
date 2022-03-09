@@ -8,7 +8,6 @@ import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 
 interface RootPermission : Permission
 

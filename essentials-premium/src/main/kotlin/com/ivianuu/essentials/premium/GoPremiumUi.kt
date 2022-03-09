@@ -28,7 +28,6 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 data class AppFeature(
   val title: String,

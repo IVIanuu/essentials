@@ -8,7 +8,6 @@ import android.content.*
 import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 fun interface AppUiStarter : IntentAppUiStarter

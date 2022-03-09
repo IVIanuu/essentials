@@ -10,8 +10,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide object LockScreenActionId : ActionId("lock_screen")
 

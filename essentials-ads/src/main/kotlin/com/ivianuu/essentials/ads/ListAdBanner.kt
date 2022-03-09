@@ -7,8 +7,6 @@ package com.ivianuu.essentials.ads
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
 @Provide object ListAdBannerFeature : AdFeature

@@ -12,7 +12,6 @@ import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 object FeedbackKey : PopupKey<Unit>
 

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
 
 @Provide fun xposedRunningHooks(modulePackageName: ModulePackageName) = Hooks {
   if (packageName.value == modulePackageName.value) {

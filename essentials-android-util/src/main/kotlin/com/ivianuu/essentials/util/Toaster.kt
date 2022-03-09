@@ -6,8 +6,6 @@ package com.ivianuu.essentials.util
 
 import android.widget.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 
 fun interface Toaster : (String) -> Unit
@@ -31,14 +29,14 @@ fun interface Toaster : (String) -> Unit
   @Provide val resourceProvider: ResourceProvider
 )
 
-fun showToast(message: String, @Inject toaster: Toaster) {
+fun showToast(message: String, toaster: Toaster) {
   toaster(message)
 }
 
-fun showToast(messageRes: Int, @Inject T: Toaster, @Inject RP: ResourceProvider) {
+fun showToast(messageRes: Int, T: Toaster, RP: ResourceProvider) {
   showToast(message = loadResource(messageRes))
 }
 
-fun showToast(messageRes: Int, vararg args: Any?, @Inject T: Toaster, @Inject RP: ResourceProvider) {
+fun showToast(messageRes: Int, vararg args: Any?, T: Toaster, RP: ResourceProvider) {
   showToast(message = loadResource(messageRes, *args))
 }

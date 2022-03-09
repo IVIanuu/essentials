@@ -8,12 +8,10 @@ import android.app.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")

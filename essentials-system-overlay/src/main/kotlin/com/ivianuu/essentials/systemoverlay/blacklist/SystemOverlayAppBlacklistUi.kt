@@ -13,7 +13,6 @@ import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 object SystemOverlayAppBlacklistKey : Key<Unit>

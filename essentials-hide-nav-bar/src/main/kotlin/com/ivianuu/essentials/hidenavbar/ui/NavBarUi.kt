@@ -19,8 +19,6 @@ import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 object NavBarKey : Key<Unit>
 

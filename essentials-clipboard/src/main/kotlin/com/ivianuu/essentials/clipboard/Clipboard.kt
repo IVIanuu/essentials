@@ -7,7 +7,6 @@ package com.ivianuu.essentials.clipboard
 import android.content.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*

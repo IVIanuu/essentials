@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.*
-import com.ivianuu.injekt.common.*
 
 object UiScope
 

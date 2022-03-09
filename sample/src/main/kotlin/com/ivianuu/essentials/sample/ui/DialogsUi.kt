@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
@@ -226,7 +225,7 @@ object DialogsKey : Key<Unit>
   enabled: Boolean = true,
   onClick: () -> Unit = {},
   text: String,
-  @Inject navigator: Navigator
+  navigator: Navigator
 ) {
   val scope = rememberCoroutineScope()
   TextButton(
@@ -243,7 +242,7 @@ object DialogsKey : Key<Unit>
 @Composable private fun DialogLauncherButton(
   text: String,
   dismissible: Boolean = true,
-  @Inject navigator: Navigator,
+  navigator: Navigator,
   dialog: @Composable (() -> Unit) -> Unit
 ) {
   Spacer(Modifier.height(8.dp))

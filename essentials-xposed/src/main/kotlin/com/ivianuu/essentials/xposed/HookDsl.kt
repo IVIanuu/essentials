@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
 import de.robv.android.xposed.*
 import java.lang.reflect.*
 import kotlin.reflect.*
@@ -111,14 +110,14 @@ inline fun hookMethod(
 
 inline fun <T : Any> hookAllMethods(
   methodName: String,
-  @Inject hookClass: KClass<T>,
+  hookClass: KClass<T>,
   block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = hookAllMethods(hookClass, methodName, block)
 
 inline fun hookAllMethods(
   className: String,
   methodName: String,
-  @Inject classLoader: ClassLoader,
+  classLoader: ClassLoader,
   block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = hookAllMethods(classLoader.getClass(className), methodName, block)
 
@@ -134,11 +133,11 @@ inline fun hookAllMethods(
 
 inline fun hookAllConstructors(
   className: String,
-  @Inject classLoader: ClassLoader,
+  classLoader: ClassLoader,
   block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = hookAllConstructors(classLoader.getClass(className), block)
 
 inline fun <T : Any> hookAllConstructors(
-  @Inject hookClass: KClass<T>,
+  hookClass: KClass<T>,
   block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllConstructors(hookClass.java, methodHook(block))

@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action.ui.picker
 
-import com.ivianuu.injekt.*
 
 fun interface ActionFilter : (String) -> Boolean
 

@@ -23,8 +23,6 @@ import com.ivianuu.essentials.gestures.action.ui.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.shell.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(

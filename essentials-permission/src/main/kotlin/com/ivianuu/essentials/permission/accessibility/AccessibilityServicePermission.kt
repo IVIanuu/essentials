@@ -12,7 +12,6 @@ import androidx.core.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 interface AccessibilityServicePermission : Permission {

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.android.settings
 
 import android.content.*
 import android.provider.*
-import com.ivianuu.injekt.*
 
 interface AndroidSettingAdapter<T> {
   fun get(

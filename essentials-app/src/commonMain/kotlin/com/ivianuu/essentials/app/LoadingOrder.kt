@@ -2,10 +2,11 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.di.*
 
 sealed interface LoadingOrder<T> {
   sealed interface Static<T> : LoadingOrder<T> {
@@ -18,31 +19,25 @@ sealed interface LoadingOrder<T> {
 
       fun last() = Last<T>()
 
-      fun <S> before(@Inject other: TypeKey<S>): Topological.Before<T> =
-        Topological.Before(other as TypeKey<T>)
+      inline fun <reified S> before(): Topological.Before<T> =
+        Topological.Before(typeKeyOf<S>() as TypeKey<T>)
 
-      fun <S> after(@Inject other: TypeKey<S>): Topological.After<T> = Topological.After(other as TypeKey<T>)
+      inline fun <reified S> after(): Topological.After<T> = Topological.After(typeKeyOf<S>() as TypeKey<T>)
     }
   }
 
-  sealed interface Topological<T> : LoadingOrder<T> {
-    data class Before<T>(val key: TypeKey<T>) : Topological<T>
+  sealed class Topological<T> : LoadingOrder<T> {
+    data class Before<T>(val key: TypeKey<T>) : Topological<T>()
 
-    data class After<T>(val key: TypeKey<T>) : Topological<T>
+    data class After<T>(val key: TypeKey<T>) : Topological<T>()
 
-    data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
+    data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>()
 
     operator fun plus(other: Topological<T>): Combined<T> = Combined(this, other)
 
-    fun <S> before(@Inject other: TypeKey<S>): Combined<T> = Combined(this, Before(other) as Topological<T>)
+    inline fun <reified S> before(): Combined<T> = Combined(this, Before(typeKeyOf<S>()) as Topological<T>)
 
-    fun <S> after(@Inject other: TypeKey<S>): Combined<T> = Combined(this, After(other) as Topological<T>)
-  }
-
-  interface Descriptor<in T> {
-    fun key(item: T): TypeKey<*>
-
-    fun loadingOrder(item: T): LoadingOrder<*>
+    inline fun <reified S> after(): Combined<T> = Combined(this, After(typeKeyOf<S>()) as Topological<T>)
   }
 
   companion object {
@@ -88,12 +83,14 @@ private fun LoadingOrder.Topological<*>.dependents(): Set<TypeKey<*>> {
   return result
 }
 
-fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.Descriptor<T>): List<T> {
+fun <T> Collection<T>.sortedWithLoadingOrder(
+  key: (T) -> TypeKey<*>,
+  loadingOrder: (T) -> LoadingOrder<*>
+): List<T> {
   if (isEmpty() || size == 1) return toList()
 
   val first = mapNotNull {
-    if (descriptor.loadingOrder(it) is LoadingOrder.Static.First)
-      descriptor.key(it)
+    if (loadingOrder(it) is LoadingOrder.Static.First) key(it)
     else null
   }
 
@@ -101,30 +98,30 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
 
   // collect dependencies for each item
   for (item in this) {
-    val key = descriptor.key(item)
+    val itemKey = key(item)
 
-    if (key in first) continue
+    if (itemKey in first) continue
 
-    val loadingOrder = descriptor.loadingOrder(item)
+    val itemLoadingOrder = loadingOrder(item)
 
-    val itemDependencies = dependencies.getOrPut(key) { mutableSetOf() }
+    val itemDependencies = dependencies.getOrPut(itemKey) { mutableSetOf() }
 
-    when (loadingOrder) {
+    when (itemLoadingOrder) {
       is LoadingOrder.Static.First -> throw AssertionError()
       is LoadingOrder.Static.Last -> {
         itemDependencies += filter { other ->
-          when (val otherLoadingOrder = descriptor.loadingOrder(other)) {
+          when (val otherLoadingOrder = loadingOrder(other)) {
             is LoadingOrder.Static.Last -> false
             is LoadingOrder.Topological -> otherLoadingOrder.dependencies()
-              .none { it == key }
+              .none { it == itemKey }
             else -> true
           }
-        }.map { descriptor.key(it) }
+        }.map { key(it) }
       }
       is LoadingOrder.Topological -> {
-        itemDependencies += loadingOrder.dependencies()
-        loadingOrder.dependents().forEach { dependentKey ->
-          dependencies.getOrPut(dependentKey) { mutableSetOf() } += key
+        itemDependencies += itemLoadingOrder.dependencies()
+        itemLoadingOrder.dependents().forEach { dependentKey ->
+          dependencies.getOrPut(dependentKey) { mutableSetOf() } += itemKey
         }
       }
       else -> {}
@@ -147,8 +144,8 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
     lastItems = unprocessedItems
     sortedItems += unprocessedItems
       .filter { item ->
-        dependencies[descriptor.key(item)]?.all { dependency ->
-          sortedItems.any { descriptor.key(it) == dependency }
+        dependencies[key(item)]?.all { dependency ->
+          sortedItems.any { key(it) == dependency }
         } ?: true
       }
   }

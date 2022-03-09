@@ -8,7 +8,6 @@ import android.content.*
 import android.net.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 object FeedbackMailKey : IntentKey
 

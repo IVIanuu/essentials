@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.ui.dialog.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class ColorPickerKey(

@@ -7,7 +7,6 @@ package com.ivianuu.essentials.accessibility
 import android.app.*
 import android.view.*
 import androidx.core.content.*
-import com.ivianuu.injekt.*
 
 @Tag annotation class AccessibilityWindowManagerTag {
   companion object {

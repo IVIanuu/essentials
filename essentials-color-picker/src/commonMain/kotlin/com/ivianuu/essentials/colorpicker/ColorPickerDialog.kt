@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.util.*
-import com.ivianuu.injekt.*
 
 @Composable fun ColorPickerDialog(
   modifier: Modifier = Modifier,
@@ -47,8 +46,8 @@ import com.ivianuu.injekt.*
   onCancel: () -> Unit,
   allowCustomArgb: Boolean = true,
   showAlphaSelector: Boolean = false,
-  @Inject colorPickerStrings: ColorPickerStrings,
-  @Inject commonStrings: CommonStrings
+  colorPickerStrings: ColorPickerStrings,
+  commonStrings: CommonStrings
 ) {
   var currentColor by remember { mutableStateOf(initialColor) }
   var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }

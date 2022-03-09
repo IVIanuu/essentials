@@ -8,7 +8,6 @@ import android.content.Intent.*
 import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
 
 fun interface ProcessRestarter : suspend () -> Unit
 

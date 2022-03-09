@@ -16,7 +16,6 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 object NavBarUnsupportedKey : Key<Unit>
 

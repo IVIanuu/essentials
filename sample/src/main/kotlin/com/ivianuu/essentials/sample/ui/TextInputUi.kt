@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 @Provide val textInputHomeItem = HomeItem("Text input") { TextInputKey }
 

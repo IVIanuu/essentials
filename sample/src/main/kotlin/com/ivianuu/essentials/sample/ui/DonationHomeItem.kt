@@ -8,7 +8,6 @@ import com.android.billingclient.api.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.donation.*
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import org.json.*
 

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @JvmInline value class ForceNavBarVisibleState(val value: Boolean)

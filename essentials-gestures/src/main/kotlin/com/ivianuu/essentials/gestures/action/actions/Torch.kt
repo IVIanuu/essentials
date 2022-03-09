@@ -10,7 +10,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.torch.*
-import com.ivianuu.injekt.*
 
 @Provide object TorchActionId : ActionId("torch")
 

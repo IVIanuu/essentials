@@ -8,14 +8,13 @@ import android.util.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.Logger.*
 import com.ivianuu.essentials.logging.Logger.Priority.*
-import com.ivianuu.injekt.*
 import kotlin.math.*
 
 @Provide class AndroidLogger(
   override val isEnabled: LoggingEnabled,
   private val systemBuildInfo: SystemBuildInfo
 ) : Logger {
-  override fun log(message: String, priority: Priority, @Inject tag: LoggingTag) {
+  override fun log(message: String, priority: Priority, tag: LoggingTag) {
     val trimmedTag = if (tag.value.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
       tag.value
     } else {

@@ -9,7 +9,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 @Provide object LastAppNativeActionId : ActionId("last_app_native")

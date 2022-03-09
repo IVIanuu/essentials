@@ -7,7 +7,6 @@ package com.ivianuu.essentials.apps.ui
 import android.content.*
 import android.content.pm.*
 import com.ivianuu.essentials.apps.*
-import com.ivianuu.injekt.*
 
 fun interface AppPredicate : (AppInfo) -> Boolean
 

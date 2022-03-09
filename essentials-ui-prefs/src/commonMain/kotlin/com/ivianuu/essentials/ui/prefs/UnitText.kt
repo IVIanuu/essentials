@@ -6,14 +6,13 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
 import kotlin.math.*
 
-@Composable fun UnitText(value: Any, unit: ValueUnit, @Inject strings: UnitStrings) {
+@Composable fun UnitText(value: Any, unit: ValueUnit, strings: UnitStrings) {
   Text(unit.picker(strings, value))
 }
 
-@Composable fun ScaledPercentageUnitText(value: Float, @Inject strings: UnitStrings) {
+@Composable fun ScaledPercentageUnitText(value: Float, strings: UnitStrings) {
   UnitText((value * 100f).roundToInt(), ValueUnit.PERCENTAGE)
 }
 

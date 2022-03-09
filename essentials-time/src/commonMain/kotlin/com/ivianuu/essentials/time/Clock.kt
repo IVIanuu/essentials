@@ -4,9 +4,13 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.di.*
 import kotlin.time.*
 
 fun interface Clock : () -> Duration
 
-@Provide expect val clock: Clock
+internal expect val clock: Clock
+
+fun ProviderRegistry.time() {
+  provide { clock }
+}

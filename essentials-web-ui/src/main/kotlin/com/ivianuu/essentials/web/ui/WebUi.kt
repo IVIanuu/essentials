@@ -23,7 +23,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class WebKey(val title: String, val url: String) : Key<Unit>

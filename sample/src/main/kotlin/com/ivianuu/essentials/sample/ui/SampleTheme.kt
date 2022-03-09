@@ -7,7 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import com.ivianuu.essentials.rubik.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.injekt.*
 
 @Provide val sampleTheme = AppTheme { content ->
   EsTheme(

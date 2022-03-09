@@ -4,6 +4,4 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.*
-
-@Provide actual val clock = Clock { System.nanoTime().nanoseconds }
+internal actual val clock = Clock { System.nanoTime().nanoseconds }

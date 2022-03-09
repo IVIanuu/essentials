@@ -9,7 +9,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 @Provide object SkipNextActionId : ActionId("media_skip_next")
 

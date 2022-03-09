@@ -4,45 +4,42 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.di.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 fun interface ScopeInitializer<N> : () -> Unit
+
+inline fun <reified N> ProviderRegistry.scopeInitializers(scopeName: N) {
+  provide<ScopeInitializerRunner<N>> { resolve(::ScopeInitializerRunner) }
+  eagerInit<N, ScopeInitializerRunner<N>>(scopeName)
+}
+
+inline fun <reified N, reified T : ScopeInitializer<N>> ProviderRegistry.scopeInitializer(
+  loadingOrder: LoadingOrder<T>,
+  crossinline factory: ProviderScope.() -> T
+) {
+  provideIntoList {
+    ScopeInitializerElement<N>(typeKeyOf<T>(), factory(), loadingOrder)
+  }
+}
 
 data class ScopeInitializerElement<N>(
   val key: TypeKey<*>,
   val initializer: ScopeInitializer<*>,
   val loadingOrder: LoadingOrder<out ScopeInitializer<*>>
-) {
-  companion object {
-    @Provide fun <@Spread T : ScopeInitializer<N>, N> scopeInitializerElement(
-      initializer: T,
-      key: TypeKey<T>,
-      loadingOrder: LoadingOrder<T> = LoadingOrder()
-    ): ScopeInitializerElement<N> = ScopeInitializerElement(key, initializer, loadingOrder)
+)
 
-    @Provide val descriptor = object : LoadingOrder.Descriptor<ScopeInitializerElement<*>> {
-      override fun key(item: ScopeInitializerElement<*>) = item.key
-
-      override fun loadingOrder(item: ScopeInitializerElement<*>) = item.loadingOrder
-    }
-
-    @Provide fun <N> defaultElements() = emptyList<ScopeInitializerElement<N>>()
-  }
-}
-
-class ScopeInitializerRunner<N> @Provide @Eager<N> constructor(
-  nameKey: TypeKey<N>,
+class ScopeInitializerRunner<N>(
   initializers: List<ScopeInitializerElement<N>>,
-  workerRunner: ScopeWorkerRunner<N>,
-  L: Logger
+  logger: Logger,
+  nameKey: TypeKey<N>,
+  workerRunner: ScopeWorkerRunner<N>
 ) {
   init {
     initializers
-      .sortedWithLoadingOrder()
+      .sortedWithLoadingOrder(key = { it.key }, loadingOrder = { it.loadingOrder })
       .forEach {
-        log { "${nameKey.value} initialize ${it.key.value}" }
+        logger.log { "$nameKey initialize ${it.key}" }
         it.initializer()
       }
     workerRunner()

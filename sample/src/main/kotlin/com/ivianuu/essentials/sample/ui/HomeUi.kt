@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.popup.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.essentials.xposed.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 @Provide class HomeKey : RootKey

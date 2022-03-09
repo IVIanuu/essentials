@@ -12,7 +12,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.writesecuresettings.*
 import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide class NavBarPermission(private val RP: ResourceProvider) : WriteSecureSettingsPermission {

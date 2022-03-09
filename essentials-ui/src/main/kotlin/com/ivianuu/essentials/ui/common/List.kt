@@ -12,8 +12,6 @@ import androidx.compose.ui.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.insets.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 fun interface ListDecorator {
   operator fun ListDecoratorScope.invoke()

@@ -8,7 +8,6 @@ import android.content.*
 import android.content.pm.*
 import android.provider.*
 import androidx.core.net.*
-import com.ivianuu.injekt.*
 
 data class DefaultIntentKey(val intent: Intent) : IntentKey
 

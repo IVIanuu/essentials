@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 object HelpKey : Key<Unit>
 

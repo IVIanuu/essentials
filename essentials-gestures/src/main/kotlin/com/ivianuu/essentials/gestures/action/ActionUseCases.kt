@@ -12,8 +12,6 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

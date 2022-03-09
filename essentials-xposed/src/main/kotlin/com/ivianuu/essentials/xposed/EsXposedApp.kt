@@ -4,8 +4,6 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.*
 
@@ -27,7 +25,7 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
   }
 
   protected abstract fun buildXposedElements(
-    @Inject context: XposedContext,
-    @Inject scope: Scope<XposedScope>
+    context: XposedContext,
+    scope: Scope<XposedScope>
   ): Elements<XposedScope>
 }

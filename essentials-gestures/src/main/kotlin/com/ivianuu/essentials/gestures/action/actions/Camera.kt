@@ -16,9 +16,7 @@ import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.recentapps.*
 import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*

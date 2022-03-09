@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 fun interface GlobalActionExecutor : suspend (Int) -> Boolean

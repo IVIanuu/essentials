@@ -14,8 +14,6 @@ import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 
 class EsActivity : ComponentActivity(), ForegroundActivityMarker {

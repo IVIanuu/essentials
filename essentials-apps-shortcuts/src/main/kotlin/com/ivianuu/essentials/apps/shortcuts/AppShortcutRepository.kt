@@ -7,8 +7,6 @@ package com.ivianuu.essentials.apps.shortcuts
 import android.content.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

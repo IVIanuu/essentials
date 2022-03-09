@@ -9,7 +9,6 @@ import android.app.*
 import android.content.*
 import androidx.core.app.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
 interface NotificationFactory {

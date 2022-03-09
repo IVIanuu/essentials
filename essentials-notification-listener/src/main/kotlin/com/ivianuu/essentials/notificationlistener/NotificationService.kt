@@ -6,7 +6,6 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.*
 import android.service.notification.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 interface NotificationService {

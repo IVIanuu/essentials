@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.di
 
+import io.kotest.assertions.throwables.*
 import io.kotest.matchers.types.*
 import org.junit.*
 
@@ -48,5 +49,12 @@ class DiTest {
 
     commands[0].shouldBeTypeOf<CommandA>()
     commands[1].shouldBeTypeOf<CommandB>()
+  }
+
+  @Test fun testListRequestWithoutProvidersDoesNotWork() {
+    shouldThrow<NoProviderFoundException> {
+      buildInstance<List<Command>> {
+      }
+    }
   }
 }

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.billing
 
 import android.app.*
 import com.android.billingclient.api.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 class TestBillingClient(

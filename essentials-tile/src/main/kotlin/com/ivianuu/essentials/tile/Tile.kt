@@ -6,7 +6,6 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
 import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
 data class TileModel<out T : AbstractFunTileService<*>>(

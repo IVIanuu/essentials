@@ -12,8 +12,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.recentapps.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")

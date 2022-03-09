@@ -6,8 +6,6 @@ package com.ivianuu.essentials.app
 
 import android.app.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 abstract class EsApp : Application(), AppElementsOwner {
   @Provide private val scope = Scope<AppScope>()
@@ -18,5 +16,5 @@ abstract class EsApp : Application(), AppElementsOwner {
     super.onCreate()
   }
 
-  protected abstract fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope>
+  protected abstract fun buildAppElements(scope: Scope<AppScope>): Elements<AppScope>
 }

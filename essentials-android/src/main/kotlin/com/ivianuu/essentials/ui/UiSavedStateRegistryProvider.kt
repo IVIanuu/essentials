@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.*
-import com.ivianuu.injekt.*
 
 fun interface SavableStateRegistryProvider : UiDecorator
 

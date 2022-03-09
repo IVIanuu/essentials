@@ -12,7 +12,6 @@ import androidx.compose.ui.*
 import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }

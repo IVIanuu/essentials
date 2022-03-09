@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.backup
 
 import com.ivianuu.essentials.data.*
-import com.ivianuu.injekt.*
 import java.io.*
 
 @Tag annotation class BackupFileTag

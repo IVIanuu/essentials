@@ -7,9 +7,6 @@ package com.ivianuu.essentials.recentapps
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 
 @JvmInline value class RecentApps(val values: List<String>)

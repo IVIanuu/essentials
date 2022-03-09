@@ -12,8 +12,6 @@ import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.processrestart.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.zip.*

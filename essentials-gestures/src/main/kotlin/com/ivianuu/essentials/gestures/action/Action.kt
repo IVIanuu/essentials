@@ -9,8 +9,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 data class Action<I : ActionId>(
   val id: String,

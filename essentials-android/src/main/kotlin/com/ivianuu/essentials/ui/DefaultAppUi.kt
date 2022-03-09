@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui
 import androidx.compose.ui.*
 import com.ivianuu.essentials.ui.app.*
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 
 @Provide fun defaultAppUi(navigationStateContent: NavigationStateContent) = AppUi {
   navigationStateContent(Modifier)

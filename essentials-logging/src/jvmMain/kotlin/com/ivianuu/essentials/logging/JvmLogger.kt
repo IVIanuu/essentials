@@ -13,3 +13,8 @@ actual fun Throwable.asLog(): String {
   printWriter.flush()
   return stringWriter.toString()
 }
+
+actual inline fun loggingTag(): String {
+  val stackTraceElement = Throwable().stackTrace.first()
+  return "${stackTraceElement.fileName}:${stackTraceElement.lineNumber}"
+}

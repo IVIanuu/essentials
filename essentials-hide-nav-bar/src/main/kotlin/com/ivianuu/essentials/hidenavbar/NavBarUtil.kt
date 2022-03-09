@@ -12,7 +12,6 @@ import com.ivianuu.essentials.*
 import com.ivianuu.essentials.android.settings.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
 
 fun interface NonSdkInterfaceDetectionDisabler : suspend () -> Unit
 

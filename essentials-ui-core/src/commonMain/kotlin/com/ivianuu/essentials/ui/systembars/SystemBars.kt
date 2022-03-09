@@ -16,7 +16,6 @@ import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.util.*
-import com.ivianuu.injekt.*
 
 @Composable fun overlaySystemBarBgColor(color: Color) =
   if (color.isLight) Color.White.copy(alpha = 0.4f) else Color.Black.copy(alpha = 0.2f)

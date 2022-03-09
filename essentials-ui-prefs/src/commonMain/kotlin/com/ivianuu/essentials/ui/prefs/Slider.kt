@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 import kotlin.time.*
@@ -28,7 +27,7 @@ import kotlin.time.*
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
-  @Inject converter: SliderValueConverter<T>
+  converter: SliderValueConverter<T>
 ) {
   Box(modifier = modifier) {
     ListItem(
@@ -123,7 +122,7 @@ import kotlin.time.*
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
-  @Inject converter: SliderValueConverter<T>
+  converter: SliderValueConverter<T>
 ) {
   SliderListItem(
     value = value.current,

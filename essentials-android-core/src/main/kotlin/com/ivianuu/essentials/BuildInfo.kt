@@ -5,8 +5,6 @@
 package com.ivianuu.essentials
 
 import android.content.pm.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 data class BuildInfo(
   val isDebug: Boolean,

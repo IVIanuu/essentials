@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.xposed
 
 import android.content.pm.*
-import com.ivianuu.injekt.*
 import de.robv.android.xposed.callbacks.*
 
 interface XposedContext {

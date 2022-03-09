@@ -4,8 +4,6 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import io.kotest.matchers.collections.*
 import org.junit.*
 

@@ -8,10 +8,9 @@ import android.bluetooth.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
 import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 @Provide object BluetoothActionId : ActionId("bluetooth")
@@ -36,7 +35,7 @@ import kotlinx.coroutines.flow.*
   }
 }
 
-private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory) = ActionIcon {
+private fun bluetoothIcon(broadcastsFactory: BroadcastsFactory) = ActionIcon {
   val bluetoothEnabled by remember {
     broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
       .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }

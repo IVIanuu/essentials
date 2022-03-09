@@ -18,7 +18,6 @@ open class EssentialsPlugin : KotlinCompilerPluginSupportPlugin {
     kotlinCompilation.target.project.plugins.hasPlugin(EssentialsPlugin::class.java)
 
   override fun apply(target: Project) {
-    target.plugins.apply(InjektPlugin::class.java)
     target.extensions.add("essentials", EssentialsExtension(target))
   }
 

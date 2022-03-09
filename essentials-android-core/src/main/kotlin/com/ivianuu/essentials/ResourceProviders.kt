@@ -12,35 +12,34 @@ import androidx.compose.ui.unit.*
 import androidx.core.content.res.*
 import androidx.core.graphics.drawable.*
 import com.ivianuu.essentials.ui.image.*
-import com.ivianuu.injekt.*
 
 inline fun <T> loadResource(
   id: Int,
-  @Inject loader: ResourceLoader<T>,
-  @Inject provider: ResourceProvider
+  loader: ResourceLoader<T>,
+  provider: ResourceProvider
 ): T = provider(id)
 
 inline fun <T> loadResource(
   id: Int,
   vararg args: Any?,
-  @Inject loader: ResourceLoaderWithArgs<T>,
-  @Inject provider: ResourceProvider
+  loader: ResourceLoaderWithArgs<T>,
+  provider: ResourceProvider
 ): T = provider(id, *args)
 
 interface ResourceProvider {
-  operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
+  operator fun <T> invoke(id: Int, loader: ResourceLoader<T>): T
 
-  operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
+  operator fun <T> invoke(id: Int, vararg args: Any?, loader: ResourceLoaderWithArgs<T>): T
 }
 
 @Provide class ResourceProviderImpl(private val context: AppContext) : ResourceProvider {
-  override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T =
+  override fun <T> invoke(id: Int, loader: ResourceLoader<T>): T =
     loader(context, id)
 
   override fun <T> invoke(
     id: Int,
     vararg args: Any?,
-    @Inject loader: ResourceLoaderWithArgs<T>
+    loader: ResourceLoaderWithArgs<T>
   ): T = loader(context, id, *args)
 }
 

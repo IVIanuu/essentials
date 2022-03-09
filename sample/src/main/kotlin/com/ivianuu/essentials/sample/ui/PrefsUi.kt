@@ -14,12 +14,9 @@ import com.ivianuu.essentials.colorpicker.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.dialog.*
-import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.*
 

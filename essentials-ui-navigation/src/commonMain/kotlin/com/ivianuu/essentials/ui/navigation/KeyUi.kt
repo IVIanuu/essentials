@@ -7,9 +7,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.state.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
 
 fun interface KeyUi<K : Key<*>> : @Composable () -> Unit

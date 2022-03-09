@@ -7,7 +7,6 @@ package com.ivianuu.essentials.coil
 import coil.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
 
 fun interface CoilInitializer : ScopeInitializer<AppScope>
 

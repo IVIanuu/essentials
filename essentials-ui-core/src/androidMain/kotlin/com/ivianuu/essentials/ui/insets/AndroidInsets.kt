@@ -8,7 +8,6 @@ import android.view.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.*
 import androidx.core.view.*
-import com.ivianuu.injekt.*
 import kotlin.math.*
 
 @Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->

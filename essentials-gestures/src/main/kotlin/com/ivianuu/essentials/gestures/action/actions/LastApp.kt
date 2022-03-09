@@ -8,8 +8,6 @@ import android.content.pm.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.*
 import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 
 @Provide object LastAppActionId : ActionId("last_app")
 

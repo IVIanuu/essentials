@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.premium.*
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.injekt.*
 
 @Provide val premiumHomeItem = HomeItem("Premium") { GoPremiumKey(true) }
 

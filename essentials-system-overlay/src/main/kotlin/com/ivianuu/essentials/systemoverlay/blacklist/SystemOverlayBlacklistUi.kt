@@ -15,7 +15,6 @@ import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 

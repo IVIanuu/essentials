@@ -7,9 +7,7 @@ package com.ivianuu.essentials.unlock
 import android.os.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.*

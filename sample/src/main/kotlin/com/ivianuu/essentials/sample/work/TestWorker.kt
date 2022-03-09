@@ -8,7 +8,6 @@ import androidx.work.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.work.*
 import kotlinx.coroutines.*
 

@@ -9,7 +9,6 @@ import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.recentapps.*
 import com.ivianuu.essentials.screenstate.*
 import com.ivianuu.essentials.systemoverlay.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
 enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }

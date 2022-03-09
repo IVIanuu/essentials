@@ -10,8 +10,6 @@ import androidx.activity.result.*
 import androidx.activity.result.contract.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.coroutines.*

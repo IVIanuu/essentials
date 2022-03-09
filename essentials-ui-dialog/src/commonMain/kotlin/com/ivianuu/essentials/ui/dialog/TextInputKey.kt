@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 data class TextInputKey(

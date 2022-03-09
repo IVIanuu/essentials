@@ -9,8 +9,6 @@ import android.content.*
 import android.database.*
 import android.net.*
 import android.os.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*

@@ -8,6 +8,7 @@ package com.ivianuu.essentials.resource
 
 import com.github.michaelbull.result.*
 import kotlinx.coroutines.flow.*
+import kotlin.experimental.*
 import kotlin.onFailure
 import kotlin.runCatching
 
@@ -50,6 +51,7 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
+@OptIn(ExperimentalTypeInference::class)
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)

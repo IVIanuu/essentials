@@ -9,7 +9,6 @@ import android.content.*
 import android.provider.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
 
 interface NotificationPolicyPermission : Permission
