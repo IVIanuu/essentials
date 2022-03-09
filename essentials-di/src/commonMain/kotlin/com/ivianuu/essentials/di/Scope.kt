@@ -32,9 +32,15 @@ private class ScopeImpl<N> : SynchronizedObject(), Scope<N>, Disposable {
 }
 
 inline fun <reified N, reified T : Any> ProviderScope.scoped(
-  scopeName: N,
+  scopeName: N? = null,
+  crossinline factory: ProviderScope.() -> T
+): T = scoped(typeKeyOf<N>(), typeKeyOf(), factory)
+
+inline fun <N, T : Any> ProviderScope.scoped(
+  scopeNameKey: TypeKey<N>,
+  typeKey: TypeKey<T>,
   crossinline factory: ProviderScope.() -> T
 ): T {
-  val scope = get<Scope<N>>()
-  return scope { factory() }
+  val scope = get(typeKeyOf<Scope<*>>().copy(arguments = arrayOf(scopeNameKey)))
+  return scope(typeKey) { factory() }
 }

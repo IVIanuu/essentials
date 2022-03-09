@@ -9,8 +9,8 @@ import kotlin.time.*
 
 fun interface Clock : () -> Duration
 
-internal expect val clock: Clock
+expect val DefaultClock: Clock
 
 fun ProviderRegistry.time() {
-  provide { clock }
+  provide { DefaultClock }
 }

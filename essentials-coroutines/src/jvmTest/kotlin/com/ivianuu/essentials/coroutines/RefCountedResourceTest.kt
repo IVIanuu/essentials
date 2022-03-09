@@ -49,6 +49,7 @@ class RefCountedResourceTest {
     class Resource(val key: Int, var released: Boolean)
 
     val refCountedResource = RefCountedResource<Int, Resource>(
+      scope = this,
       timeout = 100.milliseconds,
       create = { Resource(it, false) },
       release = { _, r -> r.released = true }

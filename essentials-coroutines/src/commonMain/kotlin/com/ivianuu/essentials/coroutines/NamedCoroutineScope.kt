@@ -8,15 +8,28 @@ import com.ivianuu.essentials.di.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
-inline fun <reified N> ProviderRegistry.namedCoroutineScope(scopeName: N) {
-  provide {
-    scoped(scopeName) {
-      val context = get<NamedCoroutineContext<N>>()
-      NamedCoroutineScope<N>(
-        object : CoroutineScope {
-          override val coroutineContext: CoroutineContext = context.value + SupervisorJob()
+fun ProviderRegistry.namedCoroutineScope() {
+  provideGeneric { key ->
+    if (key.classifierFqName != classifierFqNameOf<NamedCoroutineScope<*>>()) null
+    else {
+      val scopeNameKey = key.arguments[0]
+      Provider {
+        scoped(scopeNameKey, key as TypeKey<Any>) {
+          val context = get(typeKeyOf<NamedCoroutineContext<*>>().copy(arguments = arrayOf(scopeNameKey)))
+          NamedCoroutineScope<Any?>(
+            object : CoroutineScope {
+              override val coroutineContext: CoroutineContext = context.value + SupervisorJob()
+            }
+          )
         }
-      )
+      }
+    }
+  }
+
+  provideDefaultGeneric { key ->
+    if (key.classifierFqName != classifierFqNameOf<NamedCoroutineContext<*>>()) null
+    else {
+      Provider { NamedCoroutineContext<Any?>(Dispatchers.Default) }
     }
   }
 }
@@ -30,4 +43,4 @@ class NamedCoroutineScope<N>(val value: CoroutineScope) : CoroutineScope, Dispos
   }
 }
 
-@JvmInline value class NamedCoroutineContext<N>(val value: CoroutineContext)
+data class NamedCoroutineContext<N>(val value: CoroutineContext)

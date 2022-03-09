@@ -9,7 +9,7 @@ import com.ivianuu.essentials.logging.*
 
 fun interface ScopeInitializer<N> : () -> Unit
 
-inline fun <reified N> ProviderRegistry.scopeInitializers(scopeName: N) {
+inline fun <reified N : Any> ProviderRegistry.scopeInitializers(scopeName: N? = null) {
   provide<ScopeInitializerRunner<N>> { resolve(::ScopeInitializerRunner) }
   eagerInit<N, ScopeInitializerRunner<N>>(scopeName)
 }

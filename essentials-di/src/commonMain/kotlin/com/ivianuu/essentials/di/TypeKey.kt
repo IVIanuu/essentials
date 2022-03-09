@@ -38,6 +38,8 @@ data class TypeKey<T> internal constructor(
   }
 }
 
+inline fun <reified T> classifierFqNameOf(): String = typeKeyOf<T>().classifierFqName
+
 inline fun <reified T> typeKeyOf(): TypeKey<T> = typeOf<T>().asTypeKey()
 
 @PublishedApi internal fun <T> KType.asTypeKey(): TypeKey<T> {

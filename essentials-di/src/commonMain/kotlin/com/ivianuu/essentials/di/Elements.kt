@@ -31,14 +31,14 @@ inline fun <reified N> ProviderRegistry.elements() {
   provide<Elements<N>> { ElementsImpl(typeKeyOf(), get()) }
 }
 
-inline fun <reified N, reified T : Any> ProviderRegistry.element(
-  scopeName: N,
+inline fun <reified N : Any, reified T : Any> ProviderRegistry.element(
+  scopeName: N? = null,
   noinline factory: ProviderScope.() -> T
 ) {
   provide { Element<N>(factory(), typeKeyOf<T>()) }
 }
 
-inline fun <reified N, reified T : Any> ProviderRegistry.eagerInit(scopeName: N) {
+inline fun <reified N : Any, reified T : Any> ProviderRegistry.eagerInit(scopeName: N? = null) {
   element(scopeName) { EagerInit<T>(get<T>()) }
 }
 

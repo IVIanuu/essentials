@@ -20,8 +20,8 @@ fun <K, T> RefCountedResource(
 ): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, Duration.ZERO, null)
 
 fun <K, T> RefCountedResource(
-  timeout: Duration,
   scope: CoroutineScope,
+  timeout: Duration,
   create: suspend (K) -> T,
   release: (suspend (K, T) -> Unit)? = null,
 ): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout, scope)

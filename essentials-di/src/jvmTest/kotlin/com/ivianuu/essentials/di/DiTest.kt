@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.di
 
 import io.kotest.assertions.throwables.*
+import io.kotest.matchers.*
 import io.kotest.matchers.types.*
 import org.junit.*
 
@@ -43,8 +44,8 @@ class DiTest {
 
   @Test fun testListInjection() {
     val commands = buildInstance<List<Command>> {
-      provideIntoList<Command> { CommandA() }
-      provideIntoList<Command> { CommandB() }
+      provide<Command> { CommandA() }
+      provide<Command> { CommandB() }
     }
 
     commands[0].shouldBeTypeOf<CommandA>()
@@ -56,5 +57,14 @@ class DiTest {
       buildInstance<List<Command>> {
       }
     }
+  }
+
+  @Test fun testPrefersNonDefault() {
+    val result = buildInstance<Int> {
+      provide { 42 }
+      provideDefault { 0 }
+    }
+
+    result shouldBe 42
   }
 }

@@ -4,4 +4,4 @@
 
 package com.ivianuu.essentials.time
 
-internal actual val clock = Clock { System.nanoTime().nanoseconds }
+actual val DefaultClock = Clock { System.nanoTime().nanoseconds }

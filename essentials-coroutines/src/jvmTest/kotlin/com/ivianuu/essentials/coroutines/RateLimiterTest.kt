@@ -4,9 +4,8 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.time.milliseconds
-import com.ivianuu.essentials.time.seconds
+import com.ivianuu.essentials.test.*
+import com.ivianuu.essentials.time.*
 import io.kotest.matchers.*
 import org.junit.*
 import kotlin.time.Duration
@@ -25,7 +24,7 @@ class RateLimiterTest {
   }
 
   @Test fun testAcquire(): Unit = runCancellingBlockingTest {
-    val rateLimiter = RateLimiter(2, 1.seconds)
+    val rateLimiter = RateLimiter(2, 1.seconds, DefaultClock)
     rateLimiter.acquire()
     rateLimiter.acquire()
   }
