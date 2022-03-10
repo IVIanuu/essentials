@@ -56,7 +56,7 @@ private fun <T> CoroutineScope.state(
   val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch {
+      launch(context = stateContext) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
