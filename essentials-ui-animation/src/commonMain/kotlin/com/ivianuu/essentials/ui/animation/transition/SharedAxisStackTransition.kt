@@ -26,7 +26,7 @@ fun HorizontalSharedAxisStackTransition(
         alpha = LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
         translationX = lerp(30.dp.toPx(), 0f, FastOutSlowInEasing.transform(value))
       }
-      from?.value = Modifier.graphicsLayer {
+      from?.valuFe = Modifier.graphicsLayer {
         alpha = lerp(1f, 0f, LinearOutSlowInEasing.transform(interval(0f, 0.3f, value)))
         translationX = lerp(0f, -30.dp.toPx(), FastOutSlowInEasing.transform(value))
       }
