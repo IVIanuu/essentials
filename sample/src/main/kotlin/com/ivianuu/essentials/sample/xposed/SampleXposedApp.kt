@@ -12,7 +12,7 @@ import com.ivianuu.injekt.common.*
 class SampleXposedApp : EsXposedApp() {
   @Providers(".**") override fun buildXposedElements(
     @Inject context: XposedContext,
-    @Inject scope: Scope<XposedScope>
+    scope: Scope<XposedScope>
   ): Elements<XposedScope> {
     @Provide val logTag = XposedLogTag("EssentialsSample")
     @Provide val modulePackageName = ModulePackageName("com.ivianuu.essentials.sample")

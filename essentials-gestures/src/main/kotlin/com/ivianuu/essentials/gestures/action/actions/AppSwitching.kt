@@ -21,8 +21,8 @@ fun switchToApp(
   enterAnimResId: Int,
   exitAnimResId: Int,
   @Inject actionIntentSender: ActionIntentSender,
-  @Inject context: AppContext,
-  @Inject packageManager: PackageManager
+  context: AppContext,
+  packageManager: PackageManager
 ) {
   runCatching {
     val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@runCatching

@@ -143,7 +143,7 @@ private suspend fun getActionPickerItems(
   key: ActionPickerKey,
   filter: ActionFilter,
   @Inject repository: ActionRepository,
-  @Inject RP: ResourceProvider
+  RP: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

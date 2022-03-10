@@ -10,6 +10,7 @@ import kotlinx.serialization.encoding.*
 import kotlinx.serialization.internal.*
 import kotlinx.serialization.modules.*
 
+@OptIn(InternalSerializationApi::class)
 class PrefsEncoder(
   override val serializersModule: SerializersModule,
   private val embeddedFormat: StringFormat,

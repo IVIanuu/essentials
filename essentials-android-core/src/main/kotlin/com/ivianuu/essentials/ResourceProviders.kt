@@ -17,14 +17,14 @@ import com.ivianuu.injekt.*
 inline fun <T> loadResource(
   id: Int,
   @Inject loader: ResourceLoader<T>,
-  @Inject provider: ResourceProvider
+  provider: ResourceProvider
 ): T = provider(id)
 
 inline fun <T> loadResource(
   id: Int,
   vararg args: Any?,
   @Inject loader: ResourceLoaderWithArgs<T>,
-  @Inject provider: ResourceProvider
+  provider: ResourceProvider
 ): T = provider(id, *args)
 
 interface ResourceProvider {

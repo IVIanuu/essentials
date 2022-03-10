@@ -38,9 +38,9 @@ import kotlin.time.Duration
 
 private suspend fun shouldShowRateDialog(
   @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule,
-  @Inject clock: Clock,
-  @Inject L: Logger
+  schedule: RateUiSchedule,
+  clock: Clock,
+  L: Logger
 ): Boolean {
   val prefs = pref.data.first()
 
