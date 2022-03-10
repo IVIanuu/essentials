@@ -24,11 +24,11 @@ import kotlin.time.*
   title: @Composable (() -> Unit)? = null,
   subtitle: @Composable (() -> Unit)? = null,
   leading: @Composable (() -> Unit)? = null,
-  valueRange: ClosedRange<T>,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
-  @Inject converter: SliderValueConverter<T>
+  @Inject converter: SliderValueConverter<T>,
+  valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   Box(modifier = modifier) {
     ListItem(
@@ -119,11 +119,11 @@ import kotlin.time.*
   title: @Composable (() -> Unit)? = null,
   subtitle: @Composable (() -> Unit)? = null,
   leading: @Composable (() -> Unit)? = null,
-  valueRange: ClosedRange<T>,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
-  @Inject converter: SliderValueConverter<T>
+  @Inject converter: SliderValueConverter<T>,
+  valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   SliderListItem(
     value = value.current,
@@ -137,6 +137,15 @@ import kotlin.time.*
     modifier = modifier,
     converter = converter
   )
+}
+
+@Tag annotation class DefaultSliderRange {
+  companion object {
+    @Provide val double: @DefaultSliderRange ClosedRange<Double> = 0.0..1.0
+    @Provide val float: @DefaultSliderRange ClosedRange<Float> = 0f..1f
+    @Provide val int: @DefaultSliderRange ClosedRange<Int> = 0..100
+    @Provide val long: @DefaultSliderRange ClosedRange<Long> = 0L..100L
+  }
 }
 
 interface SliderValueConverter<T : Comparable<T>> {
