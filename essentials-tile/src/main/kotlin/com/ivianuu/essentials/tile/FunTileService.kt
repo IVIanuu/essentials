@@ -107,11 +107,9 @@ data class TileModelComponent(
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel = coroutineScope.state(
-    body = {
-      tileModelElements.toMap()[tileId]
-        ?.invoke()
-        ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
-    }
-  )
+  val tileModel = coroutineScope.state {
+    tileModelElements.toMap()[tileId]
+      ?.invoke()
+      ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
+  }
 }

@@ -7,13 +7,23 @@ package com.ivianuu.essentials.state
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.*
 import com.ivianuu.essentials.resource.*
+import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
-expect val StateContext: CoroutineContext
+typealias StateContext = @StateContextTag CoroutineContext
 
-fun <T> CoroutineScope.state(body: @Composable () -> T): StateFlow<T> {
+@Tag annotation class StateContextTag
+
+expect object StateContextInjectables {
+  @Provide val context: StateContext
+}
+
+fun <T> CoroutineScope.state(
+  @Inject context: StateContext,
+  body: @Composable () -> T
+): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
   state(
@@ -33,11 +43,12 @@ fun <T> CoroutineScope.state(body: @Composable () -> T): StateFlow<T> {
 
 private fun <T> CoroutineScope.state(
   emitter: (value: T) -> Unit,
+  @Inject stateContext: StateContext,
   body: @Composable () -> T,
 ) {
-  val recomposer = Recomposer(coroutineContext)
+  val recomposer = Recomposer(coroutineContext + stateContext)
   val composition = Composition(UnitApplier, recomposer)
-  launch(start = CoroutineStart.UNDISPATCHED) {
+  launch(context = stateContext, start = CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 

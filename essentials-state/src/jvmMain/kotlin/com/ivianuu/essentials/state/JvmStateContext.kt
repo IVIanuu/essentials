@@ -4,6 +4,10 @@
 
 package com.ivianuu.essentials.state
 
+import com.ivianuu.injekt.*
 import kotlin.coroutines.*
 
-actual val StateContext: CoroutineContext = EmptyCoroutineContext
+actual object StateContextInjectables {
+  @Provide actual inline val context: StateContext
+    get() = EmptyCoroutineContext
+}

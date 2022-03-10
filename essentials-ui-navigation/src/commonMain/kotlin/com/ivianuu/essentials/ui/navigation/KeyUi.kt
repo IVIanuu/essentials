@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -63,11 +62,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   scope: Scope<KeyUiScope>,
   sKey: TypeKey<S>
 ): KeyUi<K> = KeyUi<K> {
-  val currentModel by scope {
-    coroutineScope
-      .childCoroutineScope(StateContext)
-      .state(model)
-  }.collectAsState()
+  val currentModel by scope { coroutineScope.state(body = model) }.collectAsState()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel
