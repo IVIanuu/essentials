@@ -98,31 +98,33 @@ data class UiDonation(
   val price: String
 )
 
-@Provide @Composable fun donationModel(
+@Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
   purchase: PurchaseUseCase,
   T: ToastContext,
   ctx: KeyUiContext<DonationKey>
-) = DonationModel(
-  skus = produceResource {
-    donations
-      .parMap { donation ->
-        val details = getSkuDetails(donation.sku)!!
-        UiDonation(
-          donation,
-          details.title
-            .replaceAfterLast("(", "")
-            .removeSuffix("("),
-          details.price
-        )
-      }
-  },
-  close = action { ctx.navigator.pop(ctx.key) },
-  purchase = action { donation ->
-    purchase(donation.donation.sku, true, true)
-    consumePurchase(donation.donation.sku)
-    showToast(R.string.es_donation_thanks)
-  }
-)
+): @Composable () -> DonationModel = {
+  DonationModel(
+    skus = produceResource {
+      donations
+        .parMap { donation ->
+          val details = getSkuDetails(donation.sku)!!
+          UiDonation(
+            donation,
+            details.title
+              .replaceAfterLast("(", "")
+              .removeSuffix("("),
+            details.price
+          )
+        }
+    },
+    close = action { ctx.navigator.pop(ctx.key) },
+    purchase = action { donation ->
+      purchase(donation.donation.sku, true, true)
+      consumePurchase(donation.donation.sku)
+      showToast(R.string.es_donation_thanks)
+    }
+  )
+}

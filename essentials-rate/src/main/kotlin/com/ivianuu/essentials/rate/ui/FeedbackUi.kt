@@ -50,21 +50,23 @@ data class FeedbackModel(
   val sendMail: () -> Unit
 )
 
-@Provide @Composable fun feedbackModel(
+@Provide fun feedbackModel(
   displayShowNever: DisplayShowNeverUseCase,
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<FeedbackKey>
-) = FeedbackModel(
-  displayShowNever = produceValue(false) { displayShowNever() },
-  showNever = action(block = showNever),
-  showLater = action(block = showLater),
-  openReddit = action {
-    ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-    ctx.navigator.pop(ctx.key)
-  },
-  sendMail = action {
-    ctx.navigator.push(FeedbackMailKey)
-    ctx.navigator.pop(ctx.key)
-  }
-)
+): @Composable () -> FeedbackModel = {
+  FeedbackModel(
+    displayShowNever = produceValue(false) { displayShowNever() },
+    showNever = action(block = showNever),
+    showLater = action(block = showLater),
+    openReddit = action {
+      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+      ctx.navigator.pop(ctx.key)
+    },
+    sendMail = action {
+      ctx.navigator.push(FeedbackMailKey)
+      ctx.navigator.pop(ctx.key)
+    }
+  )
+}

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.*
 
 interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>
-
   val events: Flow<NotificationEvent>
 
   suspend fun openNotification(notification: Notification)

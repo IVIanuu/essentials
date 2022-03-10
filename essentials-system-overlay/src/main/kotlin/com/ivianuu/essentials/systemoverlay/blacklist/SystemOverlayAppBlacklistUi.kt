@@ -39,12 +39,14 @@ data class SystemOverlayAppBlacklistModel(
   val updateAppBlacklist: (Set<String>) -> Unit = {}
 )
 
-@Provide @Composable fun systemOverlayAppBlacklistModel(
+@Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayAppBlacklistKey>
-) = SystemOverlayAppBlacklistModel(
-  appBlacklist = pref.data.map { it.appBlacklist },
-  updateAppBlacklist = action { appBlacklist ->
-    pref.updateData { copy(appBlacklist = appBlacklist) }
-  }
-)
+): @Composable () -> SystemOverlayAppBlacklistModel = {
+  SystemOverlayAppBlacklistModel(
+    appBlacklist = pref.data.map { it.appBlacklist },
+    updateAppBlacklist = action { appBlacklist ->
+      pref.updateData { copy(appBlacklist = appBlacklist) }
+    }
+  )
+}

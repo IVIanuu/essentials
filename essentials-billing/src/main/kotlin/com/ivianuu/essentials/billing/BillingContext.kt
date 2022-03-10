@@ -28,7 +28,7 @@ interface BillingContext {
 @Provide @Scoped<AppScope> class BillingContextImpl(
   override val billingClient: BillingClient,
   private val context: IOContext,
-  override val logger: Logger,
+  @property:Provide override val logger: Logger,
   override val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: NamedCoroutineScope<AppScope>
 ) : BillingContext {

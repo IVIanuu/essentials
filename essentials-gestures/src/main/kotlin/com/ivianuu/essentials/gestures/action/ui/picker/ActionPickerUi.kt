@@ -119,31 +119,33 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide @Composable fun actionPickerModel(
+@Provide fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
-) = ActionPickerModel(
-  items = produceResource { getActionPickerItems(ctx.key, filter) },
-  openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
-  pickAction = action { item ->
-    val result = item.getResult() ?: return@action
-    if (result is ActionPickerKey.Result.Action) {
-      val action = repository.getAction(result.actionId)
-      if (!permissionRequester(action.permissions))
-        return@action
+): @Composable () -> ActionPickerModel = {
+  ActionPickerModel(
+    items = produceResource { getActionPickerItems(ctx.key, filter) },
+    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+    pickAction = action { item ->
+      val result = item.getResult() ?: return@action
+      if (result is ActionPickerKey.Result.Action) {
+        val action = repository.getAction(result.actionId)
+        if (!permissionRequester(action.permissions))
+          return@action
+      }
+      ctx.navigator.pop(ctx.key, result)
     }
-    ctx.navigator.pop(ctx.key, result)
-  }
-)
+  )
+}
 
 private suspend fun getActionPickerItems(
   key: ActionPickerKey,
   filter: ActionFilter,
   @Inject repository: ActionRepository,
-  RP: ResourceProvider
+  @Inject RP: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

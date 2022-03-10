@@ -41,24 +41,26 @@ object BackupAndRestoreKey : Key<Unit>
 
 data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide @Composable fun backupAndRestoreModel(
+@Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
   T: ToastContext,
   ctx: KeyUiContext<BackupAndRestoreKey>
-) = BackupAndRestoreModel(
-  backupData = action {
-    createBackup()
-      .onFailure {
-        it.printStackTrace()
-        showToast(R.string.es_backup_error)
-      }
-  },
-  restoreData = action {
-    restoreBackup()
-      .onFailure {
-        it.printStackTrace()
-        showToast(R.string.es_restore_error)
-      }
-  }
-)
+): @Composable () -> BackupAndRestoreModel = {
+  BackupAndRestoreModel(
+    backupData = action {
+      createBackup()
+        .onFailure {
+          it.printStackTrace()
+          showToast(R.string.es_backup_error)
+        }
+    },
+    restoreData = action {
+      restoreBackup()
+        .onFailure {
+          it.printStackTrace()
+          showToast(R.string.es_restore_error)
+        }
+    }
+  )
+}

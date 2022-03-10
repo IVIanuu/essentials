@@ -139,27 +139,29 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Provide @Composable fun notificationsModel(
+@Provide fun notificationsModel(
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
   service: NotificationService,
   C: AppContext,
   S: NamedCoroutineScope<KeyUiScope>
-) = NotificationsModel(
-  hasPermissions = permissionState.bindResource(),
-  notifications = service.notifications
-    .bind(emptyList())
-    .map { it.toUiNotification() },
-  requestPermissions = action {
-    permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
-  },
-  openNotification = action { notification ->
-    service.openNotification(notification.sbn.notification)
-  },
-  dismissNotification = action { notification ->
-    service.dismissNotification(notification.sbn.key)
-  }
-)
+): @Composable () -> NotificationsModel = {
+  NotificationsModel(
+    hasPermissions = permissionState.bindResource(),
+    notifications = service.notifications
+      .bind(emptyList())
+      .map { it.toUiNotification() },
+    requestPermissions = action {
+      permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
+    },
+    openNotification = action { notification ->
+      service.openNotification(notification.sbn.notification)
+    },
+    dismissNotification = action { notification ->
+      service.dismissNotification(notification.sbn.key)
+    }
+  )
+}
 
 private fun StatusBarNotification.toUiNotification(
   @Suppress("UNUSED_PARAMETER") @Inject C: AppContext

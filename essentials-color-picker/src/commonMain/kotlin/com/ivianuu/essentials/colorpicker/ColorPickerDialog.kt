@@ -48,7 +48,7 @@ import com.ivianuu.injekt.*
   allowCustomArgb: Boolean = true,
   showAlphaSelector: Boolean = false,
   @Inject colorPickerStrings: ColorPickerStrings,
-  commonStrings: CommonStrings
+  @Inject commonStrings: CommonStrings
 ) {
   var currentColor by remember { mutableStateOf(initialColor) }
   var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }

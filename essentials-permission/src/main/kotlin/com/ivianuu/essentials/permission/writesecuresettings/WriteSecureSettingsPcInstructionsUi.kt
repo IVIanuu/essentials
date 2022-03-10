@@ -173,7 +173,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-@Provide @Composable fun writeSecureSettingsPcInstructionsModel(
+@Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -181,7 +181,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   permissionStateFactory: PermissionStateFactory,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
-): WriteSecureSettingsPcInstructionsModel {
+): @Composable () -> WriteSecureSettingsPcInstructionsModel = {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
 
@@ -199,7 +199,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     else -> true
   }
 
-  return WriteSecureSettingsPcInstructionsModel(
+  WriteSecureSettingsPcInstructionsModel(
     packageName = buildInfo.packageName,
     currentStep = currentStep,
     completedStep = completedStep,

@@ -52,10 +52,9 @@ object CounterKey : Key<Unit>
 
 data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-@Provide @Composable fun counterModel(T: ToastContext): CounterModel {
+@Provide fun counterModel(T: ToastContext): @Composable () -> CounterModel = {
   var count by remember { mutableStateOf(0) }
-  println("current thread ${Thread.currentThread().name}")
-  return CounterModel(
+  CounterModel(
     count = count,
     inc = action { count++ },
     dec = action {

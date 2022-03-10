@@ -250,22 +250,24 @@ data class GoPremiumModel(
   val tryBasicVersion: () -> Unit
 )
 
-@Provide @Composable fun goPremiumModel(
+@Provide fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   premiumVersionManager: PremiumVersionManager,
   ctx: KeyUiContext<GoPremiumKey>
-) = GoPremiumModel(
-  features = features,
-  premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
-  showTryBasicOption = ctx.key.showTryBasicOption,
-  allowBackNavigation = ctx.key.allowBackNavigation,
-  goPremium = action {
-    if (premiumVersionManager.purchasePremiumVersion())
-      ctx.navigator.pop(ctx.key, true)
-  },
-  tryBasicVersion = action {
-    fullScreenAd.loadAndShow()
-    ctx.navigator.pop(ctx.key, false)
-  }
-)
+): @Composable () -> GoPremiumModel = {
+  GoPremiumModel(
+    features = features,
+    premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
+    showTryBasicOption = ctx.key.showTryBasicOption,
+    allowBackNavigation = ctx.key.allowBackNavigation,
+    goPremium = action {
+      if (premiumVersionManager.purchasePremiumVersion())
+        ctx.navigator.pop(ctx.key, true)
+    },
+    tryBasicVersion = action {
+      fullScreenAd.loadAndShow()
+      ctx.navigator.pop(ctx.key, false)
+    }
+  )
+}

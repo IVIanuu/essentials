@@ -21,7 +21,7 @@ interface Logger {
 inline fun log(
   priority: Logger.Priority = DEBUG,
   @Inject tag: LoggingTag,
-  logger: Logger,
+  @Inject logger: Logger,
   message: () -> String
 ) {
   if (logger.isEnabled.value) logger.log(message(), priority, tag)

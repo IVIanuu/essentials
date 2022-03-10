@@ -35,7 +35,7 @@ interface ModelKeyUi<K : Key<*>, S> {
 }
 inline operator fun <K : Key<*>, S> ModelKeyUi(
   crossinline block: @Composable ModelKeyUiScope<K, S>.() -> Unit
-) = object : ModelKeyUi<K, S> {
+): ModelKeyUi<K, S> = object : ModelKeyUi<K, S> {
   @Composable override fun ModelKeyUiScope<K, S>.invoke() {
     block()
   }
@@ -62,7 +62,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   coroutineScope: NamedCoroutineScope<KeyUiScope>,
   scope: Scope<KeyUiScope>,
   sKey: TypeKey<S>
-) = KeyUi<K> {
+): KeyUi<K> = KeyUi<K> {
   val currentModel by scope {
     coroutineScope
       .childCoroutineScope(StateContext)
