@@ -13,7 +13,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.*
 
 actual object StateContextInjectables {
-  @Provide actual inline val context: StateContext by lazy {
+  @Provide actual val context: StateContext by lazy {
     val dispatcher = AndroidUiDispatcher(
       if (isMainThread()) Choreographer.getInstance()
       else runBlocking(Dispatchers.Main) { Choreographer.getInstance() },
