@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
@@ -20,14 +19,14 @@ fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec
     animate(spec) { value ->
       target?.value = Modifier
         .fractionalTranslation(
-          yFraction = lerp(
+          yFraction = com.ivianuu.essentials.lerp(
             if (isPush) 0.25f else 0f,
             if (isPush) 0f else 0.25f,
             FastOutSlowInEasing.transform(value)
           )
         )
         .alpha(
-          lerp(
+          com.ivianuu.essentials.lerp(
             if (isPush) 0f else 1f,
             if (isPush) 1f else 0f,
             FastOutLinearInEasing.transform(value)

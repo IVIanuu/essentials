@@ -8,7 +8,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.time.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
@@ -36,8 +35,8 @@ fun FadeScaleStackTransition(
         .graphicsLayer {
           transformOrigin = origin
           alpha = interval(0f, 0.3f, value)
-          scaleX = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
-          scaleY = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
+          scaleX = com.ivianuu.essentials.lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
+          scaleY = com.ivianuu.essentials.lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
         }
     }
   } else {

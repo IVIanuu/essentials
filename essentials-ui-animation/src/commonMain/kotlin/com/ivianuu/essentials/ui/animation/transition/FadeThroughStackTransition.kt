@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui.animation.transition
 import androidx.compose.animation.core.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.util.*
 
@@ -23,13 +22,13 @@ fun FadeThroughStackTransition(
       to?.value = Modifier
         .alpha(LinearOutSlowInEasing.transform(interval(0.3f, 1f, value)))
         .scale(
-          lerp(
+          com.ivianuu.essentials.lerp(
             0.92f,
             1f,
             LinearOutSlowInEasing.transform(interval(0.3f, 1f, value))
           )
         )
     }
-    from?.value = Modifier.alpha(lerp(1f, 0f, FastOutLinearInEasing.transform(value)))
+    from?.value = Modifier.alpha(com.ivianuu.essentials.lerp(1f, 0f, FastOutLinearInEasing.transform(value)))
   }
 }
