@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
@@ -11,9 +12,9 @@ import kotlin.coroutines.*
 suspend fun <T> par(
   vararg blocks: suspend () -> T,
   context: CoroutineContext = EmptyCoroutineContext,
-  concurrency: Int = DEFAULT_CONCURRENCY
+  @Inject concurrency: Concurrency
 ): List<T> = coroutineScope {
-  val semaphore = Semaphore(concurrency)
+  val semaphore = Semaphore(concurrency.value)
   blocks.map { block ->
     async(context) {
       semaphore.withPermit {
@@ -25,10 +26,10 @@ suspend fun <T> par(
 
 suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
-  concurrency: Int = DEFAULT_CONCURRENCY,
+  @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
 ): List<R> = coroutineScope {
-  val semaphore = Semaphore(concurrency)
+  val semaphore = Semaphore(concurrency.value)
   map { item ->
     async(context) {
       semaphore.withPermit { transform(item) }
@@ -38,10 +39,14 @@ suspend fun <T, R> Iterable<T>.parMap(
 
 suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
-  concurrency: Int = DEFAULT_CONCURRENCY,
+  @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
-  parMap(context, concurrency) { action(it) }
+  parMap(context) { action(it) }
 }
 
-const val DEFAULT_CONCURRENCY = 64
+inline class Concurrency(val value: Int)
+
+expect object ConcurrencyInjectables {
+  @Provide val defaultConcurrency: Concurrency
+}
