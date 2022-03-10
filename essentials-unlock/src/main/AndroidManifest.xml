@@ -9,10 +9,12 @@
         <activity
             android:name="com.ivianuu.essentials.unlock.UnlockScreenActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:theme="@style/Theme.Es.Translucent" />
+            android:theme="@style/Theme.Es.Translucent"
+            android:exported="true" />
         <activity
             android:name="com.ivianuu.essentials.unlock.ScreenOnActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:theme="@style/Theme.Es.Translucent" />
+            android:theme="@style/Theme.Es.Translucent"
+            android:exported="true" />
     </application>
 </manifest>

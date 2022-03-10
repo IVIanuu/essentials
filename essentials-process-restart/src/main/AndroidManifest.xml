@@ -10,6 +10,7 @@
             android:name=".ProcessRestartActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:process=":restartprocess"
-            android:theme="@style/Theme.Es.Translucent" />
+            android:theme="@style/Theme.Es.Translucent"
+            android:exported="true" />
     </application>
 </manifest>
