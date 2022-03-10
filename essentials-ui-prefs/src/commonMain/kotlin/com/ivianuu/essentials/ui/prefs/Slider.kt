@@ -28,7 +28,7 @@ import kotlin.time.*
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
   @Inject converter: SliderValueConverter<T>,
-  valueRange: @DefaultSliderRange ClosedRange<T>,
+  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   Box(modifier = modifier) {
     ListItem(
@@ -123,7 +123,7 @@ import kotlin.time.*
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
   @Inject converter: SliderValueConverter<T>,
-  valueRange: @DefaultSliderRange ClosedRange<T>,
+  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   SliderListItem(
     value = value.current,
