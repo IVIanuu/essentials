@@ -16,8 +16,13 @@ typealias StateContext = @StateContextTag CoroutineContext
 
 @Tag annotation class StateContextTag
 
-expect object StateContextInjectables {
-  @Provide val context: StateContext
+@Provide val stateContext: StateContext by lazy {
+  Dispatchers.Main + immediateFrameClock()
+}
+
+private fun immediateFrameClock() = object : MonotonicFrameClock {
+  override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
+    onFrame(0L)
 }
 
 fun <T> CoroutineScope.state(

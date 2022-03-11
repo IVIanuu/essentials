@@ -3,32 +3,15 @@
  */
 
 plugins {
-  id("com.android.library")
   id("com.ivianuu.essentials")
   id("org.jetbrains.compose")
   kotlin("multiplatform")
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8-android.gradle")
-
-android {
-  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-}
-
 kotlin {
   jvm()
-  android {
-    publishLibraryVariants("release")
-  }
 
   sourceSets {
-    named("androidMain") {
-      dependencies {
-        api(Deps.AndroidX.core)
-      }
-    }
-
     commonMain {
       dependencies {
         api(project(":essentials-coroutines"))
