@@ -181,7 +181,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   permissionStateFactory: PermissionStateFactory,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
-): @Composable () -> WriteSecureSettingsPcInstructionsModel = {
+) = Model {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
 

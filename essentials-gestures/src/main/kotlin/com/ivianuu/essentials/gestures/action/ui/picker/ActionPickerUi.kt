@@ -125,7 +125,7 @@ sealed interface ActionPickerItem {
   repository: ActionRepository,
   RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
-): @Composable () -> ActionPickerModel = {
+) = Model {
   ActionPickerModel(
     items = produceResource { getActionPickerItems(ctx.key, filter) },
     openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },

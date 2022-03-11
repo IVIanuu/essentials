@@ -57,12 +57,12 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   uiFactory: () -> U,
-  model: @Composable () -> S,
+  model: Model<S>,
   coroutineScope: NamedCoroutineScope<KeyUiScope>,
   scope: Scope<KeyUiScope>,
   sKey: TypeKey<S>
-): KeyUi<K> = KeyUi<K> {
-  val currentModel by scope { coroutineScope.state(body = model) }.collectAsState()
+): KeyUi<K> = KeyUi {
+  val currentModel by scope { coroutineScope.state { model() } }.collectAsState()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel
@@ -73,6 +73,16 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
       invoke()
     }
   }
+}
+
+// todo make fun interface once compose is fixed
+interface Model<S> {
+  @Composable operator fun invoke(): S
+}
+inline operator fun <S> Model(
+  crossinline block: @Composable () -> S
+): Model<S> = object : Model<S> {
+  @Composable override fun invoke() = block()
 }
 
 @Provide data class KeyUiContext<K : Key<*>>(

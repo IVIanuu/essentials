@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import androidx.compose.foundation.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.github.michaelbull.result.*
@@ -73,7 +72,7 @@ data class WriteSecureSettingsModel(
   shell: Shell,
   T: ToastContext,
   ctx: KeyUiContext<WriteSecureSettingsKey>
-): @Composable () -> WriteSecureSettingsModel = {
+) = Model {
   WriteSecureSettingsModel(
     openPcInstructions = action {
       if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)

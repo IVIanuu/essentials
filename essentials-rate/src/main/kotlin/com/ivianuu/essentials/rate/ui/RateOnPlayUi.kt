@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.rate.ui
 
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.*
 import com.ivianuu.essentials.state.*
@@ -53,7 +52,7 @@ data class RateOnPlayModel(
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateOnPlayKey>
-): @Composable () -> RateOnPlayModel = {
+) = Model {
   RateOnPlayModel(
     displayShowNever = produceValue(false) { displayShowNever() },
     rate = action {

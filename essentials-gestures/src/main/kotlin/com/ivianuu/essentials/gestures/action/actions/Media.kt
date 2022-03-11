@@ -9,7 +9,6 @@ import android.provider.*
 import android.view.*
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import com.ivianuu.essentials.*
@@ -96,7 +95,7 @@ data class MediaActionSettingsModel(
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>,
   ctx: KeyUiContext<MediaActionSettingsKey>
-): @Composable () -> MediaActionSettingsModel = {
+) = Model {
   MediaActionSettingsModel(
     mediaApp = pref.data
       .map { it.mediaApp }

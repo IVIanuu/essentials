@@ -105,7 +105,7 @@ data class UiDonation(
   purchase: PurchaseUseCase,
   T: ToastContext,
   ctx: KeyUiContext<DonationKey>
-): @Composable () -> DonationModel = {
+) = Model {
   DonationModel(
     skus = produceResource {
       donations

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.about
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.donation.*
@@ -142,7 +141,7 @@ data class AboutModel(
   rateOnPlayUseCase: RateOnPlayUseCase,
   RP: ResourceProvider,
   ctx: KeyUiContext<AboutKey>
-): @Composable () -> AboutModel = {
+) = Model {
   AboutModel(
     version = buildInfo.versionName,
     email = email,

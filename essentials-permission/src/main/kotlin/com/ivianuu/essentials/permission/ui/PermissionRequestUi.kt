@@ -58,7 +58,7 @@ data class UiPermission<P : Permission>(
   permissionStateFactory: PermissionStateFactory,
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
   ctx: KeyUiContext<PermissionRequestKey>
-): @Composable () -> PermissionRequestModel = {
+) = Model {
   val model = PermissionRequestModel(
     permissions = ctx.key.permissionsKeys
       .map { permissionKey ->

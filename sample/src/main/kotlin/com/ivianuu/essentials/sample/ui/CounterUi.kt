@@ -52,7 +52,7 @@ object CounterKey : Key<Unit>
 
 data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-@Provide fun counterModel(T: ToastContext): @Composable () -> CounterModel = {
+@Provide fun counterModel(T: ToastContext) = Model {
   var count by remember { mutableStateOf(0) }
   CounterModel(
     count = count,

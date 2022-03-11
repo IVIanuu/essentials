@@ -6,7 +6,6 @@ package com.ivianuu.essentials.backup
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.github.michaelbull.result.*
 import com.ivianuu.essentials.state.*
@@ -46,7 +45,7 @@ data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: ()
   restoreBackup: RestoreBackupUseCase,
   T: ToastContext,
   ctx: KeyUiContext<BackupAndRestoreKey>
-): @Composable () -> BackupAndRestoreModel = {
+) = Model {
   BackupAndRestoreModel(
     backupData = action {
       createBackup()

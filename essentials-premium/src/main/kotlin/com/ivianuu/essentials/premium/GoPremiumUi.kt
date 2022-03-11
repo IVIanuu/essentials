@@ -255,7 +255,7 @@ data class GoPremiumModel(
   fullScreenAd: FullScreenAd,
   premiumVersionManager: PremiumVersionManager,
   ctx: KeyUiContext<GoPremiumKey>
-): @Composable () -> GoPremiumModel = {
+) = Model {
   GoPremiumModel(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),

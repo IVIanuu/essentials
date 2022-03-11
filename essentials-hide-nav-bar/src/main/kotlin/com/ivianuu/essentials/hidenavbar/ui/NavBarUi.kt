@@ -6,7 +6,6 @@ package com.ivianuu.essentials.hidenavbar.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.data.*
@@ -60,7 +59,7 @@ data class NavBarModel(
   pref: DataStore<NavBarPrefs>,
   RP: ResourceProvider,
   ctx: KeyUiContext<NavBarKey>
-): @Composable () -> NavBarModel = {
+) = Model {
   val prefs = pref.data.bind(NavBarPrefs())
   NavBarModel(
     hideNavBar = prefs.hideNavBar,

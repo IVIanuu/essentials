@@ -107,7 +107,7 @@ data class RateModel(
   showLater: ShowLaterUseCase,
   showNever: ShowNeverUseCase,
   ctx: KeyUiContext<RateKey>
-): @Composable () -> RateModel = {
+) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
     displayShowNever = produceValue(false) { displayShowNever() },

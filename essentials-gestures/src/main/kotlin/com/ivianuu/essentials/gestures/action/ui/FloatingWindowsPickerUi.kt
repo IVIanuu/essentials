@@ -8,7 +8,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
@@ -82,7 +81,7 @@ data class FloatingWindowsPickerModel(
   appRepository: AppRepository,
   T: ToastContext,
   ctx: KeyUiContext<FloatingWindowsPickerKey>
-): @Composable () -> FloatingWindowsPickerModel = {
+) = Model {
   FloatingWindowsPickerModel(
     actionTitle = ctx.key.actionTitle,
     openFloatingWindow = action {

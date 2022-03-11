@@ -7,7 +7,6 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.hidenavbar.R
@@ -56,9 +55,7 @@ object NavBarUnsupportedKey : Key<Unit>
 
 data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMethod: () -> Unit)
 
-@Provide fun navBarUnsupportedModel(
-  ctx: KeyUiContext<NavBarUnsupportedKey>
-): @Composable () -> NavBarUnsupportedModel = {
+@Provide fun navBarUnsupportedModel(ctx: KeyUiContext<NavBarUnsupportedKey>) = Model {
   NavBarUnsupportedModel(
     openMoreInfos = action {
       ctx.navigator.push(

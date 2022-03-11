@@ -55,7 +55,7 @@ data class ShortcutPickerModel(
   shortcutRepository: ShortcutRepository,
   T: ToastContext,
   ctx: KeyUiContext<ShortcutPickerKey>
-): @Composable () -> ShortcutPickerModel = {
+) = Model {
   ShortcutPickerModel(
     shortcuts = shortcutRepository.shortcuts.bindResource(),
     pickShortcut = action { shortcut ->

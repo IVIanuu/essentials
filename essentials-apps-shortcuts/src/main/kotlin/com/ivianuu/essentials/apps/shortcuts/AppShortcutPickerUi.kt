@@ -51,7 +51,7 @@ data class AppShortcutPickerModel(
   appRepository: AppRepository,
   appShortcutRepository: AppShortcutRepository,
   ctx: KeyUiContext<AppShortcutPickerKey>
-): @Composable () -> AppShortcutPickerModel = {
+) = Model {
   AppShortcutPickerModel(
     appShortcuts = appRepository.installedApps
       .flatMapLatest { apps ->

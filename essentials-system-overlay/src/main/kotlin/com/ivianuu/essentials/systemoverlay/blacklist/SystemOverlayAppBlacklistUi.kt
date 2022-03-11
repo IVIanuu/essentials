@@ -42,7 +42,7 @@ data class SystemOverlayAppBlacklistModel(
 @Provide fun systemOverlayAppBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayAppBlacklistKey>
-): @Composable () -> SystemOverlayAppBlacklistModel = {
+) = Model {
   SystemOverlayAppBlacklistModel(
     appBlacklist = pref.data.map { it.appBlacklist },
     updateAppBlacklist = action { appBlacklist ->

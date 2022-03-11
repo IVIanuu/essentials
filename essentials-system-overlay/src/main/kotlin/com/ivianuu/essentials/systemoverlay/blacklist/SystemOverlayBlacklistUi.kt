@@ -6,7 +6,6 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import androidx.compose.foundation.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.state.*
@@ -92,7 +91,7 @@ data class SystemOverlayBlacklistModel(
 @Provide fun systemOverlayBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayBlacklistKey>
-): @Composable () -> SystemOverlayBlacklistModel = {
+) = Model {
   val prefs = pref.data.bind(SystemOverlayBlacklistPrefs())
   SystemOverlayBlacklistModel(
     systemOverlayName = ctx.key.systemOverlayName,

@@ -146,7 +146,7 @@ data class UiNotification(
   service: NotificationService,
   C: AppContext,
   S: NamedCoroutineScope<KeyUiScope>
-): @Composable () -> NotificationsModel = {
+) = Model {
   NotificationsModel(
     hasPermissions = permissionState.bindResource(),
     notifications = service.notifications
@@ -164,9 +164,7 @@ data class UiNotification(
   )
 }
 
-private fun StatusBarNotification.toUiNotification(
-  @Suppress("UNUSED_PARAMETER") @Inject C: AppContext
-) = UiNotification(
+private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
