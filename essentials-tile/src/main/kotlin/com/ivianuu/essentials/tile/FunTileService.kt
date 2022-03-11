@@ -6,10 +6,10 @@ package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
 import android.service.quicksettings.*
-import androidx.compose.runtime.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.state.*
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
@@ -101,13 +101,13 @@ data class FunTileServiceComponent(
 @Provide @Element<TileScope>
 data class TileModelComponent(
   val tileId: TileId,
-  val tileModelElements: List<Pair<TileId, @Composable () -> TileModel<*>>>,
+  val tileModelElements: List<Pair<TileId, Model<TileModel<*>>>>,
   val coroutineScope: NamedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel = coroutineScope.state {
+  val tileModel = coroutineScope.state<TileModel<*>> {
     tileModelElements.toMap()[tileId]
       ?.invoke()
       ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")

@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.tile
 
 import android.graphics.drawable.*
-import androidx.compose.runtime.*
+import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
 import kotlin.reflect.*
 
@@ -27,19 +27,19 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
 @Provide
-class TileModuleElementModule<@Spread T : TileModel<S>, S : AbstractFunTileService<*>> {
-  @Provide fun element(
+class TileModuleElementModule<@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> {
+  @Provide inline fun element(
     serviceClass: KClass<S>,
-    provider: @Composable () -> T
-  ): Pair<TileId, @Composable () -> TileModel<*>> = TileId(serviceClass) to provider as @Composable () -> TileModel<*>
+    provider: T
+  ): Pair<TileId, Model<TileModel<*>>> = TileId(serviceClass) to provider as Model<TileModel<*>>
 
-  @Provide fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+  @Provide inline fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 
   companion object {
-    @Provide val defaultElements: Collection<Pair<TileId, @Composable () -> TileModel<*>>>
+    @Provide inline val defaultElements: Collection<Pair<TileId, Model<TileModel<*>>>>
       get() = emptyList()
 
-    @Provide val defaultTileIds: Collection<TileId> get() = emptyList()
+    @Provide inline val defaultTileIds: Collection<TileId> get() = emptyList()
   }
 }
 
