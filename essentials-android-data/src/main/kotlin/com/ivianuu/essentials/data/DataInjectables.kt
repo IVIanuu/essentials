@@ -8,15 +8,21 @@ import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import java.io.*
 
-@Tag annotation class DataDirTag
+@Tag annotation class DataDirTag {
+  companion object {
+    @Provide fun dataDir(context: AppContext): DataDir =
+      File(context.applicationInfo.dataDir)
+  }
+}
+
 typealias DataDir = @DataDirTag File
 
-@Provide fun dataDir(context: AppContext): DataDir =
-  File(context.applicationInfo.dataDir)
+@Tag annotation class PrefsDirTag {
+  companion object {
+    @Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
+  }
+}
 
-@Tag annotation class PrefsDirTag
 typealias PrefsDir = @PrefsDirTag File
-
-@Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
 
 @Provide fun packageManager(context: AppContext) = context.packageManager!!

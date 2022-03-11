@@ -36,10 +36,10 @@ class TileModuleElementModule<@Spread T : Model<TileModel<S>>, S : AbstractFunTi
   @Provide inline fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 
   companion object {
-    @Provide inline val defaultElements: Collection<Pair<TileId, Model<TileModel<*>>>>
+    @Provide val defaultElements: Collection<Pair<TileId, Model<TileModel<*>>>>
       get() = emptyList()
 
-    @Provide inline val defaultTileIds: Collection<TileId> get() = emptyList()
+    @Provide val defaultTileIds: Collection<TileId> get() = emptyList()
   }
 }
 

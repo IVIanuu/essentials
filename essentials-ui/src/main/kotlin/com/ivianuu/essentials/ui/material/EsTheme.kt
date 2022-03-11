@@ -18,7 +18,7 @@ import com.ivianuu.essentials.ui.animation.transition.*
   darkColors: Colors = darkColors(),
   typography: Typography = EsTypography,
   shapes: Shapes = EsShapes,
-  transition: StackTransition = ScaledSharedAxisStackTransition(),
+  transition: StackTransition = FadeUpwardsStackTransition(),
   content: @Composable () -> Unit
 ) {
   MaterialTheme(

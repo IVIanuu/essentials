@@ -73,7 +73,7 @@ import com.ivianuu.injekt.*
         modifier = Modifier.height(300.dp)
           .padding(start = 24.dp, end = 24.dp),
         current = currentScreen,
-        transition = VerticalSharedAxisStackTransition()
+        transition = CrossFadeStackTransition()
       ) { currentScreen ->
         when (currentScreen) {
           ColorPickerTab.COLORS -> {
@@ -130,7 +130,7 @@ import com.ivianuu.injekt.*
   var palettesStack by remember { mutableStateOf<List<ColorPickerPalette?>>(listOf(null)) }
   AnimatedStack(
     items = palettesStack,
-    transition = HorizontalSharedAxisStackTransition()
+    transition = CrossFadeStackTransition()
   ) { palette ->
     val items = remember {
       palette
