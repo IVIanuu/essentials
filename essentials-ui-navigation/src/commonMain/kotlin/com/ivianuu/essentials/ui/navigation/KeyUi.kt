@@ -76,7 +76,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 }
 
 // todo make fun interface once compose is fixed
-interface Model<S> {
+interface Model<out S> {
   @Composable operator fun invoke(): S
 }
 inline operator fun <S> Model(
