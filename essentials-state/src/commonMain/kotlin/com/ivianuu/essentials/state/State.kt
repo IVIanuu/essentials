@@ -12,19 +12,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
-typealias StateContext = @StateContextTag CoroutineContext
-
-@Tag annotation class StateContextTag
-
-@Provide val stateContext: StateContext by lazy {
-  Dispatchers.Main + immediateFrameClock()
-}
-
-private fun immediateFrameClock() = object : MonotonicFrameClock {
-  override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
-    onFrame(0L)
-}
-
 fun <T> CoroutineScope.state(
   @Inject context: StateContext,
   body: @Composable () -> T
@@ -57,23 +44,27 @@ private fun <T> CoroutineScope.state(
     recomposer.runRecomposeAndApplyChanges()
   }
 
+  coroutineContext.job.invokeOnCompletion {
+    composition.dispose()
+  }
+
+  globalSnapshots
+
+  composition.setContent {
+    emitter(body())
+  }
+}
+
+private val globalSnapshots by lazy {
   var applyScheduled = false
-  val snapshotHandle = Snapshot.registerGlobalWriteObserver {
+  Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch(context = stateContext) {
+      GlobalScope.launch(Dispatchers.Main) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
     }
-  }
-  coroutineContext.job.invokeOnCompletion {
-    composition.dispose()
-    snapshotHandle.dispose()
-  }
-
-  composition.setContent {
-    emitter(body())
   }
 }
 
@@ -83,6 +74,19 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun move(from: Int, to: Int, count: Int) {}
   override fun remove(index: Int, count: Int) {}
   override fun onClear() {}
+}
+
+typealias StateContext = @StateContextTag CoroutineContext
+
+@Tag annotation class StateContextTag
+
+@Provide val stateContext: StateContext by lazy {
+  Dispatchers.Main + immediateFrameClock()
+}
+
+private fun immediateFrameClock() = object : MonotonicFrameClock {
+  override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
+    onFrame(0L)
 }
 
 @Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
