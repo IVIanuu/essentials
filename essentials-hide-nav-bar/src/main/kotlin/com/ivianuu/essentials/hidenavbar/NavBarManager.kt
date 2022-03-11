@@ -75,8 +75,8 @@ private suspend fun NavBarState.apply(
   @Inject L: Logger
 ) {
   log { "apply nav bar state $this" }
-  runCatching {
-    runCatching {
+  catch {
+    catch {
       // ensure that we can access non sdk interfaces
       disableNonSdkInterfaceDetection()
     }.onFailure { it.printStackTrace() }

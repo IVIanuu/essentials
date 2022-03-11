@@ -35,7 +35,7 @@ fun quickSettingsActionExecutor(
   serviceFlow: Flow<EsAccessibilityService?>,
   systemBuildInfo: SystemBuildInfo
 ) = ActionExecutor<QuickSettingsActionId> {
-  val targetState = if (systemBuildInfo.sdk < 28) true else runCatching {
+  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
     val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(
@@ -55,7 +55,7 @@ fun quickSettingsActionExecutor(
         .any { getChild(it).isQuickSettingsPanelVisibleRecursive() }
     }
 
-    return@runCatching !service.rootInActiveWindow.isQuickSettingsPanelVisibleRecursive()
+    return@catch !service.rootInActiveWindow.isQuickSettingsPanelVisibleRecursive()
   }.getOrElse { true }
 
   if (targetState)

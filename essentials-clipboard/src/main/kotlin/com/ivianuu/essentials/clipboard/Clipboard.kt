@@ -6,6 +6,7 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.android.*
@@ -32,7 +33,7 @@ interface Clipboard {
     }
 
   override suspend fun updateText(value: String, showMessage: Boolean) {
-    runCatching {
+    catch {
       clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
     }
       .also { result ->

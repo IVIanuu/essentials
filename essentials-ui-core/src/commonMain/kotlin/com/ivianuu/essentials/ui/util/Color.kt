@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.util
 
 import androidx.compose.ui.graphics.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 
 val Color.isDark: Boolean get() = !isLight
 
@@ -41,8 +42,8 @@ fun Color.blend(other: Color): Color {
 expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
-  runCatching { toHexString() }.getOrElse { null }
+  catch { toHexString() }.getOrElse { null }
 
 expect fun String.toColor(): Color
 
-fun String.toColorOrNull(): Color? = runCatching { toColor() }.getOrElse { null }
+fun String.toColorOrNull(): Color? = catch { toColor() }.getOrElse { null }

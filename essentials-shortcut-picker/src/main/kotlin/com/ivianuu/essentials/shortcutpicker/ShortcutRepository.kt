@@ -41,7 +41,7 @@ interface ShortcutRepository {
           val shortcutsIntent = Intent(Intent.ACTION_CREATE_SHORTCUT)
           packageManager.queryIntentActivities(shortcutsIntent, 0)
             .parMap { resolveInfo ->
-              runCatching {
+              catch {
                 Shortcut(
                   intent = Intent().apply {
                     action = Intent.ACTION_CREATE_SHORTCUT

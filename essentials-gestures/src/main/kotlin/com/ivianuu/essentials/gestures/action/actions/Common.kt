@@ -55,7 +55,7 @@ fun interface ActionRootCommandRunner : suspend (String) -> Unit
   shell: Shell,
   T: ToastContext
 ) = ActionRootCommandRunner { command ->
-  runCatching { shell.run(command) }
+  catch { shell.run(command) }
     .onFailure {
       it.printStackTrace()
       showToast(R.string.es_no_root)
@@ -71,7 +71,7 @@ fun interface ActionIntentSender : (Intent, Boolean, Bundle?) -> Unit
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)
-  runCatching {
+  catch {
     PendingIntent.getActivity(
       context, 1000, intent, PendingIntent.FLAG_CANCEL_CURRENT, options
     ).send()
@@ -90,7 +90,7 @@ fun closeSystemDialogsUseCase(
   globalActionExecutor: GlobalActionExecutor,
   systemBuildInfo: SystemBuildInfo
 ) = CloseSystemDialogsUseCase {
-  runCatching {
+  catch {
     if (systemBuildInfo.sdk >= 31)
       globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else

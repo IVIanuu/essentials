@@ -9,7 +9,6 @@ import android.content.pm.*
 import android.hardware.camera2.*
 import android.os.*
 import android.provider.*
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.*
@@ -70,14 +69,14 @@ import kotlin.coroutines.*
             super.onCameraAvailable(cameraId)
             cameraManager.unregisterAvailabilityCallback(this)
             if (cameraId == frontCamera)
-              runCatching { cont.resume(true) }
+              catch { cont.resume(true) }
           }
 
           override fun onCameraUnavailable(cameraId: String) {
             super.onCameraUnavailable(cameraId)
             cameraManager.unregisterAvailabilityCallback(this)
             if (cameraId == frontCamera)
-              runCatching { cont.resume(false) }
+              catch { cont.resume(false) }
           }
         }, Handler(Looper.getMainLooper()))
       }

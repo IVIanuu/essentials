@@ -6,6 +6,7 @@ package com.ivianuu.essentials.xposed
 
 import android.annotation.*
 import android.content.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
@@ -42,9 +43,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     fun readData(): T {
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        runCatching { json.decodeFromString(serializer, serialized) }
+        catch { json.decodeFromString(serializer, serialized) }
           .onFailure { it.printStackTrace() }
-          .getOrNull()
+          .getOrElse { null }
       } ?: initial()
     }
 
@@ -100,7 +101,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       sharedPrefs.reload()
       val serialized = sharedPrefs.getString("data", null)
       return serialized?.let {
-        runCatching { json.decodeFromString(serializer, serialized) }
+        catch { json.decodeFromString(serializer, serialized) }
           .getOrElse { null }
       } ?: initial()
     }

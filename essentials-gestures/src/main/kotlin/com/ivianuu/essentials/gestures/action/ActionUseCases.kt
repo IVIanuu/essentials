@@ -32,7 +32,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   T: Toaster
 ) = ExecuteActionUseCase { key ->
   withContext(coroutineContext) {
-    com.github.michaelbull.result.runCatching {
+    catch {
       log { "execute $key" }
       val action = repository.getAction(key)
 
@@ -41,18 +41,18 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
         log { "didn't had permissions for $key ${action.permissions}" }
         screenUnlocker()
         permissionRequester(action.permissions)
-        return@runCatching false
+        return@catch false
       }
 
       if (action.turnScreenOn && !screenActivator()) {
         log { "couldn't turn screen on for $key" }
-        return@runCatching false
+        return@catch false
       }
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {
         log { "couldn't unlock screen for $key" }
-        return@runCatching false
+        return@catch false
       }
 
       // close system dialogs
@@ -63,7 +63,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 
       // fire
       repository.getActionExecutor(key)()
-      return@runCatching true
+      return@catch true
     }.onFailure {
       it.printStackTrace()
       showToast(R.string.es_action_execution_failed, key)

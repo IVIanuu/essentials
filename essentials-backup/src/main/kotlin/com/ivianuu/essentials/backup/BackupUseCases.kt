@@ -30,7 +30,7 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = CreateBackupUseCase {
-  runCatching {
+  catch {
     withContext(scope.coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
@@ -75,7 +75,7 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = RestoreBackupUseCase {
-  runCatching {
+  catch {
     withContext(scope.coroutineContext + context) {
       val uri = navigator.push(
         Intent.createChooser(

@@ -23,7 +23,7 @@ interface LicenceProjectRepository {
   private val json: Json
 ) : LicenceProjectRepository{
   override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {
-    runCatching {
+    catch {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()
         .let { String(it) }

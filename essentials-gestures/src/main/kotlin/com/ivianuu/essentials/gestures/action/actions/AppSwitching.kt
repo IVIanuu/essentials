@@ -7,7 +7,6 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.*
 import android.content.pm.*
 import androidx.core.app.*
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.accessibility.*
 import com.ivianuu.essentials.logging.*
@@ -24,8 +23,8 @@ fun switchToApp(
   @Inject context: AppContext,
   @Inject packageManager: PackageManager
 ) {
-  runCatching {
-    val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@runCatching
+  catch {
+    val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@catch
     intent.addFlags(
       Intent.FLAG_ACTIVITY_NEW_TASK or
           Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or

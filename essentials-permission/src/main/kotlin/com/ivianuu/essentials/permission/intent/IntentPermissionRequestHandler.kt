@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.permission.*
@@ -32,8 +33,10 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
       if (showFindPermissionHint.value)
         showToast(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
-      runCatching { navigator.push(intentFactory(permission).toIntentKey()) }
-        .onFailure { showToast(R.string.es_grant_permission_manually) }
+      catch { navigator.push(intentFactory(permission).toIntentKey()) }
+        .onFailure {
+          showToast(R.string.es_grant_permission_manually)
+        }
     },
     {
       // wait until user granted permission

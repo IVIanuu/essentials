@@ -6,6 +6,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.*
 import android.service.notification.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
 
@@ -32,14 +33,14 @@ interface NotificationService {
       .flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) {
-    runCatching { notification.contentIntent.send() }
+    catch { notification.contentIntent.send() }
   }
 
   override suspend fun dismissNotification(key: String) {
-    runCatching { ref.first()!!.cancelNotification(key) }
+    catch { ref.first()!!.cancelNotification(key) }
   }
 
   override suspend fun dismissAllNotifications() {
-    runCatching { ref.first()!!.cancelAllNotifications() }
+    catch { ref.first()!!.cancelAllNotifications() }
   }
 }

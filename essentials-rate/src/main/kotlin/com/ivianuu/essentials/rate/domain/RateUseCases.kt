@@ -20,7 +20,7 @@ fun interface RateOnPlayUseCase : suspend () -> Unit
   navigator: Navigator,
   pref: DataStore<RatePrefs>
 ) = RateOnPlayUseCase {
-  runCatching {
+  catch {
     navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }

@@ -19,6 +19,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.drawable.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.notificationlistener.*
 import com.ivianuu.essentials.permission.*
@@ -181,7 +182,7 @@ private fun StatusBarNotification.toUiNotification(
   @Inject context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
-    value = runCatching {
+    value = catch {
       notification.smallIcon
         .loadDrawable(context)
     }.recover {
@@ -189,7 +190,7 @@ private fun StatusBarNotification.toUiNotification(
         .loadDrawable(context)
     }
       .map { it.toBitmap().toImageBitmap() }
-      .getOrNull()
+      .getOrElse { null }
   }
 
   Image(

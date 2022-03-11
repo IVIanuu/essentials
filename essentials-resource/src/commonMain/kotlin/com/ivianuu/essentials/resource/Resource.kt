@@ -7,10 +7,9 @@
 package com.ivianuu.essentials.resource
 
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import kotlinx.coroutines.flow.*
 import kotlin.experimental.*
-import kotlin.onFailure
-import kotlin.runCatching
 
 sealed interface Resource<out T>
 
@@ -55,7 +54,7 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
 fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)
-    runCatching {
+    catch {
       block(FlowCollector<T> { value -> this@flow.emit(Success(value)) })
     }.onFailure { emit(Error(it)) }
   }

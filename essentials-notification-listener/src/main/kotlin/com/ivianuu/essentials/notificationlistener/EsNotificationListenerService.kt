@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
@@ -69,7 +70,7 @@ class EsNotificationListenerService : NotificationListenerService() {
   }
 
   private fun updateNotifications() {
-    _notifications.value = runCatching { activeNotifications!!.toList() }
+    _notifications.value = catch { activeNotifications!!.toList() }
       .getOrElse { emptyList() }
   }
 

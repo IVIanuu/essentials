@@ -67,7 +67,7 @@ interface Torch {
     )
   }
 
-  private suspend fun enableTorch() = runCatching {
+  private suspend fun enableTorch() = catch {
     val cameraId = cameraManager.cameraIdList[0]
     log { "enable torch" }
     cameraManager.setTorchMode(cameraId, true)
@@ -101,12 +101,12 @@ interface Torch {
         }
 
         log { "torch unavailable" }
-        runCatching { cameraManager.setTorchMode(cameraId, false) }
+        catch { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       },
       onCancel = {
         log { "disable torch on cancel" }
-        runCatching { cameraManager.setTorchMode(cameraId, false) }
+        catch { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     )

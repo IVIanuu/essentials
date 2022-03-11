@@ -9,6 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.insets.*
 import com.ivianuu.essentials.ui.material.*
@@ -34,7 +36,7 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val key = runCatching { LocalKeyUiElements.current }.getOrElse { null }
+    val key = catch { LocalKeyUiElements.current }.getOrElse { null }
       ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
@@ -43,7 +45,7 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val key = runCatching { LocalKeyUiElements.current }.getOrElse { null }
+    val key = catch { LocalKeyUiElements.current }.getOrElse { null }
       ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")

@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.*
   globalActionExecutor: GlobalActionExecutor,
   serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {
-  val targetState = runCatching {
+  val targetState = catch {
     val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(
@@ -50,7 +50,7 @@ import kotlinx.coroutines.flow.*
         .any { getChild(it).isNotificationShadeVisibleRecursive() }
     }
 
-    return@runCatching !service.rootInActiveWindow.isNotificationShadeVisibleRecursive()
+    return@catch !service.rootInActiveWindow.isNotificationShadeVisibleRecursive()
   }.getOrElse { true }
 
   if (targetState)
