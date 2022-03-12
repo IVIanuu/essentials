@@ -18,7 +18,9 @@ import kotlinx.coroutines.*
 import kotlin.collections.set
 import kotlin.reflect.*
 
-fun interface NavigationStateContent : @Composable (Modifier) -> Unit
+fun interface NavigationStateContent {
+  @Composable operator fun invoke(p1: Modifier)
+}
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
@@ -119,6 +121,8 @@ private class NavigationContentState(
       enterTransition = options?.enterTransition,
       exitTransition = options?.exitTransition
     ) {
+      if (isFinalized) return@AnimatedStackChild
+
       val compositionKey = currentCompositeKeyHash
 
       val savableStateRegistry = remember {

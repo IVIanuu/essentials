@@ -34,7 +34,9 @@ data class Action<I : ActionId>(
   ) : this(id.value, title, permissions, unlockScreen, closeSystemDialogs, turnScreenOn, enabled, icon)
 }
 
-fun interface ActionIcon : @Composable () -> Unit
+fun interface ActionIcon {
+  @Composable operator fun invoke()
+}
 
 abstract class ActionId(val value: String)
 

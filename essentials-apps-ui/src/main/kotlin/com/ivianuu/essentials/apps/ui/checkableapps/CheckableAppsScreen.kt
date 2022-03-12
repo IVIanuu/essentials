@@ -28,7 +28,9 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.flow.*
 
-fun interface CheckableAppsScreen : @Composable () -> Unit
+fun interface CheckableAppsScreen {
+  @Composable operator fun invoke()
+}
 
 data class CheckableAppsParams(
   val checkedApps: Flow<Set<String>>,

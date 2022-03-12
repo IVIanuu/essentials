@@ -11,7 +11,9 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
 
-fun interface KeyUi<K : Key<*>> : @Composable () -> Unit
+fun interface KeyUi<K : Key<*>> {
+  @Composable operator fun invoke()
+}
 
 typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 

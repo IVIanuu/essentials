@@ -17,7 +17,9 @@ import com.ivianuu.injekt.common.*
   loadingOrder: LoadingOrder<T> = LoadingOrder()
 ) = UiDecoratorElement(key, instance, loadingOrder as LoadingOrder<UiDecorator>)
 
-fun interface UiDecorator : @Composable (@Composable () -> Unit) -> Unit
+fun interface UiDecorator {
+  @Composable operator fun invoke(p1: @Composable () -> Unit)
+}
 
 data class UiDecoratorElement(
   val key: TypeKey<UiDecorator>,
@@ -34,7 +36,9 @@ data class UiDecoratorElement(
   }
 }
 
-fun interface DecorateUi : @Composable (@Composable () -> Unit) -> Unit
+fun interface DecorateUi {
+  @Composable operator fun invoke(p1: @Composable () -> Unit)
+}
 
 @Provide fun decorateUi(
   elements: List<UiDecoratorElement>,
