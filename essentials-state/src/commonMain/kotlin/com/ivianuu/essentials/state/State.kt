@@ -16,28 +16,6 @@ fun <T> CoroutineScope.state(
   @Inject context: StateContext,
   body: @Composable () -> T
 ): StateFlow<T> {
-  var flow: MutableStateFlow<T>? = null
-
-  state(
-    emitter = { value ->
-      val outputFlow = flow
-      if (outputFlow != null) {
-        outputFlow.value = value
-      } else {
-        flow = MutableStateFlow(value)
-      }
-    },
-    body = body,
-  )
-
-  return flow!!
-}
-
-private fun <T> CoroutineScope.state(
-  emitter: (value: T) -> Unit,
-  @Inject stateContext: StateContext,
-  body: @Composable () -> T,
-) {
   val recomposer = Recomposer(coroutineContext + stateContext)
   val composition = Composition(UnitApplier, recomposer)
   launch(stateContext, CoroutineStart.UNDISPATCHED) {
@@ -60,9 +38,18 @@ private fun <T> CoroutineScope.state(
     composition.dispose()
   }
 
+  var flow: MutableStateFlow<T>? = null
   composition.setContent {
-    emitter(body())
+    val value = body()
+    val outputFlow = flow
+    if (outputFlow != null) {
+      outputFlow.value = value
+    } else {
+      flow = MutableStateFlow(value)
+    }
   }
+
+  return flow!!
 }
 
 private object UnitApplier : AbstractApplier<Unit>(Unit) {
