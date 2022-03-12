@@ -56,7 +56,7 @@ data class FeedbackModel(
   ctx: KeyUiContext<FeedbackKey>
 ) = Model {
   FeedbackModel(
-    displayShowNever = produceValue(false) { displayShowNever() },
+    displayShowNever = produce(false) { displayShowNever() },
     showNever = action(block = showNever),
     showLater = action(block = showLater),
     openReddit = action {

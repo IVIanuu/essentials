@@ -110,7 +110,7 @@ data class RateModel(
 ) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
-    displayShowNever = produceValue(false) { displayShowNever() },
+    displayShowNever = produce(false) { displayShowNever() },
     packageName = buildInfo.packageName,
     rating = rating,
     showLater = action { showLater() },

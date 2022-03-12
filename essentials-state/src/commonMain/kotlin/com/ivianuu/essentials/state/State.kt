@@ -110,20 +110,20 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
   remember(*args) { flowAsResource() }
     .bind(initial = Idle)
 
-interface ProduceValueScope<T> : CoroutineScope {
+interface ProduceScope<T> : CoroutineScope {
   var value: T
 }
 
-@Composable fun <T> produceValue(
+@Composable fun <T> produce(
   initial: T,
   vararg args: Any?,
-  block: suspend ProduceValueScope<T>.() -> Unit
+  block: suspend ProduceScope<T>.() -> Unit
 ): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
   LaunchedStateEffect(state) {
     block(
-      object : ProduceValueScope<T>, CoroutineScope by this {
+      object : ProduceScope<T>, CoroutineScope by this {
         override var value by state
       }
     )

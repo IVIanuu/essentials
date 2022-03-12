@@ -190,7 +190,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     1 -> developerModeSetting.data.map { it != 0 }.bind(false)
     2 -> adbEnabledSetting.data.map { it != 0 }.bind(false)
     3 -> true
-    4 -> produceValue(false) {
+    4 -> produce(false) {
       while (true) {
         value = permissionStateFactory(listOf(ctx.key.permissionKey)).first()
         delay(1000)

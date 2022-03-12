@@ -54,7 +54,7 @@ data class RateOnPlayModel(
   ctx: KeyUiContext<RateOnPlayKey>
 ) = Model {
   RateOnPlayModel(
-    displayShowNever = produceValue(false) { displayShowNever() },
+    displayShowNever = produce(false) { displayShowNever() },
     rate = action {
       rateOnPlay()
       ctx.navigator.pop(ctx.key)
