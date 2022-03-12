@@ -104,9 +104,7 @@ object NotificationsKey : Key<Unit>
   }
 }
 
-@Composable private fun NotificationPermissions(
-  onRequestPermissionsClick: () -> Unit
-) {
+@Composable private fun NotificationPermissions(onRequestPermissionsClick: () -> Unit) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.Center,

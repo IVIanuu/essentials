@@ -21,10 +21,7 @@ import kotlinx.coroutines.flow.*
 
 object AdsKey : Key<Unit>
 
-@Provide fun adsUi(
-  fullScreenAd: FullScreenAd,
-  showAds: MutableStateFlow<ShowAds>
-) = KeyUi<AdsKey> {
+@Provide fun adsUi(fullScreenAd: FullScreenAd, showAds: MutableStateFlow<ShowAds>) = KeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
