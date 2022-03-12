@@ -40,31 +40,28 @@ private fun <T> CoroutineScope.state(
 ) {
   val recomposer = Recomposer(coroutineContext + stateContext)
   val composition = Composition(UnitApplier, recomposer)
-  launch(context = stateContext, start = CoroutineStart.UNDISPATCHED) {
+  launch(stateContext, CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
-  coroutineContext.job.invokeOnCompletion {
-    composition.dispose()
-  }
-
-  globalSnapshots
-
-  composition.setContent {
-    emitter(body())
-  }
-}
-
-private val globalSnapshots by lazy {
   var applyScheduled = false
-  Snapshot.registerGlobalWriteObserver {
+  val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      GlobalScope.launch(Dispatchers.Main) {
+      launch(stateContext) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
     }
+  }
+
+  coroutineContext.job.invokeOnCompletion {
+    snapshotHandle.dispose()
+    composition.dispose()
+  }
+
+  composition.setContent {
+    emitter(body())
   }
 }
 
@@ -81,7 +78,7 @@ typealias StateContext = @StateContextTag CoroutineContext
 @Tag annotation class StateContextTag
 
 @Provide val stateContext: StateContext by lazy {
-  Dispatchers.Main + immediateFrameClock()
+  Dispatchers.Default + immediateFrameClock()
 }
 
 private fun immediateFrameClock() = object : MonotonicFrameClock {
@@ -89,10 +86,17 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
     onFrame(0L)
 }
 
+@Composable fun LaunchedStateEffect(vararg keys: Any?, block: suspend CoroutineScope.() -> Unit) {
+  LaunchedEffect(*keys) {
+    Snapshot.notifyObjectsInitialized()
+    block()
+  }
+}
+
 @Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
-  LaunchedEffect(state) {
+  LaunchedStateEffect(state) {
     collect { state.value = it }
   }
 
@@ -117,7 +121,7 @@ interface ProduceValueScope<T> : CoroutineScope {
 ): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
-  LaunchedEffect(state) {
+  LaunchedStateEffect(state) {
     block(
       object : ProduceValueScope<T>, CoroutineScope by this {
         override var value by state
