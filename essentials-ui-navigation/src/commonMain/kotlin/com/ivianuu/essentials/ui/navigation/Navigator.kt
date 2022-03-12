@@ -31,12 +31,17 @@ suspend fun <R> Navigator.setRoot(key: Key<R>): R? {
 }
 
 suspend fun <R> Navigator.push(key: Key<R>): R? {
-  setBackStack(backStack.value + key)
+  setBackStack(backStack.value.filter { it != key } + key)
   return awaitResult(key)
 }
 
 suspend fun <R> Navigator.replaceTop(key: Key<R>): R? {
-  setBackStack(backStack.value.dropLast(1) + key)
+  val newBackStack = backStack.value.toMutableList()
+  if (newBackStack.lastOrNull() == key)
+    return awaitResult(key)
+  newBackStack.removeLast()
+  newBackStack += key
+  setBackStack(newBackStack)
   return awaitResult(key)
 }
 
@@ -59,7 +64,7 @@ suspend fun Navigator.clear() {
   private val keyHandlers: List<KeyHandler<*>>,
   rootKey: RootKey? = null,
   private val L: Logger,
-  private val scope: NamedCoroutineScope<AppScope>
+  scope: NamedCoroutineScope<AppScope>
 ) : Navigator {
   val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> by this::_backStack
@@ -70,6 +75,13 @@ suspend fun Navigator.clear() {
   private val actor = scope.actor()
 
   override suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>) {
+    backStack.groupBy { it }
+      .forEach {
+        check(it.value.size == 1) {
+          "Back stack cannot contain duplicates"
+        }
+      }
+
     actor.act {
       val finalResults = results.toMutableMap()
       _backStack.value = buildList {
