@@ -65,7 +65,7 @@ typealias StateContext = @StateContextTag CoroutineContext
 @Tag annotation class StateContextTag
 
 @Provide val stateContext: StateContext by lazy {
-  Dispatchers.Default + immediateFrameClock()
+  Dispatchers.Main + immediateFrameClock()
 }
 
 private fun immediateFrameClock() = object : MonotonicFrameClock {
@@ -73,17 +73,10 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
     onFrame(0L)
 }
 
-@Composable fun LaunchedStateEffect(vararg keys: Any?, block: suspend CoroutineScope.() -> Unit) {
-  LaunchedEffect(*keys) {
-    Snapshot.notifyObjectsInitialized()
-    block()
-  }
-}
-
 @Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
-  LaunchedStateEffect(state) {
+  LaunchedEffect(state) {
     collect { state.value = it }
   }
 
@@ -108,7 +101,7 @@ interface ProduceScope<T> : CoroutineScope {
 ): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
-  LaunchedStateEffect(state) {
+  LaunchedEffect(state) {
     block(
       object : ProduceScope<T>, CoroutineScope by this {
         override var value by state
