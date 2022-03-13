@@ -10,17 +10,19 @@ import kotlin.reflect.*
 
 interface AdFeature
 
-@JvmInline value class AdFeatures<K : Key<*>>(val value: List<AdFeature>)
+@JvmInline value class AdFeatures<K : Key<*>>(val value: List<AdFeature>) {
+  companion object {
+    @Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+      AdFeatures(allFeatures)
 
-@Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
-  AdFeatures(allFeatures)
+    @Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
-@Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
-
-@Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
-  keyClass: KClass<K>,
-  features: AdFeatures<K>
-): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features)
+    @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
+      keyClass: KClass<K>,
+      features: AdFeatures<K>
+    ): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features)
+  }
+}
 
 fun interface IsAdFeatureEnabledUseCase : (KClass<out Key<*>>, AdFeature) -> Boolean
 
