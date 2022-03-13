@@ -20,7 +20,7 @@ interface AdFeature
 @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
   keyClass: KClass<K>,
   features: AdFeatures<K>
-): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features) as Pair<KClass<out Key<*>>, AdFeatures<*>>
+): Pair<KClass<out Key<*>>, AdFeatures<*>> = (keyClass to features)
 
 fun interface IsAdFeatureEnabledUseCase : (KClass<out Key<*>>, AdFeature) -> Boolean
 
