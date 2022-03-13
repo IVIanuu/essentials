@@ -64,13 +64,10 @@ import kotlinx.coroutines.flow.*
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
-
   override val title: String
     get() = loadResource(R.string.es_action_app)
-
-  @Composable override fun Icon() {
-    Icon(R.drawable.es_ic_apps)
-  }
+  override val icon: @Composable () -> Unit
+    get() = { Icon(R.drawable.es_ic_apps) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val app = navigator.push(AppPickerKey(launchableAppPredicate)) ?: return null

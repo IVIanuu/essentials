@@ -82,8 +82,8 @@ private fun AppTrackerNotification(
 @Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>
     get() = EsAccessibilityService::class
-  override val title: String = "Accessibility"
-  override val desc: String = "Needs the permission to track the current app"
-  @Composable override fun Icon() {
-  }
+  override val title: String
+    get() = "Accessibility"
+  override val desc: String
+    get() = "Needs the permission to track the current app"
 }

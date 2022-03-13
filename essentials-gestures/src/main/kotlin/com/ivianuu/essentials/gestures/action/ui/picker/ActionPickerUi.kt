@@ -86,7 +86,7 @@ sealed interface ActionPickerItem {
 
     @Composable override fun Icon(modifier: Modifier) {
       Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        delegate.Icon()
+        delegate.icon()
       }
     }
 

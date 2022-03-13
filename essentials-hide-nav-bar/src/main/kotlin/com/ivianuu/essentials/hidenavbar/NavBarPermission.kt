@@ -20,10 +20,8 @@ import kotlinx.coroutines.flow.*
     get() = loadResource(R.string.es_permission_nav_bar)
   override val desc: String
     get() = loadResource(R.string.es_permission_nav_bar_desc)
-
-  @Composable override fun Icon() {
-    Icon(R.drawable.es_ic_settings)
-  }
+  override val icon: @Composable () -> Unit
+    get() = { Icon(R.drawable.es_ic_settings) }
 }
 
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(

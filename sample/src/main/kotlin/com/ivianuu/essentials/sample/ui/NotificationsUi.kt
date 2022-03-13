@@ -198,7 +198,6 @@ private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNo
 @Provide object SampleNotificationsPermission : NotificationListenerPermission {
   override val serviceClass: KClass<out NotificationListenerService>
     get() = EsNotificationListenerService::class
-  override val title: String = "Notifications"
-  @Composable override fun Icon() {
-  }
+  override val title: String
+    get() = "Notifications"
 }

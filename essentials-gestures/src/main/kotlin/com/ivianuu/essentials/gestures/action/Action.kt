@@ -71,8 +71,7 @@ interface ActionPickerDelegate {
   val baseId: String
   val title: String
   val settingsKey: Key<Unit>? get() = null
-
-  @Composable fun Icon()
+  val icon: @Composable () -> Unit
 
   suspend fun pickAction(): ActionPickerKey.Result?
 }

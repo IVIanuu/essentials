@@ -5,10 +5,12 @@
 package com.ivianuu.essentials.permission.ui
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.state.*
@@ -34,7 +36,11 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
             Text(it)
           }
         },
-        leading = { permission.permission.Icon() },
+        leading = {
+          Box(modifier = Modifier.size(40.dp)) {
+            permission.permission.icon?.invoke()
+          }
+        },
         trailing = { Switch(checked = permission.isGranted, null) }
       )
     }

@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.*
 interface Permission {
   val title: String
   val desc: String? get() = null
-  @Composable fun Icon()
+  val icon: (@Composable () -> Unit)? get() = null
 }
 
 @Provide class PermissionModule<@Spread T : Permission> {

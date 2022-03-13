@@ -68,10 +68,8 @@ import java.io.*
     get() = BASE_ID
   override val title: String
     get() = loadResource(R.string.es_action_shortcut)
-
-  @Composable override fun Icon() {
-    Icon(R.drawable.es_ic_content_cut)
-  }
+  override val icon: @Composable () -> Unit
+    get() = { Icon(R.drawable.es_ic_content_cut) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val shortcut = navigator.push(ShortcutPickerKey) ?: return null
