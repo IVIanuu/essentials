@@ -6,6 +6,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.*
 import android.service.notification.*
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.flow.*
@@ -14,11 +15,11 @@ interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>
   val events: Flow<NotificationEvent>
 
-  suspend fun openNotification(notification: Notification)
+  suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
 
-  suspend fun dismissNotification(key: String)
+  suspend fun dismissNotification(key: String): Result<Unit, Throwable>
 
-  suspend fun dismissAllNotifications()
+  suspend fun dismissAllNotifications(): Result<Unit, Throwable>
 }
 
 @Provide class NotificationServiceImpl(
@@ -32,15 +33,12 @@ interface NotificationService {
     get() = ref
       .flatMapLatest { it?.events ?: emptyFlow() }
 
-  override suspend fun openNotification(notification: Notification) {
+  override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }
-  }
 
-  override suspend fun dismissNotification(key: String) {
+  override suspend fun dismissNotification(key: String) =
     catch { ref.first()!!.cancelNotification(key) }
-  }
 
-  override suspend fun dismissAllNotifications() {
+  override suspend fun dismissAllNotifications() =
     catch { ref.first()!!.cancelAllNotifications() }
-  }
 }
