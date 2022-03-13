@@ -19,7 +19,6 @@ dependencies {
   api(project(":essentials-android-settings"))
   api(project(":essentials-android-util"))
   api(project(":essentials-apps"))
-  api(project(":essentials-apps-shortcuts"))
   api(project(":essentials-apps-ui"))
   api(project(":essentials-hide-nav-bar"))
   api(project(":essentials-floating-windows"))

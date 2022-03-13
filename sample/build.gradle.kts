@@ -40,7 +40,6 @@ dependencies {
   implementation(project(":essentials-accessibility"))
   implementation(project(":essentials-ads"))
   implementation(project(":essentials-apps"))
-  implementation(project(":essentials-apps-shortcuts"))
   implementation(project(":essentials-apps-ui"))
   implementation(project(":essentials-backup"))
   implementation(project(":essentials-billing"))
