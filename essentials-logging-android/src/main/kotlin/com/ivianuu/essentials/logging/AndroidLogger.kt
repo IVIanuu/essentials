@@ -61,4 +61,3 @@ import kotlin.math.*
 }
 
 @Provide fun androidLoggingEnabled(buildInfo: BuildInfo) = LoggingEnabled(buildInfo.isDebug)
-
