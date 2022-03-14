@@ -78,7 +78,7 @@ suspend fun Navigator.clear() {
     backStack.groupBy { it }
       .forEach {
         check(it.value.size == 1) {
-          "Back stack cannot contain duplicates ${it.key.}"
+          "Back stack cannot contain duplicates ${it.key}"
         }
       }
 
