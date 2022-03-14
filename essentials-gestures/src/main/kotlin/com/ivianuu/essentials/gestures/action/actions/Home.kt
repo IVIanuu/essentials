@@ -26,7 +26,6 @@ import com.ivianuu.injekt.*
 @Provide fun homeActionExecutor(
   actionIntentSender: ActionIntentSender,
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
 ) = ActionExecutor<HomeActionId> {
   if (!needsHomeIntentWorkaround) {
@@ -46,4 +45,4 @@ import com.ivianuu.injekt.*
   }
 }
 
-private val needsHomeIntentWorkaround = Build.MANUFACTURER != "OnePlus" || Build.MODEL == "GM1913"
+private val needsHomeIntentWorkaround = Build.MANUFACTURER == "OnePlus"
