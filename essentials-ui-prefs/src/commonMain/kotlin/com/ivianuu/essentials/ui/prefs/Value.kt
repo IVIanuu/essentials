@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.optics.*
 import com.ivianuu.essentials.state.*
+import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
 interface Value<T> {
@@ -38,12 +39,13 @@ interface Value<T> {
 
 @Composable fun <S, T> DataStore<S>.value(
   lens: Lens<S, T>,
-  initial: T
+  initial: T,
+  @Inject scope: EffectScope,
+  @Inject coroutineScope: EffectCoroutineScope
 ): Value<T> {
   val current = data.bind(null)?.let { lens.get(it) } ?: initial
-  val scope = rememberCoroutineScope()
   return Value(current) { newValue ->
-    scope.launch {
+    coroutineScope.launch {
       updateData { lens.set(this, newValue) }
     }
   }

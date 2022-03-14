@@ -90,5 +90,6 @@ inline operator fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val scope: NamedCoroutineScope<KeyUiScope>
+  @Provide val coroutineScope: NamedCoroutineScope<KeyUiScope>,
+  @Provide val scope: Scope<KeyUiScope>
 )
