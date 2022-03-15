@@ -6,22 +6,16 @@ package com.ivianuu.essentials.state
 
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.*
-import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.resource.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.*
 
-fun <T> CoroutineScope.state(
-  @Inject context: StateContext,
-  body: @Composable () -> T
-): StateFlow<T> {
-  val recomposer = Recomposer(coroutineContext + stateContext)
+fun <T> CoroutineScope.state(@Inject context: StateContext, body: @Composable () -> T): StateFlow<T> {
+  val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
-  launch(stateContext, CoroutineStart.UNDISPATCHED) {
+  launch(context, CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
@@ -29,7 +23,7 @@ fun <T> CoroutineScope.state(
   val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch(stateContext) {
+      launch(context) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
@@ -63,73 +57,44 @@ private object UnitApplier : AbstractApplier<Unit>(Unit) {
   override fun onClear() {}
 }
 
-typealias StateContext = @StateContextTag CoroutineContext
-
-@Tag annotation class StateContextTag
-
-@Provide val stateContext: StateContext by lazy {
-  Dispatchers.Main + immediateFrameClock()
+@Tag annotation class StateContextTag {
+  companion object {
+    @Provide val stateContext: StateContext by lazy {
+      Dispatchers.Main + immediateFrameClock()
+    }
+  }
 }
+
+typealias StateContext = @StateContextTag CoroutineContext
 
 private fun immediateFrameClock() = object : MonotonicFrameClock {
   override suspend fun <R> withFrameNanos(onFrame: (frameTimeNanos: Long) -> R): R =
     onFrame(0L)
 }
 
-@Composable fun Effect(
-  vararg keys: Any?,
-  @Inject scope: EffectScope,
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend CoroutineScope.() -> Unit
-) {
-  scope.scopeKeyed(currentCompositeKeyHash, *keys) {
-    val job = coroutineScope.launch(block = block)
-    Disposable { job.cancel() }
-  }
-}
+@Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
+  val state = remember(*args) { mutableStateOf(initial) }
 
-@Composable fun <T> Flow<T>.bind(
-  initial: T,
-  @Inject scope: EffectScope,
-  @Inject coroutineScope: EffectCoroutineScope,
-  vararg args: Any?
-): T {
-  val state = scope.scopeKeyed(currentCompositeKeyHash, *args) { mutableStateOf(initial) }
-
-  Effect(state) {
+  LaunchedEffect(state) {
     collect { state.value = it }
   }
 
   return state.value
 }
 
-@Composable fun <T> StateFlow<T>.bind(
-  vararg args: Any?,
-  @Inject scope: EffectScope,
-  @Inject coroutineScope: EffectCoroutineScope
-): T = bind(initial = value, args = *args)
+@Composable fun <T> StateFlow<T>.bind(vararg args: Any?): T = bind(initial = value, args = *args)
 
-@Composable fun <T> Flow<T>.bindResource(
-  vararg args: Any?,
-  @Inject scope: EffectScope,
-  @Inject coroutineScope: EffectCoroutineScope,
-): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash, *args) { flowAsResource() }
-  .bind(initial = Idle)
+@Composable fun <T> Flow<T>.bindResource(vararg args: Any?): Resource<T> =
+  flowAsResource().bind(initial = Idle)
 
 interface ProduceScope<T> : CoroutineScope {
   var value: T
 }
 
-@Composable fun <T> produce(
-  initial: T,
-  vararg args: Any?,
-  @Inject scope: EffectScope,
-  @Inject effectScope: EffectCoroutineScope,
-  block: suspend ProduceScope<T>.() -> Unit
-): T {
-  val state = scope.scopeKeyed(currentCompositeKeyHash, *args) { mutableStateOf(initial) }
+@Composable fun <T> produce(initial: T, vararg args: Any?, block: suspend ProduceScope<T>.() -> Unit): T {
+  val state = remember(*args) { mutableStateOf(initial) }
 
-  Effect(state) {
+  LaunchedEffect(state) {
     block(
       object : ProduceScope<T>, CoroutineScope by this {
         override var value by state
@@ -142,85 +107,61 @@ interface ProduceScope<T> : CoroutineScope {
 
 @Composable fun <T> produceResource(
   vararg args: Any?,
-  @Inject scope: EffectScope,
-  @Inject coroutineScope: EffectCoroutineScope,
   block: suspend () -> T
-): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash, *args) {
+): Resource<T> = remember(*args) {
   resourceFlow { emit(block()) }
 }.bind(Idle)
 
-@Composable fun action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend () -> Unit
-): () -> Unit = {
-  coroutineScope.launch {
-    block()
+@Composable fun action(block: suspend () -> Unit): () -> Unit {
+  val scope = rememberCoroutineScope()
+  return {
+    scope.launch {
+      block()
+    }
   }
 }
 
-@Composable fun <P1> action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend (P1) -> Unit
-): (P1) -> Unit = { p1 ->
-  coroutineScope.launch {
-    block(p1)
+@Composable fun <P1> action(block: suspend (P1) -> Unit): (P1) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1 ->
+    scope.launch {
+      block(p1)
+    }
   }
 }
 
-@Composable fun <P1, P2> action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend (P1, P2) -> Unit
-): (P1, P2) -> Unit = { p1, p2 ->
-  coroutineScope.launch {
-    block(p1, p2)
+@Composable fun <P1, P2> action(block: suspend (P1, P2) -> Unit): (P1, P2) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2 ->
+    scope.launch {
+      block(p1, p2)
+    }
   }
 }
 
-@Composable fun <P1, P2, P3> action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend (P1, P2, P3) -> Unit
-): (P1, P2, P3) -> Unit = { p1, p2, p3 ->
-  coroutineScope.launch {
-    block(p1, p2, p3)
+@Composable fun <P1, P2, P3> action(block: suspend (P1, P2, P3) -> Unit): (P1, P2, P3) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3 ->
+    scope.launch {
+      block(p1, p2, p3)
+    }
   }
 }
 
-@Composable fun <P1, P2, P3, P4> action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend (P1, P2, P3, P4) -> Unit
-): (P1, P2, P3, P4) -> Unit = { p1, p2, p3, p4 ->
-  coroutineScope.launch {
-    block(p1, p2, p3, p4)
+@Composable fun <P1, P2, P3, P4> action(block: suspend (P1, P2, P3, P4) -> Unit): (P1, P2, P3, P4) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3, p4 ->
+    scope.launch {
+      block(p1, p2, p3, p4)
+    }
   }
 }
 
-@Composable fun <P1, P2, P3, P4, P5> action(
-  @Inject coroutineScope: EffectCoroutineScope,
-  block: suspend (P1, P2, P3, P4, P5) -> Unit
-): (P1, P2, P3, P4, P5) -> Unit = { p1, p2, p3, p4, p5 ->
-  coroutineScope.launch {
-    block(p1, p2, p3, p4, p5)
+@Composable fun <P1, P2, P3, P4, P5> action(block: suspend (P1, P2, P3, P4, P5) -> Unit): (P1, P2, P3, P4, P5) -> Unit {
+  val scope = rememberCoroutineScope()
+  return { p1, p2, p3, p4, p5 ->
+    scope.launch {
+      block(p1, p2, p3, p4, p5)
+    }
   }
 }
-
-@Tag annotation class EffectScopeTag {
-  companion object {
-    @Provide @Composable fun provideRememberedScope(): EffectScope = remember { Scope<Any>() }
-  }
-}
-
-typealias EffectScope = @EffectScopeTag Scope<*>
-
-@Tag annotation class EffectCoroutineScopeTag {
-  sealed interface BaseModule {
-    @Provide @Composable fun composableEffectScope(): EffectCoroutineScope = rememberCoroutineScope()
-  }
-  companion object : BaseModule {
-    @Provide fun namedAsEffectScope(
-      scope: NamedCoroutineScope<*>,
-      stateContext: StateContext
-    ): EffectCoroutineScope = scope.childCoroutineScope(stateContext)
-  }
-}
-
-typealias EffectCoroutineScope = @EffectCoroutineScopeTag CoroutineScope

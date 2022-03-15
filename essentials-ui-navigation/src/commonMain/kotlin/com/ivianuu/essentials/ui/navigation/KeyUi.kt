@@ -5,9 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
 
@@ -59,12 +57,8 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   ui: U,
-  coroutineScope: NamedCoroutineScope<KeyUiScope>,
-  scope: Scope<KeyUiScope>,
-  modelFactory: (EffectScope, NamedCoroutineScope<KeyUiScope>) -> Model<S>
+  model: Model<S>
 ): KeyUi<K> = KeyUi {
-  val model = remember { modelFactory(scope, coroutineScope) }
-
   val currentModel = model()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
@@ -90,6 +84,5 @@ inline operator fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val coroutineScope: EffectCoroutineScope,
-  @Provide val scope: EffectScope
+  @Provide val coroutineScope: NamedCoroutineScope<KeyUiScope>
 )

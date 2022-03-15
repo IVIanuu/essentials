@@ -9,7 +9,6 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.backpress.*
 import com.ivianuu.injekt.*
@@ -47,7 +46,7 @@ fun interface NavigationStateContent {
       }
     }
 
-  Effect(true) {
+  LaunchedEffect(true) {
     onCancel {
       // it's important to clear the state
       // to prevent memory leaks

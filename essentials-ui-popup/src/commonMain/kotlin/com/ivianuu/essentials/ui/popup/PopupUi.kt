@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.animation.*
 import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.common.*
@@ -34,7 +33,7 @@ data class PopupKey(
 
   BoxWithConstraints {
     if (previousConstraints != null && constraints != previousConstraints)
-      Effect(true) {
+      LaunchedEffect(true) {
         navigator.pop(key)
       }
 
