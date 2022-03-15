@@ -32,20 +32,9 @@ object CounterKey : Key<Unit>
       verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Text(
-        text = "Count: ${model.count}",
-        style = MaterialTheme.typography.h3
-      )
-
-      ExtendedFloatingActionButton(
-        text = { Text("Inc") },
-        onClick = model.inc
-      )
-
-      ExtendedFloatingActionButton(
-        text = { Text("dec") },
-        onClick = model.dec
-      )
+      Text(text = "Count: $count", style = MaterialTheme.typography.h3)
+      ExtendedFloatingActionButton(onClick = inc, text = { Text("Inc") })
+      ExtendedFloatingActionButton(onClick = dec, text = { Text("dec") })
     }
   }
 }

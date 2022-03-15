@@ -47,15 +47,15 @@ object NotificationsKey : Key<Unit>
 
 @Provide val notificationsUi = ModelKeyUi<NotificationsKey, NotificationsModel> {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
-    ResourceBox(model.hasPermissions) { hasPermission ->
+    ResourceBox(hasPermissions) { hasPermission ->
       if (hasPermission) {
         NotificationsList(
-          notifications = model.notifications,
-          onNotificationClick = { model.openNotification(it) },
-          onDismissNotificationClick = { model.dismissNotification(it) }
+          notifications = notifications,
+          onNotificationClick = { openNotification(it) },
+          onDismissNotificationClick = { dismissNotification(it) }
         )
       } else {
-        NotificationPermissions(model.requestPermissions)
+        NotificationPermissions(requestPermissions)
       }
     }
   }

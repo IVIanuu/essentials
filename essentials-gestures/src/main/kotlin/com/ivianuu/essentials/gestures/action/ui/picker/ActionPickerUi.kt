@@ -41,12 +41,12 @@ data class ActionPickerKey(
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {
-    ResourceVerticalListFor(model.items) { item ->
+    ResourceVerticalListFor(items) { item ->
       ListItem(
-        modifier = Modifier.clickable { model.pickAction(item) },
+        modifier = Modifier.clickable { pickAction(item) },
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
-          IconButton(onClick = { model.openActionSettings(item) }) {
+          IconButton(onClick = { openActionSettings(item) }) {
             Icon(R.drawable.es_ic_settings)
           }
         }) else null,

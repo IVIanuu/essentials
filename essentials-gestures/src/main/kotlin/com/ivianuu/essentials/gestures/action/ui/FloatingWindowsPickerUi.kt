@@ -36,7 +36,7 @@ data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
     Column {
       Text(
         modifier = Modifier.padding(16.dp),
-        text = stringResource(R.string.es_floating_window_picker_content, model.actionTitle),
+        text = stringResource(R.string.es_floating_window_picker_content, actionTitle),
         style = MaterialTheme.typography.body2
       )
 
@@ -46,7 +46,7 @@ data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
         modifier = Modifier
           .height(48.dp)
           .fillMaxWidth()
-          .clickable(onClick = model.openFloatingWindow)
+          .clickable(onClick = openFloatingWindow)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
         text = commonStrings.yes,
@@ -59,7 +59,7 @@ data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
         modifier = Modifier
           .height(48.dp)
           .fillMaxWidth()
-          .clickable(onClick = model.openFullScreen)
+          .clickable(onClick = openFullScreen)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
         text = commonStrings.no,

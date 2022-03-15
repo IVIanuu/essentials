@@ -70,13 +70,13 @@ val mediaActionSettingsUi = ModelKeyUi<MediaActionSettingsKey, MediaActionSettin
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.updateMediaApp),
+        modifier = Modifier.clickable(onClick = updateMediaApp),
         title = { Text(R.string.es_pref_media_app) },
         subtitle = {
           Text(
             stringResource(
               R.string.es_pref_media_app_summary,
-              model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
+              mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
             )
           )
         }

@@ -27,23 +27,23 @@ object AboutKey : Key<Unit>
       ListItem(
         leading = { Icon(R.drawable.es_ic_info) },
         title = { Text(R.string.es_about_version) },
-        subtitle = { Text(model.version) }
+        subtitle = { Text(version) }
       )
     }
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.rate),
+        modifier = Modifier.clickable(onClick = rate),
         leading = { Icon(R.drawable.es_ic_star) },
         title = { Text(R.string.es_about_rate) },
         subtitle = { Text(R.string.es_about_rate_desc) }
       )
     }
 
-    if (model.showDonate) {
+    if (showDonate) {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.donate),
+          modifier = Modifier.clickable(onClick = donate),
           leading = { Icon(R.drawable.es_ic_favorite) },
           title = { Text(R.string.es_about_donate) }
         )
@@ -52,7 +52,7 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openMoreApps),
+        modifier = Modifier.clickable(onClick = openMoreApps),
         leading = { Icon(R.drawable.es_ic_google_play) },
         title = { Text(R.string.es_about_more_apps) },
         subtitle = { Text(R.string.es_about_more_apps_desc) }
@@ -61,7 +61,7 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openRedditPage),
+        modifier = Modifier.clickable(onClick = openRedditPage),
         leading = { Icon(R.drawable.es_ic_reddit) },
         title = { Text(R.string.es_about_reddit) },
         subtitle = { Text(R.string.es_about_reddit_desc) }
@@ -70,7 +70,7 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openGithubPage),
+        modifier = Modifier.clickable(onClick = openGithubPage),
         leading = { Icon(R.drawable.es_ic_github) },
         title = { Text(R.string.es_about_github) },
         subtitle = { Text(R.string.es_about_github_desc) }
@@ -79,7 +79,7 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openTwitterPage),
+        modifier = Modifier.clickable(onClick = openTwitterPage),
         leading = { Icon(R.drawable.es_ic_twitter) },
         title = { Text(R.string.es_about_twitter) },
         subtitle = { Text(R.string.es_about_twitter_desc) }
@@ -88,25 +88,25 @@ object AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.sendMail),
+        modifier = Modifier.clickable(onClick = sendMail),
         leading = { Icon(R.drawable.es_ic_email) },
         title = { Text(R.string.es_about_feedback) },
-        subtitle = { Text(model.email.value) }
+        subtitle = { Text(email.value) }
       )
     }
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openLicenses),
+        modifier = Modifier.clickable(onClick = openLicenses),
         leading = { Icon(R.drawable.es_ic_assignment) },
         title = { Text(R.string.es_licenses_title) }
       )
     }
 
-    if (model.privacyPolicyUrl != null) {
+    if (privacyPolicyUrl != null) {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
+          modifier = Modifier.clickable(onClick = openPrivacyPolicy),
           leading = { Icon(R.drawable.es_ic_policy) },
           title = { Text(R.string.es_about_privacy_policy) }
         )

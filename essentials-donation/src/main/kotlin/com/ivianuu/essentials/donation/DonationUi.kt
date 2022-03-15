@@ -44,7 +44,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       content = {
         ResourceVerticalListFor(
           modifier = Modifier.animateContentSize(),
-          resource = model.skus,
+          resource = skus,
           loading = {
             CircularProgressIndicator(
               modifier = Modifier
@@ -56,12 +56,12 @@ data class Donation(val sku: Sku, val iconRes: Int)
         ) { donation ->
           Donation(
             donation = donation,
-            onClick = { model.purchase(donation) }
+            onClick = { purchase(donation) }
           )
         }
       },
       buttons = {
-        TextButton(onClick = model.close) {
+        TextButton(onClick = close) {
           Text(commonStrings.cancel)
         }
       }

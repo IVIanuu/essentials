@@ -47,7 +47,7 @@ data class GoPremiumKey(
 }
 
 @Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
-  if (!model.allowBackNavigation)
+  if (!allowBackNavigation)
     BackHandler {  }
 
   Surface {
@@ -58,15 +58,15 @@ data class GoPremiumKey(
       ) {
         PremiumUiHeader()
 
-        PremiumUiFeatures(model.features)
+        PremiumUiFeatures(features)
 
         Spacer(Modifier.weight(1f))
 
         PremiumUiFooter(
-          skuDetails = model.premiumSkuDetails.getOrNull(),
-          showTryBasicOption = model.showTryBasicOption,
-          onGoPremiumClick = model.goPremium,
-          onTryBasicVersionClick = model.tryBasicVersion
+          skuDetails = premiumSkuDetails.getOrNull(),
+          showTryBasicOption = showTryBasicOption,
+          onGoPremiumClick = goPremium,
+          onTryBasicVersionClick = tryBasicVersion
         )
       }
     }

@@ -29,9 +29,9 @@ object ShortcutPickerKey : Key<Shortcut>
 
 @Provide val shortcutPickerUi = ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
-    ResourceVerticalListFor(model.shortcuts) { shortcut ->
+    ResourceVerticalListFor(shortcuts) { shortcut ->
       ListItem(
-        modifier = Modifier.clickable { model.pickShortcut(shortcut) },
+        modifier = Modifier.clickable { pickShortcut(shortcut) },
         leading = {
           Image(
             modifier = Modifier.size(40.dp),

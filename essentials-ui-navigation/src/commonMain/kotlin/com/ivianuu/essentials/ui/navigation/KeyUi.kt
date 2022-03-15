@@ -30,42 +30,22 @@ typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 
 // todo make fun interface once compose is fixed
 interface ModelKeyUi<K : Key<*>, S> {
-  @Composable operator fun ModelKeyUiScope<K, S>.invoke()
+  @Composable operator fun S.invoke()
 }
 inline operator fun <K : Key<*>, S> ModelKeyUi(
-  crossinline block: @Composable ModelKeyUiScope<K, S>.() -> Unit
+  crossinline block: @Composable S.() -> Unit
 ): ModelKeyUi<K, S> = object : ModelKeyUi<K, S> {
-  @Composable override fun ModelKeyUiScope<K, S>.invoke() {
+  @Composable override fun S.invoke() {
     block()
   }
-}
-
-@Composable operator fun <K : Key<*>, S> ModelKeyUi<K, S>.invoke(model: S) {
-  with(
-    object : ModelKeyUiScope<K, S> {
-      override val model: S
-        get() = model
-    }
-  ) {
-    invoke()
-  }
-}
-
-@Stable interface ModelKeyUiScope<K : Key<*>, S> {
-  val model: S
 }
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
   ui: U,
   model: Model<S>
 ): KeyUi<K> = KeyUi {
-  val currentModel = model()
-  val uiScope = object : ModelKeyUiScope<K, S> {
-    override val model: S
-      get() = currentModel
-  }
   with(ui) {
-    with(uiScope) {
+    with(model()) {
       invoke()
     }
   }

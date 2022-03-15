@@ -27,9 +27,9 @@ data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) 
 
 @Provide val permissionRequestUi = ModelKeyUi<PermissionRequestKey, PermissionRequestModel> {
   SimpleListScreen(R.string.es_request_permission_title) {
-    items(model.permissions) { permission ->
+    items(permissions) { permission ->
       ListItem(
-        modifier = Modifier.clickable { model.grantPermission(permission) },
+        modifier = Modifier.clickable { grantPermission(permission) },
         title = { Text(permission.permission.title) },
         subtitle = permission.permission.desc?.let {
           {

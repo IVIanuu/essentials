@@ -39,7 +39,7 @@ object RateKey : PopupKey<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberImagePainter(AppIcon(model.packageName)),
+            painter = rememberImagePainter(AppIcon(packageName)),
             modifier = Modifier.size(96.dp)
           )
 
@@ -61,9 +61,9 @@ object RateKey : PopupKey<Unit>
                   .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
-                  ) { model.updateRating(rating) },
+                  ) { updateRating(rating) },
                 painterResId = R.drawable.es_ic_star,
-                tint = if (rating <= model.rating) MaterialTheme.colors.secondary
+                tint = if (rating <= rating) MaterialTheme.colors.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }
@@ -71,17 +71,17 @@ object RateKey : PopupKey<Unit>
         }
       },
       buttons = {
-        if (model.displayShowNever) {
-          TextButton(onClick = model.showNever) {
+        if (displayShowNever) {
+          TextButton(onClick = showNever) {
             Text(R.string.es_never)
           }
         }
 
-        TextButton(onClick = model.showLater) {
+        TextButton(onClick = showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
+        TextButton(enabled = confirmEnabled, onClick = confirm) {
           Text(R.string.es_confirm)
         }
       }

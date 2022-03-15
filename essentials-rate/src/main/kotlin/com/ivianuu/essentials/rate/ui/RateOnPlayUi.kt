@@ -21,19 +21,13 @@ object RateOnPlayKey : PopupKey<Unit>
       title = { Text(R.string.es_rate_on_play_title) },
       content = { Text(R.string.es_rate_on_play_content) },
       buttons = {
-        if (model.displayShowNever) {
-          TextButton(onClick = model.showNever) {
-            Text(R.string.es_never)
-          }
+        if (displayShowNever) {
+          TextButton(onClick = showNever) { Text(R.string.es_never) }
         }
 
-        TextButton(onClick = model.showLater) {
-          Text(R.string.es_later)
-        }
+        TextButton(onClick = showLater) { Text(R.string.es_later) }
 
-        TextButton(onClick = model.rate) {
-          Text(R.string.es_rate)
-        }
+        TextButton(onClick = rate) { Text(R.string.es_rate) }
       }
     )
   }

@@ -35,7 +35,7 @@ object NavBarUnsupportedKey : Key<Unit>
           modifier = Modifier
             .width(200.dp)
             .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-          onClick = model.openMoreInfos
+          onClick = openMoreInfos
         ) {
           Text(R.string.es_more_infos)
         }
@@ -44,7 +44,7 @@ object NavBarUnsupportedKey : Key<Unit>
           modifier = Modifier
             .width(200.dp)
             .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-          onClick = model.openRootMethod
+          onClick = openRootMethod
         ) {
           Text(R.string.es_root_method)
         }

@@ -21,7 +21,7 @@ object BackupAndRestoreKey : Key<Unit>
   SimpleListScreen(R.string.es_backup_and_restore_title) {
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.backupData),
+        modifier = Modifier.clickable(onClick = backupData),
         leading = { Icon(R.drawable.es_ic_save) },
         title = { Text(R.string.es_pref_backup) },
         subtitle = { Text(R.string.es_pref_backup_summary) }
@@ -29,7 +29,7 @@ object BackupAndRestoreKey : Key<Unit>
     }
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.restoreData),
+        modifier = Modifier.clickable(onClick = restoreData),
         leading = { Icon(R.drawable.es_ic_restore) },
         title = { Text(R.string.es_pref_restore) },
         subtitle = { Text(R.string.es_pref_restore_summary) }

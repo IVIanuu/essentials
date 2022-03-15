@@ -25,8 +25,8 @@ object SystemOverlayAppBlacklistKey : Key<Unit>
   remember {
     checkableAppsPageFactory(
       CheckableAppsParams(
-        checkedApps = model.appBlacklist,
-        onCheckedAppsChanged = model.updateAppBlacklist,
+        checkedApps = appBlacklist,
+        onCheckedAppsChanged = updateAppBlacklist,
         appPredicate = DefaultAppPredicate,
         appBarTitle = loadResource(R.string.es_system_overlay_blacklist_title)
       )

@@ -33,14 +33,14 @@ data class AppPickerKey(
     topBar = {
       TopAppBar(
         title = {
-          Text(model.title ?: stringResource(R.string.es_title_app_picker))
+          Text(title ?: stringResource(R.string.es_title_app_picker))
         }
       )
     }
   ) {
-    ResourceVerticalListFor(model.filteredApps) { app ->
+    ResourceVerticalListFor(filteredApps) { app ->
       ListItem(
-        modifier = Modifier.clickable { model.pickApp(app) },
+        modifier = Modifier.clickable { pickApp(app) },
         title = { Text(app.appName) },
         leading = {
           Image(

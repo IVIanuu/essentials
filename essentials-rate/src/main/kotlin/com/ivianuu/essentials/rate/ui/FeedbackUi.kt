@@ -21,19 +21,19 @@ object FeedbackKey : PopupKey<Unit>
       title = { Text(R.string.es_feedback_title) },
       content = { Text(R.string.es_feedback_content) },
       buttons = {
-        if (model.displayShowNever) {
-          TextButton(onClick = model.showNever) {
+        if (displayShowNever) {
+          TextButton(onClick = showNever) {
             Text(R.string.es_never)
           }
         }
-        TextButton(onClick = model.showLater) {
+        TextButton(onClick = showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(onClick = model.openReddit) {
+        TextButton(onClick = openReddit) {
           Text(R.string.es_open_reddit)
         }
-        TextButton(onClick = model.sendMail) {
+        TextButton(onClick = sendMail) {
           Text(R.string.es_send_mail)
         }
       }

@@ -36,11 +36,11 @@ data class WriteSecureSettingsKey(
     }
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.openPcInstructions),
+        modifier = Modifier.clickable(onClick = openPcInstructions),
         title = { Text(R.string.es_use_pc) },
         subtitle = { Text(R.string.es_use_pc_summary) },
         trailing = {
-          Button(onClick = model.openPcInstructions) {
+          Button(onClick = openPcInstructions) {
             Text(R.string.es_grant)
           }
         }
@@ -48,11 +48,11 @@ data class WriteSecureSettingsKey(
     }
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = model.grantPermissionsViaRoot),
+        modifier = Modifier.clickable(onClick = grantPermissionsViaRoot),
         title = { Text(R.string.es_use_root) },
         subtitle = { Text(R.string.es_use_root_summary) },
         trailing = {
-          Button(onClick = model.grantPermissionsViaRoot) {
+          Button(onClick = grantPermissionsViaRoot) {
             Text(R.string.es_grant)
           }
         }

@@ -24,9 +24,9 @@ object LicenseKey : Key<Unit>
 
 @Provide val licenseUi = ModelKeyUi<LicenseKey, LicenseModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
-    ResourceVerticalListFor(model.projects) { project ->
+    ResourceVerticalListFor(projects) { project ->
       ListItem(
-        modifier = Modifier.clickable { model.openProject(project) },
+        modifier = Modifier.clickable { openProject(project) },
         title = { Text(project.project) }
       )
     }

@@ -27,16 +27,16 @@ object NavBarKey : Key<Unit>
   SimpleListScreen(R.string.es_nav_bar_title) {
     item {
       SwitchListItem(
-        value = model.hideNavBar,
-        onValueChange = model.updateHideNavBar,
+        value = hideNavBar,
+        onValueChange = updateHideNavBar,
         title = { Text(R.string.es_pref_hide_nav_bar) }
       )
     }
     item {
       ListItem(
         modifier = Modifier
-          .clickable(onClick = model.updateNavBarRotationMode)
-          .interactive(model.canChangeNavBarRotationMode),
+          .clickable(onClick = updateNavBarRotationMode)
+          .interactive(canChangeNavBarRotationMode),
         title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
         subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) }
       )
