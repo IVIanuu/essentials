@@ -85,7 +85,7 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
 @Composable fun <T> StateFlow<T>.bind(vararg args: Any?): T = bind(initial = value, args = *args)
 
 @Composable fun <T> Flow<T>.bindResource(vararg args: Any?): Resource<T> =
-  flowAsResource().bind(initial = Idle)
+  flowAsResource().bind(initial = Idle, args = *args)
 
 interface ProduceScope<T> : CoroutineScope {
   var value: T
