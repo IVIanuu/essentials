@@ -46,11 +46,13 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   ui: U,
   model: Model<S>
 ): KeyUi<K> = KeyUi {
-  val currentModel = model();
-  {
-    with(ui) {
-      with(currentModel) {
-        invoke()
+  val currentModel = model()
+  remember(currentModel) {
+    {
+      with(ui) {
+        with(currentModel) {
+          invoke()
+        }
       }
     }
   }

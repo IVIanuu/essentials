@@ -67,19 +67,29 @@ fun interface NavigationStateContent {
           )
         }
 
-        currentUi.value = keyUi()
+        ObserveScope(
+          remember {
+            {
+              currentUi.value = keyUi()
 
-        DisposableEffect(true) {
-          onDispose {
-            child.detach()
+              DisposableEffect(true) {
+                onDispose {
+                  child.detach()
+                }
+              }
+            }
           }
-        }
+        )
 
         child
       }
     }
 
   AnimatedStack(modifier = modifier, children = stackChildren.map { it.stackChild })
+}
+
+@Composable fun ObserveScope(body: @Composable () -> Unit) {
+  body()
 }
 
 private class NavigationContentStateChild(
