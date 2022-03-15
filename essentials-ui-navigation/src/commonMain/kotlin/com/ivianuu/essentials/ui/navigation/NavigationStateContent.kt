@@ -62,6 +62,7 @@ fun interface NavigationStateContent {
             key = key,
             options = options,
             content = { currentUi.value },
+            decorateKeyUi = navigationContentComponent.decorateUi,
             elements = elements,
             scope = scope
           )
@@ -93,11 +94,12 @@ fun interface NavigationStateContent {
 }
 
 private class NavigationContentStateChild(
-  val key: Key<*>,
+  private val key: Key<*>,
   options: KeyUiOptions? = null,
   content: () -> @Composable () -> Unit,
-  val elements: Elements<KeyUiScope>,
-  val scope: Scope<KeyUiScope>
+  private val decorateKeyUi: DecorateKeyUi,
+  private val elements: Elements<KeyUiScope>,
+  private val scope: Scope<KeyUiScope>
 ) {
   var content by mutableStateOf(content)
 
@@ -122,7 +124,7 @@ private class NavigationContentStateChild(
       LocalKeyUiElements provides elements,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      content()()
+      decorateKeyUi(content())
 
       DisposableEffect(true) {
         isComposing = true
