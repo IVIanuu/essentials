@@ -30,7 +30,7 @@ object UnlockKey : Key<Unit>
   screenUnlocker: ScreenUnlocker,
   scope: NamedCoroutineScope<KeyUiScope>,
   T: ToastContext
-) = KeyUi<UnlockKey> {
+) = SimpleKeyUi<UnlockKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {

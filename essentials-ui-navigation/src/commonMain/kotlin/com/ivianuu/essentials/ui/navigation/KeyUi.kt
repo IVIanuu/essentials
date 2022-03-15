@@ -10,8 +10,10 @@ import com.ivianuu.injekt.coroutines.*
 import kotlin.reflect.*
 
 fun interface KeyUi<K : Key<*>> {
-  @Composable operator fun invoke()
+  @Composable operator fun invoke(): @Composable () -> Unit
 }
+
+fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
 
 typealias KeyUiFactory<K> = (K) -> KeyUi<K>
 
@@ -44,9 +46,12 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   ui: U,
   model: Model<S>
 ): KeyUi<K> = KeyUi {
-  with(ui) {
-    with(model()) {
-      invoke()
+  val currentModel = model();
+  {
+    with(ui) {
+      with(currentModel) {
+        invoke()
+      }
     }
   }
 }

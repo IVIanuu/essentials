@@ -22,7 +22,7 @@ import com.ivianuu.injekt.common.*
 
 object DecoratorsKey : Key<Unit>
 
-@Provide val decoratorsUi = KeyUi<DecoratorsKey> {
+@Provide val decoratorsUi = SimpleKeyUi<DecoratorsKey> {
   SimpleListScreen("Decorators") {
     (1..10).forEach { itemIndex ->
       item {

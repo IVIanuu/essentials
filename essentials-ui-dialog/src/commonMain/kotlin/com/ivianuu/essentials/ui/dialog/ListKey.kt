@@ -24,7 +24,7 @@ data class ListKey<T : Any>(
 @Provide fun listKeyUi(
   key: ListKey<Any>,
   navigator: Navigator
-) = KeyUi<ListKey<Any>> {
+) = SimpleKeyUi<ListKey<Any>> {
   DialogScaffold {
     Dialog(
       title = key.title?.let { { Text(it) } },

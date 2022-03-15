@@ -25,7 +25,7 @@ data class TextInputKey(
   key: TextInputKey,
   navigator: Navigator,
   strings: CommonStrings
-) = KeyUi<TextInputKey> {
+) = SimpleKeyUi<TextInputKey> {
   DialogScaffold {
     var currentValue by remember { mutableStateOf(key.initial) }
     TextInputDialog(

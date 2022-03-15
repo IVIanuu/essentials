@@ -24,7 +24,7 @@ data class SingleChoiceListKey<T : Any>(
   key: SingleChoiceListKey<Any>,
   navigator: Navigator,
   strings: CommonStrings
-) = KeyUi<SingleChoiceListKey<Any>> {
+) = SimpleKeyUi<SingleChoiceListKey<Any>> {
   DialogScaffold {
     val scope = rememberCoroutineScope()
     SingleChoiceListDialog(

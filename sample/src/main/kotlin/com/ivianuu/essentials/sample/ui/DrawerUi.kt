@@ -19,7 +19,7 @@ import com.ivianuu.injekt.*
 
 object DrawerKey : Key<Unit>
 
-@Provide val drawerUi = KeyUi<DrawerKey> {
+@Provide val drawerUi = SimpleKeyUi<DrawerKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Drawer") }) },
     drawerContent = {

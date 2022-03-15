@@ -23,7 +23,7 @@ data class ColorPickerKey(
 @Provide fun colorPickerUi(
   key: ColorPickerKey,
   navigator: Navigator,
-) = KeyUi<ColorPickerKey> {
+) = SimpleKeyUi<ColorPickerKey> {
   DialogScaffold {
     val scope = rememberCoroutineScope()
     ColorPickerDialog(

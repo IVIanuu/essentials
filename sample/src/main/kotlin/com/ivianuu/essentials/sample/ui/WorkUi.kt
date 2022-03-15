@@ -18,7 +18,7 @@ import com.ivianuu.injekt.*
 
 object WorkKey : Key<Unit>
 
-@Provide fun workUi(testWorkScheduler: TestWorkScheduler) = KeyUi<WorkKey> {
+@Provide fun workUi(testWorkScheduler: TestWorkScheduler) = SimpleKeyUi<WorkKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {

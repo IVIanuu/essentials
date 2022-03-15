@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.*
 
 object DisplayRotationKey : Key<Unit>
 
-@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) = KeyUi<DisplayRotationKey> {
+@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) = SimpleKeyUi<DisplayRotationKey> {
   Box(
     modifier = Modifier.fillMaxSize()
       .background(MaterialTheme.colors.primary)

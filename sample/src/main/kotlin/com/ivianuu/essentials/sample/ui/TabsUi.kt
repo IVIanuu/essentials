@@ -27,7 +27,7 @@ import kotlinx.coroutines.*
 object TabsKey : Key<Unit>
 
 @OptIn(ExperimentalPagerApi::class)
-@Provide val tabsUi = KeyUi<TabsKey> {
+@Provide val tabsUi = SimpleKeyUi<TabsKey> {
   val pagerState = rememberPagerState()
   val scope = rememberCoroutineScope()
   Scaffold(

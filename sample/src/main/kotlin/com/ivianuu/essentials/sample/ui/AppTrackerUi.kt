@@ -39,7 +39,7 @@ object AppTrackerKey : Key<Unit>
   scope: NamedCoroutineScope<KeyUiScope>,
   N: NotificationFactory,
   T: ToastContext
-) = KeyUi<AppTrackerKey> {
+) = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)

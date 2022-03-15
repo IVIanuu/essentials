@@ -31,7 +31,7 @@ import kotlinx.coroutines.*
 
 object DialogsKey : Key<Unit>
 
-@Provide fun dialogsUi(navigator: Navigator) = KeyUi<DialogsKey> {
+@Provide fun dialogsUi(navigator: Navigator) = SimpleKeyUi<DialogsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -271,6 +271,6 @@ data class DialogLauncherKey(
   val dialog: @Composable () -> Unit
 ) : PopupKey<Unit>
 
-@Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey> {
+@Provide fun dialogLauncherUi(key: DialogLauncherKey) = SimpleKeyUi<DialogLauncherKey> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }

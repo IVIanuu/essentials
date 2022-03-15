@@ -31,7 +31,7 @@ object PrefsKey : Key<Unit>
   pref: DataStore<SamplePrefs>,
   navigator: Navigator,
   scope: NamedCoroutineScope<KeyUiScope>
-) = KeyUi<PrefsKey> {
+) = SimpleKeyUi<PrefsKey> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
     item {

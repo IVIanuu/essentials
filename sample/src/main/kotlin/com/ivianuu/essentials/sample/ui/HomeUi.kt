@@ -15,7 +15,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.ivianuu.essentials.colorpicker.*
-import com.ivianuu.essentials.ui.animation.transition.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.essentials.ui.material.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -32,7 +31,7 @@ import kotlinx.coroutines.*
   navigator: Navigator,
   itemsFactory: () -> List<HomeItem>,
   T: ToastContext
-) = KeyUi<HomeKey> {
+) = SimpleKeyUi<HomeKey> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",

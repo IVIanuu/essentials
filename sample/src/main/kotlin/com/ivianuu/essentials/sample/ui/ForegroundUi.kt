@@ -31,7 +31,7 @@ object ForegroundKey : Key<Unit>
   foregroundManager: ForegroundManager,
   N: NotificationFactory,
   scope: NamedCoroutineScope<KeyUiScope>
-) = KeyUi<ForegroundKey> {
+) = SimpleKeyUi<ForegroundKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {

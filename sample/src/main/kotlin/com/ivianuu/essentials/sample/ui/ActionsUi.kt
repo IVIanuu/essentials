@@ -29,7 +29,7 @@ object ActionsKey : Key<Unit>
   navigator: Navigator,
   scope: NamedCoroutineScope<UiScope>,
   T: Toaster
-) = KeyUi<ActionsKey> {
+) = SimpleKeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {

@@ -25,7 +25,7 @@ object CheckAppsKey : Key<Unit>
   store: DataStore<List<CheckedAppEntity>>,
   launchableAppPredicate: LaunchableAppPredicate,
   scope: NamedCoroutineScope<KeyUiScope>
-) = KeyUi<CheckAppsKey> {
+) = SimpleKeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(
