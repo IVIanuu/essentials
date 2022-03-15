@@ -204,12 +204,20 @@ data class GoPremiumKey(
       text = when (skuDetails.type.toSkuType()) {
         Sku.Type.IN_APP -> stringResource(R.string.one_time_purchase_desc, skuDetails.price)
         Sku.Type.SUBS -> {
-          stringResource(
-            R.string.subscription_pricing_model_desc,
-            skuDetails.price,
-            skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
-            skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
-          )
+          if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
+            stringResource(
+              R.string.subscription_pricing_model_desc,
+              skuDetails.price,
+              skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
+            )
+          } else {
+            stringResource(
+              R.string.subscription_pricing_model_with_trial_desc,
+              skuDetails.price,
+              skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
+              skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
+            )
+          }
         }
       },
       style = MaterialTheme.typography.caption,

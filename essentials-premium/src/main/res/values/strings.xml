@@ -8,6 +8,7 @@
     <string name="premium_title">Premium</string>
     <string name="basic_title">Basic</string>
     <string name="try_basic_version">Try limited version</string>
-    <string name="subscription_pricing_model_desc">%s\/%s after %s free trial</string>
+    <string name="subscription_pricing_model_with_trial_desc">%s\/%s after %s free trial</string>
+    <string name="subscription_pricing_model_desc">%s\/%s</string>
     <string name="one_time_purchase_desc">One time fee of %s</string>
 </resources>
