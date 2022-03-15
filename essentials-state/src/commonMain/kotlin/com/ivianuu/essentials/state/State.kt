@@ -82,7 +82,7 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
   @Inject coroutineScope: EffectCoroutineScope,
   block: suspend CoroutineScope.() -> Unit
 ) {
-  scope.scopeKeyed(currentCompositeKeyHash.toString(), *keys) {
+  scope.scopeKeyed(currentCompositeKeyHash, *keys) {
     val job = coroutineScope.launch(block = block)
     Disposable { job.cancel() }
   }
@@ -113,7 +113,7 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
   vararg args: Any?,
   @Inject scope: EffectScope,
   @Inject coroutineScope: EffectCoroutineScope,
-): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash.toString(), *args) { flowAsResource() }
+): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash, *args) { flowAsResource() }
   .bind(initial = Idle)
 
 interface ProduceScope<T> : CoroutineScope {
@@ -127,7 +127,7 @@ interface ProduceScope<T> : CoroutineScope {
   @Inject effectScope: EffectCoroutineScope,
   block: suspend ProduceScope<T>.() -> Unit
 ): T {
-  val state = scope.scopeKeyed(currentCompositeKeyHash.toString(), *args) { mutableStateOf(initial) }
+  val state = scope.scopeKeyed(currentCompositeKeyHash, *args) { mutableStateOf(initial) }
 
   Effect(state) {
     block(
@@ -145,7 +145,7 @@ interface ProduceScope<T> : CoroutineScope {
   @Inject scope: EffectScope,
   @Inject coroutineScope: EffectCoroutineScope,
   block: suspend () -> T
-): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash.toString(), *args) {
+): Resource<T> = scope.scopeKeyed(currentCompositeKeyHash, *args) {
   resourceFlow { emit(block()) }
 }.bind(Idle)
 
