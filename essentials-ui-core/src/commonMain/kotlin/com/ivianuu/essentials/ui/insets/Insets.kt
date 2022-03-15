@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
+import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.essentials.ui.common.*
 import com.ivianuu.injekt.*
@@ -26,7 +27,7 @@ import com.ivianuu.injekt.*
 
   val animatedInsets = if (!animate) targetInsets else {
     val animation = remember(targetInsets) { Animatable(0f) }
-    LaunchedEffect(animation) {
+    Effect(animation) {
       animation.animateTo(1f, animationSpec = tween(durationMillis = 150))
     }
     var lastInsets by remember { refOf(targetInsets) }

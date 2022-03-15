@@ -15,6 +15,7 @@ import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.permission.accessibility.*
 import com.ivianuu.essentials.recentapps.*
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.layout.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -43,7 +44,7 @@ object AppTrackerKey : Key<Unit>
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
-    LaunchedEffect(true) {
+    Effect(true) {
       foregroundManager.startForeground(
         24,
         currentApp

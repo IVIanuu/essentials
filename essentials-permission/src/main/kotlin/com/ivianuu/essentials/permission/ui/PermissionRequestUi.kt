@@ -82,7 +82,7 @@ data class UiPermission<P : Permission>(
     }
   )
 
-  LaunchedEffect(model) {
+  Effect(model) {
     if (ctx.key.permissionsKeys
         .all { permissionStateFactory(listOf(it)).first() }) {
       ctx.navigator.pop(ctx.key, true)

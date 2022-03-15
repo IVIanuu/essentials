@@ -58,18 +58,18 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 }
 
 @Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
-  uiFactory: () -> U,
-  model: Model<S>,
+  ui: U,
   coroutineScope: NamedCoroutineScope<KeyUiScope>,
   scope: Scope<KeyUiScope>,
-  sKey: TypeKey<S>
+  modelFactory: (EffectScope, NamedCoroutineScope<KeyUiScope>) -> Model<S>
 ): KeyUi<K> = KeyUi {
-  val currentModel by scope { coroutineScope.state { model() } }.collectAsState()
+  val model = remember { modelFactory(scope, coroutineScope) }
+
+  val currentModel = model()
   val uiScope = object : ModelKeyUiScope<K, S> {
     override val model: S
       get() = currentModel
   }
-  val ui = remember(uiFactory)
   with(ui) {
     with(uiScope) {
       invoke()
@@ -90,6 +90,6 @@ inline operator fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val coroutineScope: NamedCoroutineScope<KeyUiScope>,
-  @Provide val scope: Scope<KeyUiScope>
+  @Provide val coroutineScope: EffectCoroutineScope,
+  @Provide val scope: EffectScope
 )

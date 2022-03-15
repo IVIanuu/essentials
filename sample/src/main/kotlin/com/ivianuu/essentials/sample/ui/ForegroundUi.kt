@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.*
 import com.ivianuu.essentials.foreground.*
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.state.*
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -39,7 +40,7 @@ object ForegroundKey : Key<Unit>
     var isEnabled by remember { mutableStateOf(false) }
 
     if (isEnabled)
-      LaunchedEffect(true) {
+      Effect(true) {
         foregroundManager.startForeground(
           5,
           flow {

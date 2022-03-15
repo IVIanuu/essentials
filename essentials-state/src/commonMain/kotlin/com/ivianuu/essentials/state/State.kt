@@ -123,7 +123,7 @@ interface ProduceScope<T> : CoroutineScope {
 @Composable fun <T> produce(
   initial: T,
   vararg args: Any?,
-  @Inject scope: Scope<*>,
+  @Inject scope: EffectScope,
   @Inject effectScope: EffectCoroutineScope,
   block: suspend ProduceScope<T>.() -> Unit
 ): T {
@@ -213,7 +213,7 @@ typealias EffectScope = @EffectScopeTag Scope<*>
 
 @Tag annotation class EffectCoroutineScopeTag {
   sealed interface BaseModule {
-    @Provide @Composable fun composableEffectScope() = rememberCoroutineScope()
+    @Provide @Composable fun composableEffectScope(): EffectCoroutineScope = rememberCoroutineScope()
   }
   companion object : BaseModule {
     @Provide fun namedAsEffectScope(
