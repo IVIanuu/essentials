@@ -65,29 +65,24 @@ data class UiPermission<P : Permission>(
   requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>,
   ctx: KeyUiContext<PermissionRequestKey>
 ) = Model {
-  val model = PermissionRequestModel(
+  LaunchedEffect(true) {
+    permissionStateFactory(ctx.key.permissionsKeys)
+      .first { it }
+    ctx.navigator.pop(ctx.key, true)
+  }
+
+  PermissionRequestModel(
     permissions = ctx.key.permissionsKeys
       .map { permissionKey ->
-        key(permissionKey.value) {
-          UiPermission(
-            permissionKey,
-            permissions[permissionKey]!!,
-            permissionStateFactory(listOf(permissionKey)).bind(false)
-          )
-        }
+        UiPermission(
+          permissionKey,
+          permissions[permissionKey]!!,
+          permissionStateFactory(listOf(permissionKey)).bind(false)
+        )
       },
     grantPermission = action { permission ->
       requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
       appUiStarter()
     }
   )
-
-  LaunchedEffect(model) {
-    if (ctx.key.permissionsKeys
-        .all { permissionStateFactory(listOf(it)).first() }) {
-      ctx.navigator.pop(ctx.key, true)
-    }
-  }
-
-  model
 }

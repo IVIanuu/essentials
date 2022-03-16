@@ -88,12 +88,13 @@ suspend fun Navigator.clear() {
         for (key in backStack) {
           @Suppress("UNCHECKED_CAST")
           key as Key<Any?>
-          if (keyHandlers.none {
-              (it as KeyHandler<Any?>)(key) {
-                finalResults[key] = it
-              }
-          }) {
+
+          val keyHandle = keyHandlers.firstNotNullOfOrNull { (it as KeyHandler<Any?>)(key) }
+
+          if (keyHandle == null) {
             add(key)
+          } else {
+            finalResults[key] = keyHandle()
           }
         }
       }

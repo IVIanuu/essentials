@@ -6,6 +6,8 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.injekt.*
 
-fun interface KeyHandler<R> : suspend (Key<R>, (R) -> Unit) -> Boolean
-
-@Provide fun defaultKeyHandlers() = emptyList<KeyHandler<*>>()
+fun interface KeyHandler<R> : suspend (Key<R>) -> (suspend () -> R?)? {
+  companion object {
+    @Provide fun defaultKeyHandlers() = emptyList<KeyHandler<*>>()
+  }
+}

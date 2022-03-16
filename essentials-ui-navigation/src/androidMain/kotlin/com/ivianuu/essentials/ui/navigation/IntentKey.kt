@@ -9,7 +9,6 @@ import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
 import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
@@ -31,33 +30,29 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
   context: MainContext,
-  intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>,
-  scope: NamedCoroutineScope<AppScope>
-) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key, onResult ->
-  if (key !is IntentKey) return@handler false
+  intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
+) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key ->
+  if (key !is IntentKey) return@handler null
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
-    ?: return@handler false
+    ?: return@handler null
   val intent = intentFactory(key)
-  scope.launch {
+  return@handler {
     val activity = appUiStarter()
     withContext(context) {
-      val result =
-        suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
-          val launcher = activity.activityResultRegistry.register(
-            UUID.randomUUID().toString(),
-            ActivityResultContracts.StartActivityForResult()
-          ) {
-            if (continuation.isActive) continuation.resume(Ok(it))
-          }
-          try {
-            launcher.launch(intent)
-          } catch (e: ActivityNotFoundException) {
-            continuation.resume(Err(e))
-          }
-          continuation.invokeOnCancellation { launcher.unregister() }
+      suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+        val launcher = activity.activityResultRegistry.register(
+          UUID.randomUUID().toString(),
+          ActivityResultContracts.StartActivityForResult()
+        ) {
+          if (continuation.isActive) continuation.resume(Ok(it))
         }
-      onResult(result)
+        try {
+          launcher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+          continuation.resume(Err(e))
+        }
+        continuation.invokeOnCancellation { launcher.unregister() }
+      }
     }
   }
-  true
 }
