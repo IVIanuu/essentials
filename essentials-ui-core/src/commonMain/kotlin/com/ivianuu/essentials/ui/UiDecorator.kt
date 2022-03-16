@@ -44,17 +44,21 @@ fun interface DecorateUi {
   elements: List<UiDecoratorElement>,
   L: Logger
 ) = DecorateUi { content ->
-  remember(elements, content as? Any?) {
+  val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
     elements
       .sortedWithLoadingOrder()
       .reversed()
-      .fold(content) { acc, element ->
-        {
+      .fold({ it() }) { acc, element ->
+        { content ->
           log { "Decorate ui ${element.key.value}" }
-          element.decorator(acc)
+          acc {
+            element.decorator(content)
+          }
         }
       }
-  }()
+  }
+
+  combinedDecorator(content)
 }
 
 fun interface AppTheme : UiDecorator
