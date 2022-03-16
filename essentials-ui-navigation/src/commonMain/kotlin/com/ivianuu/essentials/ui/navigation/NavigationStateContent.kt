@@ -122,7 +122,9 @@ private class NavigationContentStateChild(
       LocalKeyUiElements provides elements,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      decorateKeyUi(content())
+      decorateKeyUi {
+        content()()
+      }
 
       DisposableEffect(true) {
         isComposing = true
