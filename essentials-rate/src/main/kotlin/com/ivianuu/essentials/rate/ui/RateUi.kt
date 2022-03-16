@@ -54,16 +54,16 @@ object RateKey : PopupKey<Unit>
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
           ) {
-            RATINGS.forEach { rating ->
+            RATINGS.forEach { currentRating ->
               Icon(
                 modifier = Modifier
                   .size(48.dp)
                   .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
-                  ) { updateRating(rating) },
+                  ) { updateRating(currentRating) },
                 painterResId = R.drawable.es_ic_star,
-                tint = if (rating <= rating) MaterialTheme.colors.secondary
+                tint = if (currentRating <= rating) MaterialTheme.colors.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }
