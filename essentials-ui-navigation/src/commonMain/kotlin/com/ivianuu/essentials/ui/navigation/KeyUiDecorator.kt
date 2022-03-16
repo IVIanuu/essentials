@@ -46,11 +46,10 @@ fun interface DecorateKeyUi {
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
     elements
       .sortedWithLoadingOrder()
-      .reversed()
       .fold({ it() }) { acc, element ->
         { content ->
-          log { "Decorate key ui ${element.key.value}" }
           acc {
+            log { "Decorate key ui ${element.key.value}" }
             element.decorator(content)
           }
         }
