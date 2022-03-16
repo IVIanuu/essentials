@@ -50,7 +50,7 @@ fun interface NavigationStateContent {
   val stackChildren = backStack
     .map { key ->
       key(key) {
-        val currentUi = remember { mutableStateOf<@Composable () -> Unit>({}) }
+        var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = Scope<KeyUiScope>()
           val elements = keyUiElementsFactory(scope, key)
@@ -61,7 +61,7 @@ fun interface NavigationStateContent {
           content to NavigationContentStateChild(
             key = key,
             options = options,
-            content = { currentUi.value },
+            content = { currentUi },
             decorateKeyUi = navigationContentComponent.decorateUi,
             elements = elements,
             scope = scope
@@ -71,7 +71,9 @@ fun interface NavigationStateContent {
         ObserveScope(
           remember {
             {
-              currentUi.value = keyUi()
+              val r= keyUi()
+              currentUi = r
+              println("update current ui $key to $r")
 
               DisposableEffect(true) {
                 onDispose {
@@ -96,13 +98,11 @@ fun interface NavigationStateContent {
 private class NavigationContentStateChild(
   private val key: Key<*>,
   options: KeyUiOptions? = null,
-  content: () -> @Composable () -> Unit,
+  private val content: () -> @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
   private val elements: Elements<KeyUiScope>,
   private val scope: Scope<KeyUiScope>
 ) {
-  var content by mutableStateOf(content)
-
   val stackChild = AnimatedStackChild(
     key = key,
     opaque = options?.opaque ?: false,
@@ -124,6 +124,7 @@ private class NavigationContentStateChild(
       LocalKeyUiElements provides elements,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
+      println("key invoke decorator with ${content.invoke()}")
       decorateKeyUi(content())
 
       DisposableEffect(true) {
