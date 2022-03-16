@@ -43,7 +43,7 @@ fun interface DecorateKeyUi {
   elements: List<KeyUiDecoratorElement>,
   L: Logger
 ) = DecorateKeyUi { content ->
-  remember {
+  remember(elements, content as Any?) {
     elements
       .sortedWithLoadingOrder()
       .reversed()

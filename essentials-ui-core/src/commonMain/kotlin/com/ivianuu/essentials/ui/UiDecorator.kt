@@ -44,7 +44,7 @@ fun interface DecorateUi {
   elements: List<UiDecoratorElement>,
   L: Logger
 ) = DecorateUi { content ->
-  remember {
+  remember(elements, content as? Any?) {
     elements
       .sortedWithLoadingOrder()
       .reversed()
