@@ -71,9 +71,7 @@ fun interface NavigationStateContent {
         ObserveScope(
           remember {
             {
-              val r= keyUi()
-              currentUi = r
-              println("update current ui $key to $r")
+              currentUi = keyUi()
 
               DisposableEffect(true) {
                 onDispose {
@@ -124,7 +122,6 @@ private class NavigationContentStateChild(
       LocalKeyUiElements provides elements,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      println("key invoke decorator with ${content.invoke()}")
       decorateKeyUi(content())
 
       DisposableEffect(true) {
