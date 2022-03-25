@@ -24,9 +24,9 @@ interface FullScreenAd {
 
   fun preload()
 
-  suspend fun load(): Boolean
+  suspend fun load(): EsResult<Boolean, Throwable>
 
-  suspend fun loadAndShow(): Boolean
+  suspend fun loadAndShow(): EsResult<Boolean, Throwable>
 
   suspend fun showIfLoaded(): Boolean
 }
@@ -48,20 +48,20 @@ interface FullScreenAd {
     scope.launch { load() }
   }
 
-  override suspend fun load(): Boolean {
-    if (!showAds.first().value) return false
+  override suspend fun load() = catch {
+    if (!showAds.first().value) return@catch false
     getOrCreateCurrentAd()
-    return true
+    true
   }
 
-  override suspend fun loadAndShow(): Boolean {
-    if (!showAds.first().value) return false
+  override suspend fun loadAndShow() = catch {
+    if (!showAds.first().value) return@catch false
     getOrCreateCurrentAd().invoke()
     preload()
-    return true
+    true
   }
 
-  override suspend fun showIfLoaded(): Boolean = getCurrentAd()
+  override suspend fun showIfLoaded() = getCurrentAd()
     ?.let {
       it.invoke()
       preload()
