@@ -18,7 +18,7 @@ import kotlinx.coroutines.*
 import java.util.*
 import java.util.zip.*
 
-fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
+fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
   backupDir: BackupDir,
@@ -64,7 +64,7 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
   }
 }
 
-fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
+fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,

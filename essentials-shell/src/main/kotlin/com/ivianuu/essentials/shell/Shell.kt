@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 interface Shell {
   suspend fun isAvailable(): Boolean
 
-  suspend fun run(vararg commands: String): Result<List<String>, Throwable>
+  suspend fun run(vararg commands: String): EsResult<List<String>, Throwable>
 }
 
 @Provide class ShellImpl(private val context: IOContext) : Shell {

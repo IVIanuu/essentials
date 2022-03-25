@@ -6,19 +6,19 @@ package com.ivianuu.essentials
 
 import com.github.michaelbull.result.*
 
-inline fun <T> catch(block: () -> T): Result<T, Throwable> = try {
+inline fun <T> catch(block: () -> T): EsResult<T, Throwable> = try {
   Ok(block())
 } catch (e: Throwable) {
   Err(e.nonFatalOrThrow())
 }
 
-inline fun <R, T> R.catch(block: R.() -> T): Result<T, Throwable> = try {
+inline fun <R, T> R.catch(block: R.() -> T): EsResult<T, Throwable> = try {
   Ok(block())
 } catch (e: Throwable) {
   Err(e.nonFatalOrThrow())
 }
 
-inline fun <T, reified E> catchT(block: () -> T): Result<T, E> = try {
+inline fun <T, reified E> catchT(block: () -> T): EsResult<T, E> = try {
   Ok(block())
 } catch (e: Throwable) {
   if (e is E)
@@ -27,7 +27,7 @@ inline fun <T, reified E> catchT(block: () -> T): Result<T, E> = try {
     throw e
 }
 
-inline fun <R, T, reified E> R.catchT(block: R.() -> T): Result<T, E> = try {
+inline fun <R, T, reified E> R.catchT(block: R.() -> T): EsResult<T, E> = try {
   Ok(block())
 } catch (e: Throwable) {
   if (e is E)

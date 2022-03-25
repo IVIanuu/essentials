@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.license.domain
 
-import com.github.michaelbull.result.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.license.data.*
 import com.ivianuu.injekt.*
@@ -14,7 +13,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 interface LicenceProjectRepository {
-  suspend fun getLicenseProjects(): Result<List<Project>, Throwable>
+  suspend fun getLicenseProjects(): EsResult<List<Project>, Throwable>
 }
 
 @Provide class LicenceProjectRepositoryImpl(
@@ -22,7 +21,7 @@ interface LicenceProjectRepository {
   private val coroutineContext: IOContext,
   private val json: Json
 ) : LicenceProjectRepository{
-  override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {
+  override suspend fun getLicenseProjects(): EsResult<List<Project>, Throwable> = withContext(coroutineContext) {
     catch {
       context.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()

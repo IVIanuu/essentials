@@ -17,7 +17,7 @@ import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
+fun interface ExecuteActionUseCase : suspend (String) -> EsResult<Boolean, Throwable>
 
 @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,

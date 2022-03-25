@@ -81,7 +81,7 @@ fun interface ActionIntentSender : (Intent, Boolean, Bundle?) -> Unit
   }
 }
 
-fun interface CloseSystemDialogsUseCase : suspend () -> Result<Unit, Throwable>
+fun interface CloseSystemDialogsUseCase : suspend () -> EsResult<Unit, Throwable>
 
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide

@@ -59,7 +59,7 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
     }.onFailure { emit(Error(it)) }
   }
 
-fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
+fun <V> EsResult<V, Throwable>.toResource(): Resource<V> = fold(
   success = { Success(it) },
   failure = { Error(it) }
 )

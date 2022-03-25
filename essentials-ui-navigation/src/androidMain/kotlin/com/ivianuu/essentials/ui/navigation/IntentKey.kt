@@ -9,6 +9,7 @@ import androidx.activity.*
 import androidx.activity.result.*
 import androidx.activity.result.contract.*
 import com.github.michaelbull.result.*
+import com.ivianuu.essentials.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
@@ -16,7 +17,7 @@ import java.util.*
 import kotlin.coroutines.*
 import kotlin.reflect.*
 
-interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
+interface IntentKey : Key<EsResult<ActivityResult, ActivityNotFoundException>>
 
 @Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
@@ -31,7 +32,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   appUiStarter: IntentAppUiStarter,
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
-) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key ->
+) = KeyHandler<EsResult<ActivityResult, Throwable>> handler@ { key ->
   if (key !is IntentKey) return@handler null
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler null
