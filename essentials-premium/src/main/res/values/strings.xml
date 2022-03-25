@@ -11,4 +11,5 @@
     <string name="subscription_pricing_model_with_trial_desc">%s\/%s after %s free trial</string>
     <string name="subscription_pricing_model_desc">%s\/%s</string>
     <string name="one_time_purchase_desc">One time fee of %s</string>
+    <string name="premium_version_hint">This functionality is only available in the premium version!</string>
 </resources>

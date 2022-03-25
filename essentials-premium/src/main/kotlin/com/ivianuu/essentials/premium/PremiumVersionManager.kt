@@ -39,7 +39,9 @@ interface PremiumVersionManager {
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val RP: ResourceProvider,
+  private val scope: NamedCoroutineScope<AppScope>,
+  private val toaster: Toaster
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
@@ -62,6 +64,7 @@ interface PremiumVersionManager {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
+      showToast(com.ivianuu.essentials.premium.R.string.premium_version_hint)
       if (!screenUnlocker()) return@launch
       appUiStarter()
       navigator.push(GoPremiumKey(showTryBasicOption = false))
