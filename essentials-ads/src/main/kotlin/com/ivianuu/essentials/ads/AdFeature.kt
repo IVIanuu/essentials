@@ -15,6 +15,9 @@ interface AdFeature
     @Provide fun <K : Key<*>> defaultAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
       AdFeatures(allFeatures)
 
+    @Provide fun <K : RootKey> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
+      AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
+
     @Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
     @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
