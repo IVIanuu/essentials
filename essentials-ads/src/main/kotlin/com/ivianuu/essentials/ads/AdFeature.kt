@@ -20,6 +20,9 @@ interface AdFeature
 
     @Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
 
+    @Provide fun <K : CriticalUserFlowKey<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
+      AdFeatures(emptyList())
+
     @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> adFeatureConfigMapEntry(
       keyClass: KClass<K>,
       features: AdFeatures<K>

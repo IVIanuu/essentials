@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.*
 
 data class WriteSecureSettingsPcInstructionsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
-) : Key<Boolean>
+) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsPcInstructionsUi =
   ModelKeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {

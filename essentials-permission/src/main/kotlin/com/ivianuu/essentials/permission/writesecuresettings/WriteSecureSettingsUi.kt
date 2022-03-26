@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.*
 
 data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
-) : Key<Boolean>
+) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsUi = ModelKeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> {
   SimpleListScreen(R.string.es_secure_settings_title) {

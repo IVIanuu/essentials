@@ -23,7 +23,9 @@ import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.flow.*
 
-data class PermissionRequestKey(val permissionsKeys: List<TypeKey<Permission>>) : Key<Boolean>
+data class PermissionRequestKey(
+  val permissionsKeys: List<TypeKey<Permission>>
+) : CriticalUserFlowKey<Boolean>
 
 @Provide val permissionRequestUi = ModelKeyUi<PermissionRequestKey, PermissionRequestModel> {
   SimpleListScreen(R.string.es_request_permission_title) {

@@ -13,6 +13,8 @@ interface RootKey : Key<Unit>
 
 interface PopupKey<T> : Key<T>
 
+interface CriticalUserFlowKey<T> : Key<T>
+
 @Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> {
   KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
 }
