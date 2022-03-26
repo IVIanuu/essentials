@@ -40,7 +40,11 @@ data class AppFeature(
 data class GoPremiumKey(
   val showTryBasicOption: Boolean,
   val allowBackNavigation: Boolean = true
-) : CriticalUserFlowKey<Boolean>
+) : CriticalUserFlowKey<Boolean> {
+  companion object {
+    @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
+  }
+}
 
 @Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
   if (!allowBackNavigation)

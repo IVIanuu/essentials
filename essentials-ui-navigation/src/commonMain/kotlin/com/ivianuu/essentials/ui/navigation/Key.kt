@@ -11,10 +11,12 @@ interface Key<T>
 
 interface RootKey : Key<Unit>
 
-interface PopupKey<T> : Key<T>
+interface PopupKey<T> : Key<T> {
+  companion object {
+    @Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> {
+      KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
+    }
+  }
+}
 
 interface CriticalUserFlowKey<T> : Key<T>
-
-@Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> {
-  KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
-}
