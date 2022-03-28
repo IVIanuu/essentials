@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.injekt.*
+import kotlinx.coroutines.*
 
 data class AppFeature(
   val title: String,
@@ -274,8 +275,10 @@ data class GoPremiumModel(
         ctx.navigator.pop(ctx.key, true)
     },
     tryBasicVersion = action {
-      fullScreenAd.loadAndShow()
       ctx.navigator.pop(ctx.key, false)
+      withContext(NonCancellable) {
+        fullScreenAd.loadAndShow()
+      }
     }
   )
 }
