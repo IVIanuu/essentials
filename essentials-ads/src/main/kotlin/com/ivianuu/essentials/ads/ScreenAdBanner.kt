@@ -44,7 +44,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (showAds.value) currentInsets
+        LocalInsets provides if (!showAds.value) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
