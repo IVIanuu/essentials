@@ -26,4 +26,4 @@ fun Iso8601Duration.toReadableString() = "$amount " + when (unit) {
   Iso8601Duration.Unit.MONTH -> "month"
   Iso8601Duration.Unit.WEEK -> "week"
   Iso8601Duration.Unit.DAY -> "day"
-} + " ${if (amount > 1) "s" else ""}"
+} + " ${if (amount > 1) "'s" else ""}"
