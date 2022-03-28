@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
 import com.ivianuu.essentials.gestures.action.ui.picker.*
 import com.ivianuu.essentials.permission.*
 import com.ivianuu.essentials.ui.navigation.*
@@ -78,9 +77,8 @@ interface ActionPickerDelegate {
 
 @JvmInline value class FloatingWindowActionsEnabled(val value: Boolean) {
   companion object {
-    @Provide fun floatingWindowActionsEnabled(
-      systemBuildInfo: SystemBuildInfo
-    ) = FloatingWindowActionsEnabled(systemBuildInfo.sdk >= 29)
+    @Provide val default
+      get() = FloatingWindowActionsEnabled(false)
   }
 }
 
