@@ -52,7 +52,4 @@ object AdsKey : Key<Unit>
 @Provide fun fullScreenAdId(RP: ResourceProvider) =
   FullScreenAdId(loadResource(R.string.es_test_ad_unit_id_interstitial))
 
-@Provide val screenLaunchAdConfig: ScreenLaunchFullscreenAdConfig
-  get() = ScreenLaunchFullscreenAdConfig(4)
-
 @Provide val showAds = MutableStateFlow(ShowAds(false))
