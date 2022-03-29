@@ -117,10 +117,14 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
       log { "ad loaded" }
 
       val result: suspend () -> Unit = {
-        log { "show ad" }
-        lock.withLock { deferredAd = null }
-        withContext(mainContext) {
-          ad.show()
+        if (rateLimiter.tryAcquire()) {
+          log { "show ad" }
+          lock.withLock { deferredAd = null }
+          withContext(mainContext) {
+            ad.show()
+          }
+        } else {
+          log { "do not show ad due to rate limit" }
         }
       }
 
