@@ -6,6 +6,7 @@ plugins {
     id("com.ivianuu.essentials")
     id("org.jetbrains.compose")
     kotlin("android")
+    kotlin("plugin.serialization")
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
