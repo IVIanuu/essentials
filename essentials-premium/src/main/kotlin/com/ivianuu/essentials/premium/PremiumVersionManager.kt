@@ -19,6 +19,7 @@ import com.ivianuu.injekt.common.*
 import com.ivianuu.injekt.coroutines.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.serialization.*
 
 interface PremiumVersionManager {
   val premiumSkuDetails: Flow<SkuDetails>
@@ -107,7 +108,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
   .map { ShowAds(!it) }
   .stateIn(scope, SharingStarted.Eagerly, ShowAds(false))
 
-data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
+@Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {
     @Provide val prefModule = PrefModule { PremiumPrefs() }
   }
