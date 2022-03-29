@@ -10,11 +10,14 @@ import androidx.core.content.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
+import kotlin.time.*
 
 interface ForegroundManager {
   suspend fun startForeground(id: Int, notification: StateFlow<Notification>): Nothing
@@ -25,19 +28,21 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
 
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   private val context: AppContext,
+  private val clock: Clock,
   private val L: Logger
 ) : ForegroundManager {
   private val lock = Mutex()
 
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
+  private val locksById = mutableMapOf<Int, Mutex>()
 
   override suspend fun startForeground(
     id: Int,
     notification: StateFlow<Notification>
   ): Nothing = bracket(
     acquire = {
-      lock.withLock {
-        ForegroundState(id, notification)
+      lock.withLock { locksById.getOrPut(id) { Mutex() } }.withLock {
+        ForegroundState(id, notification, clock())
           .also {
             states.value = states.value + it
             log { "start foreground $id ${states.value}" }
@@ -53,18 +58,24 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
       awaitCancellation()
     },
     release = { state, _ ->
-      // we ensure that the foreground service has seen this foreground request
-      // to prevent a crash in the android system
-      state.seen.await()
+      lock.withLock { locksById[id]!! }.withLock {
+        // we ensure that the foreground service is active for at least 5 seconds
+        // to prevent a crash in the android system
+        val timeToWait = clock() - state.startTime - 5.seconds
+        if (timeToWait < Duration.ZERO) {
+          log { "keep foreground alive for $id for ${timeToWait.absoluteValue}" }
+          delay(timeToWait.absoluteValue)
+        }
 
-      lock.withLock {
         states.value = states.value - state
         log { "stop foreground ${state.id} ${states.value}" }
       }
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: StateFlow<Notification>) {
-    val seen = CompletableDeferred<Unit>()
-  }
+  internal class ForegroundState(
+    val id: Int,
+    val notification: StateFlow<Notification>,
+    val startTime: Duration
+  )
 }

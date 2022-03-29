@@ -80,8 +80,6 @@ class ForegroundService : Service() {
     }
 
     previousStates = states
-
-    states.forEach { it.seen.complete(Unit) }
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
