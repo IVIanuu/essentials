@@ -28,6 +28,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.util.*
 import com.ivianuu.injekt.*
 import kotlinx.coroutines.*
 
@@ -263,7 +264,8 @@ data class GoPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   premiumVersionManager: PremiumVersionManager,
-  ctx: KeyUiContext<GoPremiumKey>
+  ctx: KeyUiContext<GoPremiumKey>,
+  TC: ToastContext
 ) = Model {
   GoPremiumModel(
     features = features,
@@ -271,8 +273,10 @@ data class GoPremiumModel(
     showTryBasicOption = ctx.key.showTryBasicOption,
     allowBackNavigation = ctx.key.allowBackNavigation,
     goPremium = action {
-      if (premiumVersionManager.purchasePremiumVersion())
+      if (premiumVersionManager.purchasePremiumVersion()) {
         ctx.navigator.pop(ctx.key, true)
+        showToast(R.string.es_premium_activated)
+      }
     },
     tryBasicVersion = action {
       ctx.navigator.pop(ctx.key, false)

@@ -12,4 +12,5 @@
     <string name="es_subscription_pricing_model_desc">%s\/%s</string>
     <string name="es_one_time_purchase_desc">One time fee of %s</string>
     <string name="es_premium_version_hint">This functionality is only available in the premium version!</string>
+    <string name="es_premium_activated">Premium version is now active!</string>
 </resources>
