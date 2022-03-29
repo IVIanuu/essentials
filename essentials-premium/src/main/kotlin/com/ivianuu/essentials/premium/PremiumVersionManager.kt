@@ -7,7 +7,10 @@ package com.ivianuu.essentials.premium
 import com.android.billingclient.api.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.ads.*
+import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.billing.*
+import com.ivianuu.essentials.coroutines.*
+import com.ivianuu.essentials.data.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
@@ -32,8 +35,10 @@ interface PremiumVersionManager {
 @Provide @Scoped<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
+  private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val getSkuDetails: GetSkuDetailsUseCase,
   private val navigator: Navigator,
+  private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   isPurchased: (Sku) -> Flow<IsPurchased>,
@@ -54,6 +59,16 @@ interface PremiumVersionManager {
       }
     else flowOf(false)
   ) { a, b -> a.value || b }
+    .onEach { isPremiumVersion ->
+      scope.launch {
+        if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
+          downgradeHandlers().parForEach { it() }
+        }
+        pref.updateData {
+          copy(wasPremiumVersion = isPremiumVersion)
+        }
+      }
+    }
     .shareIn(scope, SharingStarted.Eagerly, 1)
 
   override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
@@ -91,3 +106,11 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 ): StateFlow<ShowAds> = premiumVersionManager.isPremiumVersion
   .map { ShowAds(!it) }
   .stateIn(scope, SharingStarted.Eagerly, ShowAds(false))
+
+data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
+  companion object {
+    @Provide val prefModule = PrefModule { PremiumPrefs() }
+  }
+}
+
+fun interface PremiumDowngradeHandler : suspend () -> Unit
