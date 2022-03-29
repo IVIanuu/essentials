@@ -7,7 +7,10 @@ package com.ivianuu.essentials.ads
 import com.google.android.gms.ads.*
 import com.ivianuu.essentials.*
 import com.ivianuu.essentials.app.*
+import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.logging.*
+import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.*
 import com.ivianuu.injekt.*
 import com.ivianuu.injekt.common.*
@@ -16,8 +19,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.*
 import kotlin.coroutines.*
-
-@JvmInline value class FullScreenAdId(val value: String)
+import kotlin.time.*
 
 interface FullScreenAd {
   suspend fun isLoaded(): Boolean
@@ -31,9 +33,20 @@ interface FullScreenAd {
   suspend fun showIfLoaded(): Boolean
 }
 
+@JvmInline value class FullScreenAdId(val value: String)
+
+data class FullScreenAdConfig(val adsInterval: Duration) {
+  companion object {
+    @Provide val defaultConfig: FullScreenAdConfig
+      get() = FullScreenAdConfig(10.seconds)
+  }
+}
+
 @Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
+  private val clock: Clock,
+  private val config: FullScreenAdConfig,
   private val mainContext: MainContext,
   private val scope: NamedCoroutineScope<AppScope>,
   private val showAds: Flow<ShowAds>,
@@ -41,6 +54,7 @@ interface FullScreenAd {
 ) : FullScreenAd {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Unit>? = null
+  private val rateLimiter = RateLimiter(1, config.adsInterval)
 
   override suspend fun isLoaded() = getCurrentAd() != null
 

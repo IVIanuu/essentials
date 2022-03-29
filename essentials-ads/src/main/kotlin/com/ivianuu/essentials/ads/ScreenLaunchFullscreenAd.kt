@@ -17,9 +17,14 @@ import kotlinx.serialization.*
 
 @Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 
-@Provide data class ScreenLaunchFullscreenAdConfig(
-  val screenLaunchToShowAdCount: Int = Int.MAX_VALUE
-)
+data class ScreenLaunchFullscreenAdConfig(
+  val screenLaunchToShowAdCount: Int = 3
+) {
+  companion object {
+    @Provide val defaultConfig
+      get() = ScreenLaunchFullscreenAdConfig()
+  }
+}
 
 @Serializable data class ScreenLaunchPrefs(
   @SerialName("ad_screen_launch_count") val screenLaunchCount: Int = 0
