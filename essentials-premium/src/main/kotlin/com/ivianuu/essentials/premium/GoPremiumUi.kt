@@ -85,14 +85,14 @@ data class GoPremiumKey(
   )
 
   Text(
-    textResId = R.string.go_premium_title,
+    textResId = R.string.es_go_premium_title,
     style = MaterialTheme.typography.h5,
     fontWeight = FontWeight.Bold
   )
 
   Text(
     modifier = Modifier.padding(top = 8.dp),
-    textResId = R.string.go_premium_desc,
+    textResId = R.string.es_go_premium_desc,
     style = MaterialTheme.typography.body2,
     color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
   )
@@ -148,7 +148,7 @@ data class GoPremiumKey(
     ) {
       Text(
         modifier = Modifier.height(32.dp),
-        textResId = R.string.premium_title,
+        textResId = R.string.es_premium_title,
         style = MaterialTheme.typography.button,
         color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
       )
@@ -173,7 +173,7 @@ data class GoPremiumKey(
     ) {
       Text(
         modifier = Modifier.height(32.dp),
-        textResId = R.string.basic_title,
+        textResId = R.string.es_basic_title,
         style = MaterialTheme.typography.button,
         color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
       )
@@ -203,17 +203,17 @@ data class GoPremiumKey(
   if (skuDetails != null) {
     Text(
       text = when (skuDetails.type.toSkuType()) {
-        Sku.Type.IN_APP -> stringResource(R.string.one_time_purchase_desc, skuDetails.price)
+        Sku.Type.IN_APP -> stringResource(R.string.es_one_time_purchase_desc, skuDetails.price)
         Sku.Type.SUBS -> {
           if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
             stringResource(
-              R.string.subscription_pricing_model_desc,
+              R.string.es_subscription_pricing_model_desc,
               skuDetails.price,
               skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
             )
           } else {
             stringResource(
-              R.string.subscription_pricing_model_with_trial_desc,
+              R.string.es_subscription_pricing_model_with_trial_desc,
               skuDetails.price,
               skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
               skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
@@ -234,7 +234,7 @@ data class GoPremiumKey(
     colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
     onClick = onGoPremiumClick
   ) {
-    Text(R.string.go_premium_title)
+    Text(R.string.es_go_premium_title)
   }
 
   if (showTryBasicOption) {
@@ -245,7 +245,7 @@ data class GoPremiumKey(
         .fillMaxWidth(),
       onClick = onTryBasicVersionClick
     ) {
-      Text(R.string.try_basic_version)
+      Text(R.string.es_try_basic_version)
     }
   }
 }

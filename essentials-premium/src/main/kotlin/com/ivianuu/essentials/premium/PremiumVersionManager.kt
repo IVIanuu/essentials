@@ -80,7 +80,7 @@ interface PremiumVersionManager {
     if (isPremiumVersion.first()) return block()
 
     scope.launch {
-      showToast(com.ivianuu.essentials.premium.R.string.premium_version_hint)
+      showToast(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
       if (!screenUnlocker()) return@launch
       appUiStarter()
       navigator.push(GoPremiumKey(showTryBasicOption = false))
