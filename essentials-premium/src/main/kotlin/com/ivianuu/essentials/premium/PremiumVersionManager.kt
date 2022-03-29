@@ -33,7 +33,7 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-@Provide @Scoped<AppScope> class PremiumVersionManagerImpl(
+@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
