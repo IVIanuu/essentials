@@ -18,7 +18,7 @@ import kotlinx.serialization.*
 
 @Provide object ScreenLaunchFullscreenAdFeature : AdFeature
 
-data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 2) {
+data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4) {
   companion object {
     @Provide val defaultConfig
       get() = ScreenLaunchFullscreenAdConfig()
