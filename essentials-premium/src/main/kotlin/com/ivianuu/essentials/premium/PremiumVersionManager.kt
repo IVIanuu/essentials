@@ -113,4 +113,9 @@ data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   }
 }
 
-fun interface PremiumDowngradeHandler : suspend () -> Unit
+fun interface PremiumDowngradeHandler : suspend () -> Unit {
+  companion object {
+    @Provide val defaultHandlers: List<PremiumDowngradeHandler>
+      get() = emptyList()
+  }
+}
