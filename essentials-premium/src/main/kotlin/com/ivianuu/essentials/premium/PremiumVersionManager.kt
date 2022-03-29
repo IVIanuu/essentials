@@ -11,6 +11,7 @@ import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.billing.*
 import com.ivianuu.essentials.coroutines.*
 import com.ivianuu.essentials.data.*
+import com.ivianuu.essentials.logging.*
 import com.ivianuu.essentials.ui.navigation.*
 import com.ivianuu.essentials.unlock.*
 import com.ivianuu.essentials.util.*
@@ -45,6 +46,7 @@ interface PremiumVersionManager {
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
+  private val L: Logger,
   private val RP: ResourceProvider,
   private val scope: NamedCoroutineScope<AppScope>,
   private val toaster: Toaster
@@ -63,6 +65,7 @@ interface PremiumVersionManager {
     .onEach { isPremiumVersion ->
       scope.launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
+          log { "handle premium version downgrade" }
           downgradeHandlers().parForEach { it() }
         }
         pref.updateData {
