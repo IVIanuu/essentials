@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ads
 
+import com.github.michaelbull.result.*
 import com.ivianuu.essentials.android.prefs.*
 import com.ivianuu.essentials.app.*
 import com.ivianuu.essentials.coroutines.*
@@ -52,9 +53,9 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 2
         .screenLaunchCount
       log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
-        log { "show full screen ad $launchCount" }
-        pref.updateData { copy(screenLaunchCount = 0) }
-        fullScreenAd.loadAndShow()
+        log { "try to show full screen ad $launchCount" }
+        if (fullScreenAd.loadAndShow().getOrElse { false })
+          pref.updateData { copy(screenLaunchCount = 0) }
       }
     }
 }

@@ -53,7 +53,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val L: Logger
 ) : FullScreenAd {
   private val lock = Mutex()
-  private var deferredAd: Deferred<suspend () -> Unit>? = null
+  private var deferredAd: Deferred<suspend () -> Boolean>? = null
   private val rateLimiter = RateLimiter(1, config.adsInterval)
 
   override suspend fun isLoaded() = getCurrentAd() != null
@@ -70,24 +70,23 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
 
   override suspend fun loadAndShow() = catch {
     if (!showAds.first().value) return@catch false
-    getOrCreateCurrentAd().invoke()
-    preload()
-    true
+    getOrCreateCurrentAd()
+      .also { preload() }
+      .invoke()
   }
 
   override suspend fun showIfLoaded() = getCurrentAd()
     ?.let {
       it.invoke()
-      preload()
-      true
+        .also { preload() }
     } ?: false
 
-  private suspend fun getCurrentAd(): (suspend () -> Unit)? = lock.withLock {
+  private suspend fun getCurrentAd(): (suspend () -> Boolean)? = lock.withLock {
     deferredAd?.takeUnless { it.isCompleted && it.getCompletionExceptionOrNull() != null }
       ?.await()
   }
 
-  private suspend fun getOrCreateCurrentAd(): suspend () -> Unit = lock.withLock {
+  private suspend fun getOrCreateCurrentAd(): suspend () -> Boolean = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(mainContext) {
@@ -116,15 +115,17 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
 
       log { "ad loaded" }
 
-      val result: suspend () -> Unit = {
+      val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
           log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(mainContext) {
             ad.show()
           }
+          true
         } else {
           log { "do not show ad due to rate limit" }
+          false
         }
       }
 
