@@ -21,7 +21,7 @@ import com.ivianuu.injekt.*
 
 object HelpKey : Key<Unit>
 
-data class HelpCategory(val title: String?, val items: List<HelpItem>)
+data class HelpCategory(val title: String? = null, val items: List<HelpItem>)
 
 data class HelpItem(
   val question: String,
