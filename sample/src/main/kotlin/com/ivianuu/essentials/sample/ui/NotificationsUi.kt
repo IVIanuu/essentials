@@ -200,4 +200,6 @@ private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNo
     get() = EsNotificationListenerService::class
   override val title: String
     get() = "Notifications"
+  override val icon: (@Composable () -> Unit)?
+    get() = null
 }
