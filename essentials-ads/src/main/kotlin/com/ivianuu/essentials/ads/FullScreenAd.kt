@@ -38,7 +38,7 @@ interface FullScreenAd {
 data class FullScreenAdConfig(val adsInterval: Duration) {
   companion object {
     @Provide val defaultConfig: FullScreenAdConfig
-      get() = FullScreenAdConfig(10.seconds)
+      get() = FullScreenAdConfig(30.seconds)
   }
 }
 
