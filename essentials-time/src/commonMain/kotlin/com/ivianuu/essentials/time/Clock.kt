@@ -9,4 +9,4 @@ import kotlin.time.*
 
 fun interface Clock : () -> Duration
 
-@Provide expect val clock: Clock
+@Provide expect val DefaultClock: Clock
