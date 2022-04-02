@@ -41,5 +41,23 @@ import com.ivianuu.injekt.*
     icon = { Icon(R.drawable.es_ic_adb) },
     inPremium = true,
     inBasic = true
+  ),
+  AppFeature(
+    title = "Sample feature 5",
+    icon = { Icon(R.drawable.es_ic_adb) },
+    inPremium = true,
+    inBasic = true
+  ),
+  AppFeature(
+    title = "Sample feature 6",
+    icon = { Icon(R.drawable.es_ic_adb) },
+    inPremium = true,
+    inBasic = true
+  ),
+  AppFeature(
+    title = "Sample feature 7",
+    icon = { Icon(R.drawable.es_ic_adb) },
+    inPremium = true,
+    inBasic = true
   )
 )
