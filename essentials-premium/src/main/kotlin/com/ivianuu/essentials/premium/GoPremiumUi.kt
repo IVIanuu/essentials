@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.premium
 
+import android.content.res.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
@@ -14,6 +15,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
@@ -55,58 +57,85 @@ data class GoPremiumKey(
 
   Surface {
     InsetsPadding {
-      Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        PremiumUiHeader()
+      if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          PremiumUiHeader()
 
-        PremiumUiFeatures(Modifier.weight(1f), features)
+          Spacer(Modifier.height(32.dp))
 
-        PremiumUiFooter(
-          skuDetails = premiumSkuDetails.getOrNull(),
-          showTryBasicOption = showTryBasicOption,
-          onGoPremiumClick = goPremium,
-          onTryBasicVersionClick = tryBasicVersion
-        )
+          PremiumUiFeatures(Modifier.weight(1f), features)
+
+          PremiumUiFooter(
+            skuDetails = premiumSkuDetails.getOrNull(),
+            showTryBasicOption = showTryBasicOption,
+            onGoPremiumClick = goPremium,
+            onTryBasicVersionClick = tryBasicVersion
+          )
+        }
+      } else {
+        Row(
+          modifier = Modifier.padding(16.dp),
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Column(modifier = Modifier.weight(1f)) {
+            PremiumUiHeader()
+
+            PremiumUiFooter(
+              skuDetails = premiumSkuDetails.getOrNull(),
+              showTryBasicOption = showTryBasicOption,
+              onGoPremiumClick = goPremium,
+              onTryBasicVersionClick = tryBasicVersion
+            )
+          }
+
+          Spacer(Modifier.width(16.dp))
+
+          Column(modifier = Modifier.weight(1f)) {
+            PremiumUiFeatures(Modifier.weight(1f), features)
+          }
+        }
       }
     }
   }
 }
 
 @Composable fun PremiumUiHeader() {
-  Icon(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(16.dp)
-      .size(36.dp),
-    painterResId = R.drawable.es_ic_medal,
-    tint = MaterialTheme.colors.primary
-  )
+  Column(
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Icon(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+        .size(36.dp),
+      painterResId = R.drawable.es_ic_medal,
+      tint = MaterialTheme.colors.primary
+    )
 
-  Text(
-    textResId = R.string.es_go_premium_title,
-    style = MaterialTheme.typography.h5,
-    fontWeight = FontWeight.Bold
-  )
+    Text(
+      textResId = R.string.es_go_premium_title,
+      style = MaterialTheme.typography.h5,
+      fontWeight = FontWeight.Bold
+    )
 
-  Text(
-    modifier = Modifier.padding(top = 8.dp),
-    textResId = R.string.es_go_premium_desc,
-    style = MaterialTheme.typography.body2,
-    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-  )
+    Text(
+      modifier = Modifier.padding(top = 8.dp),
+      textResId = R.string.es_go_premium_desc,
+      style = MaterialTheme.typography.body2,
+      color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+    )
+  }
 }
 
-@Composable fun PremiumUiFeatures(
-  modifier: Modifier,
-  features: List<AppFeature>
-) {
+@Composable fun PremiumUiFeatures(modifier: Modifier, features: List<AppFeature>) {
   VerticalList(modifier) {
     item {
       Row(
         modifier = Modifier
-          .padding(top = 32.dp)
           .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
       ) {
