@@ -91,6 +91,8 @@ data class GoPremiumKey(
 
           PremiumUiFeatures(Modifier.weight(1f), features)
 
+          Spacer(Modifier.height(8.dp))
+
           PremiumUiFooter(
             skuDetails = premiumSkuDetails.getOrNull(),
             showTryBasicOption = showTryBasicOption,
@@ -105,6 +107,8 @@ data class GoPremiumKey(
         ) {
           Column(modifier = Modifier.weight(1f)) {
             PremiumUiHeader()
+
+            Spacer(Modifier.height(8.dp))
 
             PremiumUiFooter(
               skuDetails = premiumSkuDetails.getOrNull(),
@@ -259,52 +263,57 @@ data class GoPremiumKey(
   onGoPremiumClick: () -> Unit,
   onTryBasicVersionClick: () -> Unit
 ) {
-  if (skuDetails != null) {
-    Text(
-      text = when (skuDetails.type.toSkuType()) {
-        Sku.Type.IN_APP -> stringResource(R.string.es_one_time_purchase_desc, skuDetails.price)
-        Sku.Type.SUBS -> {
-          if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
-            stringResource(
-              R.string.es_subscription_pricing_model_desc,
-              skuDetails.price,
-              skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
-            )
-          } else {
-            stringResource(
-              R.string.es_subscription_pricing_model_with_trial_desc,
-              skuDetails.price,
-              skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
-              skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
-            )
-          }
-        }
-      },
-      style = MaterialTheme.typography.caption,
-      color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
-    )
-  }
-
-  Button(
-    modifier = Modifier
-      .padding(top = 8.dp)
-      .height(72.dp)
-      .fillMaxWidth(),
-    colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
-    onClick = onGoPremiumClick
+  Column(
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text(R.string.es_go_premium_title)
-  }
+    if (skuDetails != null) {
+      Text(
+        text = when (skuDetails.type.toSkuType()) {
+          Sku.Type.IN_APP -> stringResource(R.string.es_one_time_purchase_desc, skuDetails.price)
+          Sku.Type.SUBS -> {
+            if (skuDetails.freeTrialPeriod.toIso8601Duration().amount == 0) {
+              stringResource(
+                R.string.es_subscription_pricing_model_desc,
+                skuDetails.price,
+                skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString()
+              )
+            } else {
+              stringResource(
+                R.string.es_subscription_pricing_model_with_trial_desc,
+                skuDetails.price,
+                skuDetails.subscriptionPeriod.toIso8601Duration().toReadableString(),
+                skuDetails.freeTrialPeriod.toIso8601Duration().toReadableString()
+              )
+            }
+          }
+        },
+        style = MaterialTheme.typography.caption,
+        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+      )
+    }
 
-  if (showTryBasicOption) {
-    TextButton(
+    Button(
       modifier = Modifier
         .padding(top = 8.dp)
         .height(72.dp)
         .fillMaxWidth(),
-      onClick = onTryBasicVersionClick
+      colors = ButtonDefaults.esButtonColors(backgroundColor = MaterialTheme.colors.primary),
+      onClick = onGoPremiumClick
     ) {
-      Text(R.string.es_try_basic_version)
+      Text(R.string.es_go_premium_title)
+    }
+
+    if (showTryBasicOption) {
+      TextButton(
+        modifier = Modifier
+          .padding(top = 8.dp)
+          .height(72.dp)
+          .fillMaxWidth(),
+        onClick = onTryBasicVersionClick
+      ) {
+        Text(R.string.es_try_basic_version)
+      }
     }
   }
 }
