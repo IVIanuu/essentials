@@ -4,12 +4,15 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.view.inputmethod.*
-import com.ivianuu.essentials.*
+import android.view.inputmethod.InputMethodManager
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 
 @Provide object InputMethodActionId : ActionId("input_method")
 

@@ -4,12 +4,14 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.test.*
-import com.ivianuu.essentials.time.*
-import io.kotest.matchers.*
-import io.kotest.matchers.types.*
-import kotlinx.coroutines.*
-import org.junit.*
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.time.milliseconds
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeSameInstanceAs
+import io.kotest.matchers.types.shouldNotBeSameInstanceAs
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
 
 class RefCountedResourceTest {
   @Test fun testRefCountedResource() = runCancellingBlockingTest {

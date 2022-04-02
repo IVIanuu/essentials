@@ -4,8 +4,9 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.tile.*
-import com.ivianuu.essentials.ui.navigation.*
+import com.ivianuu.essentials.tile.FunTileService1
+import com.ivianuu.essentials.tile.TileModel
+import com.ivianuu.essentials.ui.navigation.Model
 
 fun sampleTileModel() = Model {
   TileModel<FunTileService1>()

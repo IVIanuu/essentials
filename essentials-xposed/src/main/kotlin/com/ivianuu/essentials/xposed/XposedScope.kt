@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Element
 
 object XposedScope
 

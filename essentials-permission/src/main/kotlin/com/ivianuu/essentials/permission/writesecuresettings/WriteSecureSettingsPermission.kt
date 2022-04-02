@@ -4,13 +4,16 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import android.*
-import android.content.pm.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import android.Manifest
+import android.content.pm.PackageManager
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
 
 interface WriteSecureSettingsPermission : Permission
 

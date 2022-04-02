@@ -4,11 +4,13 @@
 
 package com.ivianuu.essentials.ui.backpress
 
-import androidx.activity.*
-import androidx.activity.compose.*
-import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Disposable
 
 @Provide actual val backPressHandlerProvider = BackPressHandlerProvider { content ->
   val dispatcher = LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher

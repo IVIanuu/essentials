@@ -4,26 +4,37 @@
 
 package com.ivianuu.essentials.gestures.action.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.floatingwindows.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.layout.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.ui.common.CommonStrings
+import com.ivianuu.essentials.ui.layout.align
+import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.first
 
 data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 

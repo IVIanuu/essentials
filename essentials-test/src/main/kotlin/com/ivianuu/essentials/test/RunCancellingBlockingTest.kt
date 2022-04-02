@@ -6,9 +6,15 @@
 
 package com.ivianuu.essentials.test
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import kotlin.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.UncompletedCoroutinesError
+import kotlinx.coroutines.test.runBlockingTest
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 fun runCancellingBlockingTest(
   context: CoroutineContext = EmptyCoroutineContext,

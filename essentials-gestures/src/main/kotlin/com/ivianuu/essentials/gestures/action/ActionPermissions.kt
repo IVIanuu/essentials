@@ -4,20 +4,21 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import android.accessibilityservice.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
+import android.accessibilityservice.AccessibilityService
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.permission.notificationpolicy.*
-import com.ivianuu.essentials.permission.root.*
-import com.ivianuu.essentials.permission.systemoverlay.*
-import com.ivianuu.essentials.permission.writesecuresettings.*
-import com.ivianuu.essentials.permission.writesettings.*
-import com.ivianuu.injekt.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.permission.notificationpolicy.NotificationPolicyPermission
+import com.ivianuu.essentials.permission.root.RootPermission
+import com.ivianuu.essentials.permission.systemoverlay.SystemOverlayPermission
+import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
+import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
+import com.ivianuu.injekt.Provide
+import kotlin.reflect.KClass
 
 @Provide class ActionAccessibilityPermission(private val RP: ResourceProvider) : AccessibilityServicePermission {
   override val serviceClass: KClass<out AccessibilityService>

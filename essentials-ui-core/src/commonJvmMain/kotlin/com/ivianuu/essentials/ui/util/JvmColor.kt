@@ -4,7 +4,8 @@
 
 package com.ivianuu.essentials.ui.util
 
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 actual fun Color.toHexString(includeAlpha: Boolean) = if (this.toArgb() == 0) {
   if (includeAlpha) "00000000" else "000000"

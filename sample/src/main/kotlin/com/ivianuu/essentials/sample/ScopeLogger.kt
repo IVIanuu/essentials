@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
 
 @Provide fun <N> scopeLogger(
   componentKey: TypeKey<N>,

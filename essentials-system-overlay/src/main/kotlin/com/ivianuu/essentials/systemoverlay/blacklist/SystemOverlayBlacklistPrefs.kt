@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.injekt.*
-import kotlinx.serialization.*
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.injekt.Provide
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable data class SystemOverlayBlacklistPrefs(
   @SerialName("app_blacklist") val appBlacklist: Set<String> = emptySet(),

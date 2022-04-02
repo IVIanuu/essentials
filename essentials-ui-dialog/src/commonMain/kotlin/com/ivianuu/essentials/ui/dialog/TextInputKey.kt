@@ -4,14 +4,21 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.text.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.ui.common.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.launch
 
 data class TextInputKey(
   val initial: String = "",

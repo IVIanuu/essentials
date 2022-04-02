@@ -4,23 +4,43 @@
 
 package com.ivianuu.essentials.premium
 
-import com.android.billingclient.api.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ads.*
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.billing.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.unlock.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
+import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
+import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
+import com.ivianuu.essentials.billing.IsPurchased
+import com.ivianuu.essentials.billing.PurchaseUseCase
+import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.coroutines.parForEach
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.AppUiStarter
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.common.Eager
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 interface PremiumVersionManager {
   val premiumSkuDetails: Flow<SkuDetails>

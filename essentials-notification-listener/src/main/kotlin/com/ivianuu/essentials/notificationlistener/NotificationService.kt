@@ -4,11 +4,16 @@
 
 package com.ivianuu.essentials.notificationlistener
 
-import android.app.*
-import android.service.notification.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import android.app.Notification
+import android.service.notification.StatusBarNotification
+import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.catch
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 
 interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>

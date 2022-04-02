@@ -4,19 +4,25 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.annotation.*
-import android.content.*
-import android.os.*
-import android.view.*
-import androidx.activity.*
-import androidx.lifecycle.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.*
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.os.PowerManager
+import android.view.WindowManager
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.Element
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 /**
  * Turns the screen on

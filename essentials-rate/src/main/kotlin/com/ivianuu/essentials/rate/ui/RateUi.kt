@@ -4,28 +4,45 @@
 
 package com.ivianuu.essentials.rate.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.ui.*
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.apps.ui.AppIcon
 import com.ivianuu.essentials.rate.R
-import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.dialog.*
+import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
+import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
+import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produce
+import com.ivianuu.essentials.ui.dialog.Dialog
+import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.replaceTop
+import com.ivianuu.injekt.Provide
 
 object RateKey : PopupKey<Unit>
 

@@ -4,16 +4,23 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.insets.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.flow.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Surface
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.common.Scoped
+import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ScreenAdBannerFeature : AdFeature
 

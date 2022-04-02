@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 actual object ConcurrencyInjectables {
   @Provide actual val defaultConcurrency: Concurrency by lazy {

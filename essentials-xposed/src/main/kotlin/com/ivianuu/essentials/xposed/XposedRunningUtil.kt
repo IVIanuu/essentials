@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 @JvmInline value class IsXposedRunning(val value: Boolean)
 

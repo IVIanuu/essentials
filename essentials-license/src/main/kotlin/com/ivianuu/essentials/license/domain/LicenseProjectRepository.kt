@@ -4,13 +4,15 @@
 
 package com.ivianuu.essentials.license.domain
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.license.data.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.license.data.Project
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IOContext
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 interface LicenceProjectRepository {
   suspend fun getLicenseProjects(): EsResult<List<Project>, Throwable>

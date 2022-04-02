@@ -4,13 +4,15 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.content.*
-import android.content.res.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
+import android.content.ComponentCallbacks2
+import android.content.res.Configuration
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.MainContext
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 
 object ConfigChange
 

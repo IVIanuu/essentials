@@ -4,7 +4,8 @@
 
 package com.ivianuu.essentials.logging
 
-import java.io.*
+import java.io.PrintWriter
+import java.io.StringWriter
 
 actual fun Throwable.asLog(): String {
   val stringWriter = StringWriter(256)

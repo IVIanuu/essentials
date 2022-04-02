@@ -4,14 +4,18 @@
 
 package com.ivianuu.essentials.clipboard
 
-import android.content.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 interface Clipboard {
   val text: Flow<String?>

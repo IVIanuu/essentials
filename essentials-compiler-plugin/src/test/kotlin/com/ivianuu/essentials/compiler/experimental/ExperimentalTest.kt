@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.compiler.experimental
 
-import com.ivianuu.essentials.compiler.*
-import org.junit.*
+import com.ivianuu.essentials.compiler.codegen
+import org.junit.Test
 
 class ExperimentalTest {
   @Test fun testDoesNotShowExperimentalError() = codegen(

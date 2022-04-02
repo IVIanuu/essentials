@@ -16,7 +16,7 @@
 
 package com.ivianuu.essentials.kotlin.compiler.optics
 
-import org.jetbrains.kotlin.name.*
+import org.jetbrains.kotlin.name.FqName
 
 val OpticsAnnotation = FqName("com.ivianuu.essentials.optics.Optics")
 val Lens = FqName("com.ivianuu.essentials.optics.Lens")

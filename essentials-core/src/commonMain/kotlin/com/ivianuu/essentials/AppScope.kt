@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.common.*
+import com.ivianuu.injekt.common.Elements
 
 object AppScope
 

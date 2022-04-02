@@ -4,23 +4,33 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.*
-import android.content.pm.*
-import android.hardware.camera2.*
-import android.os.*
-import android.provider.*
-import com.ivianuu.essentials.*
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.recentapps.*
-import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.coroutines.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.essentials.screenstate.ScreenState
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 @Provide object CameraActionId : ActionId("camera")
 

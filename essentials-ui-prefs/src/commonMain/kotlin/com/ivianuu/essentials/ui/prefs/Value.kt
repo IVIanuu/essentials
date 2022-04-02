@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.essentials.state.*
-import kotlinx.coroutines.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.optics.Lens
+import com.ivianuu.essentials.state.bind
+import kotlinx.coroutines.launch
 
 interface Value<T> {
   val current: T

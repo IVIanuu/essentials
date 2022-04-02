@@ -4,8 +4,9 @@
 
 package com.ivianuu.essentials.kotlin.compiler
 
-import com.google.auto.service.*
-import org.jetbrains.kotlin.compiler.plugin.*
+import com.google.auto.service.AutoService
+import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
+import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 
 @AutoService(CommandLineProcessor::class)
 class EssentialsCommandLineProcessor : CommandLineProcessor {

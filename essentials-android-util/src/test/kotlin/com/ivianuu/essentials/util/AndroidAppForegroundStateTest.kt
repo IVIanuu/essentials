@@ -4,16 +4,17 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.activity.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.flow.*
-import org.junit.*
-import org.junit.runner.*
-import org.robolectric.annotation.*
+import androidx.activity.ComponentActivity
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])

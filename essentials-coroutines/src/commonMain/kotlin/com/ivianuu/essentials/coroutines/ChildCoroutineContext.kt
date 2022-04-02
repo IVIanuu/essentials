@@ -4,8 +4,12 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.*
-import kotlin.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.job
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlin.coroutines.coroutineContext
 
 fun CoroutineScope.childCoroutineScope(
   context: CoroutineContext = EmptyCoroutineContext,

@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.accessibility
 
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.injekt.Provide
 
 data class AccessibilityEvent(
   val type: Int,

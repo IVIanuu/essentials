@@ -4,18 +4,24 @@
 
 package com.ivianuu.essentials.ui.dialog
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.input.pointer.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.essentials.ui.backpress.*
-import com.ivianuu.essentials.ui.insets.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ui.animation.animationElement
+import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
+import com.ivianuu.essentials.ui.animation.transition.ScrimAnimationElementKey
+import com.ivianuu.essentials.ui.backpress.BackHandler
+import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
+import com.ivianuu.essentials.ui.insets.InsetsPadding
 
 @Composable fun DialogScaffold(
   modifier: Modifier = Modifier,

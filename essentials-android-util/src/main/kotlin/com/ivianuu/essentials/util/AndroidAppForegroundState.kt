@@ -4,13 +4,18 @@
 
 package com.ivianuu.essentials.util
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.app.AppForegroundScope
+import com.ivianuu.essentials.app.AppForegroundState
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.coroutines.bracket
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 
 @Provide fun androidAppForegroundState(
   foregroundActivity: Flow<ForegroundActivity>

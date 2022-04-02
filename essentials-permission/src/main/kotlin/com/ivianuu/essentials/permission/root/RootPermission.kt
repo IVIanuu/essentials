@@ -4,11 +4,14 @@
 
 package com.ivianuu.essentials.permission.root
 
-import com.ivianuu.essentials.permission.*
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionRequestHandler
+import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.shell.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
 
 interface RootPermission : Permission
 

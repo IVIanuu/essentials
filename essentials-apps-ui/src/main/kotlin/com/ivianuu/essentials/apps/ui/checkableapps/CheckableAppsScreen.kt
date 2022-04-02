@@ -4,29 +4,41 @@
 
 package com.ivianuu.essentials.apps.ui.checkableapps
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.apps.ui.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.ui.AppIcon
+import com.ivianuu.essentials.apps.ui.AppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.get
+import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.bind
+import com.ivianuu.essentials.state.bindResource
+import com.ivianuu.essentials.state.state
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.popup.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.popup.PopupMenu
+import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 fun interface CheckableAppsScreen {
   @Composable operator fun invoke()

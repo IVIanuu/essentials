@@ -4,12 +4,14 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.gestures.action.ui.picker.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.common.TypeKey
 
 data class Action<I : ActionId>(
   val id: String,

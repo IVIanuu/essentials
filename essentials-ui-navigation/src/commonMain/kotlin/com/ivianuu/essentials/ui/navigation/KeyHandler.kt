@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 fun interface KeyHandler<R> : suspend (Key<R>) -> (suspend () -> R?)? {
   companion object {

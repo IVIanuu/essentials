@@ -4,24 +4,43 @@
 
 package com.ivianuu.essentials.torch
 
-import android.annotation.*
-import android.app.*
-import android.content.*
-import android.hardware.camera2.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.foreground.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.*
-import kotlin.coroutines.*
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.hardware.camera2.CameraManager
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.coroutines.race
+import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.foreground.startForeground
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.asLog
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.context
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.resume
 
 interface Torch {
   val torchEnabled: StateFlow<Boolean>

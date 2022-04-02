@@ -4,16 +4,27 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.*
-import android.content.pm.*
-import androidx.core.app.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityOptionsCompat
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityEvent
+import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Eager
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 
 fun switchToApp(
   packageName: String,

@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials
 
-import android.os.*
-import com.ivianuu.injekt.*
+import android.os.Build
+import com.ivianuu.injekt.Provide
 
 data class DeviceInfo(val model: String, val manufacturer: String) {
   companion object {

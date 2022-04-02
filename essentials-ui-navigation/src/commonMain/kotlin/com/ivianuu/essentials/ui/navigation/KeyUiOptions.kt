@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.ui.animation.transition.*
+import com.ivianuu.essentials.ui.animation.transition.StackTransition
 
 data class KeyUiOptions(
   val enterTransition: StackTransition? = null,

@@ -4,11 +4,13 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.animation.util.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import com.ivianuu.essentials.ui.animation.util.fractionalTranslation
 
 fun FadeUpwardsStackTransition(spec: AnimationSpec<Float> = defaultAnimationSpec()): StackTransition =
   {

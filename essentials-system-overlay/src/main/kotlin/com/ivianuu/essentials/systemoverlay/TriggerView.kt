@@ -4,11 +4,13 @@
 
 package com.ivianuu.essentials.systemoverlay
 
-import android.annotation.*
-import android.view.*
-import android.widget.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
+import android.annotation.SuppressLint
+import android.view.MotionEvent
+import android.view.View
+import android.widget.FrameLayout
+import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.catch
 
 @SuppressLint("ViewConstructor")
 class TriggerView(private val delegate: View) : FrameLayout(delegate.context) {

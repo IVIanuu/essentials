@@ -4,8 +4,10 @@
 
 package com.ivianuu.essentials.ui.layout
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 
 fun Modifier.center() = align(align = Alignment.Center)
 

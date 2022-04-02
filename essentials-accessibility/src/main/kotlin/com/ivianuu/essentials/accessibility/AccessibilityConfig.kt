@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.accessibility
 
-import android.accessibilityservice.*
-import com.ivianuu.injekt.*
+import android.accessibilityservice.AccessibilityServiceInfo
+import com.ivianuu.injekt.Provide
 
 data class AccessibilityConfig(
   val eventTypes: Int = 0,

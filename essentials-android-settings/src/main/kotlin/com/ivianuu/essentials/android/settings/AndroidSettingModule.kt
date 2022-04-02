@@ -4,15 +4,21 @@
 
 package com.ivianuu.essentials.android.settings
 
-import android.content.*
-import android.provider.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.content.ContentResolver
+import android.provider.Settings
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.util.ContentChangesFactory
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.withContext
 
 class AndroidSettingModule<T : S, S>(
   private val name: String,

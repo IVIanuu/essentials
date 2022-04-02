@@ -4,13 +4,17 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlin.collections.set
 
 interface Navigator {

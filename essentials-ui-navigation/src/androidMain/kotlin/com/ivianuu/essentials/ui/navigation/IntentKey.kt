@@ -4,18 +4,23 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import android.content.*
-import androidx.activity.*
-import androidx.activity.result.*
-import androidx.activity.result.contract.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.ivianuu.essentials.EsResult
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.coroutines.MainContext
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.*
-import kotlin.reflect.*
+import kotlin.coroutines.resume
+import kotlin.reflect.KClass
 
 interface IntentKey : Key<EsResult<ActivityResult, ActivityNotFoundException>>
 

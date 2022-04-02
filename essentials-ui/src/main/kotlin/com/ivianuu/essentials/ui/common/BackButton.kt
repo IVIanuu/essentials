@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.ui.common
 
-import androidx.compose.material.*
-import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.ui.backpress.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import com.ivianuu.essentials.ui.backpress.LocalBackPressHandler
 
 @Composable fun BackButton(content: @Composable () -> Unit = { Icon(Icons.Default.ArrowBack) }) {
   val backHandler = LocalBackPressHandler.current

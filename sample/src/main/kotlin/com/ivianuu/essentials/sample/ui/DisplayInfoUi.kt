@@ -4,16 +4,21 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.screenstate.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.screenstate.DisplayInfo
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 
 @Provide val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }
 

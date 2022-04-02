@@ -4,12 +4,17 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.gestures.*
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import android.content.pm.PackageManager
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.gestures.R
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LastAppActionId : ActionId("last_app")
 

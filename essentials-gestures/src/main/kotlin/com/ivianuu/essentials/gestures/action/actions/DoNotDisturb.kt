@@ -4,17 +4,25 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.app.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
+import android.app.NotificationManager
+import androidx.compose.material.Icon
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionIcon
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")
 

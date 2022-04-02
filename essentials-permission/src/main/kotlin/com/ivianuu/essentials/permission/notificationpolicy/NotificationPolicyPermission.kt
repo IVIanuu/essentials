@@ -4,13 +4,15 @@
 
 package com.ivianuu.essentials.permission.notificationpolicy
 
-import android.app.*
-import android.content.*
-import android.provider.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.intent.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
+import android.app.NotificationManager
+import android.content.Intent
+import android.provider.Settings
+import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
+import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 
 interface NotificationPolicyPermission : Permission
 

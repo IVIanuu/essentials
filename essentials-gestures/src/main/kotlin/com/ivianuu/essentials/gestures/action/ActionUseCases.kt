@@ -4,18 +4,24 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
+import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.actions.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.unlock.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionStateFactory
+import com.ivianuu.essentials.unlock.ScreenActivator
+import com.ivianuu.essentials.unlock.ScreenUnlocker
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.DefaultContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
 fun interface ExecuteActionUseCase : suspend (String) -> EsResult<Boolean, Throwable>
 

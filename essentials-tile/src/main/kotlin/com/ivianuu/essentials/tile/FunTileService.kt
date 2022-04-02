@@ -4,17 +4,24 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.*
-import android.service.quicksettings.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.reflect.*
+import android.graphics.drawable.Icon
+import android.service.quicksettings.Tile
+import android.service.quicksettings.TileService
+import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.state.state
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlin.reflect.KClass
 
 class FunTileService1 : AbstractFunTileService<FunTileService1>()
 class FunTileService2 : AbstractFunTileService<FunTileService2>()

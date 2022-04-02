@@ -4,10 +4,12 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import org.junit.*
-import java.nio.file.*
+import com.ivianuu.essentials.test.dispatcher
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.shouldBe
+import org.junit.Test
+import java.nio.file.Files
 
 class DataStoreModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {

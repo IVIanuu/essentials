@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.xposed
 
-import de.robv.android.xposed.*
-import kotlin.reflect.*
+import de.robv.android.xposed.XposedHelpers
+import kotlin.reflect.KClass
 
 fun ClassLoader.getClass(className: String): KClass<*> =
   XposedHelpers.findClass(className, this).kotlin

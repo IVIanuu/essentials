@@ -4,8 +4,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.withContext
 
 fun <T> Flow<T>.onCancel(action: suspend FlowCollector<T>.() -> Unit): Flow<T> = object : Flow<T> {
   override suspend fun collect(collector: FlowCollector<T>) {

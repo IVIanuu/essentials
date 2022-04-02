@@ -4,24 +4,31 @@
 
 package com.ivianuu.essentials.permission.writesecuresettings
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.permission.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.shell.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.shell.Shell
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.showToast
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import kotlinx.coroutines.flow.first
 
 data class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>

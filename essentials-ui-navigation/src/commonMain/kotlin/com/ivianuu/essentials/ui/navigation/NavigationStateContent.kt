@@ -4,19 +4,34 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.backpress.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.ui.animation.AnimatedStack
+import com.ivianuu.essentials.ui.animation.AnimatedStackChild
+import com.ivianuu.essentials.ui.backpress.BackHandler
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.collections.set
-import kotlin.reflect.*
+import kotlin.reflect.KClass
 
 fun interface NavigationStateContent {
   @Composable operator fun invoke(p1: Modifier)

@@ -4,15 +4,19 @@
 
 package com.ivianuu.essentials.util
 
-import androidx.activity.*
-import androidx.lifecycle.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.collections.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.runner.*
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewModelStore
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.test.dispatcher
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ForegroundActivityStateTest {

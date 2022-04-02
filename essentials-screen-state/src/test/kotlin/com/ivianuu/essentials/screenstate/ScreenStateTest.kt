@@ -4,17 +4,20 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.content.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.runner.*
-import org.robolectric.annotation.*
+import android.content.Intent
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.childCoroutineScope
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])

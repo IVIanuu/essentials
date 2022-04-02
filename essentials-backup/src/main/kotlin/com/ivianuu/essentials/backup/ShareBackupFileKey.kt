@@ -4,13 +4,15 @@
 
 package com.ivianuu.essentials.backup
 
-import android.content.*
-import android.content.pm.*
-import androidx.core.content.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import java.io.*
+import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.core.content.FileProvider
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ui.navigation.IntentKey
+import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
+import com.ivianuu.injekt.Provide
+import java.io.File
 
 data class ShareBackupFileKey(val backupFilePath: String) :
   IntentKey

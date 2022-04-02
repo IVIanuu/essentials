@@ -6,19 +6,20 @@
 
 package com.ivianuu.essentials.compiler
 
-import androidx.compose.compiler.plugins.kotlin.*
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.kotlin.compiler.*
-import com.ivianuu.injekt.compiler.transform.*
-import com.tschuchort.compiletesting.*
-import io.kotest.matchers.*
-import io.kotest.matchers.string.*
-import org.intellij.lang.annotations.*
-import org.jetbrains.kotlin.name.*
-import java.net.*
-import java.nio.file.*
-import kotlin.coroutines.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.kotlin.compiler.EssentialsCommandLineProcessor
+import com.ivianuu.essentials.kotlin.compiler.EssentialsComponentRegistrar
+import com.ivianuu.injekt.compiler.transform.dumpAllFiles
+import com.tschuchort.compiletesting.KotlinCompilation
+import com.tschuchort.compiletesting.SourceFile
+import com.tschuchort.compiletesting.SourceFileAccessor
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
+import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.name.FqName
+import java.net.URLClassLoader
+import java.nio.file.Files
+import kotlin.reflect.KClass
 
 var fileIndex = 0
 
@@ -314,28 +315,4 @@ fun KotlinCompilationAssertionScope.irShouldNotContain(text: String) {
       "'$text' in source '$it'"
     }
   }
-}
-
-fun KotlinCompilation.withCompose() {
-  compilerPlugins += ComposeComponentRegistrar()
-  commandLineProcessors += ComposeCommandLineProcessor()
-}
-
-fun <R> runComposing(block: @Composable () -> R): R {
-  val recomposer = Recomposer(EmptyCoroutineContext)
-  var result: Any? = null
-  Composition(UnitApplier, recomposer).run {
-    setContent {
-      result = block()
-    }
-  }
-  return result as R
-}
-
-private object UnitApplier : AbstractApplier<Unit>(Unit) {
-  override fun insertBottomUp(index: Int, instance: Unit) {}
-  override fun insertTopDown(index: Int, instance: Unit) {}
-  override fun move(from: Int, to: Int, count: Int) {}
-  override fun remove(index: Int, count: Int) {}
-  override fun onClear() {}
 }

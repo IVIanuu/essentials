@@ -4,10 +4,14 @@
 
 package com.ivianuu.essentials.ui.material
 
-import androidx.compose.material.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.text.*
-import com.ivianuu.essentials.ui.util.*
+import androidx.compose.material.Colors
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.text.TextStyle
+import com.ivianuu.essentials.ui.util.isDark
 
 fun Typography.editEach(edit: TextStyle.() -> TextStyle) = Typography(
   h1 = edit(h1),

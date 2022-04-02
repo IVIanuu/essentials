@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Result
 
 typealias EsResult<V, E> = Result<V, E>

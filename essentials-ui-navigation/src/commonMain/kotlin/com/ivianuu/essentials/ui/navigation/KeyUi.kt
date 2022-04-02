@@ -4,10 +4,12 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlin.reflect.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlin.reflect.KClass
 
 fun interface KeyUi<K : Key<*>> {
   @Composable operator fun invoke(): @Composable () -> Unit

@@ -4,13 +4,15 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.time.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.animation.util.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import com.ivianuu.essentials.time.milliseconds
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import com.ivianuu.essentials.ui.animation.util.interval
 
 object ScrimAnimationElementKey
 

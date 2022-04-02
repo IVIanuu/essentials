@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.injekt.Provide
 
 @JvmInline value class NavBarFeatureSupported(val value: Boolean)
 

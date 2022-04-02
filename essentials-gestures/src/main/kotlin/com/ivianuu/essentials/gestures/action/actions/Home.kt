@@ -4,14 +4,17 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.*
-import android.content.*
-import android.os.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
+import android.accessibilityservice.AccessibilityService
+import android.content.Intent
+import android.os.Build
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
 

@@ -4,11 +4,15 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.app.LoadingOrder
+import com.ivianuu.essentials.app.sortedWithLoadingOrder
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.TypeKey
 
 @Provide fun <@Spread T : KeyUiDecorator> keyUiDecoratorElement(
   instance: T,

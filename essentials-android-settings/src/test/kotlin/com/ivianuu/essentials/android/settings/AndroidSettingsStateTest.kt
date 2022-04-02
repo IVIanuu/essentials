@@ -4,22 +4,24 @@
 
 package com.ivianuu.essentials.android.settings
 
-import android.content.*
-import androidx.test.ext.junit.runners.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.test.*
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.mockk.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.runner.*
-import org.robolectric.annotation.*
+import android.content.ContentResolver
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.mockk.mockk
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [24])
 class AndroidSettingsStateTest {
+  @OptIn(ExperimentalStdlibApi::class)
   @Test fun testAndroidSettingsState() = runCancellingBlockingTest {
     var value = 0
     val contentChanges = EventFlow<Unit>()
@@ -49,7 +51,7 @@ class AndroidSettingsStateTest {
     val setting = module.dataStore(
       scope = this,
       adapter = adapter,
-      context = coroutineContext.get(CoroutineDispatcher.Key)!!,
+      context = coroutineContext[CoroutineDispatcher.Key]!!,
       contentChangesFactory = { contentChanges },
       contentResolver = mockk()
     )

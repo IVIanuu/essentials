@@ -4,29 +4,41 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.accessibilityservice.*
-import android.app.*
+import android.accessibilityservice.AccessibilityService
+import android.app.Notification
+import android.app.NotificationManager
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.accessibility.*
-import com.ivianuu.essentials.foreground.*
-import com.ivianuu.essentials.permission.*
-import com.ivianuu.essentials.permission.accessibility.*
-import com.ivianuu.essentials.recentapps.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.foreground.ForegroundManager
+import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.layout.*
+import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.reflect.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.typeKeyOf
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 

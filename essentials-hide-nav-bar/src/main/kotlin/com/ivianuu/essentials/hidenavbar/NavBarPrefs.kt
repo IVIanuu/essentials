@@ -4,11 +4,13 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.optics.*
-import com.ivianuu.injekt.*
-import kotlinx.serialization.*
+import com.ivianuu.essentials.Initial
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.optics.Optics
+import com.ivianuu.injekt.Provide
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable @Optics data class NavBarPrefs(
   @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,

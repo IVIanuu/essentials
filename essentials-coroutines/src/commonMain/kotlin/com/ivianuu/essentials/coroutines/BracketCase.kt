@@ -4,8 +4,11 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.nonFatalOrThrow
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.withContext
 
 sealed interface ExitCase {
   object Completed : ExitCase {

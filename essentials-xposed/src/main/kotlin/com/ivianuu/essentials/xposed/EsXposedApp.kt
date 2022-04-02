@@ -4,10 +4,12 @@
 
 package com.ivianuu.essentials.xposed
 
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import de.robv.android.xposed.*
-import de.robv.android.xposed.callbacks.*
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import de.robv.android.xposed.IXposedHookLoadPackage
+import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private lateinit var appScope: Scope<XposedScope>
 

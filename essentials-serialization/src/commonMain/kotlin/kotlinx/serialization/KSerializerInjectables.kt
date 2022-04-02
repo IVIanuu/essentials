@@ -4,7 +4,7 @@
 
 package kotlinx.serialization
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 object SerializationInjectables {
   @Provide inline fun <reified T> kSerializer(): KSerializer<T> = serializer()

@@ -5,9 +5,11 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.help.*
+import com.ivianuu.essentials.help.HelpCategory
+import com.ivianuu.essentials.help.HelpItem
+import com.ivianuu.essentials.help.HelpKey
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 @Provide val helpHomeItem = HomeItem("Help") { HelpKey }
 

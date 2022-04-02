@@ -4,15 +4,15 @@
 
 package com.ivianuu.essentials.kotlin.compiler
 
-import com.google.auto.service.*
-import com.ivianuu.essentials.kotlin.compiler.optics.*
-import com.ivianuu.essentials.kotlin.compiler.serializationfix.*
-import org.jetbrains.kotlin.backend.common.extensions.*
-import org.jetbrains.kotlin.com.intellij.mock.*
-import org.jetbrains.kotlin.com.intellij.openapi.extensions.*
-import org.jetbrains.kotlin.com.intellij.openapi.project.*
-import org.jetbrains.kotlin.compiler.plugin.*
-import org.jetbrains.kotlin.config.*
+import com.google.auto.service.AutoService
+import com.ivianuu.essentials.kotlin.compiler.optics.optics
+import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
+import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
+import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.com.intellij.openapi.extensions.LoadingOrder
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
+import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
+import org.jetbrains.kotlin.config.CompilerConfiguration
 
 @AutoService(ComponentRegistrar::class)
 class EssentialsComponentRegistrar : ComponentRegistrar {

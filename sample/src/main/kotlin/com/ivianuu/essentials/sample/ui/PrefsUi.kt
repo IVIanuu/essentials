@@ -4,24 +4,40 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-import com.ivianuu.essentials.android.prefs.*
-import com.ivianuu.essentials.colorpicker.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.dialog.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.colorpicker.ColorPickerKey
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.ui.common.IconPlaceholder
+import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.common.interactive
+import com.ivianuu.essentials.ui.dialog.MultiChoiceListKey
+import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.dialog.TextInputKey
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.serialization.*
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.material.Subheader
+import com.ivianuu.essentials.ui.material.incrementingStepPolicy
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.prefs.ColorListItem
+import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
+import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
+import com.ivianuu.essentials.ui.prefs.SliderListItem
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
 

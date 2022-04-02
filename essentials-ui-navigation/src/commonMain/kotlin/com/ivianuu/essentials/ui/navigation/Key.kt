@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.ui.navigation
 
-import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
+import com.ivianuu.injekt.Provide
 
 interface Key<T>
 

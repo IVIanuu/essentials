@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.processrestart
 
-import android.content.*
-import android.os.*
-import androidx.activity.*
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
 
 class ProcessRestartActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

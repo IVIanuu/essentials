@@ -4,11 +4,14 @@
 
 package com.ivianuu.essentials.gestures.action.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.gestures.action.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.gestures.action.Action
 
 @Composable fun ActionIcon(action: Action<*>, modifier: Modifier = Modifier) {
   Box(

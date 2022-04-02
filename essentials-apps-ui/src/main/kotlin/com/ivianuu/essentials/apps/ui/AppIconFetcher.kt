@@ -4,14 +4,20 @@
 
 package com.ivianuu.essentials.apps.ui
 
-import android.content.pm.*
-import androidx.core.graphics.drawable.*
-import coil.bitmap.*
-import coil.decode.*
-import coil.fetch.*
-import coil.size.*
-import com.ivianuu.essentials.*
-import com.ivianuu.injekt.*
+import android.content.pm.PackageManager
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
+import coil.bitmap.BitmapPool
+import coil.decode.DataSource
+import coil.decode.Options
+import coil.fetch.DrawableResult
+import coil.fetch.FetchResult
+import coil.fetch.Fetcher
+import coil.size.OriginalSize
+import coil.size.PixelSize
+import coil.size.Size
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.injekt.Provide
 
 data class AppIcon(val packageName: String)
 

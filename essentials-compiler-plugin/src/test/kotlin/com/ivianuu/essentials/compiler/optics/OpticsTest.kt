@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.compiler.optics
 
-import com.ivianuu.essentials.compiler.*
-import io.kotest.matchers.*
-import org.junit.*
+import com.ivianuu.essentials.compiler.codegen
+import com.ivianuu.essentials.compiler.invokeSingleFile
+import io.kotest.matchers.shouldBe
+import org.junit.Test
 
 class OpticsTest {
   @Test fun testOptics() = codegen(

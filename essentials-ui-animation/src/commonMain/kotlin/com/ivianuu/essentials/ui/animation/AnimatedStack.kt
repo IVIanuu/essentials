@@ -4,13 +4,32 @@
 
 package com.ivianuu.essentials.ui.animation
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.ui.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.ui.animation.transition.*
-import kotlinx.coroutines.*
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
+import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
+import com.ivianuu.essentials.ui.animation.transition.NoOpStackTransition
+import com.ivianuu.essentials.ui.animation.transition.StackTransition
+import com.ivianuu.essentials.ui.animation.transition.StackTransitionScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.collections.set
 
 @Composable fun <T> AnimatedBox(

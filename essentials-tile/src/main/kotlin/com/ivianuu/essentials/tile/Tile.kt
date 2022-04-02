@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.tile
 
-import android.graphics.drawable.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlin.reflect.*
+import android.graphics.drawable.Icon
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Spread
+import kotlin.reflect.KClass
 
 data class TileModel<out T : AbstractFunTileService<*>>(
   val icon: Icon? = null,

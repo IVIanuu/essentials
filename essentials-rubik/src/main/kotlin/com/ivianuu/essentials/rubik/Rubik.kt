@@ -4,7 +4,10 @@
 
 package com.ivianuu.essentials.rubik
 
-import androidx.compose.ui.text.font.*
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 
 val Rubik = FontFamily(
   Font(R.font.rubik_light, FontWeight.Light, FontStyle.Normal),

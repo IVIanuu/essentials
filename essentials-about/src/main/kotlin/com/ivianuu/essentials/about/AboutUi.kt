@@ -4,20 +4,30 @@
 
 package com.ivianuu.essentials.about
 
-import androidx.compose.foundation.*
-import androidx.compose.material.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.donation.*
-import com.ivianuu.essentials.license.ui.*
-import com.ivianuu.essentials.rate.domain.*
-import com.ivianuu.essentials.rate.ui.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.web.ui.*
-import com.ivianuu.injekt.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.donation.Donation
+import com.ivianuu.essentials.donation.DonationKey
+import com.ivianuu.essentials.license.ui.LicenseKey
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
+import com.ivianuu.essentials.rate.ui.DeveloperEmail
+import com.ivianuu.essentials.rate.ui.FeedbackMailKey
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.web.ui.WebKey
+import com.ivianuu.injekt.Provide
 
 object AboutKey : Key<Unit>
 

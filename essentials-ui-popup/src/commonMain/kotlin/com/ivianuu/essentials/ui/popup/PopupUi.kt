@@ -4,23 +4,41 @@
 
 package com.ivianuu.essentials.ui.popup
 
-import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.geometry.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.input.pointer.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.unit.*
-import com.ivianuu.essentials.ui.animation.*
-import com.ivianuu.essentials.ui.animation.transition.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.insets.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.unit.Constraints
+import com.ivianuu.essentials.ui.animation.animationElement
+import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
+import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
+import com.ivianuu.essentials.ui.animation.transition.StackTransition
+import com.ivianuu.essentials.ui.animation.transition.awaitLayoutCoordinates
+import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
+import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
+import com.ivianuu.essentials.ui.animation.transition.toElementModifier
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.navigation.KeyUiOptions
+import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.launch
 
 data class PopupKey(
   val position: Rect,

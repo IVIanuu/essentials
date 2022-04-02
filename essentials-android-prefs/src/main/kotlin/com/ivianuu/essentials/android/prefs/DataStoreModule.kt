@@ -4,20 +4,26 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import androidx.datastore.core.*
+import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import androidx.datastore.core.handlers.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.data.*
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Initial
+import com.ivianuu.essentials.InitialOrDefault
+import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import java.io.*
+import com.ivianuu.essentials.data.PrefsDir
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
+import java.io.InputStream
+import java.io.OutputStream
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(

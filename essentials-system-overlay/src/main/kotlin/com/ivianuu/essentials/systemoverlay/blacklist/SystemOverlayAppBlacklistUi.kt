@@ -4,17 +4,22 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import androidx.compose.runtime.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.apps.ui.*
-import com.ivianuu.essentials.apps.ui.checkableapps.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.state.*
+import androidx.compose.runtime.remember
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
+import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 object SystemOverlayAppBlacklistKey : Key<Unit>
 

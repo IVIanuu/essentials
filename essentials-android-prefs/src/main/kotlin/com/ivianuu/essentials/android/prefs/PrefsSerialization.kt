@@ -4,11 +4,18 @@
 
 package com.ivianuu.essentials.android.prefs
 
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.*
-import kotlinx.serialization.encoding.*
-import kotlinx.serialization.internal.*
-import kotlinx.serialization.modules.*
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.StringFormat
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.SerialKind
+import kotlinx.serialization.encoding.AbstractDecoder
+import kotlinx.serialization.encoding.CompositeDecoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.internal.TaggedEncoder
+import kotlinx.serialization.modules.SerializersModule
 
 @OptIn(InternalSerializationApi::class)
 class PrefsEncoder(

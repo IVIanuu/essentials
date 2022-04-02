@@ -4,10 +4,12 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.rubik.*
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.rubik.Rubik
+import com.ivianuu.essentials.ui.AppTheme
+import com.ivianuu.essentials.ui.material.EsTheme
+import com.ivianuu.essentials.ui.material.EsTypography
+import com.ivianuu.essentials.ui.material.editEach
+import com.ivianuu.injekt.Provide
 
 @Provide val sampleTheme = AppTheme { content ->
   EsTheme(

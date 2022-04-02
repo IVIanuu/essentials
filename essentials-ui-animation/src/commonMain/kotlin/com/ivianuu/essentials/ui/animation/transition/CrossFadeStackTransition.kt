@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 
 fun CrossFadeStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec()

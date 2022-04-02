@@ -4,11 +4,16 @@
 
 package com.ivianuu.essentials.screenstate
 
-import android.util.*
-import android.view.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import kotlinx.coroutines.flow.*
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 
 data class DisplayInfo(
   val rotation: DisplayRotation = DisplayRotation.PORTRAIT_UP,

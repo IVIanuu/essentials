@@ -4,8 +4,9 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import com.ivianuu.essentials.about.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.about.AboutKey
+import com.ivianuu.essentials.about.PrivacyPolicyUrl
+import com.ivianuu.injekt.Provide
 
 @Provide val aboutHomeItem = HomeItem("About") { AboutKey }
 

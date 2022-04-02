@@ -4,12 +4,17 @@
 
 package com.ivianuu.essentials.ui.insets
 
-import android.view.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.*
-import androidx.core.view.*
-import com.ivianuu.injekt.*
-import kotlin.math.*
+import android.view.View
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowInsetsCompat
+import com.ivianuu.injekt.Provide
+import kotlin.math.max
 
 @Provide actual val windowInsetsProvider = WindowInsetsProvider { content ->
   val ownerView = LocalView.current

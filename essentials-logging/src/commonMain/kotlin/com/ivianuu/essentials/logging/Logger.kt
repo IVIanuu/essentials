@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.logging
 
-import com.ivianuu.essentials.logging.Logger.Priority.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.SourceKey
 
 interface Logger {
   val isEnabled: LoggingEnabled

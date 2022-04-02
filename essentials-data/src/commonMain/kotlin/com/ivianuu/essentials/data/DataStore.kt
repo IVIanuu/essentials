@@ -4,7 +4,9 @@
 
 package com.ivianuu.essentials.data
 
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.updateAndGet
 
 interface DataStore<T> {
   val data: Flow<T>

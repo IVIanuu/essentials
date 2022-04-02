@@ -4,7 +4,8 @@
 
 package com.ivianuu.essentials
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 
 inline fun <T> catch(block: () -> T): EsResult<T, Throwable> = try {
   Ok(block())

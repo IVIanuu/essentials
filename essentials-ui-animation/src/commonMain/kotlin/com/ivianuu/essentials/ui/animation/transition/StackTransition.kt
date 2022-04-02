@@ -4,15 +4,30 @@
 
 package com.ivianuu.essentials.ui.animation.transition
 
-import androidx.compose.animation.core.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.layout.*
-import com.ivianuu.essentials.coroutines.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.time.milliseconds
-import com.ivianuu.essentials.ui.animation.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.ui.animation.AnimatedStackChild
+import com.ivianuu.essentials.ui.animation.AnimatedStackState
+import com.ivianuu.essentials.ui.animation.AnimationElement
+import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
+import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit

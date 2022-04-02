@@ -4,8 +4,9 @@
 
 package com.ivianuu.essentials.ui.image
 
-import android.graphics.*
-import androidx.compose.ui.graphics.*
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.AndroidImageBitmapAccessor
+import androidx.compose.ui.graphics.ImageBitmap
 
 fun Bitmap.toImageBitmap(): ImageBitmap =
   AndroidImageBitmapAccessor.createAndroidImageBitmap(this)

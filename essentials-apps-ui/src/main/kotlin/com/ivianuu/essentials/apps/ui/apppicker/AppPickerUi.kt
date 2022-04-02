@@ -4,24 +4,34 @@
 
 package com.ivianuu.essentials.apps.ui.apppicker
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.ivianuu.essentials.apps.*
-import com.ivianuu.essentials.apps.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import com.ivianuu.essentials.apps.AppInfo
+import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.apps.ui.AppIcon
+import com.ivianuu.essentials.apps.ui.AppPredicate
+import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.R
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.map
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.bindResource
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.injekt.Provide
 
 data class AppPickerKey(
   val appPredicate: AppPredicate = DefaultAppPredicate,

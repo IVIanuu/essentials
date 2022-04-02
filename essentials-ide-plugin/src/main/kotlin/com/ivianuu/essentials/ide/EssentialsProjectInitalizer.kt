@@ -4,15 +4,14 @@
 
 package com.ivianuu.essentials.ide
 
-import com.intellij.openapi.project.*
-import com.ivianuu.essentials.kotlin.compiler.composefix.*
-import com.ivianuu.essentials.kotlin.compiler.optics.*
-import com.ivianuu.essentials.kotlin.compiler.serializationfix.*
-import org.jetbrains.kotlin.utils.addToStdlib.*
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManagerListener
+import com.ivianuu.essentials.kotlin.compiler.optics.optics
+import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 class EssentialsProjectInitializer : ProjectManagerListener {
   override fun projectOpened(project: Project) {
-    composeFix(project.cast())
     optics(project.cast())
     serializationFix(project.cast())
   }

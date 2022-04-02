@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.ui.app
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 
 fun interface AppUi {
   @Composable operator fun invoke()

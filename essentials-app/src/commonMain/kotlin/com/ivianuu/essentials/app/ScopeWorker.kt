@@ -4,12 +4,14 @@
 
 package com.ivianuu.essentials.app
 
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 fun interface ScopeWorker<N> : suspend () -> Unit {
   companion object {

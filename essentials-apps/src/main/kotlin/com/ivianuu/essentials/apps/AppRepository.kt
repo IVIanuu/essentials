@@ -4,16 +4,21 @@
 
 package com.ivianuu.essentials.apps
 
-import android.content.*
-import android.content.pm.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.coroutines.*
-import com.ivianuu.essentials.util.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.content.Intent
+import android.content.pm.PackageManager
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.util.BroadcastsFactory
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IOContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 
 interface AppRepository {
   val installedApps: Flow<List<AppInfo>>

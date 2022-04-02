@@ -4,15 +4,16 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.app.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.android.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import java.util.*
-import java.util.concurrent.*
+import android.app.KeyguardManager
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.coroutines.DefaultContext
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean

@@ -4,10 +4,13 @@
 
 package com.ivianuu.essentials.sample
 
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.app.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.common.*
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.app.EsApp
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Providers
+import com.ivianuu.injekt.common.Elements
+import com.ivianuu.injekt.common.Scope
+import com.ivianuu.injekt.inject
 
 class SampleApp : EsApp() {
   override fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope> =

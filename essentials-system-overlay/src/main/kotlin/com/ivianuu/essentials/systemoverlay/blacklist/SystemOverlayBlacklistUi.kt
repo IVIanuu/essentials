@@ -4,17 +4,22 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import androidx.compose.foundation.*
-import androidx.compose.material.*
-import androidx.compose.ui.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.state.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.bind
 import com.ivianuu.essentials.systemoverlay.R
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.material.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.injekt.Provide
 
 data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 

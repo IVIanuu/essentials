@@ -7,8 +7,8 @@ package com.ivianuu.essentials.coroutines
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.time.seconds
-import io.kotest.matchers.*
-import org.junit.*
+import io.kotest.matchers.shouldBe
+import org.junit.Test
 import kotlin.time.Duration
 
 class RateLimiterTest {

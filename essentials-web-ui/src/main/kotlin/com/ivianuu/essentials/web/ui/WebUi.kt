@@ -4,27 +4,38 @@
 
 package com.ivianuu.essentials.web.ui
 
-import android.webkit.*
-import androidx.compose.foundation.layout.*
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import androidx.compose.ui.viewinterop.*
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.insets.*
-import com.ivianuu.essentials.ui.material.*
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.ivianuu.essentials.ui.common.getValue
+import com.ivianuu.essentials.ui.common.refOf
+import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.ui.insets.InsetsPadding
+import com.ivianuu.essentials.ui.material.AppBarStyle
+import com.ivianuu.essentials.ui.material.LocalAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.systembars.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.systembars.systemBarStyle
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.launch
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 

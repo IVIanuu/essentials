@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials.ui.backpress
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 @Provide actual val backPressHandlerProvider = BackPressHandlerProvider { it() }

@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.ui.prefs
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import com.ivianuu.injekt.*
-import kotlin.math.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import kotlin.math.roundToInt
 
 @Composable fun UnitText(value: Any, unit: ValueUnit, @Inject strings: UnitStrings) {
   Text(unit.picker(strings, value))

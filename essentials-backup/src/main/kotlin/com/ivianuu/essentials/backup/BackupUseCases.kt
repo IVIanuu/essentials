@@ -4,19 +4,28 @@
 
 package com.ivianuu.essentials.backup
 
-import android.content.*
-import android.icu.text.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.processrestart.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import com.ivianuu.injekt.coroutines.*
-import kotlinx.coroutines.*
-import java.util.*
-import java.util.zip.*
+import android.content.ContentResolver
+import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.data.DataDir
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.toIntentKey
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.withContext
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 
 fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 

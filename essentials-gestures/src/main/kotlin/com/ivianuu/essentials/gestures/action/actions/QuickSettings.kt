@@ -4,18 +4,28 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.accessibilityservice.*
-import android.annotation.*
-import android.view.accessibility.*
-import androidx.compose.material.icons.*
-import androidx.compose.material.icons.filled.*
-import com.github.michaelbull.result.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.accessibility.*
+import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
+import android.view.accessibility.AccessibilityNodeInfo
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import com.github.michaelbull.result.getOrElse
+import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.accessibility.GlobalActionExecutor
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.gestures.action.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.gestures.action.Action
+import com.ivianuu.essentials.gestures.action.ActionExecutor
+import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.loadResource
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 

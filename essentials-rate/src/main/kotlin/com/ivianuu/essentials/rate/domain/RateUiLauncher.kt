@@ -4,18 +4,21 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.ivianuu.essentials.app.*
-import com.ivianuu.essentials.data.*
-import com.ivianuu.essentials.logging.*
-import com.ivianuu.essentials.rate.data.*
-import com.ivianuu.essentials.rate.ui.*
-import com.ivianuu.essentials.time.*
+import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.rate.data.RatePrefs
+import com.ivianuu.essentials.rate.ui.RateKey
+import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.days
 import com.ivianuu.essentials.time.milliseconds
-import com.ivianuu.essentials.ui.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.first
 import kotlin.time.Duration
 
 @Provide fun rateUiLauncher(

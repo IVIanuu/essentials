@@ -4,21 +4,27 @@
 
 package com.ivianuu.essentials.license.ui
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
-import androidx.compose.ui.*
-import com.github.michaelbull.result.*
+import androidx.compose.ui.Modifier
+import com.github.michaelbull.result.getOrThrow
 import com.ivianuu.essentials.license.R
-import com.ivianuu.essentials.license.data.*
-import com.ivianuu.essentials.license.domain.*
-import com.ivianuu.essentials.resource.*
-import com.ivianuu.essentials.state.*
-import com.ivianuu.essentials.ui.material.*
+import com.ivianuu.essentials.license.data.Project
+import com.ivianuu.essentials.license.domain.LicenceProjectRepository
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.produceResource
+import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.resource.*
-import com.ivianuu.injekt.*
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.ModelKeyUi
+import com.ivianuu.essentials.ui.navigation.UrlKey
+import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.injekt.Provide
 
 object LicenseKey : Key<Unit>
 

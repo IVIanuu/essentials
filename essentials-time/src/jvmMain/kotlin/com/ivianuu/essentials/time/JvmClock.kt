@@ -4,6 +4,6 @@
 
 package com.ivianuu.essentials.time
 
-import com.ivianuu.injekt.*
+import com.ivianuu.injekt.Provide
 
 @Provide actual val DefaultClock = Clock { System.nanoTime().nanoseconds }

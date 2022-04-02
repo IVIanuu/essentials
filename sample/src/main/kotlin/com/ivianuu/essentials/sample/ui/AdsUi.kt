@@ -4,18 +4,26 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import com.google.android.gms.ads.*
-import com.ivianuu.essentials.*
-import com.ivianuu.essentials.ads.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import com.google.android.gms.ads.AdSize
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.ads.FullScreenAd
+import com.ivianuu.essentials.ads.FullScreenAdId
+import com.ivianuu.essentials.ads.ListAdBannerConfig
+import com.ivianuu.essentials.ads.ScreenAdBannerConfig
+import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.ui.common.*
-import com.ivianuu.essentials.ui.navigation.*
-import com.ivianuu.essentials.ui.prefs.*
-import com.ivianuu.injekt.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import com.ivianuu.essentials.ui.common.SimpleListScreen
+import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
+import com.ivianuu.essentials.ui.prefs.SwitchListItem
+import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsKey }
 
