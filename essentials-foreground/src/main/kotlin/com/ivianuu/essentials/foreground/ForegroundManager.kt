@@ -32,7 +32,9 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
   private val context: AppContext,
   private val L: Logger
 ) : ForegroundManager {
-  private val lock = Mutex()
+  private val mainLock = Mutex()
+
+  private val idLocks = mutableMapOf<Int, Mutex>()
 
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
 
@@ -41,30 +43,34 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
     notification: StateFlow<Notification>
   ): Nothing = bracket(
     acquire = {
-      lock.withLock {
-        ForegroundState(id, notification)
-          .also {
-            states.value = states.value + it
-            log { "start foreground $id ${states.value}" }
-          }
+      val idLock = mainLock.withLock {
+        idLocks.getOrPut(id) { Mutex() }
       }
-    },
-    use = {
-      ContextCompat.startForegroundService(
-        context,
-        Intent(context, ForegroundService::class.java)
-      )
 
-      awaitCancellation()
-    },
-    release = { state, _ ->
-      lock.withLock {
+      val state = ForegroundState(id, notification)
+
+      idLock.withLock {
+        mainLock.withLock { states.value = states.value + state }
+        log { "start foreground $id ${states.value}" }
+
+        ContextCompat.startForegroundService(
+          context,
+          Intent(context, ForegroundService::class.java)
+        )
+
         // we ensure that the foreground service has seen this foreground request
         // to prevent a crash in the android system
         state.seen.await()
 
-        states.value = states.value - state
-        log { "stop foreground ${state.id} ${states.value}" }
+        state
+      }
+    },
+    use = { awaitCancellation() },
+    release = { state, _ ->
+      val idLock = mainLock.withLock { idLocks[id]!! }
+      idLock.withLock {
+        mainLock.withLock { states.value = states.value - state }
+        log { "stop foreground $id ${states.value}" }
       }
     }
   )
