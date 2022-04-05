@@ -7,14 +7,15 @@ package com.ivianuu.essentials.processrestart
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.ComponentActivity
 
 class ProcessRestartActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val restartIntent = intent.getParcelableExtra<Intent>(KEY_RESTART_INTENT)
+    val restartIntent = intent.getParcelableExtra<Parcelable>(KEY_RESTART_INTENT)
     if (restartIntent != null)
-      startActivity(restartIntent)
+      startActivity(restartIntent as Intent)
 
     finish()
     Runtime.getRuntime().exit(0)
