@@ -58,11 +58,11 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
       awaitCancellation()
     },
     release = { state, _ ->
-      // we ensure that the foreground service has seen this foreground request
-      // to prevent a crash in the android system
-      state.seen.await()
-
       lock.withLock {
+        // we ensure that the foreground service has seen this foreground request
+        // to prevent a crash in the android system
+        state.seen.await()
+
         states.value = states.value - state
         log { "stop foreground ${state.id} ${states.value}" }
       }
