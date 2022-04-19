@@ -39,7 +39,6 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
-import kotlin.math.max
 
 data class PopupKey(
   val position: Rect,
@@ -149,21 +148,17 @@ val PopupStackTransition: StackTransition = transition@{
 
     x = x.coerceIn(
       insets.left.roundToPx(),
-      max(
-        insets.left.roundToPx(),
-        constraints.maxWidth -
-            placeable.width -
-            insets.right.roundToPx()
-      )
+      (constraints.maxWidth -
+          placeable.width -
+          insets.right.roundToPx())
+        .coerceIn(insets.left.roundToPx(), constraints.maxWidth - insets.right.roundToPx())
     )
     y = y.coerceIn(
       insets.top.roundToPx(),
-      max(
-        insets.top.roundToPx(),
-        constraints.maxHeight -
-            placeable.height -
-            insets.bottom.roundToPx()
-      )
+      (constraints.maxHeight -
+          placeable.height -
+          insets.bottom.roundToPx())
+        .coerceIn(insets.top.roundToPx(), constraints.maxHeight - insets.bottom.roundToPx())
     )
 
     layout(constraints.maxWidth, constraints.maxHeight) {
