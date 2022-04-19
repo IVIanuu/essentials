@@ -20,6 +20,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
@@ -39,6 +42,7 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 data class PopupKey(
   val position: Rect,
@@ -127,9 +131,17 @@ val PopupStackTransition: StackTransition = transition@{
 ) {
   val insets = LocalInsets.current
   Layout(content = content, modifier = modifier) { measureables, constraints ->
+    fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
+
     val childConstraints = constraints.copy(
       minWidth = 0,
-      minHeight = 0
+      minHeight = 0,
+      maxWidth = constraints.maxWidth -
+          insets.left.insetOrMinPadding() -
+          insets.right.insetOrMinPadding(),
+      maxHeight = constraints.maxHeight -
+          insets.top.insetOrMinPadding() -
+          insets.bottom.insetOrMinPadding()
     )
 
     val placeable = measureables.single().measure(childConstraints)
@@ -147,18 +159,22 @@ val PopupStackTransition: StackTransition = transition@{
     }
 
     x = x.coerceIn(
-      insets.left.roundToPx(),
-      (constraints.maxWidth -
-          placeable.width -
-          insets.right.roundToPx())
-        .coerceIn(insets.left.roundToPx(), constraints.maxWidth - insets.right.roundToPx())
+      insets.left.insetOrMinPadding(),
+      max(
+        insets.left.insetOrMinPadding(),
+        constraints.maxWidth -
+            placeable.width -
+            insets.right.insetOrMinPadding()
+      )
     )
     y = y.coerceIn(
-      insets.top.roundToPx(),
-      (constraints.maxHeight -
-          placeable.height -
-          insets.bottom.roundToPx())
-        .coerceIn(insets.top.roundToPx(), constraints.maxHeight - insets.bottom.roundToPx())
+      insets.top.insetOrMinPadding(),
+      max(
+        insets.top.insetOrMinPadding(),
+        constraints.maxHeight -
+            placeable.height -
+            insets.bottom.insetOrMinPadding()
+      )
     )
 
     layout(constraints.maxWidth, constraints.maxHeight) {
