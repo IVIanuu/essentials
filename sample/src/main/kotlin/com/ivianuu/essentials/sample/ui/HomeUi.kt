@@ -107,7 +107,7 @@ import kotlinx.coroutines.launch
     },
     trailing = {
       PopupMenuButton(
-        items = listOf(1, 2, 3)
+        items = (0..100)
           .map { index ->
             PopupMenu.Item(onSelected = {}) {
               Text(index.toString())
