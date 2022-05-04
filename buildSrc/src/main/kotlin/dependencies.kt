@@ -64,7 +64,7 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.0.1"
+    const val version = "1.1.1"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$version"
     const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:$version"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
