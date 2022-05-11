@@ -24,5 +24,9 @@ fun interface ProcessRestarter : suspend () -> Unit
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
   log { "restart process $intent" }
   ProcessRestartActivity.launch(context, intent)
-  Runtime.getRuntime().exit(0)
+  restartProcess()
+}
+
+internal fun restartProcess() {
+  Runtime::class.java.getMethod("exit").invoke(Runtime.getRuntime(), 0)
 }
