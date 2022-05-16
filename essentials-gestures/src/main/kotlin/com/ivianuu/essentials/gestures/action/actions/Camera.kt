@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -52,6 +53,7 @@ import kotlin.coroutines.resume
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
   screenState: Flow<ScreenState>,
+  accessibilityServiceRef: Flow<EsAccessibilityService?>,
   L: Logger
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
@@ -70,8 +72,12 @@ import kotlin.coroutines.resume
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
+  val currentScreenState = screenState.first()
+
   val frontFacing = if (frontCamera != null &&
-    screenState.first() != ScreenState.OFF &&
+    currentScreenState != ScreenState.OFF &&
+    (currentScreenState == ScreenState.UNLOCKED ||
+        accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
     cameraApp.activityInfo!!.packageName == currentApp.first()?.value)
       suspendCancellableCoroutine<Boolean> { cont ->
         cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
