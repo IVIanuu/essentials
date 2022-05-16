@@ -18,7 +18,7 @@ class ProcessRestartActivity : ComponentActivity() {
       startActivity(restartIntent as Intent)
 
     finish()
-    restartProcess()
+    exitProcess()
   }
 
   internal companion object {
