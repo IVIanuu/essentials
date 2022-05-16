@@ -15,10 +15,11 @@ class ProcessRestartActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     val restartIntent = intent.getParcelableExtra<Parcelable>(KEY_RESTART_INTENT)
     if (restartIntent != null)
-      startActivity(restartIntent as Intent)
+      Context::class.java.getDeclaredMethod("startActivity", Intent::class.java)
+        .invoke(this, restartIntent)
 
     finish()
-    exitProcess()
+    Runtime.getRuntime().exit(0)
   }
 
   internal companion object {
