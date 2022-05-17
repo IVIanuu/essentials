@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
 import com.ivianuu.essentials.EsResult
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -45,7 +44,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   return@handler {
     val activity = appUiStarter()
     withContext(context) {
-      suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
+      suspendCancellableCoroutine<EsResult<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
