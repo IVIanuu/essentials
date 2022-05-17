@@ -6,7 +6,7 @@ package com.ivianuu.essentials.hidenavbar
 
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.SystemBuildInfo
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.optics.Optics
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.SerialName
@@ -29,6 +29,6 @@ import kotlinx.serialization.Serializable
 
     @Provide fun prefModule(
       initialFactory: () -> @Initial NavBarPrefs
-    ): PrefModule<NavBarPrefs> = PrefModule(initialFactory)
+    ): DataStoreModule<NavBarPrefs> = DataStoreModule("nav_bar_prefs", initialFactory)
   }
 }

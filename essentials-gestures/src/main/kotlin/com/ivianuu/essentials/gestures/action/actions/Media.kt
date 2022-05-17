@@ -12,7 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.ui.IntentAppPredicate
@@ -69,7 +69,7 @@ private fun mediaIntentFor(
   @SerialName("media_app") val mediaApp: String? = null,
 ) {
   companion object {
-    @Provide val prefModule = PrefModule { MediaActionPrefs() }
+    @Provide val prefModule = DataStoreModule("media_action_prefs") { MediaActionPrefs() }
   }
 }
 

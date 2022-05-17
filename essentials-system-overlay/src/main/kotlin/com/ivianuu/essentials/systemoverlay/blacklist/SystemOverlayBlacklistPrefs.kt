@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.systemoverlay.blacklist
 
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,6 +16,8 @@ import kotlinx.serialization.Serializable
   @SerialName("disable_on_secure_screens") val disableOnSecureScreens: Boolean = true
 ) {
   companion object {
-    @Provide val prefModule = PrefModule { SystemOverlayBlacklistPrefs() }
+    @Provide val prefModule = DataStoreModule("system_overlay_blacklist_prefs") {
+      SystemOverlayBlacklistPrefs()
+    }
   }
 }

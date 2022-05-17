@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.rate.data
 
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,6 +21,6 @@ import kotlinx.serialization.Serializable
   }
 
   companion object {
-    @Provide val prefModule = PrefModule { RatePrefs() }
+    @Provide val prefModule = DataStoreModule("rate_prefs") { RatePrefs() }
   }
 }

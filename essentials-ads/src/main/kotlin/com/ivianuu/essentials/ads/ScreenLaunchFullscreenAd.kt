@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import com.github.michaelbull.result.getOrElse
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
@@ -34,7 +34,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   @SerialName("ad_screen_launch_count") val screenLaunchCount: Int = 0
 ) {
   companion object {
-    @Provide val prefModule = PrefModule { ScreenLaunchPrefs() }
+    @Provide val prefModule = DataStoreModule("screen_launch_prefs") { ScreenLaunchPrefs() }
   }
 }
 
