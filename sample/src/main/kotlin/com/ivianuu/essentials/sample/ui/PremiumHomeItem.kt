@@ -13,7 +13,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.injekt.Provide
 
 @Provide val premiumHomeItem = HomeItem("Premium") {
-  GoPremiumKey(showTryBasicOption = true, showAdOnBackNavigation = true)
+  GoPremiumKey(showTryBasicOption = true)
 }
 
 @Provide val premiumVersionSku: PremiumVersionSku = PremiumVersionSku(
