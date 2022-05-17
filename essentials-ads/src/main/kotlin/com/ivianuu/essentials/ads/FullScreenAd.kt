@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.ads
 
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.EsResult
@@ -18,6 +19,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.MainContext
@@ -62,6 +64,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val context: AppContext,
   private val clock: Clock,
   private val config: FullScreenAdConfig,
+  private val foregroundActivity: Flow<ForegroundActivity>,
   private val mainContext: MainContext,
   private val scope: NamedCoroutineScope<AppScope>,
   private val showAds: Flow<ShowAds>,
@@ -105,27 +108,23 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(mainContext) {
-      val ad = InterstitialAd(context).apply {
-        adUnitId = id.value
-      }
-
       log { "start loading ad" }
 
-      // wait until the has been loaded
-      suspendCoroutine<Unit> { cont ->
-        ad.adListener = object : AdListener() {
-          override fun onAdLoaded() {
-            super.onAdLoaded()
-            cont.resume(Unit)
-          }
+      val ad = suspendCoroutine<InterstitialAd> { cont ->
+        InterstitialAd.load(
+          context,
+          id.value,
+          AdRequest.Builder().build(),
+          object : InterstitialAdLoadCallback() {
+            override fun onAdLoaded(ad: InterstitialAd) {
+              cont.resume(ad)
+            }
 
-          override fun onAdFailedToLoad(reason: Int) {
-            super.onAdFailedToLoad(reason)
-            cont.resumeWithException(AdLoadingException(reason))
+            override fun onAdFailedToLoad(error: LoadAdError) {
+              cont.resumeWithException(AdLoadingException(error))
+            }
           }
-        }
-
-        ad.loadAd(AdRequest.Builder().build())
+        )
       }
 
       log { "ad loaded" }
@@ -135,7 +134,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
           log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(mainContext) {
-            ad.show()
+            ad.show(foregroundActivity.first()!!)
           }
           true
         } else {
@@ -149,7 +148,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }.await()
 }
 
-class AdLoadingException(val reason: Int) : RuntimeException()
+class AdLoadingException(val error: LoadAdError) : RuntimeException()
 
 @Provide fun preloadFullScreenAdWorker(
   fullScreenAd: FullScreenAd,

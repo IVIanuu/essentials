@@ -87,9 +87,9 @@ object Deps {
     "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1060"
 
   object Firebase {
-    const val ads = "com.google.firebase:firebase-ads:18.3.0"
-    const val crashlytics = "com.google.firebase:firebase-crashlytics:17.2.2"
-    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
+    const val ads = "com.google.firebase:firebase-ads:20.6.0"
+    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.10"
+    const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
   }
 
   object Injekt {
