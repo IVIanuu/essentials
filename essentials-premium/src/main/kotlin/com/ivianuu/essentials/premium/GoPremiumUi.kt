@@ -68,8 +68,7 @@ data class AppFeature(
 
 data class GoPremiumKey(
   val showTryBasicOption: Boolean,
-  val allowBackNavigation: Boolean = true,
-  val showAdOnBackNavigation: Boolean = false
+  val allowBackNavigation: Boolean = true
 ) : CriticalUserFlowKey<Boolean> {
   companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
@@ -355,10 +354,8 @@ data class GoPremiumModel(
     goBack = action {
       if (ctx.key.allowBackNavigation) {
         ctx.navigator.pop(ctx.key, false)
-        if (ctx.key.showAdOnBackNavigation) {
-          withContext(NonCancellable) {
-            fullScreenAd.loadAndShow()
-          }
+        withContext(NonCancellable) {
+          fullScreenAd.loadAndShow()
         }
       }
     }
