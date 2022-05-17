@@ -92,6 +92,8 @@ object Deps {
     const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
   }
 
+  const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
+
   object Injekt {
     private const val version = "0.0.1-dev683"
     const val android = "com.ivianuu.injekt:injekt-android:$version"

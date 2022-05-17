@@ -36,6 +36,8 @@ dependencies {
   api(Deps.AtomicFu.gradlePlugin)
   api(Deps.Compose.gradlePlugin)
   api(Deps.androidGradlePlugin)
+  api(Deps.Firebase.crashlyticsGradlePlugin)
+  api(Deps.googlePlayServicesGradlePlugin)
   api(Deps.KotlinSerialization.gradlePlugin)
   api(Deps.Injekt.gradlePlugin)
   api(Deps.licenseGradlePlugin)
