@@ -14,15 +14,15 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
 
+fun interface KeyUiDecorator {
+  @Composable operator fun invoke(p1: @Composable () -> Unit)
+}
+
 @Provide fun <@Spread T : KeyUiDecorator> keyUiDecoratorElement(
   instance: T,
   key: TypeKey<T>,
   loadingOrder: LoadingOrder<T> = LoadingOrder()
 ) = KeyUiDecoratorElement(key, instance, loadingOrder as LoadingOrder<KeyUiDecorator>)
-
-fun interface KeyUiDecorator {
-  @Composable operator fun invoke(p1: @Composable () -> Unit)
-}
 
 data class KeyUiDecoratorElement(
   val key: TypeKey<KeyUiDecorator>,

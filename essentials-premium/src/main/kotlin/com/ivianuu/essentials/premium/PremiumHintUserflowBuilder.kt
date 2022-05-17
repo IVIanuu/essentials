@@ -5,11 +5,9 @@
 package com.ivianuu.essentials.premium
 
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.app.ScopeWorker
+import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.push
+import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
@@ -21,26 +19,32 @@ import kotlinx.serialization.Serializable
   }
 }
 
-@Provide fun appStartPremiumHintWorker(
+fun interface PremiumHintUserflowBuilder : UserflowBuilder {
+  companion object {
+    @Provide val loadingOrder = LoadingOrder<PremiumHintUserflowBuilder>()
+      .last()
+  }
+}
+
+@Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
-  navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   pref: DataStore<AppStartPremiumHintPrefs>
-) = ScopeWorker<UiScope> {
+) = PremiumHintUserflowBuilder {
   if (!enabled.value ||
-    premiumVersionManager.isPremiumVersion.first()) return@ScopeWorker
+    premiumVersionManager.isPremiumVersion.first()) return@PremiumHintUserflowBuilder emptyList()
 
   val firstAppStart = pref.data.first().firstAppStart
 
-  navigator.push(
+  pref.updateData { copy(firstAppStart = false) }
+
+  listOf(
     GoPremiumKey(
       showTryBasicOption = firstAppStart,
       allowBackNavigation = !firstAppStart,
       showAdOnBackNavigation = true
     )
   )
-
-  pref.updateData { copy(firstAppStart = false) }
 }
 
 @Serializable data class AppStartPremiumHintPrefs(
