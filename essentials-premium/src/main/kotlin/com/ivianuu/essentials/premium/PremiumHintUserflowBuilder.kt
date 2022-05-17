@@ -41,8 +41,7 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
   listOf(
     GoPremiumKey(
       showTryBasicOption = firstAppStart,
-      allowBackNavigation = !firstAppStart,
-      showAdOnBackNavigation = true
+      allowBackNavigation = !firstAppStart
     )
   )
 }
