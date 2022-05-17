@@ -68,7 +68,8 @@ data class AppFeature(
 
 data class GoPremiumKey(
   val showTryBasicOption: Boolean,
-  val allowBackNavigation: Boolean = true
+  val allowBackNavigation: Boolean = true,
+  val showAdOnBackNavigation: Boolean = false
 ) : CriticalUserFlowKey<Boolean> {
   companion object {
     @Provide fun adFeatures() = AdFeatures<GoPremiumKey>(emptyList())
@@ -76,8 +77,7 @@ data class GoPremiumKey(
 }
 
 @Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
-  if (!allowBackNavigation)
-    BackHandler {  }
+  BackHandler(goBack)
 
   Surface {
     InsetsPadding {
@@ -324,9 +324,9 @@ data class GoPremiumModel(
   val features: List<AppFeature>,
   val premiumSkuDetails: Resource<SkuDetails>,
   val showTryBasicOption: Boolean,
-  val allowBackNavigation: Boolean,
   val goPremium: () -> Unit,
-  val tryBasicVersion: () -> Unit
+  val tryBasicVersion: () -> Unit,
+  val goBack: () -> Unit
 )
 
 @Provide fun goPremiumModel(
@@ -340,7 +340,6 @@ data class GoPremiumModel(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
     showTryBasicOption = ctx.key.showTryBasicOption,
-    allowBackNavigation = ctx.key.allowBackNavigation,
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
         ctx.navigator.pop(ctx.key, true)
@@ -351,6 +350,16 @@ data class GoPremiumModel(
       ctx.navigator.pop(ctx.key, false)
       withContext(NonCancellable) {
         fullScreenAd.loadAndShow()
+      }
+    },
+    goBack = action {
+      if (ctx.key.allowBackNavigation) {
+        ctx.navigator.pop(ctx.key, false)
+        if (ctx.key.showAdOnBackNavigation) {
+          withContext(NonCancellable) {
+            fullScreenAd.loadAndShow()
+          }
+        }
       }
     }
   )
