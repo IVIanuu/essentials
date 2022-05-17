@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
@@ -27,7 +26,7 @@ import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.job
 import kotlin.time.Duration
 
 typealias StackTransition = suspend StackTransitionScope.() -> Unit
@@ -98,10 +97,8 @@ private var refKeys = 0
 fun StackTransitionScope.element(child: AnimatedStackChild<*>, key: Any): AnimationElement {
   val refKey = refKeys++
   val element = child.elementStore.referenceElement(key, refKey)
-  launch {
-    onCancel {
-      child.elementStore.disposeRef(key, refKey)
-    }
+  coroutineContext.job.invokeOnCompletion {
+    child.elementStore.disposeRef(key, refKey)
   }
   return element
 }
@@ -135,11 +132,7 @@ fun StackTransitionScope.elementModifier(
   val modifier = mutableStateOf<Modifier>(Modifier)
   val element = element(child, key)
   element.modifiers += modifier
-  launch {
-    onCancel {
-      element.modifiers -= modifier
-    }
-  }
+  coroutineContext.job.invokeOnCompletion { element.modifiers -= modifier }
   return modifier
 }
 
