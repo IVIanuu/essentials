@@ -90,6 +90,19 @@ class LoadingOrderTest {
       .shouldContainInOrder(aKey, bKey, cKey)
   }
 
+  @Test fun testAfterLast() {
+    val unsorted = listOf(
+      Item(key = aKey, loadingOrder = LoadingOrder<Item>().last()),
+      Item(key = bKey, loadingOrder = LoadingOrder<Item>().after(aKey))
+    )
+
+    val sorted = unsorted.sortedWithLoadingOrder()
+
+    sorted
+      .map { it.key }
+      .shouldContainInOrder(aKey, bKey)
+  }
+
   @Test fun testPreserversOrderForNone() {
     val unsorted = listOf(
       Item(key = aKey),
