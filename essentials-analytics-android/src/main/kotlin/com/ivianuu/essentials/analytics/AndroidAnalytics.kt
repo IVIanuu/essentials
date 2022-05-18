@@ -26,14 +26,13 @@ import kotlinx.coroutines.launch
 ) : Analytics {
   override fun log(name: String, params: Map<String, String>) {
     scope.launch {
-      val additionalParams: Map<String, String> = if (analyticsParamsContributors.isEmpty()) emptyMap()
-      else buildMap {
-        analyticsParamsContributors.forEach {
-          it(this, name)
+      val finalParams = params
+        .toMutableMap()
+        .apply {
+          analyticsParamsContributors.forEach {
+            it(this, name)
+          }
         }
-      }
-
-      val finalParams = (params + additionalParams)
         .toList()
         .sortedBy { it.first }
         .toMap()
