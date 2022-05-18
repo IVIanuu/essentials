@@ -4,8 +4,15 @@
 
 package com.ivianuu.essentials.analytics
 
+import com.ivianuu.injekt.Provide
+
 interface Analytics {
   fun log(name: String, params: Map<String, String> = emptyMap())
+}
+
+@Provide object NoopAnalytics : Analytics {
+  override fun log(name: String, params: Map<String, String>) {
+  }
 }
 
 inline fun Analytics.log(name: String, builder: MutableMap<String, String>.() -> Unit) {

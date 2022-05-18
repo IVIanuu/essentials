@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlin.reflect.KClass
 
@@ -30,6 +31,11 @@ typealias KeyUiFactory<K> = (K) -> KeyUi<K>
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
     (keyClass to keyUiOptionsFactory) as Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
+
+  @Provide fun keyTypeKey(
+    keyClass: KClass<K>,
+    keyType: TypeKey<K>
+  ): Pair<KClass<Key<*>>, TypeKey<Key<*>>> = (keyClass to keyType) as Pair<KClass<Key<*>>, TypeKey<Key<*>>>
 }
 
 // todo make fun interface once compose is fixed

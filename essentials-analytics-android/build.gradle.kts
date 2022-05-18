@@ -14,7 +14,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-source-sets-android.gradle")
 
 dependencies {
-  api(project(":essentials-analytics"))
   api(project(":essentials-android-core"))
   api(Deps.Firebase.analytics)
   api(Deps.Firebase.crashlytics)

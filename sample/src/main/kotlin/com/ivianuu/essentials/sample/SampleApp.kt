@@ -16,6 +16,7 @@ class SampleApp : EsApp() {
   override fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope> =
     @Providers(
       ".**",
-      "com.ivianuu.essentials.logging.AndroidLogger"
+      "com.ivianuu.essentials.logging.AndroidLogger",
+      "com.ivianuu.essentials.analytics.AndroidAnalytics"
     ) inject()
 }
