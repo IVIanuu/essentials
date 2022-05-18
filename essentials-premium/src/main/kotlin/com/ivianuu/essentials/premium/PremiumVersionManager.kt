@@ -8,6 +8,7 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.analytics.AnalyticsParamsContributor
 import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
@@ -145,4 +146,10 @@ fun interface PremiumDowngradeHandler : suspend () -> Unit {
     @Provide val defaultHandlers: List<PremiumDowngradeHandler>
       get() = emptyList()
   }
+}
+
+@Provide fun premiumAnalyticsParamsContributor(
+  premiumVersionManager: () -> PremiumVersionManager
+) = AnalyticsParamsContributor { params, _ ->
+  params["is_premium"] = premiumVersionManager().isPremiumVersion.first().toString()
 }
