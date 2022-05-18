@@ -18,6 +18,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.analytics.Analytics
+import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.PurchaseUseCase
@@ -111,6 +113,7 @@ data class UiDonation(
 )
 
 @Provide fun donationModel(
+  analytics: Analytics,
   consumePurchase: ConsumePurchaseUseCase,
   donations: List<Donation>,
   getSkuDetails: GetSkuDetailsUseCase,
@@ -134,7 +137,11 @@ data class UiDonation(
     },
     close = action { ctx.navigator.pop(ctx.key) },
     purchase = action { donation ->
-      purchase(donation.donation.sku, true, true)
+      val purchaseResult = purchase(donation.donation.sku, true, true)
+      analytics.log("donation_clicked") {
+        put("donation", donation.donation.sku.skuString)
+        put("donated", purchaseResult.toString())
+      }
       consumePurchase(donation.donation.sku)
       showToast(R.string.es_donation_thanks)
     }

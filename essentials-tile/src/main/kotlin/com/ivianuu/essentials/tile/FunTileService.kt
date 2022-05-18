@@ -10,6 +10,8 @@ import android.service.quicksettings.TileService
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.analytics.Analytics
+import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.state
@@ -46,6 +48,7 @@ abstract class AbstractFunTileService<T : Any>(
     get() = serviceComponent.logger
 
   private var tileComponent: TileModelComponent? = null
+  private var name: String? = null
 
   override fun onStartListening() {
     super.onStartListening()
@@ -61,6 +64,11 @@ abstract class AbstractFunTileService<T : Any>(
     super.onClick()
     log { "$serviceClass on click" }
     tileComponent?.currentModel?.onTileClicked?.invoke()
+    name?.let {
+      serviceComponent.analytics.log("tile_clicked") {
+        put("name", it)
+      }
+    }
   }
 
   override fun onStopListening() {
@@ -71,6 +79,7 @@ abstract class AbstractFunTileService<T : Any>(
   }
 
   private fun applyModel(model: TileModel<*>) {
+    this.name = model.name
     tileComponent?.currentModel = model
     val qsTile = qsTile ?: return
 
@@ -100,6 +109,7 @@ abstract class AbstractFunTileService<T : Any>(
 
 @Provide @Element<AppScope>
 data class FunTileServiceComponent(
+  val analytics: Analytics,
   val logger: Logger,
   val resourceProvider: ResourceProvider,
   val tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent

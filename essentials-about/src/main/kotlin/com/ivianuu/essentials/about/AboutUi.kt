@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
@@ -144,6 +145,7 @@ data class AboutModel(
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
 @Provide fun aboutModel(
+  analytics: Analytics,
   buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
@@ -161,18 +163,23 @@ data class AboutModel(
     openLicenses = action { ctx.navigator.push(LicenseKey) },
     rate = action { rateOnPlayUseCase() },
     openMoreApps = action {
+      analytics.log("more_apps_opened")
       ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     },
     openRedditPage = action {
+      analytics.log("reddit_page_opened")
       ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
     },
     openGithubPage = action {
+      analytics.log("github_page_opened")
       ctx.navigator.push(UrlKey("https://github.com/IVIanuu"))
     },
     openTwitterPage = action {
+      analytics.log("twitter_page_opened")
       ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu"))
     },
     openPrivacyPolicy = action {
+      analytics.log("privacy_policy_opened")
       ctx.navigator.push(
         WebKey(
           loadResource(R.string.es_about_privacy_policy),
@@ -181,6 +188,7 @@ data class AboutModel(
       )
     },
     sendMail = action {
+      analytics.log("send_mail_opened")
       ctx.navigator.push(FeedbackMailKey)
     }
   )

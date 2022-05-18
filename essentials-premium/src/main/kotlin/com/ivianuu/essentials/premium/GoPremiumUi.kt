@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ads.AdFeatures
 import com.ivianuu.essentials.ads.FullScreenAd
+import com.ivianuu.essentials.analytics.Analytics
+import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
@@ -329,6 +331,7 @@ data class GoPremiumModel(
 )
 
 @Provide fun goPremiumModel(
+  analytics: Analytics,
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
   premiumVersionManager: PremiumVersionManager,
@@ -340,12 +343,17 @@ data class GoPremiumModel(
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
     showTryBasicOption = ctx.key.showTryBasicOption,
     goPremium = action {
-      if (premiumVersionManager.purchasePremiumVersion()) {
+      val purchaseResult = premiumVersionManager.purchasePremiumVersion()
+      analytics.log("go_premium_clicked") {
+        put("purchased", purchaseResult.toString())
+      }
+      if (purchaseResult) {
         ctx.navigator.pop(ctx.key, true)
         showToast(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {
+      analytics.log("basic_version_clicked")
       ctx.navigator.pop(ctx.key, false)
       withContext(NonCancellable) {
         fullScreenAd.loadAndShow()

@@ -90,8 +90,6 @@ fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = RestoreBackupUseCase {
-  analytics.log("backup_restored")
-
   catch {
     withContext(scope.coroutineContext + context) {
       val uri = navigator.push(
@@ -118,6 +116,8 @@ fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
         }
 
       zipInputStream.close()
+
+      analytics.log("backup_restored")
 
       processRestarter()
     }

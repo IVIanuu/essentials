@@ -11,6 +11,7 @@ import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
 data class TileModel<out T : AbstractFunTileService<*>>(
+  val name: String,
   val icon: Icon? = null,
   val iconRes: Int? = null,
   val label: String? = null,
