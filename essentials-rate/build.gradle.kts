@@ -15,7 +15,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 
 dependencies {
   api(project(":essentials-android-prefs"))
-  api(project(":essentials-apps-ui"))
+  api(project(":essentials-apps-coil"))
   api(project(":essentials-ui"))
 }
 
