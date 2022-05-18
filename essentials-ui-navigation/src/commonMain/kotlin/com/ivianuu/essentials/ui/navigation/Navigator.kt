@@ -55,9 +55,10 @@ suspend fun <R> Navigator.pop(key: Key<R>, result: R? = null) {
 
 suspend fun Navigator.popTop(): Boolean {
   val currentBackStack = backStack.value
-  if (currentBackStack.isNotEmpty())
-    setBackStack(currentBackStack.dropLast(1))
-  return currentBackStack.isNotEmpty()
+  return if (currentBackStack.isNotEmpty()) {
+    pop(currentBackStack.last())
+    true
+  } else false
 }
 
 suspend fun Navigator.clear() {
