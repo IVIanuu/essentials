@@ -59,7 +59,7 @@ fun interface SampleListDecorator : ListDecorator
     val key = catch { LocalKeyUiElements.current }.getOrElse { null }
       ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
-      Text("Sample decorator before content $key")
+      Text("Sample decorator after content $key")
   }
 }
 
