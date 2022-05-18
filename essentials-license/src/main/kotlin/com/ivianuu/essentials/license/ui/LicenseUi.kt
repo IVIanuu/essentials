@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.github.michaelbull.result.getOrThrow
-import com.ivianuu.essentials.analytics.Analytics
-import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
@@ -47,19 +45,14 @@ data class LicenseModel(
 )
 
 @Provide fun licenseModel(
-  analytics: Analytics,
   licenseProjectRepository: LicenceProjectRepository,
   ctx: KeyUiContext<LicenseKey>
 ) = Model {
   LicenseModel(
     projects = produceResource { licenseProjectRepository.getLicenseProjects().getOrThrow() },
     openProject = action { project ->
-      if (project.url != null) {
-        analytics.log("license_opened") {
-          put("url", project.url)
-        }
+      if (project.url != null)
         ctx.navigator.push(UrlKey(project.url))
-      }
     }
   )
 }
