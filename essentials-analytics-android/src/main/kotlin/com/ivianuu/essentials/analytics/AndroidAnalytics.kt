@@ -8,48 +8,49 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.LoggingTag
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.launch
 
-@Provide class AndroidAnalytics(
-  private val buildInfo: BuildInfo,
-  private val firebaseAnalytics: () -> FirebaseAnalytics,
-  private val L: Logger,
-  private val scope: NamedCoroutineScope<AppScope>,
-  private val analyticsParamsContributors: List<AnalyticsParamsContributor>
-) : Analytics {
+@Provide class AndroidFirebaseAnalytics(private val firebaseAnalytics: FirebaseAnalytics) : Analytics {
   override fun log(name: String, params: Map<String, String>) {
-    scope.launch {
-      val finalParams = params
-        .toMutableMap()
-        .apply {
-          analyticsParamsContributors.forEach {
-            it(this, name)
-          }
-        }
-        .toList()
-        .sortedBy { it.first }
-        .toMap()
+    firebaseAnalytics.logEvent(name) {
+      params
+        .forEach { param(it.key, it.value) }
+    }
+  }
 
-      if (buildInfo.isDebug) {
-        log(tag = LoggingTag("Analytics")) { "$name: $finalParams" }
-      } else {
-        firebaseAnalytics().logEvent(name) {
-          finalParams
-            .forEach { param(it.key, it.value) }
-        }
-      }
+  override fun setUserProperty(name: String, value: String) {
+    firebaseAnalytics.setUserProperty(name, value)
+  }
+}
+
+@Provide class AndroidLoggingAnalytics(private val L: Logger) : Analytics {
+  private val properties = mutableMapOf<String, String>()
+
+  override fun log(name: String, params: Map<String, String>) {
+    log(tag = LoggingTag("Analytics")) { "$name: $params" }
+  }
+
+  override fun setUserProperty(name: String, value: String) {
+    synchronized(properties) {
+      properties[name] = value
+      properties.toMap()
+    }.let {
+      log(tag = LoggingTag("Analytics")) { "properties changed $it" }
     }
   }
 }
 
-object FirebaseModule {
+object AnalyticsModule {
+  @Provide inline fun androidAnalytics(
+    buildInfo: BuildInfo,
+    firebaseAnalytics: () -> AndroidFirebaseAnalytics,
+    loggingAnalytics: () -> AndroidLoggingAnalytics
+  ): Analytics = if (buildInfo.isDebug) loggingAnalytics() else firebaseAnalytics()
+
   @Provide val firebaseAnalytics: FirebaseAnalytics
     get() = Firebase.analytics
 }

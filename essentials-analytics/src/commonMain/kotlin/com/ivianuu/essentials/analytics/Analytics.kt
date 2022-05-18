@@ -8,17 +8,15 @@ import com.ivianuu.injekt.Provide
 
 interface Analytics {
   fun log(name: String, params: Map<String, String> = emptyMap())
+
+  fun setUserProperty(name: String, value: String)
 }
 
 @Provide object NoopAnalytics : Analytics {
   override fun log(name: String, params: Map<String, String>) {
   }
-}
 
-fun interface AnalyticsParamsContributor : suspend MutableMap<String, String>.(String) -> Unit {
-  companion object {
-    @Provide val defaultContributors: List<AnalyticsParamsContributor>
-      get() = emptyList()
+  override fun setUserProperty(name: String, value: String) {
   }
 }
 

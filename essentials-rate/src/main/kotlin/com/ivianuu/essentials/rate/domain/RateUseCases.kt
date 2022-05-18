@@ -7,6 +7,7 @@ package com.ivianuu.essentials.rate.domain
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.analytics.Analytics
+import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.rate.data.RatePrefs
@@ -28,7 +29,7 @@ fun interface RateOnPlayUseCase : suspend () -> Unit
   pref: DataStore<RatePrefs>
 ) = RateOnPlayUseCase {
   catch {
-    analytics.log("rate_on_play_clicked")
+    analytics.logRateResult("rate_on_play")
     navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
@@ -48,7 +49,7 @@ fun interface ShowNeverUseCase : suspend () -> Unit
   navigator: Navigator,
   pref: DataStore<RatePrefs>
 ) = ShowNeverUseCase {
-  analytics.log("rate_show_never_clicked")
+  analytics.logRateResult("show_never")
   pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
   navigator.pop(key)
 }
@@ -62,7 +63,7 @@ fun interface ShowLaterUseCase : suspend () -> Unit
   pref: DataStore<RatePrefs>,
   clock: Clock
 ) = ShowLaterUseCase {
-  analytics.log("rate_show_later_clicked")
+  analytics.logRateResult("show_later")
 
   val now = clock()
   pref.updateData {
@@ -73,4 +74,10 @@ fun interface ShowLaterUseCase : suspend () -> Unit
     )
   }
   navigator.pop(key)
+}
+
+private fun Analytics.logRateResult(result: String) {
+  log("rate_shown") {
+    put("result", result)
+  }
 }

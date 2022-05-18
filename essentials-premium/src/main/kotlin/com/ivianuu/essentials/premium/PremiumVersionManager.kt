@@ -8,7 +8,7 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.ShowAds
-import com.ivianuu.essentials.analytics.AnalyticsParamsContributor
+import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
@@ -56,6 +56,7 @@ interface PremiumVersionManager {
 }
 
 @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+  private val analytics: Analytics,
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
@@ -85,8 +86,10 @@ interface PremiumVersionManager {
   ) { a, b -> a.value || b }
     .onEach { isPremiumVersion ->
       scope.launch {
+        analytics.setUserProperty("is_premium", isPremiumVersion.toString())
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
           log { "handle premium version downgrade" }
+          analytics.log("premium_downgraded")
           downgradeHandlers().parForEach { it() }
         }
         pref.updateData {
@@ -146,10 +149,4 @@ fun interface PremiumDowngradeHandler : suspend () -> Unit {
     @Provide val defaultHandlers: List<PremiumDowngradeHandler>
       get() = emptyList()
   }
-}
-
-@Provide fun premiumAnalyticsParamsContributor(
-  premiumVersionManager: () -> PremiumVersionManager
-) = AnalyticsParamsContributor { params, _ ->
-  params["is_premium"] = premiumVersionManager().isPremiumVersion.first().toString()
 }
