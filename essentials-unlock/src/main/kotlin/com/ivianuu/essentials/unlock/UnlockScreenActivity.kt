@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.unlock
 
-import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -14,28 +13,20 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 /**
  * Requests a screen unlock
  */
 class UnlockScreenActivity : ComponentActivity() {
-  @SuppressLint("NewApi")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -66,45 +57,29 @@ class UnlockScreenActivity : ComponentActivity() {
     lifecycleScope.launchWhenResumed {
       delay(1000)
 
-      if (component.systemBuildInfo.sdk >= 26) {
-        component.keyguardManager.requestDismissKeyguard(
-          this@UnlockScreenActivity,
-          object :
-            KeyguardManager.KeyguardDismissCallback() {
-            override fun onDismissSucceeded() {
-              super.onDismissSucceeded()
-              log(logger = component.logger) { "dismiss succeeded" }
-              finishWithResult(true)
-            }
-
-            override fun onDismissCancelled() {
-              super.onDismissCancelled()
-              log(logger = component.logger) { "dismiss cancelled" }
-              finishWithResult(false)
-            }
-
-            override fun onDismissError() {
-              super.onDismissError()
-              log(logger = component.logger) { "dismiss error" }
-              finishWithResult(false)
-            }
+      component.keyguardManager.requestDismissKeyguard(
+        this@UnlockScreenActivity,
+        object :
+          KeyguardManager.KeyguardDismissCallback() {
+          override fun onDismissSucceeded() {
+            super.onDismissSucceeded()
+            log(logger = component.logger) { "dismiss succeeded" }
+            finishWithResult(true)
           }
-        )
-      } else {
-        component.broadcastsFactory(
-          Intent.ACTION_SCREEN_OFF,
-          Intent.ACTION_SCREEN_ON,
-          Intent.ACTION_USER_PRESENT
-        )
-          .map { it.action == Intent.ACTION_USER_PRESENT }
-          .onStart {
-            if (!component.keyguardManager.isKeyguardLocked)
-              emit(true)
+
+          override fun onDismissCancelled() {
+            super.onDismissCancelled()
+            log(logger = component.logger) { "dismiss cancelled" }
+            finishWithResult(false)
           }
-          .take(1)
-          .onEach { finishWithResult(it) }
-          .launchIn(lifecycleScope)
-      }
+
+          override fun onDismissError() {
+            super.onDismissError()
+            log(logger = component.logger) { "dismiss error" }
+            finishWithResult(false)
+          }
+        }
+      )
     }
 
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
@@ -131,8 +106,6 @@ class UnlockScreenActivity : ComponentActivity() {
 
 @Provide @Element<AppScope>
 data class UnlockScreenComponent(
-  val broadcastsFactory: BroadcastsFactory,
   val keyguardManager: @SystemService KeyguardManager,
-  val logger: Logger,
-  val systemBuildInfo: SystemBuildInfo
+  val logger: Logger
 )

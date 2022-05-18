@@ -4,14 +4,12 @@
 
 package com.ivianuu.essentials.util
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 
@@ -29,25 +27,21 @@ inline val NotificationCompat.Builder.context: Context
 
 @Provide class NotificationFactoryImpl(
   private val context: AppContext,
-  private val systemBuildInfo: SystemBuildInfo,
   private val notificationManager: @SystemService NotificationManager
 ) : NotificationFactory {
-  @SuppressLint("NewApi")
   override fun build(
     channelId: String,
     channelName: String,
     importance: Int,
     builder: NotificationCompat.Builder.() -> Unit
   ): Notification {
-    if (systemBuildInfo.sdk >= 26) {
-      notificationManager.createNotificationChannel(
-        NotificationChannel(
-          channelId,
-          channelName,
-          NotificationManager.IMPORTANCE_LOW
-        )
+    notificationManager.createNotificationChannel(
+      NotificationChannel(
+        channelId,
+        channelName,
+        NotificationManager.IMPORTANCE_LOW
       )
-    }
+    )
 
     return NotificationCompat.Builder(context, channelId)
       .apply(builder)

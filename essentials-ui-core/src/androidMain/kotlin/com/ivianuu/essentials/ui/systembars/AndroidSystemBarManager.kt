@@ -82,47 +82,38 @@ private class AndroidSystemBarManager : SystemBarManager {
       onDispose { }
     }
 
-    if (Build.VERSION.SDK_INT >= 26) {
-      val screenHeight = activity.window.decorView.height.toFloat()
-      val screenWidth = activity.window.decorView.width.toFloat()
-      val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
-        with(density) {
-          val bottomPadding = windowInsets.bottom.toPx()
-          val leftPadding = windowInsets.left.toPx()
-          val rightPadding = windowInsets.right.toPx()
-          when {
-            bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding * 0.5f)
-            leftPadding > 0f -> Offset(leftPadding * 0.5f, screenHeight)
-            rightPadding > 0f -> Offset(screenWidth - rightPadding * 0.5f, screenHeight)
-            else -> Offset(0f, 0f)
-          }
+    val screenHeight = activity.window.decorView.height.toFloat()
+    val screenWidth = activity.window.decorView.width.toFloat()
+    val navBarHitPoint = remember(density, windowInsets, screenWidth, screenHeight) {
+      with(density) {
+        val bottomPadding = windowInsets.bottom.toPx()
+        val leftPadding = windowInsets.left.toPx()
+        val rightPadding = windowInsets.right.toPx()
+        when {
+          bottomPadding > 0f -> Offset(bottomPadding, screenHeight - bottomPadding * 0.5f)
+          leftPadding > 0f -> Offset(leftPadding * 0.5f, screenHeight)
+          rightPadding > 0f -> Offset(screenWidth - rightPadding * 0.5f, screenHeight)
+          else -> Offset(0f, 0f)
         }
       }
+    }
 
-      val navBarStyle = styles
-        .sortedBy { it.elevation }
-        .lastOrNull { it.bounds.contains(navBarHitPoint) }
+    val navBarStyle = styles
+      .sortedBy { it.elevation }
+      .lastOrNull { it.bounds.contains(navBarHitPoint) }
 
-      DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.lightIcons) {
-        activity.window.navigationBarColor =
-          (
-              navBarStyle?.barColor ?: Color.Black
-                .copy(alpha = 0.2f)
-              ).toArgb()
-        activity.window.decorView.systemUiVisibility =
-          activity.window.decorView.systemUiVisibility.setFlag(
-            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
-            navBarStyle?.lightIcons ?: false
-          )
-        onDispose { }
-      }
-    } else {
-      DisposableEffect(activity) {
-        activity.window.navigationBarColor = Color.Black
-          .copy(alpha = 0.4f)
-          .toArgb()
-        onDispose { }
-      }
+    DisposableEffect(activity, navBarStyle?.barColor, navBarStyle?.lightIcons) {
+      activity.window.navigationBarColor =
+        (
+            navBarStyle?.barColor ?: Color.Black
+              .copy(alpha = 0.2f)
+            ).toArgb()
+      activity.window.decorView.systemUiVisibility =
+        activity.window.decorView.systemUiVisibility.setFlag(
+          View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR,
+          navBarStyle?.lightIcons ?: false
+        )
+      onDispose { }
     }
   }
 }
