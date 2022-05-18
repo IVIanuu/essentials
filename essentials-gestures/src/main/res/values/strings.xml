@@ -67,7 +67,7 @@
 
     <!-- Permissions -->
     <string name="es_action_accessibility_permission_title">Accessibility</string>
-    <string name="es_action_accessibility_permission_desc">Required to click buttons</string>
+    <string name="es_action_accessibility_permission_desc">Required to perform actions such as back, open notifications, or to switch the camera</string>
     <string name="es_action_notification_policy_permission_title">Notification policy</string>
     <string name="es_action_notification_policy_permission_desc">Required to change notification settings</string>
     <string name="es_action_root_permission_title">Root</string>

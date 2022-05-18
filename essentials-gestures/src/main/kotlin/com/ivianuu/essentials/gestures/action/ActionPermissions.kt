@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
   override val title: String
     get() = loadResource(R.string.es_action_accessibility_permission_title)
   override val desc: String
-    get() = loadResource(R.string.es_action_accessibility_permission_title)
+    get() = loadResource(R.string.es_action_accessibility_permission_desc)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_accessibility) }
 }
