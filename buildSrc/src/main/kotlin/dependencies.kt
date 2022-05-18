@@ -88,6 +88,7 @@ object Deps {
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
+    const val analytics = "com.google.firebase:firebase-analytics-ktx:21.0.0"
     const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.10"
     const val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
   }

@@ -3,6 +3,7 @@ include(
     ":essentials-accessibility",
     ":essentials-ads",
     ":essentials-analytics",
+    ":essentials-analytics-android",
     ":essentials-android",
     ":essentials-android-core",
     ":essentials-android-data",

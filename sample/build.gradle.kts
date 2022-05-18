@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+  implementation(project(":essentials-analytics-android"))
   implementation(project(":essentials-android"))
   implementation(project(":essentials-android-core"))
   implementation(project(":essentials-android-prefs"))

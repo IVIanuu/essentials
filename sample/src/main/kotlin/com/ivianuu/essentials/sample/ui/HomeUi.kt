@@ -19,6 +19,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.analytics.Analytics
+import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.colorpicker.ColorPickerPalette
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
@@ -38,6 +40,7 @@ import kotlinx.coroutines.launch
 @Provide class HomeKey : RootKey
 
 @Provide fun homeUi(
+  analytics: Analytics,
   isXposedRunning: IsXposedRunning,
   navigator: Navigator,
   itemsFactory: () -> List<HomeItem>,
@@ -67,6 +70,9 @@ import kotlinx.coroutines.launch
         item = item,
         color = color,
         onClick = {
+          analytics.log("home_item_clicked") {
+            put("item", item.title)
+          }
           scope.launch { navigator.push(item.keyFactory(color)) }
         }
       )
