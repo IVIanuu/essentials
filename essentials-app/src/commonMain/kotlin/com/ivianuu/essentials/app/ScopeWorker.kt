@@ -13,18 +13,14 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-fun interface ScopeWorker<N> : suspend () -> Unit {
-  companion object {
-    @Provide fun <N> defaultScopeWorkers() = emptyList<ScopeWorker<N>>()
-  }
-}
+fun interface ScopeWorker<N> : suspend () -> Unit, Service<ScopeWorker<N>>
 
 fun interface ScopeWorkerRunner<N> : () -> Unit
 
 @Provide fun <N> scopeWorkerRunner(
   scope: NamedCoroutineScope<N>,
   nameKey: TypeKey<N>,
-  workers: () -> List<ScopeWorker<N>>,
+  workers: () -> List<ServiceElement<ScopeWorker<N>>>,
   L: Logger
 ) = ScopeWorkerRunner<N> {
   log { "${nameKey.value} run scope workers" }
@@ -33,9 +29,10 @@ fun interface ScopeWorkerRunner<N> : () -> Unit
       block = {
         supervisorScope {
           workers()
+            .sortedWithLoadingOrder()
             .forEach { worker ->
               launch {
-                worker()
+                worker.instance()
               }
             }
         }

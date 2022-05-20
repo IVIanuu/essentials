@@ -19,15 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.app.LoadingOrder
+import com.ivianuu.essentials.app.Service
+import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.TypeKey
 
-fun interface ListDecorator {
+fun interface ListDecorator : Service<ListDecorator> {
   operator fun ListDecoratorScope.invoke()
 }
 
@@ -37,35 +36,14 @@ interface ListDecoratorScope : LazyListScope {
   fun content()
 }
 
-@Provide fun <@Spread T : ListDecorator> listDecoratorElement(
-  instance: T,
-  key: TypeKey<T>,
-  loadingOrder: LoadingOrder<T> = LoadingOrder()
-) = ListDecoratorElement(key, instance, loadingOrder as LoadingOrder<ListDecorator>)
-
-data class ListDecoratorElement(
-  val key: TypeKey<ListDecorator>,
-  val decorator: ListDecorator,
-  val loadingOrder: LoadingOrder<ListDecorator>
-) {
-  companion object {
-    @Provide val treeDescriptor = object : LoadingOrder.Descriptor<ListDecoratorElement> {
-      override fun key(item: ListDecoratorElement) = item.key
-      override fun loadingOrder(item: ListDecoratorElement) = item.loadingOrder
-    }
-
-    @Provide val defaultElements: Collection<ListDecoratorElement> get() = emptyList()
-  }
-}
-
-val LocalListDecorators = staticCompositionLocalOf<() -> List<ListDecoratorElement>> {
+val LocalListDecorators = staticCompositionLocalOf<() -> List<ServiceElement<ListDecorator>>> {
   { emptyList() }
 }
 
 fun interface ListDecoratorsProvider : UiDecorator
 
 @Provide fun listDecoratorsProvider(
-  decorators: () -> List<ListDecoratorElement>
+  decorators: () -> List<ServiceElement<ListDecorator>>
 ) = ListDecoratorsProvider { content ->
   CompositionLocalProvider(
     LocalListDecorators provides decorators,
@@ -127,14 +105,14 @@ fun interface ListDecoratorsProvider : UiDecorator
 
 private fun LazyListScope.decoratedContent(
   isVertical: Boolean,
-  decorators: List<ListDecoratorElement>,
+  decorators: List<ServiceElement<ListDecorator>>,
   content: LazyListScope.() -> Unit
 ) {
   decorators
     .reversed()
     .fold(content) { acc, element ->
       decorator@ {
-        with(element.decorator) {
+        with(element.instance) {
           val scope =  object : ListDecoratorScope, LazyListScope by this@decorator {
             override val isVertical: Boolean
               get() = isVertical
