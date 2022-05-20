@@ -15,8 +15,8 @@ suspend fun <T> race(
   vararg racers: suspend CoroutineScope.() -> T,
   context: CoroutineContext = EmptyCoroutineContext
 ): T = coroutineScope {
+  val allRacers = racers.map { async(context = context, block = it) }
   select {
-    val allRacers = racers.map { async(context = context, block = it) }
     allRacers.forEach { deferredRacer ->
       deferredRacer.onAwait { result ->
         allRacers.forEach { it.cancel() }
