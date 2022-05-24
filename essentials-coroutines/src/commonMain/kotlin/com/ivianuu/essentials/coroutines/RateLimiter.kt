@@ -31,7 +31,7 @@ internal class RateLimiterImpl(
   private val lock = Mutex()
   private val permitDuration = interval / eventsPerInterval
 
-  /* // todo @Volatile */ private var cursor = clock()
+  private var cursor = clock()
 
   override suspend fun acquire() {
     val now = clock()
