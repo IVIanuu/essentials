@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
@@ -75,7 +74,6 @@ data class WriteSecureSettingsModel(
 )
 
 @Provide fun writeSecureSettingsModel(
-  analytics: Analytics,
   buildInfo: BuildInfo,
   permissionStateFactory: PermissionStateFactory,
   shell: Shell,
@@ -91,13 +89,11 @@ data class WriteSecureSettingsModel(
       shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
           if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
-            analytics.logPermissionRequestResult(false, true)
             showToast(R.string.es_secure_settings_permission_granted)
             ctx.navigator.pop(ctx.key)
           }
         }
         .onFailure {
-          analytics.logPermissionRequestResult(false, false)
           it.printStackTrace()
           showToast(R.string.es_secure_settings_no_root)
         }

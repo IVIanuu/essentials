@@ -12,8 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.ivianuu.essentials.EsResult
-import com.ivianuu.essentials.analytics.Analytics
-import com.ivianuu.essentials.analytics.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.coroutines.MainContext
@@ -35,7 +33,6 @@ fun interface KeyIntentFactory<T> : (T) -> Intent
 fun interface IntentAppUiStarter : suspend () -> ComponentActivity
 
 @Provide fun intentKeyHandler(
-  analytics: Analytics,
   appUiStarter: IntentAppUiStarter,
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
@@ -45,12 +42,6 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
     ?: return@handler null
   val intent = intentFactory(key)
   return@handler {
-    if (intent.data?.toString()?.startsWith("https") == true) {
-      analytics.log("url_launched") {
-        put("url", intent.data.toString())
-      }
-    }
-
     val activity = appUiStarter()
     withContext(context) {
       suspendCancellableCoroutine<EsResult<ActivityResult, Throwable>> { continuation ->

@@ -11,7 +11,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.EsResult
-import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
@@ -61,7 +60,6 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
 }
 
 @Provide @Scoped<UiScope> class FullScreenAdImpl(
-  private val analytics: Analytics,
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val clock: Clock,
@@ -134,7 +132,6 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
       val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
           log { "show ad" }
-          analytics.log("full_screen_ad_shown")
           lock.withLock { deferredAd = null }
           withContext(mainContext) {
             ad.show(foregroundActivity.first()!!)

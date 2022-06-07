@@ -7,8 +7,6 @@ package com.ivianuu.essentials.gestures.action
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.EsResult
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.analytics.Analytics
-import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
@@ -28,7 +26,6 @@ import kotlinx.coroutines.withContext
 fun interface ExecuteActionUseCase : suspend (String) -> EsResult<Boolean, Throwable>
 
 @Provide fun executeActionUseCase(
-  analytics: Analytics,
   closeSystemDialogs: CloseSystemDialogsUseCase,
   coroutineContext: DefaultContext,
   permissionRequester: PermissionRequester,
@@ -69,10 +66,6 @@ fun interface ExecuteActionUseCase : suspend (String) -> EsResult<Boolean, Throw
         closeSystemDialogs()
 
       log { "fire $id" }
-
-      analytics.log("action_executed") {
-        put("id", id)
-      }
 
       // fire
       repository.getActionExecutor(id)()

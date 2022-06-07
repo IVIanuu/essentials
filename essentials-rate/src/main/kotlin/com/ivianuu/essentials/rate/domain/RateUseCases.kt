@@ -6,8 +6,6 @@ package com.ivianuu.essentials.rate.domain
 
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.analytics.Analytics
-import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.rate.data.RatePrefs
@@ -23,13 +21,11 @@ import kotlinx.coroutines.flow.first
 fun interface RateOnPlayUseCase : suspend () -> Unit
 
 @Provide fun rateOnPlayUseCase(
-  analytics: Analytics,
   buildInfo: BuildInfo,
   navigator: Navigator,
   pref: DataStore<RatePrefs>
 ) = RateOnPlayUseCase {
   catch {
-    analytics.logRateResult("rate_on_play")
     navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
     pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
   }.onFailure { it.printStackTrace() }
@@ -44,12 +40,10 @@ fun interface DisplayShowNeverUseCase : suspend () -> Boolean
 fun interface ShowNeverUseCase : suspend () -> Unit
 
 @Provide fun showNeverUseCase(
-  analytics: Analytics,
   key: Key<*>,
   navigator: Navigator,
   pref: DataStore<RatePrefs>
 ) = ShowNeverUseCase {
-  analytics.logRateResult("show_never")
   pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
   navigator.pop(key)
 }
@@ -57,14 +51,11 @@ fun interface ShowNeverUseCase : suspend () -> Unit
 fun interface ShowLaterUseCase : suspend () -> Unit
 
 @Provide fun showLaterUseCase(
-  analytics: Analytics,
   key: Key<*>,
   navigator: Navigator,
   pref: DataStore<RatePrefs>,
   clock: Clock
 ) = ShowLaterUseCase {
-  analytics.logRateResult("show_later")
-
   val now = clock()
   pref.updateData {
     copy(
@@ -74,10 +65,4 @@ fun interface ShowLaterUseCase : suspend () -> Unit
     )
   }
   navigator.pop(key)
-}
-
-private fun Analytics.logRateResult(result: String) {
-  log("rate_shown") {
-    put("result", result)
-  }
 }

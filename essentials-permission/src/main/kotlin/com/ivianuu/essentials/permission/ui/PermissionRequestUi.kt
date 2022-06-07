@@ -12,8 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.analytics.Analytics
-import com.ivianuu.essentials.analytics.log
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateFactory
@@ -71,7 +69,6 @@ data class UiPermission<P : Permission>(
 )
 
 @Provide fun permissionRequestModel(
-  analytics: Analytics,
   appUiStarter: AppUiStarter,
   permissions: Map<TypeKey<Permission>, Permission>,
   permissionStateFactory: PermissionStateFactory,
@@ -97,10 +94,6 @@ data class UiPermission<P : Permission>(
       val state = permissionStateFactory(listOf(permission.permissionKey))
       if (!state.first()) {
         requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
-        analytics.log("permission_requested") {
-          put("key", permission.permissionKey.value)
-          put("granted", state.first().toString())
-        }
         appUiStarter()
       }
     }

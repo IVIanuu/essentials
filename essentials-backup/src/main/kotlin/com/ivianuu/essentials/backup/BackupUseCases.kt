@@ -11,7 +11,6 @@ import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.EsResult
-import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.logging.Logger
@@ -32,7 +31,6 @@ import java.util.zip.ZipOutputStream
 fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
-  analytics: Analytics,
   backupDir: BackupDir,
   backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
@@ -42,8 +40,6 @@ fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
 ) = CreateBackupUseCase {
-  analytics.log("backup_created")
-
   catch {
     withContext(scope.coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
@@ -81,7 +77,6 @@ fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
-  analytics: Analytics,
   contentResolver: ContentResolver,
   context: IOContext,
   dataDir: DataDir,
@@ -116,8 +111,6 @@ fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
         }
 
       zipInputStream.close()
-
-      analytics.log("backup_restored")
 
       processRestarter()
     }

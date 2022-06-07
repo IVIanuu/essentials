@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,10 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.analytics.Analytics
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
-import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.PermissionStateFactory
@@ -188,7 +185,6 @@ typealias AdbEnabled = @AdbEnabledTag Int
 )
 
 @Provide fun writeSecureSettingsPcInstructionsModel(
-  analytics: Analytics,
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
@@ -212,23 +208,6 @@ typealias AdbEnabled = @AdbEnabledTag Int
       }
     }
     else -> true
-  }
-
-  LaunchedEffect(true) {
-    onCancel {
-      if (permissionStateFactory(listOf(ctx.key.permissionKey)).first()) {
-        analytics.logPermissionRequestResult(true, true)
-      } else {
-        analytics.logPermissionRequestResult(
-          true,
-          false,
-          mapOf(
-            "current_step" to currentStep.toString(),
-            "last_completed_step" to completedStep.toString()
-          )
-        )
-      }
-    }
   }
 
   WriteSecureSettingsPcInstructionsModel(
