@@ -13,7 +13,6 @@ import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.ToastContext
@@ -48,8 +47,7 @@ data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: ()
 @Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
   restoreBackup: RestoreBackupUseCase,
-  T: ToastContext,
-  ctx: KeyUiContext<BackupAndRestoreKey>
+  T: ToastContext
 ) = Model {
   BackupAndRestoreModel(
     backupData = action {
