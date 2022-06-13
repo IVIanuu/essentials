@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.android.prefs
 
+import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -19,6 +20,7 @@ import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
@@ -42,10 +44,18 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
         private val serializer by lazy(serializerFactory)
 
         override suspend fun readFrom(input: InputStream): T =
-          json.decodeFromStream(serializer, input)
+          try {
+            json.decodeFromStream(serializer, input)
+          } catch (e: SerializationException) {
+            throw CorruptionException("Could not read ${String(input.readBytes())}", e)
+          }
 
         override suspend fun writeTo(t: T, output: OutputStream) {
-          json.encodeToStream(serializer, t, output)
+          try {
+            json.encodeToStream(serializer, t, output)
+          } catch (e: SerializationException) {
+            throw CorruptionException("Could not write $t", e)
+          }
         }
       },
       corruptionHandler = ReplaceFileCorruptionHandler {
