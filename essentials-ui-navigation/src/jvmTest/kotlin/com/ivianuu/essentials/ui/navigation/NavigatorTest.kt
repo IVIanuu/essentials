@@ -4,6 +4,16 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import com.ivianuu.essentials.logging.NoopLogger
+import com.ivianuu.essentials.test.runCancellingBlockingTest
+import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.injekt.Provide
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.junit.Test
+
 class NavigatorTest {
   object KeyA : Key<Unit>
   object KeyB : Key<Unit>
@@ -14,7 +24,7 @@ class NavigatorTest {
   @Test fun testNavigator() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      S = this
+      scope = this
     )
 
     val collector = navigator._backStack
@@ -49,7 +59,7 @@ class NavigatorTest {
   @Test fun testReturnsResultOnPop() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      S = this
+      scope = this
     )
     val result = async { navigator.push(KeyWithResult) }
     navigator.pop(KeyWithResult, "b")
@@ -59,7 +69,7 @@ class NavigatorTest {
   @Test fun testReturnsNullResultIfNothingSent() = runCancellingBlockingTest {
     val navigator = NavigatorImpl(
       keyHandlers = emptyList(),
-      S = this
+      scope = this
     )
     val result = async { navigator.push(KeyWithResult) }
     navigator.popTop()
