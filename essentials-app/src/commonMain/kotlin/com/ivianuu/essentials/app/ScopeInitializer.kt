@@ -10,7 +10,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.common.TypeKey
 
-fun interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
+interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
 
 class ScopeInitializerRunner<N> @Provide @Eager<N> constructor(
   nameKey: TypeKey<N>,

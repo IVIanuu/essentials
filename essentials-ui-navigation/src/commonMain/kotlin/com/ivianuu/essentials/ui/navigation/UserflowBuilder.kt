@@ -13,7 +13,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 
-fun interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
+interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
 
 @Provide fun userflowBuilderWorker(
   elements: List<ServiceElement<UserflowBuilder>>,
