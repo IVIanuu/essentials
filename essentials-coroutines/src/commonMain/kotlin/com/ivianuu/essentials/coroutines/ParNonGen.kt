@@ -52,6 +52,6 @@ suspend fun <T> Iterable<T>.parForEach(
 
 inline class Concurrency(val value: Int)
 
-expect object ConcurrencyInjectables {
+expect object ConcurrencyModule {
   @Provide val defaultConcurrency: Concurrency
 }
