@@ -13,9 +13,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberImagePainter
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
@@ -24,6 +23,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ui.LocalActionIconSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.util.ToastContext
@@ -86,7 +86,7 @@ fun interface ActionIntentSender : (Intent, Boolean, Bundle?) -> Unit
   }
 }
 
-fun interface CloseSystemDialogsUseCase : suspend () -> EsResult<Unit, Throwable>
+fun interface CloseSystemDialogsUseCase : suspend () -> Result<Unit, Throwable>
 
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide

@@ -10,7 +10,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
@@ -21,6 +20,7 @@ import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.ToastContext

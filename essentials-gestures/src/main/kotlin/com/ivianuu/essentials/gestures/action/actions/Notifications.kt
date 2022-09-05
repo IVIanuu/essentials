@@ -9,7 +9,6 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
@@ -20,6 +19,7 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow

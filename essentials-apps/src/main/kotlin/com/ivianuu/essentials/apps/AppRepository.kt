@@ -6,9 +6,9 @@ package com.ivianuu.essentials.apps
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.github.michaelbull.result.fold
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide

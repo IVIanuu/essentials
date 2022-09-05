@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.ads
 
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.android.prefs.DataStoreModule
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScope

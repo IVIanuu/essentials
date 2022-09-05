@@ -20,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.state.action

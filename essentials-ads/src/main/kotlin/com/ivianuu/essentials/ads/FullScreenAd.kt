@@ -10,7 +10,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
@@ -43,9 +43,9 @@ interface FullScreenAd {
 
   fun preload()
 
-  suspend fun load(): EsResult<Boolean, Throwable>
+  suspend fun load(): Result<Boolean, Throwable>
 
-  suspend fun loadAndShow(): EsResult<Boolean, Throwable>
+  suspend fun loadAndShow(): Result<Boolean, Throwable>
 
   suspend fun showIfLoaded(): Boolean
 }

@@ -6,10 +6,10 @@
 
 package com.ivianuu.essentials.resource
 
-import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.onFailure
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.fold
+import com.ivianuu.essentials.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
@@ -64,7 +64,7 @@ fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Uni
     }.onFailure { emit(Error(it)) }
   }
 
-fun <V> EsResult<V, Throwable>.toResource(): Resource<V> = fold(
+fun <V> Result<V, Throwable>.toResource(): Resource<V> = fold(
   success = { Success(it) },
   failure = { Error(it) }
 )

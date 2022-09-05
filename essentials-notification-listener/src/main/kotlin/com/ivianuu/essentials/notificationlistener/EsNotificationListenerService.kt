@@ -6,12 +6,12 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide

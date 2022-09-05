@@ -6,7 +6,7 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +19,11 @@ interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>
   val events: Flow<NotificationEvent>
 
-  suspend fun openNotification(notification: Notification): EsResult<Unit, Throwable>
+  suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
 
-  suspend fun dismissNotification(key: String): EsResult<Unit, Throwable>
+  suspend fun dismissNotification(key: String): Result<Unit, Throwable>
 
-  suspend fun dismissAllNotifications(): EsResult<Unit, Throwable>
+  suspend fun dismissAllNotifications(): Result<Unit, Throwable>
 }
 
 @Provide class NotificationServiceImpl(

@@ -6,7 +6,6 @@ package com.ivianuu.essentials.hidenavbar
 
 import android.content.Context
 import android.graphics.Rect
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
@@ -16,6 +15,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Inject

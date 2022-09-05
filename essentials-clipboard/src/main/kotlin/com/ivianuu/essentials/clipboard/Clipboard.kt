@@ -6,8 +6,8 @@ package com.ivianuu.essentials.clipboard
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
+import com.ivianuu.essentials.Err
+import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast

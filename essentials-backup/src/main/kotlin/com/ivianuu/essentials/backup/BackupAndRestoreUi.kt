@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.github.michaelbull.result.onFailure
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem

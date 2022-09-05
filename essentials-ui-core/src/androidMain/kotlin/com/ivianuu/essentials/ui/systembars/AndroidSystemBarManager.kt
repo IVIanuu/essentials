@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.view.WindowCompat
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.setFlag
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.injekt.Provide

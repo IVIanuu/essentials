@@ -9,9 +9,9 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
+import com.ivianuu.essentials.err
+import com.ivianuu.essentials.ok
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.coroutines.MainContext
@@ -21,7 +21,7 @@ import java.util.*
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
-interface IntentKey : Key<EsResult<ActivityResult, ActivityNotFoundException>>
+interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
 @Provide fun <@Spread T : KeyIntentFactory<K>, K : Any> intentKeyIntentFactory(
   intentFactory: T,
@@ -36,7 +36,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   appUiStarter: IntentAppUiStarter,
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
-) = KeyHandler<EsResult<ActivityResult, Throwable>> handler@ { key ->
+) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key ->
   if (key !is IntentKey) return@handler null
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler null
@@ -44,17 +44,17 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
   return@handler {
     val activity = appUiStarter()
     withContext(context) {
-      suspendCancellableCoroutine<EsResult<ActivityResult, Throwable>> { continuation ->
+      suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(
           UUID.randomUUID().toString(),
           ActivityResultContracts.StartActivityForResult()
         ) {
-          if (continuation.isActive) continuation.resume(Ok(it))
+          if (continuation.isActive) continuation.resume(it.ok())
         }
         try {
           launcher.launch(intent)
         } catch (e: ActivityNotFoundException) {
-          continuation.resume(Err(e))
+          continuation.resume(e.err())
         }
         continuation.invokeOnCancellation { launcher.unregister() }
       }

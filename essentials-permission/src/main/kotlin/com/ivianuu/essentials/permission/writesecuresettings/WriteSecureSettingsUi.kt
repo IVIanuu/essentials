@@ -8,9 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.github.michaelbull.result.onFailure
-import com.github.michaelbull.result.onSuccess
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.onSuccess
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell

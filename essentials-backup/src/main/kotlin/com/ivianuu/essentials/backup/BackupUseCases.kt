@@ -9,7 +9,7 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
@@ -28,7 +28,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
+fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 @Provide fun createBackupUseCase(
   backupDir: BackupDir,
@@ -74,7 +74,7 @@ fun interface CreateBackupUseCase : suspend () -> EsResult<Unit, Throwable>
   }
 }
 
-fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
+fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,

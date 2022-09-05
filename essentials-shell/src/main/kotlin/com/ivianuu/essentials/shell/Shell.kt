@@ -4,9 +4,9 @@
 
 package com.ivianuu.essentials.shell
 
-import com.github.michaelbull.result.getOrElse
-import com.ivianuu.essentials.EsResult
+import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrElse
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
 import eu.chainfire.libsuperuser.Shell.SU
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 interface Shell {
   suspend fun isAvailable(): Boolean
 
-  suspend fun run(vararg commands: String): EsResult<List<String>, Throwable>
+  suspend fun run(vararg commands: String): Result<List<String>, Throwable>
 }
 
 @Provide class ShellImpl(private val context: IOContext) : Shell {

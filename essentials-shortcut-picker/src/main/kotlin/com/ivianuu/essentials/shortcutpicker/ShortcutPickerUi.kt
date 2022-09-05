@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bindResource

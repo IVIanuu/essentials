@@ -8,7 +8,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
@@ -18,6 +17,7 @@ import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
