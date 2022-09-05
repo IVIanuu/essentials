@@ -14,8 +14,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.insets.InsetsPadding
@@ -47,7 +47,7 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val key = catch { LocalKeyUiElements.current }.getOrElse { null }
+    val key = catch { LocalKeyUiElements.current }.getOrNull()
       ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
@@ -56,7 +56,7 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val key = catch { LocalKeyUiElements.current }.getOrElse { null }
+    val key = catch { LocalKeyUiElements.current }.getOrNull()
       ?.invoke<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator after content $key")

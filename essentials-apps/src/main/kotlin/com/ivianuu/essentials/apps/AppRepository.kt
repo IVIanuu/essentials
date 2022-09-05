@@ -7,9 +7,9 @@ package com.ivianuu.essentials.apps
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
@@ -68,7 +68,7 @@ interface AppRepository {
       withContext(context) {
         val applicationInfo = catch {
           packageManager.getApplicationInfo(packageName, 0)
-        }.getOrElse { null } ?: return@withContext null
+        }.getOrNull() ?: return@withContext null
         AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
       }
     }

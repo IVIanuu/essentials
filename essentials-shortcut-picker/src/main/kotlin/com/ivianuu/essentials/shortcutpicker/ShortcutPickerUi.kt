@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.onFailure
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bindResource
@@ -71,7 +71,7 @@ data class ShortcutPickerModel(
     pickShortcut = action { shortcut ->
       catch {
         val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())
-          ?.getOrElse { null }
+          ?.getOrNull()
           ?.data ?: return@catch
         val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
         ctx.navigator.pop(ctx.key, finalShortcut)

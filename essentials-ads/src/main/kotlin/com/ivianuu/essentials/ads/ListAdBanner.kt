@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.ads
 
 import androidx.compose.runtime.collectAsState
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
@@ -32,7 +32,7 @@ fun interface ListAdBanner : ListDecorator
     item(null) {
       val key = catch {
         LocalKeyUiElements.current<ListAdBannerComponent>().key::class
-      }.getOrElse { null }
+      }.getOrNull()
       if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
         showAdsFlow.collectAsState().value.value)
         AdBanner(config)

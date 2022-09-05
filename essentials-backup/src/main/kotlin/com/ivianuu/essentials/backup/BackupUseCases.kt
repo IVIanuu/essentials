@@ -7,12 +7,12 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.EsResult
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
@@ -94,7 +94,7 @@ fun interface RestoreBackupUseCase : suspend () -> EsResult<Unit, Throwable>
           },
           ""
         ).toIntentKey()
-      )?.getOrElse { null }?.data?.data ?: return@withContext
+      )?.getOrNull()?.data?.data ?: return@withContext
 
       val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 

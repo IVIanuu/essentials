@@ -9,10 +9,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
@@ -58,7 +58,7 @@ interface ShortcutRepository {
                   name = resolveInfo.loadLabel(packageManager).toString(),
                   icon = resolveInfo.loadIcon(packageManager)
                 )
-              }.getOrElse { null }
+              }.getOrNull()
             }
             .filterNotNull()
             .sortedBy { it.name }

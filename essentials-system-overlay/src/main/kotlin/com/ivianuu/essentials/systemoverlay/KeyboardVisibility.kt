@@ -5,12 +5,12 @@
 package com.ivianuu.essentials.systemoverlay
 
 import android.view.inputmethod.InputMethodManager
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
@@ -64,5 +64,5 @@ import kotlinx.coroutines.flow.transformLatest
   catch {
     val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
     method.invoke(inputMethodManager) as Int
-  }.getOrElse { null }
+  }.getOrNull()
 }

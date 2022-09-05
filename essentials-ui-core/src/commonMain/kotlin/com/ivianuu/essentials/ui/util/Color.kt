@@ -7,8 +7,8 @@ package com.ivianuu.essentials.ui.util
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
-import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 
 val Color.isDark: Boolean get() = !isLight
 
@@ -44,8 +44,8 @@ fun Color.blend(other: Color): Color {
 expect fun Color.toHexString(includeAlpha: Boolean = true): String
 
 fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
-  catch { toHexString() }.getOrElse { null }
+  catch { toHexString() }.getOrNull()
 
 expect fun String.toColor(): Color
 
-fun String.toColorOrNull(): Color? = catch { toColor() }.getOrElse { null }
+fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()

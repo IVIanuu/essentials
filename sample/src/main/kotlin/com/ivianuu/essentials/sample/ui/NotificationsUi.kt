@@ -34,11 +34,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.github.michaelbull.result.getOrElse
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.recover
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
 import com.ivianuu.essentials.permission.PermissionRequester
@@ -212,7 +212,7 @@ private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNo
         .loadDrawable(context)
     }
       .map { it.toBitmap().toImageBitmap() }
-      .getOrElse { null }
+      .getOrNull()
   }
 
   Image(
