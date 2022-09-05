@@ -13,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -36,7 +37,7 @@ class UnlockScreenActivity : ComponentActivity() {
     }
 
     @Provide val component = application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<UnlockScreenComponent>()
 
     log(logger = component.logger) { "unlock screen for $requestId" }

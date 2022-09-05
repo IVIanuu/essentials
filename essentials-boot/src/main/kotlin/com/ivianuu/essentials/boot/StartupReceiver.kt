@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -18,7 +19,7 @@ class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     val component = context.applicationContext
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<StartupReceiverComponent>()
 
     log(logger = component.logger) { "on system boot" }

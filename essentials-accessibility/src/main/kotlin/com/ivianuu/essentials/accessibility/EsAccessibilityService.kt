@@ -11,6 +11,7 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.addFlag
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 class EsAccessibilityService : AccessibilityService() {
   private val serviceComponent by lazy {
     application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<EsAccessibilityServiceComponent>()
   }
 

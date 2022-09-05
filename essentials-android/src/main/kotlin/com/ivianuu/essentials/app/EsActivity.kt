@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
 import com.ivianuu.essentials.ui.LocalUiElements
@@ -40,7 +41,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
     }
 
     val uiComponent = application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<EsActivityComponent>()
       .uiComponent(uiScope, this)
 

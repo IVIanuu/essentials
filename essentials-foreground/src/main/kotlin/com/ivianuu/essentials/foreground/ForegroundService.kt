@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 class ForegroundService : Service() {
   private val component by lazy {
     application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<ForegroundServiceComponent>()
   }
 

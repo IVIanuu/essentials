@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 class EsBroadcastReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     val component = context.applicationContext
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<EsBroadcastReceiverComponent>()
     component.scope.launch {
       component.handlers.parForEach { it(intent) }

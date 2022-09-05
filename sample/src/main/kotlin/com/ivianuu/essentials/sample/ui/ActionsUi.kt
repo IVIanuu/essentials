@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
+import com.ivianuu.essentials.safeAs
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -43,7 +44,7 @@ object ActionsKey : Key<Unit>
       onClick = {
         scope.launch {
           val actionId = navigator.push(ActionPickerKey())
-            ?.let { it as? ActionPickerKey.Result.Action }
+            .safeAs<ActionPickerKey.Result.Action>()
             ?.actionId ?: return@launch
 
           val action = actionRepository.getAction(actionId)

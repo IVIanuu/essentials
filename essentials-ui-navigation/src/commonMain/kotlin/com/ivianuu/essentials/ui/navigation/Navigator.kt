@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.logging.Logger
@@ -94,7 +95,7 @@ suspend fun Navigator.clear() {
           @Suppress("UNCHECKED_CAST")
           key as Key<Any?>
 
-          val keyHandle = keyHandlers.firstNotNullOfOrNull { (it as KeyHandler<Any?>)(key) }
+          val keyHandle = keyHandlers.firstNotNullOfOrNull { it.cast<KeyHandler<Any?>>()(key) }
 
           if (keyHandle == null) {
             add(key)

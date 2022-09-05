@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -38,7 +39,7 @@ class ScreenOnActivity : ComponentActivity() {
     }
 
     @Provide val component = application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<ScreenOnActivityComponent>()
 
     log(logger = component.logger) { "turn screen on for $requestId" }

@@ -9,6 +9,7 @@ import android.service.notification.StatusBarNotification
 import com.github.michaelbull.result.getOrElse
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.logging.Logger
@@ -30,7 +31,7 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   private val component by lazy {
     application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<EsNotificationListenerServiceComponent>()
   }
 

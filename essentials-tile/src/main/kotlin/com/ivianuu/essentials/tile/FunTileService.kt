@@ -10,6 +10,7 @@ import android.service.quicksettings.TileService
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.state.state
@@ -38,7 +39,7 @@ abstract class AbstractFunTileService<T : Any>(
 ) : TileService() {
   private val serviceComponent by lazy {
     application
-      .let { it as AppElementsOwner }
+      .cast<AppElementsOwner>()
       .appElements<FunTileServiceComponent>()
   }
 
