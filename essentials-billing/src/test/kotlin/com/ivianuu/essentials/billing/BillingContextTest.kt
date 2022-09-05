@@ -34,7 +34,7 @@ class BillingContextTest {
             )
         }
       },
-      context = dispatcher,
+      dispatcher = dispatcher,
       logger = NoopLogger,
       refreshes = MutableSharedFlow(),
       scope = this
@@ -61,7 +61,7 @@ class BillingContextTest {
           )
         }
       },
-      context = dispatcher,
+      dispatcher = dispatcher,
       logger = NoopLogger,
       refreshes = MutableSharedFlow(),
       scope = this

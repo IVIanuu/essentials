@@ -3,6 +3,7 @@
  */
 plugins {
   kotlin("multiplatform")
+  kotlin("plugin.serialization")
   id("com.ivianuu.essentials")
 }
 
@@ -12,10 +13,10 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api(project(":essentials-coroutines"))
+        api(project(":essentials-time"))
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
-        api(project(":essentials-optics"))
-        api(project(":essentials-tuples"))
       }
     }
     named("jvmTest") {
@@ -27,3 +28,4 @@ kotlin {
 }
 
 plugins.apply("com.vanniktech.maven.publish")
+

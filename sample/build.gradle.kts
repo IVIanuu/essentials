@@ -45,6 +45,7 @@ dependencies {
   implementation(project(":essentials-backup"))
   implementation(project(":essentials-billing"))
   implementation(project(":essentials-boot"))
+  implementation(project(":essentials-cache"))
   implementation(project(":essentials-color-picker"))
   implementation(project(":essentials-donation"))
   implementation(project(":essentials-foreground"))

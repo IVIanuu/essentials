@@ -120,8 +120,6 @@ object Deps {
     const val gradlePluginApi = "org.jetbrains.kotlin:kotlin-gradle-plugin-api:$version"
   }
 
-  const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.14"
-
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
     const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"

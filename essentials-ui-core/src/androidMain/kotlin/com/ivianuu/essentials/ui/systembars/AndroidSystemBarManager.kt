@@ -44,7 +44,7 @@ private class AndroidSystemBarManager : SystemBarManager {
   }
 
   @Composable fun Apply() {
-    val activity = LocalContext.current as ComponentActivity
+    val activity = LocalContext.current.cast<ComponentActivity>()
     DisposableEffect(activity) {
       WindowCompat.setDecorFitsSystemWindows(activity.window, false)
       if (Build.VERSION.SDK_INT >= 29) {
