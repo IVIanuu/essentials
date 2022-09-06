@@ -7,6 +7,6 @@ package kotlinx.coroutines
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 
-object EsCoroutinesInjectables {
+object EsCoroutinesModule {
   @Provide inline fun coroutinesScope(scope: NamedCoroutineScope<*>): CoroutineScope = scope
 }
