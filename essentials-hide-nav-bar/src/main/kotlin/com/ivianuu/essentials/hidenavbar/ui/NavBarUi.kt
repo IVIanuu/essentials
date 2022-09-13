@@ -55,8 +55,8 @@ object NavBarKey : Key<Unit>
 
 data class NavBarModel(
   val hideNavBar: Boolean,
-  val navBarRotationMode: NavBarRotationMode,
   val updateHideNavBar: (Boolean) -> Unit,
+  val navBarRotationMode: NavBarRotationMode,
   val updateNavBarRotationMode: () -> Unit
 ) {
   val canChangeNavBarRotationMode: Boolean
@@ -72,7 +72,6 @@ data class NavBarModel(
   val prefs = pref.data.bind(NavBarPrefs())
   NavBarModel(
     hideNavBar = prefs.hideNavBar,
-    navBarRotationMode = prefs.navBarRotationMode,
     updateHideNavBar = action { value ->
       if (!value) {
         pref.updateData { copy(hideNavBar = false) }
@@ -80,6 +79,7 @@ data class NavBarModel(
         pref.updateData { copy(hideNavBar = value) }
       }
     },
+    navBarRotationMode = prefs.navBarRotationMode,
     updateNavBarRotationMode = action {
       ctx.navigator.push(
         SingleChoiceListKey(

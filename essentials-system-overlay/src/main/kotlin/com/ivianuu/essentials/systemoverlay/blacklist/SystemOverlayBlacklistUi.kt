@@ -73,12 +73,12 @@ val systemOverlayBlacklistUi = ModelKeyUi<SystemOverlayBlacklistKey, SystemOverl
 data class SystemOverlayBlacklistModel(
   val systemOverlayName: String,
   val disableOnKeyboard: Boolean,
-  val disableOnLockScreen: Boolean,
-  val disableOnSecureScreens: Boolean,
-  val openAppBlacklistSettings: () -> Unit,
   val updateDisableOnKeyboard: (Boolean) -> Unit,
+  val disableOnLockScreen: Boolean,
   val updateDisableOnLockScreen: (Boolean) -> Unit,
-  val updateDisableOnSecureScreens: (Boolean) -> Unit
+  val disableOnSecureScreens: Boolean,
+  val updateDisableOnSecureScreens: (Boolean) -> Unit,
+  val openAppBlacklistSettings: () -> Unit
 )
 
 @Provide fun systemOverlayBlacklistModel(
@@ -89,19 +89,19 @@ data class SystemOverlayBlacklistModel(
   SystemOverlayBlacklistModel(
     systemOverlayName = ctx.key.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,
-    disableOnLockScreen = prefs.disableOnLockScreen,
-    disableOnSecureScreens = prefs.disableOnSecureScreens,
-    openAppBlacklistSettings = action {
-      ctx.navigator.push(SystemOverlayAppBlacklistKey)
-    },
     updateDisableOnKeyboard = action { value ->
       pref.updateData { copy(disableOnKeyboard = value) }
     },
+    disableOnLockScreen = prefs.disableOnLockScreen,
     updateDisableOnLockScreen = action { value ->
       pref.updateData { copy(disableOnLockScreen = value) }
     },
+    disableOnSecureScreens = prefs.disableOnSecureScreens,
     updateDisableOnSecureScreens = action { value ->
       pref.updateData { copy(disableOnSecureScreens = value) }
+    },
+    openAppBlacklistSettings = action {
+      ctx.navigator.push(SystemOverlayAppBlacklistKey)
     }
   )
 }
