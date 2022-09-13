@@ -7,3 +7,5 @@ package com.ivianuu.essentials
 import com.ivianuu.injekt.Tag
 
 @Tag annotation class Initial
+
+@Tag annotation class InitialOrDefault

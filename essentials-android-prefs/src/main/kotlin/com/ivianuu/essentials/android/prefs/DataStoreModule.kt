@@ -10,6 +10,7 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
+import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
@@ -73,4 +74,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
         androidDataStore.updateData { transform(it) }
     }
   }
+
+  @Provide
+  fun initialOrDefault(initial: () -> @Initial T = default): @InitialOrDefault T = initial()
 }
