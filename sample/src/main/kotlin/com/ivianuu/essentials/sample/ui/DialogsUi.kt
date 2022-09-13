@@ -21,12 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerDialog
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
@@ -45,7 +45,6 @@ import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 @Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
 
@@ -248,12 +247,11 @@ object DialogsKey : Key<Unit>
   text: String,
   @Inject navigator: Navigator
 ) {
-  val scope = rememberCoroutineScope()
   TextButton(
     enabled = enabled,
-    onClick = {
+    onClick = action {
       onClick()
-      scope.launch { navigator.popTop() }
+      navigator.popTop()
     }
   ) {
     Text(text)
@@ -269,19 +267,16 @@ object DialogsKey : Key<Unit>
   Spacer(Modifier.height(8.dp))
 
   val onBackPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current!!
-  val scope = rememberCoroutineScope()
   Button(
-    onClick = {
-      scope.launch {
-        navigator.push(
-          DialogLauncherKey(dismissible) {
-            dialog {
-              if (dismissible)
-                onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
-            }
+    onClick = action {
+      navigator.push(
+        DialogLauncherKey(dismissible) {
+          dialog {
+            if (dismissible)
+              onBackPressedDispatcherOwner.onBackPressedDispatcher.onBackPressed()
           }
-        )
-      }
+        }
+      )
     }
   ) { Text(text) }
 }

@@ -8,15 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 data class ListKey<T : Any>(
   val items: List<Item<T>>,
@@ -33,15 +32,12 @@ data class ListKey<T : Any>(
     Dialog(
       title = key.title?.let { { Text(it) } },
       content = {
-        val scope = rememberCoroutineScope()
         LazyColumn {
           items(key.items) { item ->
             ListItem(
-              modifier = Modifier.clickable {
-                scope.launch {
-                  navigator.pop(key, item.value)
-                }
-              },
+              modifier = Modifier.clickable(onClick = action {
+                navigator.pop(key, item.value)
+              }),
               title = { Text(item.title) },
             )
           }

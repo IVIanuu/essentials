@@ -5,11 +5,10 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.optics.Lens
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
-import kotlinx.coroutines.launch
 
 interface Value<T> {
   val current: T
@@ -39,10 +38,7 @@ interface Value<T> {
 
 @Composable fun <S, T> DataStore<S>.value(lens: Lens<S, T>, initial: T): Value<T> {
   val current = data.bind(null)?.let { lens.get(it) } ?: initial
-  val scope = rememberCoroutineScope()
-  return Value(current) { newValue ->
-    scope.launch {
-      updateData { lens.set(this, newValue) }
-    }
-  }
+  return Value(current = current, updater = action { newValue ->
+    updateData { lens.set(this, newValue) }
+  })
 }

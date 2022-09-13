@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
@@ -22,7 +22,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
-import kotlinx.coroutines.launch
 
 object PopupMenu {
   data class Item(
@@ -34,15 +33,14 @@ object PopupMenu {
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
     val component = LocalKeyUiElements.current<PopupMenuComponent>()
-    val scope = rememberCoroutineScope()
 
     LazyColumn {
       // todo use items(items) { } once fixed
       items.forEach { item ->
         item {
           PopupMenuItem(
-            onSelected = {
-              scope.launch { component.navigator.pop(component.key) }
+            onSelected = action {
+              component.navigator.pop(component.key)
               item.onSelected()
             },
             content = item.content

@@ -7,7 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.FullScreenAd
@@ -17,13 +16,13 @@ import com.ivianuu.essentials.ads.ScreenAdBannerConfig
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 @Provide val adsHomeItem = HomeItem("Ads") { AdsKey }
 
@@ -40,8 +39,7 @@ object AdsKey : Key<Unit>
     }
 
     item {
-      val scope = rememberCoroutineScope()
-      Button(onClick = { scope.launch { fullScreenAd.loadAndShow() } }) {
+      Button(onClick = action { fullScreenAd.loadAndShow() }) {
         Text("Show full screen ad")
       }
     }

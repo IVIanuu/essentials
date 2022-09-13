@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Rect
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
@@ -41,7 +41,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 import kotlin.math.max
 
 data class PopupKey(
@@ -63,12 +62,10 @@ data class PopupKey(
 
     var dismissed by remember { refOf(false) }
 
-    val scope = rememberCoroutineScope()
-
-    val dismiss: (Boolean) -> Unit = { cancelled ->
+    val dismiss: (Boolean) -> Unit = action { cancelled ->
       if (!dismissed) {
         dismissed = true
-        scope.launch { navigator.pop(key) }
+        navigator.pop(key)
         if (cancelled) key.onCancel?.invoke()
       }
     }

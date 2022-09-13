@@ -8,8 +8,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -17,7 +17,6 @@ import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 data class MultiChoiceListKey<T : Any>(
   val items: List<Item<T>>,
@@ -47,18 +46,13 @@ data class MultiChoiceListKey<T : Any>(
       },
       title = key.title?.let { { Text(it) } },
       buttons = {
-        val scope = rememberCoroutineScope()
-        TextButton(onClick = {
-          scope.launch { navigator.pop(key, null) }
-        }) {
+        TextButton(onClick = action { navigator.pop(key, null) }) {
           Text(strings.cancel)
         }
 
-        TextButton(
-          onClick = {
-            scope.launch { navigator.pop(key, selectedItems) }
-          }
-        ) { Text(strings.ok) }
+        TextButton(onClick = action { navigator.pop(key, selectedItems) }) {
+          Text(strings.ok)
+        }
       }
     )
   }

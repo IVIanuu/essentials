@@ -14,12 +14,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.colorpicker.ColorPickerPalette
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
@@ -33,7 +33,6 @@ import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.essentials.xposed.IsXposedRunning
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 @Provide class HomeKey : RootKey
 
@@ -62,13 +61,10 @@ import kotlinx.coroutines.launch
           .front
       }
 
-      val scope = rememberCoroutineScope()
       HomeItem(
         item = item,
         color = color,
-        onClick = {
-          scope.launch { navigator.push(item.keyFactory(color)) }
-        }
+        onClick = action { navigator.push(item.keyFactory(color)) }
       )
     }
 

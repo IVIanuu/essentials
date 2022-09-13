@@ -16,10 +16,10 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.getValue
 import com.ivianuu.essentials.ui.common.refOf
 import com.ivianuu.essentials.ui.common.setValue
@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 
@@ -71,12 +70,7 @@ data class WebKey(val title: String, val url: String) : Key<Unit>
             IconButton(onClick = { webViewRef!!.reload() }) {
               Icon(R.drawable.es_ic_refresh)
             }
-            val scope = rememberCoroutineScope()
-            IconButton(onClick = {
-              scope.launch {
-                navigator.push(UrlKey(webViewRef!!.url!!))
-              }
-            }) {
+            IconButton(onClick = action { navigator.push(UrlKey(webViewRef!!.url!!)) }) {
               Icon(R.drawable.es_ic_open_in_browser)
             }
           }
