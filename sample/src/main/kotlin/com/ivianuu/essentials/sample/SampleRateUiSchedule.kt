@@ -8,7 +8,8 @@ import com.ivianuu.essentials.rate.domain.RateUiSchedule
 import com.ivianuu.essentials.time.minutes
 import com.ivianuu.injekt.Provide
 
-@Provide val sampleRateUiSchedule = RateUiSchedule(
-  minInstallDuration = 1.minutes,
-  minLaunchTimes = 5
-)
+@Provide val sampleRateUiSchedule: RateUiSchedule
+  get() = RateUiSchedule(
+    minInstallDuration = 1.minutes,
+    minLaunchTimes = 5
+  )

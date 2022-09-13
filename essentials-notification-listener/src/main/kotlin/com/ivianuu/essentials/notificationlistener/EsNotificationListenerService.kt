@@ -24,10 +24,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class EsNotificationListenerService : NotificationListenerService() {
   private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
-  val notifications: Flow<List<StatusBarNotification>> get() = _notifications
+  internal val notifications: Flow<List<StatusBarNotification>> get() = _notifications
 
   private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
-  val events: Flow<NotificationEvent> get() = _events
+  internal val events: Flow<NotificationEvent> get() = _events
 
   private val component by lazy {
     application
