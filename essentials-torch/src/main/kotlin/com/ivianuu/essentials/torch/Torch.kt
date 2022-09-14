@@ -63,11 +63,11 @@ interface Torch {
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
-      torchJob = scope.launch { handleTorchState(value) }
+      torchJob = scope.launch { doSetTorchState(value) }
     }
   }
 
-  private suspend fun handleTorchState(value: Boolean) {
+  private suspend fun doSetTorchState(value: Boolean) {
     log { "handle torch state $value" }
     if (!value) {
       _torchEnabled.value = false
