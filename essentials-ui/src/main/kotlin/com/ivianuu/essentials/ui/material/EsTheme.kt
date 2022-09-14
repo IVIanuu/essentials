@@ -10,10 +10,9 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,16 +21,37 @@ import com.ivianuu.essentials.ui.animation.transition.FadeUpwardsStackTransition
 import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
 import com.ivianuu.essentials.ui.animation.transition.StackTransition
 
+data class LightAndDarkColors(val lightColors: Colors, val darkColors: Colors) {
+  constructor(
+    primary: Color,
+    secondary: Color
+  ) : this(
+    colors(
+      isLight = true,
+      primary = primary,
+      primaryVariant = primary,
+      secondary = secondary,
+      secondaryVariant = secondary
+    ),
+    colors(
+      isLight = false,
+      primary = primary,
+      primaryVariant = primary,
+      secondary = secondary,
+      secondaryVariant = secondary
+    ),
+  )
+}
+
 @Composable fun EsTheme(
-  lightColors: Colors = lightColors(),
-  darkColors: Colors = darkColors(),
+  colors: LightAndDarkColors = LightAndDarkColors(lightColors = colors(isLight = true), darkColors = colors(isLight = false)),
   typography: Typography = EsTypography,
   shapes: Shapes = EsShapes,
   transition: StackTransition = FadeUpwardsStackTransition(),
   content: @Composable () -> Unit
 ) {
   MaterialTheme(
-    colors = if (isSystemInDarkTheme()) darkColors else lightColors,
+    colors = if (isSystemInDarkTheme()) colors.darkColors else colors.lightColors,
     typography = typography,
     shapes = shapes
   ) {
