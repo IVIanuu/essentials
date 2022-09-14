@@ -25,9 +25,6 @@ interface ForegroundManager {
   suspend fun startForeground(id: Int, notification: StateFlow<Notification>): Nothing
 }
 
-suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
-  startForeground(id, MutableStateFlow(notification))
-
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   private val context: AppContext,
   private val L: Logger
@@ -79,3 +76,7 @@ suspend fun ForegroundManager.startForeground(id: Int, notification: Notificatio
     val seen = CompletableDeferred<Unit>()
   }
 }
+
+suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
+  startForeground(id, MutableStateFlow(notification))
+

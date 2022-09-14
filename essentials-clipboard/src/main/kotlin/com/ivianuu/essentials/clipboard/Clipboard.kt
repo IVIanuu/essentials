@@ -33,6 +33,9 @@ interface Clipboard {
         val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
         trySend(current)
       }
+      listener.onPrimaryClipChanged()
+
+      clipboardManager.addPrimaryClipChangedListener(listener)
       awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
     }
 

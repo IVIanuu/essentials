@@ -9,4 +9,3 @@ import com.ivianuu.injekt.Provide
 object JsonModule {
   @Provide val json = Json { ignoreUnknownKeys = true }
 }
-
