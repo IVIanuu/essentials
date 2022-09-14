@@ -180,7 +180,7 @@ class CacheTest {
   }
 
   @Test fun testMaxSize() = runCancellingBlockingTest {
-    val cache = Cache<Int, String>(maxSize = 1)
+    val cache = Cache<Int, String>(config = CacheConfig(maxSize = 1))
     cache.put(0, "a")
     cache.get(0) shouldBe "a"
     cache.put(1, "b")
@@ -190,7 +190,7 @@ class CacheTest {
 
   @Test fun testExpireAfterWrite() = runCancellingBlockingTest {
     var now = 1.seconds
-    val cache = Cache<Int, String>(expireAfterWriteDuration = 1.seconds, clock = { now })
+    val cache = Cache<Int, String>(config = CacheConfig(expireAfterWriteDuration = 1.seconds), clock = { now })
     cache.put(0, "a")
     cache.get(0) shouldBe "a"
     now += 500.milliseconds
@@ -201,14 +201,14 @@ class CacheTest {
 
   @Test fun testExpireAfterAccessWrite() = runCancellingBlockingTest {
     var now = 1.seconds
-    val cache = Cache<Int, String>(expireAfterAccessDuration = 1.seconds, clock = { now })
+    val cache = Cache<Int, String>(config = CacheConfig(expireAfterAccessDuration = 1.seconds), clock = { now })
     now += 1.seconds
     cache.get(0) shouldBe null
   }
 
   @Test fun testExpireAfterAccessRead() = runCancellingBlockingTest {
     var now = 2.seconds
-    val cache = Cache<Int, String>(expireAfterAccessDuration = 1.seconds, clock = { now })
+    val cache = Cache<Int, String>(config = CacheConfig(expireAfterAccessDuration = 1.seconds), clock = { now })
     cache.put(0, "a")
 
     repeat(3) {
