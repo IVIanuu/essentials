@@ -40,31 +40,25 @@ suspend fun <K : Any> Cache<K, *>.contains(key: K): Boolean = get(key) != null
 suspend fun Cache<*, *>.size(): Int = asMap().size
 
 fun <K : Any, V : Any> Cache(
-  config: CacheConfig = CacheConfig.DEFAULT,
+  expireAfterWriteDuration: Duration = Duration.INFINITE,
+  expireAfterAccessDuration: Duration = Duration.INFINITE,
+  maxSize: Long = Long.MAX_VALUE,
   @Inject clock: Clock
-): Cache<K, V> = CacheImpl(config, clock)
-
-data class CacheConfig(
-  val expireAfterWriteDuration: Duration = Duration.INFINITE,
-  val expireAfterAccessDuration: Duration = Duration.INFINITE,
-  val maxSize: Long = Long.MAX_VALUE,
-) {
-  companion object {
-    val DEFAULT = CacheConfig()
-  }
-}
+): Cache<K, V> = CacheImpl(expireAfterWriteDuration, expireAfterAccessDuration, maxSize, clock)
 
 internal class CacheImpl<K : Any, V : Any>(
-  private val config: CacheConfig,
+  private val expireAfterWriteDuration: Duration,
+  private val expireAfterAccessDuration: Duration,
+  private val maxSize: Long = Long.MAX_VALUE,
   @Inject val clock: Clock
 ) : Cache<K, V> {
   private val cacheLock = Mutex()
 
   private val entries = hashMapOf<K, CacheEntry>()
 
-  private val writeQueue = if (config.expireAfterWriteDuration.isFinite())
+  private val writeQueue = if (expireAfterWriteDuration.isFinite())
     mutableSetOf<CacheEntry>() else null
-  private val accessQueue = if (config.expireAfterAccessDuration.isFinite() || config.maxSize < Long.MAX_VALUE)
+  private val accessQueue = if (expireAfterAccessDuration.isFinite() || maxSize < Long.MAX_VALUE)
     mutableSetOf<CacheEntry>() else null
 
   override suspend fun get(key: K): V? {
@@ -142,8 +136,8 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   private suspend fun removeExpiredEntries(now: Duration) {
-    writeQueue?.expireEntries { now - it.writeTime >= config.expireAfterWriteDuration }
-    accessQueue?.expireEntries { now - it.accessTime >= config.expireAfterAccessDuration }
+    writeQueue?.expireEntries { now - it.writeTime >= expireAfterWriteDuration }
+    accessQueue?.expireEntries { now - it.accessTime >= expireAfterAccessDuration }
   }
 
   private suspend inline fun MutableSet<CacheEntry>.expireEntries(predicate: (CacheEntry) -> Boolean) {
@@ -159,9 +153,9 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   private suspend fun trimEntries() {
-    if (config.maxSize == Long.MAX_VALUE) return
+    if (maxSize == Long.MAX_VALUE) return
 
-    while (entries.size > config.maxSize) {
+    while (entries.size > maxSize) {
       val entryToEvict = accessQueue!!.firstOrNull() ?: continue
       entries.remove(entryToEvict.key)?.onRemove()
       writeQueue?.remove(entryToEvict)
