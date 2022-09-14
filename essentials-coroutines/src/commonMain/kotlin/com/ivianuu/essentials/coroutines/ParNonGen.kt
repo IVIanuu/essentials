@@ -15,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 suspend fun <T> par(
-  vararg blocks: suspend () -> T,
+  blocks: Iterable<suspend () -> T>,
   context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency
 ): List<T> = coroutineScope {
@@ -29,18 +29,17 @@ suspend fun <T> par(
   }.awaitAll()
 }
 
-suspend fun <T, R> Iterable<T>.parMap(
+suspend fun <T> par(
+  vararg blocks: suspend () -> T,
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject concurrency: Concurrency
+): List<T> = par(blocks.asIterable(), context)
+
+  suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
-): List<R> = coroutineScope {
-  val semaphore = Semaphore(concurrency.value)
-  map { item ->
-    async(context) {
-      semaphore.withPermit { transform(item) }
-    }
-  }.awaitAll()
-}
+): List<R> = par(map { t -> suspend { transform(t) } }, context)
 
 suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
