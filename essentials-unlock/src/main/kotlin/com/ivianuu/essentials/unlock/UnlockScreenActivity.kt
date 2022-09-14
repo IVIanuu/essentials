@@ -94,6 +94,7 @@ class UnlockScreenActivity : ComponentActivity() {
 
   internal companion object {
     private const val KEY_REQUEST_ID = "request_id"
+
     fun unlock(context: Context, requestId: String) {
       context.startActivity(
         Intent(context, UnlockScreenActivity::class.java).apply {
