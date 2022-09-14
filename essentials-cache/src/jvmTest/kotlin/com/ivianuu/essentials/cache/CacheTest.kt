@@ -173,8 +173,10 @@ class CacheTest {
   @Test fun testAsMap() = runCancellingBlockingTest {
     val cache = Cache<Int, String>()
     cache.put(0, "a")
+    cache.put(1, "b")
     val map = cache.asMap()
     map[0] shouldBe "a"
+    map[1] shouldBe "b"
   }
 
   @Test fun testMaxSize() = runCancellingBlockingTest {
