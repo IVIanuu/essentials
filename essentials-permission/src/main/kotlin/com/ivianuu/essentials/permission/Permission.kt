@@ -7,6 +7,7 @@ package com.ivianuu.essentials.permission
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
@@ -20,7 +21,6 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -88,10 +88,9 @@ fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<Permi
 ) = PermissionStateFactory { permissions ->
   if (permissions.isEmpty()) flowOf(true)
   else combine(
-    *permissions
+    permissions
       .map { permissionStates()[it]!! }
-      .toTypedArray()
-  ) { states -> states.all { it } }
+  ).map { states -> states.all { it } }
 }
 
 internal val permissionRefreshes = EventFlow<Unit>()

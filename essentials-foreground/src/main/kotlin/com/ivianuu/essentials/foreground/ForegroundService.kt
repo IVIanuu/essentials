@@ -11,6 +11,7 @@ import android.os.IBinder
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -20,9 +21,9 @@ import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ForegroundService : Service() {
@@ -51,7 +52,7 @@ class ForegroundService : Service() {
               else combine(
                 states
                   .map { it.notification }
-              ) { states }
+              ).map { states }
             }
             .collect { applyState(it) }
         },
