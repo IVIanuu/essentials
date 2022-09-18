@@ -5,7 +5,7 @@ plugins {
   kotlin("multiplatform")
   kotlin("plugin.serialization")
   id("com.ivianuu.essentials")
-  id("org.jetbrains.compose")
+  id("com.ivianuu.essentials.compose")
 }
 
 kotlin {
@@ -18,7 +18,7 @@ kotlin {
         api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))
         api(project(":essentials-state"))
-        api(compose.runtime)
+        api(Deps.Compose.runtime)
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)

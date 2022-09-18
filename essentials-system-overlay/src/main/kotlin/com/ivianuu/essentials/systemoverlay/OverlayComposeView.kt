@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
 
@@ -38,7 +37,6 @@ class OverlayComposeView(
   init {
     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
     ViewTreeLifecycleOwner.set(this, this)
-    ViewTreeSavedStateRegistryOwner.set(this, this)
     savedStateRegistryController.performRestore(null)
     ViewTreeViewModelStoreOwner.set(this, this)
     _lifecycle.currentState = Lifecycle.State.CREATED
@@ -62,8 +60,8 @@ class OverlayComposeView(
 
   override fun getViewModelStore(): ViewModelStore = viewModelStore
 
-  override fun getSavedStateRegistry(): SavedStateRegistry =
-    savedStateRegistryController.savedStateRegistry
+  override val savedStateRegistry: SavedStateRegistry
+    get() = savedStateRegistryController.savedStateRegistry
 
   fun dispose() {
     _lifecycle.currentState = Lifecycle.State.DESTROYED

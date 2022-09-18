@@ -9,13 +9,15 @@ plugins {
   id("com.github.gmazzo.buildconfig") version "3.0.2"
 }
 
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/java-8.gradle")
-
 gradlePlugin {
   plugins {
     create("essentialsPlugin") {
       id = "com.ivianuu.essentials"
       implementationClass = "com.ivianuu.essentials.gradle.EssentialsPlugin"
+    }
+    create("composePlugin") {
+      id = "com.ivianuu.essentials.compose"
+      implementationClass = "com.ivianuu.essentials.gradle.ComposePlugin"
     }
   }
 }
@@ -24,6 +26,9 @@ buildConfig {
   className("BuildConfig")
   packageName("com.ivianuu.essentials.gradle")
   buildConfigField("String", "VERSION", "\"${property("VERSION_NAME")}\"")
+  buildConfigField("String", "COMPOSE_GROUP_ID", "\"androidx.compose.compiler\"")
+  buildConfigField("String", "COMPOSE_COMPILER_ARTIFACT_ID", "\"compiler\"")
+  buildConfigField("String", "COMPOSE_COMPILER_VERSION", "\"${Deps.Compose.compilerVersion}\"")
 }
 
 dependencies {
@@ -34,7 +39,6 @@ dependencies {
   implementation(Deps.Kotlin.gradlePluginApi)
 
   api(Deps.AtomicFu.gradlePlugin)
-  api(Deps.Compose.gradlePlugin)
   api(Deps.androidGradlePlugin)
   api(Deps.Firebase.crashlyticsGradlePlugin)
   api(Deps.googlePlayServicesGradlePlugin)

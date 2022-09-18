@@ -7,7 +7,7 @@ import com.ivianuu.essentials.gradle.withLicenses
 plugins {
   id("com.android.application")
   id("com.ivianuu.essentials")
-  id("org.jetbrains.compose")
+  id("com.ivianuu.essentials.compose")
   kotlin("android")
   kotlin("plugin.serialization")
 }

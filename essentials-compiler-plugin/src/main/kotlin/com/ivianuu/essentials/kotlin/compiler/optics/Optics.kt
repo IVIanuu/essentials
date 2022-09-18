@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.extensions.SyntheticResolveExtension
 import org.jetbrains.kotlin.storage.LockBasedStorageManager
 import org.jetbrains.kotlin.types.KotlinTypeFactory
+import org.jetbrains.kotlin.types.TypeAttributes
 import org.jetbrains.kotlin.types.TypeSubstitutor
 import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.asSimpleType
@@ -40,8 +41,8 @@ class OpticsResolveExtension : SyntheticResolveExtension {
       SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT
     else null
 
-  override fun getSyntheticFunctionNames(thisDescriptor: ClassDescriptor): List<Name> {
-    return if (thisDescriptor.isCompanionObject &&
+  override fun getSyntheticFunctionNames(thisDescriptor: ClassDescriptor): List<Name> =
+    if (thisDescriptor.isCompanionObject &&
       thisDescriptor.containingDeclaration.cast<ClassDescriptor>()
         .annotations.hasAnnotation(OpticsAnnotation)
     )
@@ -51,7 +52,6 @@ class OpticsResolveExtension : SyntheticResolveExtension {
         ?.map { it.name }
         ?: emptyList()
     else emptyList()
-  }
 
   override fun generateSyntheticMethods(
     thisDescriptor: ClassDescriptor,
@@ -82,10 +82,11 @@ class OpticsResolveExtension : SyntheticResolveExtension {
       initialize(
         null,
         thisDescriptor.thisAsReceiverParameter,
+        emptyList(),
         typeParameters,
         emptyList(),
         KotlinTypeFactory.simpleNotNullType(
-          Annotations.EMPTY,
+          TypeAttributes.Empty,
           thisDescriptor.module.findClassAcrossModuleDependencies(
             ClassId.topLevel(Lens)
           )!!,

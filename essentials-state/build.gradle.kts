@@ -4,7 +4,7 @@
 
 plugins {
   id("com.ivianuu.essentials")
-  id("org.jetbrains.compose")
+  id("com.ivianuu.essentials.compose")
   kotlin("multiplatform")
 }
 

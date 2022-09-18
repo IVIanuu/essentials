@@ -6,7 +6,7 @@
 
 object Build {
   const val applicationId = "com.ivianuu.essentials.sample"
-  const val compileSdk = 31
+  const val compileSdk = 32
   const val minSdk = 27
   const val targetSdk = 30
   const val versionCode = 1
@@ -15,17 +15,17 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.20.0"
+    private const val version = "0.25.1"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.1"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.3.0"
 
   object AndroidX {
     object Activity {
-      private const val version = "1.4.0"
+      private const val version = "1.5.1"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -35,22 +35,22 @@ object Deps {
     const val dataStore = "androidx.datastore:datastore:1.0.0"
 
     object Lifecycle {
-      private const val version = "2.3.1"
+      private const val version = "2.5.1"
       const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
     }
 
     object Test {
-      const val core = "androidx.test:core:1.3.0"
+      const val core = "androidx.test:core-ktx:1.4.0"
       const val junit = "androidx.test.ext:junit:1.1.1"
       const val rules = "androidx.test:rules:1.2.0"
       const val runner = "androidx.test:runner:1.2.0"
     }
 
-    const val work = "androidx.work:work-runtime-ktx:2.7.0"
+    const val work = "androidx.work:work-runtime-ktx:2.7.1"
   }
 
   object AtomicFu {
-    private const val version = "0.16.3"
+    private const val version = "0.18.3"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -64,16 +64,16 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.1.1"
-    const val compiler = "org.jetbrains.compose.compiler:compiler:$version"
-    const val gradlePlugin = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin:$version"
+    const val version = "1.2.0-beta01"
+    const val compilerVersion = "1.3.0"
+    const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
   }
 
   object Coroutines {
-    private const val version = "1.6.0"
+    private const val version = "1.6.4"
     const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
     const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
@@ -84,7 +84,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1060"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1118"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -96,7 +96,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev683"
+    private const val version = "0.0.1-dev685"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
@@ -108,12 +108,12 @@ object Deps {
 
   const val junit = "junit:junit:4.13"
 
-  const val kotestAssertions = "io.kotest:kotest-assertions-core:4.4.3"
+  const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
-  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.4.7"
+  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.4.9"
 
   object Kotlin {
-    const val version = "1.6.10"
+    const val version = "1.7.10"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -122,14 +122,14 @@ object Deps {
 
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
-    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
   }
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
   const val licenseGradlePlugin = "com.jaredsburrows:gradle-license-plugin:0.8.90"
 
-  const val mockk = "io.mockk:mockk:1.11.0"
+  const val mockk = "io.mockk:mockk:1.12.8"
 
   const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
 
@@ -143,7 +143,7 @@ object Deps {
 
   const val superUser = "eu.chainfire:libsuperuser:1.0.0.201704021214"
 
-  const val turbine = "app.cash.turbine:turbine:0.2.1"
+  const val turbine = "app.cash.turbine:turbine:0.10.0"
 
   const val xposed = "de.robv.android.xposed:api:82"
 }
