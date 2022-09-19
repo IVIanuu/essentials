@@ -9,7 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.AppRepository
-import com.ivianuu.essentials.apps.ui.AppIcon
+import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.apppicker.AppPickerKey
 import com.ivianuu.essentials.gestures.R

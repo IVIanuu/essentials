@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.coil
 
-import coil.CoilAccessor
 import coil.ImageLoader
 import coil.decode.Decoder
 import coil.fetch.Fetcher
 import coil.intercept.Interceptor
+import coil.key.Keyer
 import coil.map.Mapper
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -19,36 +19,36 @@ import kotlin.reflect.KClass
 
 @Provide fun imageLoader(
   context: AppContext,
-  decoders: List<Decoder>,
-  fetchers: List<FetcherPair<*>>,
+  decoderFactories: List<Decoder.Factory>,
+  fetcherFactories: List<FetcherPair<*>>,
+  keyers: List<KeyerPair<*>>,
   interceptors: List<Interceptor>,
   mappers: List<MapperPair<*>>,
 ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
-  .componentRegistry {
-    decoders.forEach { add(it) }
+  .components {
+    decoderFactories.forEach { add(it) }
     interceptors.forEach { add(it) }
-    fetchers
-      .forEach { binding ->
-        CoilAccessor.add(this, binding.type.java, binding.fetcher)
-      }
+    keyers.forEach { add(it.keyer as Keyer<Any>, it.type.java as Class<Any>) }
+    fetcherFactories
+      .forEach { add(it.factory as Fetcher.Factory<Any>, it.type.java as Class<Any>) }
     mappers
-      .forEach { binding ->
-        CoilAccessor.add(this, binding.type.java, binding.mapper)
-      }
+      .forEach { add(it.mapper as Mapper<Any, Any>, it.type.java as Class<Any>) }
   }
   .build()
 
-@Provide fun <@Spread F : Fetcher<T>, T : Any> fetcherPair(
+@Provide fun defaultDecoderFactories() = emptyList<Decoder.Factory>()
+
+@Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherFactoryPair(
   instance: F,
   typeClass: KClass<T>
 ): FetcherPair<*> = FetcherPair(instance, typeClass)
 
+@Provide fun defaultFetcherFactories() = emptyList<FetcherPair<*>>()
+
 data class FetcherPair<T : Any>(
-  val fetcher: Fetcher<T>,
+  val factory: Fetcher.Factory<T>,
   val type: KClass<T>
 )
-
-@Provide fun defaultFetchers() = emptyList<FetcherPair<*>>()
 
 @Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperPair(
   instance: M,
@@ -62,6 +62,16 @@ data class MapperPair<T : Any>(
 
 @Provide fun defaultMappers() = emptyList<MapperPair<*>>()
 
-@Provide fun defaultDecoders() = emptyList<Decoder>()
-
 @Provide fun defaultInterceptors() = emptyList<Interceptor>()
+
+@Provide fun <@Spread K : Keyer<T>, T : Any> keyerPair(
+  instance: K,
+  typeClass: KClass<T>
+): KeyerPair<*> = KeyerPair(instance, typeClass)
+
+data class KeyerPair<T : Any>(
+  val keyer: Keyer<T>,
+  val type: KClass<T>
+)
+
+@Provide fun defaultKeyes() = emptyList<KeyerPair<*>>()
