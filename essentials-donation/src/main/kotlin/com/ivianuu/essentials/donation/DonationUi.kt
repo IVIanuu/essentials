@@ -46,6 +46,20 @@ object DonationKey : PopupKey<Unit>
 
 data class Donation(val sku: Sku, val iconRes: Int)
 
+@JvmInline value class Donations(val value: List<Donation>) {
+  companion object {
+    @Provide val default: Donations
+      get() = Donations(
+        listOf(
+          Donation(Sku("donation_crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),
+          Donation(Sku("donation_coffee_2", Sku.Type.IN_APP), R.drawable.es_ic_free_breakfast),
+          Donation(Sku("donation_burger_menu", Sku.Type.IN_APP), R.drawable.es_ic_lunch_dining),
+          Donation(Sku("donation_movie", Sku.Type.IN_APP), R.drawable.es_ic_popcorn)
+        )
+      )
+  }
+}
+
 @Provide fun donationUi(
   commonStrings: CommonStrings
 ) = ModelKeyUi<DonationKey, DonationModel> {
@@ -112,7 +126,7 @@ data class UiDonation(
 
 @Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
-  donations: List<Donation>,
+  donations: Donations,
   getSkuDetails: GetSkuDetailsUseCase,
   purchase: PurchaseUseCase,
   T: ToastContext,
@@ -121,6 +135,7 @@ data class UiDonation(
   DonationModel(
     skus = produceResource {
       donations
+        .value
         .parMap { donation ->
           val details = getSkuDetails(donation.sku)!!
           UiDonation(
