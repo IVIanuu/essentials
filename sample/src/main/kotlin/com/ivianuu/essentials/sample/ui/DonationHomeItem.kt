@@ -9,29 +9,20 @@ import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
-import com.ivianuu.essentials.sample.R
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 
 @Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
 
-@Provide val sampleDonations = listOf(
-  Donation(Sku("crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),
-  Donation(Sku("coffee", Sku.Type.IN_APP), R.drawable.es_ic_free_breakfast),
-  Donation(Sku("burger_menu", Sku.Type.IN_APP), R.drawable.es_ic_lunch_dining),
-  Donation(Sku("movie", Sku.Type.IN_APP), R.drawable.es_ic_popcorn)
-)
-
 @Provide val sampleGetSkuDetailsUseCase = GetSkuDetailsUseCase {
   delay(2000)
   when (it.skuString) {
-    "crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
-    "coffee" -> SkuDetails(sku = it, title = "A cup of coffee", price = "2.49€")
-    "burger_menu" -> SkuDetails(sku = it, title = "Burger menu", price = "4.99€")
-    "movie" -> SkuDetails(sku = it, title = "Movie with popcorn", price = "9.99€")
+    "donation_crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
+    "donation_coffee_2" -> SkuDetails(sku = it, title = "A cup of coffee", price = "2.49€")
+    "donation_burger_menu" -> SkuDetails(sku = it, title = "Burger menu", price = "4.99€")
+    "donation_movie" -> SkuDetails(sku = it, title = "Movie with popcorn", price = "9.99€")
     else -> throw AssertionError()
   }
 }
