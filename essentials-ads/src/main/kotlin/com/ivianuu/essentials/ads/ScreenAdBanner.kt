@@ -12,6 +12,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.ads.AdSize
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
@@ -24,7 +28,20 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
-@Tag annotation class ScreenAdBannerConfigTag
+@Tag annotation class ScreenAdBannerConfigTag {
+  companion object {
+    @Provide fun default(
+      buildInfo: BuildInfo,
+      RP: ResourceProvider
+    ) = ScreenAdBannerConfig(
+      id = loadResource(
+        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
+        else R.string.es_screen_ad_banner_ad_unit_id
+      ),
+      size = AdSize.LARGE_BANNER
+    )
+  }
+}
 typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 fun interface ScreenAdBanner : KeyUiDecorator

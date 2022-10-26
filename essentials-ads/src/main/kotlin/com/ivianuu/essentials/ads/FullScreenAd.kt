@@ -10,10 +10,13 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
+import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.Clock
@@ -50,7 +53,19 @@ interface FullScreenAd {
   suspend fun showIfLoaded(): Boolean
 }
 
-@JvmInline value class FullScreenAdId(val value: String)
+@JvmInline value class FullScreenAdId(val value: String) {
+  companion object {
+    @Provide fun default(
+      buildInfo: BuildInfo,
+      RP: ResourceProvider
+    ) = FullScreenAdId(
+      loadResource(
+        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_interstitial
+        else R.string.es_full_screen_ad_unit_id
+      )
+    )
+  }
+}
 
 data class FullScreenAdConfig(val adsInterval: Duration) {
   companion object {
