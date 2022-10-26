@@ -13,9 +13,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable @Optics data class NavBarPrefs(
-  @SerialName("hide_nav_bar") val hideNavBar: Boolean = false,
-  @SerialName("nav_bar_rotation_mode") val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
-  @SerialName("was_nav_bar_hidden") val wasNavBarHidden: Boolean = false
+  val hideNavBar: Boolean = false,
+  val navBarRotationMode: NavBarRotationMode = NavBarRotationMode.NOUGAT,
+  val wasNavBarHidden: Boolean = false
 ) {
   companion object {
     @Provide fun initial(systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(

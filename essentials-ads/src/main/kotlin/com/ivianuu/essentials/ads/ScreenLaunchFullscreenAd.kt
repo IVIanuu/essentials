@@ -30,9 +30,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-@Serializable data class ScreenLaunchPrefs(
-  @SerialName("ad_screen_launch_count") val screenLaunchCount: Int = 0
-) {
+@Serializable data class ScreenLaunchPrefs(val screenLaunchCount: Int = 0) {
   companion object {
     @Provide val prefModule = DataStoreModule("screen_launch_prefs") { ScreenLaunchPrefs() }
   }

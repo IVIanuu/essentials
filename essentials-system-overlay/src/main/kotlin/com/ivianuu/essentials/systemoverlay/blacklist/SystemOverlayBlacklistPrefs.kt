@@ -10,10 +10,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable data class SystemOverlayBlacklistPrefs(
-  @SerialName("app_blacklist") val appBlacklist: Set<String> = emptySet(),
-  @SerialName("disable_on_keyboard") val disableOnKeyboard: Boolean = false,
-  @SerialName("disable_on_lock_screen") val disableOnLockScreen: Boolean = true,
-  @SerialName("disable_on_secure_screens") val disableOnSecureScreens: Boolean = true
+  val appBlacklist: Set<String> = emptySet(),
+  val disableOnKeyboard: Boolean = false,
+  val disableOnLockScreen: Boolean = true,
+  val disableOnSecureScreens: Boolean = true
 ) {
   companion object {
     @Provide val prefModule = DataStoreModule("system_overlay_blacklist_prefs") {
