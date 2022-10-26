@@ -145,6 +145,13 @@ fun Modifier.systemWindowTrigger() = composed {
 
               type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
               else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+
+              flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                  WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                  WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+                  WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+
               format = PixelFormat.TRANSLUCENT
             }
           )
@@ -196,7 +203,6 @@ class SystemWindowState(
   height: Int = WindowManager.LayoutParams.MATCH_PARENT,
   x: Int = 0,
   y: Int = 0,
-  flags: Int = DefaultFlags,
   interceptor: (WindowManager.LayoutParams) -> Unit = {}
 ) {
   var width by mutableStateOf(width)
@@ -204,14 +210,6 @@ class SystemWindowState(
   var x by mutableStateOf(x)
   var y by mutableStateOf(y)
   var interceptor by mutableStateOf(interceptor)
-
-  companion object {
-    const val DefaultFlags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-        WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-  }
 }
 
 internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowManagerImpl> {
