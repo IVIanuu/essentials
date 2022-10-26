@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
 
@@ -38,6 +39,7 @@ class OverlayComposeView(
     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
     ViewTreeLifecycleOwner.set(this, this)
     savedStateRegistryController.performRestore(null)
+    setViewTreeSavedStateRegistryOwner(this)
     ViewTreeViewModelStoreOwner.set(this, this)
     _lifecycle.currentState = Lifecycle.State.CREATED
   }
