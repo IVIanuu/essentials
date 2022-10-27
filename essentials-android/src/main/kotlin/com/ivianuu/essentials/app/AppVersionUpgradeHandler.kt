@@ -6,7 +6,7 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.android.prefs.DataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
@@ -43,8 +43,6 @@ fun interface AppVersionUpgradeHandler : suspend (Int) -> Unit {
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {
   companion object {
-    @Provide val prefModule = DataStoreModule("version_upgrade_prefs") {
-      AppVersionUpgradePrefs()
-    }
+    @Provide val prefModule = PrefModule { AppVersionUpgradePrefs() }
   }
 }

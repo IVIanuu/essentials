@@ -4,11 +4,13 @@
 
 package com.ivianuu.essentials.premium
 
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
+import kotlinx.serialization.Serializable
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
   companion object {
@@ -27,14 +29,14 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
 @Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
   premiumVersionManager: PremiumVersionManager,
-  pref: DataStore<PremiumPrefs>
+  pref: DataStore<AppStartPremiumHintPrefs>
 ) = PremiumHintUserflowBuilder {
   if (!enabled.value ||
     premiumVersionManager.isPremiumVersion.first()) return@PremiumHintUserflowBuilder emptyList()
 
-  val firstAppStart = pref.data.first().firstStart
+  val firstAppStart = pref.data.first().firstAppStart
 
-  pref.updateData { copy(firstStart = false) }
+  pref.updateData { copy(firstAppStart = false) }
 
   listOf(
     GoPremiumKey(
@@ -42,4 +44,12 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
       allowBackNavigation = !firstAppStart
     )
   )
+}
+
+@Serializable data class AppStartPremiumHintPrefs(
+  val firstAppStart: Boolean = true
+) {
+  companion object {
+    @Provide val prefModule = PrefModule { AppStartPremiumHintPrefs() }
+  }
 }

@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.android.prefs.DataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.common.IconPlaceholder
@@ -231,6 +231,6 @@ object PrefsKey : Key<Unit>
   val singleChoice: String = "C",
 ) {
   companion object {
-    @Provide val prefModule = DataStoreModule("sample_prefs") { SamplePrefs() }
+    @Provide val prefModule = PrefModule { SamplePrefs() }
   }
 }

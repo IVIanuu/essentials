@@ -13,10 +13,7 @@ import java.nio.file.Files
 
 class DataStoreModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {
-    val dataStore = DataStoreModule<Map<String, String>>(
-      name = "prefs",
-      default = { emptyMap() }
-    ).dataStore(
+    val dataStore = prefsDataStoreModule.dataStore(
       context = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       scope = this

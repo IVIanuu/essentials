@@ -8,7 +8,7 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.ShowAds
-import com.ivianuu.essentials.android.prefs.DataStoreModule
+import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
 import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
 import com.ivianuu.essentials.billing.IsPurchased
@@ -137,12 +137,9 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
   .map { ShowAds(!it) }
   .stateIn(scope, SharingStarted.Eagerly, ShowAds(false))
 
-@Serializable data class PremiumPrefs(
-  val wasPremiumVersion: Boolean = false,
-  val firstStart: Boolean = true
-) {
+@Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {
-    @Provide val prefModule = DataStoreModule("premium_prefs") { PremiumPrefs() }
+    @Provide val prefModule = PrefModule { PremiumPrefs() }
   }
 }
 
