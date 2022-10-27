@@ -5,10 +5,8 @@
 package com.ivianuu.essentials.permission.accessibility
 
 import android.accessibilityservice.AccessibilityService
-import android.content.ComponentName
 import android.content.Intent
 import android.provider.Settings
-import android.text.TextUtils
 import androidx.core.os.bundleOf
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
@@ -24,25 +22,18 @@ interface AccessibilityServicePermission : Permission {
 }
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
+  buildInfo: BuildInfo,
   context: AppContext
-) = PermissionStateProvider<P> provider@ { permission ->
-  val expectedComponentName = ComponentName(context, permission.serviceClass.java)
-
-  val enabledServicesSetting = Settings.Secure.getString(
+) = PermissionStateProvider<P> provider@{
+  Settings.Secure.getString(
     context.contentResolver,
     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-  ) ?: return@provider false
-
-  val colonSplitter = TextUtils.SimpleStringSplitter(':')
-  colonSplitter.setString(enabledServicesSetting)
-
-  while (colonSplitter.hasNext()) {
-    val componentNameString: String = colonSplitter.next()
-    val enabledService = ComponentName.unflattenFromString(componentNameString)
-    if (enabledService != null && enabledService == expectedComponentName) return@provider true
-  }
-
-  return@provider false
+  )
+    ?.split(":")
+    ?.map {
+      it.split("/").first()
+    }
+    ?.any { it == buildInfo.packageName } == true
 }
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
