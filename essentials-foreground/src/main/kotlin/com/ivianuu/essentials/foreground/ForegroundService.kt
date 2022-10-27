@@ -15,16 +15,22 @@ import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.time.Clock
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.coroutines.MainContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.time.Duration
 
 class ForegroundService : Service() {
   private val component by lazy {
@@ -38,10 +44,15 @@ class ForegroundService : Service() {
   private var previousStates = emptyList<ForegroundManagerImpl.ForegroundState>()
 
   private var job: Job? = null
+  private var stopJob: Job? = null
+
+  private var startTime = Duration.ZERO
 
   override fun onCreate() {
     super.onCreate()
     log { "start foreground service" }
+
+    startTime = component.clock()
 
     job = component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(
@@ -54,9 +65,9 @@ class ForegroundService : Service() {
                   .map { it.notification }
               ).map { states }
             }
-            .collect { applyState(it) }
+            .collect { applyState(it, false) }
         },
-        finalizer = { applyState(emptyList()) }
+        finalizer = { applyState(emptyList(), true) }
       )
     }
   }
@@ -67,7 +78,10 @@ class ForegroundService : Service() {
     super.onDestroy()
   }
 
-  private fun applyState(states: List<ForegroundManagerImpl.ForegroundState>) {
+  private suspend fun applyState(
+    states: List<ForegroundManagerImpl.ForegroundState>,
+    fromStop: Boolean
+  ) = withContext(component.mainContext) {
     log { "apply states: $states" }
 
     previousStates
@@ -75,6 +89,11 @@ class ForegroundService : Service() {
       .forEach { component.notificationManager.cancel(it.id) }
 
     if (states.isNotEmpty()) {
+      stopJob
+        ?.cancel()
+        ?.also { log { "cancel delayed stop" } }
+      stopJob = null
+
       states
         .forEachIndexed { index, state ->
           if (index == 0) {
@@ -83,9 +102,20 @@ class ForegroundService : Service() {
             component.notificationManager.notify(state.id, state.notification.value)
           }
         }
-    } else {
-      stopForeground(true)
-      stopSelf()
+    } else if (!fromStop && stopJob?.isActive != true) {
+      stopJob = component.scope.launch {
+        val runningTime = component.clock() - startTime
+        if (runningTime < MinimumRunningTime) {
+          val delay = MinimumRunningTime - runningTime
+          log { "dispatch delayed stop $delay" }
+          delay(delay)
+        } else {
+          log { "dispatch stop" }
+        }
+
+        stopForeground(true)
+        stopSelf()
+      }
     }
 
     previousStates = states
@@ -94,11 +124,17 @@ class ForegroundService : Service() {
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
+
+  companion object {
+    private val MinimumRunningTime = 10.seconds
+  }
 }
 
 @Provide @Element<AppScope> data class ForegroundServiceComponent(
+  val clock: Clock,
   val foregroundManager: ForegroundManagerImpl,
   val notificationManager: @SystemService NotificationManager,
   val logger: Logger,
+  val mainContext: MainContext,
   val scope: NamedCoroutineScope<AppScope>
 )

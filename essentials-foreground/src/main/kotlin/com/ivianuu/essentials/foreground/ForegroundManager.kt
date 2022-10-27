@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.bracket
+import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
@@ -43,11 +44,8 @@ interface ForegroundScope {
   private val context: AppContext,
   private val L: Logger
 ) : ForegroundManager {
-  private val mainLock = Mutex()
-
-  private val idLocks = mutableMapOf<Int, Mutex>()
-
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
+  private val lock = Mutex()
 
   override suspend fun <R> runInForeground(
     notification: Notification,
@@ -55,44 +53,35 @@ interface ForegroundScope {
     block: suspend ForegroundScope.() -> R
   ) = bracket(
     acquire = {
-      val idLock = mainLock.withLock {
-        idLocks.getOrPut(id.value) { Mutex() }
-      }
-
       val state = ForegroundState(id.value, notification)
+      lock.withLock { states.value = states.value + state }
+      log { "start foreground ${id.value} ${states.value}" }
 
-      idLock.withLock {
-        mainLock.withLock { states.value = states.value + state }
-        log { "start foreground ${id.value} ${states.value}" }
+      ContextCompat.startForegroundService(
+        context,
+        Intent(context, ForegroundService::class.java)
+      )
 
-        ContextCompat.startForegroundService(
-          context,
-          Intent(context, ForegroundService::class.java)
-        )
-
-        // we ensure that the foreground service has seen this foreground request
-        // to prevent a crash in the android system
-        state.seen.await()
-
-        state
-      }
+      state
     },
-    use = block,
+    use = {
+      par(
+        { block(it) },
+        { it.seen.await() }
+      ).first() as R
+    },
     release = { state, _ ->
-      val idLock = mainLock.withLock { idLocks[id.value]!! }
-      idLock.withLock {
-        mainLock.withLock { states.value = states.value - state }
-        log { "stop foreground $id ${states.value}" }
-      }
+      lock.withLock { states.value = states.value - state }
+      log { "stop foreground ${id.value} ${states.value}" }
     }
   )
 
   internal class ForegroundState(val id: Int, notification: Notification) : ForegroundScope {
     val notification = MutableStateFlow(notification)
-    private val mutex = Mutex()
+    private val lock = Mutex()
     val seen = CompletableDeferred<Unit>()
 
-    override suspend fun updateNotification(notification: Notification) = mutex.withLock {
+    override suspend fun updateNotification(notification: Notification) = lock.withLock {
       this.notification.value = notification
     }
   }
