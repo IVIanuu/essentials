@@ -52,17 +52,17 @@ object ForegroundKey : Key<Unit>
 
     if (isEnabled)
       LaunchedEffect(true) {
-        foregroundManager.startForeground(
-          5,
-          flow {
-            var i = 0
-            while (currentCoroutineContext().isActive) {
-              emit(ForegroundNotification(primaryColor, i++))
-              delay(1000)
-            }
+        val notifications = flow {
+          var i = 0
+          while (currentCoroutineContext().isActive) {
+            emit(ForegroundNotification(primaryColor, i++))
+            delay(1000)
           }
-            .stateIn(scope, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
-        )
+        }
+          .stateIn(scope, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
+        foregroundManager.runInForeground(notifications.value) {
+          notifications.collect { updateNotification(it) }
+        }
       }
 
     Button(onClick = { isEnabled = !isEnabled }) {

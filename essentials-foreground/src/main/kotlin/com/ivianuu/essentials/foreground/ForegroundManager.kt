@@ -12,17 +12,31 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  suspend fun startForeground(id: Int, notification: StateFlow<Notification>): Nothing
+  suspend fun <R> runInForeground(
+    notification: Notification,
+    @Inject id: ForegroundId,
+    block: suspend ForegroundScope.() -> R
+  ): R
+}
+
+interface ForegroundScope {
+  suspend fun updateNotification(notification: Notification)
+}
+
+@JvmInline value class ForegroundId(val value: Int) {
+  companion object {
+    @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
+  }
 }
 
 @Provide @Scoped<AppScope> class ForegroundManagerImpl(
@@ -35,20 +49,21 @@ interface ForegroundManager {
 
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
 
-  override suspend fun startForeground(
-    id: Int,
-    notification: StateFlow<Notification>
-  ): Nothing = bracket(
+  override suspend fun <R> runInForeground(
+    notification: Notification,
+    @Inject id: ForegroundId,
+    block: suspend ForegroundScope.() -> R
+  ) = bracket(
     acquire = {
       val idLock = mainLock.withLock {
-        idLocks.getOrPut(id) { Mutex() }
+        idLocks.getOrPut(id.value) { Mutex() }
       }
 
-      val state = ForegroundState(id, notification)
+      val state = ForegroundState(id.value, notification)
 
       idLock.withLock {
         mainLock.withLock { states.value = states.value + state }
-        log { "start foreground $id ${states.value}" }
+        log { "start foreground ${id.value} ${states.value}" }
 
         ContextCompat.startForegroundService(
           context,
@@ -62,9 +77,9 @@ interface ForegroundManager {
         state
       }
     },
-    use = { awaitCancellation() },
+    use = block,
     release = { state, _ ->
-      val idLock = mainLock.withLock { idLocks[id]!! }
+      val idLock = mainLock.withLock { idLocks[id.value]!! }
       idLock.withLock {
         mainLock.withLock { states.value = states.value - state }
         log { "stop foreground $id ${states.value}" }
@@ -72,11 +87,13 @@ interface ForegroundManager {
     }
   )
 
-  internal class ForegroundState(val id: Int, val notification: StateFlow<Notification>) {
+  internal class ForegroundState(val id: Int, notification: Notification) : ForegroundScope {
+    val notification = MutableStateFlow(notification)
+    private val mutex = Mutex()
     val seen = CompletableDeferred<Unit>()
+
+    override suspend fun updateNotification(notification: Notification) = mutex.withLock {
+      this.notification.value = notification
+    }
   }
 }
-
-suspend fun ForegroundManager.startForeground(id: Int, notification: Notification): Nothing =
-  startForeground(id, MutableStateFlow(notification))
-

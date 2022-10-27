@@ -15,7 +15,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.foreground.startForeground
 import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
@@ -74,11 +73,12 @@ interface Torch {
       return
     }
 
-    race(
-      { enableTorch() },
-      { broadcastsFactory(ACTION_DISABLE_TORCH).first() },
-      { foregroundManager.startForeground(64578, createTorchNotification()) }
-    )
+    foregroundManager.runInForeground(createTorchNotification()) {
+      race(
+        { enableTorch() },
+        { broadcastsFactory(ACTION_DISABLE_TORCH).first() }
+      )
+    }
   }
 
   private suspend fun enableTorch() {
