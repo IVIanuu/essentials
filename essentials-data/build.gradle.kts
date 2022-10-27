@@ -14,6 +14,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api(project(":essentials-db"))
         api(project(":essentials-resource"))
         api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))

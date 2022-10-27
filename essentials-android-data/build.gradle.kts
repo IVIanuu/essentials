@@ -18,6 +18,7 @@ dependencies {
   api(Deps.Injekt.android)
   api(Deps.AndroidX.dataStore)
   api(project(":essentials-android-core"))
+  api(project(":essentials-db"))
   api(project(":essentials-data"))
   api(project(":essentials-serialization"))
   testImplementation(project(":essentials-android-test"))
