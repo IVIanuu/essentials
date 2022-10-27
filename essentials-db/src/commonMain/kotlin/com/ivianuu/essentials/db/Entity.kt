@@ -66,6 +66,18 @@ private class EntityDescriptorImpl<T>(
         autoIncrement = annotations.any { it is AutoIncrement }
       )
     }
+
+  init {
+    rows
+      .filter { it.isPrimaryKey }
+      .let { primaryKeys ->
+        when {
+          primaryKeys.size == 0 -> error("Entity needs @PrimaryKey")
+          primaryKeys.size > 1 -> error("Entity can only have one @PrimaryKey")
+          else -> {}
+        }
+      }
+  }
 }
 
 data class Row(

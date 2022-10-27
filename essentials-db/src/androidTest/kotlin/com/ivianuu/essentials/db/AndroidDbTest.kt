@@ -7,6 +7,7 @@ package com.ivianuu.essentials.db
 import androidx.test.core.app.ApplicationProvider
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -752,15 +753,36 @@ class AndroidDbTest {
     v2Db.dispose()
   }
 
+  @Test fun testEntityWithoutPrimaryKey() {
+    shouldThrow<IllegalStateException> {
+      EntityDescriptor<EntityWithoutPrimaryKey>("table")
+    }
+  }
+
+  @Test fun testEntityWithMultiplePrimaryKey() {
+    shouldThrow<IllegalStateException> {
+      EntityDescriptor<EntityWithoutPrimaryKey>("table")
+    }
+  }
+
+  @Serializable data class EntityWithoutPrimaryKey(
+    val name: String
+  )
+
+  @Serializable data class EntityWithMultiplePrimaryKey(
+    @PrimaryKey val firstName: String,
+    @PrimaryKey val lastName: String
+  )
+
   @Serializable data class UserWithDog(
-    val name: String,
+    @PrimaryKey val name: String,
     val dog: Dog
   )
 
   @Serializable data class Dog(val name: String)
 
   @Serializable data class UserWithMultipleDogs(
-    val name: String,
+    @PrimaryKey val name: String,
     val dogs: List<Dog>
   )
 
