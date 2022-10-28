@@ -50,7 +50,7 @@ class ForegroundService : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    log { "start foreground service" }
+    log { "start service" }
 
     startTime = component.clock()
 
@@ -73,7 +73,7 @@ class ForegroundService : Service() {
   }
 
   override fun onDestroy() {
-    log { "stop foreground service" }
+    log { "stop service" }
     job?.cancel()
     super.onDestroy()
   }
@@ -97,23 +97,19 @@ class ForegroundService : Service() {
       states
         .forEachIndexed { index, state ->
           if (index == 0) {
+            log { "start foreground" }
             startForeground(state.id, state.notification.value)
           } else {
             component.notificationManager.notify(state.id, state.notification.value)
           }
         }
     } else if (!fromStop && stopJob?.isActive != true) {
-      stopJob = component.scope.launch {
-        val runningTime = component.clock() - startTime
-        if (runningTime < MinimumRunningTime) {
-          val delay = MinimumRunningTime - runningTime
-          log { "dispatch delayed stop $delay" }
-          delay(delay)
-        } else {
-          log { "dispatch stop" }
-        }
+      log { "stop foreground" }
+      stopForeground(true)
 
-        stopForeground(true)
+      stopJob = component.scope.launch {
+        log { "dispatch delayed stop" }
+        delay(6.seconds)
         stopSelf()
       }
     }
@@ -124,10 +120,6 @@ class ForegroundService : Service() {
   }
 
   override fun onBind(intent: Intent?): IBinder? = null
-
-  companion object {
-    private val MinimumRunningTime = 10.seconds
-  }
 }
 
 @Provide @Element<AppScope> data class ForegroundServiceComponent(
