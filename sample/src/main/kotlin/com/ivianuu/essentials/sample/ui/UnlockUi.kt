@@ -55,7 +55,7 @@ object UnlockKey : Key<Unit>
           scope.launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
-            delay(3000)
+            delay(1500)
             val unlocked = screenUnlocker()
             showToast("Screen unlocked $unlocked")
           }
@@ -69,7 +69,7 @@ object UnlockKey : Key<Unit>
           scope.launch {
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
-            delay(3000)
+            delay(1500)
             val activated = screenActivator()
             showToast("Screen activated $activated")
           }

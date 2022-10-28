@@ -16,7 +16,7 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt
 dependencies {
   api(project(":essentials-android-core"))
   api(project(":essentials-android-util"))
-  api(project(":essentials-broadcast"))
+  api(project(":essentials-screen-state"))
 }
 
 plugins.apply("com.vanniktech.maven.publish")

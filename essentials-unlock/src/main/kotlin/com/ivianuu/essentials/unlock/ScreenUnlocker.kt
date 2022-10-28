@@ -14,7 +14,6 @@ import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean
@@ -38,7 +37,7 @@ fun interface ScreenUnlocker : suspend () -> Boolean
 
     log { "unlock screen $requestId" }
 
-    UnlockScreenActivity.unlock(context, requestId)
+    UnlockActivity.unlockScreen(context, requestId)
 
     return@withContext result.await().also {
       log { "unlock result $requestId -> $it" }
@@ -46,8 +45,3 @@ fun interface ScreenUnlocker : suspend () -> Boolean
   }
 }
 
-private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
-
-internal fun onUnlockScreenResult(requestId: String, success: Boolean) {
-  requestsById.remove(requestId)?.complete(success)
-}

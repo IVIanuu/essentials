@@ -14,7 +14,6 @@ import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set
 
 fun interface ScreenActivator : suspend () -> Boolean
@@ -38,16 +37,10 @@ fun interface ScreenActivator : suspend () -> Boolean
 
     log { "turn screen on $requestId" }
 
-    ScreenOnActivity.turnOn(context, requestId)
+    UnlockActivity.turnScreenOn(context, requestId)
 
     return@withContext result.await().also {
       log { "screen on result $requestId -> $it" }
     }
   }
-}
-
-private val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
-
-internal fun onScreenOnResult(requestId: String, success: Boolean) {
-  requestsById.remove(requestId)?.complete(success)
 }

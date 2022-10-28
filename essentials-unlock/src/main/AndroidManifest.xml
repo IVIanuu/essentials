@@ -7,12 +7,7 @@
 
     <application>
         <activity
-            android:name="com.ivianuu.essentials.unlock.UnlockScreenActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
-            android:theme="@style/Theme.Es.Translucent"
-            android:exported="true" />
-        <activity
-            android:name="com.ivianuu.essentials.unlock.ScreenOnActivity"
+            android:name="com.ivianuu.essentials.unlock.UnlockActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout"
             android:theme="@style/Theme.Es.Translucent"
             android:exported="true" />
