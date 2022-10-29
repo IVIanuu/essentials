@@ -18,5 +18,5 @@
     <string name="es_root_method">Alternative [ROOT]</string>
 
     <string name="es_permission_nav_bar">Write secure settings</string>
-    <string name="es_permission_nav_bar_desc">The write settings permission is required to hide the nav bar</string>
+    <string name="es_permission_nav_bar_desc">Required to hide the nav bar</string>
 </resources>
