@@ -10,13 +10,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.onCancel
@@ -43,7 +41,7 @@ fun interface NavigationStateContent {
   rootKey: RootKey? = null,
   scope: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
-  val backStack by navigator.backStack.collectAsState()
+  val backStack = navigator.backStack.collectAsState()
 
   if (backStack.size > 1)
     BackHandler {
@@ -63,9 +61,10 @@ fun interface NavigationStateContent {
   }
 
   val stackChildren = backStack
+    .value
     .map { key ->
       key(key) {
-        var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
+        val currentUi = remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = Scope<KeyUiScope>()
           val elements = keyUiElementsFactory(scope, key)
@@ -76,7 +75,7 @@ fun interface NavigationStateContent {
           content to NavigationContentStateChild(
             key = key,
             options = options,
-            content = { currentUi },
+            content = { currentUi.value },
             decorateKeyUi = navigationContentComponent.decorateUi,
             elements = elements,
             scope = scope
@@ -86,7 +85,7 @@ fun interface NavigationStateContent {
         ObserveScope(
           remember {
             {
-              currentUi = keyUi()
+              currentUi.value = keyUi()
 
               DisposableEffect(true) {
                 onDispose {
@@ -109,7 +108,7 @@ fun interface NavigationStateContent {
 }
 
 private class NavigationContentStateChild(
-  private val key: Key<*>,
+  key: Key<*>,
   options: KeyUiOptions? = null,
   private val content: () -> @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
