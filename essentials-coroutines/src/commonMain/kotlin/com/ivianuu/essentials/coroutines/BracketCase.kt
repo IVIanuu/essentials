@@ -24,7 +24,7 @@ suspend inline fun onCancel(
 ): Nothing = onCancel(block = { awaitCancellation() }, onCancel)
 
 suspend inline fun <R> onCancel(
-  block: suspend () -> R,
+  crossinline block: suspend () -> R,
   crossinline onCancel: suspend () -> Unit
 ): R = guarantee(block) { case ->
   when (case) {
@@ -34,7 +34,7 @@ suspend inline fun <R> onCancel(
 }
 
 suspend inline fun <R> guarantee(
-  block: suspend () -> R,
+  crossinline block: suspend () -> R,
   crossinline finalizer: suspend (ExitCase) -> Unit
 ): R {
   val result = try {
@@ -57,7 +57,7 @@ suspend inline fun <T> bracket(
 
 suspend inline fun <T, R> bracket(
   crossinline acquire: suspend () -> T,
-  use: suspend (T) -> R,
+  crossinline use: suspend (T) -> R,
   crossinline release: suspend (T, ExitCase) -> Unit
 ): R {
   val acquired = withContext(NonCancellable) { acquire() }
