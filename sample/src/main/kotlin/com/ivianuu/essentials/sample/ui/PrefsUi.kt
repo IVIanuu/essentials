@@ -175,8 +175,7 @@ object PrefsKey : Key<Unit>
                     MultiChoiceListKey.Item("B", "B"),
                     MultiChoiceListKey.Item("C", "C")
                   ),
-                  selectedItems = prefs.multiChoice,
-                  title = "Multi select list"
+                  selectedItems = prefs.multiChoice
                 )
               ) ?: return@launch
               launch {
@@ -202,8 +201,7 @@ object PrefsKey : Key<Unit>
                     SingleChoiceListKey.Item("B", "B"),
                     SingleChoiceListKey.Item("C", "C")
                   ),
-                  selectedItem = prefs.singleChoice,
-                  title = "Single item list"
+                  selectedItem = prefs.singleChoice
                 )
               ) ?: return@launch
               launch {
