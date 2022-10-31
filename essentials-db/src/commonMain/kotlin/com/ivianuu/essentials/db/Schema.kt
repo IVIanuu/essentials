@@ -42,7 +42,7 @@ private class SchemaImpl(
   override val serializersModule: SerializersModule,
   override val embeddedFormat: StringFormat
 ) : Schema {
-  private val _entities = entities.associateBy { it.typeKey }
+  private val _entities = entities.associateBy { it.typeKey.value }
 
   override suspend fun create(db: Db) {
     _entities.values
@@ -64,7 +64,7 @@ private class SchemaImpl(
   }
 
   override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
-    _entities[key]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
+    _entities[key.value]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 
 interface Migration {
