@@ -1,0 +1,13 @@
+<!--
+  ~ Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M17,2L7,2A2,2 0,0 0,5 4L5,20a2,2 0,0 0,2 2L17,22a2,2 0,0 0,2 -2L19,4A2,2 0,0 0,17 2ZM17.5,7L6.5,7L6.5,4h11Z" />
+</vector>

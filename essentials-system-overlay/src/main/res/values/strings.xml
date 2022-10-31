@@ -15,4 +15,9 @@
 
     <string name="es_pref_disable_on_secure_screens">Disable on secure screens</string>
     <string name="es_pref_disable_on_secure_screens_summary">Disables %s on screens like the permission or app installing screen</string>
+
+    <string name="es_screen_edge_left">Left</string>
+    <string name="es_screen_edge_top">Top</string>
+    <string name="es_screen_edge_right">Right</string>
+    <string name="es_screen_edge_bottom">Bottom</string>
 </resources>
