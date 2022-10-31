@@ -72,7 +72,7 @@ private class RefCountedReleaseImpl<K, T>(
 
 suspend inline fun <K, T, R> RefCountedResource<K, T>.withResource(
   key: K,
-  block: suspend (T) -> R
+  crossinline block: suspend (T) -> R
 ): R = bracket(
   acquire = { acquire(key) },
   use = block,
