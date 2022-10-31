@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.logging
 
 import android.util.Log
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.logging.Logger.Priority
@@ -16,6 +17,7 @@ import com.ivianuu.essentials.logging.Logger.Priority.WARN
 import com.ivianuu.essentials.logging.Logger.Priority.WTF
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Scoped
 import kotlin.math.min
 
 @Provide class AndroidLogger(
@@ -62,7 +64,7 @@ import kotlin.math.min
     @Provide inline fun androidLogger(
       loggingEnabled: LoggingEnabled,
       androidLoggerFactory: () -> AndroidLogger
-    ): Logger = if (loggingEnabled.value) androidLoggerFactory()
+    ): @Scoped<AppScope> Logger = if (loggingEnabled.value) androidLoggerFactory()
     else NoopLogger
   }
 }
