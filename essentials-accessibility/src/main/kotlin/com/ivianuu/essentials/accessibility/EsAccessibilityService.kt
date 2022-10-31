@@ -43,21 +43,22 @@ class EsAccessibilityService : AccessibilityService() {
     serviceComponent.accessibilityServiceRef.value = this
 
     accessibilityComponent.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
-      log { "update config from ${accessibilityComponent.configs}" }
+      val configs = accessibilityComponent.configs()
+      log { "update config from $configs" }
       serviceInfo = serviceInfo?.apply {
-        eventTypes = accessibilityComponent.configs
+        eventTypes = configs
           .map { it.eventTypes }
           .fold(0) { acc, events -> acc.addFlag(events) }
 
-        flags = accessibilityComponent.configs
+        flags = configs
           .map { it.flags }
           .fold(0) { acc, flags -> acc.addFlag(flags) }
 
         // first one wins
-        accessibilityComponent.configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
+        configs.firstOrNull()?.feedbackType?.let { feedbackType = it }
         feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
 
-        notificationTimeout = accessibilityComponent.configs
+        notificationTimeout = configs
           .map { it.notificationTimeout }
           .maxOrNull() ?: 0L
 
@@ -103,7 +104,7 @@ data class EsAccessibilityServiceComponent(
 )
 
 @Provide data class AccessibilityComponent(
-  val configs: List<AccessibilityConfig>,
+  val configs: () -> List<AccessibilityConfig>,
   val coroutineScope: NamedCoroutineScope<AccessibilityScope>,
   val elements: Elements<AccessibilityScope>,
   val scope: Scope<AccessibilityScope>
