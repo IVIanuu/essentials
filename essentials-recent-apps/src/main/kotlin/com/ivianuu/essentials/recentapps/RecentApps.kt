@@ -11,7 +11,7 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Eager
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.shareIn
   accessibilityEvents: Flow<AccessibilityEvent>,
   scope: NamedCoroutineScope<AppScope>,
   L: Logger
-): @Eager<AppScope> Flow<RecentApps> = accessibilityEvents
+): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }
   .filter { it.className != "android.inputmethodservice.SoftInputWindow" }

@@ -14,7 +14,7 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.Eager
+import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.transformLatest
   accessibilityEvents: Flow<AccessibilityEvent>,
   keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
   scope: NamedCoroutineScope<AppScope>
-): @Eager<AppScope> Flow<KeyboardVisible> = accessibilityEvents
+): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&
         it.className == "android.inputmethodservice.SoftInputWindow"
