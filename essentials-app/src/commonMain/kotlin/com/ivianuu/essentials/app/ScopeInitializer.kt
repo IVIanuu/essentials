@@ -7,24 +7,33 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Eager
+import com.ivianuu.injekt.common.ProvidedElement
 import com.ivianuu.injekt.common.TypeKey
 
 interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
 
-class ScopeInitializerRunner<N> @Provide @Eager<N> constructor(
-  nameKey: TypeKey<N>,
-  initializers: List<ServiceElement<ScopeInitializer<N>>>,
-  workerRunner: ScopeWorkerRunner<N>,
-  L: Logger
-) {
-  init {
-    initializers
+@Provide inline fun <N> scopeInitializerRunner(
+  crossinline key: () -> TypeKey<ScopeInitializerRunner>,
+  crossinline nameKey: () -> TypeKey<N>,
+  crossinline initializers: () -> List<ServiceElement<ScopeInitializer<N>>>,
+  crossinline workerRunner: () -> ScopeWorkerRunner<N>,
+  crossinline logger: () -> Logger
+) = object : ProvidedElement<N, ScopeInitializerRunner> {
+  override val key: TypeKey<ScopeInitializerRunner>
+    get() = key()
+
+  override fun init() {
+    val logger = logger()
+    initializers()
       .sortedWithLoadingOrder()
       .forEach {
-        log { "${nameKey.value} initialize ${it.key.value}" }
+        log(logger = logger) { "${nameKey().value} initialize ${it.key.value}" }
         it.instance()
       }
-    workerRunner()
+    workerRunner()()
   }
+
+  override fun get(): ScopeInitializerRunner = ScopeInitializerRunner
 }
+
+object ScopeInitializerRunner
