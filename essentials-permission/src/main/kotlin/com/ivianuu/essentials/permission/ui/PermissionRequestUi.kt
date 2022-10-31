@@ -91,11 +91,8 @@ data class UiPermission<P : Permission>(
         )
       },
     grantPermission = action { permission ->
-      val state = permissionStateFactory(listOf(permission.permissionKey))
-      if (!state.first()) {
-        requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
-        appUiStarter()
-      }
+      requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
+      appUiStarter()
     }
   )
 }
