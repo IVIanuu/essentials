@@ -17,7 +17,7 @@ import com.ivianuu.essentials.logging.Logger.Priority.WARN
 import com.ivianuu.essentials.logging.Logger.Priority.WTF
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.common.Scope
 import kotlin.math.min
 
 @Provide class AndroidLogger(
@@ -62,10 +62,13 @@ import kotlin.math.min
     private const val MAX_TAG_LENGTH = 23
 
     @Provide inline fun androidLogger(
-      loggingEnabled: LoggingEnabled,
-      androidLoggerFactory: () -> AndroidLogger
-    ): @Scoped<AppScope> Logger = if (loggingEnabled.value) androidLoggerFactory()
-    else NoopLogger
+      crossinline loggingEnabled: () -> LoggingEnabled,
+      crossinline androidLoggerFactory: () -> AndroidLogger,
+      scope: Scope<AppScope>
+    ): Logger = scope {
+      if (loggingEnabled().value) androidLoggerFactory()
+      else NoopLogger
+    }
   }
 }
 
