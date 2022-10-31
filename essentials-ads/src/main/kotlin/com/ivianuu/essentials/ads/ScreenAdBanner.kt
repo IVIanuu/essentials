@@ -20,10 +20,8 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ScreenAdBannerFeature : AdFeature
@@ -51,7 +49,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
   config: ScreenAdBannerConfig? = null,
   showAdsFlow: StateFlow<ShowAds>,
   key: Key<*>
-): @Scoped<KeyUiScope> ScreenAdBanner = ScreenAdBanner decorator@ { content ->
+) = ScreenAdBanner decorator@{ content ->
   if (config == null) {
     content()
     return@decorator
