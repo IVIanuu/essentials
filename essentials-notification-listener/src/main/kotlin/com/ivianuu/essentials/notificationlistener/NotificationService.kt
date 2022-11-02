@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.notificationlistener
 
 import android.app.Notification
+import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
@@ -30,12 +31,10 @@ interface NotificationService {
   private val ref: Flow<EsNotificationListenerService?>
 ) : NotificationService {
   override val notifications: Flow<List<StatusBarNotification>>
-    get() = ref
-      .flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
+    get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
   override val events: Flow<NotificationEvent>
-    get() = ref
-      .flatMapLatest { it?.events ?: emptyFlow() }
+    get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) =
     catch { notification.contentIntent.send() }
@@ -45,4 +44,10 @@ interface NotificationService {
 
   override suspend fun dismissAllNotifications() =
     catch { ref.first()!!.cancelAllNotifications() }
+}
+
+sealed interface NotificationEvent {
+  data class NotificationPosted(val sbn: StatusBarNotification) : NotificationEvent
+  data class NotificationRemoved(val sbn: StatusBarNotification) : NotificationEvent
+  data class RankingUpdate(val map: NotificationListenerService.RankingMap) : NotificationEvent
 }
