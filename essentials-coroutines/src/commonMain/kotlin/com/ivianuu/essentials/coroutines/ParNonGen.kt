@@ -35,7 +35,7 @@ suspend fun <T> par(
   @Inject concurrency: Concurrency
 ): List<T> = par(blocks.asIterable(), context)
 
-  suspend fun <T, R> Iterable<T>.parMap(
+suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
   @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
