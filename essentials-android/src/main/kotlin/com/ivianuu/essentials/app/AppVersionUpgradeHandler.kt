@@ -15,7 +15,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 
-fun interface AppVersionUpgradeHandler : suspend (Int) -> Unit {
+fun interface AppVersionUpgradeHandler : suspend (Int, Int) -> Unit {
   companion object {
     @Provide val defaultHandlers: List<AppVersionUpgradeHandler>
       get() = emptyList()
@@ -24,7 +24,7 @@ fun interface AppVersionUpgradeHandler : suspend (Int) -> Unit {
 
 @Provide fun appVersionUpgradeWorker(
   buildInfo: BuildInfo,
-  handlers: List<AppVersionUpgradeHandler>,
+  handlers: () -> List<AppVersionUpgradeHandler>,
   pref: DataStore<AppVersionUpgradePrefs>,
   L: Logger
 ) = ScopeWorker<AppScope> {
@@ -34,8 +34,8 @@ fun interface AppVersionUpgradeHandler : suspend (Int) -> Unit {
 
   log { "upgrade from app version ${prefs.lastAppVersion} to ${buildInfo.versionCode}" }
 
-  handlers.parForEach {
-    it(prefs.lastAppVersion)
+  handlers().parForEach {
+    it(prefs.lastAppVersion, buildInfo.versionCode)
   }
 
   pref.updateData { copy(lastAppVersion = buildInfo.versionCode) }
