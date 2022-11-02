@@ -141,7 +141,7 @@ object Deps {
 
   const val shadowGradlePlugin = "gradle.plugin.com.github.johnrengelman:shadow:7.1.0"
 
-  const val superUser = "eu.chainfire:libsuperuser:1.0.0.201704021214"
+  const val superUser = "eu.chainfire:libsuperuser:1.1.1"
 
   const val turbine = "app.cash.turbine:turbine:0.10.0"
 
