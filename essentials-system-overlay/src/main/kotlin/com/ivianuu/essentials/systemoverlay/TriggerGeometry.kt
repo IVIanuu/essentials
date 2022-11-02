@@ -70,7 +70,7 @@ fun TriggerGeometry(
     horizontalMargin = horizontalMargin,
     verticalMargin = verticalMargin,
     rotation = rotation,
-    edge = edge
+    edge = rotatedEdge
   )
 }
 
