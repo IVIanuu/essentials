@@ -69,7 +69,7 @@ data class NavBarModel(
   RP: ResourceProvider,
   ctx: KeyUiContext<NavBarKey>
 ) = Model {
-  val prefs = pref.data.bind(NavBarPrefs())
+  val prefs = pref.data.bind { NavBarPrefs() }
   NavBarModel(
     hideNavBar = prefs.hideNavBar,
     updateHideNavBar = action { value ->

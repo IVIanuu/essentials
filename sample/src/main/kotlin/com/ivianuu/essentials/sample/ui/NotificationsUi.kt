@@ -174,7 +174,7 @@ data class UiNotification(
   NotificationsModel(
     hasPermissions = permissionState.bindResource(),
     notifications = service.notifications
-      .bind(emptyList())
+      .bind { emptyList() }
       .map { it.toUiNotification() },
     requestPermissions = action {
       permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
