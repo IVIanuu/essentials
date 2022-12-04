@@ -48,10 +48,10 @@ internal class RateLimiterImpl(
   override suspend fun tryAcquire(): Boolean {
     val now = clock()
 
-    if (cursor > now)
-      return false
-
     val wakeUpTime = lock.withLock {
+      if (cursor > now)
+        return false
+
       val base = if (cursor > now) cursor else now
       if (base > now)
         return false
