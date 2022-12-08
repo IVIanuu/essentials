@@ -8,6 +8,8 @@ import com.ivianuu.injekt.Provide
 
 fun interface Hooks {
   operator fun XposedContext.invoke()
-}
 
-@Provide val defaultHooks: Collection<Hooks> get() = emptyList()
+  companion object {
+    @Provide val defaultHooks: Collection<Hooks> get() = emptyList()
+  }
+}
