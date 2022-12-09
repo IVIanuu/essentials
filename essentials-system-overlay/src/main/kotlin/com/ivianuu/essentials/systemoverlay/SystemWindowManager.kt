@@ -127,42 +127,40 @@ fun Modifier.systemWindowTrigger() = composed {
   override suspend fun attachSystemWindow(
     state: SystemWindowState,
     content: @Composable () -> Unit
-  ): Nothing {
-    withContext(mainContext) {
-      lateinit var contentView: View
-      contentView = OverlayComposeView(appContext) {
-        Window(contentView, state, content)
-      }
-
-      guarantee(
-        block = {
-          windowManager.addView(
-            contentView,
-            WindowManager.LayoutParams().apply {
-              this.width = WindowManager.LayoutParams.WRAP_CONTENT
-              this.height = WindowManager.LayoutParams.WRAP_CONTENT
-              gravity = Gravity.LEFT or Gravity.TOP
-
-              type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-              else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-
-              flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                  WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                  WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
-                  WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-
-              format = PixelFormat.TRANSLUCENT
-            }
-          )
-          awaitCancellation()
-        },
-        finalizer = {
-          catch { windowManager.removeViewImmediate(contentView) }
-          contentView.dispose()
-        }
-      )
+  ): Nothing = withContext(mainContext) {
+    lateinit var contentView: View
+    contentView = OverlayComposeView(appContext) {
+      Window(contentView, state, content)
     }
+
+    guarantee(
+      block = {
+        windowManager.addView(
+          contentView,
+          WindowManager.LayoutParams().apply {
+            this.width = WindowManager.LayoutParams.WRAP_CONTENT
+            this.height = WindowManager.LayoutParams.WRAP_CONTENT
+            gravity = Gravity.LEFT or Gravity.TOP
+
+            type = if (useAccessibility) WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
+            else WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+
+            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR or
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+
+            format = PixelFormat.TRANSLUCENT
+          }
+        )
+        awaitCancellation()
+      },
+      finalizer = {
+        catch { windowManager.removeViewImmediate(contentView) }
+        contentView.dispose()
+      }
+    )
   }
 
   @Composable private fun Window(
