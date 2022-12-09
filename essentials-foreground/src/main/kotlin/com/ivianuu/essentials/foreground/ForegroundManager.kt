@@ -18,7 +18,12 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.SourceKey
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -30,8 +35,14 @@ interface ForegroundManager {
   ): R
 }
 
-interface ForegroundScope {
+interface ForegroundScope : CoroutineScope {
   suspend fun updateNotification(notification: Notification)
+}
+
+fun ForegroundScope.updateNotification(notifications: Flow<Notification>) {
+  notifications
+    .onEach { updateNotification(it) }
+    .launchIn(this)
 }
 
 @JvmInline value class ForegroundId(val value: Int) {
@@ -51,32 +62,38 @@ interface ForegroundScope {
     notification: Notification,
     @Inject id: ForegroundId,
     block: suspend ForegroundScope.() -> R
-  ) = bracket(
-    acquire = {
-      val state = ForegroundState(id.value, notification)
-      lock.withLock { states.value = states.value + state }
-      log { "start foreground ${id.value} ${states.value}" }
+  ) = coroutineScope {
+    bracket(
+      acquire = {
+        val state = ForegroundState(id.value, notification, this)
+        lock.withLock { states.value = states.value + state }
+        log { "start foreground ${id.value} ${states.value}" }
 
-      ContextCompat.startForegroundService(
-        context,
-        Intent(context, ForegroundService::class.java)
-      )
+        ContextCompat.startForegroundService(
+          context,
+          Intent(context, ForegroundService::class.java)
+        )
 
-      state
-    },
-    use = {
-      par(
-        { block(it) },
-        { it.seen.await() }
-      ).first() as R
-    },
-    release = { state, _ ->
-      lock.withLock { states.value = states.value - state }
-      log { "stop foreground ${id.value} ${states.value}" }
-    }
-  )
+        state
+      },
+      use = {
+        par(
+          { block(it) },
+          { it.seen.await() }
+        ).first() as R
+      },
+      release = { state, _ ->
+        lock.withLock { states.value = states.value - state }
+        log { "stop foreground ${id.value} ${states.value}" }
+      }
+    )
+  }
 
-  internal class ForegroundState(val id: Int, notification: Notification) : ForegroundScope {
+  internal class ForegroundState(
+    val id: Int,
+    notification: Notification,
+    coroutineScope: CoroutineScope
+  ) : ForegroundScope, CoroutineScope by coroutineScope {
     val notification = MutableStateFlow(notification)
     private val lock = Mutex()
     val seen = CompletableDeferred<Unit>()
