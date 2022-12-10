@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -39,7 +38,7 @@ fun interface NavigationStateContent {
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
-  keyUiElementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
+  componentFactory: (Scope<KeyUiScope>, Key<*>) -> NavigationContentComponent,
   rootKey: RootKey? = null,
   scope: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
@@ -68,8 +67,7 @@ fun interface NavigationStateContent {
         var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = Scope<KeyUiScope>()
-          val elements = keyUiElementsFactory(scope, key)
-          val navigationContentComponent = elements<NavigationContentComponent>()
+          val navigationContentComponent = componentFactory(scope, key)
           val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
           checkNotNull(content) { "No ui factory found for $key" }
           val options = navigationContentComponent.optionFactories[key::class]?.invoke(key)
@@ -78,7 +76,7 @@ fun interface NavigationStateContent {
             options = options,
             content = { currentUi },
             decorateKeyUi = navigationContentComponent.decorateUi,
-            elements = elements,
+            elements = navigationContentComponent.elements,
             scope = scope
           )
         }
@@ -109,7 +107,7 @@ fun interface NavigationStateContent {
 }
 
 private class NavigationContentStateChild(
-  private val key: Key<*>,
+  key: Key<*>,
   options: KeyUiOptions? = null,
   private val content: () -> @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
@@ -171,9 +169,9 @@ private class NavigationContentStateChild(
   }
 }
 
-@Provide @Element<KeyUiScope>
-data class NavigationContentComponent(
+@Provide data class NavigationContentComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
-  val decorateUi: DecorateKeyUi
+  val decorateUi: DecorateKeyUi,
+  val elements: Elements<KeyUiScope>
 )
