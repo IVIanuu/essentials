@@ -4,13 +4,12 @@
 
 package com.ivianuu.essentials.premium
 
-import com.ivianuu.essentials.android.prefs.PrefModule
+import com.ivianuu.essentials.app.IsFirstRun
 import com.ivianuu.essentials.app.LoadingOrder
-import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.navigation.UserflowBuilder
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.serialization.Serializable
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
   companion object {
@@ -28,28 +27,18 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
 
 @Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
-  premiumVersionManager: PremiumVersionManager,
-  pref: DataStore<AppStartPremiumHintPrefs>
+  isFirstRunFlow: Flow<IsFirstRun>,
+  premiumVersionManager: PremiumVersionManager
 ) = PremiumHintUserflowBuilder {
   if (!enabled.value ||
     premiumVersionManager.isPremiumVersion.first()) return@PremiumHintUserflowBuilder emptyList()
 
-  val firstAppStart = pref.data.first().firstAppStart
-
-  pref.updateData { copy(firstAppStart = false) }
+  val isFirstRun = isFirstRunFlow.first().value
 
   listOf(
     GoPremiumKey(
-      showTryBasicOption = firstAppStart,
-      allowBackNavigation = !firstAppStart
+      showTryBasicOption = isFirstRun,
+      allowBackNavigation = !isFirstRun
     )
   )
-}
-
-@Serializable data class AppStartPremiumHintPrefs(
-  val firstAppStart: Boolean = true
-) {
-  companion object {
-    @Provide val prefModule = PrefModule { AppStartPremiumHintPrefs() }
-  }
 }

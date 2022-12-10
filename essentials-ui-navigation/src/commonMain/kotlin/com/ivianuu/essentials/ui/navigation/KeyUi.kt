@@ -59,7 +59,6 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   remember(currentModel) {
     {
       with(ui) {
-        .
         with(currentModel) {
           invoke()
         }
