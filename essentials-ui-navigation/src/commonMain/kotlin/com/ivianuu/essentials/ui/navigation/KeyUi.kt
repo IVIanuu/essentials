@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
+import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlin.reflect.KClass
@@ -18,7 +19,7 @@ fun interface KeyUi<K : Key<*>> {
 
 fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
 
-typealias KeyUiFactory<K> = (K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (Scope<KeyUiScope>, K) -> KeyUi<K>
 
 @Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
   @Provide fun keyUi(
@@ -58,6 +59,7 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
   remember(currentModel) {
     {
       with(ui) {
+        .
         with(currentModel) {
           invoke()
         }

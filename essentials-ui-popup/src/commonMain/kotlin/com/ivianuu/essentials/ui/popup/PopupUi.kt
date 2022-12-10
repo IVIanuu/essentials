@@ -92,7 +92,7 @@ data class PopupKey(
   }
 }
 
-@Provide val popupKeyOptionsFactory = KeyUiOptionsFactory<PopupKey> {
+@Provide val popupKeyOptionsFactory = KeyUiOptionsFactory<PopupKey> { _, _ ->
   KeyUiOptions(opaque = true, transition = PopupStackTransition)
 }
 

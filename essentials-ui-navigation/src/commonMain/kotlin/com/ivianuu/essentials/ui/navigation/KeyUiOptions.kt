@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.ui.animation.transition.StackTransition
+import com.ivianuu.injekt.common.Scope
 
 data class KeyUiOptions(
   val enterTransition: StackTransition? = null,
@@ -17,8 +18,8 @@ data class KeyUiOptions(
   ) : this(transition, transition, opaque)
 }
 
-fun interface KeyUiOptionsFactory<K : Key<*>> : (K) -> KeyUiOptions
+fun interface KeyUiOptionsFactory<K : Key<*>> : (Scope<KeyUiScope>, K) -> KeyUiOptions
 
-fun <K : Key<*>> noOpKeyUiOptionFactory() = KeyUiOptionsFactory<K> { defaultKeyUiOptions }
+fun <K : Key<*>> noOpKeyUiOptionFactory() = KeyUiOptionsFactory<K> { _, _ -> defaultKeyUiOptions }
 
 private val defaultKeyUiOptions = KeyUiOptions()

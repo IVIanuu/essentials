@@ -38,7 +38,10 @@ fun interface NavigationStateContent {
 
 @Provide fun navigationStateContent(
   navigator: Navigator,
-  componentFactory: (Scope<KeyUiScope>, Key<*>) -> NavigationContentComponent,
+  optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
+  uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
+  decorateUi: (Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
+  elementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
   rootKey: RootKey? = null,
   scope: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
@@ -67,16 +70,15 @@ fun interface NavigationStateContent {
         var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = Scope<KeyUiScope>()
-          val navigationContentComponent = componentFactory(scope, key)
-          val content = navigationContentComponent.uiFactories[key::class]?.invoke(key)
+          val content = uiFactories[key::class]?.invoke(scope, key)
           checkNotNull(content) { "No ui factory found for $key" }
-          val options = navigationContentComponent.optionFactories[key::class]?.invoke(key)
+          val options = optionFactories[key::class]?.invoke(scope, key)
           content to NavigationContentStateChild(
             key = key,
             options = options,
             content = { currentUi },
-            decorateKeyUi = navigationContentComponent.decorateUi,
-            elements = navigationContentComponent.elements,
+            decorateKeyUi = decorateUi(scope, key),
+            elements = elementsFactory(scope, key),
             scope = scope
           )
         }
@@ -169,9 +171,3 @@ private class NavigationContentStateChild(
   }
 }
 
-@Provide data class NavigationContentComponent(
-  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
-  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
-  val decorateUi: DecorateKeyUi,
-  val elements: Elements<KeyUiScope>
-)
