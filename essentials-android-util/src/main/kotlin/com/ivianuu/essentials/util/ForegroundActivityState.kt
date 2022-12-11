@@ -16,14 +16,16 @@ import com.ivianuu.injekt.coroutines.MainContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
-@Tag annotation class ForegroundActivityTag
+@Tag annotation class ForegroundActivityTag {
+  companion object {
+    @Provide
+    val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
+  }
+}
 
 typealias ForegroundActivity = @ForegroundActivityTag ComponentActivity?
 
 interface ForegroundActivityMarker
-
-@Provide
-val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
