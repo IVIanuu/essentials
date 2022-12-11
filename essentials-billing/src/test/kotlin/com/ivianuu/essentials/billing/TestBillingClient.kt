@@ -20,14 +20,13 @@ import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.SkuDetailsResponseListener
-import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TestBillingClient(
   private val purchasesUpdated: () -> Unit,
-  @Provide private val scope: CoroutineScope
+  private val scope: CoroutineScope
 ) : BillingClient() {
   var purchases = emptyList<Purchase>()
     set(value) {
@@ -47,7 +46,7 @@ class TestBillingClient(
       listener.onBillingSetupFinished(successResult())
       return
     }
-    launch {
+    scope.launch {
       delay(10)
       listener.onBillingSetupFinished(successResult())
       isConnected = true
@@ -59,7 +58,7 @@ class TestBillingClient(
   }
 
   override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
-    launch {
+    scope.launch {
       delay(10)
       purchases = purchases + Purchase(sku = params.sku)
     }
@@ -83,7 +82,7 @@ class TestBillingClient(
     params: SkuDetailsParams,
     listener: SkuDetailsResponseListener
   ) {
-    launch {
+    scope.launch {
       delay(10)
       listener.onSkuDetailsResponse(
         successResult(),
@@ -94,7 +93,7 @@ class TestBillingClient(
 
   override fun consumeAsync(params: ConsumeParams, listener: ConsumeResponseListener) {
     purchases = purchases.filterNot { it.purchaseToken == params.purchaseToken }
-    launch {
+    scope.launch {
       delay(10)
       listener.onConsumeResponse(successResult(), params.purchaseToken)
     }
@@ -125,7 +124,7 @@ class TestBillingClient(
           it.developerPayload
         )
       }
-    launch {
+    scope.launch {
       delay(10)
       listener.onAcknowledgePurchaseResponse(successResult())
     }
