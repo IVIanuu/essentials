@@ -10,16 +10,20 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import java.io.File
 
-@Tag annotation class BackupFileTag
+@Tag annotation class BackupFileTag {
+  companion object {
+    @Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
+
+    @Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
+
+    @Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")
+  }
+}
 typealias BackupFile = @BackupFileTag File
 
-@Tag annotation class BackupDirTag
+@Tag annotation class BackupDirTag {
+  companion object {
+    @Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
+  }
+}
 typealias BackupDir = @BackupDirTag File
-
-@Provide fun backupDir(dataDir: DataDir): BackupDir = dataDir.resolve("files/backups")
-
-@Provide fun backupPrefs(prefsDir: PrefsDir): BackupFile = prefsDir
-
-@Provide fun backupDatabases(dataDir: DataDir): BackupFile = dataDir.resolve("databases")
-
-@Provide fun backupSharedPrefs(dataDir: DataDir): BackupFile = dataDir.resolve("shared_prefs")

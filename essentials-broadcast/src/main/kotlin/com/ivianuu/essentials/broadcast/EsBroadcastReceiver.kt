@@ -27,8 +27,7 @@ class EsBroadcastReceiver : BroadcastReceiver() {
   }
 }
 
-@Provide @Element<AppScope>
-data class EsBroadcastReceiverComponent(
+@Provide @Element<AppScope> data class EsBroadcastReceiverComponent(
   val handlers: List<BroadcastHandler>,
   val scope: NamedCoroutineScope<AppScope>
 )
