@@ -8,6 +8,6 @@ import com.ivianuu.injekt.Provide
 
 fun interface KeyHandler<R> : suspend (Key<R>) -> (suspend () -> R?)? {
   companion object {
-    @Provide fun defaultKeyHandlers() = emptyList<KeyHandler<*>>()
+    @Provide val defaultKeyHandlers get() = emptyList<KeyHandler<*>>()
   }
 }

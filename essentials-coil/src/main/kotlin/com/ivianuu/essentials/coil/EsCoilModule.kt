@@ -36,14 +36,14 @@ import kotlin.reflect.KClass
   }
   .build()
 
-@Provide fun defaultDecoderFactories() = emptyList<Decoder.Factory>()
+@Provide val defaultDecoderFactories get() = emptyList<Decoder.Factory>()
 
 @Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherFactoryPair(
   instance: F,
   typeClass: KClass<T>
 ): FetcherPair<*> = FetcherPair(instance, typeClass)
 
-@Provide fun defaultFetcherFactories() = emptyList<FetcherPair<*>>()
+@Provide val defaultFetcherFactories get() = emptyList<FetcherPair<*>>()
 
 data class FetcherPair<T : Any>(
   val factory: Fetcher.Factory<T>,
@@ -60,9 +60,9 @@ data class MapperPair<T : Any>(
   val type: KClass<T>
 )
 
-@Provide fun defaultMappers() = emptyList<MapperPair<*>>()
+@Provide val defaultMappers get() = emptyList<MapperPair<*>>()
 
-@Provide fun defaultInterceptors() = emptyList<Interceptor>()
+@Provide val defaultInterceptors get() = emptyList<Interceptor>()
 
 @Provide fun <@Spread K : Keyer<T>, T : Any> keyerPair(
   instance: K,
@@ -74,4 +74,4 @@ data class KeyerPair<T : Any>(
   val type: KClass<T>
 )
 
-@Provide fun defaultKeyes() = emptyList<KeyerPair<*>>()
+@Provide val defaultKeyers get() = emptyList<KeyerPair<*>>()
