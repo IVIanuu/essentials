@@ -81,7 +81,7 @@ typealias PermissionState<P> = @PermissionStateTag<P> Boolean
     }
   }
 
-fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<PermissionState<Boolean>>
+fun interface PermissionStateFactory : (List<TypeKey<Permission>>) -> Flow<PermissionState<*>>
 
 @Provide fun permissionStateFactory(
   permissionStates: () -> Map<TypeKey<Permission>, Flow<PermissionState<Permission>>>

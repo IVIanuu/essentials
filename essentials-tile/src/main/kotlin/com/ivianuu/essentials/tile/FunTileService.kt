@@ -99,15 +99,13 @@ abstract class AbstractFunTileService<T : Any>(
   }
 }
 
-@Provide @Element<AppScope>
-data class FunTileServiceComponent(
+@Provide @Element<AppScope> data class FunTileServiceComponent(
   val logger: Logger,
   val resourceProvider: ResourceProvider,
   val tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
 )
 
-@Provide @Element<TileScope>
-data class TileModelComponent(
+@Provide @Element<TileScope> data class TileModelComponent(
   val tileId: TileId,
   val tileModelElements: List<Pair<TileId, Model<TileModel<*>>>>,
   val coroutineScope: NamedCoroutineScope<TileScope>,

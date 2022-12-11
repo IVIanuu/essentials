@@ -27,8 +27,7 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
-@Provide
-class TileModuleElementModule<@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> {
+@Provide class TileModuleElementModule<@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> {
   @Provide inline fun element(
     serviceClass: KClass<S>,
     provider: T
