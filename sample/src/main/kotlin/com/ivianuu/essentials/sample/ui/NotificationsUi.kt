@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.sample.ui
 
 import android.app.Notification
-import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -65,7 +64,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlin.reflect.KClass
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
@@ -221,11 +219,7 @@ private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNo
   )
 }
 
-@Provide object SampleNotificationsPermission : NotificationListenerPermission {
-  override val serviceClass: KClass<out NotificationListenerService>
-    get() = EsNotificationListenerService::class
-  override val title: String
-    get() = "Notifications"
-  override val icon: (@Composable () -> Unit)?
-    get() = null
-}
+@Provide object SampleNotificationsPermission : NotificationListenerPermission(
+  serviceClass = EsNotificationListenerService::class,
+  title = "Notifications"
+)

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.systemoverlay
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
@@ -16,7 +17,11 @@ import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
 
-interface SystemOverlayPermission : Permission
+abstract class SystemOverlayPermission(
+  override val title: String,
+  override val desc: String? = null,
+  override val icon: @Composable (() -> Unit)? = null
+) : Permission
 
 @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
   context: AppContext

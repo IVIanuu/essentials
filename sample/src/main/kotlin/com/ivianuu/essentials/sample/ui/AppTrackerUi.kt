@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.accessibilityservice.AccessibilityService
 import android.app.Notification
 import android.app.NotificationManager
 import androidx.compose.material.Text
@@ -38,7 +37,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
 
@@ -91,11 +89,8 @@ private fun AppTrackerNotification(
     setContentTitle("Current app: ${currentApp?.value}")
   }
 
-@Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission {
-  override val serviceClass: KClass<out AccessibilityService>
-    get() = EsAccessibilityService::class
-  override val title: String
-    get() = "Accessibility"
-  override val desc: String
-    get() = "Needs the permission to track the current app"
-}
+@Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission(
+  serviceClass = EsAccessibilityService::class,
+  title = "Accessibility",
+  desc = "Needs the permission to track the current app"
+)

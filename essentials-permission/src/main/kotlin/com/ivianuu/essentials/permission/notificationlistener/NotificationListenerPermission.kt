@@ -7,6 +7,7 @@ package com.ivianuu.essentials.permission.notificationlistener
 import android.content.Intent
 import android.provider.Settings
 import android.service.notification.NotificationListenerService
+import androidx.compose.runtime.Composable
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import com.ivianuu.essentials.AppContext
@@ -18,9 +19,12 @@ import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
 import kotlin.reflect.KClass
 
-interface NotificationListenerPermission : Permission {
-  val serviceClass: KClass<out NotificationListenerService>
-}
+abstract class NotificationListenerPermission(
+  val serviceClass: KClass<out NotificationListenerService>,
+  override val title: String,
+  override val desc: String? = null,
+  override val icon: @Composable (() -> Unit)? = null
+) : Permission
 
 @Provide fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -15,9 +16,12 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 
-interface RuntimePermission : Permission {
-  val permissionName: String
-}
+abstract class RuntimePermission(
+  val permissionName: String,
+  override val title: String,
+  override val desc: String? = null,
+  override val icon: @Composable (() -> Unit)? = null
+) : Permission
 
 @Provide fun <P : RuntimePermission> runtimePermissionStateProvider(
   context: AppContext

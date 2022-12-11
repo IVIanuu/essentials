@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.writesettings
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
@@ -14,7 +15,11 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.injekt.Provide
 
-interface WriteSettingsPermission : Permission
+abstract class WriteSettingsPermission(
+  override val title: String,
+  override val desc: String? = null,
+  override val icon: @Composable (() -> Unit)? = null
+) : Permission
 
 @Provide fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
   context: AppContext
