@@ -7,7 +7,6 @@ package com.ivianuu.essentials.permission.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
@@ -22,7 +21,7 @@ abstract class AccessibilityServicePermission(
   val serviceClass: KClass<out AccessibilityService>,
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
+  override val icon: Permission.Icon? = null
 ) : Permission
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(

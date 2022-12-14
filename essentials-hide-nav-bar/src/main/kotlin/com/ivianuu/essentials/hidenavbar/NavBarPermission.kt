@@ -9,6 +9,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.loadResource
+import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.ui.UiScope
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.first
 @Provide class NavBarPermission(RP: ResourceProvider) : WriteSecureSettingsPermission(
   title = loadResource(R.string.es_permission_nav_bar),
   desc = loadResource(R.string.es_permission_nav_bar_desc),
-  icon = { Icon(R.drawable.es_ic_settings) }
+  icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
 )
 
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(

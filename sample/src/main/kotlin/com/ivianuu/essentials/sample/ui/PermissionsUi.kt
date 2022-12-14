@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
+import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
@@ -68,44 +69,44 @@ object PermissionsKey : Key<Unit>
   permissionName = android.Manifest.permission.CAMERA,
   title = "Camera",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SamplePhonePermission : RuntimePermission(
   permissionName = android.Manifest.permission.CALL_PHONE,
   title = "Call phone",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SampleAccessibilityPermission : AccessibilityServicePermission(
   serviceClass = EsAccessibilityService::class,
   title = "Accessibility",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SampleNotificationListenerPermission : NotificationListenerPermission(
   serviceClass = EsNotificationListenerService::class,
   title = "Notification listener",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SampleSystemOverlayPermission : SystemOverlayPermission(
   title = "System overlay",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SampleWriteSecureSettingsPermission : WriteSecureSettingsPermission(
   title = "Write secure settings",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
 
 @Provide object SampleWriteSettingsPermission : WriteSettingsPermission(
   title = "Write settings",
   desc = "This is a desc",
-  icon = { Icon(Icons.Default.Menu) }
+  icon = Permission.Icon { Icon(Icons.Default.Menu) }
 )
