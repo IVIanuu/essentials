@@ -11,7 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -54,7 +54,7 @@ data class AppPickerKey(
         title = { Text(app.appName) },
         leading = {
           Image(
-            painter = rememberImagePainter(AppIcon(packageName = app.packageName)),
+            painter = rememberAsyncImagePainter(AppIcon(packageName = app.packageName)),
             modifier = Modifier.size(40.dp)
           )
         }

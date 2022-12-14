@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.rate.R
@@ -56,7 +56,7 @@ object RateKey : PopupKey<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberImagePainter(AppIcon(packageName)),
+            painter = rememberAsyncImagePainter(AppIcon(packageName)),
             modifier = Modifier.size(96.dp)
           )
 

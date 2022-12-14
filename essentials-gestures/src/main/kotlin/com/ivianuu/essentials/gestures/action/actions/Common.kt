@@ -12,7 +12,7 @@ import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.SystemBuildInfo
@@ -33,7 +33,7 @@ import com.ivianuu.injekt.common.TypeKey
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
-    painter = rememberImagePainter(data),
+    painter = rememberAsyncImagePainter(data),
     modifier = LocalActionImageSizeModifier.current
   )
 }

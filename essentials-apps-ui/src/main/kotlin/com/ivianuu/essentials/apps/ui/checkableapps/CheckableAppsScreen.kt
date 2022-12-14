@@ -13,7 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
@@ -78,7 +78,7 @@ data class CheckableAppsParams(
         title = { Text(app.info.appName) },
         leading = {
           Image(
-            painter = rememberImagePainter(AppIcon(packageName = app.info.packageName)),
+            painter = rememberAsyncImagePainter(AppIcon(packageName = app.info.packageName)),
             modifier = Modifier.size(40.dp)
           )
         },
