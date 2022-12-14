@@ -17,9 +17,9 @@ import com.ivianuu.essentials.ui.material.Switch
 @Composable fun <T> MultiChoiceListDialog(
   modifier: Modifier = Modifier,
   item: @Composable (T) -> Unit,
-  icon: @Composable (() -> Unit)? = null,
-  title: @Composable (() -> Unit)? = null,
-  buttons: @Composable (() -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  buttons: (@Composable () -> Unit)? = null,
   selectedItems: Set<T>,
   onSelectionsChanged: (Set<T>) -> Unit,
   items: List<T>,

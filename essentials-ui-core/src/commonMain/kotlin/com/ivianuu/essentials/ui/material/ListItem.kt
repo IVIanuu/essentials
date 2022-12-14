@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable fun ListItem(
   modifier: Modifier = Modifier,
-  title: @Composable (() -> Unit)? = null,
-  subtitle: @Composable (() -> Unit)? = null,
-  leading: @Composable (() -> Unit)? = null,
-  trailing: @Composable (() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
+  trailing: (@Composable () -> Unit)? = null,
   contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
 ) {

@@ -27,10 +27,10 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 
 @Composable fun Dialog(
   modifier: Modifier = Modifier,
-  icon: @Composable (() -> Unit)? = null,
-  title: @Composable (() -> Unit)? = null,
-  buttons: @Composable (() -> Unit)? = null,
-  content: @Composable (() -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  buttons: (@Composable () -> Unit)? = null,
+  content: (@Composable () -> Unit)? = null,
   showTopDivider: Boolean = false,
   showBottomDivider: Boolean = false,
   applyContentPadding: Boolean = true,
@@ -49,17 +49,17 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 }
 
 @Composable private fun DialogBody(
-  icon: @Composable (() -> Unit)?,
-  title: @Composable (() -> Unit)?,
-  content: @Composable (() -> Unit)?,
+  icon: (@Composable () -> Unit)?,
+  title: (@Composable () -> Unit)?,
+  content: (@Composable () -> Unit)?,
   buttons: @Composable() (() -> Unit)?,
   showTopDivider: Boolean,
   showBottomDivider: Boolean,
   applyContentPadding: Boolean
 ) {
-  val header: @Composable (() -> Unit)? = if (icon != null || title != null) {
+  val header: (@Composable () -> Unit)? = if (icon != null || title != null) {
     {
-      val styledTitle: @Composable (() -> Unit)? = title?.let {
+      val styledTitle: (@Composable () -> Unit)? = title?.let {
         {
           CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.h6,
@@ -69,7 +69,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
         }
       }
 
-      val styledIcon: @Composable (() -> Unit)? = icon?.let {
+      val styledIcon: (@Composable () -> Unit)? = icon?.let {
         {
           CompositionLocalProvider(
             LocalContentAlpha provides ContentAlpha.high,
@@ -94,7 +94,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
     null
   }
 
-  val finalContent: @Composable (() -> Unit)? = if (content != null) {
+  val finalContent: (@Composable () -> Unit)? = if (content != null) {
     {
       CompositionLocalProvider(
         LocalTextStyle provides MaterialTheme.typography.body2,
@@ -120,9 +120,9 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
   showTopDivider: Boolean,
   showBottomDivider: Boolean,
   applyContentPadding: Boolean,
-  header: @Composable (() -> Unit)?,
-  content: @Composable (() -> Unit)?,
-  buttons: @Composable (() -> Unit)?
+  header: (@Composable () -> Unit)?,
+  content: (@Composable () -> Unit)?,
+  buttons: (@Composable () -> Unit)?
 ) {
   val finalContent: @Composable () -> Unit = {
     if (header != null) {

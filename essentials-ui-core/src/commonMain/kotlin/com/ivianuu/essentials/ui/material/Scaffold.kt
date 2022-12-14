@@ -25,9 +25,9 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
 
 @Composable fun Scaffold(
   scaffoldState: ScaffoldState = rememberScaffoldState(),
-  topBar: @Composable (() -> Unit)? = null,
-  bottomBar: @Composable (() -> Unit)? = null,
-  floatingActionButton: @Composable (() -> Unit)? = null,
+  topBar: (@Composable () -> Unit)? = null,
+  bottomBar: (@Composable () -> Unit)? = null,
+  floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   isFloatingActionButtonDocked: Boolean = false,
   drawerContent: @Composable (ColumnScope.() -> Unit)? = null,

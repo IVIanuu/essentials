@@ -22,7 +22,7 @@ abstract class AccessibilityServicePermission(
   val serviceClass: KClass<out AccessibilityService>,
   override val title: String,
   override val desc: String? = null,
-  override val icon: @Composable (() -> Unit)? = null
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(

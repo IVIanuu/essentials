@@ -24,10 +24,10 @@ import androidx.compose.ui.text.input.TextFieldValue
   modifier: Modifier = Modifier,
   value: String,
   onValueChange: (String) -> Unit,
-  label: @Composable (() -> Unit)? = null,
-  icon: @Composable (() -> Unit)? = null,
-  title: @Composable (() -> Unit)? = null,
-  buttons: @Composable (() -> Unit)? = null,
+  label: (@Composable () -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  buttons: (@Composable () -> Unit)? = null,
   keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
   Dialog(

@@ -19,9 +19,9 @@ import com.ivianuu.essentials.ui.material.ListItem
 @Composable fun <T> SingleChoiceListDialog(
   modifier: Modifier = Modifier,
   item: @Composable (T) -> Unit,
-  icon: @Composable (() -> Unit)? = null,
-  title: @Composable (() -> Unit)? = null,
-  buttons: @Composable (() -> Unit)? = null,
+  icon: (@Composable () -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  buttons: (@Composable () -> Unit)? = null,
   onSelectionChanged: (T) -> Unit,
   items: List<T>,
   selectedItem: T,

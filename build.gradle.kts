@@ -9,11 +9,12 @@ buildscript {
     mavenLocal()
     google()
     mavenCentral()
+    jcenter()
     maven("https://plugins.gradle.org/m2")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://jitpack.io")
-    maven("https://github.com/rovo89/XposedBridge/blob/gh-pages/")
+    maven("https://github.com/IVIanuu/XposedBridge/tree/gh-pages")
   }
 
   dependencies {
@@ -35,9 +36,10 @@ allprojects {
     mavenLocal()
     google()
     mavenCentral()
+    jcenter()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://jitpack.io")
-    maven("https://github.com/rovo89/XposedBridge/blob/gh-pages/")
+    maven("https://github.com/IVIanuu/XposedBridge/tree/gh-pages")
   }
 
   plugins.withId("com.vanniktech.maven.publish") {

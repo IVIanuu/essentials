@@ -17,7 +17,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 @Composable fun SimpleListScreen(
   title: String,
   popupMenuItems: List<PopupMenu.Item> = emptyList(),
-  floatingActionButton: @Composable (() -> Unit)? = null,
+  floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   content: LazyListScope.() -> Unit
 ) {
@@ -40,7 +40,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 @Composable inline fun SimpleListScreen(
   titleRes: Int,
   popupMenuItems: List<PopupMenu.Item> = emptyList(),
-  noinline floatingActionButton: @Composable (() -> Unit)? = null,
+  noinline floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   noinline content: LazyListScope.() -> Unit
 ) {

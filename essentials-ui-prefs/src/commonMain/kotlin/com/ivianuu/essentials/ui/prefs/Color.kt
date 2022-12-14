@@ -19,9 +19,9 @@ import com.ivianuu.essentials.ui.material.ListItem
 @Composable fun ColorListItem(
   value: Color,
   onValueChangeRequest: () -> Unit,
-  title: @Composable (() -> Unit)? = null,
-  subtitle: @Composable (() -> Unit)? = null,
-  leading: @Composable (() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
   modifier: Modifier = Modifier
 ) {
   ListItem(

@@ -42,9 +42,9 @@ import kotlin.time.Duration
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
   onValueChange: (T) -> Unit,
-  title: @Composable (() -> Unit)? = null,
-  subtitle: @Composable (() -> Unit)? = null,
-  leading: @Composable (() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
@@ -137,9 +137,9 @@ import kotlin.time.Duration
 
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: Value<T>,
-  title: @Composable (() -> Unit)? = null,
-  subtitle: @Composable (() -> Unit)? = null,
-  leading: @Composable (() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  subtitle: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = null,
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,

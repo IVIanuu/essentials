@@ -42,10 +42,10 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 
 @Composable fun TopAppBar(
   modifier: Modifier = Modifier,
-  title: @Composable (() -> Unit)? = null,
-  leading: @Composable (() -> Unit)? = autoTopAppBarLeadingIcon(),
-  actions: @Composable (() -> Unit)? = null,
-  bottomContent: @Composable (() -> Unit)? = null,
+  title: (@Composable () -> Unit)? = null,
+  leading: (@Composable () -> Unit)? = autoTopAppBarLeadingIcon(),
+  actions: (@Composable () -> Unit)? = null,
+  bottomContent: (@Composable () -> Unit)? = null,
   backgroundColor: Color = when (LocalAppBarStyle.current) {
     AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
     AppBarStyle.SURFACE -> MaterialTheme.colors.surface
@@ -100,7 +100,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   contentColor: Color = guessingContentColorFor(backgroundColor),
   elevation: Dp = DefaultAppBarElevation,
   applySystemBarStyle: Boolean = true,
-  bottomContent: @Composable (() -> Unit)? = null,
+  bottomContent: (@Composable () -> Unit)? = null,
   content: @Composable RowScope.() -> Unit,
 ) {
   val systemBarStyleModifier = if (applySystemBarStyle) {
@@ -135,7 +135,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
 private val DefaultAppBarHeight = 64.dp
 val DefaultAppBarElevation = 0.dp
 
-@Composable fun autoTopAppBarLeadingIcon(): @Composable (() -> Unit)? {
+@Composable fun autoTopAppBarLeadingIcon(): (@Composable () -> Unit)? {
   val component = LocalKeyUiElements.current<AutoTopAppBarComponent>()
   val canGoBack = remember {
     component.navigator.backStack.value.indexOf(component.key) > 0
