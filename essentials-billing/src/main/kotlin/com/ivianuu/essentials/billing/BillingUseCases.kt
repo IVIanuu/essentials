@@ -9,9 +9,11 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.consumePurchase
+import com.android.billingclient.api.queryPurchasesAsync
 import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.logging.log
@@ -67,7 +69,6 @@ fun interface PurchaseUseCase : suspend (Sku, Boolean, Boolean) -> Boolean
     val billingFlowParams = BillingFlowParams.newBuilder()
       .setSkuDetails(skuDetails)
       .build()
-
 
     val result = billingClient.launchBillingFlow(activity, billingFlowParams)
     if (result.responseCode != BillingClient.BillingResponseCode.OK)
@@ -148,15 +149,19 @@ fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
   .distinctUntilChanged()
   .onEach { log { "is purchased flow for $sku -> $it" } }
 
-private fun BillingContext.getIsPurchased(sku: Sku): Boolean {
+private suspend fun BillingContext.getIsPurchased(sku: Sku): Boolean {
   val purchase = getPurchase(sku) ?: return false
   val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
   log { "get is purchased for $sku result is $isPurchased for $purchase" }
   return isPurchased
 }
 
-private fun BillingContext.getPurchase(sku: Sku): Purchase? =
-  billingClient.queryPurchases(sku.type.value)
+private suspend fun BillingContext.getPurchase(sku: Sku): Purchase? =
+  billingClient.queryPurchasesAsync(
+    QueryPurchasesParams.newBuilder()
+      .setProductType(sku.type.value)
+      .build()
+  )
     .purchasesList
-    ?.firstOrNull { it.sku == sku.skuString }
+    .firstOrNull { sku.skuString in it.skus }
     .also { log { "got purchase $it for $sku" } }
