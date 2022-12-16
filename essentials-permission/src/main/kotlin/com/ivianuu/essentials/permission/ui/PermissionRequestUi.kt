@@ -87,7 +87,7 @@ data class UiPermission<P : Permission>(
         UiPermission(
           permissionKey,
           permissions[permissionKey]!!,
-          permissionStateFactory(listOf(permissionKey)).bind { false }
+          permissionStateFactory(listOf(permissionKey)).bind(false)
         )
       },
     grantPermission = action { permission ->

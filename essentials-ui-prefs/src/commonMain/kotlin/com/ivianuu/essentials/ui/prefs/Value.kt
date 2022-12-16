@@ -37,7 +37,7 @@ interface Value<T> {
 }
 
 @Composable fun <S, T> DataStore<S>.value(lens: Lens<S, T>, initial: T): Value<T> {
-  val current = data.bind { null }?.let { lens.get(it) } ?: initial
+  val current = data.bind(null)?.let { lens.get(it) } ?: initial
   return Value(current = current, updater = action { newValue ->
     updateData { lens.set(this, newValue) }
   })

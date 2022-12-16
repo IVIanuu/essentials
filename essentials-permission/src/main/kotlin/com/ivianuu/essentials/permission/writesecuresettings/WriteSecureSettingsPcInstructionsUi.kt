@@ -198,8 +198,8 @@ typealias AdbEnabled = @AdbEnabledTag Int
 
   val canContinueStep = if (currentStep != completedStep) false
   else when (completedStep) {
-    1 -> developerModeSetting.data.map { it != 0 }.bind { false }
-    2 -> adbEnabledSetting.data.map { it != 0 }.bind { false }
+    1 -> developerModeSetting.data.map { it != 0 }.bind(false)
+    2 -> adbEnabledSetting.data.map { it != 0 }.bind(false)
     3 -> true
     4 -> produce(false) {
       while (true) {

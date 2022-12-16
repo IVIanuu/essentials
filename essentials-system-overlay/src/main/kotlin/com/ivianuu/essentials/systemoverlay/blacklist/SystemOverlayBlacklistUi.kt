@@ -85,7 +85,7 @@ data class SystemOverlayBlacklistModel(
   pref: DataStore<SystemOverlayBlacklistPrefs>,
   ctx: KeyUiContext<SystemOverlayBlacklistKey>
 ) = Model {
-  val prefs = pref.data.bind { SystemOverlayBlacklistPrefs() }
+  val prefs = pref.data.bind(SystemOverlayBlacklistPrefs())
   SystemOverlayBlacklistModel(
     systemOverlayName = ctx.key.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,
