@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.combine
+import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
@@ -136,5 +137,39 @@ fun interface PermissionRequester : suspend (List<TypeKey<Permission>>) -> Boole
     val result = navigator.push(PermissionRequestKey(requestedPermissions)) == true
     log { "request permissions result $requestedPermissions -> $result" }
     return@withContext result
+  }
+}
+
+interface PermissionRevokeHandler : suspend (List<TypeKey<Permission>>) -> Unit {
+  val permissions: List<TypeKey<Permission>>
+
+  companion object {
+    inline operator fun invoke(
+      permissions: List<TypeKey<Permission>>,
+      crossinline block: suspend (List<TypeKey<Permission>>) -> Unit
+    ): PermissionRevokeHandler {
+      return object : PermissionRevokeHandler {
+        override val permissions: List<TypeKey<Permission>>
+          get() = permissions
+
+        override suspend fun invoke(p1: List<TypeKey<Permission>>) {
+          block(p1)
+        }
+      }
+    }
+
+    @Provide val defaultHandlers get() = emptyList<PermissionRevokeHandler>()
+  }
+}
+
+@Provide fun permissionRevokeWorker(
+  handlers: List<PermissionRevokeHandler>,
+  permissionStateFactory: PermissionStateFactory
+) = ScopeWorker<UiScope> {
+  handlers.parForEach { handler ->
+    val revokedPermissions = handler.permissions
+      .filter { !permissionStateFactory(listOf(it)).first() }
+    if (revokedPermissions.isNotEmpty())
+      handler(revokedPermissions)
   }
 }
