@@ -13,17 +13,18 @@ import com.ivianuu.injekt.Provide
 
 @Provide val helpHomeItem = HomeItem("Help") { HelpKey }
 
-@Provide val helpCategories: List<HelpCategory> get() = listOf(
-  HelpCategory(
-    title = null,
-    items = listOf(
-      HelpItem(
-        question = "What's the answer to everything?",
-        answer = "42"
-      ),
-      HelpItem(
-        question = "Sample question 1",
-        answer = "Sample answer 1",
+@Provide val helpCategories
+  get() = listOf(
+    HelpCategory(
+      title = null,
+      items = listOf(
+        HelpItem(
+          question = "What's the answer to everything?",
+          answer = "42"
+        ),
+        HelpItem(
+          question = "Sample question 1",
+          answer = "Sample answer 1",
         actions = {
           TextButton(onClick = {}) {
             Text("Action 1")

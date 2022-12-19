@@ -64,14 +64,11 @@ interface Permission {
   ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 
   companion object {
-    @Provide val defaultPermissions: Collection<Pair<TypeKey<Permission>, Permission>>
-      get() = emptyList()
+    @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, Permission>>()
 
-    @Provide val defaultRequestHandlers: Collection<Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>>
-      get() = emptyList()
+    @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>>()
 
-    @Provide val defaultStates: Collection<Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>>>
-      get() = emptyList()
+    @Provide val defaultStates get() = emptyList<Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>>>()
   }
 }
 

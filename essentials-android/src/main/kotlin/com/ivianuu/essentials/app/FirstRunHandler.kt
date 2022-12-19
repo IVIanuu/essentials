@@ -6,7 +6,6 @@ package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
@@ -34,8 +33,7 @@ import kotlinx.serialization.Serializable
 
 fun interface FirstRunHandler : suspend () -> Unit {
   companion object {
-    @Provide val defaultHandlers: List<FirstRunHandler>
-      get() = emptyList()
+    @Provide val defaultHandlers get() = emptyList<FirstRunHandler>()
   }
 }
 

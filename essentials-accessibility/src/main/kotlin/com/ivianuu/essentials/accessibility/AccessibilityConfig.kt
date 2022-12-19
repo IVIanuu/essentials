@@ -15,6 +15,6 @@ data class AccessibilityConfig(
   val notificationTimeout: Long = 0L,
 ) {
   companion object {
-    @Provide val defaultConfigs: Collection<AccessibilityConfig> get() = emptyList()
+    @Provide val defaultConfigs get() = emptyList<AccessibilityConfig>()
   }
 }

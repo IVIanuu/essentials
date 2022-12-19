@@ -135,31 +135,6 @@ import kotlin.time.Duration
   }
 }
 
-@Composable fun <T : Comparable<T>> SliderListItem(
-  value: Value<T>,
-  title: (@Composable () -> Unit)? = null,
-  subtitle: (@Composable () -> Unit)? = null,
-  leading: (@Composable () -> Unit)? = null,
-  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
-  valueText: @Composable ((T) -> Unit)? = null,
-  modifier: Modifier = Modifier,
-  @Inject converter: SliderValueConverter<T>,
-  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
-) {
-  SliderListItem(
-    value = value.current,
-    onValueChange = value.updater,
-    title = title,
-    subtitle = subtitle,
-    leading = leading,
-    valueRange = valueRange,
-    stepPolicy = stepPolicy,
-    valueText = valueText,
-    modifier = modifier,
-    converter = converter
-  )
-}
-
 @Tag annotation class DefaultSliderRange {
   companion object {
     @Provide val double: @DefaultSliderRange ClosedRange<Double> = 0.0..1.0

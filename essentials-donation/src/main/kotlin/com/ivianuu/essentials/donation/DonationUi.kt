@@ -48,7 +48,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
 
 @JvmInline value class Donations(val value: List<Donation>) {
   companion object {
-    @Provide val default: Donations
+    @Provide val default
       get() = Donations(
         listOf(
           Donation(Sku("donation_crossaint", Sku.Type.IN_APP), R.drawable.es_ic_bakery_dining),

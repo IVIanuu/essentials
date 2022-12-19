@@ -17,8 +17,7 @@ import kotlinx.serialization.Serializable
 
 fun interface AppVersionUpgradeHandler : suspend (Int, Int) -> Unit {
   companion object {
-    @Provide val defaultHandlers: List<AppVersionUpgradeHandler>
-      get() = emptyList()
+    @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
   }
 }
 

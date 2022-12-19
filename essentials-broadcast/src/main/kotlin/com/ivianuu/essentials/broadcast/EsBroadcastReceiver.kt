@@ -42,7 +42,6 @@ fun interface BroadcastHandler : suspend (Intent) -> Unit {
         handle(it)
     }
 
-    @Provide val defaultHandlers: List<BroadcastHandler>
-      get() = emptyList()
+    @Provide val defaultHandlers get() = emptyList<BroadcastHandler>()
   }
 }

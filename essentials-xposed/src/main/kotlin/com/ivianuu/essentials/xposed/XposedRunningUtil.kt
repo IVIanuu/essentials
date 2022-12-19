@@ -8,4 +8,4 @@ import com.ivianuu.injekt.Provide
 
 @JvmInline value class IsXposedRunning(val value: Boolean)
 
-@Provide val isXposedRunning: IsXposedRunning get() = IsXposedRunning(false)
+@Provide val isXposedRunning get() = IsXposedRunning(false)

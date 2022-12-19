@@ -13,8 +13,7 @@ import kotlinx.coroutines.flow.first
 
 @JvmInline value class AppStartPremiumHintEnabled(val value: Boolean) {
   companion object {
-    @Provide val default: AppStartPremiumHintEnabled
-      get() = AppStartPremiumHintEnabled(true)
+    @Provide val default get() = AppStartPremiumHintEnabled(true)
   }
 }
 

@@ -10,6 +10,6 @@ fun interface Hooks {
   operator fun XposedContext.invoke()
 
   companion object {
-    @Provide val defaultHooks: Collection<Hooks> get() = emptyList()
+    @Provide val defaultHooks get() = emptyList<Hooks>()
   }
 }

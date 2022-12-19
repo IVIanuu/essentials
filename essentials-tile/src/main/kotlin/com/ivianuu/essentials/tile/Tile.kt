@@ -36,10 +36,9 @@ fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.St
   @Provide inline fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
 
   companion object {
-    @Provide val defaultElements: Collection<Pair<TileId, Model<TileModel<*>>>>
-      get() = emptyList()
+    @Provide val defaultElements get() = emptyList<Pair<TileId, Model<TileModel<*>>>>()
 
-    @Provide val defaultTileIds: Collection<TileId> get() = emptyList()
+    @Provide val defaultTileIds get() = emptyList<TileId>()
   }
 }
 

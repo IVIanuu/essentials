@@ -116,16 +116,14 @@ interface PremiumVersionManager {
 
 @Tag annotation class PremiumVersionSkuTag {
   companion object {
-    @Provide val default: PremiumVersionSku
-      get() = Sku("premium_version", Sku.Type.SUBS)
+    @Provide val default get() = Sku("premium_version", Sku.Type.SUBS)
   }
 }
 typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 
 @Tag annotation class OldPremiumVersionSkuTag {
   companion object {
-    @Provide val defaultOldPermissionVersionSkus: List<OldPremiumVersionSku>
-      get() = emptyList()
+    @Provide val defaultOldPermissionVersionSkus get() = emptyList<OldPremiumVersionSku>()
   }
 }
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
@@ -145,7 +143,6 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 fun interface PremiumDowngradeHandler : suspend () -> Unit {
   companion object {
-    @Provide val defaultHandlers: List<PremiumDowngradeHandler>
-      get() = emptyList()
+    @Provide val defaultHandlers get() = emptyList<PremiumDowngradeHandler>()
   }
 }
