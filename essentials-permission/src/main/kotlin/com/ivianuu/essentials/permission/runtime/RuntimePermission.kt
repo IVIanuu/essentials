@@ -6,14 +6,13 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
+import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 
 abstract class RuntimePermission(
@@ -34,5 +33,6 @@ abstract class RuntimePermission(
   navigator: Navigator
 ) = PermissionRequestHandler<P> { permission ->
   val contract = ActivityResultContracts.RequestPermission()
-  navigator.push(contract.createIntent(context, permission.permissionName).toIntentKey())
+  val intent = contract.createIntent(context, permission.permissionName)
+  navigator.push(DefaultIntentKey(intent))
 }

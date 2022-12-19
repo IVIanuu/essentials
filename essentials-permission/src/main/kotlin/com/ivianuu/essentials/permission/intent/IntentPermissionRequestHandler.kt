@@ -13,9 +13,9 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.R
+import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
@@ -40,7 +40,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
       if (showFindPermissionHint.value)
         showToast(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
-      catch { navigator.push(intentFactory(permission).toIntentKey()) }
+      catch { navigator.push(DefaultIntentKey(intentFactory(permission))) }
         .onFailure {
           showToast(R.string.es_grant_permission_manually)
         }

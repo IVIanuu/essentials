@@ -23,13 +23,13 @@ import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
+import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -70,7 +70,7 @@ data class ShortcutPickerModel(
     shortcuts = shortcutRepository.shortcuts.bindResource(),
     pickShortcut = action { shortcut ->
       catch {
-        val shortcutRequestResult = ctx.navigator.push(shortcut.intent.toIntentKey())
+        val shortcutRequestResult = ctx.navigator.push(DefaultIntentKey(shortcut.intent))
           ?.getOrNull()
           ?.data ?: return@catch
         val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)

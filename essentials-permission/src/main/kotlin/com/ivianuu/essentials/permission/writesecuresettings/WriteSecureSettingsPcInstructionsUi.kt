@@ -35,12 +35,12 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
+import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.essentials.util.ToastContext
@@ -232,7 +232,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         { developerModeSetting.data.first { it != 0 } },
         {
-          ctx.navigator.push(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS).toIntentKey())
+          ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onFailure { showToast(R.string.open_phone_info_failed) }
         }
       )
@@ -241,7 +241,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
-        { ctx.navigator.push(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).toIntentKey()) }
+        { ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
       appUiStarter()
     }

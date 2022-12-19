@@ -16,9 +16,9 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
+import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.navigation.toIntentKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -88,12 +88,14 @@ fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
   catch {
     withContext(scope.coroutineContext + context) {
       val uri = navigator.push(
-        Intent.createChooser(
-          Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "application/zip"
-          },
-          ""
-        ).toIntentKey()
+        DefaultIntentKey(
+          Intent.createChooser(
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+              type = "application/zip"
+            },
+            ""
+          )
+        )
       )?.getOrNull()?.data?.data ?: return@withContext
 
       val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)

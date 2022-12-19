@@ -12,8 +12,6 @@ import com.ivianuu.injekt.Provide
 
 data class DefaultIntentKey(val intent: Intent) : IntentKey
 
-fun Intent.toIntentKey() = DefaultIntentKey(this)
-
 @Provide val defaultIntentKeyIntentFactory = KeyIntentFactory<DefaultIntentKey> { it.intent }
 
 data class AppInfoKey(val packageName: String) : IntentKey
