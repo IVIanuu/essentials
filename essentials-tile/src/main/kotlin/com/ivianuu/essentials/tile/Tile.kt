@@ -27,19 +27,19 @@ data class TileModel<out T : AbstractFunTileService<*>>(
 
 fun Boolean.toTileStatus() = if (this) TileModel.Status.ACTIVE else TileModel.Status.INACTIVE
 
-@Provide class TileModuleElementModule<@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> {
-  @Provide inline fun element(
+object TileModuleElementModule {
+  @Provide inline fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> element(
     serviceClass: KClass<S>,
     provider: T
   ): Pair<TileId, Model<TileModel<*>>> = TileId(serviceClass) to provider as Model<TileModel<*>>
 
-  @Provide inline fun tileId(serviceClass: KClass<S>): TileId = TileId(serviceClass)
+  @Provide inline fun <@Spread T : Model<TileModel<S>>, S : AbstractFunTileService<*>> tileId(
+    serviceClass: KClass<S>
+  ): TileId = TileId(serviceClass)
 
-  companion object {
-    @Provide val defaultElements get() = emptyList<Pair<TileId, Model<TileModel<*>>>>()
+  @Provide val defaultElements get() = emptyList<Pair<TileId, Model<TileModel<*>>>>()
 
-    @Provide val defaultTileIds get() = emptyList<TileId>()
-  }
+  @Provide val defaultTileIds get() = emptyList<TileId>()
 }
 
 object TileScope

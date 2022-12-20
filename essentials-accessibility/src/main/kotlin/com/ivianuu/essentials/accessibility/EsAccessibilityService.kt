@@ -38,9 +38,9 @@ class EsAccessibilityService : AccessibilityService() {
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
+    serviceComponent.accessibilityServiceRef.value = this
     val accessibilityComponent = serviceComponent.accessibilityComponentFactory(Scope(), this)
       .also { this.accessibilityComponent = it }
-    serviceComponent.accessibilityServiceRef.value = this
 
     accessibilityComponent.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
       val configs = accessibilityComponent.configs()

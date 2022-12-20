@@ -46,30 +46,28 @@ interface Permission {
   }
 }
 
-@Provide class PermissionModule<@Spread T : Permission> {
-  @Provide fun permissionSetElement(
+object PermissionModule {
+  @Provide fun <@Spread T : Permission> permissionSetElement(
     permissionKey: TypeKey<T>,
     permission: T
   ): Pair<TypeKey<Permission>, Permission> = permissionKey to permission
 
-  @Provide fun requestHandler(
+  @Provide fun <@Spread T : Permission> requestHandler(
     permissionKey: TypeKey<T>,
     requestHandler: PermissionRequestHandler<T>
   ): Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>> =
     (permissionKey to requestHandler.intercept()) as Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>
 
-  @Provide fun permissionState(
+  @Provide fun <@Spread T : Permission> permissionState(
     permissionKey: TypeKey<T>,
     state: Flow<PermissionState<T>>
   ): Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>> = permissionKey to state
 
-  companion object {
-    @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, Permission>>()
+  @Provide val defaultPermissions get() = emptyList<Pair<TypeKey<Permission>, Permission>>()
 
-    @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>>()
+  @Provide val defaultRequestHandlers get() = emptyList<Pair<TypeKey<Permission>, PermissionRequestHandler<Permission>>>()
 
-    @Provide val defaultStates get() = emptyList<Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>>>()
-  }
+  @Provide val defaultStates get() = emptyList<Pair<TypeKey<Permission>, Flow<PermissionState<Permission>>>>()
 }
 
 fun interface PermissionStateProvider<P : Permission> : suspend (P) -> Boolean

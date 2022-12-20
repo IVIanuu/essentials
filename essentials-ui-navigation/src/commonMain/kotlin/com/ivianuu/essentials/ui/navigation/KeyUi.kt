@@ -21,22 +21,24 @@ fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
 
 typealias KeyUiFactory<K> = (Scope<KeyUiScope>, K) -> KeyUi<K>
 
-@Provide class KeyUiModule<@Spread T : KeyUi<K>, K : Key<*>> {
-  @Provide fun keyUi(
+object KeyUiModule {
+  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUi(
     keyClass: KClass<K>,
     keyUiFactory: KeyUiFactory<K>
-  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> = (keyClass to keyUiFactory) as Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>>
+  ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
+    (keyClass to keyUiFactory) as Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>>
 
-  @Provide fun keyUiOptionFactory(
+  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUiOptionFactory(
     keyClass: KClass<K>,
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
     (keyClass to keyUiOptionsFactory) as Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
 
-  @Provide fun keyTypeKey(
+  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyTypeKey(
     keyClass: KClass<K>,
     keyType: TypeKey<K>
-  ): Pair<KClass<Key<*>>, TypeKey<Key<*>>> = (keyClass to keyType) as Pair<KClass<Key<*>>, TypeKey<Key<*>>>
+  ): Pair<KClass<Key<*>>, TypeKey<Key<*>>> =
+    (keyClass to keyType) as Pair<KClass<Key<*>>, TypeKey<Key<*>>>
 }
 
 // todo make fun interface once compose is fixed
