@@ -16,7 +16,6 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -25,7 +24,7 @@ import kotlinx.coroutines.flow.first
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
-@Provide fun killCurrentAppAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun killCurrentAppAction() = Action(
   id = KillCurrentAppActionId,
   title = loadResource(R.string.es_action_kill_current_app),
   icon = staticActionIcon(Icons.Default.Clear),

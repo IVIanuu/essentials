@@ -23,18 +23,16 @@ import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-@Provide class AppActionFactory(
+context(ResourceProvider) @Provide class AppActionFactory(
   private val actionIntentSender: ActionIntentSender,
   private val appRepository: AppRepository,
-  private val packageManager: PackageManager,
-  private val RP: ResourceProvider
+  private val packageManager: PackageManager
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -66,11 +64,10 @@ import kotlinx.coroutines.flow.first
   }
 }
 
-@Provide class AppActionPickerDelegate(
+context(ResourceProvider) @Provide class AppActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
-  private val navigator: Navigator,
-  private val RP: ResourceProvider
+  private val navigator: Navigator
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

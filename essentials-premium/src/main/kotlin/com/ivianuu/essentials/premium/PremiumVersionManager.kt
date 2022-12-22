@@ -6,7 +6,6 @@ package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
@@ -23,7 +22,7 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppUiStarter
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -55,7 +54,7 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+context(ToastContext) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
@@ -68,9 +67,7 @@ interface PremiumVersionManager {
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
   private val L: Logger,
-  private val RP: ResourceProvider,
-  private val scope: NamedCoroutineScope<AppScope>,
-  private val toaster: Toaster
+  private val scope: NamedCoroutineScope<AppScope>
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }

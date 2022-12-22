@@ -20,7 +20,6 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
@@ -35,7 +34,7 @@ import kotlin.coroutines.resume
 
 @Provide object CameraActionId : ActionId("camera")
 
-@Provide fun cameraAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun cameraAction() = Action(
   id = CameraActionId,
   title = loadResource(R.string.es_action_camera),
   icon = staticActionIcon(R.drawable.es_ic_photo_camera),

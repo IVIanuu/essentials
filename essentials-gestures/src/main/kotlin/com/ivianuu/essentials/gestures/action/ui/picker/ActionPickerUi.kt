@@ -21,7 +21,6 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.state.action
@@ -132,11 +131,10 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-@Provide fun actionPickerModel(
+context(ResourceProvider) @Provide fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
   repository: ActionRepository,
-  RP: ResourceProvider,
   ctx: KeyUiContext<ActionPickerKey>
 ) = Model {
   ActionPickerModel(
@@ -154,11 +152,10 @@ sealed interface ActionPickerItem {
   )
 }
 
-private suspend fun getActionPickerItems(
+context(ResourceProvider) private suspend fun getActionPickerItems(
   key: ActionPickerKey,
   filter: ActionFilter,
-  @Inject repository: ActionRepository,
-  @Inject RP: ResourceProvider
+  @Inject repository: ActionRepository
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 

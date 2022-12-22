@@ -13,7 +13,6 @@ import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
@@ -63,10 +62,9 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-@Provide fun navBarModel(
+context(ResourceProvider) @Provide fun navBarModel(
   permissionRequester: PermissionRequester,
   pref: DataStore<NavBarPrefs>,
-  RP: ResourceProvider,
   ctx: KeyUiContext<NavBarKey>
 ) = Model {
   val prefs = pref.data.bind(NavBarPrefs())

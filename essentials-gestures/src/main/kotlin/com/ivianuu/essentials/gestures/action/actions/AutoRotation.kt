@@ -17,7 +17,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionWriteSettingsPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.typeKeyOf
@@ -25,9 +24,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
-@Provide fun autoRotationAction(
-  autoRotation: DataStore<AutoRotation>,
-  RP: ResourceProvider
+context(ResourceProvider) @Provide fun autoRotationAction(
+  autoRotation: DataStore<AutoRotation>
 ) = Action(
   id = AutoRotationActionId,
   title = loadResource(R.string.es_action_auto_rotation),

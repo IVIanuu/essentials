@@ -7,43 +7,47 @@ package com.ivianuu.essentials.util
 import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.ResourceLoader
+import com.ivianuu.essentials.ResourceLoaderWithArgs
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.loadResource
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.MainContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
-fun interface Toaster : (String) -> Unit
+fun interface Toaster {
+  fun showToast(message: String)
+}
 
-@Provide fun toaster(
-  context: AppContext,
-  coroutineContext: MainContext,
-  scope: NamedCoroutineScope<AppScope>
-) = Toaster { message ->
-  scope.launch(coroutineContext) {
+context(AppContext, MainContext, NamedCoroutineScope<AppScope>)
+    @Provide fun toaster() = Toaster { message ->
+  launch(this@MainContext) {
     Toast.makeText(
-      context,
+      this@AppContext,
       message,
       Toast.LENGTH_SHORT
     ).show()
   }
 }
 
+context(ResourceProvider, Toaster) fun showToast(messageRes: Int) {
+  showToast(loadResource(messageRes))
+}
+
+context(ResourceProvider, Toaster) fun showToast(messageRes: Int, vararg args: Any?) {
+  showToast(loadResourceWithArgs(messageRes, *args))
+}
+
 @Provide data class ToastContext(
-  @Provide val toaster: Toaster,
-  @Provide val resourceProvider: ResourceProvider
-)
+  val resourceProvider: ResourceProvider,
+  val toaster: Toaster
+) : ResourceProvider by resourceProvider, Toaster by toaster {
+  //  todo remove explicit delegates once fixed
+  context(ResourceLoader<T>) override fun <T> loadResource(id: Int): T =
+    resourceProvider.loadResource(id)
 
-fun showToast(message: String, @Inject toaster: Toaster) {
-  toaster(message)
-}
-
-fun showToast(messageRes: Int, @Inject T: Toaster, @Inject RP: ResourceProvider) {
-  showToast(message = loadResource(messageRes))
-}
-
-fun showToast(messageRes: Int, vararg args: Any?, @Inject T: Toaster, @Inject RP: ResourceProvider) {
-  showToast(message = loadResource(messageRes, *args))
+  context(ResourceLoaderWithArgs<T>) override fun <T> loadResourceWithArgs(
+    id: Int,
+    vararg args: Any?
+  ): T = resourceProvider.loadResourceWithArgs(id, *args)
 }

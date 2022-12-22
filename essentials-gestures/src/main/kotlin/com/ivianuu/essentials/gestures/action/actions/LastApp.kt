@@ -12,13 +12,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LastAppActionId : ActionId("last_app")
 
-@Provide fun lastAppAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun lastAppAction() = Action(
   id = LastAppActionId,
   title = loadResource(R.string.es_action_last_app),
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),

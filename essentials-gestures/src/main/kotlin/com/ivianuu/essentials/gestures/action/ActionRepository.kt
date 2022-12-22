@@ -6,7 +6,6 @@ package com.ivianuu.essentials.gestures.action
 
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
@@ -26,14 +25,13 @@ interface ActionRepository {
   suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
 }
 
-@Provide class ActionRepositoryImpl(
+context(ToastContext) @Provide class ActionRepositoryImpl(
   private val actions: () -> Map<String, () -> Action<*>>,
   private val actionFactories: () -> List<() -> ActionFactory>,
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val context: DefaultContext,
-  private val T: ToastContext
+  private val context: DefaultContext
 ) : ActionRepository {
   override suspend fun getAllActions() = withContext(context) {
     actions().values.map { it() }

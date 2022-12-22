@@ -10,13 +10,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 
 @Provide object InputMethodActionId : ActionId("input_method")
 
-@Provide fun inputMethodAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun inputMethodAction() = Action(
   id = InputMethodActionId,
   title = loadResource(R.string.es_action_input_method),
   icon = staticActionIcon(R.drawable.es_ic_keyboard_hide)

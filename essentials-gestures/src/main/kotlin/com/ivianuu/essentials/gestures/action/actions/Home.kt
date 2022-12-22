@@ -13,12 +13,11 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
 
-@Provide fun homeAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun homeAction() = Action(
   id = HomeActionId,
   title = loadResource(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()

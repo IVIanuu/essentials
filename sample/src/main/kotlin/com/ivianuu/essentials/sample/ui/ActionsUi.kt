@@ -20,7 +20,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
@@ -29,12 +28,11 @@ import kotlinx.coroutines.launch
 
 object ActionsKey : Key<Unit>
 
-@Provide fun actionsUi(
+context(Toaster) @Provide fun actionsUi(
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   navigator: Navigator,
-  scope: NamedCoroutineScope<UiScope>,
-  T: Toaster
+  scope: NamedCoroutineScope<UiScope>
 ) = SimpleKeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }

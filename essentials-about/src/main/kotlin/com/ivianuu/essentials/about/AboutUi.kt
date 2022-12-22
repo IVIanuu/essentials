@@ -13,7 +13,6 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
 import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
@@ -143,13 +142,12 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-@Provide fun aboutModel(
+context(ResourceProvider) @Provide fun aboutModel(
   buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
   rateOnPlayUseCase: RateOnPlayUseCase,
-  RP: ResourceProvider,
   ctx: KeyUiContext<AboutKey>
 ) = Model {
   AboutModel(

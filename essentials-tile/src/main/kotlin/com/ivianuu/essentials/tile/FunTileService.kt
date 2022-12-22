@@ -85,15 +85,17 @@ abstract class AbstractFunTileService<T : Any>(
       model.iconRes != null -> Icon.createWithResource(this, model.iconRes)
       else -> null
     }
-    qsTile.label = when {
-      model.label != null -> model.label
-      model.labelRes != null -> serviceComponent.resourceProvider<String>(model.labelRes)
-      else -> null
-    }
-    qsTile.contentDescription = when {
-      model.description != null -> model.description
-      model.descriptionRes != null -> serviceComponent.resourceProvider<String>(model.descriptionRes)
-      else -> null
+    with(serviceComponent.resourceProvider) {
+      qsTile.label = when {
+        model.label != null -> model.label
+        model.labelRes != null -> loadResource<String>(model.labelRes)
+        else -> null
+      }
+      qsTile.contentDescription = when {
+        model.description != null -> model.description
+        model.descriptionRes != null -> loadResource<String>(model.descriptionRes)
+        else -> null
+      }
     }
     qsTile.updateTile()
   }

@@ -11,13 +11,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Provide
 
 @Provide object StopActionId : ActionId("media_stop")
 
-@Provide fun stopMediaAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun stopMediaAction() = Action(
   id = StopActionId,
   title = loadResource(R.string.es_action_media_stop),
   icon = staticActionIcon(R.drawable.es_ic_stop)

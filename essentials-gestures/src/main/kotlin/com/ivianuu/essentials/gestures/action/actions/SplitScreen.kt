@@ -11,12 +11,11 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 
 @Provide object SplitScreenActionId : ActionId("split_screen")
 
-@Provide fun splitScreenAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun splitScreenAction() = Action(
   id = SplitScreenActionId,
   title = loadResource(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,

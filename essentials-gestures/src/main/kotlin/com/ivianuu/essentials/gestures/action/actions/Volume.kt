@@ -10,13 +10,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 
 @Provide object VolumeActionId : ActionId("volume")
 
-@Provide fun volumeAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun volumeAction() = Action(
   id = VolumeActionId,
   title = loadResource(R.string.es_action_volume),
   icon = staticActionIcon(R.drawable.es_ic_volume_up)

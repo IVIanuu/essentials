@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key
@@ -28,10 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Tag annotation class ScreenAdBannerConfigTag {
   companion object {
-    @Provide fun default(
-      buildInfo: BuildInfo,
-      RP: ResourceProvider
-    ) = ScreenAdBannerConfig(
+    context(ResourceProvider) @Provide fun default(buildInfo: BuildInfo) = ScreenAdBannerConfig(
       id = loadResource(
         if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_screen_ad_banner_ad_unit_id

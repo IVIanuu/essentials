@@ -15,15 +15,13 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LockScreenActionId : ActionId("lock_screen")
 
-@Provide fun lockScreenAction(
-  systemBuildInfo: SystemBuildInfo,
-  RP: ResourceProvider
+context(ResourceProvider) @Provide fun lockScreenAction(
+  systemBuildInfo: SystemBuildInfo
 ): Action<LockScreenActionId> = Action(
   id = LockScreenActionId,
   title = loadResource(R.string.es_action_lock_screen),

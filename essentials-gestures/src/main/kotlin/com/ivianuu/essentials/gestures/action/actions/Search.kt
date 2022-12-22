@@ -14,13 +14,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object SearchActionId : ActionId("search")
 
-@Provide fun searchAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun searchAction() = Action(
   id = SearchActionId,
   title = loadResource(R.string.es_action_search),
   icon = staticActionIcon(Icons.Default.Search),

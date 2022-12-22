@@ -12,13 +12,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object MenuActionId : ActionId("menu")
 
-@Provide fun menuAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun menuAction() = Action(
   id = MenuActionId,
   title = loadResource(R.string.es_action_menu),
   icon = staticActionIcon(Icons.Default.MoreVert),

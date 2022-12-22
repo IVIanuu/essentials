@@ -25,7 +25,6 @@ import com.ivianuu.essentials.gestures.action.FloatingWindowActionsEnabled
 import com.ivianuu.essentials.gestures.action.ui.FloatingWindowsPickerKey
 import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.shortcutpicker.ShortcutPickerKey
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -70,10 +69,9 @@ import java.io.ByteArrayOutputStream
   }
 }
 
-@Provide class ShortcutActionPickerDelegate(
+context(ResourceProvider) @Provide class ShortcutActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
-  private val navigator: Navigator,
-  private val RP: ResourceProvider
+  private val navigator: Navigator
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

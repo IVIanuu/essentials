@@ -15,7 +15,6 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -24,10 +23,7 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object BluetoothActionId : ActionId("bluetooth")
 
-@Provide fun bluetoothAction(
-  B: BroadcastsFactory,
-  RP: ResourceProvider
-) = Action(
+context(ResourceProvider) @Provide fun bluetoothAction(B: BroadcastsFactory) = Action(
   id = BluetoothActionId,
   title = loadResource(R.string.es_action_bluetooth),
   icon = bluetoothIcon(),

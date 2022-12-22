@@ -11,12 +11,11 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 
 @Provide object PowerDialogActionId : ActionId("power_dialog")
 
-@Provide fun powerDialogAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun powerDialogAction() = Action(
   id = PowerDialogActionId,
   title = loadResource(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,

@@ -11,13 +11,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Provide
 
 @Provide object SkipPreviousActionId : ActionId("media_skip_previous")
 
-@Provide fun skipPreviousMediaAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun skipPreviousMediaAction() = Action(
   id = SkipPreviousActionId,
   title = loadResource(R.string.es_action_media_skip_previous),
   icon = staticActionIcon(R.drawable.es_ic_skip_previous)

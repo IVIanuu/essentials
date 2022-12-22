@@ -29,18 +29,16 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.xposed.IsXposedRunning
 import com.ivianuu.injekt.Provide
 
 @Provide class HomeKey : RootKey
 
-@Provide fun homeUi(
+context(Toaster) @Provide fun homeUi(
   isXposedRunning: IsXposedRunning,
   navigator: Navigator,
-  itemsFactory: () -> List<HomeItem>,
-  T: ToastContext
+  itemsFactory: () -> List<HomeItem>
 ) = SimpleKeyUi<HomeKey> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(

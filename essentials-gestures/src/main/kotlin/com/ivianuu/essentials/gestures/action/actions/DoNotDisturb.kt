@@ -16,7 +16,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -26,7 +25,7 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")
 
-@Provide fun doNotDisturbAction(icon: DoNotDisturbIcon, RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun doNotDisturbAction(icon: DoNotDisturbIcon) = Action(
   id = DoNotDisturbAction,
   title = loadResource(R.string.es_action_do_not_disturb),
   icon = icon,

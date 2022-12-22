@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 
 @Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
@@ -49,7 +48,7 @@ object CounterKey : Key<Unit>
 
 data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-@Provide fun counterModel(T: ToastContext) = Model {
+context(ToastContext) @Provide fun counterModel() = Model {
   var count by remember { mutableStateOf(0) }
   CounterModel(
     count = count,

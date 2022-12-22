@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -16,7 +15,7 @@ import com.ivianuu.essentials.permission.PermissionRequester
 import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultContext
@@ -25,7 +24,7 @@ import kotlinx.coroutines.withContext
 
 fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
-@Provide fun executeActionUseCase(
+context(ToastContext) @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   coroutineContext: DefaultContext,
   permissionRequester: PermissionRequester,
@@ -33,9 +32,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   repository: ActionRepository,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  L: Logger,
-  RP: ResourceProvider,
-  T: Toaster
+  L: Logger
 ) = ExecuteActionUseCase { id ->
   withContext(coroutineContext) {
     catch {

@@ -15,7 +15,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
@@ -30,6 +29,7 @@ import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -43,14 +43,13 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-@Provide @Scoped<AppScope> class TorchImpl(
+context(ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
   private val scope: NamedCoroutineScope<AppScope>,
-  private val L: Logger,
-  private val T: ToastContext
+  private val L: Logger
 ) : Torch {
   private val _torchEnabled = MutableStateFlow(false)
   override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
@@ -88,7 +87,8 @@ interface Torch {
       cameraManager.setTorchMode(cameraId, true)
       _torchEnabled.value = true
 
-      onCancel {
+      // todo remove dummy block param once fixed
+      onCancel(block = { awaitCancellation() }) {
         log { "disable torch on cancel" }
         catch { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false

@@ -11,13 +11,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.torch.Torch
 import com.ivianuu.injekt.Provide
 
 @Provide object TorchActionId : ActionId("torch")
 
-@Provide fun torchAction(torch: Torch, RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun torchAction(torch: Torch) = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
   icon = {

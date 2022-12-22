@@ -11,13 +11,12 @@ import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.delay
 
 @Provide object LastAppNativeActionId : ActionId("last_app_native")
 
-@Provide fun lastAppNativeAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun lastAppNativeAction() = Action(
   id = LastAppNativeActionId,
   title = loadResource(R.string.es_action_last_app_native),
   permissions = accessibilityActionPermissions,

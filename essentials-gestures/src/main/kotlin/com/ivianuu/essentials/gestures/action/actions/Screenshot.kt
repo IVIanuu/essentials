@@ -15,17 +15,13 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.delay
 
 @Provide object ScreenshotActionId : ActionId("screenshot")
 
-@Provide fun screenshotAction(
-  systemBuildInfo: SystemBuildInfo,
-  RP: ResourceProvider
-): Action<ScreenshotActionId> = Action(
+context(ResourceProvider) @Provide fun screenshotAction(systemBuildInfo: SystemBuildInfo) = Action(
   id = ScreenshotActionId,
   title = loadResource(R.string.es_action_screenshot),
   icon = staticActionIcon(R.drawable.es_ic_photo_album),

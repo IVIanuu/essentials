@@ -18,16 +18,14 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.dialog.TextInputKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
-@Provide class KeycodeActionFactory(
-  private val actionRootCommandRunner: ActionRootCommandRunner,
-  private val RP: ResourceProvider
+context(ResourceProvider) @Provide class KeycodeActionFactory(
+  private val actionRootCommandRunner: ActionRootCommandRunner
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -35,7 +33,7 @@ import com.ivianuu.injekt.common.typeKeyOf
     val keycode = id.removePrefix(BASE_ID)
     return Action<ActionId>(
       id = id,
-      title = loadResource(R.string.es_action_keycode_suffix, keycode),
+      title = loadResourceWithArgs(R.string.es_action_keycode_suffix, keycode),
       icon = staticActionIcon(R.drawable.es_ic_keyboard),
       permissions = listOf(typeKeyOf<ActionRootPermission>()),
       enabled = true
@@ -48,9 +46,8 @@ import com.ivianuu.injekt.common.typeKeyOf
   }
 }
 
-@Provide class KeycodeActionPickerDelegate(
-  private val navigator: Navigator,
-  private val RP: ResourceProvider
+context(ResourceProvider) @Provide class KeycodeActionPickerDelegate(
+  private val navigator: Navigator
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID

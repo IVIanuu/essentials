@@ -16,7 +16,6 @@ import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.Clock
@@ -55,10 +54,7 @@ interface FullScreenAd {
 
 @JvmInline value class FullScreenAdId(val value: String) {
   companion object {
-    @Provide fun default(
-      buildInfo: BuildInfo,
-      RP: ResourceProvider
-    ) = FullScreenAdId(
+    context(ResourceProvider) @Provide fun default(buildInfo: BuildInfo) = FullScreenAdId(
       loadResource(
         if (buildInfo.isDebug) R.string.es_test_ad_unit_id_interstitial
         else R.string.es_full_screen_ad_unit_id

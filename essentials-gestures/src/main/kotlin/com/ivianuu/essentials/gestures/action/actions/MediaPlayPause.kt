@@ -13,13 +13,12 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSettingsKey
-import com.ivianuu.essentials.loadResource
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.injekt.Provide
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
 
-@Provide fun playPauseMediaAction(RP: ResourceProvider) = Action(
+context(ResourceProvider) @Provide fun playPauseMediaAction() = Action(
   id = PlayPauseActionId,
   title = loadResource(R.string.es_action_media_play_pause),
   icon = staticActionIcon(Icons.Default.PlayArrow)
