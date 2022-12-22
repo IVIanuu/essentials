@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.Inject
 import kotlin.experimental.ExperimentalTypeInference
 
 sealed interface Result<out V, out E>
@@ -85,33 +84,34 @@ inline fun <V> V.ok() = Ok(this)
 inline fun <E> E.err() = Err(this)
 
 @OptIn(ExperimentalTypeInference::class)
-inline fun <V> catch(@BuilderInference block: (@Inject ResultControl<Throwable>) -> V): Result<V, Throwable> = try {
-  block(ResultControlImpl.cast()).ok()
-} catch (e: Throwable) {
-  e.nonFatalOrThrow().err()
-}
+inline fun <V> catch(@BuilderInference block: context(ResultControl<Throwable>) () -> V): Result<V, Throwable> =
+  try {
+    block(ResultControlImpl.cast()).ok()
+  } catch (e: Throwable) {
+    e.nonFatalOrThrow().err()
+  }
 
 @OptIn(ExperimentalTypeInference::class)
-inline fun <V, reified T> catchT(@BuilderInference block: (@Inject ResultControl<Throwable>) -> V): Result<V, T> = try {
-  block(ResultControlImpl.cast()).ok()
-} catch (e: Throwable) {
-  if (e is T) e.err()
-  else throw e
-}
+inline fun <V, reified T> catchT(@BuilderInference block: context(ResultControl<Throwable>) () -> V): Result<V, T> =
+  try {
+    block(ResultControlImpl.cast()).ok()
+  } catch (e: Throwable) {
+    if (e is T) e.err()
+    else throw e
+  }
 
 @OptIn(ExperimentalTypeInference::class)
 @Suppress("UNCHECKED_CAST")
-inline fun <V, E> result(@BuilderInference block: (@Inject ResultControl<E>) -> V): Result<V, E> = try {
-  block(ResultControlImpl.cast()).ok()
-} catch (e: ResultControlImpl.ShortCircuitException) {
-  e.error as Err<E>
-}
+inline fun <V, E> result(@BuilderInference block: context(ResultControl<E>) () -> V): Result<V, E> =
+  try {
+    block(ResultControlImpl.cast()).ok()
+  } catch (e: ResultControlImpl.ShortCircuitException) {
+    e.error as Err<E>
+  }
 
 interface ResultControl<in A> {
   fun <T> bind(result: Result<T, A>): T
 }
-
-inline fun <T, A> Result<T, A>.bind(@Inject control: ResultControl<A>): T = control.bind(this)
 
 @PublishedApi internal object ResultControlImpl : ResultControl<Nothing> {
   override fun <T> bind(result: Result<T, Nothing>): T = when (result) {
