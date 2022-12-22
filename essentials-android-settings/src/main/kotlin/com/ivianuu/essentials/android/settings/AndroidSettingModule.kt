@@ -12,6 +12,7 @@ import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,13 +26,13 @@ class AndroidSettingModule<T : S, S>(
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  @Suppress("UNCHECKED_CAST")
-  @Provide fun dataStore(
+  context(NamedCoroutineScope<AppScope>)
+      @Suppress("UNCHECKED_CAST")
+      @Provide fun dataStore(
     adapter: AndroidSettingAdapter<S>,
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
-    context: IOContext,
-    scope: NamedCoroutineScope<AppScope>
+    context: IOContext
   ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
       when (type) {
@@ -46,7 +47,7 @@ class AndroidSettingModule<T : S, S>(
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }
-      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+      .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
     override suspend fun updateData(transform: T.() -> T): T {

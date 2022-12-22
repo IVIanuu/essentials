@@ -22,9 +22,8 @@ import kotlinx.coroutines.launch
 
 object RestartProcessKey : Key<Unit>
 
-@Provide fun restartProcessUi(
-  processRestarter: ProcessRestarter,
-  scope: NamedCoroutineScope<KeyUiScope>
+context(NamedCoroutineScope<KeyUiScope>) @Provide fun restartProcessUi(
+  processRestarter: ProcessRestarter
 ) = SimpleKeyUi<RestartProcessKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Restart process") }) }
@@ -32,7 +31,7 @@ object RestartProcessKey : Key<Unit>
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        launch {
           processRestarter()
         }
       }

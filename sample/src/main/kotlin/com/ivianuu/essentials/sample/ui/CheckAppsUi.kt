@@ -33,11 +33,10 @@ import kotlinx.serialization.Serializable
 
 object CheckAppsKey : Key<Unit>
 
-@Provide fun checkAppsUi(
+context(NamedCoroutineScope<KeyUiScope>) @Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
-  launchableAppPredicate: LaunchableAppPredicate,
-  scope: NamedCoroutineScope<KeyUiScope>
+  launchableAppPredicate: LaunchableAppPredicate
 ) = SimpleKeyUi<CheckAppsKey> {
   remember {
     checkableAppsScreen(
@@ -45,7 +44,7 @@ object CheckAppsKey : Key<Unit>
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
-          scope.launch {
+          launch {
             db.transaction {
               db.deleteAll<CheckedAppEntity>()
               db.insertAll(

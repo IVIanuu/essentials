@@ -50,10 +50,9 @@ context(ActionIntentSender, AppContext, PackageManager) fun switchToApp(
   }
 }
 
-context(Logger) @Provide @Scoped<AppScope> class AppSwitchManager(
+context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class AppSwitchManager(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  private val packageManager: PackageManager,
-  scope: NamedCoroutineScope<AppScope>
+  private val packageManager: PackageManager
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
@@ -93,7 +92,7 @@ context(Logger) @Provide @Scoped<AppScope> class AppSwitchManager(
           log { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
-      .launchIn(scope)
+      .launchIn(inject())
   }
 
   fun lastApp(): String? = if (isOnHomeScreen) recentApps.lastOrNull()

@@ -18,7 +18,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
@@ -69,14 +68,12 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 }
 
-context(Logger) @Provide @Scoped<UiScope> class FullScreenAdImpl(
+context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
-  private val clock: Clock,
   private val config: FullScreenAdConfig,
   private val foregroundActivity: Flow<ForegroundActivity>,
   private val mainContext: MainContext,
-  private val scope: NamedCoroutineScope<AppScope>,
   private val showAds: Flow<ShowAds>
 ) : FullScreenAd {
   private val lock = Mutex()
@@ -86,7 +83,7 @@ context(Logger) @Provide @Scoped<UiScope> class FullScreenAdImpl(
   override suspend fun isLoaded() = getCurrentAd() != null
 
   override fun preload() {
-    scope.launch { load() }
+    launch { load() }
   }
 
   override suspend fun load() = catch {
@@ -116,7 +113,7 @@ context(Logger) @Provide @Scoped<UiScope> class FullScreenAdImpl(
   private suspend fun getOrCreateCurrentAd(): suspend () -> Boolean = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
-    } ?: scope.async(mainContext) {
+    } ?: async(mainContext) {
       log { "start loading ad" }
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->

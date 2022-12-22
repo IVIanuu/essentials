@@ -31,18 +31,17 @@ interface BillingContext {
   suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R?
 }
 
-@Provide @Scoped<AppScope> class BillingContextImpl(
+context(NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class BillingContextImpl(
   override val billingClient: BillingClient,
   private val context: IOContext,
   @property:Provide override val logger: Logger,
-  override val refreshes: MutableSharedFlow<BillingRefresh>,
-  private val scope: NamedCoroutineScope<AppScope>
+  override val refreshes: MutableSharedFlow<BillingRefresh>
 ) : BillingContext {
   private var isConnected = false
   private val connectionLock = Mutex()
 
   override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R? =
-    withContext(scope.coroutineContext + context) {
+    withContext(coroutineContext + context) {
       ensureConnected()
       block()
     }

@@ -11,6 +11,7 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
 fun interface KeyUi<K : Key<*>> {
@@ -82,5 +83,5 @@ inline operator fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   @Provide val key: K,
   @Provide val navigator: Navigator,
-  @Provide val coroutineScope: NamedCoroutineScope<KeyUiScope>
-)
+  private val coroutineScope: NamedCoroutineScope<KeyUiScope>
+) : CoroutineScope by coroutineScope

@@ -43,11 +43,11 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-context(BroadcastsFactory, Logger, ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
+context(BroadcastsFactory, Logger, NamedCoroutineScope<AppScope>, ToastContext)
+@Provide @Scoped<AppScope> class TorchImpl(
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
-  private val notificationFactory: NotificationFactory,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val notificationFactory: NotificationFactory
 ) : Torch {
   private val _torchEnabled = MutableStateFlow(false)
   override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
@@ -59,7 +59,7 @@ context(BroadcastsFactory, Logger, ToastContext) @Provide @Scoped<AppScope> clas
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
-      torchJob = scope.launch { doSetTorchState(value) }
+      torchJob = launch { doSetTorchState(value) }
     }
   }
 

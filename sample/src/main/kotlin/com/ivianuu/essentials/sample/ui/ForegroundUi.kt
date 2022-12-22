@@ -24,9 +24,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,12 +38,9 @@ import kotlinx.coroutines.isActive
 
 object ForegroundKey : Key<Unit>
 
-@SuppressLint("NewApi")
-@Provide fun foregroundUi(
-  foregroundManager: ForegroundManager,
-  N: NotificationFactory,
-  scope: NamedCoroutineScope<KeyUiScope>
-) = SimpleKeyUi<ForegroundKey> {
+context(ForegroundManager, NamedCoroutineScope<KeyUiScope>, NotificationFactory)
+    @SuppressLint("NewApi")
+    @Provide fun foregroundUi() = SimpleKeyUi<ForegroundKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
@@ -59,8 +56,8 @@ object ForegroundKey : Key<Unit>
             delay(1000)
           }
         }
-          .stateIn(scope, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
-        foregroundManager.runInForeground(notifications.value) {
+          .stateIn(inject(), SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
+        runInForeground(notifications.value) {
           notifications.collect { updateNotification(it) }
         }
       }

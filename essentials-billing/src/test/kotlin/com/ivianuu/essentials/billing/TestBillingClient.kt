@@ -32,9 +32,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TestBillingClient(
-  private val purchasesUpdated: () -> Unit,
-  private val scope: CoroutineScope
+context(CoroutineScope) class TestBillingClient(
+  private val purchasesUpdated: () -> Unit
 ) : BillingClient() {
   var purchases = emptyList<Purchase>()
     set(value) {

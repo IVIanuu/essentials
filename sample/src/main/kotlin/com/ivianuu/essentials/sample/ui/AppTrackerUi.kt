@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -40,11 +41,10 @@ import kotlinx.coroutines.launch
 
 object AppTrackerKey : Key<Unit>
 
-context(NotificationFactory, ToastContext) @Provide fun appTrackerUi(
+context(NamedCoroutineScope<KeyUiScope>, NotificationFactory, ToastContext) @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
-  permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>
+  permissionRequester: PermissionRequester
 ) = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
@@ -52,7 +52,7 @@ context(NotificationFactory, ToastContext) @Provide fun appTrackerUi(
     LaunchedEffect(true) {
       val notifications = currentApp
         .map { AppTrackerNotification(it) }
-        .stateIn(scope, SharingStarted.Eagerly, AppTrackerNotification(null))
+        .stateIn(inject(), SharingStarted.Eagerly, AppTrackerNotification(null))
       foregroundManager.runInForeground(notifications.value) {
         notifications.collect { updateNotification(it) }
       }
@@ -64,7 +64,7 @@ context(NotificationFactory, ToastContext) @Provide fun appTrackerUi(
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        launch {
           if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
             isEnabled = !isEnabled
           }

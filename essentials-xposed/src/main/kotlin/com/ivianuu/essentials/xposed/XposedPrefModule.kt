@@ -25,6 +25,7 @@ import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -41,16 +42,15 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
-  @SuppressLint("WorldReadableFiles")
-  @Provide fun dataStore(
+  context(NamedCoroutineScope<AppScope>, Scope<AppScope>)
+      @SuppressLint("WorldReadableFiles")
+      @Provide fun dataStore(
     context: AppContext,
     coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
-    serializerFactory: () -> KSerializer<T>,
-    scope: NamedCoroutineScope<AppScope>,
-    appScope: Scope<AppScope>
+    serializerFactory: () -> KSerializer<T>
   ): @Scoped<AppScope> DataStore<T> {
     val sharedPrefs by lazy {
       context.getSharedPreferences(prefName, Context.MODE_WORLD_READABLE)
@@ -69,9 +69,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
 
     val data = callbackFlow<T> {
-      val listener = appScope {
+      val listener = this@Scope {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-          scope.launch(coroutineContext) {
+          launch(coroutineContext) {
             context.sendBroadcast(Intent(prefsChangedAction(packageName)))
             send(readData())
           }
@@ -83,9 +83,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart { emit(readData()) }
       .distinctUntilChanged()
       .flowOn(coroutineContext)
-      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+      .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
 
-    val actor = scope.actor(coroutineContext)
+    val actor = actor(coroutineContext)
 
     return object : DataStore<T> {
       override val data: Flow<T>

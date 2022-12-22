@@ -43,10 +43,9 @@ import kotlinx.serialization.Serializable
 
 object PrefsKey : Key<Unit>
 
-@Provide fun prefsUi(
+context(NamedCoroutineScope<KeyUiScope>) @Provide fun prefsUi(
   pref: DataStore<SamplePrefs>,
-  navigator: Navigator,
-  scope: NamedCoroutineScope<KeyUiScope>
+  navigator: Navigator
 ) = SimpleKeyUi<PrefsKey> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
@@ -54,7 +53,7 @@ object PrefsKey : Key<Unit>
       SwitchListItem(
         value = prefs.switch,
         onValueChange = {
-          scope.launch {
+          launch {
             pref.updateData { copy(switch = it) }
           }
         },
@@ -69,7 +68,7 @@ object PrefsKey : Key<Unit>
       RadioButtonListItem(
         value = prefs.radioButton,
         onValueChange = {
-          scope.launch {
+          launch {
             pref.updateData { copy(radioButton = it) }
           }
         },
@@ -83,7 +82,7 @@ object PrefsKey : Key<Unit>
       SliderListItem(
         value = prefs.slider,
         onValueChange = {
-          scope.launch {
+          launch {
             pref.updateData { copy(slider = it) }
           }
         },
@@ -99,7 +98,7 @@ object PrefsKey : Key<Unit>
       SliderListItem(
         value = prefs.steppedSlider,
         onValueChange = {
-          scope.launch {
+          launch {
             pref.updateData { copy(steppedSlider = it) }
           }
         },
@@ -121,7 +120,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            scope.launch {
+            launch {
               val newTextInput = navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
@@ -145,7 +144,7 @@ object PrefsKey : Key<Unit>
       ColorListItem(
         value = Color(prefs.color),
         onValueChangeRequest = {
-          scope.launch {
+          launch {
             val newColor = navigator.push(
               ColorPickerKey(
                 initialColor = Color(prefs.color),
@@ -167,7 +166,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            scope.launch {
+            launch {
               val newItems = navigator.push(
                 MultiChoiceListKey(
                   items = listOf(
@@ -193,7 +192,7 @@ object PrefsKey : Key<Unit>
       ListItem(
         modifier = Modifier
           .clickable {
-            scope.launch {
+            launch {
               val newItem = navigator.push(
                 SingleChoiceListKey(
                   items = listOf(

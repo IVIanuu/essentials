@@ -31,13 +31,12 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
-  @Provide fun dataStore(
+  context(NamedCoroutineScope<AppScope>) @Provide fun dataStore(
     context: IOContext,
     initial: () -> @Initial T = default,
     json: Json,
     serializerFactory: () -> KSerializer<T>,
-    prefsDir: () -> PrefsDir,
-    scope: NamedCoroutineScope<AppScope>
+    prefsDir: () -> PrefsDir
   ): @Scoped<AppScope> DataStore<T> {
     val androidDataStore = DataStoreFactory.create(
       object : Serializer<T> {
@@ -66,7 +65,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
         initial()
       },
       produceFile = { prefsDir().resolve(name) },
-      scope = scope.childCoroutineScope(context)
+      scope = childCoroutineScope(context)
     )
 
     return object : DataStore<T> {

@@ -28,11 +28,10 @@ import kotlinx.coroutines.launch
 
 object ActionsKey : Key<Unit>
 
-context(Toaster) @Provide fun actionsUi(
+context(NamedCoroutineScope<UiScope>, Toaster) @Provide fun actionsUi(
   actionRepository: ActionRepository,
   executeAction: ExecuteActionUseCase,
-  navigator: Navigator,
-  scope: NamedCoroutineScope<UiScope>
+  navigator: Navigator
 ) = SimpleKeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
@@ -40,7 +39,7 @@ context(Toaster) @Provide fun actionsUi(
     Button(
       modifier = Modifier.center(),
       onClick = {
-        scope.launch {
+        launch {
           val actionId = navigator.push(ActionPickerKey())
             .safeAs<ActionPickerKey.Result.Action>()
             ?.actionId ?: return@launch

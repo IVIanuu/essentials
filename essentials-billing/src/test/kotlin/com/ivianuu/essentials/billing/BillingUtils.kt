@@ -21,14 +21,12 @@ fun TestBillingClient.withTestSku(): TestBillingClient = apply {
   skus += SkuDetails(TestSku)
 }
 
-class TestBillingContext(scope: CoroutineScope) : BillingContext {
-  override val billingClient = TestBillingClient(
-    { refreshes.tryEmit(BillingRefresh) },
-    scope
-  )
+context(CoroutineScope) class TestBillingContext : BillingContext {
+  override val billingClient = TestBillingClient { refreshes.tryEmit(BillingRefresh) }
   override val refreshes: MutableSharedFlow<BillingRefresh> = EventFlow()
   @Provide override val logger: Logger = PrintingLogger(LoggingEnabled(true))
-  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R = block()
+  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R =
+    block()
 }
 
 fun Purchase(

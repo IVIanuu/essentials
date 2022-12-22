@@ -11,6 +11,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,12 +23,11 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
-  @Provide fun dataStore(
+  context(NamedCoroutineScope<AppScope>) @Provide fun dataStore(
     prefsDataStore: DataStore<Map<String, String?>>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
-    serializerFactory: () -> KSerializer<T>,
-    scope: NamedCoroutineScope<AppScope>
+    serializerFactory: () -> KSerializer<T>
   ): @Scoped<AppScope> DataStore<T> {
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
@@ -41,7 +41,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
       override val data: Flow<T> = prefsDataStore.data
         .map { it.decode() }
         .distinctUntilChanged()
-        .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
+        .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
 
       override suspend fun updateData(transform: T.() -> T): T =
         prefsDataStore.updateData {

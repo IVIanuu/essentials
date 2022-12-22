@@ -28,6 +28,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +55,8 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+context(Logger, NamedCoroutineScope<AppScope>, ToastContext)
+@Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
@@ -65,8 +67,7 @@ context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionMana
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
-  private val purchase: PurchaseUseCase,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val purchase: PurchaseUseCase
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
@@ -80,7 +81,7 @@ context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionMana
     else flowOf(false)
   ) { a, b -> a.value || b }
     .onEach { isPremiumVersion ->
-      scope.launch {
+      launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
           log { "handle premium version downgrade" }
           downgradeHandlers().parForEach { it() }
@@ -90,7 +91,7 @@ context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionMana
         }
       }
     }
-    .shareIn(scope, SharingStarted.Eagerly, 1)
+    .shareIn(inject(), SharingStarted.Eagerly, 1)
 
   override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
 
@@ -99,7 +100,7 @@ context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionMana
   override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()
 
-    scope.launch {
+    launch {
       showToast(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
       if (!screenUnlocker()) return@launch
       appUiStarter()

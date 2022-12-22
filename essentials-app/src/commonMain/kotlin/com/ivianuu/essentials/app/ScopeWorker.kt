@@ -17,13 +17,12 @@ fun interface ScopeWorker<N> : suspend () -> Unit, Service<ScopeWorker<N>>
 
 fun interface ScopeWorkerRunner<N> : () -> Unit
 
-context(Logger) @Provide fun <N> scopeWorkerRunner(
-  scope: NamedCoroutineScope<N>,
+context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
   nameKey: TypeKey<N>,
   workers: () -> List<ServiceElement<ScopeWorker<N>>>
 ) = ScopeWorkerRunner<N> {
   log { "${nameKey.value} run scope workers" }
-  scope.launch {
+  launch {
     guarantee(
       block = {
         supervisorScope {

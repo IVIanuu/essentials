@@ -44,12 +44,11 @@ import kotlinx.coroutines.launch
 
 object NavBarKey : Key<Unit>
 
-@Provide fun navBarUi(
+context(NamedCoroutineScope<KeyUiScope>) @Provide fun navBarUi(
   navigator: Navigator,
   navBarPref: DataStore<NavBarPrefs>,
   permissionState: Flow<PermissionState<NavBarPermission>>,
-  permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>
+  permissionRequester: PermissionRequester
 ) = SimpleKeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -63,7 +62,7 @@ object NavBarKey : Key<Unit>
       // reshow nav bar when leaving the screen
       DisposableEffect(true) {
         onDispose {
-          scope.launch {
+          launch {
             navBarPref.updateData {
               copy(hideNavBar = false)
             }
@@ -92,13 +91,13 @@ object NavBarKey : Key<Unit>
       Button(
         onClick = {
           if (hasPermission) {
-            scope.launch {
+            launch {
               navBarPref.updateData {
                 copy(hideNavBar = !hideNavBar)
               }
             }
           } else {
-            scope.launch {
+            launch {
               permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
@@ -120,7 +119,7 @@ object NavBarKey : Key<Unit>
 
       Button(
         onClick = {
-          scope.launch {
+          launch {
             navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
           }
         }

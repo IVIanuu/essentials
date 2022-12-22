@@ -30,17 +30,16 @@ import java.util.zip.ZipOutputStream
 
 fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
 
-context(Logger) @Provide fun createBackupUseCase(
+context(Logger, NamedCoroutineScope<AppScope>) @Provide fun createBackupUseCase(
   backupDir: BackupDir,
   backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
   context: IOContext,
   dataDir: DataDir,
-  navigator: Navigator,
-  scope: NamedCoroutineScope<AppScope>
+  navigator: Navigator
 ) = CreateBackupUseCase {
   catch {
-    withContext(scope.coroutineContext + context) {
+    withContext(coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
         "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -75,16 +74,15 @@ context(Logger) @Provide fun createBackupUseCase(
 
 fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
 
-context(Logger) @Provide fun restoreBackupUseCase(
+context(Logger, NamedCoroutineScope<AppScope>) @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
   context: IOContext,
   dataDir: DataDir,
   navigator: Navigator,
-  processRestarter: ProcessRestarter,
-  scope: NamedCoroutineScope<AppScope>
+  processRestarter: ProcessRestarter
 ) = RestoreBackupUseCase {
   catch {
-    withContext(scope.coroutineContext + context) {
+    withContext(coroutineContext + context) {
       val uri = navigator.push(
         DefaultIntentKey(
           Intent.createChooser(

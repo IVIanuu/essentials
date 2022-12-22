@@ -13,7 +13,6 @@ import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.SourceKey
@@ -62,7 +61,7 @@ context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   ) = coroutineScope {
     bracket(
       acquire = {
-        val state = ForegroundState(foregroundId, notification, this)
+        val state = ForegroundState(foregroundId, notification)
         lock.withLock { states.value = states.value + state }
         log { "start foreground $foregroundId ${states.value}" }
 
@@ -86,11 +85,10 @@ context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
     )
   }
 
-  internal class ForegroundState(
+  context(CoroutineScope) internal class ForegroundState(
     val id: Int,
-    notification: Notification,
-    coroutineScope: CoroutineScope
-  ) : ForegroundScope, CoroutineScope by coroutineScope {
+    notification: Notification
+  ) : ForegroundScope, CoroutineScope by this@CoroutineScope {
     val notification = MutableStateFlow(notification)
     private val lock = Mutex()
     val seen = CompletableDeferred<Unit>()

@@ -16,6 +16,7 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -29,10 +30,9 @@ import kotlinx.coroutines.flow.transformLatest
 
 @JvmInline value class KeyboardVisible(val value: Boolean)
 
-@Provide fun keyboardVisible(
+context(NamedCoroutineScope<AppScope>) @Provide fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
-  scope: NamedCoroutineScope<AppScope>
+  keyboardHeightProvider: @KeyboardHeightProvider () -> Int?
 ): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&
@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.transformLatest
   }
   .map { KeyboardVisible(it) }
   .distinctUntilChanged()
-  .stateIn(scope, SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
+  .stateIn(inject(), SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(
