@@ -17,8 +17,10 @@ data class ServiceElement<T : Service<*>>(
 ) {
   companion object {
     @Provide val treeDescriptor = object : LoadingOrder.Descriptor<ServiceElement<*>> {
-      override fun key(item: ServiceElement<*>) = item.key
-      override fun loadingOrder(item: ServiceElement<*>) = item.loadingOrder
+      override val ServiceElement<*>.key: TypeKey<*>
+        get() = key
+      override val ServiceElement<*>.loadingOrder: LoadingOrder<*>
+        get() = loadingOrder
     }
 
     @Provide fun <@Spread T : Service<B>, B : Service<*>> serviceElement(

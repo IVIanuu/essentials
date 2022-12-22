@@ -88,18 +88,13 @@ fun defaultAnimationSpec(
   easing = easing
 )
 
-context(StackTransitionScope) fun fromElement(key: Any): AnimationElement? =
-  from?.let { element(it, key) }
+context(StackTransitionScope) fun fromElement(key: Any): AnimationElement? = from?.let { element(it, key) }
 
-context(StackTransitionScope) fun toElement(key: Any): AnimationElement? =
-  to?.let { element(it, key) }
+context(StackTransitionScope) fun toElement(key: Any): AnimationElement? = to?.let { element(it, key) }
 
 private var refKeys = 0
 
-context(StackTransitionScope) fun element(
-  child: AnimatedStackChild<*>,
-  key: Any
-): AnimationElement {
+context(StackTransitionScope) fun element(child: AnimatedStackChild<*>, key: Any): AnimationElement {
   val refKey = refKeys++
   val element = child.elementStore.referenceElement(key, refKey)
   coroutineContext.job.invokeOnCompletion {

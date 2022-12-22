@@ -12,7 +12,6 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.MainContext
@@ -59,7 +58,7 @@ context(Logger) @Provide fun displayRotation(
         awaitClose { listener.disable() }
       }
         .flowOn(coroutineContext)
-        .map { getCurrentDisplayRotation() }
+        .map { windowManager.getCurrentDisplayRotation() }
         .onStart { log { "sub for rotation" } }
         .onCompletion { log { "dispose rotation" } }
     } else {
@@ -69,9 +68,7 @@ context(Logger) @Provide fun displayRotation(
   }
   .distinctUntilChanged()
 
-private fun getCurrentDisplayRotation(
-  @Inject windowManager: @SystemService WindowManager,
-) = when (windowManager.defaultDisplay.rotation) {
+private fun WindowManager.getCurrentDisplayRotation() = when (defaultDisplay.rotation) {
   Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
   Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT
   Surface.ROTATION_180 -> DisplayRotation.PORTRAIT_DOWN

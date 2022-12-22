@@ -28,17 +28,16 @@ interface AppRepository {
   fun isAppInstalled(packageName: String): Flow<Boolean>
 }
 
-@Provide class AppRepositoryImpl(
-  private val broadcastsFactory: BroadcastsFactory,
+context(BroadcastsFactory) @Provide class AppRepositoryImpl(
   private val context: IOContext,
   private val packageManager: PackageManager
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>>
     get() = merge(
-      broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
-      broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
+      broadcasts(Intent.ACTION_PACKAGE_ADDED),
+      broadcasts(Intent.ACTION_PACKAGE_REMOVED),
+      broadcasts(Intent.ACTION_PACKAGE_CHANGED),
+      broadcasts(Intent.ACTION_PACKAGE_REPLACED)
     )
       .onStart<Any?> { emit(Unit) }
       .map {
@@ -57,7 +56,7 @@ interface AppRepository {
       }
       .distinctUntilChanged()
 
-  override fun appInfo(packageName: String) = broadcastsFactory(
+  override fun appInfo(packageName: String) = broadcasts(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED,
     Intent.ACTION_PACKAGE_CHANGED,
@@ -74,7 +73,7 @@ interface AppRepository {
     }
     .distinctUntilChanged()
 
-  override fun isAppInstalled(packageName: String) = broadcastsFactory(
+  override fun isAppInstalled(packageName: String) = broadcasts(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED
   )

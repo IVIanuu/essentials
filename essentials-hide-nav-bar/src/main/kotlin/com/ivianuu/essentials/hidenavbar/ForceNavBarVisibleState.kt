@@ -18,9 +18,8 @@ import kotlinx.coroutines.flow.take
 /**
  * We always wanna show the nav bar on system shut down
  */
-@Provide fun systemShutdownForceNavBarVisibleState(
-  broadcastsFactory: BroadcastsFactory
-): Flow<ForceNavBarVisibleState> = broadcastsFactory(Intent.ACTION_SHUTDOWN)
+context(BroadcastsFactory) @Provide fun systemShutdownForceNavBarVisibleState(
+): Flow<ForceNavBarVisibleState> = broadcasts(Intent.ACTION_SHUTDOWN)
   .take(1)
   .map { ForceNavBarVisibleState(true) }
   .onStart { emit(ForceNavBarVisibleState(false)) }

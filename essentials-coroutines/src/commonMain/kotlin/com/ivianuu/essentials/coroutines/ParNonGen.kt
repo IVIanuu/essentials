@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,13 +13,11 @@ import kotlinx.coroutines.sync.withPermit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-suspend fun <T> par(
-  blocks: Iterable<suspend () -> T>,
-  context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency
+context(Concurrency) suspend fun <T> Iterable<suspend () ->T>.par(
+  context: CoroutineContext = EmptyCoroutineContext
 ): List<T> = coroutineScope {
-  val semaphore = Semaphore(concurrency.value)
-  blocks.map { block ->
+  val semaphore = Semaphore(concurrency)
+  map { block ->
     async(context) {
       semaphore.withPermit {
         block()
@@ -29,27 +26,24 @@ suspend fun <T> par(
   }.awaitAll()
 }
 
-suspend fun <T> par(
+context(Concurrency) suspend fun <T> par(
   vararg blocks: suspend () -> T,
-  context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency
-): List<T> = par(blocks.asIterable(), context)
+  context: CoroutineContext = EmptyCoroutineContext
+): List<T> = blocks.asIterable().par(context)
 
-suspend fun <T, R> Iterable<T>.parMap(
+context(Concurrency) suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
-): List<R> = par(map { t -> suspend { transform(t) } }, context)
+): List<R> = map { t -> suspend { transform(t) } }.par(context)
 
-suspend fun <T> Iterable<T>.parForEach(
+context(Concurrency) suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
-  @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
   parMap(context) { action(it) }
 }
 
-inline class Concurrency(val value: Int)
+inline class Concurrency(val concurrency: Int)
 
 expect object ConcurrencyModule {
   @Provide val defaultConcurrency: Concurrency

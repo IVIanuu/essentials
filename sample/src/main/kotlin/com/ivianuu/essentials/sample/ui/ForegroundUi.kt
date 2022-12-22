@@ -71,11 +71,10 @@ object ForegroundKey : Key<Unit>
   }
 }
 
-private fun ForegroundNotification(
+context(NotificationFactory) private fun ForegroundNotification(
   color: Color,
-  count: Int,
-  @Inject notificationFactory: NotificationFactory
-) = notificationFactory.build(
+  count: Int
+) = buildNotification(
   "foreground",
   "Foreground",
   NotificationManager.IMPORTANCE_LOW

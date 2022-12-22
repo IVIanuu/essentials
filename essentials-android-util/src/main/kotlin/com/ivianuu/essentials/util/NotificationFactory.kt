@@ -14,7 +14,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 
 interface NotificationFactory {
-  fun build(
+  fun buildNotification(
     channelId: String,
     channelName: String,
     importance: Int,
@@ -29,7 +29,7 @@ inline val NotificationCompat.Builder.context: Context
   private val context: AppContext,
   private val notificationManager: @SystemService NotificationManager
 ) : NotificationFactory {
-  override fun build(
+  override fun buildNotification(
     channelId: String,
     channelName: String,
     importance: Int,

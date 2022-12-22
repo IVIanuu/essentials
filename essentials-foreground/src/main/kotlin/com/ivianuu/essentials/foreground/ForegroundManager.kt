@@ -28,9 +28,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 interface ForegroundManager {
-  suspend fun <R> runInForeground(
+  context(ForegroundId) suspend fun <R> runInForeground(
     notification: Notification,
-    @Inject id: ForegroundId,
     block: suspend context(ForegroundScope) () -> R
   ): R
 }
@@ -45,7 +44,7 @@ fun Flow<Notification>.updateNotification() {
     .launchIn(this@ForegroundScope)
 }
 
-@JvmInline value class ForegroundId(val value: Int) {
+@JvmInline value class ForegroundId(val foregroundId: Int) {
   companion object {
     @Provide fun default(sourceKey: SourceKey) = ForegroundId(sourceKey.hashCode())
   }
@@ -57,16 +56,15 @@ context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
-  override suspend fun <R> runInForeground(
+  context(ForegroundId) override suspend fun <R> runInForeground(
     notification: Notification,
-    @Inject id: ForegroundId,
     block: suspend context(ForegroundScope) () -> R
   ) = coroutineScope {
     bracket(
       acquire = {
-        val state = ForegroundState(id.value, notification, this)
+        val state = ForegroundState(foregroundId, notification, this)
         lock.withLock { states.value = states.value + state }
-        log { "start foreground ${id.value} ${states.value}" }
+        log { "start foreground $foregroundId ${states.value}" }
 
         ContextCompat.startForegroundService(
           context,
@@ -83,7 +81,7 @@ context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
       },
       release = { state, _ ->
         lock.withLock { states.value = states.value - state }
-        log { "stop foreground ${id.value} ${states.value}" }
+        log { "stop foreground $foregroundId ${states.value}" }
       }
     )
   }

@@ -116,12 +116,11 @@ inline fun <T : Any> hookAllMethods(
   block: context(MethodHookBuilder) () -> Unit
 ): Set<XC_MethodHook.Unhook> = hookAllMethods(hookClass, methodName, block)
 
-inline fun hookAllMethods(
+context(ClassLoader) inline fun hookAllMethods(
   className: String,
   methodName: String,
-  @Inject classLoader: ClassLoader,
   block: context(MethodHookBuilder) () -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(classLoader.getClass(className), methodName, block)
+): Set<XC_MethodHook.Unhook> = hookAllMethods(getClass(className), methodName, block)
 
 inline fun hookAllMethods(
   hookClass: KClass<*>,
@@ -133,11 +132,10 @@ inline fun hookAllMethods(
   methodHook(block)
 )
 
-inline fun hookAllConstructors(
+context(ClassLoader) inline fun hookAllConstructors(
   className: String,
-  @Inject classLoader: ClassLoader,
   block: context(MethodHookBuilder) () -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllConstructors(classLoader.getClass(className), block)
+): Set<XC_MethodHook.Unhook> = hookAllConstructors(getClass(className), block)
 
 inline fun <T : Any> hookAllConstructors(
   @Inject hookClass: KClass<T>,

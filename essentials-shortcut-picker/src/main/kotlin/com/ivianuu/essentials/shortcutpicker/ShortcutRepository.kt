@@ -28,14 +28,13 @@ interface ShortcutRepository {
   suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut
 }
 
-@Provide class ShortcutRepositoryImpl(
-  private val broadcastsFactory: BroadcastsFactory,
+context(BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
   private val context: AppContext,
   private val coroutineContext: IOContext,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>>
-    get() = broadcastsFactory(
+    get() = broadcasts(
       Intent.ACTION_PACKAGE_ADDED,
       Intent.ACTION_PACKAGE_REMOVED,
       Intent.ACTION_PACKAGE_CHANGED,

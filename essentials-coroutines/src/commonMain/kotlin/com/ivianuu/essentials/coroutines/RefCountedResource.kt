@@ -27,16 +27,16 @@ fun <K, T> RefCountedResource(
 
 fun <K, T> RefCountedResource(
   timeout: Duration,
-  @Inject scope: CoroutineScope,
+  scope: CoroutineScope,
   create: suspend (K) -> T,
   release: (suspend (K, T) -> Unit)? = null,
-): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout)
+): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout, scope)
 
 private class RefCountedReleaseImpl<K, T>(
   private val create: suspend (K) -> T,
   private val release: (suspend (K, T) -> Unit)?,
   private val timeout: Duration,
-  @Inject private val scope: CoroutineScope?
+  private val scope: CoroutineScope?
 ) : RefCountedResource<K, T> {
   private val lock = Mutex()
   private val values = mutableMapOf<K, Item>()

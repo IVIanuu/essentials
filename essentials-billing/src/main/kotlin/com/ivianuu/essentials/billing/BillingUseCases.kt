@@ -105,19 +105,18 @@ context(BillingContext) @Provide fun consumePurchaseUseCase() = ConsumePurchaseU
 
 fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
 
-context(BillingContext) @Provide fun acknowledgePurchaseUseCase() =
-  AcknowledgePurchaseUseCase { sku ->
-    withConnection {
-      val purchase = getPurchase(sku)
-        ?: return@withConnection false
+context(BillingContext) @Provide fun acknowledgePurchaseUseCase() = AcknowledgePurchaseUseCase { sku ->
+  withConnection {
+    val purchase = getPurchase(sku)
+      ?: return@withConnection false
 
-      if (purchase.isAcknowledged) return@withConnection true
+    if (purchase.isAcknowledged) return@withConnection true
 
-      val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
-        .setPurchaseToken(purchase.purchaseToken)
-        .build()
+    val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
+      .setPurchaseToken(purchase.purchaseToken)
+      .build()
 
-      val result = billingClient.acknowledgePurchase(acknowledgeParams)
+    val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
     log {
       "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"

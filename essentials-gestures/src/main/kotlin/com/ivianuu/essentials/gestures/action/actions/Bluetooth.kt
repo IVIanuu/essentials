@@ -16,7 +16,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionIcon
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.util.BroadcastsFactory
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -40,9 +39,9 @@ context(ResourceProvider) @Provide fun bluetoothAction(B: BroadcastsFactory) = A
   }
 }
 
-private fun bluetoothIcon(@Inject broadcastsFactory: BroadcastsFactory) = ActionIcon {
+context(BroadcastsFactory) private fun bluetoothIcon() = ActionIcon {
   val bluetoothEnabled by remember {
-    broadcastsFactory(BluetoothAdapter.ACTION_STATE_CHANGED)
+    broadcasts(BluetoothAdapter.ACTION_STATE_CHANGED)
       .map { it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF) }
       .onStart {
         emit(

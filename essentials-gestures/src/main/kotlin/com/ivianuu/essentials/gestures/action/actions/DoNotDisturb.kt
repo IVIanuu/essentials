@@ -43,18 +43,14 @@ context(ResourceProvider) @Provide fun doNotDisturbAction(icon: DoNotDisturbIcon
 
 fun interface DoNotDisturbIcon : ActionIcon
 
-@Provide fun doNotDisturbIcon(
-  broadcastsFactory: BroadcastsFactory,
-  notificationManager: @SystemService NotificationManager,
-) = DoNotDisturbIcon {
+context(BroadcastsFactory, (@SystemService NotificationManager))
+@Provide fun doNotDisturbIcon() = DoNotDisturbIcon {
   val doNotDisturb by remember {
-    broadcastsFactory(
+    broadcasts(
       NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED
     )
       .onStart<Any?> { emit(Unit) }
-      .map {
-        notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY
-      }
+      .map { currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY }
   }.collectAsState(false)
 
   Icon(

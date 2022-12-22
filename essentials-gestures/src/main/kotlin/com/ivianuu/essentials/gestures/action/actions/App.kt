@@ -29,11 +29,8 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-context(ResourceProvider) @Provide class AppActionFactory(
-  private val actionIntentSender: ActionIntentSender,
-  private val appRepository: AppRepository,
-  private val packageManager: PackageManager
-) : ActionFactory {
+context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
+@Provide class AppActionFactory() : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -41,7 +38,7 @@ context(ResourceProvider) @Provide class AppActionFactory(
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
-      title = appRepository.appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
+      title = appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
@@ -55,8 +52,8 @@ context(ResourceProvider) @Provide class AppActionFactory(
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1].toBoolean() }
     return ActionExecutor<ActionId> {
-      actionIntentSender(
-        packageManager.getLaunchIntentForPackage(packageName)!!,
+      sendIntent(
+        getLaunchIntentForPackage(packageName)!!,
         isFloating,
         null
       )

@@ -103,8 +103,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
   }
 
-  @Provide fun xposedPrefFlow(
-    broadcastsFactory: BroadcastsFactory,
+  context(BroadcastsFactory) @Provide fun xposedPrefFlow(
     coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
@@ -125,7 +124,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: initial()
     }
 
-    return broadcastsFactory(prefsChangedAction(packageName))
+    return broadcasts(prefsChangedAction(packageName))
       .filter { sharedPrefs.hasFileChanged() }
       .onStart<Any?> { emit(Unit) }
       .map { readData() }

@@ -96,7 +96,7 @@ data class PopupKey(
   KeyUiOptions(opaque = true, transition = PopupStackTransition)
 }
 
-val PopupStackTransition: StackTransition = transition@{
+val PopupStackTransition: StackTransition = transition@ {
   val popupModifier = (if (isPush) toElementModifier(PopupAnimationElementKey)
   else fromElementModifier(PopupAnimationElementKey))
     ?: return@transition

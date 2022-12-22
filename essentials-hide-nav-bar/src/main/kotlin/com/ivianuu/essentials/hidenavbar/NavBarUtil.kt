@@ -65,7 +65,7 @@ internal typealias HiddenApiPolicyPieApps = @HiddenApiPolicyPieAppsTag Int
 fun interface OverscanUpdater : (Rect) -> Unit
 
 context(Logger)
-    @SuppressLint("PrivateApi") @Provide fun overscanUpdater() = OverscanUpdater { rect ->
+@SuppressLint("PrivateApi") @Provide fun overscanUpdater() = OverscanUpdater { rect ->
   log { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")

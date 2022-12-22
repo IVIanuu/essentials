@@ -29,7 +29,7 @@ import com.ivianuu.injekt.inject
 
 fun interface ListDecorator : Service<ListDecorator> {
   context(ListDecoratorScope)
-      operator fun invoke()
+  operator fun invoke()
 }
 
 interface ListDecoratorScope : LazyListScope {
@@ -113,9 +113,9 @@ context(LazyListScope) private fun decoratedContent(
   decorators
     .reversed()
     .fold(content) { acc, element ->
-      decorator@{
+      decorator@ {
         with(element.instance) {
-          val scope = object : ListDecoratorScope, LazyListScope by inject() {
+          val scope =  object : ListDecoratorScope, LazyListScope by inject() {
             override val isVertical: Boolean
               get() = isVertical
 

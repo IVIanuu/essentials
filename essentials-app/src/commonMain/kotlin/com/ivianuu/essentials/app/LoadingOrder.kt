@@ -4,8 +4,10 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.inject
 
 sealed interface LoadingOrder<T> {
   sealed interface Static<T> : LoadingOrder<T> {
@@ -18,10 +20,11 @@ sealed interface LoadingOrder<T> {
 
       fun last() = Last<T>()
 
-      fun <S> before(@Inject other: TypeKey<S>): Topological.Before<T> =
-        Topological.Before(other as TypeKey<T>)
+      context(TypeKey<S>) fun <S> before(): Topological.Before<T> =
+        Topological.Before<S>(inject()).cast()
 
-      fun <S> after(@Inject other: TypeKey<S>): Topological.After<T> = Topological.After(other as TypeKey<T>)
+      context(TypeKey<S>) fun <S> after(): Topological.After<T> =
+        Topological.After<S>(inject()).cast()
     }
   }
 
@@ -32,17 +35,17 @@ sealed interface LoadingOrder<T> {
 
     data class Combined<T>(val a: Topological<T>, val b: Topological<T>) : Topological<T>
 
-    operator fun plus(other: Topological<T>): Combined<T> = Combined(this, other)
+    operator fun plus(other: Topological<T>) = Combined(this, other)
 
-    fun <S> before(@Inject other: TypeKey<S>): Combined<T> = Combined(this, Before(other) as Topological<T>)
+    context(TypeKey<S>) fun <S> before() = Combined(this, Before<S>(inject()).cast())
 
-    fun <S> after(@Inject other: TypeKey<S>): Combined<T> = Combined(this, After(other) as Topological<T>)
+    context(TypeKey<S>)fun <S> after() = Combined(this, After<S>(inject()).cast())
   }
 
   interface Descriptor<in T> {
-    fun key(item: T): TypeKey<*>
+    val T.key: TypeKey<*>
 
-    fun loadingOrder(item: T): LoadingOrder<*>
+    val T.loadingOrder: LoadingOrder<*>
   }
 
   companion object {
@@ -88,12 +91,12 @@ private fun LoadingOrder.Topological<*>.dependents(): Set<TypeKey<*>> {
   return result
 }
 
-fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.Descriptor<T>): List<T> {
+context(LoadingOrder.Descriptor<T>) fun <T> Collection<T>.sortedWithLoadingOrder(): List<T> {
   if (isEmpty() || size == 1) return toList()
 
   val first = mapNotNull {
-    if (descriptor.loadingOrder(it) is LoadingOrder.Static.First)
-      descriptor.key(it)
+    if (it.loadingOrder is LoadingOrder.Static.First)
+      it.key
     else null
   }
 
@@ -101,11 +104,11 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
 
   // collect dependencies for each item
   for (item in this) {
-    val key = descriptor.key(item)
+    val key = item.key
 
     if (key in first) continue
 
-    val loadingOrder = descriptor.loadingOrder(item)
+    val loadingOrder = item.loadingOrder
 
     val itemDependencies = dependencies.getOrPut(key) { mutableSetOf() }
 
@@ -113,13 +116,13 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
       is LoadingOrder.Static.First -> throw AssertionError()
       is LoadingOrder.Static.Last -> {
         itemDependencies += filter { other ->
-          when (val otherLoadingOrder = descriptor.loadingOrder(other)) {
+          when (val otherLoadingOrder = other.loadingOrder) {
             is LoadingOrder.Static.Last -> false
             is LoadingOrder.Topological -> otherLoadingOrder.dependencies()
               .none { it == key }
             else -> true
           }
-        }.map { descriptor.key(it) }
+        }.map { it.key }
       }
       is LoadingOrder.Topological -> {
         itemDependencies += loadingOrder.dependencies()
@@ -147,8 +150,8 @@ fun <T> Collection<T>.sortedWithLoadingOrder(@Inject descriptor: LoadingOrder.De
     lastItems = unprocessedItems
     sortedItems += unprocessedItems
       .filter { item ->
-        dependencies[descriptor.key(item)]?.all { dependency ->
-          sortedItems.any { descriptor.key(it) == dependency }
+        dependencies[item.key]?.all { dependency ->
+          sortedItems.any { it.key == dependency }
         } ?: true
       }
   }

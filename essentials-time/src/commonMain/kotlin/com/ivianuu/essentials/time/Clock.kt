@@ -7,6 +7,8 @@ package com.ivianuu.essentials.time
 import com.ivianuu.injekt.Provide
 import kotlin.time.Duration
 
-fun interface Clock : () -> Duration
+fun interface Clock {
+  fun now(): Duration
+}
 
 @Provide expect val DefaultClock: Clock

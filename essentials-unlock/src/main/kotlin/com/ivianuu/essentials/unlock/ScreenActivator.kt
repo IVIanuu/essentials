@@ -25,7 +25,7 @@ context(Logger) @Provide fun screenActivator(
 ) = ScreenActivator {
   withContext(coroutineContext) {
     log { "on request is off ? ${!powerManager.isInteractive}" }
-    if (powerManager.isInteractive) {
+    if (powerManager.isInteractive){
       log { "already on" }
       return@withContext true
     }

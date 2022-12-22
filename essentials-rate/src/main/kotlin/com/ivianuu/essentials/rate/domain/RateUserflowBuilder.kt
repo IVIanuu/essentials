@@ -20,13 +20,12 @@ import kotlin.time.Duration
 
 fun interface RateUserflowBuilder : UserflowBuilder
 
-context(Logger) @Provide fun rateUserflowBuilder(
+context(Clock, Logger) @Provide fun rateUserflowBuilder(
   pref: DataStore<RatePrefs>,
-  clock: Clock,
   S: RateUiSchedule = RateUiSchedule()
 ) = RateUserflowBuilder {
   if (pref.data.first().installTime == 0L) {
-    val now = clock()
+    val now = now()
     pref.updateData { copy(installTime = now.inWholeNanoseconds) }
   }
 
@@ -36,10 +35,9 @@ context(Logger) @Provide fun rateUserflowBuilder(
   else emptyList()
 }
 
-context(Logger) private suspend fun shouldShowRateDialog(
+context(Clock, Logger) private suspend fun shouldShowRateDialog(
   @Inject pref: DataStore<RatePrefs>,
-  @Inject schedule: RateUiSchedule,
-  @Inject clock: Clock
+  @Inject schedule: RateUiSchedule
 ): Boolean {
   val prefs = pref.data.first()
 
@@ -54,7 +52,7 @@ context(Logger) private suspend fun shouldShowRateDialog(
       log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
     }
 
-  val now = clock()
+  val now = now()
   val installedDuration = now - prefs.installTime.milliseconds
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {

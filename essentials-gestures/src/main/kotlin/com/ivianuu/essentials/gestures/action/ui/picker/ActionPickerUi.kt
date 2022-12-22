@@ -35,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 data class ActionPickerKey(
@@ -131,10 +130,9 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-context(ResourceProvider) @Provide fun actionPickerModel(
+context(ActionRepository, ResourceProvider) @Provide fun actionPickerModel(
   filter: ActionFilter,
   permissionRequester: PermissionRequester,
-  repository: ActionRepository,
   ctx: KeyUiContext<ActionPickerKey>
 ) = Model {
   ActionPickerModel(
@@ -143,7 +141,7 @@ context(ResourceProvider) @Provide fun actionPickerModel(
     pickAction = action { item ->
       val result = item.getResult() ?: return@action
       if (result is ActionPickerKey.Result.Action) {
-        val action = repository.getAction(result.actionId)
+        val action = getAction(result.actionId)
         if (!permissionRequester(action.permissions))
           return@action
       }
@@ -152,10 +150,9 @@ context(ResourceProvider) @Provide fun actionPickerModel(
   )
 }
 
-context(ResourceProvider) private suspend fun getActionPickerItems(
+context(ActionRepository, ResourceProvider) private suspend fun getActionPickerItems(
   key: ActionPickerKey,
-  filter: ActionFilter,
-  @Inject repository: ActionRepository
+  filter: ActionFilter
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
@@ -174,14 +171,14 @@ context(ResourceProvider) private suspend fun getActionPickerItems(
   }
 
   val actionsAndDelegates = (
-      (repository.getActionPickerDelegates()
+      (getActionPickerDelegates()
         .filter { filter(it.baseId) }
-        .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
+        .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
         .filter { filter(it.id) }
         .map {
           ActionPickerItem.ActionItem(
             it,
-            repository.getActionSettingsKey(it.id)
+            getActionSettingsKey(it.id)
           )
         })
       )

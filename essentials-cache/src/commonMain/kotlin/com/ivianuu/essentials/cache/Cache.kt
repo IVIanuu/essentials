@@ -6,7 +6,6 @@ package com.ivianuu.essentials.cache
 
 import com.ivianuu.essentials.nonFatalOrThrow
 import com.ivianuu.essentials.time.Clock
-import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -39,18 +38,16 @@ suspend fun <K : Any> Cache<K, *>.contains(key: K): Boolean = get(key) != null
 
 suspend fun Cache<*, *>.size(): Int = asMap().size
 
-fun <K : Any, V : Any> Cache(
+context(Clock) fun <K : Any, V : Any> Cache(
   expireAfterWriteDuration: Duration = Duration.INFINITE,
   expireAfterAccessDuration: Duration = Duration.INFINITE,
-  maxSize: Long = Long.MAX_VALUE,
-  @Inject clock: Clock
-): Cache<K, V> = CacheImpl(expireAfterWriteDuration, expireAfterAccessDuration, maxSize, clock)
+  maxSize: Long = Long.MAX_VALUE
+): Cache<K, V> = CacheImpl(expireAfterWriteDuration, expireAfterAccessDuration, maxSize)
 
-internal class CacheImpl<K : Any, V : Any>(
+context(Clock) internal class CacheImpl<K : Any, V : Any>(
   private val expireAfterWriteDuration: Duration,
   private val expireAfterAccessDuration: Duration,
-  private val maxSize: Long = Long.MAX_VALUE,
-  @Inject val clock: Clock
+  private val maxSize: Long = Long.MAX_VALUE
 ) : Cache<K, V> {
   private val cacheLock = Mutex()
 
@@ -62,7 +59,7 @@ internal class CacheImpl<K : Any, V : Any>(
     mutableSetOf<CacheEntry>() else null
 
   override suspend fun get(key: K): V? {
-    val now = clock()
+    val now = now()
     return cacheLock.withLock {
       removeExpiredEntries(now)
 
@@ -72,7 +69,7 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   override suspend fun get(key: K, computation: suspend (K) -> V): V {
-    val now = clock()
+    val now = now()
     return cacheLock.withLock {
       removeExpiredEntries(now)
 
@@ -90,7 +87,7 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   override suspend fun put(key: K, value: V) {
-    val now = clock()
+    val now = now()
     cacheLock.withLock {
       removeExpiredEntries(now)
 
@@ -104,7 +101,7 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   override suspend fun remove(key: K) {
-    val now = clock()
+    val now = now()
     cacheLock.withLock {
       removeExpiredEntries(now)
 
@@ -124,7 +121,7 @@ internal class CacheImpl<K : Any, V : Any>(
   }
 
   override suspend fun asMap(): Map<K, V> {
-    val now = clock()
+    val now = now()
     return cacheLock.withLock {
       buildMap {
         this@CacheImpl.entries.forEach { (_, entry) ->
@@ -204,7 +201,7 @@ internal class CacheImpl<K : Any, V : Any>(
       valueLock.withLock {
         value ?: CoroutineScope(coroutineContext).async {
           block(key).also {
-            val now = clock()
+            val now = now()
             cacheLock.withLock { recordWrite(now) }
           }
         }.also { value = it }
@@ -222,7 +219,7 @@ internal class CacheImpl<K : Any, V : Any>(
       }
     }
       .also {
-        val now = clock()
+        val now = now()
         cacheLock.withLock { recordRead(now) }
       }
 

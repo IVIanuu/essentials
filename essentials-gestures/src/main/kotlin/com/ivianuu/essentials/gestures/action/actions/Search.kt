@@ -26,10 +26,8 @@ context(ResourceProvider) @Provide fun searchAction() = Action(
   permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
 )
 
-@Provide fun searchActionExecutor(
-  intentSender: ActionIntentSender
-) = ActionExecutor<SearchActionId> {
-  intentSender(
+context(ActionIntentSender) @Provide fun searchActionExecutor() = ActionExecutor<SearchActionId> {
+  sendIntent(
     Intent(Intent.ACTION_MAIN).apply {
       component = ComponentName(
         "com.google.android.googlequicksearchbox",

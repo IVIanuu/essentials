@@ -33,9 +33,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import java.io.ByteArrayOutputStream
 
-@Provide class ShortcutActionFactory(
-  private val actionIntentSender: ActionIntentSender
-) : ActionFactory {
+context(ActionIntentSender) @Provide class ShortcutActionFactory : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -65,7 +63,7 @@ import java.io.ByteArrayOutputStream
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
     val isFloating = tmp[4].toBoolean()
-    return ActionExecutor<ActionId> { actionIntentSender(intent, isFloating, null) }
+    return ActionExecutor<ActionId> { sendIntent(intent, isFloating, null) }
   }
 }
 

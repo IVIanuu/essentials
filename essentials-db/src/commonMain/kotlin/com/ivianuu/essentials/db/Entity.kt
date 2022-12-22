@@ -6,6 +6,7 @@ package com.ivianuu.essentials.db
 
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.inject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -20,6 +21,7 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
+// todo replace @Inject with context receivers once supported
 abstract class AbstractEntityDescriptor<T>(
   tableName: String,
   @Inject K: TypeKey<T>,
@@ -34,11 +36,9 @@ annotation class PrimaryKey
 @SerialInfo
 annotation class AutoIncrement
 
-fun <T> EntityDescriptor(
-  tableName: String,
-  @Inject key: TypeKey<T>,
-  @Inject serializer: KSerializer<T>
-): EntityDescriptor<T> = EntityDescriptorImpl(tableName, key, serializer)
+context(TypeKey<T>, KSerializer<T>)
+fun <T> EntityDescriptor(tableName: String): EntityDescriptor<T> =
+  EntityDescriptorImpl(tableName, inject(), inject())
 
 private class EntityDescriptorImpl<T>(
   override val tableName: String,
@@ -95,7 +95,7 @@ data class Row(
   }
 }
 
-fun <T> T.toSqlColumnsAndArgsString(schema: Schema, @Inject K: TypeKey<T>): String = buildString {
+context(TypeKey<T>) fun <T> T.toSqlColumnsAndArgsString(schema: Schema): String = buildString {
   val descriptor = schema.descriptor<T>()
 
   val rowsWithValues = descriptor.rows.zip(

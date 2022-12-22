@@ -82,11 +82,7 @@ private class AnimatedStackWithItemsState<T>(
     update(transition, itemContent, items)
   }
 
-  fun update(
-    transition: StackTransition,
-    itemContent: @Composable context(BoxScope) (T) -> Unit,
-    items: List<T>
-  ) {
+  fun update(transition: StackTransition, itemContent: @Composable context(BoxScope) (T) -> Unit, items: List<T>) {
     children = items.map { getOrCreateChild(it, transition, itemContent) }
   }
 

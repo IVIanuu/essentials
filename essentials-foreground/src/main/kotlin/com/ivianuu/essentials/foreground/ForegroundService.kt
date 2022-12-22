@@ -52,7 +52,7 @@ class ForegroundService : Service() {
     super.onCreate()
     log { "start service" }
 
-    startTime = component.clock()
+    startTime = component.clock.now()
 
     job = component.scope.launch(start = CoroutineStart.UNDISPATCHED) {
       guarantee(

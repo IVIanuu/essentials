@@ -17,24 +17,22 @@ interface RateLimiter {
   suspend fun tryAcquire(): Boolean
 }
 
-fun RateLimiter(
+context(Clock) fun RateLimiter(
   eventsPerInterval: Int,
-  interval: Duration,
-  @Inject clock: Clock
+  interval: Duration
 ): RateLimiter = RateLimiterImpl(eventsPerInterval, interval)
 
-internal class RateLimiterImpl(
+context(Clock) internal class RateLimiterImpl(
   eventsPerInterval: Int,
-  interval: Duration,
-  @Inject private val clock: Clock
+  interval: Duration
 ) : RateLimiter {
   private val lock = Mutex()
   private val permitDuration = interval / eventsPerInterval
 
-  private var cursor = clock()
+  private var cursor = now()
 
   override suspend fun acquire() {
-    val now = clock()
+    val now = now()
 
     val wakeUpTime = lock.withLock {
       val base = if (cursor > now) cursor else now
@@ -46,7 +44,7 @@ internal class RateLimiterImpl(
   }
 
   override suspend fun tryAcquire(): Boolean {
-    val now = clock()
+    val now = now()
 
     val wakeUpTime = lock.withLock {
       if (cursor > now)

@@ -50,13 +50,12 @@ fun interface ShowNeverUseCase : suspend () -> Unit
 
 fun interface ShowLaterUseCase : suspend () -> Unit
 
-@Provide fun showLaterUseCase(
+context(Clock) @Provide fun showLaterUseCase(
   key: Key<*>,
   navigator: Navigator,
-  pref: DataStore<RatePrefs>,
-  clock: Clock
+  pref: DataStore<RatePrefs>
 ) = ShowLaterUseCase {
-  val now = clock()
+  val now = now()
   pref.updateData {
     copy(
       launchTimes = 0,

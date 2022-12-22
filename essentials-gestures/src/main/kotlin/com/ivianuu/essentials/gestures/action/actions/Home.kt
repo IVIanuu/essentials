@@ -25,8 +25,7 @@ context(ResourceProvider) @Provide fun homeAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_action_home)
 )
 
-@Provide fun homeActionExecutor(
-  actionIntentSender: ActionIntentSender,
+context(ActionIntentSender) @Provide fun homeActionExecutor(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   globalActionExecutor: GlobalActionExecutor,
 ) = ActionExecutor<HomeActionId> {
@@ -35,7 +34,7 @@ context(ResourceProvider) @Provide fun homeAction() = Action(
   } else {
     closeSystemDialogs()
 
-    actionIntentSender(
+    sendIntent(
       Intent(Intent.ACTION_MAIN).apply {
         addCategory(
           Intent.CATEGORY_HOME

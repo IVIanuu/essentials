@@ -37,18 +37,15 @@ context(ResourceProvider) @Provide fun wifiAction(icon: WifiIcon) = Action(
 
 fun interface WifiIcon : ActionIcon
 
-@Provide fun wifiIcon(
-  broadcastsFactory: BroadcastsFactory,
-  wifiManager: @SystemService WifiManager,
-) = WifiIcon {
+context(BroadcastsFactory, (@SystemService WifiManager)) @Provide fun wifiIcon() = WifiIcon {
   val wifiEnabled by remember {
-    broadcastsFactory(WifiManager.WIFI_STATE_CHANGED_ACTION)
+    broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
       .map {
         val state =
           it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
         state == WifiManager.WIFI_STATE_ENABLED
       }
-      .onStart { emit(wifiManager.isWifiEnabled) }
+      .onStart { emit(isWifiEnabled) }
   }.collectAsState(false)
 
   Icon(

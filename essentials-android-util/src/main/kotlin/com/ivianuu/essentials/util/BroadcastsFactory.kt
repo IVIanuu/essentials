@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 fun interface BroadcastsFactory {
-  operator fun invoke(vararg actions: String): Flow<Intent>
+  fun broadcasts(vararg actions: String): Flow<Intent>
 }
 
 @Provide fun broadcastsFactory(

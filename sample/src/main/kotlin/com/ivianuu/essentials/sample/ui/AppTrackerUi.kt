@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.sample.ui
 
-import android.app.Notification
 import android.app.NotificationManager
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -28,7 +27,6 @@ import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -80,11 +78,9 @@ object AppTrackerKey : Key<Unit>
   }
 }
 
-private fun AppTrackerNotification(
-  currentApp: CurrentApp?,
-  @Inject factory: NotificationFactory
-): Notification =
-  factory.build("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
+context(NotificationFactory) private fun AppTrackerNotification(
+  currentApp: CurrentApp?
+) = buildNotification("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
     setSmallIcon(R.mipmap.ic_launcher)
     setContentTitle("Current app: ${currentApp?.value}")
   }

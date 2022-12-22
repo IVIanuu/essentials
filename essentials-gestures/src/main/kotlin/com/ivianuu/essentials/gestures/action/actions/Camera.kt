@@ -46,8 +46,7 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-context(Logger) @Provide fun cameraActionExecutor(
-  actionIntentSender: ActionIntentSender,
+context(ActionIntentSender, Logger) @Provide fun cameraActionExecutor(
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
@@ -101,7 +100,7 @@ context(Logger) @Provide fun cameraActionExecutor(
   if (frontFacing != null)
     intent.addCameraFacingExtras(frontFacing)
 
-  actionIntentSender(intent, false, null)
+  sendIntent(intent, false, null)
 }
 
 fun Intent.addCameraFacingExtras(frontFacing: Boolean) {

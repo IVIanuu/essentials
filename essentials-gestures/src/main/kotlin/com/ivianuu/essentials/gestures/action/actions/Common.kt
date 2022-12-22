@@ -67,7 +67,9 @@ fun interface ActionRootCommandRunner : suspend (String) -> Unit
     }
 }
 
-fun interface ActionIntentSender : (Intent, Boolean, Bundle?) -> Unit
+fun interface ActionIntentSender {
+  fun sendIntent(intent: Intent, isFloating: Boolean, options: Bundle?)
+}
 
 @Provide fun actionIntentSender(
   context: AppContext,

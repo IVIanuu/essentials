@@ -28,8 +28,7 @@ class TestBillingContext(scope: CoroutineScope) : BillingContext {
   )
   override val refreshes: MutableSharedFlow<BillingRefresh> = EventFlow()
   @Provide override val logger: Logger = PrintingLogger(LoggingEnabled(true))
-  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R =
-    block()
+  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R = block()
 }
 
 fun Purchase(

@@ -43,8 +43,7 @@ interface Torch {
   suspend fun setTorchState(value: Boolean)
 }
 
-context(Logger, ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
-  private val broadcastsFactory: BroadcastsFactory,
+context(BroadcastsFactory, Logger, ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
   private val cameraManager: @SystemService CameraManager,
   private val foregroundManager: ForegroundManager,
   private val notificationFactory: NotificationFactory,
@@ -74,7 +73,7 @@ context(Logger, ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
     foregroundManager.runInForeground(createTorchNotification()) {
       race(
         { enableTorch() },
-        { broadcastsFactory(ACTION_DISABLE_TORCH).first() }
+        { broadcasts(ACTION_DISABLE_TORCH).first() }
       )
     }
   }
@@ -100,7 +99,7 @@ context(Logger, ToastContext) @Provide @Scoped<AppScope> class TorchImpl(
   }
 
   @SuppressLint("LaunchActivityFromNotification")
-  private fun createTorchNotification(): Notification = notificationFactory.build(
+  private fun createTorchNotification(): Notification = notificationFactory.buildNotification(
     NOTIFICATION_CHANNEL_ID,
     loadResource(R.string.es_notif_channel_torch),
     NotificationManager.IMPORTANCE_LOW

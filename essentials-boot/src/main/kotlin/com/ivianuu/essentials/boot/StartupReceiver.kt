@@ -28,7 +28,4 @@ class StartupReceiver : BroadcastReceiver() {
 }
 
 @Provide @Element<AppScope>
-data class StartupReceiverComponent(
-  val bootListeners: List<BootListener>,
-  @Provide val logger: Logger
-)
+data class StartupReceiverComponent(val bootListeners: List<BootListener>, @Provide val logger: Logger)

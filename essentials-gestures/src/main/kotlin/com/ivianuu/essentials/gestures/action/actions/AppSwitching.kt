@@ -15,10 +15,10 @@ import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -26,13 +26,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-fun switchToApp(
+context(ActionIntentSender, AppContext, PackageManager) fun switchToApp(
   packageName: String,
   enterAnimResId: Int,
-  exitAnimResId: Int,
-  @Inject actionIntentSender: ActionIntentSender,
-  @Inject context: AppContext,
-  @Inject packageManager: PackageManager
+  exitAnimResId: Int
 ) {
   catch {
     val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@catch
@@ -41,9 +38,11 @@ fun switchToApp(
           Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or
           Intent.FLAG_ACTIVITY_TASK_ON_HOME
     )
-    actionIntentSender(
-      intent, false, ActivityOptionsCompat.makeCustomAnimation(
-        context,
+    sendIntent(
+      intent,
+      false,
+      ActivityOptionsCompat.makeCustomAnimation(
+        inject(),
         enterAnimResId,
         exitAnimResId
       ).toBundle()

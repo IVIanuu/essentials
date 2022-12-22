@@ -37,7 +37,7 @@ context(Logger) @Provide fun navBarManager(
   permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater
-) = ScopeWorker<AppScope> worker@{
+) = ScopeWorker<AppScope> worker@ {
   if (!navBarFeatureSupported.value) return@worker
   permissionState
     .flatMapLatest { hasPermission ->

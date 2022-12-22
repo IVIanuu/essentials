@@ -41,18 +41,17 @@ fun <T> Flow<T>.launchOnEachLatest(block: suspend context(CoroutineScope) (T) ->
   }
 }
 
-fun <T> Flow<T>.launchOnCompletion(block: suspend context(CoroutineScope) (Throwable?) -> Unit) =
-  flow {
-    coroutineScope {
-      emitAll(
-        this@launchOnCompletion
-          .onCompletion {
-            launch {
-              block(it)
-            }.join()
-          }
-      )
-    }
+fun <T> Flow<T>.launchOnCompletion(block: suspend context(CoroutineScope) (Throwable?) -> Unit) = flow {
+  coroutineScope {
+    emitAll(
+      this@launchOnCompletion
+        .onCompletion {
+          launch {
+            block(it)
+          }.join()
+        }
+    )
+  }
 }
 
 fun <T> Flow<T>.launchOnCancel(block: suspend context(CoroutineScope) () -> Unit) = flow {
