@@ -44,7 +44,7 @@ import kotlin.reflect.KClass
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
   successEmpty: @Composable () -> Unit = {},
-  successItemContent: @Composable LazyItemScope.(T) -> Unit,
+  successItemContent: @Composable context(LazyItemScope) (T) -> Unit,
 ) {
   ResourceBox(
     resource = resource,
@@ -70,7 +70,7 @@ import kotlin.reflect.KClass
   loading: @Composable () -> Unit = ResourceBoxDefaults.loading,
   idle: @Composable () -> Unit = {},
   successEmpty: @Composable () -> Unit = {},
-  successItemContent: @Composable LazyItemScope.(T) -> Unit,
+  successItemContent: @Composable context(LazyItemScope) (T) -> Unit,
 ) {
   ResourceBox(
     resource = resource,

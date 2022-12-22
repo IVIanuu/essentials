@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
   colors: ButtonColors = ButtonDefaults.esButtonColors(),
   contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
   forceMinSize: Boolean = true,
-  content: @Composable RowScope.() -> Unit
+  content: @Composable context(RowScope) () -> Unit
 ) {
   androidx.compose.material.Button(
     onClick,
@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.dp
   border: BorderStroke? = ButtonDefaults.outlinedBorder,
   colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
   contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-  content: @Composable RowScope.() -> Unit
+  content: @Composable context(RowScope) () -> Unit
 ) = Button(
   onClick = onClick,
   modifier = modifier,
@@ -85,7 +85,7 @@ import androidx.compose.ui.unit.dp
   border: BorderStroke? = null,
   colors: ButtonColors = ButtonDefaults.textButtonColors(),
   contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
-  content: @Composable RowScope.() -> Unit
+  content: @Composable context(RowScope) () -> Unit
 ) = Button(
   onClick = onClick,
   modifier = modifier,

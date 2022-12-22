@@ -35,14 +35,13 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-@Provide fun screenLaunchFullScreenObserver(
+context(Logger) @Provide fun screenLaunchFullScreenObserver(
   isFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>,
-  showAds: Flow<ShowAds>,
-  L: Logger
+  showAds: Flow<ShowAds>
 ) = ScopeWorker<UiScope> {
   showAds
     .flatMapLatest {

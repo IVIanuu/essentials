@@ -23,11 +23,11 @@ interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
     get() = key()
 
   override fun init() {
-    val logger = logger()
+    @Provide val logger = logger()
     initializers()
       .sortedWithLoadingOrder()
       .forEach {
-        log(logger = logger) { "${nameKey().value} initialize ${it.key.value}" }
+        log { "${nameKey().value} initialize ${it.key.value}" }
         it.instance()
       }
     workerRunner()()

@@ -10,17 +10,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.withContext
 
-fun <T> Flow<T>.onCancel(action: suspend FlowCollector<T>.() -> Unit): Flow<T> = object : Flow<T> {
-  override suspend fun collect(collector: FlowCollector<T>) {
-    try {
-      this@onCancel.collect { value ->
-        try {
-          collector.emit(value)
-        } catch (e: CancellationException) {
-          throw CollectorCancellationException(e)
+fun <T> Flow<T>.onCancel(action: suspend context(FlowCollector<T>) () -> Unit): Flow<T> =
+  object : Flow<T> {
+    override suspend fun collect(collector: FlowCollector<T>) {
+      try {
+        this@onCancel.collect { value ->
+          try {
+            collector.emit(value)
+          } catch (e: CancellationException) {
+            throw CollectorCancellationException(e)
+          }
         }
-      }
-    } catch (e: CancellationException) {
+      } catch (e: CancellationException) {
       if (e !is CollectorCancellationException) {
         withContext(NonCancellable) {
           action(collector)

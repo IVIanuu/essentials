@@ -24,15 +24,14 @@ import kotlinx.coroutines.withContext
 
 fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
-context(ToastContext) @Provide fun executeActionUseCase(
+context(Logger, ToastContext) @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   coroutineContext: DefaultContext,
   permissionRequester: PermissionRequester,
   permissionStateFactory: PermissionStateFactory,
   repository: ActionRepository,
   screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker,
-  L: Logger
+  screenUnlocker: ScreenUnlocker
 ) = ExecuteActionUseCase { id ->
   withContext(coroutineContext) {
     catch {

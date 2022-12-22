@@ -18,14 +18,17 @@ import com.ivianuu.injekt.common.Element
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    val component = context.applicationContext
+    @Provide val component = context.applicationContext
       .cast<AppElementsOwner>()
       .appElements<StartupReceiverComponent>()
 
-    log(logger = component.logger) { "on system boot" }
+    log { "on system boot" }
     component.bootListeners.forEach { it() }
   }
 }
 
 @Provide @Element<AppScope>
-data class StartupReceiverComponent(val bootListeners: List<BootListener>, val logger: Logger)
+data class StartupReceiverComponent(
+  val bootListeners: List<BootListener>,
+  @Provide val logger: Logger
+)

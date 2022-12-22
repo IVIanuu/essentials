@@ -18,10 +18,9 @@ import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean
 
-@Provide fun screenUnlocker(
+context(Logger) @Provide fun screenUnlocker(
   context: AppContext,
   coroutineContext: DefaultContext,
-  L: Logger,
   keyguardManager: @SystemService KeyguardManager
 ) = ScreenUnlocker {
   withContext(coroutineContext) {

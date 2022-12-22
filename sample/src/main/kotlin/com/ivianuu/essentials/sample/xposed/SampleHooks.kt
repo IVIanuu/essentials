@@ -9,6 +9,6 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.xposed.Hooks
 import com.ivianuu.injekt.Provide
 
-@Provide fun sampleHooks(L: Logger) = Hooks {
+context(Logger) @Provide fun sampleHooks() = Hooks {
   log { "hello from xposed $packageName" }
 }

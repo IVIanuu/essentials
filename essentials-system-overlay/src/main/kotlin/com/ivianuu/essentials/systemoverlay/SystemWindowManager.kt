@@ -214,6 +214,7 @@ internal val LocalSystemWindowManager = staticCompositionLocalOf<SystemWindowMan
   throw IllegalStateException("No system window manager provided")
 }
 
+// todo context usage
 private fun WindowManager.addOrUpdateView(view: View, layoutParams: WindowManager.LayoutParams) {
   if (view.isAttachedToWindow) {
     updateViewLayout(view, layoutParams)

@@ -9,6 +9,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-@Provide fun sampleFirstRunHandler(logger: Logger) = FirstRunHandler {
+context(Logger) @Provide fun sampleFirstRunHandler() = FirstRunHandler {
   log { "hello" }
 }

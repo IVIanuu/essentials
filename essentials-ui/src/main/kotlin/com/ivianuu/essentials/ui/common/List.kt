@@ -25,9 +25,11 @@ import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 
 fun interface ListDecorator : Service<ListDecorator> {
-  operator fun ListDecoratorScope.invoke()
+  context(ListDecoratorScope)
+      operator fun invoke()
 }
 
 interface ListDecoratorScope : LazyListScope {
@@ -61,7 +63,7 @@ fun interface ListDecoratorsProvider : UiDecorator
   horizontalAlignment: Alignment.Horizontal = Alignment.Start,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   decorate: Boolean = true,
-  content: LazyListScope.() -> Unit
+  content: context(LazyListScope) () -> Unit
 ) {
   val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyColumn(
@@ -87,7 +89,7 @@ fun interface ListDecoratorsProvider : UiDecorator
   verticalAlignment: Alignment.Vertical = Alignment.Top,
   flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
   decorate: Boolean = true,
-  content: LazyListScope.() -> Unit
+  content: context(LazyListScope) () -> Unit
 ) {
   val decorators = if (decorate) remember(LocalListDecorators.current) else emptyList()
   LazyRow(
@@ -103,17 +105,17 @@ fun interface ListDecoratorsProvider : UiDecorator
   }
 }
 
-private fun LazyListScope.decoratedContent(
+context(LazyListScope) private fun decoratedContent(
   isVertical: Boolean,
   decorators: List<ServiceElement<ListDecorator>>,
-  content: LazyListScope.() -> Unit
+  content: context(LazyListScope) () -> Unit
 ) {
   decorators
     .reversed()
     .fold(content) { acc, element ->
-      decorator@ {
+      decorator@{
         with(element.instance) {
-          val scope =  object : ListDecoratorScope, LazyListScope by this@decorator {
+          val scope = object : ListDecoratorScope, LazyListScope by inject() {
             override val isVertical: Boolean
               get() = isVertical
 
@@ -127,5 +129,5 @@ private fun LazyListScope.decoratedContent(
         }
       }
     }
-    .invoke(this)
+    .invoke()
 }

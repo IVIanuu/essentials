@@ -15,10 +15,9 @@ import com.ivianuu.injekt.Provide
 
 interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
 
-@Provide fun userflowBuilderWorker(
+context(Logger) @Provide fun userflowBuilderWorker(
   elements: List<ServiceElement<UserflowBuilder>>,
-  navigator: Navigator,
-  L: Logger
+  navigator: Navigator
 ) = ScopeWorker<UiScope> {
   val userflowKeys = elements
     .sortedWithLoadingOrder()

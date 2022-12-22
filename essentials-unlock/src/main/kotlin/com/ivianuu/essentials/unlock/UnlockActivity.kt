@@ -53,7 +53,7 @@ class UnlockActivity : ComponentActivity() {
       .cast<AppElementsOwner>()
       .appElements<UnlockComponent>()
 
-    log(logger = component.logger) {
+    log {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -64,7 +64,7 @@ class UnlockActivity : ComponentActivity() {
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      log(logger = component.logger) { "finish with result $success" }
+      log { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -92,19 +92,19 @@ class UnlockActivity : ComponentActivity() {
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                log(logger = component.logger) { "dismiss succeeded" }
+                log { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                log(logger = component.logger) { "dismiss error" }
+                log { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                log(logger = component.logger) { "dismiss cancelled" }
+                log { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }
@@ -159,7 +159,7 @@ class UnlockActivity : ComponentActivity() {
 @Provide @Element<AppScope>
 data class UnlockComponent(
   val keyguardManager: () -> @SystemService KeyguardManager,
-  val logger: Logger,
+  @Provide val logger: Logger,
   val powerManager: () -> @SystemService PowerManager
 )
 

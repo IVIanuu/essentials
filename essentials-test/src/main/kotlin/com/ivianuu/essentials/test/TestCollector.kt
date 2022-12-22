@@ -20,9 +20,10 @@ class TestCollector<T>(
   }
 }
 
-fun <T> Flow<T>.testCollect(scope: CoroutineScope, onEach: suspend (T) -> Unit = {}) =
+context(CoroutineScope)
+fun <T> Flow<T>.testCollect(onEach: suspend (T) -> Unit = {}) =
   TestCollector(onEach).also { collector ->
-    scope.launch {
+    launch {
       try {
         collect(collector)
       } catch (e: Throwable) {

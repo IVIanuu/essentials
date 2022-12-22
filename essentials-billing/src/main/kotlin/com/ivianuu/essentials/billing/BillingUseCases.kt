@@ -30,8 +30,8 @@ import kotlinx.coroutines.flow.onStart
 
 fun interface GetSkuDetailsUseCase : suspend (Sku) -> SkuDetails?
 
-@Provide fun getSkuDetailsUseCase(context: BillingContext) = GetSkuDetailsUseCase { sku ->
-  context.withConnection {
+context(BillingContext) @Provide fun getSkuDetailsUseCase() = GetSkuDetailsUseCase { sku ->
+  withConnection {
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
@@ -41,14 +41,13 @@ fun interface GetSkuDetailsUseCase : suspend (Sku) -> SkuDetails?
 
 fun interface PurchaseUseCase : suspend (Sku, Boolean, Boolean) -> Boolean
 
-@Provide fun purchaseUseCase(
+context(BillingContext) @Provide fun purchaseUseCase(
   acknowledgePurchase: AcknowledgePurchaseUseCase,
   appUiStarter: AppUiStarter,
-  context: BillingContext,
   consumePurchase: ConsumePurchaseUseCase,
   getSkuDetails: GetSkuDetailsUseCase
 ) = PurchaseUseCase { sku, acknowledge, consumeOldPurchaseIfUnspecified ->
-  context.withConnection {
+  withConnection {
     log {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
@@ -84,8 +83,8 @@ fun interface PurchaseUseCase : suspend (Sku, Boolean, Boolean) -> Boolean
 
 fun interface ConsumePurchaseUseCase : suspend (Sku) -> Boolean
 
-@Provide fun consumePurchaseUseCase(context: BillingContext) = ConsumePurchaseUseCase { sku ->
-  context.withConnection {
+context(BillingContext) @Provide fun consumePurchaseUseCase() = ConsumePurchaseUseCase { sku ->
+  withConnection {
     val purchase = getPurchase(sku) ?: return@withConnection false
 
     val consumeParams = ConsumeParams.newBuilder()
@@ -106,18 +105,19 @@ fun interface ConsumePurchaseUseCase : suspend (Sku) -> Boolean
 
 fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
 
-@Provide fun acknowledgePurchaseUseCase(context: BillingContext) = AcknowledgePurchaseUseCase { sku ->
-  context.withConnection {
-    val purchase = getPurchase(sku)
-      ?: return@withConnection false
+context(BillingContext) @Provide fun acknowledgePurchaseUseCase() =
+  AcknowledgePurchaseUseCase { sku ->
+    withConnection {
+      val purchase = getPurchase(sku)
+        ?: return@withConnection false
 
-    if (purchase.isAcknowledged) return@withConnection true
+      if (purchase.isAcknowledged) return@withConnection true
 
-    val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
-      .setPurchaseToken(purchase.purchaseToken)
-      .build()
+      val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
+        .setPurchaseToken(purchase.purchaseToken)
+        .build()
 
-    val result = billingClient.acknowledgePurchase(acknowledgeParams)
+      val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
     log {
       "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
@@ -131,32 +131,31 @@ fun interface AcknowledgePurchaseUseCase : suspend (Sku) -> Boolean
 
 @JvmInline value class IsPurchased(val value: Boolean)
 
-@Provide fun isPurchased(
+context(BillingContext) @Provide fun isPurchased(
   appForegroundState: Flow<AppForegroundState>,
-  context: BillingContext,
   sku: Sku
 ): Flow<IsPurchased> = merge(
   appForegroundState
     .filter { it == AppForegroundState.FOREGROUND },
-  context.refreshes
+  refreshes
 )
   .onStart { emit(Unit) }
   .map {
-    context.withConnection {
+    withConnection {
       IsPurchased(getIsPurchased(sku))
     } ?: IsPurchased(false)
   }
   .distinctUntilChanged()
   .onEach { log { "is purchased flow for $sku -> $it" } }
 
-private suspend fun BillingContext.getIsPurchased(sku: Sku): Boolean {
+context(BillingContext) private suspend fun getIsPurchased(sku: Sku): Boolean {
   val purchase = getPurchase(sku) ?: return false
   val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
   log { "get is purchased for $sku result is $isPurchased for $purchase" }
   return isPurchased
 }
 
-private suspend fun BillingContext.getPurchase(sku: Sku): Purchase? =
+context(BillingContext) private suspend fun getPurchase(sku: Sku): Purchase? =
   billingClient.queryPurchasesAsync(
     QueryPurchasesParams.newBuilder()
       .setProductType(sku.type.value)

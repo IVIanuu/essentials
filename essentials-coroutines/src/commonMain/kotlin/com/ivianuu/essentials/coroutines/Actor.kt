@@ -24,30 +24,32 @@ fun <T> CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
-  block: suspend ActorScope<T>.() -> Unit
+  block: suspend context(ActorScope<T>) () -> Unit
 ): Actor<T> = ActorImpl(coroutineContext + context, capacity, start, block)
 
-interface ActorScope<T> : CoroutineScope, ReceiveChannel<T>
+interface ActorScope<T> : CoroutineScope {
+  val messages: ReceiveChannel<T>
+}
 
 private class ActorImpl<T>(
   coroutineContext: CoroutineContext,
   capacity: Int,
   start: CoroutineStart,
-  block: suspend ActorScope<T>.() -> Unit,
-  private val mailbox: Channel<T> = Channel(capacity = capacity)
-) : Actor<T>, ActorScope<T>, ReceiveChannel<T> by mailbox, CoroutineScope {
+  block: suspend context(ActorScope<T>) () -> Unit,
+  override val messages: Channel<T> = Channel(capacity = capacity)
+) : Actor<T>, ActorScope<T> {
   override val coroutineContext: CoroutineContext = coroutineContext.childCoroutineContext()
 
   private val job = launch(start = start) { block() }
 
   override suspend fun act(message: T) {
     job.start()
-    mailbox.send(message)
+    messages.send(message)
   }
 
   override fun tryAct(message: T): ChannelResult<Unit> {
     job.start()
-    return mailbox.trySend(message)
+    return messages.trySend(message)
   }
 }
 
@@ -55,7 +57,7 @@ fun CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64
 ): Actor<suspend () -> Unit> = actor(context, capacity) {
-  for (block in this) block()
+  for (block in messages) block()
 }
 
 suspend fun <T> Actor<suspend () -> Unit>.actAndReply(block: suspend () -> T): T {

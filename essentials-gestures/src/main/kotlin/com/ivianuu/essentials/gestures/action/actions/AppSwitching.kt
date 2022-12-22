@@ -51,11 +51,10 @@ fun switchToApp(
   }
 }
 
-@Provide @Scoped<AppScope> class AppSwitchManager(
+context(Logger) @Provide @Scoped<AppScope> class AppSwitchManager(
   accessibilityEvents: Flow<AccessibilityEvent>,
   private val packageManager: PackageManager,
-  scope: NamedCoroutineScope<AppScope>,
-  private val L: Logger
+  scope: NamedCoroutineScope<AppScope>
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0

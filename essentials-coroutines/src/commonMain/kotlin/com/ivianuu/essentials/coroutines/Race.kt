@@ -16,7 +16,7 @@ suspend fun <T> race(context: CoroutineContext = EmptyCoroutineContext) {
 }
 
 suspend fun <T> race(
-  vararg racers: suspend CoroutineScope.() -> T,
+  vararg racers: suspend context(CoroutineScope) () -> T,
   context: CoroutineContext = EmptyCoroutineContext
 ): T = coroutineScope {
   val allRacers = racers.map { async(context = context, block = it) }

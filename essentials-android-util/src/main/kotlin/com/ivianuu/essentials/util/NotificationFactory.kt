@@ -18,7 +18,7 @@ interface NotificationFactory {
     channelId: String,
     channelName: String,
     importance: Int,
-    builder: NotificationCompat.Builder.() -> Unit
+    builder: context(NotificationCompat.Builder) () -> Unit
   ): Notification
 }
 
@@ -33,7 +33,7 @@ inline val NotificationCompat.Builder.context: Context
     channelId: String,
     channelName: String,
     importance: Int,
-    builder: NotificationCompat.Builder.() -> Unit
+    builder: context(NotificationCompat.Builder) () -> Unit
   ): Notification {
     notificationManager.createNotificationChannel(
       NotificationChannel(

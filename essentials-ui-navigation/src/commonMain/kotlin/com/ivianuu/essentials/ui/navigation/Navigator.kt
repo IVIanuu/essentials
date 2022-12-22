@@ -66,10 +66,9 @@ suspend fun Navigator.clear() {
   setBackStack(emptyList())
 }
 
-@Provide @Scoped<AppScope> class NavigatorImpl(
+context(Logger) @Provide @Scoped<AppScope> class NavigatorImpl(
   private val keyHandlers: List<KeyHandler<*>>,
   rootKey: RootKey? = null,
-  private val L: Logger,
   scope: NamedCoroutineScope<AppScope>
 ) : Navigator {
   val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))

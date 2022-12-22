@@ -28,7 +28,7 @@ interface BillingContext {
 
   val refreshes: MutableSharedFlow<BillingRefresh>
 
-  suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R?
+  suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R?
 }
 
 @Provide @Scoped<AppScope> class BillingContextImpl(
@@ -41,7 +41,7 @@ interface BillingContext {
   private var isConnected = false
   private val connectionLock = Mutex()
 
-  override suspend fun <R> withConnection(block: suspend BillingContext.() -> R): R? =
+  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R? =
     withContext(scope.coroutineContext + context) {
       ensureConnected()
       block()

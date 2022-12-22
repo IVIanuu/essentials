@@ -69,7 +69,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 }
 
-@Provide @Scoped<UiScope> class FullScreenAdImpl(
+context(Logger) @Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val clock: Clock,
@@ -77,8 +77,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val foregroundActivity: Flow<ForegroundActivity>,
   private val mainContext: MainContext,
   private val scope: NamedCoroutineScope<AppScope>,
-  private val showAds: Flow<ShowAds>,
-  private val L: Logger
+  private val showAds: Flow<ShowAds>
 ) : FullScreenAd {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null

@@ -14,10 +14,9 @@ import com.ivianuu.injekt.Provide
 
 fun interface ProcessRestarter : suspend () -> Unit
 
-@Provide fun processRestarter(
+context(Logger) @Provide fun processRestarter(
   buildInfo: BuildInfo,
   context: AppContext,
-  L: Logger,
   packageManager: PackageManager,
 ) = ProcessRestarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!

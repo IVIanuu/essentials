@@ -29,7 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.job
 import kotlin.time.Duration
 
-typealias StackTransition = suspend StackTransitionScope.() -> Unit
+typealias StackTransition = suspend context(StackTransitionScope) () -> Unit
 
 interface StackTransitionScope : CoroutineScope {
   val state: AnimatedStackState<*>
@@ -43,7 +43,7 @@ interface StackTransitionScope : CoroutineScope {
 
 fun ContentAnimationStackTransition(
   spec: AnimationSpec<Float> = defaultAnimationSpec(),
-  block: StackTransitionScope.(MutableState<Modifier>?, MutableState<Modifier>?, Float) -> Unit
+  block: context(StackTransitionScope) (MutableState<Modifier>?, MutableState<Modifier>?, Float) -> Unit
 ): StackTransition = {
   val fromModifier = fromElementModifier(ContentAnimationElementKey)
   val toModifier = toElementModifier(ContentAnimationElementKey)
@@ -69,7 +69,7 @@ suspend fun MutableState<Modifier>.awaitLayoutCoordinates(): LayoutCoordinates {
 val LayoutCoordinates.rootCoordinates: LayoutCoordinates
   get() = parentCoordinates?.rootCoordinates ?: this
 
-suspend fun StackTransitionScope.animate(
+context(StackTransitionScope) suspend fun animate(
   spec: AnimationSpec<Float> = defaultAnimationSpec(),
   block: (Float) -> Unit
 ) {
@@ -88,13 +88,18 @@ fun defaultAnimationSpec(
   easing = easing
 )
 
-fun StackTransitionScope.fromElement(key: Any): AnimationElement? = from?.let { element(it, key) }
+context(StackTransitionScope) fun fromElement(key: Any): AnimationElement? =
+  from?.let { element(it, key) }
 
-fun StackTransitionScope.toElement(key: Any): AnimationElement? = to?.let { element(it, key) }
+context(StackTransitionScope) fun toElement(key: Any): AnimationElement? =
+  to?.let { element(it, key) }
 
 private var refKeys = 0
 
-fun StackTransitionScope.element(child: AnimatedStackChild<*>, key: Any): AnimationElement {
+context(StackTransitionScope) fun element(
+  child: AnimatedStackChild<*>,
+  key: Any
+): AnimationElement {
   val refKey = refKeys++
   val element = child.elementStore.referenceElement(key, refKey)
   coroutineContext.job.invokeOnCompletion {
@@ -103,29 +108,29 @@ fun StackTransitionScope.element(child: AnimatedStackChild<*>, key: Any): Animat
   return element
 }
 
-fun <T> StackTransitionScope.fromElementProp(
+context(StackTransitionScope) fun <T> fromElementProp(
   elementKey: Any,
   propKey: AnimationElementPropKey<T>
 ) = from?.let { elementProp(it, elementKey, propKey) }
 
-fun <T> StackTransitionScope.toElementProp(
+context(StackTransitionScope) fun <T> toElementProp(
   elementKey: Any,
   propKey: AnimationElementPropKey<T>
 ) = to?.let { elementProp(it, elementKey, propKey) }
 
-fun <T> StackTransitionScope.elementProp(
+context(StackTransitionScope) fun <T> elementProp(
   child: AnimatedStackChild<*>,
   elementKey: Any,
   propKey: AnimationElementPropKey<T>,
 ) = element(child, elementKey)[propKey]
 
-fun StackTransitionScope.fromElementModifier(key: Any): MutableState<Modifier>? =
+context(StackTransitionScope) fun fromElementModifier(key: Any): MutableState<Modifier>? =
   from?.let { elementModifier(it, key) }
 
-fun StackTransitionScope.toElementModifier(key: Any): MutableState<Modifier>? =
+context(StackTransitionScope) fun toElementModifier(key: Any): MutableState<Modifier>? =
   to?.let { elementModifier(it, key) }
 
-fun StackTransitionScope.elementModifier(
+context(StackTransitionScope) fun elementModifier(
   child: AnimatedStackChild<*>,
   key: Any,
 ): MutableState<Modifier> {

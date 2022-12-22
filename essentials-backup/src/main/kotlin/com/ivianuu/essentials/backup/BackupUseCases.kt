@@ -30,15 +30,14 @@ import java.util.zip.ZipOutputStream
 
 fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
 
-@Provide fun createBackupUseCase(
+context(Logger) @Provide fun createBackupUseCase(
   backupDir: BackupDir,
   backupFiles: List<BackupFile>,
   buildInfo: BuildInfo,
   context: IOContext,
   dataDir: DataDir,
   navigator: Navigator,
-  scope: NamedCoroutineScope<AppScope>,
-  L: Logger
+  scope: NamedCoroutineScope<AppScope>
 ) = CreateBackupUseCase {
   catch {
     withContext(scope.coroutineContext + context) {
@@ -76,14 +75,13 @@ fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
 
 fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
 
-@Provide fun restoreBackupUseCase(
+context(Logger) @Provide fun restoreBackupUseCase(
   contentResolver: ContentResolver,
   context: IOContext,
   dataDir: DataDir,
   navigator: Navigator,
   processRestarter: ProcessRestarter,
-  scope: NamedCoroutineScope<AppScope>,
-  L: Logger
+  scope: NamedCoroutineScope<AppScope>
 ) = RestoreBackupUseCase {
   catch {
     withContext(scope.coroutineContext + context) {

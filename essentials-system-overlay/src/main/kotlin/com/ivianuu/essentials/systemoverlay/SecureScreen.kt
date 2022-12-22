@@ -23,10 +23,9 @@ import kotlinx.coroutines.flow.stateIn
 
 @JvmInline value class IsOnSecureScreen(val value: Boolean)
 
-@Provide fun isOnSecureScreen(
+context(Logger) @Provide fun isOnSecureScreen(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  scope: NamedCoroutineScope<AppScope>,
-  L: Logger
+  scope: NamedCoroutineScope<AppScope>
 ): @Scoped<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .map { it.packageName to it.className }

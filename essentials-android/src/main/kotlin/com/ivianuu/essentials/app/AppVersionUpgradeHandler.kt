@@ -21,11 +21,10 @@ fun interface AppVersionUpgradeHandler : suspend (Int, Int) -> Unit {
   }
 }
 
-@Provide fun appVersionUpgradeWorker(
+context(Logger) @Provide fun appVersionUpgradeWorker(
   buildInfo: BuildInfo,
   handlers: () -> List<AppVersionUpgradeHandler>,
-  pref: DataStore<AppVersionUpgradePrefs>,
-  L: Logger
+  pref: DataStore<AppVersionUpgradePrefs>
 ) = ScopeWorker<AppScope> {
   val prefs = pref.data.first()
 

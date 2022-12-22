@@ -15,10 +15,9 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.work.InjektWorker
 import kotlinx.coroutines.delay
 
-@Provide @InjektWorker class SampleWorker(
+context(Logger) @Provide @InjektWorker class SampleWorker(
   appContext: AppContext,
-  params: WorkerParameters,
-  private val L: Logger
+  params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
     log { "start work" }

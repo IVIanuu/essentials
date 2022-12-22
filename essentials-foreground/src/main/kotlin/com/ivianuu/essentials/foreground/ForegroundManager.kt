@@ -31,7 +31,7 @@ interface ForegroundManager {
   suspend fun <R> runInForeground(
     notification: Notification,
     @Inject id: ForegroundId,
-    block: suspend ForegroundScope.() -> R
+    block: suspend context(ForegroundScope) () -> R
   ): R
 }
 
@@ -39,10 +39,10 @@ interface ForegroundScope : CoroutineScope {
   suspend fun updateNotification(notification: Notification)
 }
 
-fun ForegroundScope.updateNotification(notifications: Flow<Notification>) {
-  notifications
-    .onEach { updateNotification(it) }
-    .launchIn(this)
+context(ForegroundScope)
+fun Flow<Notification>.updateNotification() {
+  onEach { updateNotification(it) }
+    .launchIn(this@ForegroundScope)
 }
 
 @JvmInline value class ForegroundId(val value: Int) {
@@ -51,9 +51,8 @@ fun ForegroundScope.updateNotification(notifications: Flow<Notification>) {
   }
 }
 
-@Provide @Scoped<AppScope> class ForegroundManagerImpl(
-  private val context: AppContext,
-  private val L: Logger
+context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
+  private val context: AppContext
 ) : ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
@@ -61,7 +60,7 @@ fun ForegroundScope.updateNotification(notifications: Flow<Notification>) {
   override suspend fun <R> runInForeground(
     notification: Notification,
     @Inject id: ForegroundId,
-    block: suspend ForegroundScope.() -> R
+    block: suspend context(ForegroundScope) () -> R
   ) = coroutineScope {
     bracket(
       acquire = {

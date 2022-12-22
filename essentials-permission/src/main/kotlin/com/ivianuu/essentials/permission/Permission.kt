@@ -114,12 +114,11 @@ private fun <P : Permission> PermissionRequestHandler<P>.intercept() = Permissio
 
 fun interface PermissionRequester : suspend (List<TypeKey<Permission>>) -> Boolean
 
-@Provide fun permissionRequester(
+context(Logger) @Provide fun permissionRequester(
   appUiStarter: AppUiStarter,
   context: DefaultContext,
   navigator: Navigator,
-  permissionStateFactory: PermissionStateFactory,
-  L: Logger
+  permissionStateFactory: PermissionStateFactory
 ) = PermissionRequester { requestedPermissions ->
   withContext(context) {
     log { "request permissions $requestedPermissions" }

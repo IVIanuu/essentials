@@ -5,41 +5,40 @@
 package com.ivianuu.essentials.logging
 
 import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.SourceKey
+import com.ivianuu.injekt.inject
 
 interface Logger {
-  val isEnabled: LoggingEnabled
+  val isLoggingEnabled: LoggingEnabled
 
-  fun log(message: String, priority: Priority = DEBUG, @Inject tag: LoggingTag)
+  fun logMessage(priority: Priority = DEBUG, tag: String, message: String)
 
   enum class Priority {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
   }
 }
 
-inline fun log(
+context(Logger, LoggingTag) inline fun log(
   priority: Logger.Priority = DEBUG,
-  @Inject tag: LoggingTag,
-  @Inject logger: Logger,
+  tag: LoggingTag = inject(),
   message: () -> String
 ) {
-  if (logger.isEnabled.value) logger.log(message(), priority, tag)
+  if (isLoggingEnabled.value) logMessage(priority, tag.value, message())
 }
 
 expect fun Throwable.asLog(): String
 
 object NoopLogger : Logger {
-  override val isEnabled: LoggingEnabled
+  override val isLoggingEnabled: LoggingEnabled
     get() = LoggingEnabled(false)
 
-  override fun log(message: String, priority: Logger.Priority, @Inject tag: LoggingTag) {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
   }
 }
 
-@Provide class PrintingLogger(override val isEnabled: LoggingEnabled) : Logger {
-  override fun log(message: String, priority: Logger.Priority, @Inject tag: LoggingTag) {
+@Provide class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
     println("[${priority.name}] $tag $message")
   }
 }

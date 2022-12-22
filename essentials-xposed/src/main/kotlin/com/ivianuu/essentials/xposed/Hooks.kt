@@ -7,7 +7,7 @@ package com.ivianuu.essentials.xposed
 import com.ivianuu.injekt.Provide
 
 fun interface Hooks {
-  operator fun XposedContext.invoke()
+  context(XposedContext) operator fun invoke()
 
   companion object {
     @Provide val defaultHooks get() = emptyList<Hooks>()

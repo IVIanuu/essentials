@@ -21,9 +21,8 @@ fun interface DecorateKeyUi {
   @Composable operator fun invoke(p1: @Composable () -> Unit)
 }
 
-@Provide fun decorateKeyUi(
-  elements: List<ServiceElement<KeyUiDecorator>>,
-  L: Logger
+context(Logger) @Provide fun decorateKeyUi(
+  elements: List<ServiceElement<KeyUiDecorator>>
 ) = DecorateKeyUi { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
     elements

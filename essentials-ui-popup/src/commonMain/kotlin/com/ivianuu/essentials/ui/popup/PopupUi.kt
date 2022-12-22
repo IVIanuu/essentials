@@ -115,9 +115,9 @@ val PopupStackTransition: StackTransition = transition@{
         if (isLeft) 0f else 1f,
         if (isTop) 0f else 1f
       )
-    )(this)
+    )()
   } else {
-    FadeScaleStackTransition()(this)
+    FadeScaleStackTransition()()
   }
 }
 

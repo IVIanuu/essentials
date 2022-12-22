@@ -46,14 +46,13 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-@Provide fun cameraActionExecutor(
+context(Logger) @Provide fun cameraActionExecutor(
   actionIntentSender: ActionIntentSender,
   cameraManager: @SystemService CameraManager,
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
   screenState: Flow<ScreenState>,
-  accessibilityServiceRef: Flow<EsAccessibilityService?>,
-  L: Logger
+  accessibilityServiceRef: Flow<EsAccessibilityService?>
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
     .resolveActivity(

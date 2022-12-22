@@ -54,7 +54,7 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-context(ToastContext) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+context(Logger, ToastContext) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
@@ -66,7 +66,6 @@ context(ToastContext) @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   isPurchased: (Sku) -> Flow<IsPurchased>,
   private val screenUnlocker: ScreenUnlocker,
   private val purchase: PurchaseUseCase,
-  private val L: Logger,
   private val scope: NamedCoroutineScope<AppScope>
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>

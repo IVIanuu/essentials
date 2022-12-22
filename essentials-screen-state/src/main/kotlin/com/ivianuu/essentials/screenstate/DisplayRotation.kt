@@ -40,11 +40,10 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   LANDSCAPE_RIGHT(false)
 }
 
-@Provide fun displayRotation(
+context(Logger) @Provide fun displayRotation(
   context: AppContext,
   coroutineContext: MainContext,
   screenState: () -> Flow<ScreenState>,
-  L: Logger,
   windowManager: @SystemService WindowManager
 ): Flow<DisplayRotation> = screenState()
   .flatMapLatest { currentScreenState ->

@@ -80,7 +80,7 @@ class AndroidDb private constructor(
     null
   )
 
-  override suspend fun <R> transaction(block: suspend Db.() -> R): R {
+  override suspend fun <R> transaction(block: suspend context(Db) () -> R): R {
     val currentCoroutineContext = currentCoroutineContext()
     val transactionContext = currentCoroutineContext[TransactionContextKey] ?: run {
       val controlJob = Job()
@@ -151,7 +151,7 @@ class AndroidDb private constructor(
     withTransactionOrDefaultContext { database.compileStatement(sql).executeInsert() }
       .also { handleTableMutation(tableName) }
 
-  private suspend fun <R> withTransactionOrDefaultContext(block: suspend CoroutineScope.() -> R): R =
+  private suspend fun <R> withTransactionOrDefaultContext(block: suspend context(CoroutineScope) () -> R): R =
     withContext(
       currentCoroutineContext()[TransactionContextKey]?.interceptor ?: coroutineContext,
       block

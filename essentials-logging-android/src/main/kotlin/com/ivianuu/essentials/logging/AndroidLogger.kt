@@ -15,20 +15,19 @@ import com.ivianuu.essentials.logging.Logger.Priority.INFO
 import com.ivianuu.essentials.logging.Logger.Priority.VERBOSE
 import com.ivianuu.essentials.logging.Logger.Priority.WARN
 import com.ivianuu.essentials.logging.Logger.Priority.WTF
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scope
 import kotlin.math.min
 
 @Provide class AndroidLogger(
-  override val isEnabled: LoggingEnabled,
+  override val isLoggingEnabled: LoggingEnabled,
   private val systemBuildInfo: SystemBuildInfo
 ) : Logger {
-  override fun log(message: String, priority: Priority, @Inject tag: LoggingTag) {
-    val trimmedTag = if (tag.value.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
-      tag.value
+  override fun logMessage(priority: Priority, tag: String, message: String) {
+    val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
+      tag
     } else {
-      tag.value.substring(0, MAX_TAG_LENGTH)
+      tag.substring(0, MAX_TAG_LENGTH)
     }
 
     var i = 0

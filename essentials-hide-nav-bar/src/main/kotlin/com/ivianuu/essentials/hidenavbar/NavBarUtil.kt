@@ -19,12 +19,11 @@ import com.ivianuu.injekt.Tag
 
 fun interface NonSdkInterfaceDetectionDisabler : suspend () -> Unit
 
-@Provide fun nonSdkInterfaceDetectionDisabler(
+context(Logger) @Provide fun nonSdkInterfaceDetectionDisabler(
   systemBuildInfo: SystemBuildInfo,
   hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
   hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
-  hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>,
-  L: Logger
+  hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>
 ) = NonSdkInterfaceDetectionDisabler {
   if (systemBuildInfo.sdk >= 29) {
     log { "disable non sdk on 29" }
@@ -65,8 +64,8 @@ internal typealias HiddenApiPolicyPieApps = @HiddenApiPolicyPieAppsTag Int
 
 fun interface OverscanUpdater : (Rect) -> Unit
 
-@SuppressLint("PrivateApi")
-@Provide fun overscanUpdater(L: Logger) = OverscanUpdater { rect ->
+context(Logger)
+    @SuppressLint("PrivateApi") @Provide fun overscanUpdater() = OverscanUpdater { rect ->
   log { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")

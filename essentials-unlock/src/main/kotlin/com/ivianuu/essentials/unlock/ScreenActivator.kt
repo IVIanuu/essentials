@@ -18,15 +18,14 @@ import kotlin.collections.set
 
 fun interface ScreenActivator : suspend () -> Boolean
 
-@Provide fun screenActivator(
+context(Logger) @Provide fun screenActivator(
   context: AppContext,
   coroutineContext: DefaultContext,
-  L: Logger,
   powerManager: @SystemService PowerManager
 ) = ScreenActivator {
   withContext(coroutineContext) {
     log { "on request is off ? ${!powerManager.isInteractive}" }
-    if (powerManager.isInteractive){
+    if (powerManager.isInteractive) {
       log { "already on" }
       return@withContext true
     }

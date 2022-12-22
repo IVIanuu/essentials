@@ -20,10 +20,9 @@ import kotlin.time.Duration
 
 fun interface RateUserflowBuilder : UserflowBuilder
 
-@Provide fun rateUserflowBuilder(
+context(Logger) @Provide fun rateUserflowBuilder(
   pref: DataStore<RatePrefs>,
   clock: Clock,
-  L: Logger,
   S: RateUiSchedule = RateUiSchedule()
 ) = RateUserflowBuilder {
   if (pref.data.first().installTime == 0L) {
@@ -37,11 +36,10 @@ fun interface RateUserflowBuilder : UserflowBuilder
   else emptyList()
 }
 
-private suspend fun shouldShowRateDialog(
+context(Logger) private suspend fun shouldShowRateDialog(
   @Inject pref: DataStore<RatePrefs>,
   @Inject schedule: RateUiSchedule,
-  @Inject clock: Clock,
-  @Inject L: Logger
+  @Inject clock: Clock
 ): Boolean {
   val prefs = pref.data.first()
 

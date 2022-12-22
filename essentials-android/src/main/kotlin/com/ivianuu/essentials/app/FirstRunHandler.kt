@@ -37,11 +37,10 @@ fun interface FirstRunHandler : suspend () -> Unit {
   }
 }
 
-@Provide fun firstRunWorker(
+context(Logger) @Provide fun firstRunWorker(
   handlers: () -> List<FirstRunHandler>,
   isFirstRun: Flow<IsFirstRun>,
-  pref: DataStore<FirstRunPrefs>,
-  L: Logger
+  pref: DataStore<FirstRunPrefs>
 ) = ScopeWorker<AppScope> {
   if (!isFirstRun.first().value) return@ScopeWorker
 

@@ -25,10 +25,9 @@ import kotlinx.coroutines.flow.shareIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
-@Provide fun recentApps(
+context(Logger) @Provide fun recentApps(
   accessibilityEvents: Flow<AccessibilityEvent>,
-  scope: NamedCoroutineScope<AppScope>,
-  L: Logger
+  scope: NamedCoroutineScope<AppScope>
 ): @Scoped<AppScope> Flow<RecentApps> = accessibilityEvents
   .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
   .filter { it.isFullScreen }
