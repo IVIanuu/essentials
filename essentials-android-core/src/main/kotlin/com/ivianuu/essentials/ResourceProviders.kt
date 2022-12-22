@@ -30,7 +30,7 @@ context(AppContext) @Provide class ResourceProviderImpl : ResourceProvider {
     id: Int,
     vararg args: Any?
   ): T =
-    with(this@AppContext as Context) { load(id) }
+    with(this@AppContext as Context) { load(id, *args) }
 }
 
 // todo make fun interface once fixed
