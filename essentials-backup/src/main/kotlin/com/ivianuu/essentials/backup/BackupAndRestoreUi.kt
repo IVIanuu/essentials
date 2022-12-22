@@ -44,10 +44,9 @@ object BackupAndRestoreKey : Key<Unit>
 
 data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-@Provide fun backupAndRestoreModel(
+context(ToastContext) @Provide fun backupAndRestoreModel(
   createBackup: CreateBackupUseCase,
-  restoreBackup: RestoreBackupUseCase,
-  T: ToastContext
+  restoreBackup: RestoreBackupUseCase
 ) = Model {
   BackupAndRestoreModel(
     backupData = action {

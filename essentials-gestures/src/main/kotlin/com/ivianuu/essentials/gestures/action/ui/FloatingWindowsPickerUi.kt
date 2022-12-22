@@ -88,27 +88,23 @@ data class FloatingWindowsPickerModel(
   val openFullScreen: () -> Unit
 )
 
-@Provide fun floatingWindowsPickerModel(
-  appRepository: AppRepository,
-  T: ToastContext,
-  ctx: KeyUiContext<FloatingWindowsPickerKey>
+context(KeyUiContext<FloatingWindowsPickerKey>, ToastContext) @Provide fun floatingWindowsPickerModel(
+  appRepository: AppRepository
 ) = Model {
   FloatingWindowsPickerModel(
-    actionTitle = ctx.key.actionTitle,
+    actionTitle = key.actionTitle,
     openFloatingWindow = action {
       if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
       } else {
         showToast(R.string.es_floating_windows_not_installed)
-        ctx.navigator.push(
+        navigator.push(
           PlayStoreAppDetailsKey(
             FLOATING_WINDOWS_PACKAGE
           )
         )
       }
     },
-    openFullScreen = action {
-      ctx.navigator.pop(ctx.key, false)
-    }
+    openFullScreen = action { navigator.pop(key, false) }
   )
 }

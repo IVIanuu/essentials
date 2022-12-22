@@ -130,14 +130,13 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-context(ActionRepository, ResourceProvider) @Provide fun actionPickerModel(
+context(ActionRepository, KeyUiContext<ActionPickerKey>, ResourceProvider) @Provide fun actionPickerModel(
   filter: ActionFilter,
-  permissionRequester: PermissionRequester,
-  ctx: KeyUiContext<ActionPickerKey>
+  permissionRequester: PermissionRequester
 ) = Model {
   ActionPickerModel(
-    items = produceResource { getActionPickerItems(ctx.key, filter) },
-    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+    items = produceResource { getActionPickerItems(key, filter) },
+    openActionSettings = action { item -> navigator.push(item.settingsKey!!) },
     pickAction = action { item ->
       val result = item.getResult() ?: return@action
       if (result is ActionPickerKey.Result.Action) {
@@ -145,7 +144,7 @@ context(ActionRepository, ResourceProvider) @Provide fun actionPickerModel(
         if (!permissionRequester(action.permissions))
           return@action
       }
-      ctx.navigator.pop(ctx.key, result)
+      navigator.pop(key, result)
     }
   )
 }

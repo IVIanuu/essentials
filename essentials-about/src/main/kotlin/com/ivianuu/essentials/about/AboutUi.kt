@@ -142,44 +142,35 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-context(ResourceProvider) @Provide fun aboutModel(
+context(KeyUiContext<AboutKey>, ResourceProvider) @Provide fun aboutModel(
   buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
-  rateOnPlayUseCase: RateOnPlayUseCase,
-  ctx: KeyUiContext<AboutKey>
+  rateOnPlayUseCase: RateOnPlayUseCase
 ) = Model {
   AboutModel(
     version = buildInfo.versionName,
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,
-    donate = action { ctx.navigator.push(DonationKey) },
-    openLicenses = action { ctx.navigator.push(LicenseKey) },
+    donate = action { navigator.push(DonationKey) },
+    openLicenses = action { navigator.push(LicenseKey) },
     rate = action { rateOnPlayUseCase() },
     openMoreApps = action {
-      ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+      navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     },
-    openRedditPage = action {
-      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-    },
-    openGithubPage = action {
-      ctx.navigator.push(UrlKey("https://github.com/IVIanuu"))
-    },
-    openTwitterPage = action {
-      ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu"))
-    },
+    openRedditPage = action { navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps")) },
+    openGithubPage = action { navigator.push(UrlKey("https://github.com/IVIanuu")) },
+    openTwitterPage = action { navigator.push(UrlKey("https://twitter.com/IVIanuu")) },
     openPrivacyPolicy = action {
-      ctx.navigator.push(
+      navigator.push(
         WebKey(
           loadResource(R.string.es_about_privacy_policy),
           privacyPolicyUrl!!.value
         )
       )
     },
-    sendMail = action {
-      ctx.navigator.push(FeedbackMailKey)
-    }
+    sendMail = action { navigator.push(FeedbackMailKey) }
   )
 }

@@ -124,13 +124,11 @@ data class UiDonation(
   val price: String
 )
 
-@Provide fun donationModel(
+context(KeyUiContext<DonationKey>, ToastContext) @Provide fun donationModel(
   consumePurchase: ConsumePurchaseUseCase,
   donations: Donations,
   getSkuDetails: GetSkuDetailsUseCase,
-  purchase: PurchaseUseCase,
-  T: ToastContext,
-  ctx: KeyUiContext<DonationKey>
+  purchase: PurchaseUseCase
 ) = Model {
   DonationModel(
     skus = produceResource {
@@ -147,7 +145,7 @@ data class UiDonation(
           )
         }
     },
-    close = action { ctx.navigator.pop(ctx.key) },
+    close = action { navigator.pop(key) },
     purchase = action { donation ->
       if (purchase(donation.donation.sku, true, true)) {
         consumePurchase(donation.donation.sku)

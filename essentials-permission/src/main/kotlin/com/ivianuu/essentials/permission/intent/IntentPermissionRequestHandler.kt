@@ -27,13 +27,12 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 
 @JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
-@Provide fun <P : Permission> intentPermissionRequestHandler(
+context(ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
-  state: Flow<PermissionState<P>>,
-  T: ToastContext
+  state: Flow<PermissionState<P>>
 ) = PermissionRequestHandler<P> { permission ->
   race(
     {

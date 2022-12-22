@@ -23,9 +23,8 @@ interface Clipboard {
   suspend fun updateText(value: String, showMessage: Boolean = true)
 }
 
-@Provide class ClipboardImpl(
-  private val clipboardManager: @SystemService ClipboardManager,
-  private val T: ToastContext
+context(ToastContext) @Provide class ClipboardImpl(
+  private val clipboardManager: @SystemService ClipboardManager
 ) : Clipboard {
   override val text: Flow<String?>
     get() = callbackFlow<String?> {

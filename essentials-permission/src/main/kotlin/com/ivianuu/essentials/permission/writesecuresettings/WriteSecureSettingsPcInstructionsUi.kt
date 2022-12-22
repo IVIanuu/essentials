@@ -184,14 +184,12 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-@Provide fun writeSecureSettingsPcInstructionsModel(
+context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, ToastContext) @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>,
-  permissionStateFactory: PermissionStateFactory,
-  T: ToastContext,
-  ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>
+  permissionStateFactory: PermissionStateFactory
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
@@ -203,7 +201,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     3 -> true
     4 -> produce(false) {
       while (true) {
-        value = permissionStateFactory(listOf(ctx.key.permissionKey)).first()
+        value = permissionStateFactory(listOf(key.permissionKey)).first()
         delay(1000)
       }
     }
@@ -217,7 +215,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     canContinueStep = canContinueStep,
     continueStep = action {
       if (completedStep == 4)
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
       else {
         completedStep++
         currentStep = completedStep
@@ -232,7 +230,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         { developerModeSetting.data.first { it != 0 } },
         {
-          ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
+          navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onFailure { showToast(R.string.open_phone_info_failed) }
         }
       )
@@ -241,7 +239,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
-        { ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
+        { navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
       appUiStarter()
     }

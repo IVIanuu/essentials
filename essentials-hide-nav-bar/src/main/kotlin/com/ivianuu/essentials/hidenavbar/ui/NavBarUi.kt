@@ -62,10 +62,9 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-context(ResourceProvider) @Provide fun navBarModel(
+context(KeyUiContext<NavBarKey>, ResourceProvider) @Provide fun navBarModel(
   permissionRequester: PermissionRequester,
-  pref: DataStore<NavBarPrefs>,
-  ctx: KeyUiContext<NavBarKey>
+  pref: DataStore<NavBarPrefs>
 ) = Model {
   val prefs = pref.data.bind(NavBarPrefs())
   NavBarModel(
@@ -79,7 +78,7 @@ context(ResourceProvider) @Provide fun navBarModel(
     },
     navBarRotationMode = prefs.navBarRotationMode,
     updateNavBarRotationMode = action {
-      ctx.navigator.push(
+      navigator.push(
         SingleChoiceListKey(
           items = NavBarRotationMode.values()
             .map { mode ->

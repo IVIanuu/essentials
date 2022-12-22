@@ -40,13 +40,11 @@ import kotlinx.coroutines.launch
 
 object AppTrackerKey : Key<Unit>
 
-@Provide fun appTrackerUi(
+context(NotificationFactory, ToastContext) @Provide fun appTrackerUi(
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
   permissionRequester: PermissionRequester,
-  scope: NamedCoroutineScope<KeyUiScope>,
-  N: NotificationFactory,
-  T: ToastContext
+  scope: NamedCoroutineScope<KeyUiScope>
 ) = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 

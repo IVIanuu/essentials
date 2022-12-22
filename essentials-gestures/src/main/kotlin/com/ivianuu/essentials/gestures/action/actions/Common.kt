@@ -71,9 +71,8 @@ fun interface ActionIntentSender {
   fun sendIntent(intent: Intent, isFloating: Boolean, options: Bundle?)
 }
 
-@Provide fun actionIntentSender(
-  context: AppContext,
-  T: ToastContext
+context(ToastContext) @Provide fun actionIntentSender(
+  context: AppContext
 ) = ActionIntentSender { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)

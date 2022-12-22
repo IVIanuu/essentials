@@ -97,11 +97,10 @@ data class MediaActionSettingsModel(
   val updateMediaApp: () -> Unit
 )
 
-@Provide fun mediaActionSettingsModel(
+context(KeyUiContext<MediaActionSettingsKey>) @Provide fun mediaActionSettingsModel(
   appRepository: AppRepository,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
-  pref: DataStore<MediaActionPrefs>,
-  ctx: KeyUiContext<MediaActionSettingsKey>
+  pref: DataStore<MediaActionPrefs>
 ) = Model {
   MediaActionSettingsModel(
     mediaApp = pref.data
@@ -109,7 +108,7 @@ data class MediaActionSettingsModel(
       .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
       .bindResource(),
     updateMediaApp = action {
-      val newMediaApp = ctx.navigator.push(
+      val newMediaApp = navigator.push(
         AppPickerKey(
           intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
         )

@@ -73,14 +73,11 @@ data class AppPickerModel(
     .map { it.filter(appPredicate) }
 }
 
-@Provide fun appPickerModel(
-  appRepository: AppRepository,
-  ctx: KeyUiContext<AppPickerKey>
-) = Model {
+context(AppRepository, KeyUiContext<AppPickerKey>) @Provide fun appPickerModel() = Model {
   AppPickerModel(
-    appPredicate = ctx.key.appPredicate,
-    title = ctx.key.title,
-    allApps = appRepository.installedApps.bindResource(),
-    pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
+    appPredicate = key.appPredicate,
+    title = key.title,
+    allApps = installedApps.bindResource(),
+    pickApp = action { app -> navigator.pop(key, app) }
   )
 }

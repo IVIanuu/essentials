@@ -328,32 +328,30 @@ data class GoPremiumModel(
   val goBack: () -> Unit
 )
 
-@Provide fun goPremiumModel(
+context(KeyUiContext<GoPremiumKey>, ToastContext) @Provide fun goPremiumModel(
   features: List<AppFeature>,
   fullScreenAd: FullScreenAd,
-  premiumVersionManager: PremiumVersionManager,
-  ctx: KeyUiContext<GoPremiumKey>,
-  TC: ToastContext
+  premiumVersionManager: PremiumVersionManager
 ) = Model {
   GoPremiumModel(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
-    showTryBasicOption = ctx.key.showTryBasicOption,
+    showTryBasicOption = key.showTryBasicOption,
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
         showToast(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {
-      ctx.navigator.pop(ctx.key, false)
+      navigator.pop(key, false)
       withContext(NonCancellable) {
         fullScreenAd.loadAndShow()
       }
     },
     goBack = action {
-      if (ctx.key.allowBackNavigation) {
-        ctx.navigator.pop(ctx.key, false)
+      if (key.allowBackNavigation) {
+        navigator.pop(key, false)
         withContext(NonCancellable) {
           fullScreenAd.loadAndShow()
         }
