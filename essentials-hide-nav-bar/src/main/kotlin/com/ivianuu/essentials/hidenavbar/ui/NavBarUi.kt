@@ -81,8 +81,7 @@ context(KeyUiContext<NavBarKey>, ResourceProvider) @Provide fun navBarModel(
       navigator.push(
         SingleChoiceListKey(
           items = NavBarRotationMode.values().toList(),
-          selectedItem = prefs.navBarRotationMode,
-          title = loadResource(R.string.es_pref_nav_bar_rotation_mode)
+          selectedItem = prefs.navBarRotationMode
         ) { loadResource(titleRes) }
       )?.let { newRotationMode ->
         pref.updateData { copy(navBarRotationMode = newRotationMode) }
