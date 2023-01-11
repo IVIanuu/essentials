@@ -10,19 +10,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 data class ListKey<T : Any>(
-  val items: List<Item<T>>,
-  val title: String? = null
-) : PopupKey<T> {
-  data class Item<T>(val value: T, val title: String)
-}
+  val items: List<T>,
+  val title: String? = null,
+  @Inject val renderable: UiRenderer<T>,
+) : PopupKey<T>
 
 @Provide fun listKeyUi(
   key: ListKey<Any>,
@@ -36,9 +37,11 @@ data class ListKey<T : Any>(
           items(key.items) { item ->
             ListItem(
               modifier = Modifier.clickable(onClick = action {
-                navigator.pop(key, item.value)
+                navigator.pop(key, item)
               }),
-              title = { Text(item.title) },
+              title = {
+                with(key.renderable) { Text(item.toUiString()) }
+              },
             )
           }
         }

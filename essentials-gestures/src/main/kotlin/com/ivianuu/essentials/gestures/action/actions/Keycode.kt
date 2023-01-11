@@ -59,8 +59,7 @@ context(ResourceProvider) @Provide class KeycodeActionPickerDelegate(
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(
       TextInputKey(
-        title = loadResource(R.string.es_keycode_picker_title),
-        label = loadResource(R.string.es_keycode_input_hint),
+        label = loadResource(R.string.es_keycode_label),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         predicate = { it.isNotEmpty() }
       )

@@ -21,7 +21,7 @@ import com.ivianuu.injekt.Provide
 
 data class TextInputKey(
   val initial: String = "",
-  val label: String,
+  val label: String = "",
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }

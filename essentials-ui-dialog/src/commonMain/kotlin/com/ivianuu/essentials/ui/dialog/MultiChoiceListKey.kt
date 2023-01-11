@@ -11,20 +11,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.CommonStrings
+import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 data class MultiChoiceListKey<T : Any>(
-  val items: List<Item<T>>,
+  val items: List<T>,
   val selectedItems: Set<T>,
-  val title: String? = null
-) : PopupKey<Set<T>> {
-  data class Item<T>(val value: T, val title: String)
-}
+  val title: String? = null,
+  @Inject val renderable: UiRenderer<T>
+) : PopupKey<Set<T>>
 
 @Provide fun multiChoiceListUi(
   key: MultiChoiceListKey<Any>,
@@ -35,14 +36,11 @@ data class MultiChoiceListKey<T : Any>(
     var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
     MultiChoiceListDialog(
-      items = remember {
-        key.items
-          .map { it.value }
-      },
+      items = key.items,
       selectedItems = selectedItems,
       onSelectionsChanged = { selectedItems = it },
       item = { item ->
-        Text(key.items.single { it.value == item }.title)
+        with(key.renderable) { Text(item.toUiString()) }
       },
       title = key.title?.let { { Text(it) } },
       buttons = {

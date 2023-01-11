@@ -57,8 +57,7 @@
     <string name="es_pref_media_app_summary">Define the target app for the media actions (current: %s)</string>
 
     <!-- Keycode -->
-    <string name="es_keycode_picker_title">Keycode</string>
-    <string name="es_keycode_input_hint">Type in the keycode</string>
+    <string name="es_keycode_label">Keycode..</string>
 
     <string name="es_unknown_action_name">Unknown</string>
     <string name="es_activity_not_found">Failed to launch screen!</string>

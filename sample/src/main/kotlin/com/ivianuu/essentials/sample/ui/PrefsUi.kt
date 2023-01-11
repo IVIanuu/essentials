@@ -169,11 +169,7 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun prefsUi(
             launch {
               val newItems = navigator.push(
                 MultiChoiceListKey(
-                  items = listOf(
-                    MultiChoiceListKey.Item("A", "A"),
-                    MultiChoiceListKey.Item("B", "B"),
-                    MultiChoiceListKey.Item("C", "C")
-                  ),
+                  items = listOf("A", "B", "C"),
                   selectedItems = prefs.multiChoice
                 )
               ) ?: return@launch
@@ -195,11 +191,7 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun prefsUi(
             launch {
               val newItem = navigator.push(
                 SingleChoiceListKey(
-                  items = listOf(
-                    SingleChoiceListKey.Item("A", "A"),
-                    SingleChoiceListKey.Item("B", "B"),
-                    SingleChoiceListKey.Item("C", "C")
-                  ),
+                  items = listOf("A", "B", "C"),
                   selectedItem = prefs.singleChoice
                 )
               ) ?: return@launch
