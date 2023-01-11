@@ -31,8 +31,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
@@ -58,16 +58,10 @@ data class CheckableAppsParams(
       TopAppBar(
         title = { Text(model.appBarTitle) },
         actions = {
-          PopupMenuButton(
-            items = listOf(
-              PopupMenu.Item(onSelected = model.selectAll) {
-                Text(R.string.es_select_all)
-              },
-              PopupMenu.Item(onSelected = model.deselectAll) {
-                Text(R.string.es_deselect_all)
-              }
-            )
-          )
+          PopupMenuButton {
+            PopupMenuItem(onSelected = model.selectAll) { Text(R.string.es_select_all) }
+            PopupMenuItem(onSelected = model.deselectAll) { Text(R.string.es_deselect_all) }
+          }
         }
       )
     }

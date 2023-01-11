@@ -27,8 +27,8 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
+import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.xposed.IsXposedRunning
 import com.ivianuu.injekt.Provide
@@ -43,12 +43,13 @@ context(Toaster) @Provide fun homeUi(
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",
-    popupMenuItems = listOf("Option 1", "Option 2", "Option 3")
-      .map { title ->
-        PopupMenu.Item(onSelected = { showToast("Selected $title") }) {
+    popupMenuContent = {
+      listOf("Option 1", "Option 2", "Option 3").forEach { title ->
+        PopupMenuItem(onSelected = { showToast("Selected $title") }) {
           Text(title)
         }
       }
+    }
   ) {
     items(finalItems) { item ->
       val color = rememberSaveable(item) {
@@ -79,11 +80,7 @@ context(Toaster) @Provide fun homeUi(
   }
 }
 
-@Composable private fun HomeItem(
-  color: Color,
-  onClick: () -> Unit,
-  item: HomeItem,
-) {
+@Composable private fun HomeItem(color: Color, onClick: () -> Unit, item: HomeItem) {
   ListItem(
     modifier = Modifier.clickable(onClick = onClick),
     title = {
@@ -100,14 +97,13 @@ context(Toaster) @Provide fun homeUi(
       )
     },
     trailing = {
-      PopupMenuButton(
-        items = (0..100)
-          .map { index ->
-            PopupMenu.Item(onSelected = {}) {
-              Text(index.toString())
-            }
+      PopupMenuButton {
+        (0..100).forEach { index ->
+          PopupMenuItem(onSelected = {}) {
+            Text(index.toString())
           }
-      )
+        }
+      }
     }
   )
 }

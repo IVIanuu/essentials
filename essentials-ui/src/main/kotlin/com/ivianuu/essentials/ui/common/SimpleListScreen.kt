@@ -11,12 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.popup.PopupMenu
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 
 @Composable fun SimpleListScreen(
   title: String,
-  popupMenuItems: List<PopupMenu.Item> = emptyList(),
+  popupMenuContent: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   content: context(LazyListScope) () -> Unit
@@ -25,8 +24,8 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
     topBar = {
       TopAppBar(
         title = { Text(title) },
-        actions = if (popupMenuItems.isEmpty()) null else ({
-          PopupMenuButton(items = popupMenuItems)
+        actions = if (popupMenuContent == null) null else ({
+          PopupMenuButton(popupContent = popupMenuContent)
         })
       )
     },
@@ -39,14 +38,14 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 
 @Composable inline fun SimpleListScreen(
   titleRes: Int,
-  popupMenuItems: List<PopupMenu.Item> = emptyList(),
+  noinline popupMenuContent: (@Composable () -> Unit)? = null,
   noinline floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   noinline content: context(LazyListScope) () -> Unit
 ) {
   SimpleListScreen(
     stringResource(titleRes),
-    popupMenuItems,
+    popupMenuContent,
     floatingActionButton,
     floatingActionButtonPosition,
     content

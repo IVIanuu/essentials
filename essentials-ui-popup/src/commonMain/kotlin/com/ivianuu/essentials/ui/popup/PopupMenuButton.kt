@@ -35,17 +35,17 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
 @Composable fun PopupMenuButton(
-  items: List<PopupMenu.Item>,
+  modifier: Modifier = Modifier,
   onCancel: (() -> Unit)? = null,
-  modifier: Modifier = Modifier
+  popupContent: @Composable () -> Unit
 ) {
   Box(
     modifier = Modifier
       .size(size = 40.dp)
       .popupClickable(
-        items = items,
+        indication = rememberRipple(bounded = false),
         onCancel = onCancel,
-        indication = rememberRipple(bounded = false)
+        popupContent = popupContent
       )
       .then(modifier),
     contentAlignment = Alignment.Center
@@ -55,9 +55,9 @@ import com.ivianuu.injekt.common.Element
 }
 
 @Composable fun Modifier.popupClickable(
-  items: List<PopupMenu.Item>,
-  onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
+  onCancel: (() -> Unit)? = null,
+  popupContent: @Composable () -> Unit
 ) = composed {
   val component = LocalUiElements.current.element<PopupMenuButtonComponent>()
 
@@ -73,7 +73,7 @@ import com.ivianuu.injekt.common.Element
             position = coordinates!!.boundsInRoot(),
             onCancel = onCancel
           ) {
-            PopupMenu(items = items)
+            Popup(popupContent)
           }
         )
       }

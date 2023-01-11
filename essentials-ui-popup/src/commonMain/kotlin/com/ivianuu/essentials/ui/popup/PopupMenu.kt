@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,45 +22,22 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
-object PopupMenu {
-  data class Item(
-    val onSelected: () -> Unit,
-    val content: @Composable () -> Unit
-  )
-}
-
-@Composable fun PopupMenu(items: List<PopupMenu.Item>) {
-  Popup {
-    val component = LocalKeyUiElements.current.element<PopupMenuComponent>()
-
-    LazyColumn {
-      // todo use items(items) { } once fixed
-      items.forEach { item ->
-        item {
-          PopupMenuItem(
-            onSelected = action {
-              component.navigator.pop(component.key)
-              item.onSelected()
-            },
-            content = item.content
-          )
-        }
-      }
-    }
-  }
-}
-
 @Provide @Element<KeyUiScope>
 data class PopupMenuComponent(val key: Key<*>, val navigator: Navigator)
 
-@Composable private fun PopupMenuItem(
+@Composable fun PopupMenuItem(
   onSelected: () -> Unit,
   content: @Composable () -> Unit,
 ) {
+  val component = LocalKeyUiElements.current.element<PopupMenuComponent>()
+
   Box(
     modifier = Modifier.widthIn(min = 200.dp)
       .height(48.dp)
-      .clickable(onClick = onSelected),
+      .clickable(onClick = action {
+        component.navigator.pop(component.key)
+        onSelected()
+      }),
     contentAlignment = Alignment.CenterStart
   ) {
     Box(
