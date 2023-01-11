@@ -55,8 +55,9 @@ fun <T> Flow<T>.flowAsResource(): Flow<Resource<T>> = resourceFlow {
   emitAll(this@flowAsResource)
 }
 
+// todo context
 @OptIn(ExperimentalTypeInference::class)
-fun <T> resourceFlow(@BuilderInference block: suspend context(FlowCollector<T>) () -> Unit): Flow<Resource<T>> =
+fun <T> resourceFlow(@BuilderInference block: suspend FlowCollector<T>.() -> Unit): Flow<Resource<T>> =
   flow<Resource<T>> {
     emit(Loading)
     catch {

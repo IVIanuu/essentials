@@ -115,7 +115,7 @@ abstract class AbstractFunTileService<T : Any>(
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel = state {
+  val tileModel = coroutineScope.state {
     tileModelElements.toMap()[tileId]
       ?.invoke()
       ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")
