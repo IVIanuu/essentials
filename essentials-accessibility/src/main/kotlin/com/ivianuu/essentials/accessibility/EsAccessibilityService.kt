@@ -28,7 +28,8 @@ class EsAccessibilityService : AccessibilityService() {
   private val serviceComponent by lazy {
     application
       .cast<AppElementsOwner>()
-      .appElements<EsAccessibilityServiceComponent>()
+      .appElements
+      .element<EsAccessibilityServiceComponent>()
   }
 
   @Provide private val logger get() = serviceComponent.logger

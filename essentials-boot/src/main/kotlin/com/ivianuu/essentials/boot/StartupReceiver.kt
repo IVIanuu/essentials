@@ -20,7 +20,8 @@ class StartupReceiver : BroadcastReceiver() {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
     @Provide val component = context.applicationContext
       .cast<AppElementsOwner>()
-      .appElements<StartupReceiverComponent>()
+      .appElements
+      .element<StartupReceiverComponent>()
 
     log { "on system boot" }
     component.bootListeners.forEach { it() }

@@ -20,7 +20,8 @@ class EsBroadcastReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     val component = context.applicationContext
       .cast<AppElementsOwner>()
-      .appElements<EsBroadcastReceiverComponent>()
+      .appElements
+      .element<EsBroadcastReceiverComponent>()
     component.scope.launch {
       component.handlers.parForEach { it(intent) }
     }

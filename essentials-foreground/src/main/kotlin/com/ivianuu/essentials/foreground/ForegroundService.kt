@@ -36,7 +36,8 @@ class ForegroundService : Service() {
   private val component by lazy {
     application
       .cast<AppElementsOwner>()
-      .appElements<ForegroundServiceComponent>()
+      .appElements
+      .element<ForegroundServiceComponent>()
   }
 
   @Provide val logger get() = component.logger

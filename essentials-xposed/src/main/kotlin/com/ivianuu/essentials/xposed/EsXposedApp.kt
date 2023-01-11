@@ -18,7 +18,7 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
     @Provide val scope = Scope<XposedScope>()
       .also { appScope = it }
     @Provide val elements = buildXposedElements()
-    elements<XposedHooksComponent>().hooks().forEach { hooks ->
+    elements.element<XposedHooksComponent>().hooks().forEach { hooks ->
       with(hooks) {
         with(context) {
           invoke()

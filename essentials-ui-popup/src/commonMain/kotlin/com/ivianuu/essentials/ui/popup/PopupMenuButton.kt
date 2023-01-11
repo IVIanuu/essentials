@@ -59,7 +59,7 @@ import com.ivianuu.injekt.common.Element
   onCancel: (() -> Unit)? = null,
   indication: Indication = LocalIndication.current,
 ) = composed {
-  val component = LocalUiElements.current<PopupMenuButtonComponent>()
+  val component = LocalUiElements.current.element<PopupMenuButtonComponent>()
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

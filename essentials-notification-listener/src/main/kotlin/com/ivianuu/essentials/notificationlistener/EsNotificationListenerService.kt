@@ -32,7 +32,8 @@ class EsNotificationListenerService : NotificationListenerService() {
   private val component by lazy {
     application
       .cast<AppElementsOwner>()
-      .appElements<EsNotificationListenerServiceComponent>()
+      .appElements
+      .element<EsNotificationListenerServiceComponent>()
   }
 
   @Provide private val logger get() = component.logger

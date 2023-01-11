@@ -51,7 +51,8 @@ class UnlockActivity : ComponentActivity() {
 
     @Provide val component = application
       .cast<AppElementsOwner>()
-      .appElements<UnlockComponent>()
+      .appElements
+      .element<UnlockComponent>()
 
     log {
       when (requestType) {

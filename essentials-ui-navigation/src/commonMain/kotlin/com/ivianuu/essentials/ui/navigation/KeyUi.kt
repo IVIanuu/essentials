@@ -46,7 +46,7 @@ object KeyUiModule {
 interface ModelKeyUi<K : Key<*>, S> {
   @Composable operator fun S.invoke()
 }
-inline operator fun <K : Key<*>, S> ModelKeyUi(
+inline fun <K : Key<*>, S> ModelKeyUi(
   crossinline block: @Composable S.() -> Unit
 ): ModelKeyUi<K, S> = object : ModelKeyUi<K, S> {
   @Composable override fun S.invoke() {
@@ -74,7 +74,8 @@ inline operator fun <K : Key<*>, S> ModelKeyUi(
 interface Model<out S> {
   @Composable operator fun invoke(): S
 }
-inline operator fun <S> Model(
+
+inline fun <S> Model(
   crossinline block: @Composable () -> S
 ): Model<S> = object : Model<S> {
   @Composable override fun invoke() = block()

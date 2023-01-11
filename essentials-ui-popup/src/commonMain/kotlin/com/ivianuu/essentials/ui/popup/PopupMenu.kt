@@ -32,7 +32,7 @@ object PopupMenu {
 
 @Composable fun PopupMenu(items: List<PopupMenu.Item>) {
   Popup {
-    val component = LocalKeyUiElements.current<PopupMenuComponent>()
+    val component = LocalKeyUiElements.current.element<PopupMenuComponent>()
 
     LazyColumn {
       // todo use items(items) { } once fixed

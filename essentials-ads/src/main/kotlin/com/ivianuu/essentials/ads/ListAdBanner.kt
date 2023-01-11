@@ -44,7 +44,7 @@ fun interface ListAdBanner : ListDecorator
   if (config != null && isVertical) {
     item(null) {
       val key = catch {
-        LocalKeyUiElements.current<ListAdBannerComponent>().key::class
+        LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
       if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
         showAdsFlow.collectAsState().value.value)

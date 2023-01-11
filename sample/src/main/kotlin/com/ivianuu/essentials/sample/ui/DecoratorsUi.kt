@@ -48,7 +48,7 @@ fun interface SampleListDecorator : ListDecorator
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
     val key = catch { LocalKeyUiElements.current }.getOrNull()
-      ?.invoke<SampleDecoratorComponent>()?.key
+      ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -57,7 +57,7 @@ fun interface SampleListDecorator : ListDecorator
 
   item(null) {
     val key = catch { LocalKeyUiElements.current }.getOrNull()
-      ?.invoke<SampleDecoratorComponent>()?.key
+      ?.element<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator after content $key")
   }
@@ -66,7 +66,7 @@ fun interface SampleListDecorator : ListDecorator
 fun interface SampleKeyUiDecorator : KeyUiDecorator
 
 @Provide val sampleKeyUiDecorator = SampleKeyUiDecorator decorator@ { content ->
-  val key = LocalKeyUiElements.current<SampleDecoratorComponent>().key
+  val key = LocalKeyUiElements.current.element<SampleDecoratorComponent>().key
   if (key !is DecoratorsKey) {
     content()
     return@decorator

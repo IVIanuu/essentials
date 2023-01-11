@@ -42,7 +42,8 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
 
     val uiComponent = application
       .cast<AppElementsOwner>()
-      .appElements<EsActivityComponent>()
+      .appElements
+      .element<EsActivityComponent>()
       .uiComponent(uiScope, this)
 
     setContent {

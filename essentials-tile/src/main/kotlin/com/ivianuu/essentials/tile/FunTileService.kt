@@ -40,7 +40,8 @@ abstract class AbstractFunTileService<T : Any>(
   private val serviceComponent by lazy {
     application
       .cast<AppElementsOwner>()
-      .appElements<FunTileServiceComponent>()
+      .appElements
+      .element<FunTileServiceComponent>()
   }
 
   @Provide private val logger
