@@ -62,9 +62,10 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.util.toColorOrNull
 import com.ivianuu.essentials.ui.util.toHexString
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-context(ColorPickerStrings, CommonStrings) @Composable fun ColorPickerDialog(
+@Composable fun ColorPickerDialog(
   modifier: Modifier = Modifier,
   initialColor: Color,
   colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
@@ -73,7 +74,9 @@ context(ColorPickerStrings, CommonStrings) @Composable fun ColorPickerDialog(
   onColorSelected: (Color) -> Unit,
   onCancel: () -> Unit,
   allowCustomArgb: Boolean = true,
-  showAlphaSelector: Boolean = false
+  showAlphaSelector: Boolean = false,
+  @Inject colorPickerStrings: ColorPickerStrings,
+  @Inject commonStrings: CommonStrings
 ) {
   var currentColor by remember { mutableStateOf(initialColor) }
   var currentScreen by remember { mutableStateOf(ColorPickerTab.COLORS) }
@@ -128,11 +131,11 @@ context(ColorPickerStrings, CommonStrings) @Composable fun ColorPickerDialog(
             contentColor = currentColor
           )
         ) {
-          Text(otherScreen.title())
+          Text(otherScreen.title(colorPickerStrings))
         }
       }
 
-      TextButton(onClick = onCancel) { Text(cancel) }
+      TextButton(onClick = onCancel) { Text(commonStrings.cancel) }
 
       TextButton(
         onClick = { onColorSelected(currentColor) },
@@ -140,7 +143,7 @@ context(ColorPickerStrings, CommonStrings) @Composable fun ColorPickerDialog(
           contentColor = currentColor
         )
       ) {
-        Text(ok)
+        Text(commonStrings.ok)
       }
     }
   )
@@ -448,7 +451,7 @@ private enum class ColorComponent(
   abstract fun apply(color: Color, value: Float): Color
 }
 
-private enum class ColorPickerTab(val title: context(ColorPickerStrings) () -> String) {
+private enum class ColorPickerTab(val title: ColorPickerStrings.() -> String) {
   COLORS({ ColorsTabTitle }), EDITOR({ EditorTabTitle })
 }
 

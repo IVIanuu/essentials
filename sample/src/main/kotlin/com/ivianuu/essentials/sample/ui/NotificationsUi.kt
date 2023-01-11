@@ -162,10 +162,11 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-context(AppContext) @Provide fun notificationsModel(
+@Provide fun notificationsModel(
   permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
   permissionRequester: PermissionRequester,
   service: NotificationService,
+  C: AppContext,
   S: NamedCoroutineScope<KeyUiScope>
 ) = Model {
   NotificationsModel(
@@ -185,7 +186,7 @@ context(AppContext) @Provide fun notificationsModel(
   )
 }
 
-context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNotification(
+private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
@@ -196,16 +197,17 @@ context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNot
   sbn = this
 )
 
-context(AppContext) @Composable private fun NotificationIcon(
-  notification: Notification
+@Composable private fun NotificationIcon(
+  notification: Notification,
+  @Inject context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
     value = catch {
       notification.smallIcon
-        .loadDrawable(this@AppContext)
+        .loadDrawable(context)
     }.recover {
       notification.getLargeIcon()
-        .loadDrawable(this@AppContext)
+        .loadDrawable(context)
     }
       .map { it.toBitmap().toImageBitmap() }
       .getOrNull()

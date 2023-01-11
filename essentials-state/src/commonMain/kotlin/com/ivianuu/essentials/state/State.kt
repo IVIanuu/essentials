@@ -20,6 +20,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
@@ -32,10 +33,13 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): StateFlow<T> {
-  val recomposer = Recomposer(coroutineContext + this@StateContext)
+fun <T> CoroutineScope.state(
+  @Inject context: StateContext,
+  body: @Composable () -> T
+): StateFlow<T> {
+  val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
-  launch(this@StateContext, CoroutineStart.UNDISPATCHED) {
+  launch(context, CoroutineStart.UNDISPATCHED) {
     recomposer.runRecomposeAndApplyChanges()
   }
 
@@ -43,7 +47,7 @@ context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): 
   val snapshotHandle = Snapshot.registerGlobalWriteObserver {
     if (!applyScheduled) {
       applyScheduled = true
-      launch(this@StateContext) {
+      launch(context) {
         applyScheduled = false
         Snapshot.sendApplyNotifications()
       }
@@ -114,7 +118,7 @@ interface ProduceScope<T> : CoroutineScope {
 @Composable fun <T> produce(
   initial: T,
   vararg args: Any?,
-  block: suspend context(ProduceScope<T>) () -> Unit
+  block: suspend ProduceScope<T>.() -> Unit
 ): T {
   val state = remember(*args) { mutableStateOf(initial) }
 
@@ -133,7 +137,7 @@ interface ProduceScope<T> : CoroutineScope {
   vararg args: Any?,
   block: suspend () -> T
 ): Resource<T> = remember(*args) {
-  resourceFlow<T> { emit(block()) }
+  resourceFlow { emit(block()) }
 }.bind(Idle)
 
 @Composable fun action(block: suspend () -> Unit): () -> Unit {

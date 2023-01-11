@@ -11,15 +11,15 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlin.math.roundToInt
 
-context(UnitStrings) @Composable fun UnitText(value: Any, unit: ValueUnit) {
-  Text(unit.picker(value))
+@Composable fun UnitText(value: Any, unit: ValueUnit, @Inject strings: UnitStrings) {
+  Text(unit.picker(strings, value))
 }
 
-context(UnitStrings) @Composable fun ScaledPercentageUnitText(value: Float) {
+@Composable fun ScaledPercentageUnitText(value: Float, @Inject strings: UnitStrings) {
   UnitText((value * 100f).roundToInt(), ValueUnit.PERCENTAGE)
 }
 
-enum class ValueUnit(val picker: context(UnitStrings) (Any) -> String) {
+enum class ValueUnit(val picker: UnitStrings.(Any) -> String) {
   DP({ dp(it.cast()) }),
   MILLIS({ millis(it.cast()) }),
   PERCENTAGE({ percentage(it.cast()) }),

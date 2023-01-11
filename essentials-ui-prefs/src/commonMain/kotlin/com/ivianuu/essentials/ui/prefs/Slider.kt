@@ -33,14 +33,13 @@ import com.ivianuu.essentials.ui.material.StepPolicy
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
-context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListItem(
+@Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
   onValueChange: (T) -> Unit,
   title: (@Composable () -> Unit)? = null,
@@ -49,6 +48,7 @@ context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListI
   stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
+  @Inject converter: SliderValueConverter<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   Box(modifier = modifier) {
@@ -71,10 +71,10 @@ context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListI
         ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
+      var internalValue by remember(value) { mutableStateOf(converter.toFloat(value)) }
 
-      val floatRange = remember(inject<SliderValueConverter<T>>(), valueRange) {
-        valueRange.start.toFloat()..valueRange.endInclusive.toFloat()
+      val floatRange = remember(converter, valueRange) {
+        converter.toFloat(valueRange.start)..converter.toFloat(valueRange.endInclusive)
       }
 
       var valueChangeJob: Job? by remember { refOf(null) }
@@ -87,16 +87,16 @@ context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListI
           valueChangeJob = scope.launch {
             delay(200)
             if (newValue != value)
-              onValueChange(newValue.toValue())
+              onValueChange(converter.toValue(newValue))
 
             delay(800)
-            internalValue = value.toFloat()
+            internalValue = converter.toFloat(value)
           }
         },
         valueRange = floatRange,
         stepPolicy = remember(stepPolicy) {
           { valueRange ->
-            stepPolicy(valueRange.start.toValue()..valueRange.endInclusive.toValue())
+            stepPolicy(converter.toValue(valueRange.start)..converter.toValue(valueRange.endInclusive))
           }
         },
         modifier = Modifier.weight(1f)
@@ -116,15 +116,15 @@ context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListI
               else List(steps + 2) { it.toFloat() / (steps + 1) })
               val stepValues = stepFractions
                 .map {
-                  valueRange.start.toFloat() +
-                      ((valueRange.endInclusive.toFloat() - valueRange.start.toFloat()) * it)
+                  converter.toFloat(valueRange.start) +
+                      ((converter.toFloat(valueRange.endInclusive) - converter.toFloat(valueRange.start)) * it)
                 }
 
               val steppedValue = stepValues
                 .minByOrNull { (it - internalValue).absoluteValue }
                 ?: internalValue
 
-              steppedValue.toValue()
+              converter.toValue(steppedValue)
             }
 
             valueText(steppedValue)
@@ -145,38 +145,38 @@ context(SliderValueConverter<T>) @Composable fun <T : Comparable<T>> SliderListI
 }
 
 interface SliderValueConverter<T : Comparable<T>> {
-  fun T.toFloat(): Float
-  fun Float.toValue(): T
+  fun toFloat(value: T): Float
+  fun toValue(floatValue: Float): T
 
   companion object {
     @Provide val duration = object : SliderValueConverter<Duration> {
-      override fun Duration.toFloat() = toLong().toFloat()
-      override fun Float.toValue() = toLong().toDuration()
+      override fun toFloat(value: Duration) = value.toLong().toFloat()
+      override fun toValue(floatValue: Float) = floatValue.toLong().toDuration()
     }
 
     @Provide val double = object : SliderValueConverter<Double> {
-      override fun Double.toFloat() = toFloat()
-      override fun Float.toValue() = toDouble()
+      override fun toFloat(value: Double) = value.toFloat()
+      override fun toValue(floatValue: Float) = floatValue.toDouble()
     }
 
     @Provide val dp = object : SliderValueConverter<Dp> {
-      override fun Dp.toFloat() = value
-      override fun Float.toValue() = dp
+      override fun toFloat(value: Dp) = value.value
+      override fun toValue(floatValue: Float) = floatValue.dp
     }
 
     @Provide val float = object : SliderValueConverter<Float> {
-      override fun Float.toFloat() = this
-      override fun Float.toValue() = this
+      override fun toFloat(value: Float) = value
+      override fun toValue(floatValue: Float) = floatValue
     }
 
     @Provide val int = object : SliderValueConverter<Int> {
-      override fun Int.toFloat() = toFloat()
-      override fun Float.toValue() = toInt()
+      override fun toFloat(value: Int) = value.toFloat()
+      override fun toValue(floatValue: Float) = floatValue.toInt()
     }
 
     @Provide val long = object : SliderValueConverter<Long> {
-      override fun Long.toFloat() = toFloat()
-      override fun Float.toValue() = toLong()
+      override fun toFloat(value: Long) = value.toFloat()
+      override fun toValue(floatValue: Float) = floatValue.toLong()
     }
   }
 }
