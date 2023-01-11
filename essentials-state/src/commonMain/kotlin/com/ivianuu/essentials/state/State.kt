@@ -26,17 +26,52 @@ import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+
+fun <T> stateFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
+  launchMolecule(
+    emitter = { trySend(it).getOrThrow() },
+    body = body
+  )
+  awaitClose()
+}
 
 fun <T> CoroutineScope.state(
   @Inject context: StateContext,
   body: @Composable () -> T
 ): StateFlow<T> {
+  var flow: MutableStateFlow<T>? = null
+
+  launchMolecule(
+    emitter = { value ->
+      val outputFlow = flow
+      if (outputFlow != null) {
+        outputFlow.value = value
+      } else {
+        flow = MutableStateFlow(value)
+      }
+    },
+    body = body,
+  )
+
+  return flow!!
+}
+
+fun <T> CoroutineScope.launchMolecule(
+  @Inject context: StateContext,
+  emitter: (T) -> Unit,
+  body: @Composable () -> T
+) {
+  if (!coroutineContext.isActive) return
+
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
   launch(context, CoroutineStart.UNDISPATCHED) {
@@ -59,18 +94,9 @@ fun <T> CoroutineScope.state(
     composition.dispose()
   }
 
-  var flow: MutableStateFlow<T>? = null
   composition.setContent {
-    val value = body()
-    val outputFlow = flow
-    if (outputFlow != null) {
-      outputFlow.value = value
-    } else {
-      flow = MutableStateFlow(value)
-    }
+    emitter(body())
   }
-
-  return flow!!
 }
 
 private object UnitApplier : AbstractApplier<Unit>(Unit) {
