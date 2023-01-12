@@ -19,27 +19,29 @@ data class DisplayInfo(
   val rotation: DisplayRotation = DisplayRotation.PORTRAIT_UP,
   val screenWidth: Int = 0,
   val screenHeight: Int = 0
-)
-
-@Provide fun displayInfo(
-  configChanges: () -> Flow<ConfigChange>,
-  displayRotation: () -> Flow<DisplayRotation>,
-  windowManager: @SystemService WindowManager
-): Flow<DisplayInfo> = flow {
-  combine(
-    configChanges()
-      .onStart { emit(ConfigChange) },
-    displayRotation()
-  ) { _, rotation ->
-    val metrics = DisplayMetrics()
-    windowManager.defaultDisplay.getRealMetrics(metrics)
-    DisplayInfo(
-      rotation = rotation,
-      screenWidth = metrics.widthPixels,
-      screenHeight = metrics.heightPixels
-    )
-  }
-    .distinctUntilChanged()
-    .let { emitAll(it) }
+) {
+  @JvmInline value class Provider(val displayInfo: Flow<DisplayInfo>)
 }
 
+context(ConfigChangeProvider, DisplayRotation.Provider)
+    @Provide fun displayInfoProvider(
+  windowManager: @SystemService WindowManager
+) = DisplayInfo.Provider(
+  flow {
+    combine(
+      configChanges
+        .onStart { emit(Unit) },
+      displayRotation
+    ) { _, rotation ->
+      val metrics = DisplayMetrics()
+      windowManager.defaultDisplay.getRealMetrics(metrics)
+      DisplayInfo(
+        rotation = rotation,
+        screenWidth = metrics.widthPixels,
+        screenHeight = metrics.heightPixels
+      )
+    }
+      .distinctUntilChanged()
+      .let { emitAll(it) }
+  }
+)

@@ -6,6 +6,7 @@ package com.ivianuu.essentials.accessibility
 
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 
 data class AccessibilityEvent(
   val type: Int,
@@ -13,10 +14,11 @@ data class AccessibilityEvent(
   val className: String?,
   val isFullScreen: Boolean,
 ) {
+  @Provide @JvmInline value class Provider(val accessibilityEvents: Flow<AccessibilityEvent>)
+
   companion object {
     @Provide val accessibilityEvents = EventFlow<AccessibilityEvent>()
   }
 }
 
 typealias AndroidAccessibilityEvent = android.view.accessibility.AccessibilityEvent
-

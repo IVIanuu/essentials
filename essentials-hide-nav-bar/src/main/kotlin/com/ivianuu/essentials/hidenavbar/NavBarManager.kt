@@ -29,10 +29,15 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater, PermissionManager) @Provide fun navBarManager(
+context(
+CombinedForceNavBarVisibleProvider,
+DisplayRotation.Provider,
+Logger,
+NonSdkInterfaceDetectionDisabler,
+OverscanUpdater,
+PermissionManager
+) @Provide fun navBarManager(
   context: AppContext,
-  displayRotation: Flow<DisplayRotation>,
-  forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   navBarFeatureSupported: NavBarFeatureSupported,
   pref: DataStore<NavBarPrefs>
 ) = ScopeWorker<AppScope> worker@{
@@ -40,13 +45,13 @@ context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater, PermissionMan
   permissionState(listOf<TypeKey<NavBarPermission>>())
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
-        forceNavBarVisibleState
+        forceNavBarVisible
           .flatMapLatest { forceVisible ->
             pref.data
               // we wanna ignore changes to the wasNavBarHidden state
               .distinctUntilChangedBy { it.copy(wasNavBarHidden = false) }
               .map {
-                if (!forceVisible.value) it
+                if (!forceVisible) it
                 else it.copy(hideNavBar = false)
               }
           }

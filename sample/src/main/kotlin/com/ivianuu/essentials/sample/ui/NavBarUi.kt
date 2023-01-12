@@ -17,8 +17,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
+import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleProvider
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionManager
@@ -77,7 +78,9 @@ context(NamedCoroutineScope<KeyUiScope>, PermissionManager) @Provide fun navBarU
         Text(
           text = if (hasPermission) {
             when {
-              sampleForceNavBarVisibleState.collectAsState().value.value -> "Nav bar forced shown"
+              sampleForceNavBarVisibleState.forceNavBarVisible
+                .collectAsState(false)
+                .value -> "Nav bar forced shown"
               navBarPrefs.hideNavBar -> "Nav bar hidden"
               else -> "Nav bar shown"
             }
@@ -108,8 +111,8 @@ context(NamedCoroutineScope<KeyUiScope>, PermissionManager) @Provide fun navBarU
 
       Button(
         onClick = {
-          sampleForceNavBarVisibleState.value =
-            ForceNavBarVisibleState(!sampleForceNavBarVisibleState.value.value)
+          sampleForceNavBarVisibleState.forceNavBarVisible.cast<MutableStateFlow<Boolean>>()
+            .let { it.value = !it.value }
         }
       ) { Text("Toggle force nav bar") }
 
@@ -126,5 +129,4 @@ context(NamedCoroutineScope<KeyUiScope>, PermissionManager) @Provide fun navBarU
   }
 }
 
-@Provide val sampleForceNavBarVisibleState =
-  MutableStateFlow(ForceNavBarVisibleState(false))
+@Provide val sampleForceNavBarVisibleState = ForceNavBarVisibleProvider(MutableStateFlow(false))

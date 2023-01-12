@@ -22,7 +22,7 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.essentials.recentapps.CurrentAppProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -46,11 +46,10 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-context(ActionIntentSender, Logger) @Provide fun cameraActionExecutor(
+context(ActionIntentSender, CurrentAppProvider, Logger, ScreenState.Provider)
+    @Provide fun cameraActionExecutor(
   cameraManager: @SystemService CameraManager,
-  currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
-  screenState: Flow<ScreenState>,
   accessibilityServiceRef: Flow<EsAccessibilityService?>
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = packageManager
@@ -75,17 +74,18 @@ context(ActionIntentSender, Logger) @Provide fun cameraActionExecutor(
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
         accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-    cameraApp.activityInfo!!.packageName == currentApp.first()?.value)
-      suspendCancellableCoroutine<Boolean> { cont ->
-        cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
-          override fun onCameraAvailable(cameraId: String) {
-            super.onCameraAvailable(cameraId)
-            cameraManager.unregisterAvailabilityCallback(this)
-            if (cameraId == frontCamera)
-              catch { cont.resume(true) }
-          }
+    cameraApp.activityInfo!!.packageName == currentApp.first()
+  )
+    suspendCancellableCoroutine<Boolean> { cont ->
+      cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
+        override fun onCameraAvailable(cameraId: String) {
+          super.onCameraAvailable(cameraId)
+          cameraManager.unregisterAvailabilityCallback(this)
+          if (cameraId == frontCamera)
+            catch { cont.resume(true) }
+        }
 
-          override fun onCameraUnavailable(cameraId: String) {
+        override fun onCameraUnavailable(cameraId: String) {
             super.onCameraUnavailable(cameraId)
             cameraManager.unregisterAvailabilityCallback(this)
             if (cameraId == frontCamera)

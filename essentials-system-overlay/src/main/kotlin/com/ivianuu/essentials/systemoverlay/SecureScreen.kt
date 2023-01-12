@@ -21,26 +21,28 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-@JvmInline value class IsOnSecureScreen(val value: Boolean)
+@JvmInline value class OnSecureScreenProvider(val isOnSecureScreen: Flow<Boolean>)
 
-context(Logger, NamedCoroutineScope<AppScope>) @Provide fun isOnSecureScreen(
-  accessibilityEvents: Flow<AccessibilityEvent>
-): @Scoped<AppScope> Flow<IsOnSecureScreen> = accessibilityEvents
-  .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
-  .map { it.packageName to it.className }
-  .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
-  .map { (packageName, className) ->
-    var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
-    if (!isOnSecureScreen) {
-      isOnSecureScreen = packageName == "com.android.settings" &&
-          className == "android.app.MaterialDialog"
-    }
+context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>)
+    @Provide fun isOnSecureScreen(): @Scoped<AppScope> OnSecureScreenProvider =
+  OnSecureScreenProvider(
+    accessibilityEvents
+      .filter { it.type == AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED }
+      .map { it.packageName to it.className }
+      .filter { it.second != "android.inputmethodservice.SoftInputWindow" }
+      .map { (packageName, className) ->
+        var isOnSecureScreen = "packageinstaller" in packageName.orEmpty()
+        if (!isOnSecureScreen) {
+          isOnSecureScreen = packageName == "com.android.settings" &&
+              className == "android.app.MaterialDialog"
+        }
 
-    IsOnSecureScreen(isOnSecureScreen)
-  }
-  .distinctUntilChanged()
-  .onEach { log { "on secure screen changed: $it" } }
-  .state(SharingStarted.WhileSubscribed(1000), IsOnSecureScreen(false))
+        isOnSecureScreen
+      }
+      .distinctUntilChanged()
+      .onEach { log { "on secure screen changed: $it" } }
+      .state(SharingStarted.WhileSubscribed(1000), false)
+  )
 
 @Provide val isOnSecureScreenAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

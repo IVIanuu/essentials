@@ -16,7 +16,7 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.essentials.recentapps.CurrentAppProvider
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.Flow
@@ -31,11 +31,11 @@ context(ResourceProvider) @Provide fun killCurrentAppAction() = Action(
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-context(ActionRootCommandRunner, PackageManager) @Provide fun killCurrentAppActionExecutor(
-  buildInfo: BuildInfo,
-  currentAppFlow: Flow<CurrentApp?>
+context(ActionRootCommandRunner, CurrentAppProvider, PackageManager)
+    @Provide fun killCurrentAppActionExecutor(
+  buildInfo: BuildInfo
 ) = ActionExecutor<KillCurrentAppActionId> {
-  val currentApp = currentAppFlow.first()?.value
+  val currentApp = currentApp.first()
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
     currentApp != buildInfo.packageName && // we have no suicidal intentions :D

@@ -17,7 +17,7 @@ import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
-import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.essentials.recentapps.CurrentAppProvider
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -33,6 +33,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -41,14 +42,13 @@ import kotlinx.coroutines.launch
 object AppTrackerKey : Key<Unit>
 
 context(
+CurrentAppProvider,
 ForegroundManager,
 NamedCoroutineScope<KeyUiScope>,
 NotificationFactory,
 PermissionManager,
 ToastContext
-) @Provide fun appTrackerUi(
-  currentApp: Flow<CurrentApp?>
-) = SimpleKeyUi<AppTrackerKey> {
+) @Provide fun appTrackerUi() = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
@@ -79,11 +79,10 @@ ToastContext
   }
 }
 
-context(NotificationFactory) private fun AppTrackerNotification(
-  currentApp: CurrentApp?
-) = buildNotification("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
+context(NotificationFactory) private fun AppTrackerNotification(currentApp: String?) =
+  buildNotification("app_tracker", "App tracking", NotificationManager.IMPORTANCE_LOW) {
     setSmallIcon(R.mipmap.ic_launcher)
-    setContentTitle("Current app: ${currentApp?.value}")
+    setContentTitle("Current app: $currentApp")
   }
 
 @Provide object AppTrackerAccessibilityPermission : AccessibilityServicePermission(

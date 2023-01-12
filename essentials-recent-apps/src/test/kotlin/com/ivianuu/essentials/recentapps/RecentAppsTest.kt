@@ -25,7 +25,7 @@ class RecentAppsTest {
     val recentAppsScopeDispatcher = TestCoroutineDispatcher()
     val recentAppsScope = childCoroutineScope(recentAppsScopeDispatcher)
     val accessibilityEvents = EventFlow<AccessibilityEvent>()
-    val collector = recentApps(accessibilityEvents, recentAppsScope, NoopLogger)
+    val collector = recentAppsProvider(accessibilityEvents, recentAppsScope, NoopLogger)
       .testCollect(this)
 
     accessibilityEvents.emit(
@@ -74,28 +74,28 @@ class RecentAppsTest {
     )
 
     collector.values.shouldContainExactly(
-      RecentApps(listOf()),
-      RecentApps(listOf("a")),
-      RecentApps(listOf("b", "a")),
-      RecentApps(listOf("c", "b", "a"))
+      RecentAppsProvider(listOf()),
+      RecentAppsProvider(listOf("a")),
+      RecentAppsProvider(listOf("b", "a")),
+      RecentAppsProvider(listOf("c", "b", "a"))
     )
   }
 
   @Test fun testCurrentApp() = runCancellingBlockingTest {
-    val recentApps = EventFlow<RecentApps>()
+    val recentApps = EventFlow<RecentAppsProvider>()
     val collector = currentApp(recentApps).testCollect(this)
 
-    recentApps.emit(RecentApps(listOf("a", "b", "c")))
-    recentApps.emit(RecentApps(listOf("a", "b", "c")))
-    recentApps.emit(RecentApps(listOf("c", "a", "b")))
-    recentApps.emit(RecentApps(listOf("a", "b", "c")))
-    recentApps.emit(RecentApps(listOf("b", "c", "a")))
+    recentApps.emit(RecentAppsProvider(listOf("a", "b", "c")))
+    recentApps.emit(RecentAppsProvider(listOf("a", "b", "c")))
+    recentApps.emit(RecentAppsProvider(listOf("c", "a", "b")))
+    recentApps.emit(RecentAppsProvider(listOf("a", "b", "c")))
+    recentApps.emit(RecentAppsProvider(listOf("b", "c", "a")))
 
     collector.values.shouldContainExactly(
-      CurrentApp("a"),
-      CurrentApp("c"),
-      CurrentApp("a"),
-      CurrentApp("b")
+      CurrentAppProvider("a"),
+      CurrentAppProvider("c"),
+      CurrentAppProvider("a"),
+      CurrentAppProvider("b")
     )
   }
 }

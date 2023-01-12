@@ -34,8 +34,8 @@ import kotlinx.coroutines.launch
 
 object UnlockKey : Key<Unit>
 
-context(ScreenActivator, ScreenUnlocker, NamedCoroutineScope<KeyUiScope>, Toaster)
-    @Provide fun unlockUi(screenState: Flow<ScreenState>) = SimpleKeyUi<UnlockKey> {
+context(ScreenActivator, ScreenState.Provider, ScreenUnlocker, NamedCoroutineScope<KeyUiScope>, Toaster)
+    @Provide fun unlockUi() = SimpleKeyUi<UnlockKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {

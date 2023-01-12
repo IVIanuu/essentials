@@ -27,28 +27,29 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
 
-@JvmInline value class KeyboardVisible(val value: Boolean)
+@JvmInline value class KeyboardVisibleProvider(val keyboardVisible: Flow<Boolean>)
 
-context(NamedCoroutineScope<AppScope>) @Provide fun keyboardVisible(
-  accessibilityEvents: Flow<AccessibilityEvent>,
+context(AccessibilityEvent.Provider, NamedCoroutineScope<AppScope>)
+    @Provide fun keyboardVisibleProvider(
   keyboardHeightProvider: @KeyboardHeightProvider () -> Int?
-): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
-  .filter {
-    it.isFullScreen &&
-        it.className == "android.inputmethodservice.SoftInputWindow"
-  }
-  .onStart<Any?> { emit(Unit) }
-  .transformLatest {
-    emit(true)
-    while ((keyboardHeightProvider() ?: 0) > 0) {
-      delay(100)
+): @Scoped<AppScope> KeyboardVisibleProvider = KeyboardVisibleProvider(
+  accessibilityEvents
+    .filter {
+      it.isFullScreen &&
+          it.className == "android.inputmethodservice.SoftInputWindow"
     }
-    emit(false)
-    awaitCancellation()
-  }
-  .map { KeyboardVisible(it) }
-  .distinctUntilChanged()
-  .state(SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
+    .onStart<Any?> { emit(Unit) }
+    .transformLatest {
+      emit(true)
+      while ((keyboardHeightProvider() ?: 0) > 0) {
+        delay(100)
+      }
+      emit(false)
+      awaitCancellation()
+    }
+    .distinctUntilChanged()
+    .state(SharingStarted.WhileSubscribed(1000), false)
+)
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

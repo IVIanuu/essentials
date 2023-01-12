@@ -19,27 +19,32 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 enum class ScreenState(val isOn: Boolean) {
-  OFF(false), LOCKED(true), UNLOCKED(true)
+  OFF(false), LOCKED(true), UNLOCKED(true);
+
+  @JvmInline value class Provider(val screenState: Flow<ScreenState>)
 }
 
-context(BroadcastsFactory) @Provide fun screenState(
-  screenStateProvider: @CurrentScreenStateProvider suspend () -> ScreenState
-): Flow<ScreenState> = broadcasts(
-  Intent.ACTION_SCREEN_OFF,
-  Intent.ACTION_SCREEN_ON,
-  Intent.ACTION_USER_PRESENT
+context(BroadcastsFactory, CurrentScreenStateProvider)
+    @Provide fun screenStateProvider() = ScreenState.Provider(
+  broadcasts(
+    Intent.ACTION_SCREEN_OFF,
+    Intent.ACTION_SCREEN_ON,
+    Intent.ACTION_USER_PRESENT
+  )
+    .onStart<Any?> { emit(Unit) }
+    .map { currentScreenState() }
+    .distinctUntilChanged()
 )
-  .onStart<Any?> { emit(Unit) }
-  .map { screenStateProvider() }
-  .distinctUntilChanged()
 
-@Tag private annotation class CurrentScreenStateProvider
+fun interface CurrentScreenStateProvider {
+  suspend fun currentScreenState(): ScreenState
+}
 
 @Provide fun currentScreenStateProvider(
   context: DefaultContext,
   keyguardManager: @SystemService KeyguardManager,
   powerManager: @SystemService PowerManager,
-): @CurrentScreenStateProvider suspend () -> ScreenState = {
+) = CurrentScreenStateProvider {
   withContext(context) {
     if (powerManager.isInteractive) {
       if (keyguardManager.isDeviceLocked) {

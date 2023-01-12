@@ -36,37 +36,40 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   PORTRAIT_DOWN(true),
 
   // 270 degrees
-  LANDSCAPE_RIGHT(false)
+  LANDSCAPE_RIGHT(false);
+
+  @JvmInline value class Provider(val displayRotation: Flow<DisplayRotation>)
 }
 
-context(Logger) @Provide fun displayRotation(
+context(Logger, ScreenState.Provider) @Provide fun displayRotationProvider(
   context: AppContext,
   coroutineContext: MainContext,
-  screenState: () -> Flow<ScreenState>,
   windowManager: @SystemService WindowManager
-): Flow<DisplayRotation> = screenState()
-  .flatMapLatest { currentScreenState ->
-    if (currentScreenState.isOn) {
-      callbackFlow {
-        val listener = object :
-          OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
-          override fun onOrientationChanged(orientation: Int) {
-            trySend(orientation)
+) = DisplayRotation.Provider(
+  screenState
+    .flatMapLatest { currentScreenState ->
+      if (currentScreenState.isOn) {
+        callbackFlow {
+          val listener = object :
+            OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
+            override fun onOrientationChanged(orientation: Int) {
+              trySend(orientation)
+            }
           }
+          listener.enable()
+          awaitClose { listener.disable() }
         }
-        listener.enable()
-        awaitClose { listener.disable() }
+          .flowOn(coroutineContext)
+          .map { windowManager.getCurrentDisplayRotation() }
+          .onStart { log { "sub for rotation" } }
+          .onCompletion { log { "dispose rotation" } }
+      } else {
+        log { "do not observe rotation while screen is off" }
+        infiniteEmptyFlow()
       }
-        .flowOn(coroutineContext)
-        .map { windowManager.getCurrentDisplayRotation() }
-        .onStart { log { "sub for rotation" } }
-        .onCompletion { log { "dispose rotation" } }
-    } else {
-      log { "do not observe rotation while screen is off" }
-      infiniteEmptyFlow()
     }
-  }
-  .distinctUntilChanged()
+    .distinctUntilChanged()
+)
 
 private fun WindowManager.getCurrentDisplayRotation() = when (defaultDisplay.rotation) {
   Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP

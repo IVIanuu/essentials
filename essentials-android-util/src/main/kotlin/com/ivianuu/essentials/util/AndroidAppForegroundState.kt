@@ -17,18 +17,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
-@Provide fun androidAppForegroundState(
+@Provide fun androidAppForegroundStateContext(
   foregroundActivity: Flow<ForegroundActivity>
-): Flow<AppForegroundState> =
+) = AppForegroundState.Provider(
   foregroundActivity.map {
     if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND
   }
+)
 
+context(AppForegroundState.Provider)
 @Provide fun androidAppForegroundScopeHandler(
-  foregroundElementsFactory: (Scope<AppForegroundScope>) -> Elements<AppForegroundScope>,
-  foregroundState: Flow<AppForegroundState>
+  foregroundElementsFactory: (Scope<AppForegroundScope>) -> Elements<AppForegroundScope>
 ) = ScopeWorker<UiScope> {
-  foregroundState.collectLatest { state ->
+  appForegroundState.collectLatest { state ->
     if (state == AppForegroundState.FOREGROUND) {
       bracket(
         acquire = {
