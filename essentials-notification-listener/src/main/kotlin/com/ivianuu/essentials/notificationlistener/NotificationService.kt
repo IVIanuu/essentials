@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 
 interface NotificationService {
   val notifications: Flow<List<StatusBarNotification>>
-  val events: Flow<NotificationEvent>
+  val notificationEvents: Flow<NotificationEvent>
 
   suspend fun openNotification(notification: Notification): Result<Unit, Throwable>
 
@@ -33,7 +33,7 @@ interface NotificationService {
   override val notifications: Flow<List<StatusBarNotification>>
     get() = ref.flatMapLatest { it?.notifications ?: flowOf(emptyList()) }
 
-  override val events: Flow<NotificationEvent>
+  override val notificationEvents: Flow<NotificationEvent>
     get() = ref.flatMapLatest { it?.events ?: emptyFlow() }
 
   override suspend fun openNotification(notification: Notification) =
