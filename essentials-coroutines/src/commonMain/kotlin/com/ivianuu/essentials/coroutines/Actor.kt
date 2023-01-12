@@ -20,7 +20,7 @@ interface Actor<T> : CoroutineScope {
   fun tryAct(message: T): ChannelResult<Unit>
 }
 
-fun <T> CoroutineScope.actor(
+context(CoroutineScope) fun <T> actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
@@ -53,7 +53,7 @@ private class ActorImpl<T>(
   }
 }
 
-fun CoroutineScope.actor(
+context(CoroutineScope) fun actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64
 ): Actor<suspend () -> Unit> = actor(context, capacity) {

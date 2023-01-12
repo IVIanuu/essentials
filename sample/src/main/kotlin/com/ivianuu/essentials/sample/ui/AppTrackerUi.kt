@@ -7,10 +7,8 @@ package com.ivianuu.essentials.sample.ui
 import android.app.NotificationManager
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.coroutines.state
@@ -19,6 +17,8 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.state.setValue
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold

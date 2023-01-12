@@ -23,10 +23,8 @@ import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -37,6 +35,8 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.guarantee
+import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.state.setValue
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.MainContext

@@ -7,7 +7,6 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive

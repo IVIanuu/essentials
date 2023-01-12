@@ -25,7 +25,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +46,7 @@ import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
 import com.ivianuu.essentials.state.bindResource
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button

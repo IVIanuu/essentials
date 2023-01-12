@@ -14,7 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +22,7 @@ import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionManager
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold

@@ -4,15 +4,15 @@
 
 package com.ivianuu.essentials.ui.animation.util
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
+import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.state.setValue
 
 fun Modifier.fractionalTranslation(
   xFraction: Float = 0f,

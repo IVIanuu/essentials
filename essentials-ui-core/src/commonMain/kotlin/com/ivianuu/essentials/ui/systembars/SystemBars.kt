@@ -11,10 +11,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -25,6 +23,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
+import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.state.setValue
 import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.WindowInsetsProvider

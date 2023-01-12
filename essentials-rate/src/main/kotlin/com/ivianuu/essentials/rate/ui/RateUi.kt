@@ -18,10 +18,8 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,7 +29,9 @@ import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.state.produce
+import com.ivianuu.essentials.state.setValue
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton

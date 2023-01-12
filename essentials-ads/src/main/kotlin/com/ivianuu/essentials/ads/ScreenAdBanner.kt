@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -25,6 +24,7 @@ import com.ivianuu.essentials.resource.map
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
 import com.ivianuu.essentials.state.bindResource
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.state.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold

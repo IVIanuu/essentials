@@ -12,10 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +28,9 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
+import com.ivianuu.essentials.state.getValue
 import com.ivianuu.essentials.state.produce
+import com.ivianuu.essentials.state.setValue
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
