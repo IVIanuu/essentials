@@ -22,8 +22,7 @@ context(ResourceProvider) @Provide fun powerDialogAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
-@Provide fun powerDialogActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
-) = ActionExecutor<PowerDialogActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+context(GlobalActionExecutor)
+    @Provide fun powerDialogActionExecutor() = ActionExecutor<PowerDialogActionId> {
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

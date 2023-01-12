@@ -35,12 +35,12 @@ context(ResourceProvider) @Provide fun quickSettingsAction() = Action(
   icon = staticActionIcon(Icons.Default.Settings)
 )
 
+context(GlobalActionExecutor)
 @Provide
 @SuppressLint("NewApi")
 fun quickSettingsActionExecutor(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
-  globalActionExecutor: GlobalActionExecutor,
   serviceFlow: Flow<EsAccessibilityService?>,
   systemBuildInfo: SystemBuildInfo
 ) = ActionExecutor<QuickSettingsActionId> {
@@ -68,7 +68,7 @@ fun quickSettingsActionExecutor(
   }.getOrElse { true }
 
   if (targetState)
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
   else
     closeSystemDialogs()
 }

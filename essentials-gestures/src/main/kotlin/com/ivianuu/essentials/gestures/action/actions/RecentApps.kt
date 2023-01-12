@@ -21,8 +21,7 @@ context(ResourceProvider) @Provide fun recentAppsAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
-@Provide fun recentAppsActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
-) = ActionExecutor<RecentAppsActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+context(GlobalActionExecutor)
+    @Provide fun recentAppsActionExecutor() = ActionExecutor<RecentAppsActionId> {
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

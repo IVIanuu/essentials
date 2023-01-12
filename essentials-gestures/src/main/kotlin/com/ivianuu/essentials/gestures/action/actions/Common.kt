@@ -93,16 +93,16 @@ context(ToastContext) @Provide fun actionIntentSender(
 
 fun interface CloseSystemDialogsUseCase : suspend () -> Result<Unit, Throwable>
 
+context(GlobalActionExecutor)
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide
 fun closeSystemDialogsUseCase(
   context: AppContext,
-  globalActionExecutor: GlobalActionExecutor,
   systemBuildInfo: SystemBuildInfo
 ) = CloseSystemDialogsUseCase {
   catch {
     if (systemBuildInfo.sdk >= 31)
-      globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+      performGlobalAction(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
       context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }

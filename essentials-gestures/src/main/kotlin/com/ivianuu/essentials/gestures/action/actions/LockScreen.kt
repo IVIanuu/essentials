@@ -32,15 +32,15 @@ context(ResourceProvider) @Provide fun lockScreenAction(
   )
 )
 
+context(GlobalActionExecutor)
 @SuppressLint("InlinedApi")
 @Provide
 fun lockScreenActionExecutor(
   actionRootCommandRunner: ActionRootCommandRunner,
-  globalActionExecutor: GlobalActionExecutor,
   systemBuildInfo: SystemBuildInfo,
 ) = ActionExecutor<LockScreenActionId> {
   if (systemBuildInfo.sdk >= 28) {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
   } else {
     actionRootCommandRunner("input keyevent 26")
   }

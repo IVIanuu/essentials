@@ -25,10 +25,9 @@ context(ResourceProvider) @Provide fun lastAppNativeAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_repeat)
 )
 
-@Provide fun lastAppNativeActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
-) = ActionExecutor<LastAppNativeActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+context(GlobalActionExecutor)
+    @Provide fun lastAppNativeActionExecutor() = ActionExecutor<LastAppNativeActionId> {
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
   delay(250)
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

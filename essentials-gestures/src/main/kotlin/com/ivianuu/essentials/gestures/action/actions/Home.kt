@@ -25,12 +25,11 @@ context(ResourceProvider) @Provide fun homeAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_action_home)
 )
 
-context(ActionIntentSender) @Provide fun homeActionExecutor(
-  closeSystemDialogs: CloseSystemDialogsUseCase,
-  globalActionExecutor: GlobalActionExecutor,
+context(ActionIntentSender, GlobalActionExecutor) @Provide fun homeActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase
 ) = ActionExecutor<HomeActionId> {
   if (!needsHomeIntentWorkaround) {
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
   } else {
     closeSystemDialogs()
 

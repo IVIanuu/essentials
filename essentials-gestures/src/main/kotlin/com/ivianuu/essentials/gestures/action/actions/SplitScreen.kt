@@ -22,8 +22,7 @@ context(ResourceProvider) @Provide fun splitScreenAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-@Provide fun splitScreenActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
-) = ActionExecutor<SplitScreenActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+context(GlobalActionExecutor)
+    @Provide fun splitScreenActionExecutor() = ActionExecutor<SplitScreenActionId> {
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

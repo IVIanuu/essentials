@@ -33,10 +33,10 @@ context(ResourceProvider) @Provide fun notificationsAction() = Action(
   icon = staticActionIcon(Icons.Default.Notifications)
 )
 
+context(GlobalActionExecutor)
 @Provide fun notificationsActionExecutor(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
-  globalActionExecutor: GlobalActionExecutor,
   serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
@@ -62,7 +62,7 @@ context(ResourceProvider) @Provide fun notificationsAction() = Action(
   }.getOrElse { true }
 
   if (targetState)
-    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
   else
     closeSystemDialogs()
 }

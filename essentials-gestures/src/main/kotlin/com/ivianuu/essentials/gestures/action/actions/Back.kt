@@ -22,8 +22,6 @@ context(ResourceProvider) @Provide fun backAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_action_back)
 )
 
-@Provide fun backActionExecutor(
-  globalActionExecutor: GlobalActionExecutor
-) = ActionExecutor<BackActionId> {
-  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
+context(GlobalActionExecutor) @Provide fun backActionExecutor() = ActionExecutor<BackActionId> {
+  performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
 }
