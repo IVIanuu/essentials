@@ -22,6 +22,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
@@ -37,7 +38,7 @@ import kotlinx.coroutines.isActive
 
 object ForegroundKey : Key<Unit>
 
-context(ForegroundManager, NamedCoroutineScope<KeyUiScope>, NotificationFactory)
+context(ForegroundManager, KeyUiContext<ForegroundKey>, NotificationFactory)
     @SuppressLint("NewApi")
     @Provide fun foregroundUi() = SimpleKeyUi<ForegroundKey> {
   Scaffold(

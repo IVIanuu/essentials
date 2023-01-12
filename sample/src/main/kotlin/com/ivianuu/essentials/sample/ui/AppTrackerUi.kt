@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
@@ -44,7 +45,7 @@ object AppTrackerKey : Key<Unit>
 context(
 CurrentAppProvider,
 ForegroundManager,
-NamedCoroutineScope<KeyUiScope>,
+KeyUiContext<AppTrackerKey>,
 NotificationFactory,
 PermissionManager,
 ToastContext

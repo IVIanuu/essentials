@@ -16,6 +16,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
@@ -28,8 +29,12 @@ import kotlinx.coroutines.launch
 
 object ActionsKey : Key<Unit>
 
-context(ActionRepository, ExecuteActionUseCase, NamedCoroutineScope<UiScope>, Toaster)
-    @Provide fun actionsUi(navigator: Navigator) = SimpleKeyUi<ActionsKey> {
+context(
+ActionRepository,
+ExecuteActionUseCase,
+KeyUiContext<ActionsKey>,
+Toaster
+) @Provide fun actionsUi() = SimpleKeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {

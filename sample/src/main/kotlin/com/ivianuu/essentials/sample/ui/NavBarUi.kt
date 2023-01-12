@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -43,8 +44,7 @@ import kotlinx.coroutines.launch
 
 object NavBarKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>, PermissionManager) @Provide fun navBarUi(
-  navigator: Navigator,
+context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
   navBarPref: DataStore<NavBarPrefs>
 ) = SimpleKeyUi<NavBarKey> {
   Scaffold(

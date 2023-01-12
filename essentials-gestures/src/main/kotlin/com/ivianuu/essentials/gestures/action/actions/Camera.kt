@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -47,6 +48,7 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
 )
 
 context(
+AccessibilityServiceProvider,
 ActionIntentSender,
 CameraManager,
 CurrentAppProvider,
@@ -54,9 +56,7 @@ Logger,
 PackageManager,
 ScreenState.Provider
 )
-    @Provide fun cameraActionExecutor(
-  accessibilityServiceRef: Flow<EsAccessibilityService?>
-) = ActionExecutor<CameraActionId> {
+    @Provide fun cameraActionExecutor() = ActionExecutor<CameraActionId> {
   val cameraApp = resolveActivity(
     Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
     PackageManager.MATCH_DEFAULT_ONLY
@@ -77,7 +77,7 @@ ScreenState.Provider
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
-        accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
+        accessibilityService.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
     cameraApp.activityInfo!!.packageName == currentApp.first()
   )
     suspendCancellableCoroutine<Boolean> { cont ->

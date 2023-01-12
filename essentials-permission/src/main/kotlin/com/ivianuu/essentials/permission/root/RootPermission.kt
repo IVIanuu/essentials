@@ -22,7 +22,7 @@ abstract class RootPermission(
 context(Shell) @Provide fun <P : RootPermission> rootPermissionStateProvider() =
   PermissionStateProvider<P> { isShellAvailable() }
 
-context(Shell, ToastContext)@Provide fun <P : RootPermission> rootPermissionRequestHandler() =
+context(Shell, ToastContext) @Provide fun <P : RootPermission> rootPermissionRequestHandler() =
   PermissionRequestHandler<P> {
     if (!isShellAvailable()) showToast(R.string.es_no_root)
   }

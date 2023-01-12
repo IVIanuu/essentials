@@ -24,6 +24,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 
 object PermissionsKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>, PermissionManager)
+context(KeyUiContext<PermissionsKey>, PermissionManager)
     @Provide fun permissionUi() = SimpleKeyUi<PermissionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }

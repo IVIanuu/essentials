@@ -12,5 +12,7 @@ fun interface GlobalActionExecutor {
   suspend fun performGlobalAction(action: Int): Boolean
 }
 
-@Provide fun performGlobalAction(ref: Flow<EsAccessibilityService?>) =
-  GlobalActionExecutor { action -> ref.first()?.performGlobalAction(action) ?: false }
+context(AccessibilityServiceProvider) @Provide fun performGlobalAction() =
+  GlobalActionExecutor { action ->
+    accessibilityService.first()?.performGlobalAction(action) ?: false
+  }

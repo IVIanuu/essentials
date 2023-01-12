@@ -19,6 +19,7 @@ import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
@@ -33,7 +34,7 @@ import kotlinx.serialization.Serializable
 
 object CheckAppsKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>) @Provide fun checkAppsUi(
+context(KeyUiContext<CheckAppsKey>) @Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate

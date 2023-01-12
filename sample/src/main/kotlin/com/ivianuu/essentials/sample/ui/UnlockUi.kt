@@ -18,6 +18,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.unlock.ScreenActivator
@@ -34,7 +35,7 @@ import kotlinx.coroutines.launch
 
 object UnlockKey : Key<Unit>
 
-context(ScreenActivator, ScreenState.Provider, ScreenUnlocker, NamedCoroutineScope<KeyUiScope>, Toaster)
+context(KeyUiContext<UnlockKey>, ScreenActivator, ScreenState.Provider, ScreenUnlocker, Toaster)
     @Provide fun unlockUi() = SimpleKeyUi<UnlockKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }

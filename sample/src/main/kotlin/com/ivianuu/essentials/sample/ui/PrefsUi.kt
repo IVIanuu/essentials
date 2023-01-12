@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -43,9 +44,8 @@ import kotlinx.serialization.Serializable
 
 object PrefsKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>) @Provide fun prefsUi(
-  pref: DataStore<SamplePrefs>,
-  navigator: Navigator
+context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
+  pref: DataStore<SamplePrefs>
 ) = SimpleKeyUi<PrefsKey> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {

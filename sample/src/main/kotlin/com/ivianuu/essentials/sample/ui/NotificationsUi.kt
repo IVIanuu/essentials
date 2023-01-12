@@ -54,6 +54,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
@@ -160,7 +161,7 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-context(AppContext, NamedCoroutineScope<KeyUiScope>, NotificationService, PermissionManager)
+context(AppContext, KeyUiContext<NotificationsKey>, NotificationService, PermissionManager)
     @Provide fun notificationsModel() = Model {
   NotificationsModel(
     hasPermissions = permissionState(listOf(typeKeyOf<SampleNotificationsPermission>())).bindResource(),

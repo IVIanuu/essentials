@@ -9,6 +9,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -23,11 +24,8 @@ data class SingleChoiceListKey<T : Any>(
   @Inject val renderable: UiRenderer<T>
 ) : PopupKey<T>
 
-@Provide fun singleChoiceListUi(
-  key: SingleChoiceListKey<Any>,
-  navigator: Navigator,
-  strings: CommonStrings
-) = SimpleKeyUi<SingleChoiceListKey<Any>> {
+context(KeyUiContext<SingleChoiceListKey<Any>>, CommonStrings)
+    @Provide fun singleChoiceListUi() = SimpleKeyUi<SingleChoiceListKey<Any>> {
   DialogScaffold {
     SingleChoiceListDialog(
       items = key.items,
@@ -39,7 +37,7 @@ data class SingleChoiceListKey<T : Any>(
       title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(strings.cancel)
+          Text(cancel)
         }
       }
     )

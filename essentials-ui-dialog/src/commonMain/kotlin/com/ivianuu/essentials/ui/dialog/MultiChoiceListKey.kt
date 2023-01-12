@@ -13,6 +13,7 @@ import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -27,11 +28,8 @@ data class MultiChoiceListKey<T : Any>(
   @Inject val renderable: UiRenderer<T>
 ) : PopupKey<Set<T>>
 
-@Provide fun multiChoiceListUi(
-  key: MultiChoiceListKey<Any>,
-  navigator: Navigator,
-  strings: CommonStrings
-) = SimpleKeyUi<MultiChoiceListKey<Any>> {
+context(KeyUiContext<MultiChoiceListKey<Any>>, CommonStrings)
+    @Provide fun multiChoiceListUi() = SimpleKeyUi<MultiChoiceListKey<Any>> {
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
@@ -45,11 +43,11 @@ data class MultiChoiceListKey<T : Any>(
       title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(strings.cancel)
+          Text(cancel)
         }
 
         TextButton(onClick = action { navigator.pop(key, selectedItems) }) {
-          Text(strings.ok)
+          Text(ok)
         }
       }
     )

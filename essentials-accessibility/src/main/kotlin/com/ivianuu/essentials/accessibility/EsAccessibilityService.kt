@@ -20,6 +20,7 @@ import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -39,7 +40,8 @@ class EsAccessibilityService : AccessibilityService() {
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
-    serviceComponent.accessibilityServiceRef.value = this
+    serviceComponent.accessibilityServiceRef.accessibilityService
+      .cast<MutableStateFlow<EsAccessibilityService?>>().value = this
     val accessibilityComponent = serviceComponent.accessibilityComponentFactory(Scope(), this)
       .also { this.accessibilityComponent = it }
 
@@ -87,12 +89,15 @@ class EsAccessibilityService : AccessibilityService() {
     log { "service disconnected" }
     accessibilityComponent?.scope?.dispose()
     accessibilityComponent = null
-    serviceComponent.accessibilityServiceRef.value = null
+    serviceComponent.accessibilityServiceRef.accessibilityService
+      .cast<MutableStateFlow<EsAccessibilityService?>>().value = null
     return super.onUnbind(intent)
   }
+}
 
+@JvmInline value class AccessibilityServiceProvider(val accessibilityService: Flow<EsAccessibilityService?>) {
   companion object {
-    @Provide val accessibilityServiceRef = MutableStateFlow<EsAccessibilityService?>(null)
+    @Provide val default = AccessibilityServiceProvider(MutableStateFlow(null))
   }
 }
 
@@ -101,7 +106,7 @@ data class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
   val accessibilityComponentFactory: (Scope<AccessibilityScope>, EsAccessibilityService) -> AccessibilityComponent,
   val logger: Logger,
-  val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
+  val accessibilityServiceRef: AccessibilityServiceProvider
 )
 
 @Provide data class AccessibilityComponent(

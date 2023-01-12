@@ -13,6 +13,7 @@ import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -27,11 +28,8 @@ data class TextInputKey(
   val predicate: (String) -> Boolean = { true }
 ) : PopupKey<String>
 
-@Provide fun textInputUi(
-  key: TextInputKey,
-  navigator: Navigator,
-  strings: CommonStrings
-) = SimpleKeyUi<TextInputKey> {
+context(KeyUiContext<TextInputKey>, CommonStrings)
+    @Provide fun textInputUi() = SimpleKeyUi<TextInputKey> {
   DialogScaffold {
     var currentValue by remember { mutableStateOf(key.initial) }
     TextInputDialog(
@@ -39,10 +37,10 @@ data class TextInputKey(
       onValueChange = { currentValue = it },
       label = { Text(key.label) },
       keyboardOptions = key.keyboardOptions,
-      title = key.title?.let { { Text(key.title) } },
+      title = key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(strings.cancel)
+          Text(cancel)
         }
 
         val currentValueIsOk = remember(currentValue) { key.predicate(currentValue) }
@@ -50,7 +48,7 @@ data class TextInputKey(
         TextButton(
           enabled = currentValueIsOk,
           onClick = action { navigator.pop(key, currentValue) }
-        ) { Text(strings.ok) }
+        ) { Text(ok) }
       }
     )
   }

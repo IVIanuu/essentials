@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.ListItem
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -25,10 +26,8 @@ data class ListKey<T : Any>(
   @Inject val renderable: UiRenderer<T>,
 ) : PopupKey<T>
 
-@Provide fun listKeyUi(
-  key: ListKey<Any>,
-  navigator: Navigator
-) = SimpleKeyUi<ListKey<Any>> {
+context(KeyUiContext<ListKey<Any>>)
+    @Provide fun listKeyUi() = SimpleKeyUi<ListKey<Any>> {
   DialogScaffold {
     Dialog(
       title = key.title?.let { { Text(it) } },

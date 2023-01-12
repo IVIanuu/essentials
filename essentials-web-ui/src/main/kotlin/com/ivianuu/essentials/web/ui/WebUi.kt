@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.LocalAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
@@ -38,7 +39,7 @@ import com.ivianuu.injekt.Provide
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 
-@Provide fun webUi(key: WebKey, navigator: Navigator) = SimpleKeyUi<WebKey> {
+context(KeyUiContext<WebKey>) @Provide fun webUi() = SimpleKeyUi<WebKey> {
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {

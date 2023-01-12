@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Notifications
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
@@ -33,17 +34,16 @@ context(ResourceProvider) @Provide fun notificationsAction() = Action(
   icon = staticActionIcon(Icons.Default.Notifications)
 )
 
-context(AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor)
-@Provide fun notificationsActionExecutor(
-  serviceFlow: Flow<EsAccessibilityService?>
-) = ActionExecutor<NotificationsActionId> {
+context(AccessibilityServiceProvider, AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor)
+    @Provide fun notificationsActionExecutor() = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
-    val service = serviceFlow.first()!!
+    val service = accessibilityService.first()!!
 
     val systemUiContext = createPackageContext("com.android.systemui", 0)
 
     val id = systemUiContext.resources.getIdentifier(
-      "accessibility_desc_notification_shade", "string", "com.android.systemui")
+      "accessibility_desc_notification_shade", "string", "com.android.systemui"
+    )
 
     val notificationShadeDesc = systemUiContext.resources.getString(id)
 

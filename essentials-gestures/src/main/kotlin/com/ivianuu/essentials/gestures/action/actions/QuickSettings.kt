@@ -14,6 +14,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
+import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
@@ -35,12 +36,15 @@ context(ResourceProvider) @Provide fun quickSettingsAction() = Action(
   icon = staticActionIcon(Icons.Default.Settings)
 )
 
-context(AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor, SystemBuildInfo)
-    @Provide @SuppressLint("NewApi") fun quickSettingsActionExecutor(
-  serviceFlow: Flow<EsAccessibilityService?>
-) = ActionExecutor<QuickSettingsActionId> {
+context(
+AccessibilityServiceProvider,
+AppContext,
+CloseSystemDialogsUseCase,
+GlobalActionExecutor,
+SystemBuildInfo) @Provide @SuppressLint("NewApi")
+fun quickSettingsActionExecutor() = ActionExecutor<QuickSettingsActionId> {
   val targetState = if (systemSdk < 28) true else catch {
-    val service = serviceFlow.first()!!
+    val service = accessibilityService.first()!!
 
     val systemUiContext = createPackageContext("com.android.systemui", 0)
 
