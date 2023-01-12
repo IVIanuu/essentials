@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.clipboard
 
+import android.content.ClipboardManager as AndroidClipboardManager
 import android.content.ClipData
-import android.content.ClipboardManager
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
 import com.ivianuu.essentials.catch
@@ -17,30 +17,30 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-interface Clipboard {
-  val text: Flow<String?>
+interface ClipboardManager {
+  val clipboardText: Flow<String?>
 
-  suspend fun updateText(value: String, showMessage: Boolean = true)
+  suspend fun updateClipboardText(value: String, showMessage: Boolean = true)
 }
 
-context(ToastContext) @Provide class ClipboardImpl(
-  private val clipboardManager: @SystemService ClipboardManager
-) : Clipboard {
-  override val text: Flow<String?>
+context(ToastContext) @Provide class ClipboardManagerImpl(
+  private val androidClipboardManager: @SystemService AndroidClipboardManager
+) : ClipboardManager {
+  override val clipboardText: Flow<String?>
     get() = callbackFlow<String?> {
-      val listener = ClipboardManager.OnPrimaryClipChangedListener {
-        val current = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+      val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
+        val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
         trySend(current)
       }
       listener.onPrimaryClipChanged()
 
-      clipboardManager.addPrimaryClipChangedListener(listener)
-      awaitClose { clipboardManager.removePrimaryClipChangedListener(listener) }
+      androidClipboardManager.addPrimaryClipChangedListener(listener)
+      awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
-  override suspend fun updateText(value: String, showMessage: Boolean) {
+  override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
     catch {
-      clipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
+      androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
     }
       .also { result ->
         if (showMessage) {
