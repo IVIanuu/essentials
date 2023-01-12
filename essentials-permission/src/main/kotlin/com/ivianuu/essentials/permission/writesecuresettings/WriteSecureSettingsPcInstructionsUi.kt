@@ -26,7 +26,7 @@ import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.PermissionStateFactory
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
@@ -184,12 +184,12 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, ToastContext) @Provide fun writeSecureSettingsPcInstructionsModel(
+context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, PermissionManager, ToastContext)
+    @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
-  developerModeSetting: DataStore<DeveloperMode>,
-  permissionStateFactory: PermissionStateFactory
+  developerModeSetting: DataStore<DeveloperMode>
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
@@ -201,7 +201,7 @@ context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, ToastContext) @Provi
     3 -> true
     4 -> produce(false) {
       while (true) {
-        value = permissionStateFactory(listOf(key.permissionKey)).first()
+        value = permissionState(listOf(key.permissionKey)).first()
         delay(1000)
       }
     }

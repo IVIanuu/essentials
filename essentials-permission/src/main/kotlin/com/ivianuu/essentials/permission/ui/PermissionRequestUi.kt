@@ -13,8 +13,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionStateFactory
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
@@ -68,14 +68,12 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-context(KeyUiContext<PermissionRequestKey>) @Provide fun permissionRequestModel(
+context(KeyUiContext<PermissionRequestKey>, PermissionManager) @Provide fun permissionRequestModel(
   appUiStarter: AppUiStarter,
-  permissions: Map<TypeKey<Permission>, Permission>,
-  permissionStateFactory: PermissionStateFactory,
-  requestHandlers: Map<TypeKey<Permission>, PermissionRequestHandler<Permission>>
+  requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
 ) = Model {
   LaunchedEffect(true) {
-    permissionStateFactory(key.permissionsKeys)
+    permissionState(key.permissionsKeys)
       .first { it }
     navigator.pop(key, true)
   }
@@ -85,12 +83,12 @@ context(KeyUiContext<PermissionRequestKey>) @Provide fun permissionRequestModel(
       .map { permissionKey ->
         UiPermission(
           permissionKey,
-          permissions[permissionKey]!!,
-          permissionStateFactory(listOf(permissionKey)).bind(false)
+          permission(permissionKey),
+          permissionState(listOf(permissionKey)).bind(false)
         )
       },
     grantPermission = action { permission ->
-      requestHandlers[permission.permissionKey]!!(permissions[permission.permissionKey]!!)
+      requestHandlers[permission.permissionKey]!!()(permission.permission)
       appUiStarter()
     }
   )

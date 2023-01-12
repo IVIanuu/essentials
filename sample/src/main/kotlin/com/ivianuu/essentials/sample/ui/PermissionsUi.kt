@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.permission.Permission
-import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.permission.runtime.RuntimePermission
@@ -35,9 +35,8 @@ import kotlinx.coroutines.launch
 
 object PermissionsKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>) @Provide fun permissionUi(
-  permissionRequester: PermissionRequester
-) = SimpleKeyUi<PermissionsKey> {
+context(NamedCoroutineScope<KeyUiScope>, PermissionManager)
+    @Provide fun permissionUi() = SimpleKeyUi<PermissionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {
@@ -45,7 +44,7 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun permissionUi(
       modifier = Modifier.center(),
       onClick = {
         launch {
-          permissionRequester(
+          requestPermissions(
             listOf(
               typeKeyOf<SampleCameraPermission>(),
               typeKeyOf<SamplePhonePermission>(),

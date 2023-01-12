@@ -11,8 +11,7 @@ import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionStateFactory
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.ToastContext
@@ -24,11 +23,9 @@ import kotlinx.coroutines.withContext
 
 fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
-context(Logger, ToastContext) @Provide fun executeActionUseCase(
+context(Logger, PermissionManager, ToastContext) @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   coroutineContext: DefaultContext,
-  permissionRequester: PermissionRequester,
-  permissionStateFactory: PermissionStateFactory,
   repository: ActionRepository,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker
@@ -39,10 +36,10 @@ context(Logger, ToastContext) @Provide fun executeActionUseCase(
       val action = repository.getAction(id)
 
       // check permissions
-      if (!permissionStateFactory(action.permissions).first()) {
+      if (!permissionState(action.permissions).first()) {
         log { "didn't had permissions for $id ${action.permissions}" }
         screenUnlocker()
-        permissionRequester(action.permissions)
+        requestPermissions(action.permissions)
         return@catch false
       }
 

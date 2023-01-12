@@ -39,8 +39,7 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.notificationlistener.NotificationService
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.notificationlistener.NotificationListenerPermission
 import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
@@ -63,7 +62,6 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 
@@ -162,31 +160,26 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-@Provide fun notificationsModel(
-  permissionState: Flow<PermissionState<SampleNotificationsPermission>>,
-  permissionRequester: PermissionRequester,
-  service: NotificationService,
-  C: AppContext,
-  S: NamedCoroutineScope<KeyUiScope>
-) = Model {
+context(AppContext, NamedCoroutineScope<KeyUiScope>, NotificationService, PermissionManager)
+    @Provide fun notificationsModel() = Model {
   NotificationsModel(
-    hasPermissions = permissionState.bindResource(),
-    notifications = service.notifications
+    hasPermissions = permissionState(listOf(typeKeyOf<SampleNotificationsPermission>())).bindResource(),
+    notifications = notifications
       .bind(emptyList())
       .map { it.toUiNotification() },
     requestPermissions = action {
-      permissionRequester(listOf(typeKeyOf<SampleNotificationsPermission>()))
+      requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
     },
     openNotification = action { notification ->
-      service.openNotification(notification.sbn.notification)
+      openNotification(notification.sbn.notification)
     },
     dismissNotification = action { notification ->
-      service.dismissNotification(notification.sbn.key)
+      dismissNotification(notification.sbn.key)
     }
   )
 }
 
-private fun StatusBarNotification.toUiNotification(@Inject C: AppContext) = UiNotification(
+context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)

@@ -10,8 +10,8 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
-import com.ivianuu.essentials.permission.PermissionState
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -19,8 +19,8 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
@@ -31,8 +31,9 @@ context(ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandl
   buildInfo: BuildInfo,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
+  permissionKey: TypeKey<P>,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
-  state: Flow<PermissionState<P>>
+  permissionManager: PermissionManager
 ) = PermissionRequestHandler<P> { permission ->
   race(
     {
@@ -46,7 +47,7 @@ context(ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandl
     },
     {
       // wait until user granted permission
-      while (!state.first()) delay(100)
+      while (!permissionManager.permissionState(listOf(permissionKey)).first()) delay(100)
     }
   )
 }

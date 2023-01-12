@@ -22,8 +22,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
-import com.ivianuu.essentials.permission.PermissionRequester
-import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -36,7 +35,6 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -44,11 +42,9 @@ import kotlinx.coroutines.launch
 
 object NavBarKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>) @Provide fun navBarUi(
+context(NamedCoroutineScope<KeyUiScope>, PermissionManager) @Provide fun navBarUi(
   navigator: Navigator,
-  navBarPref: DataStore<NavBarPrefs>,
-  permissionState: Flow<PermissionState<NavBarPermission>>,
-  permissionRequester: PermissionRequester
+  navBarPref: DataStore<NavBarPrefs>
 ) = SimpleKeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -70,7 +66,9 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun navBarUi(
         }
       }
 
-      val hasPermission by permissionState.collectAsState(false)
+      val hasPermission by permissionState(listOf(typeKeyOf<NavBarPermission>())).collectAsState(
+        false
+      )
 
       Box(
         modifier = Modifier.fillMaxWidth(),
@@ -98,7 +96,7 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun navBarUi(
             }
           } else {
             launch {
-              permissionRequester(listOf(typeKeyOf<NavBarPermission>()))
+              requestPermissions(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
         }

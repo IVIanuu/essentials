@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionPickerDelegate
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ui.ActionIcon
-import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.produceResource
@@ -130,10 +130,8 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-context(ActionRepository, KeyUiContext<ActionPickerKey>, ResourceProvider) @Provide fun actionPickerModel(
-  filter: ActionFilter,
-  permissionRequester: PermissionRequester
-) = Model {
+context(ActionRepository, KeyUiContext<ActionPickerKey>, PermissionManager, ResourceProvider)
+    @Provide fun actionPickerModel(filter: ActionFilter) = Model {
   ActionPickerModel(
     items = produceResource { getActionPickerItems(key, filter) },
     openActionSettings = action { item -> navigator.push(item.settingsKey!!) },
@@ -141,7 +139,7 @@ context(ActionRepository, KeyUiContext<ActionPickerKey>, ResourceProvider) @Prov
       val result = item.getResult() ?: return@action
       if (result is ActionPickerKey.Result.Action) {
         val action = getAction(result.actionId)
-        if (!permissionRequester(action.permissions))
+        if (!requestPermissions(action.permissions))
           return@action
       }
       navigator.pop(key, result)

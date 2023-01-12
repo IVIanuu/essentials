@@ -7,5 +7,7 @@ package com.ivianuu.essentials
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> Any?.cast(): T = this as T
 
+inline fun <T> Any?.unsafeCast(): T = this as T
+
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> Any?.safeAs(): T? = this as? T

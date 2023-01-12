@@ -16,9 +16,10 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
-import com.ivianuu.essentials.permission.PermissionState
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
@@ -28,18 +29,17 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-context(Logger) @Provide fun navBarManager(
+context(Logger, PermissionManager) @Provide fun navBarManager(
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
   forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   navBarFeatureSupported: NavBarFeatureSupported,
   nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-  permissionState: Flow<PermissionState<NavBarPermission>>,
   pref: DataStore<NavBarPrefs>,
   setOverscan: OverscanUpdater
-) = ScopeWorker<AppScope> worker@ {
+) = ScopeWorker<AppScope> worker@{
   if (!navBarFeatureSupported.value) return@worker
-  permissionState
+  permissionState(listOf<TypeKey<NavBarPermission>>())
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
         forceNavBarVisibleState

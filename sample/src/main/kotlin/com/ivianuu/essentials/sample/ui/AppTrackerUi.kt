@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.foreground.ForegroundManager
-import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.sample.R
@@ -41,10 +41,14 @@ import kotlinx.coroutines.launch
 
 object AppTrackerKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>, NotificationFactory, ToastContext) @Provide fun appTrackerUi(
-  currentApp: Flow<CurrentApp?>,
-  foregroundManager: ForegroundManager,
-  permissionRequester: PermissionRequester
+context(
+ForegroundManager,
+NamedCoroutineScope<KeyUiScope>,
+NotificationFactory,
+PermissionManager,
+ToastContext
+) @Provide fun appTrackerUi(
+  currentApp: Flow<CurrentApp?>
 ) = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }
 
@@ -53,7 +57,7 @@ context(NamedCoroutineScope<KeyUiScope>, NotificationFactory, ToastContext) @Pro
       val notifications = currentApp
         .map { AppTrackerNotification(it) }
         .stateIn(inject(), SharingStarted.Eagerly, AppTrackerNotification(null))
-      foregroundManager.runInForeground(notifications.value) {
+      runInForeground(notifications.value) {
         notifications.collect { updateNotification(it) }
       }
     }
@@ -65,7 +69,7 @@ context(NamedCoroutineScope<KeyUiScope>, NotificationFactory, ToastContext) @Pro
       modifier = Modifier.center(),
       onClick = {
         launch {
-          if (permissionRequester(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
+          if (requestPermissions(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
             isEnabled = !isEnabled
           }
         }

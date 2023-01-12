@@ -13,7 +13,7 @@ import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
-import com.ivianuu.essentials.permission.PermissionRequester
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.bind
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -62,8 +62,7 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-context(KeyUiContext<NavBarKey>, ResourceProvider) @Provide fun navBarModel(
-  permissionRequester: PermissionRequester,
+context(KeyUiContext<NavBarKey>, PermissionManager, ResourceProvider) @Provide fun navBarModel(
   pref: DataStore<NavBarPrefs>
 ) = Model {
   val prefs = pref.data.bind(NavBarPrefs())
@@ -72,7 +71,7 @@ context(KeyUiContext<NavBarKey>, ResourceProvider) @Provide fun navBarModel(
     updateHideNavBar = action { value ->
       if (!value) {
         pref.updateData { copy(hideNavBar = false) }
-      } else if (permissionRequester(listOf(typeKeyOf<NavBarPermission>()))) {
+      } else if (requestPermissions(listOf(typeKeyOf<NavBarPermission>()))) {
         pref.updateData { copy(hideNavBar = value) }
       }
     },

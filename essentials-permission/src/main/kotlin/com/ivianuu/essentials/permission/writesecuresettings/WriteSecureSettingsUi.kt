@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
-import com.ivianuu.essentials.permission.PermissionStateFactory
+import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
 import com.ivianuu.essentials.state.action
@@ -73,9 +73,9 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-context(KeyUiContext<WriteSecureSettingsKey>, ToastContext) @Provide fun writeSecureSettingsModel(
+context(KeyUiContext<WriteSecureSettingsKey>, PermissionManager, ToastContext)
+    @Provide fun writeSecureSettingsModel(
   buildInfo: BuildInfo,
-  permissionStateFactory: PermissionStateFactory,
   shell: Shell
 ) = Model {
   WriteSecureSettingsModel(
@@ -86,7 +86,7 @@ context(KeyUiContext<WriteSecureSettingsKey>, ToastContext) @Provide fun writeSe
     grantPermissionsViaRoot = action {
       shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
-          if (permissionStateFactory(listOf(key.permissionKey)).first()) {
+          if (permissionState(listOf(key.permissionKey)).first()) {
             showToast(R.string.es_secure_settings_permission_granted)
             navigator.pop(key)
           }
