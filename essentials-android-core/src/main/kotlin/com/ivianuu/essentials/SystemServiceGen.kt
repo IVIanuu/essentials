@@ -30,6 +30,7 @@ fun main() {
       add(PackageManager::class.java)
     }
     .groupBy { it.packageName }
+    .mapValues { it.value.sortedBy { it.simpleName } }
     .toMutableMap()
     .forEach { (packageName, services) ->
       file.resolve(packageName.replace(".", "/"))
@@ -46,10 +47,16 @@ fun main() {
               appendLine()
               appendLine("object SystemServiceModule {")
               services.forEach { service ->
-                appendLine(
+                append(
                   "  @Provide fun ${service.simpleName.decapitalize()}(context: Context): " +
-                      "${service.simpleName} =\n    context.getSystemService(${service.simpleName}::class.java)"
+                      "${service.simpleName} =\n    context."
                 )
+
+                if (service == PackageManager::class.java) {
+                  appendLine("packageManager")
+                } else {
+                  appendLine("getSystemService(${service.simpleName}::class.java)")
+                }
               }
 
               appendLine("}")
