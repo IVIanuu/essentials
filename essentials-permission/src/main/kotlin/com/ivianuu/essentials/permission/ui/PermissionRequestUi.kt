@@ -88,7 +88,7 @@ context(AppUiStarter, KeyUiContext<PermissionRequestKey>, PermissionManager)
         )
       },
     grantPermission = action { permission ->
-      requestHandlers[permission.permissionKey]!!()(permission.permission)
+      requestHandlers[permission.permissionKey]!!().requestPermission(permission.permission)
       startAppUi()
     }
   )

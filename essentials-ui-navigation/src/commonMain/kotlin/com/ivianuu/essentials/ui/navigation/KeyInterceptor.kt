@@ -6,8 +6,10 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.injekt.Provide
 
-fun interface KeyHandler<R> : suspend (Key<R>) -> (suspend () -> R?)? {
+fun interface KeyInterceptor<R> {
+  suspend operator fun invoke(key: Key<R>): (suspend () -> R?)?
+
   companion object {
-    @Provide val defaultKeyHandlers get() = emptyList<KeyHandler<*>>()
+    @Provide val defaultKeyInterceptors get() = emptyList<KeyInterceptor<*>>()
   }
 }

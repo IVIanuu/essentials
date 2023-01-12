@@ -33,15 +33,14 @@ interface BackupManager {
   suspend fun restoreBackup(): Result<Unit, Throwable>
 }
 
-context(Logger) @Provide class BackupManagerImpl(
+context(Logger, ProcessRestarter) @Provide class BackupManagerImpl(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
   private val buildInfo: BuildInfo,
   private val contentResolver: ContentResolver,
   private val context: IOContext,
   private val dataDir: DataDir,
-  private val navigator: Navigator,
-  private val processRestarter: ProcessRestarter
+  private val navigator: Navigator
 ) : BackupManager {
   override suspend fun createBackup(): Result<Unit, Throwable> = catch {
     withContext(coroutineContext + context) {
@@ -105,7 +104,7 @@ context(Logger) @Provide class BackupManagerImpl(
 
       zipInputStream.close()
 
-      processRestarter()
+      restartProcess()
     }
   }
 }

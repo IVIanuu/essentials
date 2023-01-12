@@ -70,7 +70,7 @@ data class AppPickerModel(
   val pickApp: (AppInfo) -> Unit
 ) {
   val filteredApps = allApps
-    .map { it.filter(appPredicate) }
+    .map { it.filter { appPredicate(it) } }
 }
 
 context(AppRepository, KeyUiContext<AppPickerKey>) @Provide fun appPickerModel() = Model {

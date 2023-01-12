@@ -136,7 +136,7 @@ private class NavigationContentStateChild(
       LocalKeyUiElements provides elements,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
-      decorateKeyUi {
+      decorateKeyUi.decorate {
         content()()
       }
 

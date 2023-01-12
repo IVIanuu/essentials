@@ -28,17 +28,19 @@ interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
   keyClass: KClass<K>
 ): Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>> = (keyClass to intentFactory) as Pair<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
 
-fun interface KeyIntentFactory<T> : (T) -> Intent
+fun interface KeyIntentFactory<T> {
+  suspend operator fun invoke(key: T): Intent
+}
 
 fun interface IntentAppUiStarter {
   suspend fun startAppUi(): ComponentActivity
 }
 
 context(IntentAppUiStarter)
-@Provide fun intentKeyHandler(
+    @Provide fun intentKeyHandler(
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
-) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key ->
+) = KeyInterceptor<Result<ActivityResult, Throwable>> handler@{ key ->
   if (key !is IntentKey) return@handler null
   val intentFactory = intentFactories()[key::class as KClass<IntentKey>]
     ?: return@handler null

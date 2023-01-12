@@ -6,7 +6,9 @@ package com.ivianuu.essentials.boot
 
 import com.ivianuu.injekt.Provide
 
-fun interface BootListener : () -> Unit {
+fun interface BootListener {
+  operator fun invoke()
+
   companion object {
     @Provide val defaultListeners get() = emptyList<BootListener>()
   }

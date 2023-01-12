@@ -14,11 +14,11 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
 fun interface KeyUiDecorator : Service<KeyUiDecorator> {
-  @Composable operator fun invoke(p1: @Composable () -> Unit)
+  @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
 fun interface DecorateKeyUi {
-  @Composable operator fun invoke(p1: @Composable () -> Unit)
+  @Composable fun decorate(content: @Composable () -> Unit)
 }
 
 context(Logger) @Provide fun decorateKeyUi(

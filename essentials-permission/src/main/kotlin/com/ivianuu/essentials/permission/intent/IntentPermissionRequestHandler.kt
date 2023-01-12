@@ -23,13 +23,14 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
-fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
+fun interface PermissionIntentFactory<P : Permission> {
+  suspend fun createPermissionIntent(permission: P): Intent
+}
 
 @JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
-context(ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandler(
+context(PermissionIntentFactory<P>, ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandler(
   buildInfo: BuildInfo,
-  intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   permissionKey: TypeKey<P>,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
@@ -40,7 +41,7 @@ context(ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandl
       if (showFindPermissionHint.value)
         showToast(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
-      catch { navigator.push(DefaultIntentKey(intentFactory(permission))) }
+      catch { navigator.push(DefaultIntentKey(createPermissionIntent(permission))) }
         .onFailure {
           showToast(R.string.es_grant_permission_manually)
         }

@@ -9,7 +9,9 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.apps.AppInfo
 import com.ivianuu.injekt.Provide
 
-fun interface AppPredicate : (AppInfo) -> Boolean
+fun interface AppPredicate {
+  operator fun invoke(app: AppInfo): Boolean
+}
 
 val DefaultAppPredicate = AppPredicate { true }
 

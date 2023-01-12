@@ -58,9 +58,13 @@ object PermissionModule {
   @Provide val defaultStateProviders get() = emptyList<Pair<TypeKey<Permission>, () -> PermissionStateProvider<Permission>>>()
 }
 
-fun interface PermissionStateProvider<P : Permission> : suspend (P) -> Boolean
+fun interface PermissionStateProvider<P : Permission> {
+  suspend fun isPermissionGranted(permission: P): Boolean
+}
 
-fun interface PermissionRequestHandler<P : Permission> : suspend (P) -> Unit
+fun interface PermissionRequestHandler<P : Permission> {
+  suspend fun requestPermission(permission: P)
+}
 
 internal val permissionRefreshes = EventFlow<Unit>()
 
@@ -69,7 +73,7 @@ internal val permissionRefreshes = EventFlow<Unit>()
 }
 
 private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
-  this(it)
+  requestPermission(it)
   permissionRefreshes.emit(Unit)
 }
 

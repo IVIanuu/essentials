@@ -31,7 +31,9 @@ import kotlinx.serialization.Serializable
   }
 }
 
-fun interface FirstRunHandler : suspend () -> Unit {
+fun interface FirstRunHandler {
+  suspend operator fun invoke()
+
   companion object {
     @Provide val defaultHandlers get() = emptyList<FirstRunHandler>()
   }

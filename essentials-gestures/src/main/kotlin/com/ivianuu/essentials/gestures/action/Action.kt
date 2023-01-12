@@ -46,7 +46,9 @@ abstract class ActionId(val value: String)
   provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
 
-fun interface ActionExecutor<I : ActionId> : suspend () -> Unit
+fun interface ActionExecutor<I : ActionId> {
+  suspend fun execute()
+}
 
 @Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
   id: I,

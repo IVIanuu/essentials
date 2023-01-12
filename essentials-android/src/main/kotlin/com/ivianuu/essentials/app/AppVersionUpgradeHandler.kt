@@ -15,7 +15,9 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 
-fun interface AppVersionUpgradeHandler : suspend (Int, Int) -> Unit {
+fun interface AppVersionUpgradeHandler {
+  suspend operator fun invoke(lastAppVersion: Int, appVersion: Int)
+
   companion object {
     @Provide val defaultHandlers get() = emptyList<AppVersionUpgradeHandler>()
   }

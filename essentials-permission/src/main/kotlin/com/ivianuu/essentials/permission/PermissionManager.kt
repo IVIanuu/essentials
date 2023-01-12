@@ -50,7 +50,7 @@ context(AppUiStarter, Logger) @Provide class PermissionManagerImpl(
             .onStart<Any?> { emit(Unit) }
             .map {
               withContext(context) {
-                stateProvider(permission)
+                stateProvider.isPermissionGranted(permission)
               }
             }
         }

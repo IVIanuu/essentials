@@ -12,7 +12,9 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
-fun interface ProcessRestarter : suspend () -> Unit
+fun interface ProcessRestarter {
+  suspend fun restartProcess()
+}
 
 context(Logger) @Provide fun processRestarter(
   buildInfo: BuildInfo,

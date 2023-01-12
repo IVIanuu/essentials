@@ -27,7 +27,9 @@ context(Logger) @Provide @InjektWorker class SampleWorker(
   }
 }
 
-fun interface SampleWorkScheduler : () -> Unit
+fun interface SampleWorkScheduler {
+  suspend fun scheduleWork()
+}
 
 @Provide fun sampleWorkScheduler(workManager: WorkManager) = SampleWorkScheduler {
   workManager.enqueue(OneTimeWorkRequestBuilder<SampleWorker>().build())

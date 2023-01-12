@@ -97,7 +97,7 @@ data class CheckableAppsModel(
   val deselectAll: () -> Unit
 ) {
   val checkableApps = allApps
-    .map { it.filter(appPredicate) }
+    .map { it.filter { appPredicate(it) } }
     .map { apps ->
       apps.map { app ->
         CheckableApp(

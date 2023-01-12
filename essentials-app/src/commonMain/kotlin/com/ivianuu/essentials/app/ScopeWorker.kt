@@ -13,9 +13,13 @@ import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
-fun interface ScopeWorker<N> : suspend () -> Unit, Service<ScopeWorker<N>>
+fun interface ScopeWorker<N> : Service<ScopeWorker<N>> {
+  suspend operator fun invoke()
+}
 
-fun interface ScopeWorkerRunner<N> : () -> Unit
+fun interface ScopeWorkerRunner<N> {
+  operator fun invoke()
+}
 
 context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
   nameKey: TypeKey<N>,

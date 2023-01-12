@@ -22,10 +22,9 @@ context(ResourceProvider) @Provide fun skipPreviousMediaAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_skip_previous)
 )
 
-@Provide fun skipPreviousMediaActionExecutor(
-  mediaActionSender: MediaActionSender
-) = ActionExecutor<SkipPreviousActionId> {
-  mediaActionSender(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+context(MediaActionSender)
+    @Provide fun skipPreviousMediaActionExecutor() = ActionExecutor<SkipPreviousActionId> {
+  sendMediaAction(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
 }
 
 @Provide inline val skipPreviousMediaActionSettingsKey: @ActionSettingsKey<SkipPreviousActionId> Key<Unit>

@@ -24,10 +24,9 @@ context(ResourceProvider) @Provide fun playPauseMediaAction() = Action(
   icon = staticActionIcon(Icons.Default.PlayArrow)
 )
 
-@Provide fun playPauseMediaActionExecutor(
-  mediaActionSender: MediaActionSender
-) = ActionExecutor<PlayPauseActionId> {
-  mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+context(MediaActionSender)
+    @Provide fun playPauseMediaActionExecutor() = ActionExecutor<PlayPauseActionId> {
+  sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
 @Provide inline val playPauseMediaActionSettingsKey: @ActionSettingsKey<PlayPauseActionId> Key<Unit>

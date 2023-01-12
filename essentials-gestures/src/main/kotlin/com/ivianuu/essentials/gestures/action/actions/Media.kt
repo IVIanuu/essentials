@@ -37,7 +37,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 
-fun interface MediaActionSender : suspend (Int) -> Unit
+fun interface MediaActionSender {
+  suspend fun sendMediaAction(keycode: Int)
+}
 
 @Provide fun mediaActionSender(
   context: AppContext,

@@ -29,14 +29,12 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-context(Logger, PermissionManager) @Provide fun navBarManager(
+context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater, PermissionManager) @Provide fun navBarManager(
   context: AppContext,
   displayRotation: Flow<DisplayRotation>,
   forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
   navBarFeatureSupported: NavBarFeatureSupported,
-  nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
-  pref: DataStore<NavBarPrefs>,
-  setOverscan: OverscanUpdater
+  pref: DataStore<NavBarPrefs>
 ) = ScopeWorker<AppScope> worker@{
   if (!navBarFeatureSupported.value) return@worker
   permissionState(listOf<TypeKey<NavBarPermission>>())
@@ -70,7 +68,7 @@ context(Logger, PermissionManager) @Provide fun navBarManager(
       }
     }
     .distinctUntilChanged()
-    .collect { it.apply(context, nonSdkInterfaceDetectionDisabler, setOverscan) }
+    .collect { it.apply(context) }
 }
 
 private sealed interface NavBarState {
@@ -78,11 +76,8 @@ private sealed interface NavBarState {
   object Visible : NavBarState
 }
 
-context(Logger) private suspend fun NavBarState.apply(
-  context: Context,
-  disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
-  setOverscan: OverscanUpdater
-) {
+context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
+    private suspend fun NavBarState.apply(context: Context) {
   log { "apply nav bar state $this" }
   catch {
     catch {
@@ -96,7 +91,7 @@ context(Logger) private suspend fun NavBarState.apply(
       )
       NavBarState.Visible -> Rect(0, 0, 0, 0)
     }
-    setOverscan(rect)
+    updateOverscan(rect)
   }.onFailure {
     log(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
   }

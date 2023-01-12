@@ -16,11 +16,11 @@ import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 
 fun interface UiDecorator : Service<UiDecorator> {
-  @Composable operator fun invoke(p1: @Composable () -> Unit)
+  @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
 fun interface DecorateUi {
-  @Composable operator fun invoke(p1: @Composable () -> Unit)
+  @Composable fun decorate(content: @Composable () -> Unit)
 }
 
 context(Logger) @Provide fun decorateUi(

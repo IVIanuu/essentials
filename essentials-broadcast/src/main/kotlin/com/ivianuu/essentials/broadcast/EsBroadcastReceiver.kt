@@ -33,7 +33,9 @@ class EsBroadcastReceiver : BroadcastReceiver() {
   val scope: NamedCoroutineScope<AppScope>
 )
 
-fun interface BroadcastHandler : suspend (Intent) -> Unit {
+fun interface BroadcastHandler {
+  suspend operator fun invoke(intent: Intent)
+
   companion object {
     inline operator fun invoke(
       action: String,

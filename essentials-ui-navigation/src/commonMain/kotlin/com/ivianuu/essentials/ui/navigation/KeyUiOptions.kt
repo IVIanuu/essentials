@@ -18,7 +18,9 @@ data class KeyUiOptions(
   ) : this(transition, transition, opaque)
 }
 
-fun interface KeyUiOptionsFactory<K : Key<*>> : (Scope<KeyUiScope>, K) -> KeyUiOptions
+fun interface KeyUiOptionsFactory<K : Key<*>> {
+  operator fun invoke(scope: Scope<KeyUiScope>, key: K): KeyUiOptions
+}
 
 fun <K : Key<*>> noOpKeyUiOptionFactory() = KeyUiOptionsFactory<K> { _, _ -> defaultKeyUiOptions }
 

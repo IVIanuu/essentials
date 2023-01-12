@@ -17,7 +17,9 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
-fun interface NonSdkInterfaceDetectionDisabler : suspend () -> Unit
+fun interface NonSdkInterfaceDetectionDisabler {
+  suspend fun disableNonSdkInterfaceDetection()
+}
 
 context(Logger) @Provide fun nonSdkInterfaceDetectionDisabler(
   systemBuildInfo: SystemBuildInfo,
@@ -62,7 +64,9 @@ internal typealias HiddenApiPolicyPieApps = @HiddenApiPolicyPieAppsTag Int
   0
 )
 
-fun interface OverscanUpdater : (Rect) -> Unit
+fun interface OverscanUpdater {
+  suspend fun updateOverscan(rect: Rect)
+}
 
 context(Logger)
 @SuppressLint("PrivateApi") @Provide fun overscanUpdater() = OverscanUpdater { rect ->

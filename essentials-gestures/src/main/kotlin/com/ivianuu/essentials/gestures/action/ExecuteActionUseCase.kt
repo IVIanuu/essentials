@@ -66,7 +66,7 @@ ToastContext)
       log { "fire $id" }
 
       // fire
-      getActionExecutor(id)()
+      getActionExecutor(id).execute()
       return@catch true
     }.onFailure {
       it.printStackTrace()

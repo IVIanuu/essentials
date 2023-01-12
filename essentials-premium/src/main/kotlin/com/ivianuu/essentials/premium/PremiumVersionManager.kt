@@ -133,7 +133,9 @@ context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
   }
 }
 
-fun interface PremiumDowngradeHandler : suspend () -> Unit {
+fun interface PremiumDowngradeHandler {
+  suspend operator fun invoke()
+
   companion object {
     @Provide val defaultHandlers get() = emptyList<PremiumDowngradeHandler>()
   }

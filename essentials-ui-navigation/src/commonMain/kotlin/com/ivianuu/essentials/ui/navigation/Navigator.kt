@@ -67,7 +67,7 @@ suspend fun Navigator.clear() {
 }
 
 context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class NavigatorImpl(
-  private val keyHandlers: List<KeyHandler<*>>,
+  private val keyInterceptors: List<KeyInterceptor<*>>,
   rootKey: RootKey? = null
 ) : Navigator {
   val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
@@ -93,7 +93,8 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class 
           @Suppress("UNCHECKED_CAST")
           key as Key<Any?>
 
-          val keyHandle = keyHandlers.firstNotNullOfOrNull { it.cast<KeyHandler<Any?>>()(key) }
+          val keyHandle =
+            keyInterceptors.firstNotNullOfOrNull { it.cast<KeyInterceptor<Any?>>()(key) }
 
           if (keyHandle == null) {
             add(key)

@@ -7,6 +7,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.sample.SampleWorkScheduler
+import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -19,13 +20,13 @@ import com.ivianuu.injekt.Provide
 
 object WorkKey : Key<Unit>
 
-@Provide fun workUi(sampleWorkScheduler: SampleWorkScheduler) = SimpleKeyUi<WorkKey> {
+context(SampleWorkScheduler) @Provide fun workUi() = SimpleKeyUi<WorkKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {
     Button(
       modifier = Modifier.center(),
-      onClick = { sampleWorkScheduler() }
+      onClick = action { scheduleWork() }
     ) {
       Text("Perform work")
     }

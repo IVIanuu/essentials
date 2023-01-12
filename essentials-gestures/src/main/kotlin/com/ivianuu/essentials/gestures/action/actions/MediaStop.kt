@@ -22,10 +22,8 @@ context(ResourceProvider) @Provide fun stopMediaAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_stop)
 )
 
-@Provide fun stopMediaActionExecutor(
-  mediaActionSender: MediaActionSender
-) = ActionExecutor<StopActionId> {
-  mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
+context(MediaActionSender) @Provide fun stopMediaActionExecutor() = ActionExecutor<StopActionId> {
+  sendMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
 @Provide inline val stopMediaActionSettingsKey: @ActionSettingsKey<StopActionId> Key<Unit>
