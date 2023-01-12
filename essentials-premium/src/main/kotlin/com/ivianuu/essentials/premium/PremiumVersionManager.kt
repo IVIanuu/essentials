@@ -6,7 +6,7 @@ package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ads.ShowAds
+import com.ivianuu.essentials.ads.AdsEnabledProvider
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
@@ -122,9 +122,10 @@ typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
-    @Provide fun showAds(): StateFlow<ShowAds> = isPremiumVersion
-  .map { ShowAds(!it) }
-  .state(SharingStarted.Eagerly, ShowAds(false))
+    @Provide fun premiumAdsEnabledProvider() = AdsEnabledProvider(
+  isPremiumVersion
+    .state(SharingStarted.Eagerly, false)
+)
 
 @Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {

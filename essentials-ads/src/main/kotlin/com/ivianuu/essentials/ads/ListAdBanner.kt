@@ -9,6 +9,7 @@ import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.Key
@@ -36,9 +37,8 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
 fun interface ListAdBanner : ListDecorator
 
-context(IsAdFeatureEnabledUseCase) @Provide fun adBannerListDecorator(
-  config: ListAdBannerConfig? = null,
-  showAdsFlow: StateFlow<ShowAds>
+context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerListDecorator(
+  config: ListAdBannerConfig? = null
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {
@@ -46,7 +46,7 @@ context(IsAdFeatureEnabledUseCase) @Provide fun adBannerListDecorator(
         LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
       if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) &&
-        showAdsFlow.collectAsState().value.value
+        adsEnabled.bind()
       )
         AdBanner(config)
     }

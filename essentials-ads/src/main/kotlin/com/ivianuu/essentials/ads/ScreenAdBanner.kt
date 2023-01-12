@@ -21,7 +21,6 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
@@ -40,9 +39,8 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 fun interface ScreenAdBanner : KeyUiDecorator
 
-context(IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyUiDecorator(
+context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyUiDecorator(
   config: ScreenAdBannerConfig? = null,
-  showAdsFlow: StateFlow<ShowAds>,
   key: Key<*>
 ) = ScreenAdBanner decorator@{ content ->
   if (config == null) {
@@ -56,18 +54,18 @@ context(IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyUiDecorator(
   }
 
   Column {
-    val showAds by showAdsFlow.collectAsState()
+    val adsEnabled by adsEnabled.collectAsState()
 
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (!showAds.value) currentInsets
+        LocalInsets provides if (!adsEnabled) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (showAds.value) {
+    if (adsEnabled) {
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

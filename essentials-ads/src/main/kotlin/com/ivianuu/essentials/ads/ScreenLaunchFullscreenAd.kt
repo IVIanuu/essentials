@@ -24,8 +24,7 @@ import kotlinx.serialization.Serializable
 
 data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4) {
   companion object {
-    @Provide val defaultConfig
-      get() = ScreenLaunchFullscreenAdConfig()
+    @Provide val defaultConfig get() = ScreenLaunchFullscreenAdConfig()
   }
 }
 
@@ -35,16 +34,15 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-context(IsAdFeatureEnabledUseCase, Logger) @Provide fun screenLaunchFullScreenObserver(
+context(AdsEnabledProvider, IsAdFeatureEnabledUseCase, Logger) @Provide fun screenLaunchFullScreenObserver(
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
-  pref: DataStore<ScreenLaunchPrefs>,
-  showAds: Flow<ShowAds>
+  pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeWorker<UiScope> {
-  showAds
+  adsEnabled
     .flatMapLatest {
-      if (!it.value) infiniteEmptyFlow()
+      if (!it) infiniteEmptyFlow()
       else navigator.launchEvents()
     }
     .collectLatest {

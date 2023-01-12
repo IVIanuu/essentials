@@ -68,13 +68,13 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 }
 
-context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<UiScope> class FullScreenAdImpl(
+context(AdsEnabledProvider, Logger, NamedCoroutineScope<AppScope>)
+@Provide @Scoped<UiScope> class FullScreenAdImpl(
   private val id: FullScreenAdId,
   private val context: AppContext,
   private val config: FullScreenAdConfig,
   private val foregroundActivity: Flow<ForegroundActivity>,
-  private val mainContext: MainContext,
-  private val showAds: Flow<ShowAds>
+  private val mainContext: MainContext
 ) : FullScreenAd {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
@@ -87,13 +87,13 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<UiScope> class F
   }
 
   override suspend fun load() = catch {
-    if (!showAds.first().value) return@catch false
+    if (!adsEnabled.first()) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
   override suspend fun loadAndShow() = catch {
-    if (!showAds.first().value) return@catch false
+    if (!adsEnabled.first()) return@catch false
     getOrCreateCurrentAd()
       .also { preload() }
       .invoke()
@@ -156,11 +156,9 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<UiScope> class F
 
 class AdLoadingException(val error: LoadAdError) : RuntimeException()
 
-@Provide fun preloadFullScreenAdWorker(
-  fullScreenAd: FullScreenAd,
-  showAds: Flow<ShowAds>
-) = ScopeWorker<UiScope> {
-  showAds
-    .filter { it.value }
+context(AdsEnabledProvider)
+    @Provide fun preloadFullScreenAdWorker(fullScreenAd: FullScreenAd) = ScopeWorker<UiScope> {
+  adsEnabled
+    .filter { it }
     .collect { fullScreenAd.preload() }
 }
