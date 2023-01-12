@@ -23,14 +23,12 @@ interface ResourceProvider {
 }
 
 context(AppContext) @Provide class ResourceProviderImpl : ResourceProvider {
-  context(ResourceLoader<T>) override fun <T> loadResource(id: Int): T =
-    with(this@AppContext as Context) { load(id) }
+  context(ResourceLoader<T>) override fun <T> loadResource(id: Int): T = load(id)
 
   context(ResourceLoaderWithArgs<T>) override fun <T> loadResourceWithArgs(
     id: Int,
     vararg args: Any?
-  ): T =
-    with(this@AppContext as Context) { load(id, *args) }
+  ): T = load(id, *args)
 }
 
 // todo make fun interface once fixed

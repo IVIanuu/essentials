@@ -24,7 +24,7 @@ abstract class IgnoreBatteryOptimizationsPermission(
 
 context(BuildInfo, PowerManager)
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
-) = PermissionStateProvider<P> { this@PowerManager.isIgnoringBatteryOptimizations(packageName) }
+) = PermissionStateProvider<P> { isIgnoringBatteryOptimizations(packageName) }
 
 context(BuildInfo)
 @SuppressLint("BatteryLife")

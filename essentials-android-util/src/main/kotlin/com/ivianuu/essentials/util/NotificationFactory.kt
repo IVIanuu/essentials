@@ -29,7 +29,7 @@ inline val NotificationCompat.Builder.context: Context
 context(AppContext, NotificationManager)
     @Provide fun notificationFactory() =
   NotificationFactory { channelId, channelName, importance, builder ->
-    this@NotificationManager.createNotificationChannel(
+    createNotificationChannel(
       NotificationChannel(
         channelId,
         channelName,

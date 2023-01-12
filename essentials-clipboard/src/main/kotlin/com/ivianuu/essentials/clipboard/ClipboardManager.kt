@@ -33,12 +33,12 @@ context(AndroidClipboardManager, ToastContext)
       }
       listener.onPrimaryClipChanged()
 
-      this@AndroidClipboardManager.addPrimaryClipChangedListener(listener)
-      awaitClose { this@AndroidClipboardManager.removePrimaryClipChangedListener(listener) }
+      addPrimaryClipChangedListener(listener)
+      awaitClose { removePrimaryClipChangedListener(listener) }
     }
 
   override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
-    catch { this@AndroidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
+    catch { setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage) {
           showToast(

@@ -1,5 +1,4 @@
 package android.app.admin
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

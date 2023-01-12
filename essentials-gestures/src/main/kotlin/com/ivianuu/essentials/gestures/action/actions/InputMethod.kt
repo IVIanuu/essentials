@@ -23,5 +23,5 @@ context(ResourceProvider) @Provide fun inputMethodAction() = Action(
 
 context(InputMethodManager)
     @Provide fun inputMethodActionExecutor() = ActionExecutor<InputMethodActionId> {
-  this@InputMethodManager.showInputMethodPicker()
+  showInputMethodPicker()
 }

@@ -1,5 +1,4 @@
 package android.media
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

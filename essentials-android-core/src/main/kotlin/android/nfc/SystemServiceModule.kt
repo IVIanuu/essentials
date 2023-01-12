@@ -1,5 +1,4 @@
 package android.nfc
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

@@ -13,6 +13,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.MainContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.launch
 
 fun interface Toaster {
@@ -23,7 +24,7 @@ context(AppContext, MainContext, NamedCoroutineScope<AppScope>)
     @Provide fun toaster() = Toaster { message ->
   launch(this@MainContext) {
     Toast.makeText(
-      this@AppContext,
+      inject(),
       message,
       Toast.LENGTH_SHORT
     ).show()

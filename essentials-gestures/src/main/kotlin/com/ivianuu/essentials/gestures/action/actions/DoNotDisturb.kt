@@ -34,7 +34,7 @@ context(ResourceProvider) @Provide fun doNotDisturbAction(icon: DoNotDisturbIcon
 
 context(NotificationManager)
     @Provide fun doNotDisturbActionExecutor() = ActionExecutor<DoNotDisturbAction> {
-  this@NotificationManager.setInterruptionFilter(
+  setInterruptionFilter(
     if (currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_PRIORITY)
       NotificationManager.INTERRUPTION_FILTER_PRIORITY else NotificationManager.INTERRUPTION_FILTER_ALL
   )

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
-context(CoroutineScope) inline fun <T> Flow<T>.launch() = launchIn(this@CoroutineScope)
+context(CoroutineScope) inline fun <T> Flow<T>.launch() = launchIn(inject())
 
 context(CoroutineScope) inline fun <T> Flow<T>.share(
   started: SharingStarted,
@@ -24,5 +25,5 @@ context(CoroutineScope) inline fun <T> Flow<T>.state(
   initialValue: T
 ) = stateIn(this@CoroutineScope, started, initialValue)
 
-context(CoroutineScope) inline fun <T> Flow<T>.produce() = produceIn(this@CoroutineScope)
+context(CoroutineScope) inline fun <T> Flow<T>.produce() = produceIn(inject())
 

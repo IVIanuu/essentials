@@ -23,7 +23,7 @@ context(ResourceProvider) @Provide fun volumeAction() = Action(
 
 context(AudioManager)
     @Provide fun volumeActionExecutor() = ActionExecutor<VolumeActionId> {
-  this@AudioManager.adjustStreamVolume(
+  adjustStreamVolume(
     AudioManager.STREAM_MUSIC,
     AudioManager.ADJUST_SAME,
     AudioManager.FLAG_SHOW_UI

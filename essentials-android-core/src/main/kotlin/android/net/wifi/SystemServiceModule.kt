@@ -1,5 +1,4 @@
 package android.net.wifi
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

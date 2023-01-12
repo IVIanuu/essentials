@@ -86,13 +86,13 @@ ToastContext
     catch {
       val cameraId = cameraIdList[0]
       log { "enable torch" }
-      this@CameraManager.setTorchMode(cameraId, true)
+      setTorchMode(cameraId, true)
       _torchEnabled.value = true
 
       // todo remove dummy block param once fixed
       onCancel(block = { awaitCancellation() }) {
         log { "disable torch on cancel" }
-        catch { this@CameraManager.setTorchMode(cameraId, false) }
+        catch { setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     }.onFailure {

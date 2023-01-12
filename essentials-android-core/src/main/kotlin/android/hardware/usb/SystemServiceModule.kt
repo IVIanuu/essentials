@@ -1,5 +1,4 @@
 package android.hardware.usb
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

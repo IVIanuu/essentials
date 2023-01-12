@@ -31,7 +31,7 @@ context(AppOpsManager, BuildInfo)
 @Provide
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
 ) = PermissionStateProvider<P> {
-  this@AppOpsManager.checkOpNoThrow(
+  checkOpNoThrow(
     AppOpsManager.OPSTR_GET_USAGE_STATS,
     Process.myUid(),
     packageName

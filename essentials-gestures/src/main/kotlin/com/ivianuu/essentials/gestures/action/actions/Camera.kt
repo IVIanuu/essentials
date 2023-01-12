@@ -68,7 +68,7 @@ ScreenState.Provider
 
   val frontCamera = cameraIdList
     .firstOrNull {
-      this@CameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
+      getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
@@ -81,18 +81,17 @@ ScreenState.Provider
     cameraApp.activityInfo!!.packageName == currentApp.first()
   )
     suspendCancellableCoroutine<Boolean> { cont ->
-      this@CameraManager.registerAvailabilityCallback(object :
-        CameraManager.AvailabilityCallback() {
+      registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
         override fun onCameraAvailable(cameraId: String) {
           super.onCameraAvailable(cameraId)
-          this@CameraManager.unregisterAvailabilityCallback(this)
+          unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
             catch { cont.resume(true) }
         }
 
         override fun onCameraUnavailable(cameraId: String) {
           super.onCameraUnavailable(cameraId)
-          this@CameraManager.unregisterAvailabilityCallback(this)
+          unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
             catch { cont.resume(false) }
         }

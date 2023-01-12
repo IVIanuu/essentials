@@ -1,5 +1,4 @@
 package android.view.accessibility
-
 import android.content.Context
 import com.ivianuu.injekt.Provide
 

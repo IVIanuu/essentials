@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -28,7 +29,7 @@ context(CoroutineScope) fun <K, T> RefCountedResource(
   timeout: Duration,
   create: suspend (K) -> T,
   release: (suspend (K, T) -> Unit)? = null,
-): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout, this@CoroutineScope)
+): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout, inject())
 
 private class RefCountedReleaseImpl<K, T>(
   private val create: suspend (K) -> T,
