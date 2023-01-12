@@ -52,15 +52,19 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-context(BillingService, Logger, NamedCoroutineScope<AppScope>, ToastContext)
+context(
+AppUiStarter,
+BillingService,
+Logger,
+NamedCoroutineScope<AppScope>,
+ScreenUnlocker,
+ToastContext)
 @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
-  private val appUiStarter: AppUiStarter,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
   private val navigator: Navigator,
   private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
-  oldPremiumVersionSkus: List<OldPremiumVersionSku>,
-  private val screenUnlocker: ScreenUnlocker
+  oldPremiumVersionSkus: List<OldPremiumVersionSku>
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
@@ -95,8 +99,8 @@ context(BillingService, Logger, NamedCoroutineScope<AppScope>, ToastContext)
 
     launch {
       showToast(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
-      if (!screenUnlocker()) return@launch
-      appUiStarter()
+      if (!unlockScreen()) return@launch
+      startAppUi()
       navigator.push(GoPremiumKey(showTryBasicOption = false))
     }
 

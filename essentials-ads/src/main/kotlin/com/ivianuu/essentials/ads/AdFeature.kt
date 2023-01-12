@@ -35,7 +35,9 @@ interface AdFeature
   }
 }
 
-fun interface IsAdFeatureEnabledUseCase : (KClass<out Key<*>>, AdFeature) -> Boolean
+fun interface IsAdFeatureEnabledUseCase {
+  fun isAdFeatureEnabled(keyClass: KClass<out Key<*>>, feature: AdFeature): Boolean
+}
 
 @Provide fun isAdFeatureEnabledUseCase(
   featuresByKey: Map<KClass<out Key<*>>, AdFeatures<*>>

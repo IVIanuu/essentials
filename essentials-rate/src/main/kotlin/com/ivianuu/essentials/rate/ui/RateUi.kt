@@ -29,9 +29,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.rate.R
-import com.ivianuu.essentials.rate.domain.DisplayShowNeverUseCase
-import com.ivianuu.essentials.rate.domain.ShowLaterUseCase
-import com.ivianuu.essentials.rate.domain.ShowNeverUseCase
+import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.state.produce
 import com.ivianuu.essentials.ui.dialog.Dialog
@@ -118,15 +116,10 @@ data class RateModel(
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-context(KeyUiContext<RateKey>) @Provide fun rateModel(
-  buildInfo: BuildInfo,
-  displayShowNever: DisplayShowNeverUseCase,
-  showLater: ShowLaterUseCase,
-  showNever: ShowNeverUseCase
-) = Model {
+context(KeyUiContext<RateKey>, RateUseCases) @Provide fun rateModel(buildInfo: BuildInfo) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
-    displayShowNever = produce(false) { displayShowNever() },
+    displayShowNever = produce(false) { shouldDisplayShowNever() },
     packageName = buildInfo.packageName,
     rating = rating,
     showLater = action { showLater() },

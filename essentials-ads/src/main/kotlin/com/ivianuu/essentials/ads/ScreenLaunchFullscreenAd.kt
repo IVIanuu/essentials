@@ -35,8 +35,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-context(Logger) @Provide fun screenLaunchFullScreenObserver(
-  isFeatureEnabled: IsAdFeatureEnabledUseCase,
+context(IsAdFeatureEnabledUseCase, Logger) @Provide fun screenLaunchFullScreenObserver(
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAd: FullScreenAd,
   navigator: Navigator,
@@ -46,7 +45,7 @@ context(Logger) @Provide fun screenLaunchFullScreenObserver(
   showAds
     .flatMapLatest {
       if (!it.value) infiniteEmptyFlow()
-      else navigator.launchEvents(isFeatureEnabled)
+      else navigator.launchEvents()
     }
     .collectLatest {
       val launchCount = pref
@@ -61,14 +60,14 @@ context(Logger) @Provide fun screenLaunchFullScreenObserver(
     }
 }
 
-private fun Navigator.launchEvents(isFeatureEnabled: IsAdFeatureEnabledUseCase): Flow<Unit> {
+context(IsAdFeatureEnabledUseCase) private fun Navigator.launchEvents(): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->
       val launchedKeys = currentBackStack
         .filter {
           it !in lastBackStack &&
-              isFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
+              isAdFeatureEnabled(it::class, ScreenLaunchFullscreenAdFeature)
         }
       (if (currentBackStack.size > 1 && launchedKeys.isNotEmpty()) Unit
       else null)

@@ -30,8 +30,7 @@ interface PermissionManager {
   suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean
 }
 
-context(Logger) @Provide class PermissionManagerImpl(
-  private val appUiStarter: () -> AppUiStarter,
+context(AppUiStarter, Logger) @Provide class PermissionManagerImpl(
   private val context: DefaultContext,
   private val navigator: Navigator,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,
@@ -64,7 +63,7 @@ context(Logger) @Provide class PermissionManagerImpl(
       if (permissions.all { permissionState(listOf(it)).first() })
         return@withContext true
 
-      appUiStarter()()
+      startAppUi()
 
       val result = navigator.push(PermissionRequestKey(permissions)) == true
       log { "request permissions result $permissions -> $result" }

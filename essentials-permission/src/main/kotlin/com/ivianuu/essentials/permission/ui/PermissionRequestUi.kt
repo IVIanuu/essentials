@@ -68,8 +68,8 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-context(KeyUiContext<PermissionRequestKey>, PermissionManager) @Provide fun permissionRequestModel(
-  appUiStarter: AppUiStarter,
+context(AppUiStarter, KeyUiContext<PermissionRequestKey>, PermissionManager)
+    @Provide fun permissionRequestModel(
   requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
 ) = Model {
   LaunchedEffect(true) {
@@ -89,7 +89,7 @@ context(KeyUiContext<PermissionRequestKey>, PermissionManager) @Provide fun perm
       },
     grantPermission = action { permission ->
       requestHandlers[permission.permissionKey]!!()(permission.permission)
-      appUiStarter()
+      startAppUi()
     }
   )
 }

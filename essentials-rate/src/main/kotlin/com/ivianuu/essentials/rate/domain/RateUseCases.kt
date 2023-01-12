@@ -18,50 +18,46 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
-fun interface RateOnPlayUseCase : suspend () -> Unit
+interface RateUseCases {
+  suspend fun rateOnPlay()
 
-@Provide fun rateOnPlayUseCase(
-  buildInfo: BuildInfo,
-  navigator: Navigator,
-  pref: DataStore<RatePrefs>
-) = RateOnPlayUseCase {
-  catch {
-    navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
-    pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
-  }.onFailure { it.printStackTrace() }
+  suspend fun shouldDisplayShowNever(): Boolean
+
+  suspend fun showNever()
+
+  suspend fun showLater()
 }
 
-fun interface DisplayShowNeverUseCase : suspend () -> Boolean
-
-@Provide fun displayShowNeverUseCase(pref: DataStore<RatePrefs>) = DisplayShowNeverUseCase {
-  pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
-}
-
-fun interface ShowNeverUseCase : suspend () -> Unit
-
-@Provide fun showNeverUseCase(
-  key: Key<*>,
-  navigator: Navigator,
-  pref: DataStore<RatePrefs>
-) = ShowNeverUseCase {
-  pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
-  navigator.pop(key)
-}
-
-fun interface ShowLaterUseCase : suspend () -> Unit
-
-context(Clock) @Provide fun showLaterUseCase(
-  key: Key<*>,
-  navigator: Navigator,
-  pref: DataStore<RatePrefs>
-) = ShowLaterUseCase {
-  val now = now()
-  pref.updateData {
-    copy(
-      launchTimes = 0,
-      installTime = now.inWholeMilliseconds,
-      feedbackState = RatePrefs.FeedbackState.LATER
-    )
+context(Clock) @Provide class RateUsecasesImpl(
+  private val buildInfo: BuildInfo,
+  private val key: Key<*>,
+  private val navigator: Navigator,
+  private val pref: DataStore<RatePrefs>
+) : RateUseCases {
+  override suspend fun rateOnPlay() {
+    catch {
+      navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
+      pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
+    }.onFailure { it.printStackTrace() }
   }
-  navigator.pop(key)
+
+  override suspend fun shouldDisplayShowNever(): Boolean =
+    pref.data.first().feedbackState == RatePrefs.FeedbackState.LATER
+
+  override suspend fun showNever() {
+    pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.NEVER) }
+    navigator.pop(key)
+  }
+
+  override suspend fun showLater() {
+    val now = now()
+    pref.updateData {
+      copy(
+        launchTimes = 0,
+        installTime = now.inWholeMilliseconds,
+        feedbackState = RatePrefs.FeedbackState.LATER
+      )
+    }
+    navigator.pop(key)
+  }
 }

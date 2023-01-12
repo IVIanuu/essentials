@@ -13,7 +13,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
-import com.ivianuu.essentials.rate.domain.RateOnPlayUseCase
+import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
 import com.ivianuu.essentials.state.action
@@ -142,12 +142,11 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-context(KeyUiContext<AboutKey>, ResourceProvider) @Provide fun aboutModel(
+context(KeyUiContext<AboutKey>, RateUseCases, ResourceProvider) @Provide fun aboutModel(
   buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
-  email: DeveloperEmail,
-  rateOnPlayUseCase: RateOnPlayUseCase
+  email: DeveloperEmail
 ) = Model {
   AboutModel(
     version = buildInfo.versionName,
@@ -156,7 +155,7 @@ context(KeyUiContext<AboutKey>, ResourceProvider) @Provide fun aboutModel(
     showDonate = donations != null,
     donate = action { navigator.push(DonationKey) },
     openLicenses = action { navigator.push(LicenseKey) },
-    rate = action { rateOnPlayUseCase() },
+    rate = action { rateOnPlay() },
     openMoreApps = action {
       navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     },

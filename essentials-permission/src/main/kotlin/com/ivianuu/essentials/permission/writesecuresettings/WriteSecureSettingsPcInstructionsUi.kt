@@ -184,10 +184,13 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, PermissionManager, ToastContext)
+context(
+AppUiStarter,
+KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
+PermissionManager,
+ToastContext)
     @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
-  appUiStarter: AppUiStarter,
   buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>
 ) = Model {
@@ -234,14 +237,14 @@ context(KeyUiContext<WriteSecureSettingsPcInstructionsKey>, PermissionManager, T
             ?.onFailure { showToast(R.string.open_phone_info_failed) }
         }
       )
-      appUiStarter()
+      startAppUi()
     },
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
         { navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
-      appUiStarter()
+      startAppUi()
     }
   )
 }

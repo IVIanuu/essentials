@@ -40,8 +40,7 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 fun interface ScreenAdBanner : KeyUiDecorator
 
-@Provide fun adBannerKeyUiDecorator(
-  isFeatureEnabled: IsAdFeatureEnabledUseCase,
+context(IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyUiDecorator(
   config: ScreenAdBannerConfig? = null,
   showAdsFlow: StateFlow<ShowAds>,
   key: Key<*>
@@ -51,7 +50,7 @@ fun interface ScreenAdBanner : KeyUiDecorator
     return@decorator
   }
 
-  if (!isFeatureEnabled(key::class, ScreenAdBannerFeature)) {
+  if (!isAdFeatureEnabled(key::class, ScreenAdBannerFeature)) {
     content()
     return@decorator
   }

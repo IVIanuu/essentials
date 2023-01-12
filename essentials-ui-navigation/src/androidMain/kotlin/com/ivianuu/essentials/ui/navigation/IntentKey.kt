@@ -30,10 +30,12 @@ interface IntentKey : Key<Result<ActivityResult, ActivityNotFoundException>>
 
 fun interface KeyIntentFactory<T> : (T) -> Intent
 
-fun interface IntentAppUiStarter : suspend () -> ComponentActivity
+fun interface IntentAppUiStarter {
+  suspend fun startAppUi(): ComponentActivity
+}
 
+context(IntentAppUiStarter)
 @Provide fun intentKeyHandler(
-  appUiStarter: IntentAppUiStarter,
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
 ) = KeyHandler<Result<ActivityResult, Throwable>> handler@ { key ->
@@ -42,7 +44,7 @@ fun interface IntentAppUiStarter : suspend () -> ComponentActivity
     ?: return@handler null
   val intent = intentFactory(key)
   return@handler {
-    val activity = appUiStarter()
+    val activity = startAppUi()
     withContext(context) {
       suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(

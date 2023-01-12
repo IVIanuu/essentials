@@ -34,11 +34,8 @@ import kotlinx.coroutines.launch
 
 object UnlockKey : Key<Unit>
 
-context(NamedCoroutineScope<KeyUiScope>, Toaster) @Provide fun unlockUi(
-  screenState: Flow<ScreenState>,
-  screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker
-) = SimpleKeyUi<UnlockKey> {
+context(ScreenActivator, ScreenUnlocker, NamedCoroutineScope<KeyUiScope>, Toaster)
+    @Provide fun unlockUi(screenState: Flow<ScreenState>) = SimpleKeyUi<UnlockKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {
@@ -53,7 +50,7 @@ context(NamedCoroutineScope<KeyUiScope>, Toaster) @Provide fun unlockUi(
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(1500)
-            val unlocked = screenUnlocker()
+            val unlocked = unlockScreen()
             showToast("Screen unlocked $unlocked")
           }
         }
@@ -67,7 +64,7 @@ context(NamedCoroutineScope<KeyUiScope>, Toaster) @Provide fun unlockUi(
             showToast("Turn the screen off")
             screenState.first { !it.isOn }
             delay(1500)
-            val activated = screenActivator()
+            val activated = activateScreen()
             showToast("Screen activated $activated")
           }
         }

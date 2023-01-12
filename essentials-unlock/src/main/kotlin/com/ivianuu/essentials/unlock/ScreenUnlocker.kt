@@ -16,7 +16,9 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.set
 
-fun interface ScreenUnlocker : suspend () -> Boolean
+fun interface ScreenUnlocker {
+  suspend fun unlockScreen(): Boolean
+}
 
 context(Logger) @Provide fun screenUnlocker(
   context: AppContext,

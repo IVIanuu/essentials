@@ -16,7 +16,9 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.set
 
-fun interface ScreenActivator : suspend () -> Boolean
+fun interface ScreenActivator {
+  suspend fun activateScreen(): Boolean
+}
 
 context(Logger) @Provide fun screenActivator(
   context: AppContext,

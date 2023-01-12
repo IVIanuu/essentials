@@ -36,18 +36,18 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
 fun interface ListAdBanner : ListDecorator
 
-@Provide fun adBannerListDecorator(
-  isFeatureEnabled: IsAdFeatureEnabledUseCase,
+context(IsAdFeatureEnabledUseCase) @Provide fun adBannerListDecorator(
   config: ListAdBannerConfig? = null,
   showAdsFlow: StateFlow<ShowAds>
-) = ListAdBanner decorator@ {
+) = ListAdBanner decorator@{
   if (config != null && isVertical) {
     item(null) {
       val key = catch {
         LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
-      if ((key == null || isFeatureEnabled(key, ListAdBannerFeature)) &&
-        showAdsFlow.collectAsState().value.value)
+      if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) &&
+        showAdsFlow.collectAsState().value.value
+      )
         AdBanner(config)
     }
   }

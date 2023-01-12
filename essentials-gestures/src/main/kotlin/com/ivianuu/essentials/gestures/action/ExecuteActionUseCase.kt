@@ -30,35 +30,34 @@ ActionRepository,
 CloseSystemDialogsUseCase,
 Logger,
 PermissionManager,
+ScreenActivator,
+ScreenUnlocker,
 ToastContext)
-    @Provide fun executeActionUseCase(
-  coroutineContext: DefaultContext,
-  screenActivator: ScreenActivator,
-  screenUnlocker: ScreenUnlocker
-) = ExecuteActionUseCase { id ->
-  withContext(coroutineContext) {
-    catch {
-      log { "execute $id" }
-      val action = getAction(id)
+    @Provide fun executeActionUseCase(coroutineContext: DefaultContext) =
+  ExecuteActionUseCase { id ->
+    withContext(coroutineContext) {
+      catch {
+        log { "execute $id" }
+        val action = getAction(id)
 
-      // check permissions
-      if (!permissionState(action.permissions).first()) {
-        log { "didn't had permissions for $id ${action.permissions}" }
-        screenUnlocker()
-        requestPermissions(action.permissions)
+        // check permissions
+        if (!permissionState(action.permissions).first()) {
+          log { "didn't had permissions for $id ${action.permissions}" }
+          unlockScreen()
+          requestPermissions(action.permissions)
         return@catch false
       }
 
-      if (action.turnScreenOn && !screenActivator()) {
-        log { "couldn't turn screen on for $id" }
-        return@catch false
-      }
+        if (action.turnScreenOn && !activateScreen()) {
+          log { "couldn't turn screen on for $id" }
+          return@catch false
+        }
 
       // unlock screen
-      if (action.unlockScreen && !screenUnlocker()) {
-        log { "couldn't unlock screen for $id" }
-        return@catch false
-      }
+        if (action.unlockScreen && !unlockScreen()) {
+          log { "couldn't unlock screen for $id" }
+          return@catch false
+        }
 
       // close system dialogs
       if (action.closeSystemDialogs)
