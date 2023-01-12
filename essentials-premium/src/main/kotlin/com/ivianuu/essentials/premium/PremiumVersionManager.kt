@@ -12,6 +12,8 @@ import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
+import com.ivianuu.essentials.coroutines.share
+import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -25,7 +27,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -35,8 +36,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -88,7 +87,7 @@ ToastContext)
         }
       }
     }
-    .shareIn(inject(), SharingStarted.Eagerly, 1)
+    .share(SharingStarted.Eagerly, 1)
 
   override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
 
@@ -125,7 +124,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
     @Provide fun showAds(): StateFlow<ShowAds> = isPremiumVersion
   .map { ShowAds(!it) }
-  .stateIn(this@NamedCoroutineScope, SharingStarted.Eagerly, ShowAds(false))
+  .state(SharingStarted.Eagerly, ShowAds(false))
 
 @Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {

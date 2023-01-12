@@ -13,6 +13,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
@@ -22,7 +23,6 @@ import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
@@ -92,7 +92,7 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class 
           log { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
-      .launchIn(inject())
+      .launch()
   }
 
   fun lastApp(): String? = if (isOnHomeScreen) recentApps.lastOrNull()

@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -30,11 +31,9 @@ import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
@@ -56,7 +55,7 @@ ToastContext
     LaunchedEffect(true) {
       val notifications = currentApp
         .map { AppTrackerNotification(it) }
-        .stateIn(inject(), SharingStarted.Eagerly, AppTrackerNotification(null))
+        .state(SharingStarted.Eagerly, AppTrackerNotification(null))
       runInForeground(notifications.value) {
         notifications.collect { updateNotification(it) }
       }

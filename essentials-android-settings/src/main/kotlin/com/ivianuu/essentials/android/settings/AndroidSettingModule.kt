@@ -7,18 +7,17 @@ package com.ivianuu.essentials.android.settings
 import android.content.ContentResolver
 import android.provider.Settings
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 class AndroidSettingModule<T : S, S>(
@@ -46,7 +45,7 @@ class AndroidSettingModule<T : S, S>(
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }
-      .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
+      .share(SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
     override suspend fun updateData(transform: T.() -> T): T {

@@ -15,6 +15,7 @@ import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
+import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
@@ -25,7 +26,6 @@ import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.IOContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -83,7 +82,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart { emit(readData()) }
       .distinctUntilChanged()
       .flowOn(coroutineContext)
-      .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
+      .share(SharingStarted.WhileSubscribed(), 1)
 
     val actor = actor(coroutineContext)
 

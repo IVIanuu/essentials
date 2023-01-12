@@ -10,13 +10,13 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 
 @JvmInline value class KeyboardVisible(val value: Boolean)
@@ -49,7 +48,7 @@ context(NamedCoroutineScope<AppScope>) @Provide fun keyboardVisible(
   }
   .map { KeyboardVisible(it) }
   .distinctUntilChanged()
-  .stateIn(inject(), SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
+  .state(SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

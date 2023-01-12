@@ -13,7 +13,6 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -152,7 +151,7 @@ class AndroidDbTest {
     var updates = 0
     db.query("SELECT * FROM MyEntity", null) {
       updates++
-    }.launchIn(this)
+    }.launch()
     advanceUntilIdle()
 
     updates shouldBe 1
@@ -181,7 +180,7 @@ class AndroidDbTest {
     var updates = 0
     db.query("SELECT * FROM MyEntity", "MyEntity") {
       updates++
-    }.launchIn(this)
+    }.launch()
     advanceUntilIdle()
 
     updates shouldBe 1

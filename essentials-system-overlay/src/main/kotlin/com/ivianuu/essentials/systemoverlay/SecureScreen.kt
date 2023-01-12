@@ -8,19 +8,18 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 
 @JvmInline value class IsOnSecureScreen(val value: Boolean)
 
@@ -41,7 +40,7 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide fun isOnSecureScreen(
   }
   .distinctUntilChanged()
   .onEach { log { "on secure screen changed: $it" } }
-  .stateIn(inject(), SharingStarted.WhileSubscribed(1000), IsOnSecureScreen(false))
+  .state(SharingStarted.WhileSubscribed(1000), IsOnSecureScreen(false))
 
 @Provide val isOnSecureScreenAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(

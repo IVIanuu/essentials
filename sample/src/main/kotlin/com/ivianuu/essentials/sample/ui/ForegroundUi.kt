@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Button
@@ -26,12 +27,10 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
@@ -56,7 +55,7 @@ context(ForegroundManager, NamedCoroutineScope<KeyUiScope>, NotificationFactory)
             delay(1000)
           }
         }
-          .stateIn(inject(), SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
+          .state(SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
         runInForeground(notifications.value) {
           notifications.collect { updateNotification(it) }
         }

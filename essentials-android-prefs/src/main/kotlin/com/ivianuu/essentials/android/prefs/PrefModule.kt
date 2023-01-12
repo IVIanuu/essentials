@@ -7,16 +7,15 @@ package com.ivianuu.essentials.android.prefs
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
+import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.elementNames
 import kotlinx.serialization.json.Json
@@ -41,7 +40,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
       override val data: Flow<T> = prefsDataStore.data
         .map { it.decode() }
         .distinctUntilChanged()
-        .shareIn(inject(), SharingStarted.WhileSubscribed(), 1)
+        .share(SharingStarted.WhileSubscribed(), 1)
 
       override suspend fun updateData(transform: T.() -> T): T =
         prefsDataStore.updateData {

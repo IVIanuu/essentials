@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.bracket
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -21,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -39,7 +39,7 @@ interface ForegroundScope : CoroutineScope {
 
 context(ForegroundScope) fun Flow<Notification>.updateNotification() {
   onEach { updateNotification(it) }
-    .launchIn(this@ForegroundScope)
+    .launch()
 }
 
 @JvmInline value class ForegroundId(val foregroundId: Int) {

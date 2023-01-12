@@ -8,12 +8,12 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
+import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.flow.shareIn
 
 @JvmInline value class RecentApps(val values: List<String>)
 
@@ -60,7 +59,7 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide fun recentApps(
   .map { RecentApps(it) }
   .distinctUntilChanged()
   .onEach { log { "recent apps changed $it" } }
-  .shareIn(inject(), SharingStarted.Eagerly, 1)
+  .share(SharingStarted.Eagerly, 1)
   .distinctUntilChanged()
 
 @Provide val recentAppsAccessibilityConfig: AccessibilityConfig
