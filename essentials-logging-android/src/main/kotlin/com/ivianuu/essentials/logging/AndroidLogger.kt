@@ -19,12 +19,11 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scope
 import kotlin.math.min
 
-@Provide class AndroidLogger(
-  override val isLoggingEnabled: LoggingEnabled,
-  private val systemBuildInfo: SystemBuildInfo
+context(SystemBuildInfo) @Provide class AndroidLogger(
+  override val isLoggingEnabled: LoggingEnabled
 ) : Logger {
   override fun logMessage(priority: Priority, tag: String, message: String) {
-    val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
+    val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemSdk >= 26) {
       tag
     } else {
       tag.substring(0, MAX_TAG_LENGTH)
@@ -71,4 +70,4 @@ import kotlin.math.min
   }
 }
 
-@Provide fun androidLoggingEnabled(buildInfo: BuildInfo) = LoggingEnabled(buildInfo.isDebug)
+context(BuildInfo) @Provide fun androidLoggingEnabled() = LoggingEnabled(isDebug)

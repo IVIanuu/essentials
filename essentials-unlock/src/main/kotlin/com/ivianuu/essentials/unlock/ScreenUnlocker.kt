@@ -20,8 +20,7 @@ fun interface ScreenUnlocker {
   suspend fun unlockScreen(): Boolean
 }
 
-context(Logger) @Provide fun screenUnlocker(
-  context: AppContext,
+context(AppContext, Logger) @Provide fun screenUnlocker(
   coroutineContext: DefaultContext,
   keyguardManager: @SystemService KeyguardManager
 ) = ScreenUnlocker {
@@ -38,11 +37,10 @@ context(Logger) @Provide fun screenUnlocker(
 
     log { "unlock screen $requestId" }
 
-    UnlockActivity.unlockScreen(context, requestId)
+    UnlockActivity.unlockScreen(requestId)
 
     return@withContext result.await().also {
       log { "unlock result $requestId -> $it" }
     }
   }
 }
-

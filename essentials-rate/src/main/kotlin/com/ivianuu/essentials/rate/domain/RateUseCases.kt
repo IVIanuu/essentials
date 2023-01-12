@@ -28,15 +28,14 @@ interface RateUseCases {
   suspend fun showLater()
 }
 
-context(Clock) @Provide class RateUsecasesImpl(
-  private val buildInfo: BuildInfo,
+context(BuildInfo, Clock) @Provide class RateUsecasesImpl(
   private val key: Key<*>,
   private val navigator: Navigator,
   private val pref: DataStore<RatePrefs>
 ) : RateUseCases {
   override suspend fun rateOnPlay() {
     catch {
-      navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
+      navigator.push(PlayStoreAppDetailsKey(packageName))
       pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
     }.onFailure { it.printStackTrace() }
   }

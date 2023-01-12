@@ -26,24 +26,24 @@ abstract class PackageUsageStatsPermission(
 @Provide fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)
 
+context(BuildInfo)
 @Suppress("DEPRECATION")
 @Provide
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
-  appOpsManager: @SystemService AppOpsManager,
-  buildInfo: BuildInfo,
+  appOpsManager: @SystemService AppOpsManager
 ) = PermissionStateProvider<P> {
   appOpsManager.checkOpNoThrow(
     AppOpsManager.OPSTR_GET_USAGE_STATS,
     Process.myUid(),
-    buildInfo.packageName
+    packageName
   ) == AppOpsManager.MODE_ALLOWED
 }
 
+context(BuildInfo)
 @Provide fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
-  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_USAGE_ACCESS_SETTINGS,
-    Uri.parse("package:${buildInfo.packageName}")
+    Uri.parse("package:${packageName}")
   )
 }

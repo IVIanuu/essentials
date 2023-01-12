@@ -31,14 +31,12 @@ context(ResourceProvider) @Provide fun killCurrentAppAction() = Action(
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-context(ActionRootCommandRunner, CurrentAppProvider, PackageManager)
-    @Provide fun killCurrentAppActionExecutor(
-  buildInfo: BuildInfo
-) = ActionExecutor<KillCurrentAppActionId> {
+context(ActionRootCommandRunner, BuildInfo, CurrentAppProvider, PackageManager)
+    @Provide fun killCurrentAppActionExecutor() = ActionExecutor<KillCurrentAppActionId> {
   val currentApp = currentApp.first()
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
-    currentApp != buildInfo.packageName && // we have no suicidal intentions :D
+    currentApp != packageName && // we have no suicidal intentions :D
     currentApp != getHomePackage()
   ) {
     runActionRootCommand("am force-stop $currentApp")

@@ -9,5 +9,5 @@ import com.ivianuu.injekt.Provide
 
 @JvmInline value class NavBarFeatureSupported(val value: Boolean)
 
-@Provide fun navBarFeatureSupported(systemBuildInfo: SystemBuildInfo) =
-  NavBarFeatureSupported(systemBuildInfo.sdk < 30)
+context(SystemBuildInfo)
+    @Provide fun navBarFeatureSupported() = NavBarFeatureSupported(systemSdk < 30)

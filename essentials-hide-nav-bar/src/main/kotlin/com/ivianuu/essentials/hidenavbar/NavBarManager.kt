@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 context(
+AppContext,
 CombinedForceNavBarVisibleProvider,
 DisplayRotation.Provider,
 Logger,
@@ -37,7 +38,6 @@ NonSdkInterfaceDetectionDisabler,
 OverscanUpdater,
 PermissionManager
 ) @Provide fun navBarManager(
-  context: AppContext,
   navBarFeatureSupported: NavBarFeatureSupported,
   pref: DataStore<NavBarPrefs>
 ) = ScopeWorker<AppScope> worker@{
@@ -73,7 +73,7 @@ PermissionManager
       }
     }
     .distinctUntilChanged()
-    .collect { it.apply(context) }
+    .collect { it.apply() }
 }
 
 private sealed interface NavBarState {
@@ -81,8 +81,8 @@ private sealed interface NavBarState {
   object Visible : NavBarState
 }
 
-context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
-    private suspend fun NavBarState.apply(context: Context) {
+context(AppContext, Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
+    private suspend fun NavBarState.apply() {
   log { "apply nav bar state $this" }
   catch {
     catch {
@@ -92,7 +92,7 @@ context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
 
     val rect = when (this) {
       is NavBarState.Hidden -> getOverscanRect(
-        -getNavigationBarHeight(context, rotation), rotationMode, rotation
+        -getNavigationBarHeight(rotation), rotationMode, rotation
       )
       NavBarState.Visible -> Rect(0, 0, 0, 0)
     }
@@ -102,14 +102,11 @@ context(Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
   }
 }
 
-private fun getNavigationBarHeight(
-  context: Context,
-  rotation: DisplayRotation
-): Int {
+context(AppContext) private fun getNavigationBarHeight(rotation: DisplayRotation): Int {
   val name = if (rotation.isPortrait) "navigation_bar_height"
   else "navigation_bar_width"
-  val id = context.resources.getIdentifier(name, "dimen", "android")
-  return if (id > 0) context.resources.getDimensionPixelSize(id) else 0
+  val id = resources.getIdentifier(name, "dimen", "android")
+  return if (id > 0) resources.getDimensionPixelSize(id) else 0
 }
 
 private fun getOverscanRect(

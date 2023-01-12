@@ -18,12 +18,11 @@ import java.io.File
 data class ShareBackupFileKey(val backupFilePath: String) :
   IntentKey
 
-context(AppContext) @Provide fun shareBackupFileKeyIntentFactory(
-  buildInfo: BuildInfo
-) = KeyIntentFactory<ShareBackupFileKey> { key ->
+context(AppContext, BuildInfo)
+    @Provide fun shareBackupFileKeyIntentFactory() = KeyIntentFactory<ShareBackupFileKey> { key ->
   val uri = FileProvider.getUriForFile(
     inject(),
-    "${buildInfo.packageName}.backupprovider",
+    "${packageName}.backupprovider",
     File(key.backupFilePath)
   )
   val intent = Intent(Intent.ACTION_SEND).apply {

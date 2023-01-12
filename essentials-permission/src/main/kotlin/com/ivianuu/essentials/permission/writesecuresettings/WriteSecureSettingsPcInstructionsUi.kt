@@ -186,12 +186,12 @@ typealias AdbEnabled = @AdbEnabledTag Int
 
 context(
 AppUiStarter,
+BuildInfo,
 KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
 PermissionManager,
 ToastContext)
     @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
-  buildInfo: BuildInfo,
   developerModeSetting: DataStore<DeveloperMode>
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }
@@ -212,7 +212,7 @@ ToastContext)
   }
 
   WriteSecureSettingsPcInstructionsModel(
-    packageName = buildInfo.packageName,
+    packageName = packageName,
     currentStep = currentStep,
     completedStep = completedStep,
     canContinueStep = canContinueStep,

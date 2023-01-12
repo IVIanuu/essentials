@@ -21,8 +21,7 @@ fun interface BroadcastsFactory {
   fun broadcasts(vararg actions: String): Flow<Intent>
 }
 
-@Provide fun broadcastsFactory(
-  context: AppContext,
+context(AppContext) @Provide fun broadcastsFactory(
   coroutineContext: MainContext
 ) = BroadcastsFactory { actions ->
   callbackFlow<Intent> {
@@ -31,12 +30,12 @@ fun interface BroadcastsFactory {
         trySend(intent)
       }
     }
-    context.registerReceiver(broadcastReceiver, IntentFilter().apply {
+    registerReceiver(broadcastReceiver, IntentFilter().apply {
       actions.forEach { addAction(it) }
     })
     awaitClose {
       catch {
-        context.unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(broadcastReceiver)
       }
     }
   }

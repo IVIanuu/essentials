@@ -22,6 +22,7 @@ import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
@@ -135,9 +136,9 @@ class UnlockActivity : ComponentActivity() {
     private const val REQUEST_TYPE_UNLOCK = 0
     private const val REQUEST_TYPE_SCREEN_ON = 1
 
-    fun unlockScreen(context: Context, requestId: String) {
-      context.startActivity(
-        Intent(context, UnlockActivity::class.java).apply {
+    context(Context) fun unlockScreen(requestId: String) {
+      startActivity(
+        Intent(inject(), UnlockActivity::class.java).apply {
           putExtra(KEY_REQUEST_ID, requestId)
           putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_UNLOCK)
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -145,9 +146,9 @@ class UnlockActivity : ComponentActivity() {
       )
     }
 
-    fun turnScreenOn(context: Context, requestId: String) {
-      context.startActivity(
-        Intent(context, UnlockActivity::class.java).apply {
+    context(Context) fun turnScreenOn(requestId: String) {
+      startActivity(
+        Intent(inject(), UnlockActivity::class.java).apply {
           putExtra(KEY_REQUEST_ID, requestId)
           putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_SCREEN_ON)
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

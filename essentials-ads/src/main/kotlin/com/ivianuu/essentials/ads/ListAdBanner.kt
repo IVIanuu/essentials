@@ -24,9 +24,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Tag annotation class ListAdBannerConfigTag {
   companion object {
-    context(ResourceProvider) @Provide fun default(buildInfo: BuildInfo) = ListAdBannerConfig(
+    context(BuildInfo, ResourceProvider) @Provide fun default() = ListAdBannerConfig(
       id = loadResource(
-        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
+        if (isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_list_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER

@@ -29,17 +29,20 @@ fun interface PermissionIntentFactory<P : Permission> {
 
 @JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
-context(PermissionIntentFactory<P>, ToastContext) @Provide fun <P : Permission> intentPermissionRequestHandler(
-  buildInfo: BuildInfo,
+context(
+BuildInfo,
+PermissionIntentFactory<P>,
+PermissionManager,
+ToastContext
+) @Provide fun <P : Permission> intentPermissionRequestHandler(
   navigator: Navigator,
   permissionKey: TypeKey<P>,
-  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
-  permissionManager: PermissionManager
+  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false)
 ) = PermissionRequestHandler<P> { permission ->
   race(
     {
       if (showFindPermissionHint.value)
-        showToast(R.string.es_find_app_here, buildInfo.appName)
+        showToast(R.string.es_find_app_here, appName)
       // wait until user navigates back from the permission screen
       catch { navigator.push(DefaultIntentKey(createPermissionIntent(permission))) }
         .onFailure {
@@ -48,7 +51,7 @@ context(PermissionIntentFactory<P>, ToastContext) @Provide fun <P : Permission> 
     },
     {
       // wait until user granted permission
-      while (!permissionManager.permissionState(listOf(permissionKey)).first()) delay(100)
+      while (!permissionState(listOf(permissionKey)).first()) delay(100)
     }
   )
 }

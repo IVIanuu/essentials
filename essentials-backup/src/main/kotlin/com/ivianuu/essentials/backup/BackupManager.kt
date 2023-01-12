@@ -33,10 +33,9 @@ interface BackupManager {
   suspend fun restoreBackup(): Result<Unit, Throwable>
 }
 
-context(Logger, ProcessRestarter) @Provide class BackupManagerImpl(
+context(BuildInfo, Logger, ProcessRestarter) @Provide class BackupManagerImpl(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
-  private val buildInfo: BuildInfo,
   private val contentResolver: ContentResolver,
   private val context: IOContext,
   private val dataDir: DataDir,
@@ -46,7 +45,7 @@ context(Logger, ProcessRestarter) @Provide class BackupManagerImpl(
     withContext(coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
-        "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+        "${packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
       val backupFile = backupDir.resolve("$backupFileName.zip")
         .also {

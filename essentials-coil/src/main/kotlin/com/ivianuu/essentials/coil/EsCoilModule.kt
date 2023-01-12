@@ -15,16 +15,16 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.inject
 import kotlin.reflect.KClass
 
-@Provide fun imageLoader(
-  context: AppContext,
+context(AppContext) @Provide fun imageLoader(
   decoderFactories: List<Decoder.Factory>,
   fetcherFactories: List<FetcherPair<*>>,
   keyers: List<KeyerPair<*>>,
   interceptors: List<Interceptor>,
   mappers: List<MapperPair<*>>,
-): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(context)
+): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(inject())
   .components {
     decoderFactories.forEach { add(it) }
     interceptors.forEach { add(it) }

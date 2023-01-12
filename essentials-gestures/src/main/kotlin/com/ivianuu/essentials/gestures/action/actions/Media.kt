@@ -41,13 +41,12 @@ fun interface MediaActionSender {
   suspend fun sendMediaAction(keycode: Int)
 }
 
-@Provide fun mediaActionSender(
-  context: AppContext,
+context(AppContext) @Provide fun mediaActionSender(
   prefs: DataStore<MediaActionPrefs>
 ) = MediaActionSender { keycode ->
   val currentPrefs = prefs.data.first()
-  context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
-  context.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
+  sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+  sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }
 
 private fun mediaIntentFor(

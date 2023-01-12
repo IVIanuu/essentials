@@ -142,14 +142,13 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-context(KeyUiContext<AboutKey>, RateUseCases, ResourceProvider) @Provide fun aboutModel(
-  buildInfo: BuildInfo,
+context(BuildInfo, KeyUiContext<AboutKey>, RateUseCases, ResourceProvider) @Provide fun aboutModel(
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail
 ) = Model {
   AboutModel(
-    version = buildInfo.versionName,
+    version = versionName,
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,

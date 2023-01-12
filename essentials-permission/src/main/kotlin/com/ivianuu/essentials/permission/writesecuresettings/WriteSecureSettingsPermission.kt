@@ -22,11 +22,10 @@ abstract class WriteSecureSettingsPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-@Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
-  context: AppContext
+context(AppContext) @Provide
+fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
 ) = PermissionStateProvider<P> {
-  context.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) ==
-      PackageManager.PERMISSION_GRANTED
+  checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
 }
 
 @Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(

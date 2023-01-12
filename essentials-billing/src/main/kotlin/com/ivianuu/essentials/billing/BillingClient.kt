@@ -10,13 +10,13 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-@Provide fun billingClient(
-  context: AppContext,
+context(AppContext) @Provide fun billingClient(
   refreshes: MutableSharedFlow<BillingRefresh>
 ): @Scoped<AppScope> BillingClient = BillingClient
-  .newBuilder(context)
+  .newBuilder(inject())
   .enablePendingPurchases()
   .setListener { _, _ -> refreshes.tryEmit(BillingRefresh) }
   .build()

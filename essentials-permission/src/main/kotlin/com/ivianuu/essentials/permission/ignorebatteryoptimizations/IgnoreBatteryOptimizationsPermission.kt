@@ -22,21 +22,20 @@ abstract class IgnoreBatteryOptimizationsPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-@Provide
-fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
-  buildInfo: BuildInfo,
+context(BuildInfo)
+    @Provide fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
   powerManager: @SystemService PowerManager
 ) = PermissionStateProvider<P> {
-  powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
+  powerManager.isIgnoringBatteryOptimizations(packageName)
 }
 
+context(BuildInfo)
 @SuppressLint("BatteryLife")
 @Provide
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
-  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-    "package:${buildInfo.packageName}".toUri()
+    "package:${packageName}".toUri()
   )
 }

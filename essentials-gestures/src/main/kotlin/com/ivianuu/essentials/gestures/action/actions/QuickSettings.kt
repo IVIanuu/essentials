@@ -35,20 +35,14 @@ context(ResourceProvider) @Provide fun quickSettingsAction() = Action(
   icon = staticActionIcon(Icons.Default.Settings)
 )
 
-context(CloseSystemDialogsUseCase, GlobalActionExecutor)
-@Provide
-@SuppressLint("NewApi")
-fun quickSettingsActionExecutor(
-  context: AppContext,
-  serviceFlow: Flow<EsAccessibilityService?>,
-  systemBuildInfo: SystemBuildInfo
+context(AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor, SystemBuildInfo)
+    @Provide @SuppressLint("NewApi") fun quickSettingsActionExecutor(
+  serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<QuickSettingsActionId> {
-  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
+  val targetState = if (systemSdk < 28) true else catch {
     val service = serviceFlow.first()!!
 
-    val systemUiContext = context.createPackageContext(
-      "com.android.systemui", 0
-    )
+    val systemUiContext = createPackageContext("com.android.systemui", 0)
 
     val id = systemUiContext.resources.getIdentifier(
       "accessibility_desc_quick_settings", "string", "com.android.systemui"

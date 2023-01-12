@@ -17,9 +17,9 @@ import kotlinx.serialization.Serializable
   val wasNavBarHidden: Boolean = false
 ) {
   companion object {
-    @Provide fun initial(systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
+    context(SystemBuildInfo) @Provide fun initial(): @Initial NavBarPrefs = NavBarPrefs(
       hideNavBar = false,
-      navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
+      navBarRotationMode = if (systemSdk >= 24) {
         NavBarRotationMode.NOUGAT
       } else {
         NavBarRotationMode.MARSHMALLOW

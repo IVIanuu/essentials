@@ -21,17 +21,16 @@ fun interface NonSdkInterfaceDetectionDisabler {
   suspend fun disableNonSdkInterfaceDetection()
 }
 
-context(Logger) @Provide fun nonSdkInterfaceDetectionDisabler(
-  systemBuildInfo: SystemBuildInfo,
+context(Logger, SystemBuildInfo) @Provide fun nonSdkInterfaceDetectionDisabler(
   hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
   hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
   hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>
 ) = NonSdkInterfaceDetectionDisabler {
-  if (systemBuildInfo.sdk >= 29) {
+  if (systemSdk >= 29) {
     log { "disable non sdk on 29" }
     hiddenApiPolicyStore.updateData { 1 }
     log { "disabled non sdk on 29" }
-  } else if (systemBuildInfo.sdk >= 28) {
+  } else if (systemSdk >= 28) {
     log { "disable non sdk on p" }
     hiddenApiPolicyPrePieAppsStore.updateData { 1 }
     hiddenApiPolicyPieAppsStore.updateData { 1 }

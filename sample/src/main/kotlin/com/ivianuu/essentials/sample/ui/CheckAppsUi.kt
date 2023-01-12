@@ -63,8 +63,7 @@ context(NamedCoroutineScope<KeyUiScope>) @Provide fun checkAppsUi(
 
 @Tag private annotation class CheckApps
 
-@Provide fun checkAppsDb(context: AppContext): @Scoped<AppScope> @CheckApps Db = AndroidDb(
-  context = context,
+context(AppContext) @Provide fun checkAppsDb(): @Scoped<AppScope> @CheckApps Db = AndroidDb(
   name = "checked_apps.db",
   schema = Schema(
     version = 1,

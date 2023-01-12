@@ -30,6 +30,7 @@ import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.inject
 
 fun staticActionImage(data: Any) = ActionIcon {
   Image(
@@ -71,15 +72,14 @@ fun interface ActionIntentSender {
   fun sendIntent(intent: Intent, isFloating: Boolean, options: Bundle?)
 }
 
-context(ToastContext) @Provide fun actionIntentSender(
-  context: AppContext
-) = ActionIntentSender { intent, isFloating, options ->
+context(AppContext, ToastContext)
+    @Provide fun actionIntentSender() = ActionIntentSender { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)
   catch {
     PendingIntent.getActivity(
-      context,
+      inject(),
       1000,
       intent,
       PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -95,17 +95,14 @@ fun interface CloseSystemDialogsUseCase {
   suspend fun closeSystemDialogs(): Result<Unit, Throwable>
 }
 
-context(GlobalActionExecutor)
-@SuppressLint("MissingPermission", "InlinedApi")
-@Provide
-fun closeSystemDialogsUseCase(
-  context: AppContext,
-  systemBuildInfo: SystemBuildInfo
-) = CloseSystemDialogsUseCase {
+context(AppContext, GlobalActionExecutor, SystemBuildInfo)
+    @SuppressLint("MissingPermission", "InlinedApi")
+    @Provide
+fun closeSystemDialogsUseCase() = CloseSystemDialogsUseCase {
   catch {
-    if (systemBuildInfo.sdk >= 31)
+    if (systemSdk >= 31)
       performGlobalAction(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
-      context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+      sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }
 }

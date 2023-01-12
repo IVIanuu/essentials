@@ -16,23 +16,21 @@ import kotlinx.coroutines.flow.flowOn
 
 @JvmInline value class ConfigChangeProvider(val configChanges: Flow<Unit>)
 
-@Provide fun configChangeProvider(
-  context: AppContext,
-  coroutineContext: MainContext,
-) = ConfigChangeProvider(
-  callbackFlow<Unit> {
-    val callbacks = object : ComponentCallbacks2 {
-      override fun onConfigurationChanged(newConfig: Configuration) {
-        trySend(Unit)
-      }
+context(AppContext) @Provide fun configChangeProvider(coroutineContext: MainContext) =
+  ConfigChangeProvider(
+    callbackFlow<Unit> {
+      val callbacks = object : ComponentCallbacks2 {
+        override fun onConfigurationChanged(newConfig: Configuration) {
+          trySend(Unit)
+        }
 
-      override fun onLowMemory() {
-      }
+        override fun onLowMemory() {
+        }
 
-      override fun onTrimMemory(level: Int) {
+        override fun onTrimMemory(level: Int) {
+        }
       }
-    }
-    context.registerComponentCallbacks(callbacks)
-    awaitClose { context.unregisterComponentCallbacks(callbacks) }
+      registerComponentCallbacks(callbacks)
+      awaitClose { unregisterComponentCallbacks(callbacks) }
   }.flowOn(coroutineContext)
 )

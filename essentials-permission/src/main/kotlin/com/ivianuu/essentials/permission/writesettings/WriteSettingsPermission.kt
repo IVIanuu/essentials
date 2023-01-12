@@ -14,6 +14,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 
 abstract class WriteSettingsPermission(
   override val title: String,
@@ -21,15 +22,15 @@ abstract class WriteSettingsPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-@Provide fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
-  context: AppContext
-) = PermissionStateProvider<P> { Settings.System.canWrite(context) }
+context(AppContext)
+    @Provide fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
+) = PermissionStateProvider<P> { Settings.System.canWrite(inject()) }
 
+context(BuildInfo)
 @Provide fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
-  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_MANAGE_WRITE_SETTINGS,
-    "package:${buildInfo.packageName}".toUri()
+    "package:${packageName}".toUri()
   )
 }

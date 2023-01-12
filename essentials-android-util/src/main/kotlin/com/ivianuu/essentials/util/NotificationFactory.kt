@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.inject
 
 interface NotificationFactory {
   fun buildNotification(
@@ -25,8 +26,8 @@ interface NotificationFactory {
 inline val NotificationCompat.Builder.context: Context
   get() = @Suppress("RestrictedLint") mContext
 
+context(AppContext)
 @Provide class NotificationFactoryImpl(
-  private val context: AppContext,
   private val notificationManager: @SystemService NotificationManager
 ) : NotificationFactory {
   override fun buildNotification(
@@ -43,7 +44,7 @@ inline val NotificationCompat.Builder.context: Context
       )
     )
 
-    return NotificationCompat.Builder(context, channelId)
+    return NotificationCompat.Builder(inject(), channelId)
       .apply(builder)
       .build()
   }

@@ -14,6 +14,7 @@ import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 
 abstract class RuntimePermission(
   val permissionName: String,
@@ -22,17 +23,16 @@ abstract class RuntimePermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-@Provide fun <P : RuntimePermission> runtimePermissionStateProvider(
-  context: AppContext
-) = PermissionStateProvider<P> { permission ->
-  context.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
-}
+context(AppContext)
+    @Provide fun <P : RuntimePermission> runtimePermissionStateProvider() =
+  PermissionStateProvider<P> { permission ->
+    checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
+  }
 
-@Provide fun <P : RuntimePermission> runtimePermissionRequestHandler(
-  context: AppContext,
+context(AppContext) @Provide fun <P : RuntimePermission> runtimePermissionRequestHandler(
   navigator: Navigator
 ) = PermissionRequestHandler<P> { permission ->
   val contract = ActivityResultContracts.RequestPermission()
-  val intent = contract.createIntent(context, permission.permissionName)
+  val intent = contract.createIntent(inject(), permission.permissionName)
   navigator.push(DefaultIntentKey(intent))
 }

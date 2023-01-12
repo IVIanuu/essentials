@@ -116,11 +116,11 @@ data class RateModel(
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-context(KeyUiContext<RateKey>, RateUseCases) @Provide fun rateModel(buildInfo: BuildInfo) = Model {
+context(BuildInfo, KeyUiContext<RateKey>, RateUseCases) @Provide fun rateModel() = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
     displayShowNever = produce(false) { shouldDisplayShowNever() },
-    packageName = buildInfo.packageName,
+    packageName = packageName,
     rating = rating,
     showLater = action { showLater() },
     showNever = action { showNever() },

@@ -17,6 +17,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.common.SourceKey
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -48,9 +49,8 @@ context(ForegroundScope) fun Flow<Notification>.updateNotification() {
   }
 }
 
-context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
-  private val context: AppContext
-) : ForegroundManager {
+context(AppContext, Logger)
+@Provide @Scoped<AppScope> class ForegroundManagerImpl() : ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
@@ -65,8 +65,8 @@ context(Logger) @Provide @Scoped<AppScope> class ForegroundManagerImpl(
         log { "start foreground $foregroundId ${states.value}" }
 
         ContextCompat.startForegroundService(
-          context,
-          Intent(context, ForegroundService::class.java)
+          inject(),
+          Intent(inject(), ForegroundService::class.java)
         )
 
         state

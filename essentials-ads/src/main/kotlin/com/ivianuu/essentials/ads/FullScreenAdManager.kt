@@ -25,6 +25,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.MainContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.filter
@@ -52,9 +53,9 @@ interface FullScreenAdManager {
 
 @JvmInline value class FullScreenAdId(val value: String) {
   companion object {
-    context(ResourceProvider) @Provide fun default(buildInfo: BuildInfo) = FullScreenAdId(
+    context(BuildInfo, ResourceProvider) @Provide fun default() = FullScreenAdId(
       loadResource(
-        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_interstitial
+        if (isDebug) R.string.es_test_ad_unit_id_interstitial
         else R.string.es_full_screen_ad_unit_id
       )
     )
@@ -67,10 +68,9 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 }
 
-context(AdsEnabledProvider, ForegroundActivityProvider, Logger, NamedCoroutineScope<AppScope>)
+context(AdsEnabledProvider, AppContext, ForegroundActivityProvider, Logger, NamedCoroutineScope<AppScope>)
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
   private val id: FullScreenAdId,
-  private val context: AppContext,
   private val config: FullScreenAdConfig,
   private val mainContext: MainContext
 ) : FullScreenAdManager {
@@ -116,7 +116,7 @@ context(AdsEnabledProvider, ForegroundActivityProvider, Logger, NamedCoroutineSc
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->
         InterstitialAd.load(
-          context,
+          inject(),
           id.value,
           AdRequest.Builder().build(),
           object : InterstitialAdLoadCallback() {

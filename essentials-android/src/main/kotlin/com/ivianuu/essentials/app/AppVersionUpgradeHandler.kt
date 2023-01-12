@@ -23,22 +23,19 @@ fun interface AppVersionUpgradeHandler {
   }
 }
 
-context(Logger) @Provide fun appVersionUpgradeWorker(
-  buildInfo: BuildInfo,
+context(BuildInfo, Logger) @Provide fun appVersionUpgradeWorker(
   handlers: () -> List<AppVersionUpgradeHandler>,
   pref: DataStore<AppVersionUpgradePrefs>
 ) = ScopeWorker<AppScope> {
   val prefs = pref.data.first()
 
-  if (buildInfo.versionCode <= prefs.lastAppVersion) return@ScopeWorker
+  if (versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  log { "upgrade from app version ${prefs.lastAppVersion} to ${buildInfo.versionCode}" }
+  log { "upgrade from app version ${prefs.lastAppVersion} to $versionCode" }
 
-  handlers().parForEach {
-    it(prefs.lastAppVersion, buildInfo.versionCode)
-  }
+  handlers().parForEach { it(prefs.lastAppVersion, versionCode) }
 
-  pref.updateData { copy(lastAppVersion = buildInfo.versionCode) }
+  pref.updateData { copy(lastAppVersion = versionCode) }
 }
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {

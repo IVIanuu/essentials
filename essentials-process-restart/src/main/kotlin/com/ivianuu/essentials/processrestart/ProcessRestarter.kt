@@ -16,8 +16,8 @@ fun interface ProcessRestarter {
   suspend fun restartProcess()
 }
 
-context(AppContext, Logger) @Provide fun processRestarter(buildInfo: BuildInfo) = ProcessRestarter {
-  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
+context(AppContext, BuildInfo, Logger) @Provide fun processRestarter() = ProcessRestarter {
+  val intent = packageManager.getLaunchIntentForPackage(packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
   log { "restart process $intent" }
   ProcessRestartActivity.launch(intent)

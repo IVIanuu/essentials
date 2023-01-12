@@ -17,10 +17,9 @@ fun interface AppUiStarter : IntentAppUiStarter
 
 @Provide fun intentAppUiStarter(appUiStarter: AppUiStarter): IntentAppUiStarter = appUiStarter
 
-context(AppContext, ForegroundActivityProvider) @Provide fun appUiStarter(
-  buildInfo: BuildInfo
-) = AppUiStarter {
-  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
+context(AppContext, BuildInfo, ForegroundActivityProvider)
+    @Provide fun appUiStarter() = AppUiStarter {
+  val intent = packageManager.getLaunchIntentForPackage(packageName)!!
   startActivity(
     intent.apply {
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

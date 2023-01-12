@@ -33,17 +33,14 @@ context(ResourceProvider) @Provide fun notificationsAction() = Action(
   icon = staticActionIcon(Icons.Default.Notifications)
 )
 
-context(CloseSystemDialogsUseCase, GlobalActionExecutor)
+context(AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor)
 @Provide fun notificationsActionExecutor(
-  context: AppContext,
   serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
     val service = serviceFlow.first()!!
 
-    val systemUiContext = context.createPackageContext(
-      "com.android.systemui", 0
-    )
+    val systemUiContext = createPackageContext("com.android.systemui", 0)
 
     val id = systemUiContext.resources.getIdentifier(
       "accessibility_desc_notification_shade", "string", "com.android.systemui")

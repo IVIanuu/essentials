@@ -41,19 +41,16 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
-  context(NamedCoroutineScope<AppScope>, Scope<AppScope>)
+  context(AppContext, NamedCoroutineScope<AppScope>, Scope<AppScope>)
       @SuppressLint("WorldReadableFiles")
       @Provide fun dataStore(
-    context: AppContext,
     coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
     serializerFactory: () -> KSerializer<T>
   ): @Scoped<AppScope> DataStore<T> {
-    val sharedPrefs by lazy {
-      context.getSharedPreferences(prefName, Context.MODE_WORLD_READABLE)
-    }
+    val sharedPrefs by lazy { getSharedPreferences(prefName, Context.MODE_WORLD_READABLE) }
 
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
@@ -71,7 +68,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       val listener = scoped {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
           launch(coroutineContext) {
-            context.sendBroadcast(Intent(prefsChangedAction(packageName)))
+            sendBroadcast(Intent(prefsChangedAction(packageName)))
             send(readData())
           }
         }

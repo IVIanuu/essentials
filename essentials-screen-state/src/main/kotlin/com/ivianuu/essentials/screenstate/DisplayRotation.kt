@@ -15,6 +15,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,8 +42,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   @JvmInline value class Provider(val displayRotation: Flow<DisplayRotation>)
 }
 
-context(Logger, ScreenState.Provider) @Provide fun displayRotationProvider(
-  context: AppContext,
+context(AppContext, Logger, ScreenState.Provider) @Provide fun displayRotationProvider(
   coroutineContext: MainContext,
   windowManager: @SystemService WindowManager
 ) = DisplayRotation.Provider(
@@ -51,7 +51,7 @@ context(Logger, ScreenState.Provider) @Provide fun displayRotationProvider(
       if (currentScreenState.isOn) {
         callbackFlow {
           val listener = object :
-            OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL) {
+            OrientationEventListener(inject(), SensorManager.SENSOR_DELAY_NORMAL) {
             override fun onOrientationChanged(orientation: Int) {
               trySend(orientation)
             }

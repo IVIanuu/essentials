@@ -26,9 +26,9 @@ import com.ivianuu.injekt.Tag
 
 @Tag annotation class ScreenAdBannerConfigTag {
   companion object {
-    context(ResourceProvider) @Provide fun default(buildInfo: BuildInfo) = ScreenAdBannerConfig(
+    context(BuildInfo, ResourceProvider) @Provide fun default() = ScreenAdBannerConfig(
       id = loadResource(
-        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
+        if (isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_screen_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER

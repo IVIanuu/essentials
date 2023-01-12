@@ -192,6 +192,7 @@ context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNot
 
 @Composable private fun NotificationIcon(
   notification: Notification,
+  // todo use context receiver once fixed
   @Inject context: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
