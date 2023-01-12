@@ -31,8 +31,7 @@ context(ResourceProvider) @Provide fun killCurrentAppAction() = Action(
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-context(PackageManager) @Provide fun killCurrentAppActionExecutor(
-  actionRootCommandRunner: ActionRootCommandRunner,
+context(ActionRootCommandRunner, PackageManager) @Provide fun killCurrentAppActionExecutor(
   buildInfo: BuildInfo,
   currentAppFlow: Flow<CurrentApp?>
 ) = ActionExecutor<KillCurrentAppActionId> {
@@ -42,7 +41,7 @@ context(PackageManager) @Provide fun killCurrentAppActionExecutor(
     currentApp != buildInfo.packageName && // we have no suicidal intentions :D
     currentApp != getHomePackage()
   ) {
-    actionRootCommandRunner("am force-stop $currentApp")
+    runActionRootCommand("am force-stop $currentApp")
   }
 }
 

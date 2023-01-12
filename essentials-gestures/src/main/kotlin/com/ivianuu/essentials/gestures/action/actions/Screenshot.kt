@@ -31,17 +31,15 @@ context(ResourceProvider) @Provide fun screenshotAction(systemBuildInfo: SystemB
   )
 )
 
-context(GlobalActionExecutor)
-@SuppressLint("InlinedApi")
-@Provide
-fun screenshotActionExecutor(
-  rootCommandRunner: ActionRootCommandRunner,
-  systemBuildInfo: SystemBuildInfo,
-) = ActionExecutor<ScreenshotActionId> {
-  delay(500)
-  if (systemBuildInfo.sdk >= 28) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-  } else {
-    rootCommandRunner("input keyevent 26")
+context(ActionRootCommandRunner, GlobalActionExecutor)
+    @SuppressLint("InlinedApi")
+    @Provide
+fun screenshotActionExecutor(systemBuildInfo: SystemBuildInfo) =
+  ActionExecutor<ScreenshotActionId> {
+    delay(500)
+    if (systemBuildInfo.sdk >= 28) {
+      performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+    } else {
+      runActionRootCommand("input keyevent 26")
+    }
   }
-}

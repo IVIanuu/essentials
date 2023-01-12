@@ -23,8 +23,7 @@ import kotlinx.coroutines.withContext
 
 fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
-context(Logger, PermissionManager, ToastContext) @Provide fun executeActionUseCase(
-  closeSystemDialogs: CloseSystemDialogsUseCase,
+context(CloseSystemDialogsUseCase, Logger, PermissionManager, ToastContext) @Provide fun executeActionUseCase(
   coroutineContext: DefaultContext,
   repository: ActionRepository,
   screenActivator: ScreenActivator,

@@ -54,11 +54,12 @@ fun staticActionIcon(id: Int) = ActionIcon {
 
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
-fun interface ActionRootCommandRunner : suspend (String) -> Unit
+fun interface ActionRootCommandRunner {
+  suspend fun runActionRootCommand(command: String)
+}
 
-@Provide fun actionRootCommandRunner(
-  shell: Shell,
-  T: ToastContext
+context(ToastContext) @Provide fun actionRootCommandRunner(
+  shell: Shell
 ) = ActionRootCommandRunner { command ->
   catch { shell.run(command) }
     .onFailure {
@@ -91,7 +92,9 @@ context(ToastContext) @Provide fun actionIntentSender(
   }
 }
 
-fun interface CloseSystemDialogsUseCase : suspend () -> Result<Unit, Throwable>
+fun interface CloseSystemDialogsUseCase {
+  suspend fun closeSystemDialogs(): Result<Unit, Throwable>
+}
 
 context(GlobalActionExecutor)
 @SuppressLint("MissingPermission", "InlinedApi")

@@ -24,9 +24,8 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
-context(ResourceProvider) @Provide class KeycodeActionFactory(
-  private val actionRootCommandRunner: ActionRootCommandRunner
-) : ActionFactory {
+context(ActionRootCommandRunner, ResourceProvider)
+@Provide class KeycodeActionFactory() : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -42,7 +41,7 @@ context(ResourceProvider) @Provide class KeycodeActionFactory(
 
   override suspend fun createExecutor(id: String): ActionExecutor<*> {
     val keycode = id.removePrefix(BASE_ID)
-    return ActionExecutor<ActionId> { actionRootCommandRunner("input keyevent $keycode") }
+    return ActionExecutor<ActionId> { runActionRootCommand("input keyevent $keycode") }
   }
 }
 

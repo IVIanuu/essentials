@@ -33,9 +33,8 @@ context(ResourceProvider) @Provide fun notificationsAction() = Action(
   icon = staticActionIcon(Icons.Default.Notifications)
 )
 
-context(GlobalActionExecutor)
+context(CloseSystemDialogsUseCase, GlobalActionExecutor)
 @Provide fun notificationsActionExecutor(
-  closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<NotificationsActionId> {

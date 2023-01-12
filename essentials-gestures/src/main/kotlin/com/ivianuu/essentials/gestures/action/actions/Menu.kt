@@ -24,8 +24,7 @@ context(ResourceProvider) @Provide fun menuAction() = Action(
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
-@Provide fun menuActionExecutor(
-  actionRootCommandRunner: ActionRootCommandRunner
-) = ActionExecutor<MenuActionId> {
-  actionRootCommandRunner("input keyevent 82")
+context(ActionRootCommandRunner)
+    @Provide fun menuActionExecutor() = ActionExecutor<MenuActionId> {
+  runActionRootCommand("input keyevent 82")
 }
