@@ -26,15 +26,14 @@ class AndroidSettingModule<T : S, S>(
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  context(NamedCoroutineScope<AppScope>)
+  context(ContentChangesFactory, NamedCoroutineScope<AppScope>)
       @Suppress("UNCHECKED_CAST")
       @Provide fun dataStore(
     adapter: AndroidSettingAdapter<S>,
-    contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
     context: IOContext
   ): DataStore<T> = object : DataStore<T> {
-    override val data: Flow<T> = contentChangesFactory(
+    override val data: Flow<T> = contentChanges(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
         AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)

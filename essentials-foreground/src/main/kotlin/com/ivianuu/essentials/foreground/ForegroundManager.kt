@@ -37,8 +37,7 @@ interface ForegroundScope : CoroutineScope {
   suspend fun updateNotification(notification: Notification)
 }
 
-context(ForegroundScope)
-fun Flow<Notification>.updateNotification() {
+context(ForegroundScope) fun Flow<Notification>.updateNotification() {
   onEach { updateNotification(it) }
     .launchIn(this@ForegroundScope)
 }

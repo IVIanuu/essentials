@@ -20,9 +20,9 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.resourceFlow
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> stateFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
+context(StateContext) fun <T> stateFlow(body: @Composable () -> T): Flow<T> = channelFlow {
   launchMolecule(
     emitter = { trySend(it).getOrThrow() },
     body = body
@@ -44,10 +44,7 @@ fun <T> stateFlow(@Inject context: StateContext, body: @Composable () -> T): Flo
   awaitClose()
 }
 
-fun <T> CoroutineScope.state(
-  @Inject context: StateContext,
-  body: @Composable () -> T
-): StateFlow<T> {
+context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
   launchMolecule(
@@ -65,12 +62,13 @@ fun <T> CoroutineScope.state(
   return flow!!
 }
 
-fun <T> CoroutineScope.launchMolecule(
-  @Inject context: StateContext,
+context(CoroutineScope, StateContext) fun <T> launchMolecule(
   emitter: (T) -> Unit,
   body: @Composable () -> T
 ) {
   if (!coroutineContext.isActive) return
+
+  val context = inject<StateContext>()
 
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)

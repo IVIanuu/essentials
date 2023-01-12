@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-fun interface ContentChangesFactory : (Uri) -> Flow<Unit>
+fun interface ContentChangesFactory {
+  fun contentChanges(uri: Uri): Flow<Unit>
+}
 
 @Provide fun contentChangesFactory(
   contentResolver: ContentResolver,
