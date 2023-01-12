@@ -14,11 +14,11 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
+        api(project(":essentials-compose"))
         api(project(":essentials-db"))
         api(project(":essentials-resource"))
         api(project(":essentials-tuples"))
         api(project(":essentials-serialization"))
-        api(project(":essentials-state"))
         api(Deps.Compose.runtime)
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)

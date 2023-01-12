@@ -9,7 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ads.FullScreenAd
 import com.ivianuu.essentials.ads.ShowAds
-import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi

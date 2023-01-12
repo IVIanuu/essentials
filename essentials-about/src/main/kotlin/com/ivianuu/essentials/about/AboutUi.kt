@@ -10,13 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.essentials.license.ui.LicenseKey
 import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.rate.ui.DeveloperEmail
 import com.ivianuu.essentials.rate.ui.FeedbackMailKey
-import com.ivianuu.essentials.state.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key

@@ -34,6 +34,7 @@ kotlin {
         api(Deps.Compose.runtime)
         api(Deps.AtomicFu.runtime)
         api(project(":essentials-app"))
+        api(project(":essentials-compose"))
         api(project(":essentials-logging"))
         api(project(":essentials-resource"))
         api(project(":essentials-time"))

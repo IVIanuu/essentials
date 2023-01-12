@@ -31,8 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Key

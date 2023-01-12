@@ -43,10 +43,10 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.bind
-import com.ivianuu.essentials.state.bindResource
-import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bind
+import com.ivianuu.essentials.compose.bindResource
+import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button

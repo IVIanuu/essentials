@@ -18,11 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
-import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.refOf
-import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
+import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.ui.material.DefaultSliderRange
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.NoStepsStepPolicy

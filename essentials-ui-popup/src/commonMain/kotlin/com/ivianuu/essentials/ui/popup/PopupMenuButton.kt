@@ -24,9 +24,9 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.LocalUiElements
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator

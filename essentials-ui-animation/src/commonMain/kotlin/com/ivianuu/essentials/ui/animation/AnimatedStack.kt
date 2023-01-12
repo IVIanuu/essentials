@@ -18,9 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.guarantee
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
 import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition
 import com.ivianuu.essentials.ui.animation.transition.LocalStackTransition
 import com.ivianuu.essentials.ui.animation.transition.NoOpStackTransition

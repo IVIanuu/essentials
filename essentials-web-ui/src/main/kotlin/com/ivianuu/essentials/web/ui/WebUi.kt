@@ -19,10 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.ui.common.getValue
-import com.ivianuu.essentials.ui.common.refOf
-import com.ivianuu.essentials.ui.common.setValue
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.refOf
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.AppBarStyle
 import com.ivianuu.essentials.ui.material.LocalAppBarStyle

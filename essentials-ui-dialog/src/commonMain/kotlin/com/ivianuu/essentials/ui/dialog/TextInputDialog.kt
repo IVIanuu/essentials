@@ -17,8 +17,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 
 @Composable fun TextInputDialog(
   modifier: Modifier = Modifier,

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ui.backpress
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
-import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.compose.getValue
 
 @Composable fun BackHandler(onBackPress: () -> Unit) {
   val currentOnBack by rememberUpdatedState(onBackPress)

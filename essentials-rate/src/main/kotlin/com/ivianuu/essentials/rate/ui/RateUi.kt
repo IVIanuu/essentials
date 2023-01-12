@@ -28,10 +28,10 @@ import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.produce
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.produce
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton

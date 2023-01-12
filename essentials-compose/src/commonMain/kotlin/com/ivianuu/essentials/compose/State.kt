@@ -2,7 +2,7 @@
  * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.ivianuu.essentials.state
+package com.ivianuu.essentials.compose
 
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composable
@@ -35,8 +35,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 context(StateContext) fun <T> stateFlow(body: @Composable () -> T): Flow<T> = channelFlow {
-  launchMolecule(
-    emitter = { trySend(it).getOrThrow() },
+  launchState(
+    emitter = { trySend(it) },
     body = body
   )
   awaitClose()
@@ -45,7 +45,7 @@ context(StateContext) fun <T> stateFlow(body: @Composable () -> T): Flow<T> = ch
 context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
-  launchMolecule(
+  launchState(
     emitter = { value ->
       val outputFlow = flow
       if (outputFlow != null) {
@@ -60,7 +60,7 @@ context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): 
   return flow!!
 }
 
-context(CoroutineScope, StateContext) fun <T> launchMolecule(
+context(CoroutineScope, StateContext) fun <T> launchState(
   emitter: (T) -> Unit,
   body: @Composable () -> T
 ) {

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.Key

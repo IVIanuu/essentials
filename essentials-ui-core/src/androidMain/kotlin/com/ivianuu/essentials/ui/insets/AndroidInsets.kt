@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 

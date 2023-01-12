@@ -12,8 +12,8 @@ import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.produceResource
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

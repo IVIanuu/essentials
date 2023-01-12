@@ -13,10 +13,10 @@ kotlin {
     commonMain {
       dependencies {
         api(project(":essentials-analytics"))
+        api(project(":essentials-compose"))
         api(project(":essentials-core"))
         api(project(":essentials-coroutines"))
         api(project(":essentials-logging"))
-        api(project(":essentials-state"))
       }
     }
     named("jvmTest") {

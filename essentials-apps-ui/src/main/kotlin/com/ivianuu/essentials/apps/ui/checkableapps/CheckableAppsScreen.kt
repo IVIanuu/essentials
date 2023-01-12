@@ -21,11 +21,11 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.bind
-import com.ivianuu.essentials.state.bindResource
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.state
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bind
+import com.ivianuu.essentials.compose.bindResource
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch

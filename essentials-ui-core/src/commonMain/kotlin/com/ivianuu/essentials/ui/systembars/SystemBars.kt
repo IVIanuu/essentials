@@ -23,8 +23,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
-import com.ivianuu.essentials.state.getValue
-import com.ivianuu.essentials.state.setValue
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.AppTheme
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.WindowInsetsProvider

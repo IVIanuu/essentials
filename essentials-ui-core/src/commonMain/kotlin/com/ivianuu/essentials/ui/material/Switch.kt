@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.state.getValue
+import com.ivianuu.essentials.compose.getValue
 
 @Composable fun Switch(
   checked: Boolean,

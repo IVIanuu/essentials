@@ -6,7 +6,7 @@ package com.ivianuu.essentials.colorpicker
 
 import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
-import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey

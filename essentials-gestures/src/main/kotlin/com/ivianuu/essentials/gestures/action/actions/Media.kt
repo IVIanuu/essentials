@@ -22,8 +22,8 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.getOrNull
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.bindResource
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key

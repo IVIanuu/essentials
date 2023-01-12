@@ -7,8 +7,8 @@ package com.ivianuu.essentials.rate.ui
 import androidx.compose.material.Text
 import com.ivianuu.essentials.rate.R
 import com.ivianuu.essentials.rate.domain.RateUseCases
-import com.ivianuu.essentials.state.action
-import com.ivianuu.essentials.state.produce
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.produce
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton

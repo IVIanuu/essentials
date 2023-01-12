@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ui.dialog
 
 import androidx.compose.material.Text
-import com.ivianuu.essentials.state.action
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
