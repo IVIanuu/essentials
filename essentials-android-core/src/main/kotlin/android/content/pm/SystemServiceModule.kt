@@ -3,6 +3,6 @@ import android.content.Context
 import com.ivianuu.injekt.Provide
 
 object SystemServiceModule {
-  @Provide fun packageManager(context: Context): PackageManager =
+  @Provide inline fun packageManager(context: Context): PackageManager =
     context.packageManager
 }

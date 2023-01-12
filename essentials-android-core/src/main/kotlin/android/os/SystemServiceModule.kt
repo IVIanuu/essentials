@@ -3,12 +3,12 @@ import android.content.Context
 import com.ivianuu.injekt.Provide
 
 object SystemServiceModule {
-  @Provide fun dropBoxManager(context: Context): DropBoxManager =
+  @Provide inline fun dropBoxManager(context: Context): DropBoxManager =
     context.getSystemService(DropBoxManager::class.java)
 
-  @Provide fun powerManager(context: Context): PowerManager =
+  @Provide inline fun powerManager(context: Context): PowerManager =
     context.getSystemService(PowerManager::class.java)
 
-  @Provide fun vibrator(context: Context): Vibrator =
+  @Provide inline fun vibrator(context: Context): Vibrator =
     context.getSystemService(Vibrator::class.java)
 }

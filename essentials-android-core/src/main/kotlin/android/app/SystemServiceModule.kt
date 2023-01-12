@@ -3,27 +3,27 @@ import android.content.Context
 import com.ivianuu.injekt.Provide
 
 object SystemServiceModule {
-  @Provide fun activityManager(context: Context): ActivityManager =
+  @Provide inline fun activityManager(context: Context): ActivityManager =
     context.getSystemService(ActivityManager::class.java)
 
-  @Provide fun alarmManager(context: Context): AlarmManager =
+  @Provide inline fun alarmManager(context: Context): AlarmManager =
     context.getSystemService(AlarmManager::class.java)
 
-  @Provide fun downloadManager(context: Context): DownloadManager =
+  @Provide inline fun downloadManager(context: Context): DownloadManager =
     context.getSystemService(DownloadManager::class.java)
 
-  @Provide fun keyguardManager(context: Context): KeyguardManager =
+  @Provide inline fun keyguardManager(context: Context): KeyguardManager =
     context.getSystemService(KeyguardManager::class.java)
 
-  @Provide fun notificationManager(context: Context): NotificationManager =
+  @Provide inline fun notificationManager(context: Context): NotificationManager =
     context.getSystemService(NotificationManager::class.java)
 
-  @Provide fun searchManager(context: Context): SearchManager =
+  @Provide inline fun searchManager(context: Context): SearchManager =
     context.getSystemService(SearchManager::class.java)
 
-  @Provide fun uiModeManager(context: Context): UiModeManager =
+  @Provide inline fun uiModeManager(context: Context): UiModeManager =
     context.getSystemService(UiModeManager::class.java)
 
-  @Provide fun wallpaperManager(context: Context): WallpaperManager =
+  @Provide inline fun wallpaperManager(context: Context): WallpaperManager =
     context.getSystemService(WallpaperManager::class.java)
 }

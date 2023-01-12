@@ -48,7 +48,7 @@ fun main() {
               appendLine("object SystemServiceModule {")
               services.forEach { service ->
                 append(
-                  "  @Provide fun ${service.simpleName.decapitalize()}(context: Context): " +
+                  "  @Provide inline fun ${service.simpleName.decapitalize()}(context: Context): " +
                       "${service.simpleName} =\n    context."
                 )
 

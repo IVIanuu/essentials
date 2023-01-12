@@ -3,6 +3,6 @@ import android.content.Context
 import com.ivianuu.injekt.Provide
 
 object SystemServiceModule {
-  @Provide fun inputMethodManager(context: Context): InputMethodManager =
+  @Provide inline fun inputMethodManager(context: Context): InputMethodManager =
     context.getSystemService(InputMethodManager::class.java)
 }

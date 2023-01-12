@@ -3,6 +3,6 @@ import android.content.Context
 import com.ivianuu.injekt.Provide
 
 object SystemServiceModule {
-  @Provide fun devicePolicyManager(context: Context): DevicePolicyManager =
+  @Provide inline fun devicePolicyManager(context: Context): DevicePolicyManager =
     context.getSystemService(DevicePolicyManager::class.java)
 }
