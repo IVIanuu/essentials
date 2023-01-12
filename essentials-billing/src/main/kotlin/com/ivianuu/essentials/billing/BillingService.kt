@@ -57,9 +57,8 @@ interface BillingService {
   suspend fun acknowledgePurchase(sku: Sku): Boolean
 }
 
-context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class BillingServiceImpl(
+context(AppUiStarter, Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class BillingServiceImpl(
   private val appForegroundState: Flow<AppForegroundState>,
-  private val appUiStarter: AppUiStarter,
   private val billingClient: BillingClient,
   private val context: IOContext,
   private val refreshes: MutableSharedFlow<BillingRefresh>
@@ -101,7 +100,7 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class 
       }
     }
 
-    val activity = appUiStarter()
+    val activity = startAppUi()
 
     val skuDetails = getSkuDetails(sku)
       ?: return@withConnection false
