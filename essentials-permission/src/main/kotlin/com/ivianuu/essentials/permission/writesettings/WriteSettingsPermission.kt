@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.writesettings
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo

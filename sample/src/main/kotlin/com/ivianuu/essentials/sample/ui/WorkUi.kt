@@ -6,8 +6,8 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.sample.SampleWorkScheduler
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.sample.SampleWorkScheduler
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold

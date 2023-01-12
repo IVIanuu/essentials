@@ -8,14 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.hidenavbar.NavBarRotationMode
 import com.ivianuu.essentials.hidenavbar.R
 import com.ivianuu.essentials.permission.PermissionManager
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey

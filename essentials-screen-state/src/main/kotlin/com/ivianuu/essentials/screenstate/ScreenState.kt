@@ -9,8 +9,6 @@ import android.content.Intent
 import android.os.PowerManager
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

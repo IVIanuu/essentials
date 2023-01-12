@@ -13,10 +13,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 @Provide val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey }

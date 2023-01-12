@@ -6,7 +6,6 @@ package com.ivianuu.essentials.shortcutpicker
 
 import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.ivianuu.essentials.AppContext

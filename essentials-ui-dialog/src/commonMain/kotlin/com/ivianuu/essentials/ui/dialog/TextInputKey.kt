@@ -14,7 +14,6 @@ import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop

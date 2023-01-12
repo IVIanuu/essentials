@@ -13,7 +13,6 @@ import android.os.Looper
 import android.provider.MediaStore
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -26,9 +25,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentAppProvider
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume

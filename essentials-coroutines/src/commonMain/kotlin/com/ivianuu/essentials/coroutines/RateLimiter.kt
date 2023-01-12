@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.time.Clock
-import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

@@ -24,7 +24,6 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push

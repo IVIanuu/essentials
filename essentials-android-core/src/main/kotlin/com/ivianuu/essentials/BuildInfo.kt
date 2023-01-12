@@ -5,7 +5,6 @@
 package com.ivianuu.essentials
 
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 

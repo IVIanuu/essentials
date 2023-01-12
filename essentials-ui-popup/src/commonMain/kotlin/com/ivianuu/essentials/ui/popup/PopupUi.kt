@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.refOf
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.animation.animationElement
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.essentials.ui.animation.transition.PopupAnimationElementKey
@@ -31,9 +34,6 @@ import com.ivianuu.essentials.ui.animation.transition.awaitLayoutCoordinates
 import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.refOf
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory

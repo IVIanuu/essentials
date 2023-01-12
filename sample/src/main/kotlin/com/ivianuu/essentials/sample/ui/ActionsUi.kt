@@ -10,19 +10,16 @@ import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.safeAs
-import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }

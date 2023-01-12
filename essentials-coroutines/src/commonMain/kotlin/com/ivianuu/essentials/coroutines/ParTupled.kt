@@ -1,16 +1,5 @@
 package com.ivianuu.essentials.coroutines
 
-import com.ivianuu.essentials.tuples.tupleOf
-import com.ivianuu.injekt.*
-import kotlin.coroutines.*
-import com.ivianuu.essentials.tuples.Tuple2
-import com.ivianuu.essentials.tuples.Tuple3
-import com.ivianuu.essentials.tuples.Tuple4
-import com.ivianuu.essentials.tuples.Tuple5
-import com.ivianuu.essentials.tuples.Tuple6
-import com.ivianuu.essentials.tuples.Tuple7
-import com.ivianuu.essentials.tuples.Tuple8
-import com.ivianuu.essentials.tuples.Tuple9
 import com.ivianuu.essentials.tuples.Tuple10
 import com.ivianuu.essentials.tuples.Tuple11
 import com.ivianuu.essentials.tuples.Tuple12
@@ -21,8 +10,19 @@ import com.ivianuu.essentials.tuples.Tuple16
 import com.ivianuu.essentials.tuples.Tuple17
 import com.ivianuu.essentials.tuples.Tuple18
 import com.ivianuu.essentials.tuples.Tuple19
+import com.ivianuu.essentials.tuples.Tuple2
 import com.ivianuu.essentials.tuples.Tuple20
 import com.ivianuu.essentials.tuples.Tuple21
+import com.ivianuu.essentials.tuples.Tuple3
+import com.ivianuu.essentials.tuples.Tuple4
+import com.ivianuu.essentials.tuples.Tuple5
+import com.ivianuu.essentials.tuples.Tuple6
+import com.ivianuu.essentials.tuples.Tuple7
+import com.ivianuu.essentials.tuples.Tuple8
+import com.ivianuu.essentials.tuples.Tuple9
+import com.ivianuu.essentials.tuples.tupleOf
+import com.ivianuu.injekt.*
+import kotlin.coroutines.*
 
 context(Concurrency) suspend fun <A, B> parTupled(blockA: suspend () -> A, blockB: suspend () -> B, context: CoroutineContext = EmptyCoroutineContext): Tuple2<A, B> {
     val result = par<Any?>(blockA, blockB, context = context)

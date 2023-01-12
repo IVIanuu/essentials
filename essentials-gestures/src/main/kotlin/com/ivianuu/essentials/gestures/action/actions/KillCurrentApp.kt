@@ -19,7 +19,6 @@ import com.ivianuu.essentials.gestures.action.ActionRootPermission
 import com.ivianuu.essentials.recentapps.CurrentAppProvider
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")

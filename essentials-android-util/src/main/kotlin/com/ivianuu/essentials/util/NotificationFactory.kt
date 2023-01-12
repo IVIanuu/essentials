@@ -11,7 +11,6 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.inject
 
 fun interface NotificationFactory {

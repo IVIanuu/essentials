@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import android.content.Context
 import android.graphics.Rect
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -20,7 +19,6 @@ import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter

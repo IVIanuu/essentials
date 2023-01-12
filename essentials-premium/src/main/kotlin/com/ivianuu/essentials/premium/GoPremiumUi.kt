@@ -38,10 +38,10 @@ import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
 import com.ivianuu.essentials.billing.toSkuType
-import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource
+import com.ivianuu.essentials.resource.Resource
+import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.insets.InsetsPadding

@@ -7,13 +7,13 @@ package com.ivianuu.essentials.license.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.getOrThrow
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
 import com.ivianuu.essentials.resource.Resource
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar

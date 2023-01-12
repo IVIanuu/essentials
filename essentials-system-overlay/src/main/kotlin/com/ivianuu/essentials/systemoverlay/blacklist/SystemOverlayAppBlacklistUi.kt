@@ -9,8 +9,8 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.ui.DefaultAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Model

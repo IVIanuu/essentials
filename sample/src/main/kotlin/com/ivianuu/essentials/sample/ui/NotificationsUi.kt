@@ -34,6 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bind
+import com.ivianuu.essentials.compose.bindResource
+import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.map
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
@@ -43,10 +47,6 @@ import com.ivianuu.essentials.permission.notificationlistener.NotificationListen
 import com.ivianuu.essentials.recover
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.sample.R
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
-import com.ivianuu.essentials.compose.bindResource
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
@@ -55,14 +55,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 
 @Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
 

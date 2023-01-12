@@ -9,12 +9,12 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem

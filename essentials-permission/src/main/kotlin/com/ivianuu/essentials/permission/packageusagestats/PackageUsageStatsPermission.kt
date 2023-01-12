@@ -15,7 +15,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 abstract class PackageUsageStatsPermission(
   override val title: String,

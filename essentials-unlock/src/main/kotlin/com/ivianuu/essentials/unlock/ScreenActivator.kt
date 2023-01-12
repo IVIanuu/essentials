@@ -9,7 +9,6 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext

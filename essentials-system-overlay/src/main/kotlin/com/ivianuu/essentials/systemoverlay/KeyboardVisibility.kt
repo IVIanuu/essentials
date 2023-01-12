@@ -13,8 +13,6 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.inject
@@ -24,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
 

@@ -19,15 +19,12 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

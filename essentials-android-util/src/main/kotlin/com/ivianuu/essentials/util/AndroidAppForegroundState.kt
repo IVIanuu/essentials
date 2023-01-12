@@ -13,7 +13,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 

@@ -29,7 +29,6 @@ import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow

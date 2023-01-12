@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.cast
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.inject
 

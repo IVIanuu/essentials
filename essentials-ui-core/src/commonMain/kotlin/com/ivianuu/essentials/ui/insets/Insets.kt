@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
-import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
+import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.injekt.Provide
 
 @Composable fun InsetsPadding(

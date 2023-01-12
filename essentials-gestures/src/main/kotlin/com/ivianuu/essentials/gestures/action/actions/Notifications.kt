@@ -13,7 +13,6 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
-import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -22,7 +21,6 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")

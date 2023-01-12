@@ -20,7 +20,6 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.inject
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull

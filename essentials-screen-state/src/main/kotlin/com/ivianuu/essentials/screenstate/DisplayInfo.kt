@@ -7,7 +7,6 @@ package com.ivianuu.essentials.screenstate
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

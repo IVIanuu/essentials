@@ -6,7 +6,6 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Providers
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope

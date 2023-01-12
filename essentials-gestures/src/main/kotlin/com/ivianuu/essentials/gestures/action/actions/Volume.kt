@@ -11,7 +11,6 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 
 @Provide object VolumeActionId : ActionId("volume")
 

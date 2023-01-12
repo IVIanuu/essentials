@@ -12,12 +12,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.R
-import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Switch
@@ -68,8 +68,8 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-context(AppUiStarter, KeyUiContext<PermissionRequestKey>, PermissionManager)
-    @Provide fun permissionRequestModel(
+context(AppUiStarter, KeyUiContext<PermissionRequestKey>, PermissionManager) @Provide
+fun permissionRequestModel(
   requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
 ) = Model {
   LaunchedEffect(true) {

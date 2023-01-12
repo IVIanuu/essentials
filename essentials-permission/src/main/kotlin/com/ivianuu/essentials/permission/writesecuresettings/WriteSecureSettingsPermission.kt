@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler

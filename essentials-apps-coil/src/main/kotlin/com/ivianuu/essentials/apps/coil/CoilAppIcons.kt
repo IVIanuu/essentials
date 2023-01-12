@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.apps.coil
 
-import android.content.pm.PackageManager
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import coil.ImageLoader

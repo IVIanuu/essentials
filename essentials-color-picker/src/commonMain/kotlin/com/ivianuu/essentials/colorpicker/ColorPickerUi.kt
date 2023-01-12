@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop

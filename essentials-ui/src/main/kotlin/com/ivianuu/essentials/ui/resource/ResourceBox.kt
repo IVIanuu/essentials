@@ -19,13 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.resource.Error
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Loading
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.Success
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedBox
 import com.ivianuu.essentials.ui.animation.transition.CrossFadeStackTransition

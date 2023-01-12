@@ -20,7 +20,6 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred

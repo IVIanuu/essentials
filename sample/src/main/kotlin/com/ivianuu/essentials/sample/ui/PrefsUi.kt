@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
-import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.common.interactive
@@ -26,8 +26,6 @@ import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ColorListItem
@@ -36,7 +34,6 @@ import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
 import com.ivianuu.essentials.ui.prefs.SliderListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 

@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
-import com.ivianuu.essentials.coroutines.parMap
-import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.produceResource
+import com.ivianuu.essentials.coroutines.parMap
+import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold

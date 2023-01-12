@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.apps.AppRepository
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
 import com.ivianuu.essentials.gestures.R
-import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.layout.align
 import com.ivianuu.essentials.ui.material.HorizontalDivider

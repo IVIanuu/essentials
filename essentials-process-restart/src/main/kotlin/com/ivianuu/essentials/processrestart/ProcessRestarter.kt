@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.processrestart
 
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.logging.Logger

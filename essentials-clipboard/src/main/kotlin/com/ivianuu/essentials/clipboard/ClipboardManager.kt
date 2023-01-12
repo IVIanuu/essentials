@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.clipboard
 
-import android.content.ClipboardManager as AndroidClipboardManager
 import android.content.ClipData
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
@@ -12,10 +11,10 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.util.ToastContext
 import com.ivianuu.essentials.util.showToast
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import android.content.ClipboardManager as AndroidClipboardManager
 
 interface ClipboardManager {
   val clipboardText: Flow<String?>

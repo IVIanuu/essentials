@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.ads
 
-import androidx.compose.runtime.collectAsState
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ResourceProvider
@@ -18,7 +17,6 @@ import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Element
-import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ListAdBannerFeature : AdFeature
 

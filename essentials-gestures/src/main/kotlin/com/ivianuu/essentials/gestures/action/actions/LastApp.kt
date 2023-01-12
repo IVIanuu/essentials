@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
