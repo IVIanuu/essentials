@@ -115,8 +115,7 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 }
 
-@Provide class SystemWindowManagerImpl(
-  private val appContext: AppContext,
+context(AppContext) @Provide class SystemWindowManagerImpl(
   private val mainContext: MainContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   windowManager: @SystemService WindowManager
@@ -129,7 +128,7 @@ fun Modifier.systemWindowTrigger() = composed {
     content: @Composable () -> Unit
   ): Nothing = withContext(mainContext) {
     lateinit var contentView: View
-    contentView = OverlayComposeView(appContext) {
+    contentView = OverlayComposeView() {
       Window(contentView, state, content)
     }
 

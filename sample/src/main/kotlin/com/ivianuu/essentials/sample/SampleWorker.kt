@@ -13,12 +13,11 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.work.InjektWorker
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.delay
 
-context(Logger) @Provide @InjektWorker class SampleWorker(
-  appContext: AppContext,
-  params: WorkerParameters
-) : CoroutineWorker(appContext, params) {
+context(AppContext, Logger, WorkerParameters)
+@Provide @InjektWorker class SampleWorker : CoroutineWorker(inject(), inject()) {
   override suspend fun doWork(): Result {
     log { "start work" }
     delay(5000)
