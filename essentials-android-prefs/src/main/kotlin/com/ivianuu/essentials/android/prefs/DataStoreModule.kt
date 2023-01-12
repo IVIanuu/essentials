@@ -31,10 +31,9 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
-  context(NamedCoroutineScope<AppScope>) @Provide fun dataStore(
+  context(Json, NamedCoroutineScope<AppScope>) @Provide fun dataStore(
     context: IOContext,
     initial: () -> @Initial T = default,
-    json: Json,
     serializerFactory: () -> KSerializer<T>,
     prefsDir: () -> PrefsDir
   ): @Scoped<AppScope> DataStore<T> {
@@ -47,14 +46,14 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
 
         override suspend fun readFrom(input: InputStream): T =
           try {
-            json.decodeFromStream(serializer, input)
+            decodeFromStream(serializer, input)
           } catch (e: SerializationException) {
             throw CorruptionException("Could not read ${String(input.readBytes())}", e)
           }
 
         override suspend fun writeTo(t: T, output: OutputStream) {
           try {
-            json.encodeToStream(serializer, t, output)
+            encodeToStream(serializer, t, output)
           } catch (e: SerializationException) {
             throw CorruptionException("Could not write $t", e)
           }
