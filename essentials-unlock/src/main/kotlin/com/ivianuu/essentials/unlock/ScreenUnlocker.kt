@@ -20,13 +20,12 @@ fun interface ScreenUnlocker {
   suspend fun unlockScreen(): Boolean
 }
 
-context(AppContext, Logger) @Provide fun screenUnlocker(
-  coroutineContext: DefaultContext,
-  keyguardManager: @SystemService KeyguardManager
+context(AppContext, KeyguardManager, Logger) @Provide fun screenUnlocker(
+  coroutineContext: DefaultContext
 ) = ScreenUnlocker {
   withContext(coroutineContext) {
-    log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
-    if (!keyguardManager.isKeyguardLocked) {
+    log { "on request is locked ? $isKeyguardLocked" }
+    if (!isKeyguardLocked) {
       log { "already unlocked" }
       return@withContext true
     }

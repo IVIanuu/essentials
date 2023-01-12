@@ -23,10 +23,8 @@ data class DisplayInfo(
   @JvmInline value class Provider(val displayInfo: Flow<DisplayInfo>)
 }
 
-context(ConfigChangeProvider, DisplayRotation.Provider)
-    @Provide fun displayInfoProvider(
-  windowManager: @SystemService WindowManager
-) = DisplayInfo.Provider(
+context(ConfigChangeProvider, DisplayRotation.Provider, WindowManager)
+    @Provide fun displayInfoProvider() = DisplayInfo.Provider(
   flow {
     combine(
       configChanges
@@ -34,7 +32,7 @@ context(ConfigChangeProvider, DisplayRotation.Provider)
       displayRotation
     ) { _, rotation ->
       val metrics = DisplayMetrics()
-      windowManager.defaultDisplay.getRealMetrics(metrics)
+      defaultDisplay.getRealMetrics(metrics)
       DisplayInfo(
         rotation = rotation,
         screenWidth = metrics.widthPixels,

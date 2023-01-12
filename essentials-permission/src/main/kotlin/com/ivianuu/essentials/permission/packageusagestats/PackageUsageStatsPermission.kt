@@ -26,13 +26,12 @@ abstract class PackageUsageStatsPermission(
 @Provide fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)
 
-context(BuildInfo)
+context(AppOpsManager, BuildInfo)
 @Suppress("DEPRECATION")
 @Provide
 fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
-  appOpsManager: @SystemService AppOpsManager
 ) = PermissionStateProvider<P> {
-  appOpsManager.checkOpNoThrow(
+  this@AppOpsManager.checkOpNoThrow(
     AppOpsManager.OPSTR_GET_USAGE_STATS,
     Process.myUid(),
     packageName

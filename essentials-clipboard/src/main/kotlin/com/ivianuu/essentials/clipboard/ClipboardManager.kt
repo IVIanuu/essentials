@@ -23,25 +23,22 @@ interface ClipboardManager {
   suspend fun updateClipboardText(value: String, showMessage: Boolean = true)
 }
 
-context(ToastContext) @Provide class ClipboardManagerImpl(
-  private val androidClipboardManager: @SystemService AndroidClipboardManager
-) : ClipboardManager {
+context(AndroidClipboardManager, ToastContext)
+@Provide class ClipboardManagerImpl : ClipboardManager {
   override val clipboardText: Flow<String?>
     get() = callbackFlow<String?> {
       val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
-        val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+        val current = primaryClip?.getItemAt(0)?.text?.toString()
         trySend(current)
       }
       listener.onPrimaryClipChanged()
 
-      androidClipboardManager.addPrimaryClipChangedListener(listener)
-      awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
+      this@AndroidClipboardManager.addPrimaryClipChangedListener(listener)
+      awaitClose { this@AndroidClipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
   override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
-    catch {
-      androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value))
-    }
+    catch { this@AndroidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage) {
           showToast(

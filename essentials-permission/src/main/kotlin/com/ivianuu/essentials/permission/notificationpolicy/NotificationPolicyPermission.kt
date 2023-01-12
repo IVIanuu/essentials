@@ -23,9 +23,9 @@ abstract class NotificationPolicyPermission(
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)
 
-@Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
-  notificationManager: @SystemService NotificationManager
-) = PermissionStateProvider<P> { notificationManager.isNotificationPolicyAccessGranted }
+context(NotificationManager)
+    @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
+) = PermissionStateProvider<P> { isNotificationPolicyAccessGranted }
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionIntentFactory(
 ) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }

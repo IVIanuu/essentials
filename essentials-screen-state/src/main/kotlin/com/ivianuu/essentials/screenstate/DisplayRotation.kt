@@ -42,10 +42,8 @@ enum class DisplayRotation(val isPortrait: Boolean) {
   @JvmInline value class Provider(val displayRotation: Flow<DisplayRotation>)
 }
 
-context(AppContext, Logger, ScreenState.Provider) @Provide fun displayRotationProvider(
-  coroutineContext: MainContext,
-  windowManager: @SystemService WindowManager
-) = DisplayRotation.Provider(
+context(AppContext, Logger, ScreenState.Provider, WindowManager)
+    @Provide fun displayRotationProvider(coroutineContext: MainContext) = DisplayRotation.Provider(
   screenState
     .flatMapLatest { currentScreenState ->
       if (currentScreenState.isOn) {
@@ -60,7 +58,7 @@ context(AppContext, Logger, ScreenState.Provider) @Provide fun displayRotationPr
           awaitClose { listener.disable() }
         }
           .flowOn(coroutineContext)
-          .map { windowManager.getCurrentDisplayRotation() }
+          .map { getCurrentDisplayRotation() }
           .onStart { log { "sub for rotation" } }
           .onCompletion { log { "dispose rotation" } }
       } else {

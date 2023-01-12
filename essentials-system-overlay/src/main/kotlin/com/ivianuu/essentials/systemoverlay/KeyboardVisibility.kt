@@ -17,6 +17,7 @@ import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -29,40 +30,39 @@ import kotlinx.coroutines.flow.transformLatest
 
 @JvmInline value class KeyboardVisibleProvider(val keyboardVisible: Flow<Boolean>)
 
-context(AccessibilityEvent.Provider, NamedCoroutineScope<AppScope>)
-    @Provide fun keyboardVisibleProvider(
-  keyboardHeightProvider: @KeyboardHeightProvider () -> Int?
-): @Scoped<AppScope> KeyboardVisibleProvider = KeyboardVisibleProvider(
-  accessibilityEvents
-    .filter {
-      it.isFullScreen &&
-          it.className == "android.inputmethodservice.SoftInputWindow"
-    }
-    .onStart<Any?> { emit(Unit) }
-    .transformLatest {
-      emit(true)
-      while ((keyboardHeightProvider() ?: 0) > 0) {
-        delay(100)
+context(AccessibilityEvent.Provider, KeyboardHeightProvider, NamedCoroutineScope<AppScope>)
+    @Provide fun keyboardVisibleProvider(): @Scoped<AppScope> KeyboardVisibleProvider =
+  KeyboardVisibleProvider(
+    accessibilityEvents
+      .filter {
+        it.isFullScreen &&
+            it.className == "android.inputmethodservice.SoftInputWindow"
       }
-      emit(false)
-      awaitCancellation()
-    }
-    .distinctUntilChanged()
-    .state(SharingStarted.WhileSubscribed(1000), false)
-)
+      .onStart<Any?> { emit(Unit) }
+      .transformLatest {
+        emit(true)
+        while ((getKeyboardHeight() ?: 0) > 0) {
+          delay(100)
+        }
+        emit(false)
+        awaitCancellation()
+      }
+      .distinctUntilChanged()
+      .state(SharingStarted.WhileSubscribed(1000), false)
+  )
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(
     eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
 
-@Tag private annotation class KeyboardHeightProvider
+fun interface KeyboardHeightProvider {
+  fun getKeyboardHeight(): Int?
+}
 
-@Provide fun keyboardHeightProvider(
-  inputMethodManager: @SystemService InputMethodManager
-): @KeyboardHeightProvider () -> Int? = {
+context(InputMethodManager) @Provide fun keyboardHeightProvider() = KeyboardHeightProvider {
   catch {
-    val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
-    method.invoke(inputMethodManager) as Int
+    val method = InputMethodManager::class.java.getMethod("getInputMethodWindowVisibleHeight")
+    method.invoke(inject<InputMethodManager>()) as Int
   }.getOrNull()
 }

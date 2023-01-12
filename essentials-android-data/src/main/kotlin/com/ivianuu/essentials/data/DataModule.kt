@@ -25,5 +25,3 @@ typealias DataDir = @DataDirTag File
 }
 
 typealias PrefsDir = @PrefsDirTag File
-
-context(AppContext) @Provide fun packageManager() = packageManager!!

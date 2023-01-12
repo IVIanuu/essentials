@@ -21,8 +21,7 @@ context(ResourceProvider) @Provide fun inputMethodAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_keyboard_hide)
 )
 
-@Provide fun inputMethodActionExecutor(
-  inputMethodManager: @SystemService InputMethodManager
-) = ActionExecutor<InputMethodActionId> {
-  inputMethodManager.showInputMethodPicker()
+context(InputMethodManager)
+    @Provide fun inputMethodActionExecutor() = ActionExecutor<InputMethodActionId> {
+  this@InputMethodManager.showInputMethodPicker()
 }

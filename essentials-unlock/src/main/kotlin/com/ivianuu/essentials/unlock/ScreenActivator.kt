@@ -20,13 +20,12 @@ fun interface ScreenActivator {
   suspend fun activateScreen(): Boolean
 }
 
-context(AppContext, Logger) @Provide fun screenActivator(
-  coroutineContext: DefaultContext,
-  powerManager: @SystemService PowerManager
+context(AppContext, Logger, PowerManager) @Provide fun screenActivator(
+  coroutineContext: DefaultContext
 ) = ScreenActivator {
   withContext(coroutineContext) {
-    log { "on request is off ? ${!powerManager.isInteractive}" }
-    if (powerManager.isInteractive) {
+    log { "on request is off ? ${!isInteractive}" }
+    if (isInteractive) {
       log { "already on" }
       return@withContext true
     }

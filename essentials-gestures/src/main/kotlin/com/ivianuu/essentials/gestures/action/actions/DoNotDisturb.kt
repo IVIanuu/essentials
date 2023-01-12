@@ -32,18 +32,17 @@ context(ResourceProvider) @Provide fun doNotDisturbAction(icon: DoNotDisturbIcon
   permissions = listOf(typeKeyOf<ActionNotificationPolicyPermission>())
 )
 
-@Provide fun doNotDisturbActionExecutor(
-  notificationManager: @SystemService NotificationManager
-) = ActionExecutor<DoNotDisturbAction> {
-  notificationManager.setInterruptionFilter(
-    if (notificationManager.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+context(NotificationManager)
+    @Provide fun doNotDisturbActionExecutor() = ActionExecutor<DoNotDisturbAction> {
+  this@NotificationManager.setInterruptionFilter(
+    if (currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_PRIORITY)
       NotificationManager.INTERRUPTION_FILTER_PRIORITY else NotificationManager.INTERRUPTION_FILTER_ALL
   )
 }
 
 fun interface DoNotDisturbIcon : ActionIcon
 
-context(BroadcastsFactory, (@SystemService NotificationManager))
+context(BroadcastsFactory, NotificationManager)
 @Provide fun doNotDisturbIcon() = DoNotDisturbIcon {
   val doNotDisturb by remember {
     broadcasts(

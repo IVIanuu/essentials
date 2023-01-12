@@ -14,6 +14,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.inject
 
 @Provide object AssistantActionId : ActionId("assistant")
 
@@ -25,11 +26,10 @@ context(ResourceProvider) @Provide fun assistantAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_google)
 )
 
-@SuppressLint("DiscouragedPrivateApi")
-@Provide fun assistantActionExecutor(
-  searchManager: @SystemService SearchManager
-) = ActionExecutor<AssistantActionId> {
-  val launchAssist = searchManager.javaClass
+context(SearchManager)
+    @SuppressLint("DiscouragedPrivateApi")
+    @Provide fun assistantActionExecutor() = ActionExecutor<AssistantActionId> {
+  val launchAssist = SearchManager::class.java
     .getDeclaredMethod("launchAssist", Bundle::class.java)
-  launchAssist.invoke(searchManager, Bundle())
+  launchAssist.invoke(inject<SearchManager>(), Bundle())
 }

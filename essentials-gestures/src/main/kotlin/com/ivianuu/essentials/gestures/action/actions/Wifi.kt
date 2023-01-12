@@ -28,16 +28,14 @@ context(ResourceProvider) @Provide fun wifiAction(icon: WifiIcon) = Action(
   icon = icon
 )
 
-@Provide fun wifiActionExecutor(
-  wifiManager: @SystemService WifiManager
-) = ActionExecutor<WifiActionId> {
+context(WifiManager) @Provide fun wifiActionExecutor() = ActionExecutor<WifiActionId> {
   @Suppress("DEPRECATION")
-  wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
+  isWifiEnabled = !isWifiEnabled
 }
 
 fun interface WifiIcon : ActionIcon
 
-context(BroadcastsFactory, (@SystemService WifiManager)) @Provide fun wifiIcon() = WifiIcon {
+context(BroadcastsFactory, WifiManager) @Provide fun wifiIcon() = WifiIcon {
   val wifiEnabled by remember {
     broadcasts(WifiManager.WIFI_STATE_CHANGED_ACTION)
       .map {

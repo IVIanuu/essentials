@@ -126,7 +126,7 @@ class ForegroundService : Service() {
 @Provide @Element<AppScope> data class ForegroundServiceComponent(
   val clock: Clock,
   val foregroundManager: ForegroundManagerImpl,
-  val notificationManager: @SystemService NotificationManager,
+  val notificationManager: NotificationManager,
   val logger: Logger,
   val mainContext: MainContext,
   val scope: NamedCoroutineScope<AppScope>

@@ -160,9 +160,9 @@ class UnlockActivity : ComponentActivity() {
 
 @Provide @Element<AppScope>
 data class UnlockComponent(
-  val keyguardManager: () -> @SystemService KeyguardManager,
+  val keyguardManager: () -> KeyguardManager,
   @Provide val logger: Logger,
-  val powerManager: () -> @SystemService PowerManager
+  val powerManager: () -> PowerManager
 )
 
 internal val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()

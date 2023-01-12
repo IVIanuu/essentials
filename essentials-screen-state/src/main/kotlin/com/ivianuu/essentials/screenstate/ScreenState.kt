@@ -40,14 +40,12 @@ fun interface CurrentScreenStateProvider {
   suspend fun currentScreenState(): ScreenState
 }
 
-@Provide fun currentScreenStateProvider(
-  context: DefaultContext,
-  keyguardManager: @SystemService KeyguardManager,
-  powerManager: @SystemService PowerManager,
+context(KeyguardManager, PowerManager) @Provide fun currentScreenStateProvider(
+  context: DefaultContext
 ) = CurrentScreenStateProvider {
   withContext(context) {
-    if (powerManager.isInteractive) {
-      if (keyguardManager.isDeviceLocked) {
+    if (isInteractive) {
+      if (isDeviceLocked) {
         ScreenState.LOCKED
       } else {
         ScreenState.UNLOCKED

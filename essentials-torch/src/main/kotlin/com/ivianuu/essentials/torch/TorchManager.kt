@@ -45,15 +45,14 @@ interface TorchManager {
 
 context(
 BroadcastsFactory,
+CameraManager,
 ForegroundManager,
 Logger,
 NamedCoroutineScope<AppScope>,
 NotificationFactory,
 ToastContext
 )
-@Provide @Scoped<AppScope> class TorchManagerImpl(
-  private val cameraManager: @SystemService CameraManager
-) : TorchManager {
+@Provide @Scoped<AppScope> class TorchManagerImpl : TorchManager {
   private val _torchEnabled = MutableStateFlow(false)
   override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
 
@@ -85,15 +84,15 @@ ToastContext
 
   private suspend fun enableTorch() {
     catch {
-      val cameraId = cameraManager.cameraIdList[0]
+      val cameraId = cameraIdList[0]
       log { "enable torch" }
-      cameraManager.setTorchMode(cameraId, true)
+      this@CameraManager.setTorchMode(cameraId, true)
       _torchEnabled.value = true
 
       // todo remove dummy block param once fixed
       onCancel(block = { awaitCancellation() }) {
         log { "disable torch on cancel" }
-        catch { cameraManager.setTorchMode(cameraId, false) }
+        catch { this@CameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     }.onFailure {

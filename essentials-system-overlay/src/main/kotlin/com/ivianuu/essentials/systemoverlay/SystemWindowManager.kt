@@ -118,7 +118,7 @@ fun Modifier.systemWindowTrigger() = composed {
 context(AppContext) @Provide class SystemWindowManagerImpl(
   private val mainContext: MainContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
-  windowManager: @SystemService WindowManager
+  windowManager: WindowManager
 ) : SystemWindowManager {
   internal val useAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager

@@ -30,7 +30,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
 context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
-@Provide class AppActionFactory() : ActionFactory {
+@Provide class AppActionFactory : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -38,7 +38,8 @@ context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
-      title = appInfo(packageName).first()?.appName ?: loadResource(R.string.es_unknown_action_name),
+      title = appInfo(packageName).first()?.appName
+        ?: loadResource(R.string.es_unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,

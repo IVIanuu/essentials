@@ -15,8 +15,7 @@ import com.ivianuu.injekt.inject
 
 fun interface WorkInitializer : ScopeInitializer<AppScope>
 
-context(AppContext, WorkerFactory)
-    @Provide fun workInitializer() = WorkInitializer {
+context(AppContext, WorkerFactory) @Provide fun workInitializer() = WorkInitializer {
   WorkManager.initialize(
     inject(),
     Configuration.Builder()

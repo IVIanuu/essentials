@@ -46,9 +46,15 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-context(ActionIntentSender, CurrentAppProvider, Logger, PackageManager, ScreenState.Provider)
+context(
+ActionIntentSender,
+CameraManager,
+CurrentAppProvider,
+Logger,
+PackageManager,
+ScreenState.Provider
+)
     @Provide fun cameraActionExecutor(
-  cameraManager: @SystemService CameraManager,
   accessibilityServiceRef: Flow<EsAccessibilityService?>
 ) = ActionExecutor<CameraActionId> {
   val cameraApp = resolveActivity(
@@ -60,9 +66,9 @@ context(ActionIntentSender, CurrentAppProvider, Logger, PackageManager, ScreenSt
     getLaunchIntentForPackage("com.motorola.camera2")!!
   else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
-  val frontCamera = cameraManager.cameraIdList
+  val frontCamera = cameraIdList
     .firstOrNull {
-      cameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
+      this@CameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
@@ -75,20 +81,21 @@ context(ActionIntentSender, CurrentAppProvider, Logger, PackageManager, ScreenSt
     cameraApp.activityInfo!!.packageName == currentApp.first()
   )
     suspendCancellableCoroutine<Boolean> { cont ->
-      cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
+      this@CameraManager.registerAvailabilityCallback(object :
+        CameraManager.AvailabilityCallback() {
         override fun onCameraAvailable(cameraId: String) {
           super.onCameraAvailable(cameraId)
-          cameraManager.unregisterAvailabilityCallback(this)
+          this@CameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
             catch { cont.resume(true) }
         }
 
         override fun onCameraUnavailable(cameraId: String) {
-            super.onCameraUnavailable(cameraId)
-            cameraManager.unregisterAvailabilityCallback(this)
-            if (cameraId == frontCamera)
-              catch { cont.resume(false) }
-          }
+          super.onCameraUnavailable(cameraId)
+          this@CameraManager.unregisterAvailabilityCallback(this)
+          if (cameraId == frontCamera)
+            catch { cont.resume(false) }
+        }
         }, Handler(Looper.getMainLooper()))
       }
   else null
