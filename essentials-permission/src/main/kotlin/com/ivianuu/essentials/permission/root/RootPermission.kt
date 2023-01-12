@@ -19,12 +19,10 @@ abstract class RootPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-@Provide fun <P : RootPermission> rootPermissionStateProvider(
-  shell: Shell
-) = PermissionStateProvider<P> { shell.isAvailable() }
+context(Shell) @Provide fun <P : RootPermission> rootPermissionStateProvider() =
+  PermissionStateProvider<P> { isShellAvailable() }
 
-context(ToastContext) @Provide fun <P : RootPermission> rootPermissionRequestHandler(
-  shell: Shell
-) = PermissionRequestHandler<P> {
-  if (!shell.isAvailable()) showToast(R.string.es_no_root)
-}
+context(Shell, ToastContext)@Provide fun <P : RootPermission> rootPermissionRequestHandler() =
+  PermissionRequestHandler<P> {
+    if (!isShellAvailable()) showToast(R.string.es_no_root)
+  }

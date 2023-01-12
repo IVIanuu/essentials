@@ -73,10 +73,9 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-context(KeyUiContext<WriteSecureSettingsKey>, PermissionManager, ToastContext)
+context(KeyUiContext<WriteSecureSettingsKey>, PermissionManager, Shell, ToastContext)
     @Provide fun writeSecureSettingsModel(
-  buildInfo: BuildInfo,
-  shell: Shell
+  buildInfo: BuildInfo
 ) = Model {
   WriteSecureSettingsModel(
     openPcInstructions = action {
@@ -84,7 +83,7 @@ context(KeyUiContext<WriteSecureSettingsKey>, PermissionManager, ToastContext)
         navigator.pop(key)
     },
     grantPermissionsViaRoot = action {
-      shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+      runShellCommand("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
           if (permissionState(listOf(key.permissionKey)).first()) {
             showToast(R.string.es_secure_settings_permission_granted)

@@ -58,10 +58,9 @@ fun interface ActionRootCommandRunner {
   suspend fun runActionRootCommand(command: String)
 }
 
-context(ToastContext) @Provide fun actionRootCommandRunner(
-  shell: Shell
-) = ActionRootCommandRunner { command ->
-  catch { shell.run(command) }
+context(Shell, ToastContext)
+    @Provide fun actionRootCommandRunner() = ActionRootCommandRunner { command ->
+  runShellCommand(command)
     .onFailure {
       it.printStackTrace()
       showToast(R.string.es_no_root)
