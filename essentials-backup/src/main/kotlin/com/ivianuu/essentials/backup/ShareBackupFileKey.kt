@@ -12,18 +12,17 @@ import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ui.navigation.IntentKey
 import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 import java.io.File
 
 data class ShareBackupFileKey(val backupFilePath: String) :
   IntentKey
 
-@Provide fun shareBackupFileKeyIntentFactory(
-  context: AppContext,
-  buildInfo: BuildInfo,
-  packageManager: PackageManager
+context(AppContext) @Provide fun shareBackupFileKeyIntentFactory(
+  buildInfo: BuildInfo
 ) = KeyIntentFactory<ShareBackupFileKey> { key ->
   val uri = FileProvider.getUriForFile(
-    context,
+    inject(),
     "${buildInfo.packageName}.backupprovider",
     File(key.backupFilePath)
   )
@@ -38,7 +37,7 @@ data class ShareBackupFileKey(val backupFilePath: String) :
     .map { it.activityInfo.packageName }
     .distinct()
     .forEach {
-      context.grantUriPermission(
+      grantUriPermission(
         it,
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION

@@ -7,25 +7,26 @@ package com.ivianuu.essentials.gestures.action.actions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
 import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
-import com.ivianuu.essentials.torch.Torch
+import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.injekt.Provide
 
 @Provide object TorchActionId : ActionId("torch")
 
-context(ResourceProvider) @Provide fun torchAction(torch: Torch) = Action(
+context(ResourceProvider, TorchManager) @Provide fun torchAction() = Action(
   id = TorchActionId,
   title = loadResource(R.string.es_action_torch),
   icon = {
     Icon(
-      if (torch.torchEnabled.collectAsState().value) R.drawable.es_ic_flashlight_on
+      if (torchEnabled.bind()) R.drawable.es_ic_flashlight_on
       else R.drawable.es_ic_flashlight_off
     )
   }
 )
 
-@Provide fun torchActionExecutor(torch: Torch) = ActionExecutor<TorchActionId>
-  { torch.setTorchState(!torch.torchEnabled.value) }
+context(TorchManager) @Provide fun torchActionExecutor() = ActionExecutor<TorchActionId>
+{ setTorchState(!torchEnabled.value) }

@@ -46,20 +46,18 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-context(ActionIntentSender, CurrentAppProvider, Logger, ScreenState.Provider)
+context(ActionIntentSender, CurrentAppProvider, Logger, PackageManager, ScreenState.Provider)
     @Provide fun cameraActionExecutor(
   cameraManager: @SystemService CameraManager,
-  packageManager: PackageManager,
   accessibilityServiceRef: Flow<EsAccessibilityService?>
 ) = ActionExecutor<CameraActionId> {
-  val cameraApp = packageManager
-    .resolveActivity(
-      Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
-      PackageManager.MATCH_DEFAULT_ONLY
-    )!!
+  val cameraApp = resolveActivity(
+    Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
+    PackageManager.MATCH_DEFAULT_ONLY
+  )!!
 
   val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
-    packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
+    getLaunchIntentForPackage("com.motorola.camera2")!!
   else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
   val frontCamera = cameraManager.cameraIdList

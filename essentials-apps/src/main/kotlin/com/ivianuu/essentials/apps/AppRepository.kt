@@ -13,6 +13,7 @@ import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -28,9 +29,8 @@ interface AppRepository {
   fun isAppInstalled(packageName: String): Flow<Boolean>
 }
 
-context(BroadcastsFactory) @Provide class AppRepositoryImpl(
-  private val context: IOContext,
-  private val packageManager: PackageManager
+context(BroadcastsFactory, PackageManager) @Provide class AppRepositoryImpl(
+  private val context: IOContext
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>>
     get() = merge(
@@ -42,10 +42,10 @@ context(BroadcastsFactory) @Provide class AppRepositoryImpl(
       .onStart<Any?> { emit(Unit) }
       .map {
         withContext(context) {
-          packageManager.getInstalledApplications(0)
+          getInstalledApplications(0)
             .parMap {
               AppInfo(
-                appName = it.loadLabel(packageManager).toString(),
+                appName = it.loadLabel(inject()).toString(),
                 packageName = it.packageName
               )
             }
@@ -66,9 +66,9 @@ context(BroadcastsFactory) @Provide class AppRepositoryImpl(
     .map {
       withContext(context) {
         val applicationInfo = catch {
-          packageManager.getApplicationInfo(packageName, 0)
+          getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
-        AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
+        AppInfo(packageName, applicationInfo.loadLabel(inject()).toString())
       }
     }
     .distinctUntilChanged()
@@ -80,7 +80,7 @@ context(BroadcastsFactory) @Provide class AppRepositoryImpl(
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(context) {
-        catch { packageManager.getApplicationInfo(packageName, 0) }
+        catch { getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }
     }

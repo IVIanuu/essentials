@@ -17,9 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
-@Provide fun androidAppForegroundStateContext(
-  foregroundActivity: Flow<ForegroundActivity>
-) = AppForegroundState.Provider(
+context(ForegroundActivityProvider)
+    @Provide fun androidAppForegroundStateContext() = AppForegroundState.Provider(
   foregroundActivity.map {
     if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND
   }

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.sample.ui
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import com.ivianuu.essentials.ads.AdsEnabledProvider
-import com.ivianuu.essentials.ads.FullScreenAd
+import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 object AdsKey : Key<Unit>
 
 context(AdsEnabledProvider)
-    @Provide fun adsUi(fullScreenAd: FullScreenAd) = SimpleKeyUi<AdsKey> {
+    @Provide fun adsUi(fullScreenAdManager: FullScreenAdManager) = SimpleKeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
@@ -34,7 +34,7 @@ context(AdsEnabledProvider)
     }
 
     item {
-      Button(onClick = action { fullScreenAd.loadAndShow() }) {
+      Button(onClick = action { fullScreenAdManager.loadAndShowFullScreenAd() }) {
         Text("Show full screen ad")
       }
     }

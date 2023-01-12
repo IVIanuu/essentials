@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-interface Torch {
+interface TorchManager {
   val torchEnabled: StateFlow<Boolean>
 
   suspend fun setTorchState(value: Boolean)
@@ -51,9 +51,9 @@ NamedCoroutineScope<AppScope>,
 NotificationFactory,
 ToastContext
 )
-@Provide @Scoped<AppScope> class TorchImpl(
+@Provide @Scoped<AppScope> class TorchManagerImpl(
   private val cameraManager: @SystemService CameraManager
-) : Torch {
+) : TorchManager {
   private val _torchEnabled = MutableStateFlow(false)
   override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
 

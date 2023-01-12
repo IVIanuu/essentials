@@ -20,10 +20,7 @@ import com.ivianuu.injekt.Provide
 
 data class AppIcon(val packageName: String)
 
-@Provide class AppIconFetcherFactory(
-  private val context: AppContext,
-  private val packageManager: PackageManager
-) : Fetcher.Factory<AppIcon> {
+context(AppContext) @Provide class AppIconFetcherFactory : Fetcher.Factory<AppIcon> {
   override fun create(data: AppIcon, options: Options, imageLoader: ImageLoader) =
     Fetcher {
       val rawDrawable = packageManager.getApplicationIcon(data.packageName)
@@ -33,7 +30,7 @@ data class AppIcon(val packageName: String)
           width = size.width.pxOrElse { rawDrawable.intrinsicWidth },
           height = size.height.pxOrElse { rawDrawable.intrinsicHeight }
         )
-          .toDrawable(context.resources)
+          .toDrawable(resources)
       }
       DrawableResult(finalDrawable, false, DataSource.DISK)
     }

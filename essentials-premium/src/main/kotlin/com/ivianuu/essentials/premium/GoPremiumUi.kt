@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.ads.AdFeatures
-import com.ivianuu.essentials.ads.FullScreenAd
+import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.billing.toIso8601Duration
 import com.ivianuu.essentials.billing.toReadableString
@@ -331,7 +331,7 @@ data class GoPremiumModel(
 context(KeyUiContext<GoPremiumKey>, PremiumVersionManager, ToastContext)
     @Provide fun goPremiumModel(
   features: List<AppFeature>,
-  fullScreenAd: FullScreenAd
+  fullScreenAdManager: FullScreenAdManager
 ) = Model {
   GoPremiumModel(
     features = features,
@@ -346,14 +346,14 @@ context(KeyUiContext<GoPremiumKey>, PremiumVersionManager, ToastContext)
     tryBasicVersion = action {
       navigator.pop(key, false)
       withContext(NonCancellable) {
-        fullScreenAd.loadAndShow()
+        fullScreenAdManager.loadAndShowFullScreenAd()
       }
     },
     goBack = action {
       if (key.allowBackNavigation) {
         navigator.pop(key, false)
         withContext(NonCancellable) {
-          fullScreenAd.loadAndShow()
+          fullScreenAdManager.loadAndShowFullScreenAd()
         }
       }
     }

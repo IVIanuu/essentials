@@ -36,7 +36,7 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
 
 context(AdsEnabledProvider, IsAdFeatureEnabledUseCase, Logger) @Provide fun screenLaunchFullScreenObserver(
   config: ScreenLaunchFullscreenAdConfig,
-  fullScreenAd: FullScreenAd,
+  fullScreenAdManager: FullScreenAdManager,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeWorker<UiScope> {
@@ -52,7 +52,7 @@ context(AdsEnabledProvider, IsAdFeatureEnabledUseCase, Logger) @Provide fun scre
       log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
         log { "try to show full screen ad $launchCount" }
-        if (fullScreenAd.loadAndShow().getOrElse { false })
+        if (fullScreenAdManager.loadAndShowFullScreenAd().getOrElse { false })
           pref.updateData { copy(screenLaunchCount = 0) }
       }
     }

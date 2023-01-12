@@ -14,7 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.torch.Torch
+import com.ivianuu.essentials.compose.bind
+import com.ivianuu.essentials.torch.TorchManager
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -27,24 +28,21 @@ import com.ivianuu.injekt.Provide
 
 object TorchKey : Key<Unit>
 
-@Provide fun torchUi(torch: Torch) = SimpleKeyUi<TorchKey> {
+context(TorchManager)
+    @Provide fun torchUi() = SimpleKeyUi<TorchKey> {
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
-        "Torch is ${if (torch.torchEnabled.collectAsState().value) "enabled" else "disabled"}",
+        "Torch is ${if (torchEnabled.bind()) "enabled" else "disabled"}",
         style = MaterialTheme.typography.h4
       )
 
       Spacer(Modifier.height(8.dp))
 
-      Button(
-        onClick = action {
-          torch.setTorchState(!torch.torchEnabled.value)
-        }
-      ) {
+      Button(onClick = action { setTorchState(!torchEnabled.value) }) {
         Text("Toggle torch")
       }
     }

@@ -17,23 +17,22 @@ val DefaultAppPredicate = AppPredicate { true }
 
 fun interface LaunchableAppPredicate : AppPredicate
 
-@Provide fun launchableAppPredicate(packageManager: PackageManager): LaunchableAppPredicate {
+context(PackageManager)
+    @Provide fun launchableAppPredicate(): LaunchableAppPredicate {
   val cache = mutableMapOf<String, Boolean>()
   return LaunchableAppPredicate { app ->
     cache.getOrPut(app.packageName) {
-      packageManager.getLaunchIntentForPackage(app.packageName) != null
+      getLaunchIntentForPackage(app.packageName) != null
     }
   }
 }
 
 fun interface IntentAppPredicate : AppPredicate
 
-@Provide fun intentAppPredicate(
-  packageManager: PackageManager,
-  intent: Intent
-): IntentAppPredicate {
+context(PackageManager)
+    @Provide fun intentAppPredicate(intent: Intent): IntentAppPredicate {
   val apps by lazy {
-    packageManager.queryIntentActivities(intent, 0)
+    queryIntentActivities(intent, 0)
       .map { it.activityInfo.applicationInfo.packageName }
   }
   return IntentAppPredicate { app -> app.packageName in apps }

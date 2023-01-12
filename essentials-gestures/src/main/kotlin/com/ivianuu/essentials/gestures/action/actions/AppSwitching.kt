@@ -50,10 +50,8 @@ context(ActionIntentSender, AppContext, PackageManager) fun switchToApp(
   }
 }
 
-context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>)
-@Provide @Scoped<AppScope> class AppSwitchManager(
-  private val packageManager: PackageManager
-) {
+context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>, PackageManager)
+@Provide @Scoped<AppScope> class AppSwitchManager {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
   private var isOnHomeScreen = false
@@ -101,7 +99,7 @@ context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>)
   fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
 
   private fun getHomePackages(defaultOnly: Boolean = true): List<String> =
-    packageManager.queryIntentActivities(
+    queryIntentActivities(
       homeIntent(),
       if (defaultOnly) PackageManager.MATCH_DEFAULT_ONLY
       else PackageManager.MATCH_ALL

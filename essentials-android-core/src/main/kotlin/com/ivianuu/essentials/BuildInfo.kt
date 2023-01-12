@@ -17,11 +17,8 @@ data class BuildInfo(
   val versionCode: Int,
 ) {
   companion object {
-    @Provide fun androidBuildInfo(
-      context: AppContext,
-      packageManager: PackageManager
-    ): @Scoped<AppScope> BuildInfo {
-      val appInfo = context.applicationInfo
+    context(AppContext) @Provide fun androidBuildInfo(): @Scoped<AppScope> BuildInfo {
+      val appInfo = applicationInfo
       val packageInfo = packageManager
         .getPackageInfo(appInfo.packageName, 0)
       return BuildInfo(
