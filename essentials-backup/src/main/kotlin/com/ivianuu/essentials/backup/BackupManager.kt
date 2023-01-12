@@ -7,7 +7,6 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
@@ -21,24 +20,30 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-fun interface CreateBackupUseCase : suspend () -> Result<Unit, Throwable>
+interface BackupManager {
+  suspend fun createBackup(): Result<Unit, Throwable>
 
-context(Logger, NamedCoroutineScope<AppScope>) @Provide fun createBackupUseCase(
-  backupDir: BackupDir,
-  backupFiles: List<BackupFile>,
-  buildInfo: BuildInfo,
-  context: IOContext,
-  dataDir: DataDir,
-  navigator: Navigator
-) = CreateBackupUseCase {
-  catch {
+  suspend fun restoreBackup(): Result<Unit, Throwable>
+}
+
+context(Logger) @Provide class BackupManagerImpl(
+  private val backupDir: BackupDir,
+  private val backupFiles: List<BackupFile>,
+  private val buildInfo: BuildInfo,
+  private val contentResolver: ContentResolver,
+  private val context: IOContext,
+  private val dataDir: DataDir,
+  private val navigator: Navigator,
+  private val processRestarter: ProcessRestarter
+) : BackupManager {
+  override suspend fun createBackup(): Result<Unit, Throwable> = catch {
     withContext(coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
@@ -70,18 +75,8 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide fun createBackupUseCase(
       navigator.push(ShareBackupFileKey(backupFile.absolutePath))
     }
   }
-}
 
-fun interface RestoreBackupUseCase : suspend () -> Result<Unit, Throwable>
-
-context(Logger, NamedCoroutineScope<AppScope>) @Provide fun restoreBackupUseCase(
-  contentResolver: ContentResolver,
-  context: IOContext,
-  dataDir: DataDir,
-  navigator: Navigator,
-  processRestarter: ProcessRestarter
-) = RestoreBackupUseCase {
-  catch {
+  override suspend fun restoreBackup(): Result<Unit, Throwable> = catch {
     withContext(coroutineContext + context) {
       val uri = navigator.push(
         DefaultIntentKey(
