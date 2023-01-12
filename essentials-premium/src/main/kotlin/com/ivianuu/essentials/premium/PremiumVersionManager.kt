@@ -118,12 +118,10 @@ typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 }
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
-@Provide fun showAds(
-  premiumVersionManager: PremiumVersionManager,
-  scope: NamedCoroutineScope<AppScope>
-): StateFlow<ShowAds> = premiumVersionManager.isPremiumVersion
+context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
+    @Provide fun showAds(): StateFlow<ShowAds> = isPremiumVersion
   .map { ShowAds(!it) }
-  .stateIn(scope, SharingStarted.Eagerly, ShowAds(false))
+  .stateIn(this@NamedCoroutineScope, SharingStarted.Eagerly, ShowAds(false))
 
 @Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {

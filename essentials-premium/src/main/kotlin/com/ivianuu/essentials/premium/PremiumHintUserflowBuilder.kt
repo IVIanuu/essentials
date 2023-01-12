@@ -24,13 +24,11 @@ fun interface PremiumHintUserflowBuilder : UserflowBuilder {
   }
 }
 
-@Provide fun premiumHintUserflowBuilder(
+context(PremiumVersionManager) @Provide fun premiumHintUserflowBuilder(
   enabled: AppStartPremiumHintEnabled,
-  isFirstRunFlow: Flow<IsFirstRun>,
-  premiumVersionManager: PremiumVersionManager
+  isFirstRunFlow: Flow<IsFirstRun>
 ) = PremiumHintUserflowBuilder {
-  if (!enabled.value ||
-    premiumVersionManager.isPremiumVersion.first()) return@PremiumHintUserflowBuilder emptyList()
+  if (!enabled.value || isPremiumVersion.first()) return@PremiumHintUserflowBuilder emptyList()
 
   val isFirstRun = isFirstRunFlow.first().value
 
