@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-context(ActionIntentSender, AppContext, PackageManager) fun switchToApp(
+context(ActionIntentSender, AppContext) fun switchToApp(
   packageName: String,
   enterAnimResId: Int,
   exitAnimResId: Int

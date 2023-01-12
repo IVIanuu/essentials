@@ -28,10 +28,8 @@ interface ShortcutRepository {
   suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut
 }
 
-context(BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
-  private val context: AppContext,
-  private val coroutineContext: IOContext,
-  private val packageManager: PackageManager
+context(AppContext, BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
+  private val coroutineContext: IOContext
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>>
     get() = broadcasts(
@@ -75,7 +73,7 @@ context(BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
       shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
     @Suppress("DEPRECATION") val icon = when {
-      bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
+      bitmapIcon != null -> bitmapIcon.toDrawable(resources)
       iconResource != null -> {
         val resources =
           packageManager.getResourcesForApplication(iconResource.packageName)

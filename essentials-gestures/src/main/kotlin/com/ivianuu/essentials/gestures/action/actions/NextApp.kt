@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
-import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
@@ -26,12 +25,8 @@ context(ResourceProvider) @Provide fun nextAppAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_arrow_forward)
 )
 
-@Provide fun nextAppActionExecutor(
-  appSwitchManager: AppSwitchManager,
-  actionIntentSender: ActionIntentSender,
-  context: AppContext,
-  packageManager: PackageManager
-) = ActionExecutor<NextAppActionId> {
-  appSwitchManager.nextApp()
+context(ActionIntentSender, AppContext, AppSwitchManager)
+    @Provide fun nextAppActionExecutor() = ActionExecutor<NextAppActionId> {
+  nextApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_left, R.anim.es_slide_out_left) }
 }

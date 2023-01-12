@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.ComponentActivity
+import com.ivianuu.injekt.inject
 
 class ProcessRestartActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +25,9 @@ class ProcessRestartActivity : ComponentActivity() {
 
   internal companion object {
     private const val KEY_RESTART_INTENT = "restart_intent"
-    fun launch(context: Context, restartIntent: Intent) {
-      context.startActivity(
-        Intent(context, ProcessRestartActivity::class.java).apply {
+    context(Context) fun launch(restartIntent: Intent) {
+      startActivity(
+        Intent(inject(), ProcessRestartActivity::class.java).apply {
           putExtra(KEY_RESTART_INTENT, restartIntent)
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }

@@ -10,14 +10,12 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.inject
 
-@Provide fun tileServiceDeclarationChecker(
-  context: AppContext,
-  packageManager: PackageManager,
-  tileIds: List<TileId>
-) = ScopeWorker<AppScope> {
+context(AppContext)
+    @Provide fun tileServiceDeclarationChecker(tileIds: List<TileId>) = ScopeWorker<AppScope> {
   for (tileId in tileIds) {
-    val intent = Intent(context, tileId.clazz.java)
+    val intent = Intent(inject(), tileId.clazz.java)
     val resolveInfo = packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY)
     if (resolveInfo.isEmpty())
       throw IllegalStateException("A model for tile ${tileId.clazz} was provided but not declared in the manifest")

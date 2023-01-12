@@ -26,7 +26,7 @@ context(ResourceProvider) @Provide fun lastAppAction() = Action(
   icon = staticActionIcon(R.drawable.es_ic_arrow_back)
 )
 
-context(ActionIntentSender, AppSwitchManager, AppContext, PackageManager)
+context(ActionIntentSender, AppContext, AppSwitchManager)
     @Provide fun lastAppActionExecutor() = ActionExecutor<LastAppActionId> {
   lastApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_right, R.anim.es_slide_out_right) }
