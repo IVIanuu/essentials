@@ -42,7 +42,7 @@ context(CoroutineScope) class TestBillingClient(
     }
   var skus = emptyList<SkuDetails>()
 
-  override fun isFeatureSupported(p0: String): BillingResult = successResult()
+  override fun isFeatureSupported(feature: String): BillingResult = successResult()
 
   override fun isReady(): Boolean = isConnected
 
