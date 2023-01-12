@@ -18,9 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
-import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
-import com.ivianuu.essentials.billing.PurchaseUseCase
+import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.resource.Resource
@@ -124,11 +122,8 @@ data class UiDonation(
   val price: String
 )
 
-context(KeyUiContext<DonationKey>, ToastContext) @Provide fun donationModel(
-  consumePurchase: ConsumePurchaseUseCase,
-  donations: Donations,
-  getSkuDetails: GetSkuDetailsUseCase,
-  purchase: PurchaseUseCase
+context(BillingService, KeyUiContext<DonationKey>, ToastContext) @Provide fun donationModel(
+  donations: Donations
 ) = Model {
   DonationModel(
     skus = produceResource {

@@ -8,10 +8,7 @@ import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.ads.ShowAds
 import com.ivianuu.essentials.android.prefs.PrefModule
-import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
-import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
-import com.ivianuu.essentials.billing.IsPurchased
-import com.ivianuu.essentials.billing.PurchaseUseCase
+import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
@@ -55,19 +52,15 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-context(Logger, NamedCoroutineScope<AppScope>, ToastContext)
+context(BillingService, Logger, NamedCoroutineScope<AppScope>, ToastContext)
 @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
   private val appUiStarter: AppUiStarter,
-  private val consumePurchase: ConsumePurchaseUseCase,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
-  private val getSkuDetails: GetSkuDetailsUseCase,
   private val navigator: Navigator,
   private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
-  isPurchased: (Sku) -> Flow<IsPurchased>,
-  private val screenUnlocker: ScreenUnlocker,
-  private val purchase: PurchaseUseCase
+  private val screenUnlocker: ScreenUnlocker
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
     get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
@@ -76,10 +69,10 @@ context(Logger, NamedCoroutineScope<AppScope>, ToastContext)
     isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
       combine(oldPremiumVersionSkus.map { isPurchased(it) }).map {
-        it.any { it.value }
+        it.any { it }
       }
     else flowOf(false)
-  ) { a, b -> a.value || b }
+  ) { a, b -> a || b }
     .onEach { isPremiumVersion ->
       launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {

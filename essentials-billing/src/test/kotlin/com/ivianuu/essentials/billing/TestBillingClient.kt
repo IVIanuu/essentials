@@ -53,7 +53,7 @@ context(CoroutineScope) class TestBillingClient(
       listener.onBillingSetupFinished(successResult())
       return
     }
-    scope.launch {
+    launch {
       delay(10)
       listener.onBillingSetupFinished(successResult())
       isConnected = true
@@ -68,7 +68,7 @@ context(CoroutineScope) class TestBillingClient(
     ConnectionState.CONNECTED else ConnectionState.DISCONNECTED
 
   override fun launchBillingFlow(activity: Activity, params: BillingFlowParams): BillingResult {
-    scope.launch {
+    launch {
       delay(10)
       purchases = purchases + Purchase(sku = params.zze().first().cast<SkuDetails>().sku)
     }
@@ -108,7 +108,7 @@ context(CoroutineScope) class TestBillingClient(
     params: SkuDetailsParams,
     listener: SkuDetailsResponseListener
   ) {
-    scope.launch {
+    launch {
       delay(10)
       listener.onSkuDetailsResponse(
         successResult(),
@@ -119,7 +119,7 @@ context(CoroutineScope) class TestBillingClient(
 
   override fun consumeAsync(params: ConsumeParams, listener: ConsumeResponseListener) {
     purchases = purchases.filterNot { it.purchaseToken == params.purchaseToken }
-    scope.launch {
+    launch {
       delay(10)
       listener.onConsumeResponse(successResult(), params.purchaseToken)
     }
@@ -163,7 +163,7 @@ context(CoroutineScope) class TestBillingClient(
           it.developerPayload
         )
       }
-    scope.launch {
+    launch {
       delay(10)
       listener.onAcknowledgePurchaseResponse(successResult())
     }

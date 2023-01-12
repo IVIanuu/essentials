@@ -5,34 +5,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.billing.ConsumePurchaseUseCase
-import com.ivianuu.essentials.billing.GetSkuDetailsUseCase
-import com.ivianuu.essentials.billing.PurchaseUseCase
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.donation.DonationKey
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.delay
 import org.json.JSONObject
 
 @Provide val donationHomeItem = HomeItem("Donation") { DonationKey }
-
-@Provide val sampleGetSkuDetailsUseCase = GetSkuDetailsUseCase {
-  delay(2000)
-  when (it.skuString) {
-    "donation_crossaint" -> SkuDetails(sku = it, title = "A crossaint", price = "0.99€")
-    "donation_coffee_2" -> SkuDetails(sku = it, title = "A cup of coffee", price = "2.49€")
-    "donation_burger_menu" -> SkuDetails(sku = it, title = "Burger menu", price = "4.99€")
-    "donation_movie" -> SkuDetails(sku = it, title = "Movie with popcorn", price = "9.99€")
-    else -> throw AssertionError()
-  }
-}
-
-@Provide val samplePurchaseUseCase = PurchaseUseCase { _, _, _ ->
-  delay(3000)
-  true
-}
-
-@Provide val sampleConsumePurchaseUseCase = ConsumePurchaseUseCase { true }
 
 private fun SkuDetails(
   sku: Sku,

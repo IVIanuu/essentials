@@ -6,27 +6,12 @@ package com.ivianuu.essentials.billing
 
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.coroutines.EventFlow
-import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.LoggingEnabled
-import com.ivianuu.essentials.logging.PrintingLogger
-import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
 import org.json.JSONObject
 
 val TestSku = Sku("sku", Sku.Type.IN_APP)
 
 fun TestBillingClient.withTestSku(): TestBillingClient = apply {
   skus += SkuDetails(TestSku)
-}
-
-context(CoroutineScope) class TestBillingContext : BillingContext {
-  override val billingClient = TestBillingClient { refreshes.tryEmit(BillingRefresh) }
-  override val refreshes: MutableSharedFlow<BillingRefresh> = EventFlow()
-  @Provide override val logger: Logger = PrintingLogger(LoggingEnabled(true))
-  override suspend fun <R> withConnection(block: suspend context(BillingContext) () -> R): R =
-    block()
 }
 
 fun Purchase(
