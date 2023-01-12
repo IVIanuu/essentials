@@ -44,10 +44,10 @@ data class LicenseModel(
   val openProject: (Project) -> Unit
 )
 
-context(KeyUiContext<LicenseKey>)
-    @Provide fun licenseModel(licenseProjectRepository: LicenceProjectRepository) = Model {
+context(KeyUiContext<LicenseKey>, LicenceProjectRepository)
+    @Provide fun licenseModel() = Model {
   LicenseModel(
-    projects = produceResource { licenseProjectRepository.getLicenseProjects().getOrThrow() },
+    projects = produceResource { getLicenseProjects().getOrThrow() },
     openProject = action { project ->
       if (project.url != null)
         navigator.push(UrlKey(project.url))

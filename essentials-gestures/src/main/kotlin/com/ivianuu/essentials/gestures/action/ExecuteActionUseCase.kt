@@ -21,18 +21,25 @@ import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
+fun interface ExecuteActionUseCase {
+  suspend fun executeAction(id: String): Result<Boolean, Throwable>
+}
 
-context(CloseSystemDialogsUseCase, Logger, PermissionManager, ToastContext) @Provide fun executeActionUseCase(
+context(
+ActionRepository,
+CloseSystemDialogsUseCase,
+Logger,
+PermissionManager,
+ToastContext)
+    @Provide fun executeActionUseCase(
   coroutineContext: DefaultContext,
-  repository: ActionRepository,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker
 ) = ExecuteActionUseCase { id ->
   withContext(coroutineContext) {
     catch {
       log { "execute $id" }
-      val action = repository.getAction(id)
+      val action = getAction(id)
 
       // check permissions
       if (!permissionState(action.permissions).first()) {
@@ -60,7 +67,7 @@ context(CloseSystemDialogsUseCase, Logger, PermissionManager, ToastContext) @Pro
       log { "fire $id" }
 
       // fire
-      repository.getActionExecutor(id)()
+      getActionExecutor(id)()
       return@catch true
     }.onFailure {
       it.printStackTrace()

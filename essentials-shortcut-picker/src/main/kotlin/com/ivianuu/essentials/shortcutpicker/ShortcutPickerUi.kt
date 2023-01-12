@@ -61,17 +61,16 @@ data class ShortcutPickerModel(
   val pickShortcut: (Shortcut) -> Unit
 )
 
-context(KeyUiContext<ShortcutPickerKey>, ToastContext) @Provide fun shortcutPickerModel(
-  shortcutRepository: ShortcutRepository
-) = Model {
+context(KeyUiContext<ShortcutPickerKey>, ShortcutRepository, ToastContext)
+    @Provide fun shortcutPickerModel() = Model {
   ShortcutPickerModel(
-    shortcuts = shortcutRepository.shortcuts.bindResource(),
+    shortcuts = shortcuts.bindResource(),
     pickShortcut = action { shortcut ->
       catch {
         val shortcutRequestResult = navigator.push(DefaultIntentKey(shortcut.intent))
           ?.getOrNull()
           ?.data ?: return@catch
-        val finalShortcut = shortcutRepository.extractShortcut(shortcutRequestResult)
+        val finalShortcut = extractShortcut(shortcutRequestResult)
         navigator.pop(key, finalShortcut)
       }.onFailure {
         it.printStackTrace()

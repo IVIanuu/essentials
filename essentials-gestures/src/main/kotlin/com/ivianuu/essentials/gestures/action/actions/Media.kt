@@ -97,15 +97,14 @@ data class MediaActionSettingsModel(
   val updateMediaApp: () -> Unit
 )
 
-context(KeyUiContext<MediaActionSettingsKey>) @Provide fun mediaActionSettingsModel(
-  appRepository: AppRepository,
+context(AppRepository, KeyUiContext<MediaActionSettingsKey>) @Provide fun mediaActionSettingsModel(
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>
 ) = Model {
   MediaActionSettingsModel(
     mediaApp = pref.data
       .map { it.mediaApp }
-      .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
+      .flatMapLatest { if (it != null) appInfo(it) else infiniteEmptyFlow() }
       .bindResource(),
     updateMediaApp = action {
       val newMediaApp = navigator.push(
