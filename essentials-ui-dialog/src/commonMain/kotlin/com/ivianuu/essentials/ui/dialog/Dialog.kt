@@ -168,6 +168,7 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
             bottom = 8.dp
           ),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+        verticalAlignment = Alignment.CenterVertically,
         content = { buttons() }
       )
     }
