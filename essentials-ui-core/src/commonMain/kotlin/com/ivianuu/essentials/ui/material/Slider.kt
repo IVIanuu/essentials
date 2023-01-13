@@ -40,7 +40,7 @@ import kotlin.time.Duration
     { onValueChange(it.toValue()) },
     modifier,
     enabled,
-    valueRange.start.toFloat()..valueRange.endInclusive.toFloat(),
+    remember(valueRange) { valueRange.start.toFloat()..valueRange.endInclusive.toFloat() },
     remember(valueRange) { stepPolicy(valueRange) },
     onValueChangeFinished,
     interactionSource,
