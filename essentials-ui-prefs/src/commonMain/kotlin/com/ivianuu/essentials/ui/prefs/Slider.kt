@@ -65,7 +65,7 @@ import kotlin.math.absoluteValue
         ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      var internalValue by remember(value) { mutableStateOf(value) }
+      var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
 
       var valueChangeJob: Job? by remember { refOf(null) }
       val scope = rememberCoroutineScope()
@@ -77,15 +77,18 @@ import kotlin.math.absoluteValue
           valueChangeJob = scope.launch {
             delay(200)
             if (newValue != value)
-              onValueChange(newValue)
+              onValueChange(newValue.toValue())
 
             delay(800)
-            internalValue = value
+            internalValue = value.toFloat()
           }
+        },
+        valueRange = remember(valueRange) {
+          valueRange.start.toFloat()..valueRange.endInclusive.toFloat()
         },
         stepPolicy = remember(stepPolicy) {
           { valueRange ->
-            stepPolicy(valueRange.start..valueRange.endInclusive)
+            stepPolicy(valueRange.start.toValue()..valueRange.endInclusive.toValue())
           }
         },
         modifier = Modifier.weight(1f)
@@ -110,8 +113,8 @@ import kotlin.math.absoluteValue
                 }
 
               val steppedValue = stepValues
-                .minByOrNull { (it - internalValue.toFloat()).absoluteValue }
-                ?: internalValue.toFloat()
+                .minByOrNull { (it - internalValue).absoluteValue }
+                ?: internalValue
 
               steppedValue.toValue()
             }
