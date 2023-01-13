@@ -12,7 +12,7 @@ import com.ivianuu.injekt.inject
 interface Logger {
   val isLoggingEnabled: LoggingEnabled
 
-  fun logMessage(tag: String, message: String, priority: Priority = DEBUG)
+  fun logMessage(priority: Priority = DEBUG, tag: String, message: String)
 
   enum class Priority {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
@@ -31,7 +31,7 @@ context(Logger, LoggingTag) inline fun log(
   priority: Logger.Priority = DEBUG,
   message: () -> String
 ) {
-  if (isLoggingEnabled.value) logMessage(inject<LoggingTag>().value, message(), priority)
+  if (isLoggingEnabled.value) logMessage(priority, inject<LoggingTag>().value, message())
 }
 
 expect fun Throwable.asLog(): String
@@ -40,12 +40,12 @@ object NoopLogger : Logger {
   override val isLoggingEnabled: LoggingEnabled
     get() = LoggingEnabled(false)
 
-  override fun logMessage(tag: String, message: String, priority: Logger.Priority) {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
   }
 }
 
 @Provide class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
-  override fun logMessage(tag: String, message: String, priority: Logger.Priority) {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
     println("[${priority.name}] $tag $message")
   }
 }

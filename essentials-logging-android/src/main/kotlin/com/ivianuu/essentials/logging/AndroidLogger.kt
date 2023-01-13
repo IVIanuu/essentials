@@ -22,7 +22,7 @@ import kotlin.math.min
 context(SystemBuildInfo) @Provide class AndroidLogger(
   override val isLoggingEnabled: LoggingEnabled
 ) : Logger {
-  override fun logMessage(tag: String, message: String, priority: Priority) {
+  override fun logMessage(priority: Priority, tag: String, message: String) {
     val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemSdk >= 26) {
       tag
     } else {
