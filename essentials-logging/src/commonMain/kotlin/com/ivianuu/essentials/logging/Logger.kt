@@ -12,19 +12,26 @@ import com.ivianuu.injekt.inject
 interface Logger {
   val isLoggingEnabled: LoggingEnabled
 
-  fun logMessage(priority: Priority = DEBUG, tag: String, message: String)
+  fun logMessage(tag: String, message: String, priority: Priority = DEBUG)
 
   enum class Priority {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
   }
 }
 
-context(Logger, LoggingTag) inline fun log(
+context(Logger) @JvmName("logWithTag") inline fun log(
+  tag: String,
   priority: Logger.Priority = DEBUG,
-  tag: LoggingTag = inject(),
   message: () -> String
 ) {
-  if (isLoggingEnabled.value) logMessage(priority, tag.value, message())
+  with(LoggingTag(tag)) { log(priority, message) }
+}
+
+context(Logger, LoggingTag) inline fun log(
+  priority: Logger.Priority = DEBUG,
+  message: () -> String
+) {
+  if (isLoggingEnabled.value) logMessage(inject<LoggingTag>().value, message(), priority)
 }
 
 expect fun Throwable.asLog(): String
@@ -33,12 +40,12 @@ object NoopLogger : Logger {
   override val isLoggingEnabled: LoggingEnabled
     get() = LoggingEnabled(false)
 
-  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
+  override fun logMessage(tag: String, message: String, priority: Logger.Priority) {
   }
 }
 
 @Provide class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
-  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
+  override fun logMessage(tag: String, message: String, priority: Logger.Priority) {
     println("[${priority.name}] $tag $message")
   }
 }
