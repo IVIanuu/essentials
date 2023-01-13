@@ -5,8 +5,11 @@
 package com.ivianuu.essentials
 
 import android.content.pm.PackageManager
-import android.hardware.camera2.CameraManager
+import android.os.Build
 import java.io.File
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
+import kotlin.reflect.KClass
 
 /**
  * Run to regenerate system service modules
@@ -16,6 +19,12 @@ fun main() {
   val workingDir = System.getProperty("user.dir")!!
   val file = File("$workingDir/essentials-android-core/src/main/kotlin")
 
+  // we have to change the sdk int because otherwise not all services will be generated
+  null.updatePrivateFinalField<Int>(
+    Build.VERSION::class,
+    "SDK_INT"
+  ) { Int.MAX_VALUE }
+
   Class.forName("androidx.core.content.ContextCompat\$LegacyServiceMapHolder")
     .getDeclaredField("SERVICES")
     .also { it.isAccessible = true }
@@ -24,12 +33,10 @@ fun main() {
     .keys
     .toMutableSet()
     .apply {
-      // is missing somehow
-      add(CameraManager::class.java)
       // cannot hurt either:D
       add(PackageManager::class.java)
     }
-    .groupBy { it.packageName }
+    .groupBy { it.canonicalName!!.removeSuffix(".${it.simpleName}") }
     .mapValues { it.value.sortedBy { it.simpleName } }
     .toMutableMap()
     .forEach { (packageName, services) ->
@@ -41,6 +48,7 @@ fun main() {
           writeText(
             buildString {
               appendLine("package $packageName")
+              appendLine()
               appendLine("import android.content.Context")
               appendLine("import com.ivianuu.injekt.Provide")
 
@@ -64,4 +72,21 @@ fun main() {
           )
         }
     }
+}
+
+private fun <T> Any?.updatePrivateFinalField(
+  clazz: KClass<*>,
+  fieldName: String,
+  transform: T.() -> T
+): T {
+  val field = clazz.java.declaredFields
+    .single { it.name == fieldName }
+  field.isAccessible = true
+  val modifiersField: Field = Field::class.java.getDeclaredField("modifiers")
+  modifiersField.isAccessible = true
+  modifiersField.setInt(field, field.modifiers and Modifier.FINAL.inv())
+  val currentValue = field.get(this)
+  val newValue = transform(currentValue as T)
+  field.set(this, newValue)
+  return newValue
 }

@@ -1,4 +1,5 @@
 package android.hardware.camera2
+
 import android.content.Context
 import com.ivianuu.injekt.Provide
 
