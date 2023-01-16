@@ -4,12 +4,14 @@
 
 package com.ivianuu.essentials.db
 
+import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.inject
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.SerialKind
 
 interface EntityDescriptor<T> {
   val typeKey: TypeKey<T>
@@ -40,6 +42,10 @@ annotation class PrimaryKey
 @SerialInfo
 annotation class AutoIncrement
 
+@Target(AnnotationTarget.PROPERTY)
+@SerialInfo
+annotation class Relation
+
 context(TypeKey<T>, KSerializer<T>)
 fun <T> EntityDescriptor(tableName: String): EntityDescriptor<T> =
   EntityDescriptorImpl(tableName, inject(), inject())
@@ -52,22 +58,42 @@ private class EntityDescriptorImpl<T>(
   override val rows: List<Row> = (0 until serializer.descriptor.elementsCount)
     .map { elementIndex ->
       val annotations = serializer.descriptor.getElementAnnotations(elementIndex)
+      val isRelation = annotations.any { it is Relation }
+
+      val kind: PrimitiveKind
+      val relationPrimaryKeyIndex: Int?
+      if (isRelation) {
+        val relationDescriptor = serializer.descriptor.getElementDescriptor(elementIndex)
+        check(relationDescriptor.annotations.any { it is Entity }) {
+          "Relation must be a entity"
+        }
+
+        val _relationPrimaryKeyIndex = (0 until relationDescriptor.elementsCount)
+          .singleOrNull {
+            relationDescriptor.getElementAnnotations(it)
+              .any { it is PrimaryKey }
+          }
+
+        checkNotNull(_relationPrimaryKeyIndex) {
+          "Relation has no primary key"
+        }
+
+        kind = relationDescriptor.getElementDescriptor(_relationPrimaryKeyIndex).kind.cast()
+        relationPrimaryKeyIndex = _relationPrimaryKeyIndex
+      } else {
+        kind = serializer.descriptor.getElementDescriptor(elementIndex).kind.cast()
+        relationPrimaryKeyIndex = null
+      }
+
       Row(
         name = serializer.descriptor.getElementName(elementIndex),
-        type = when (serializer.descriptor.getElementDescriptor(elementIndex).kind) {
-          PrimitiveKind.BOOLEAN -> Row.Type.INT
-          PrimitiveKind.BYTE -> Row.Type.INT
-          PrimitiveKind.CHAR -> Row.Type.STRING
-          PrimitiveKind.SHORT -> Row.Type.INT
-          PrimitiveKind.INT -> Row.Type.INT
-          PrimitiveKind.LONG -> Row.Type.INT
-          PrimitiveKind.FLOAT -> Row.Type.DOUBLE
-          PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
-          else -> Row.Type.STRING
-        },
+        type = kind.toRowType(),
+        kind = kind,
         isNullable = serializer.descriptor.getElementDescriptor(elementIndex).isNullable,
         isPrimaryKey = annotations.any { it is PrimaryKey },
-        autoIncrement = annotations.any { it is AutoIncrement }
+        autoIncrement = annotations.any { it is AutoIncrement },
+        isRelation = isRelation,
+        relationPrimaryKeyIndex = relationPrimaryKeyIndex
       )
     }
 
@@ -88,12 +114,27 @@ private class EntityDescriptorImpl<T>(
   }
 }
 
+private fun SerialKind.toRowType() = when (this) {
+  PrimitiveKind.BOOLEAN -> Row.Type.INT
+  PrimitiveKind.BYTE -> Row.Type.INT
+  PrimitiveKind.CHAR -> Row.Type.STRING
+  PrimitiveKind.SHORT -> Row.Type.INT
+  PrimitiveKind.INT -> Row.Type.INT
+  PrimitiveKind.LONG -> Row.Type.INT
+  PrimitiveKind.FLOAT -> Row.Type.DOUBLE
+  PrimitiveKind.DOUBLE -> Row.Type.DOUBLE
+  else -> Row.Type.STRING
+}
+
 data class Row(
   val name: String,
   val type: Type,
+  val kind: PrimitiveKind,
   val isNullable: Boolean,
   val isPrimaryKey: Boolean,
-  val autoIncrement: Boolean
+  val autoIncrement: Boolean,
+  val isRelation: Boolean,
+  val relationPrimaryKeyIndex: Int?
 ) {
   enum class Type {
     STRING,
@@ -111,7 +152,8 @@ context(TypeKey<T>) fun <T> T.toSqlColumnsAndArgsString(schema: Schema): String 
       OneLevelEmittingEncoder(
         schema.serializersModule,
         schema.embeddedFormat,
-        descriptor.serializer.descriptor
+        descriptor.serializer.descriptor,
+        descriptor
       ) { this += it }
         .encodeSerializableValue(descriptor.serializer, this@toSqlColumnsAndArgsString)
     }
@@ -125,7 +167,6 @@ context(TypeKey<T>) fun <T> T.toSqlColumnsAndArgsString(schema: Schema): String 
   append(") ")
 
   append("VALUES(")
-
   append(rowsWithValues.joinToString { it.second.toSqlArg(it.first) })
   append(")")
 }

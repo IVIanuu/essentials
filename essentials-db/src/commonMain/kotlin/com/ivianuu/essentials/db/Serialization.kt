@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.db
 
+import com.ivianuu.essentials.cast
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
@@ -20,14 +21,56 @@ class OneLevelEmittingEncoder(
   override val serializersModule: SerializersModule,
   private val embeddedFormat: StringFormat,
   private val descriptor: SerialDescriptor,
+  private val entityDescriptor: EntityDescriptor<*>,
   private val consumer: (String) -> Unit
 ) : AbstractEncoder() {
+  override fun <T> encodeSerializableElement(
+    descriptor: SerialDescriptor,
+    index: Int,
+    serializer: SerializationStrategy<T>,
+    value: T
+  ) {
+    val row = entityDescriptor.rows[index]
+    if (row.isRelation) {
+      lateinit var relationPrimaryKey: Any
+      // todo is there a better way to extract the primary key value
+      serializer.serialize(
+        object : AbstractEncoder() {
+          override val serializersModule: SerializersModule
+            get() = this@OneLevelEmittingEncoder.serializersModule
+
+          override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean =
+            (index == row.relationPrimaryKeyIndex)
+
+          override fun encodeValue(value: Any) {
+            relationPrimaryKey = value
+          }
+        },
+        value
+      )
+
+      when (row.kind) {
+        PrimitiveKind.BOOLEAN -> encodeBoolean(relationPrimaryKey.cast())
+        PrimitiveKind.BYTE -> encodeByte(relationPrimaryKey.cast())
+        PrimitiveKind.CHAR -> encodeChar(relationPrimaryKey.cast())
+        PrimitiveKind.DOUBLE -> encodeDouble(relationPrimaryKey.cast())
+        PrimitiveKind.FLOAT -> encodeFloat(relationPrimaryKey.cast())
+        PrimitiveKind.INT -> encodeInt(relationPrimaryKey.cast())
+        PrimitiveKind.LONG -> encodeLong(relationPrimaryKey.cast())
+        PrimitiveKind.SHORT -> encodeShort(relationPrimaryKey.cast())
+        PrimitiveKind.STRING -> encodeString(relationPrimaryKey.cast())
+      }
+    } else super.encodeSerializableElement(descriptor, index, serializer, value)
+  }
+
   override fun <T> encodeSerializableValue(serializer: SerializationStrategy<T>, value: T) {
     if (serializer.descriptor == this.descriptor ||
       serializer.descriptor.kind is PrimitiveKind ||
       serializer.descriptor.kind == SerialKind.ENUM
     ) super.encodeSerializableValue(serializer, value)
-    else encodeString(embeddedFormat.encodeToString(serializer, value))
+    else {
+      encodeString(embeddedFormat.encodeToString(serializer, value))
+    }
   }
 
   override fun encodeBoolean(value: Boolean) {
@@ -100,13 +143,14 @@ class CursorDecoder(
     else index
   }
 
-  override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T =
-    if (deserializer.descriptor == this.descriptor ||
+  override fun <T> decodeSerializableValue(deserializer: DeserializationStrategy<T>): T {
+    return if (deserializer.descriptor == this.descriptor ||
       deserializer.descriptor.kind is PrimitiveKind ||
       deserializer.descriptor.kind == SerialKind.ENUM
     ) super.decodeSerializableValue(deserializer)
     else
       embeddedFormat.decodeFromString(deserializer, decodeString())
+  }
 
   override fun <T : Any> decodeNullableSerializableValue(deserializer: DeserializationStrategy<T?>): T? =
     if (cursor.isNull(index)) null.also { index++ } else decodeSerializableValue(deserializer)
