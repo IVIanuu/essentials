@@ -27,11 +27,11 @@ import com.ivianuu.essentials.ui.material.NoStepsStepPolicy
 import com.ivianuu.essentials.ui.material.Slider
 import com.ivianuu.essentials.ui.material.SliderValueConverter
 import com.ivianuu.essentials.ui.material.StepPolicy
+import com.ivianuu.essentials.ui.material.stepValue
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
@@ -103,20 +103,7 @@ import kotlin.math.absoluteValue
             LocalTextStyle provides MaterialTheme.typography.body2
           ) {
             val steppedValue = remember(valueRange, stepPolicy, internalValue) {
-              val steps = stepPolicy(valueRange)
-              val stepFractions = (if (steps == 0) emptyList()
-              else List(steps + 2) { it.toFloat() / (steps + 1) })
-              val stepValues = stepFractions
-                .map {
-                  valueRange.start.toFloat() +
-                      ((valueRange.endInclusive.toFloat() - valueRange.start.toFloat()) * it)
-                }
-
-              val steppedValue = stepValues
-                .minByOrNull { (it - internalValue).absoluteValue }
-                ?: internalValue
-
-              steppedValue.toValue()
+              stepPolicy.stepValue(internalValue.toValue(), valueRange)
             }
 
             valueText(steppedValue)
@@ -126,4 +113,3 @@ import kotlin.math.absoluteValue
     }
   }
 }
-

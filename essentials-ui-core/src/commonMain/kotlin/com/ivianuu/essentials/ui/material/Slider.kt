@@ -18,6 +18,7 @@ import com.ivianuu.essentials.time.toLong
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
+import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
 @Composable fun <T : Comparable<T>> Slider(
@@ -118,4 +119,22 @@ fun incrementingStepPolicy(incValue: Long): StepPolicy<Long> = { valueRange ->
 
 fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRange ->
   (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
+}
+
+context(SliderValueConverter<T>)
+fun <T : Comparable<T>> StepPolicy<T>.stepValue(value: T, valueRange: ClosedRange<T>): T {
+  val steps = this(valueRange)
+  val stepFractions = (if (steps == 0) emptyList()
+  else List(steps + 2) { it.toFloat() / (steps + 1) })
+  val stepValues = stepFractions
+    .map {
+      valueRange.start.toFloat() +
+          ((valueRange.endInclusive.toFloat() - valueRange.start.toFloat()) * it)
+    }
+
+  val steppedValue = stepValues
+    .minByOrNull { (it - value.toFloat()).absoluteValue }
+    ?: value.toFloat()
+
+  return steppedValue.toValue()
 }
