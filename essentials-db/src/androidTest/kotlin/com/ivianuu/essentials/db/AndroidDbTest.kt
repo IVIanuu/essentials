@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.db
 
 import androidx.test.core.app.ApplicationProvider
+import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.test.testCollect
 import io.kotest.assertions.throwables.shouldThrow
@@ -300,7 +301,7 @@ class AndroidDbTest {
       coroutineContext = coroutineContext
     )
 
-    val collector = db.selectAll<MyEntity>().testCollect(this)
+    val collector = db.selectAll<MyEntity>().testCollect()
 
     advanceUntilIdle()
 
@@ -435,10 +436,9 @@ class AndroidDbTest {
         ),
         migrations = listOf(
           Migration(1, 2) { db, _, _ ->
-            db.createTable<Migration3MyEntityV2>(
-              entity = EntityDescriptor(tableName = "MyEntity"),
-              tableName = "MyEntity_new"
-            )
+            with(EntityDescriptor<Migration3MyEntityV2>(tableName = "MyEntity")) {
+              db.createTable<Migration3MyEntityV2>(tableName = "MyEntity_new")
+            }
             db.execute("INSERT INTO MyEntity_new (name) SELECT name FROM MyEntity", "MyEntity")
             db.execute("DROP TABLE MyEntity", "MyEntity")
             db.execute("ALTER TABLE MyEntity_new RENAME TO MyEntity", "MyEntity")
@@ -752,6 +752,16 @@ class AndroidDbTest {
     v2Db.dispose()
   }
 
+  @Test fun testEntityWithoutEntityAnnotation() {
+    shouldThrow<IllegalStateException> {
+      EntityDescriptor<EntityWithoutEntityAnnotation>("table")
+    }
+  }
+
+  @Serializable data class EntityWithoutEntityAnnotation(
+    val name: String
+  )
+
   @Test fun testEntityWithoutPrimaryKey() {
     shouldThrow<IllegalStateException> {
       EntityDescriptor<EntityWithoutPrimaryKey>("table")
@@ -764,43 +774,43 @@ class AndroidDbTest {
     }
   }
 
-  @Serializable data class EntityWithoutPrimaryKey(
+  @Entity @Serializable data class EntityWithoutPrimaryKey(
     val name: String
   )
 
-  @Serializable data class EntityWithMultiplePrimaryKey(
+  @Entity @Serializable data class EntityWithMultiplePrimaryKey(
     @PrimaryKey val firstName: String,
     @PrimaryKey val lastName: String
   )
 
-  @Serializable data class UserWithDog(
+  @Entity @Serializable data class UserWithDog(
     @PrimaryKey val name: String,
     val dog: Dog
   )
 
-  @Serializable data class Dog(val name: String)
+  @Entity @Serializable data class Dog(val name: String)
 
-  @Serializable data class UserWithMultipleDogs(
+  @Entity @Serializable data class UserWithMultipleDogs(
     @PrimaryKey val name: String,
     val dogs: List<Dog>
   )
 
-  @Serializable data class EntityWithNullableStringField(
+  @Entity @Serializable data class EntityWithNullableStringField(
     @PrimaryKey val id: String,
     val name: String?
   )
 
-  @Serializable data class EntityWithNullableField(
+  @Entity @Serializable data class EntityWithNullableField(
     @PrimaryKey val id: String,
     val value: Long?
   )
 
-  @Serializable data class EntityWithEnum(
+  @Entity @Serializable data class EntityWithEnum(
     @PrimaryKey val id: String,
     val enum: MyEnum
   )
 
-  @Serializable data class EntityWithEnumId(
+  @Entity @Serializable data class EntityWithEnumId(
     @PrimaryKey val enum: MyEnum
   )
 
@@ -808,46 +818,46 @@ class AndroidDbTest {
     A, B, C
   }
 
-  @Serializable data class MyEntity(
+  @Entity @Serializable data class MyEntity(
     @PrimaryKey val name: String,
     val age: Int
   )
 
-  @Serializable data class MyEntity2(
+  @Entity @Serializable data class MyEntity2(
     @PrimaryKey val name: String,
     val age: Int
   )
 
-  @Serializable data class Migration1MyEntityV1(
+  @Entity @Serializable data class Migration1MyEntityV1(
     @PrimaryKey val name: String,
     val age: Int
   )
 
-  @Serializable data class Migration1MyEntityV2(
+  @Entity @Serializable data class Migration1MyEntityV2(
     @PrimaryKey val name: String,
     val height: Int = 183,
     val age: Int
   )
 
-  @Serializable data class Migration2MyEntityV1(
+  @Entity @Serializable data class Migration2MyEntityV1(
     @PrimaryKey val name: String,
     val age: Int
   )
 
-  @Serializable data class Migration2MyEntityV2(
+  @Entity @Serializable data class Migration2MyEntityV2(
     @PrimaryKey val name: String,
     val age: Int,
     val height: Int = 183
   )
 
-  @Serializable data class Migration3MyEntityV1(
+  @Entity @Serializable data class Migration3MyEntityV1(
     @PrimaryKey val name: String,
     val age: Int
   )
 
-  @Serializable data class Migration3MyEntityV2(@PrimaryKey val name: String)
+  @Entity @Serializable data class Migration3MyEntityV2(@PrimaryKey val name: String)
 
-  @Serializable data class EntityWithAutoIncrementId(
+  @Entity @Serializable data class EntityWithAutoIncrementId(
     @PrimaryKey @AutoIncrement val id: Long = 0L,
     val name: String
   )

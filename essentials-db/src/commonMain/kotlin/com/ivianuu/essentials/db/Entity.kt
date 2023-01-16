@@ -28,6 +28,10 @@ abstract class AbstractEntityDescriptor<T>(
   @Inject S: KSerializer<T>
 ) : EntityDescriptor<T> by EntityDescriptor(tableName)
 
+@Target(AnnotationTarget.CLASS)
+@SerialInfo
+annotation class Entity
+
 @Target(AnnotationTarget.PROPERTY)
 @SerialInfo
 annotation class PrimaryKey
@@ -68,6 +72,10 @@ private class EntityDescriptorImpl<T>(
     }
 
   init {
+    check(serializer.descriptor.annotations.any { it is Entity }) {
+      "Entity needs to be annotated with @Entity"
+    }
+
     rows
       .filter { it.isPrimaryKey }
       .let { primaryKeys ->
