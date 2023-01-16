@@ -19,21 +19,22 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.elementNames
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.modules.SerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
   context(NamedCoroutineScope<AppScope>) @Provide fun dataStore(
     prefsDataStore: DataStore<Map<String, String?>>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
-    serializerFactory: () -> KSerializer<T>
+    serializerFactory: () -> KSerializer<T>,
+    serializersModule: SerializersModule
   ): @Scoped<AppScope> DataStore<T> {
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
 
     fun Map<String, String?>.decode(): T =
       if (serializer.descriptor.elementNames.any { it in this })
-        PrefsDecoder(this, EmptySerializersModule(), serializer.descriptor, json)
+        PrefsDecoder(this, json, serializer.descriptor, serializersModule)
           .decodeSerializableValue(serializer) else initial()
 
     return object : DataStore<T> {
@@ -48,7 +49,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
           val update = current.transform()
           if (current != update) {
             toMutableMap().apply {
-              PrefsEncoder(EmptySerializersModule(), json, serializer.descriptor, this)
+              PrefsEncoder(json, serializer.descriptor, this, serializersModule)
                 .encodeSerializableValue(serializer, update)
             }
           } else this

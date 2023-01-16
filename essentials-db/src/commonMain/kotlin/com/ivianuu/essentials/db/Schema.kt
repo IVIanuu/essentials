@@ -30,7 +30,7 @@ fun Schema(
   version: Int,
   entities: List<EntityDescriptor<*>> = emptyList(),
   migrations: List<Migration> = emptyList(),
-  serializersModule: SerializersModule = EmptySerializersModule,
+  serializersModule: SerializersModule = EmptySerializersModule(),
   embeddedFormat: StringFormat = Json
 ): Schema = SchemaImpl(version, entities, migrations, serializersModule, embeddedFormat)
 

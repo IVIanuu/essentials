@@ -19,10 +19,10 @@ import kotlinx.serialization.modules.SerializersModule
 
 @OptIn(InternalSerializationApi::class)
 class PrefsEncoder(
-  override val serializersModule: SerializersModule,
   private val embeddedFormat: StringFormat,
   private val descriptor: SerialDescriptor,
-  private val result: MutableMap<String, String?>
+  private val result: MutableMap<String, String?>,
+  override val serializersModule: SerializersModule = embeddedFormat.serializersModule
 ) : TaggedEncoder<String>() {
   override fun SerialDescriptor.getTag(index: Int): String = getElementName(index)
 
@@ -83,9 +83,9 @@ class PrefsEncoder(
 
 class PrefsDecoder(
   private val prefs: Map<String, String?>,
-  override val serializersModule: SerializersModule,
+  private val embeddedFormat: StringFormat,
   private val descriptor: SerialDescriptor,
-  private val embeddedFormat: StringFormat
+  override val serializersModule: SerializersModule = embeddedFormat.serializersModule
 ) : AbstractDecoder() {
   private var index = 0
 

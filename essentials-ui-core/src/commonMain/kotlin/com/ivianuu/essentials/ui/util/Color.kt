@@ -9,6 +9,13 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.injekt.Provide
+import kotlinx.serialization.InjektSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 val Color.isDark: Boolean get() = !isLight
 
@@ -49,3 +56,12 @@ fun Color.toHexStringOrNull(includeAlpha: Boolean = true): String? =
 expect fun String.toColor(): Color
 
 fun String.toColorOrNull(): Color? = catch { toColor() }.getOrNull()
+
+@Provide @InjektSerializer object ColorSerializer : KSerializer<Color> {
+  override val descriptor =
+    PrimitiveSerialDescriptor("androidx.compose.ui.graphics.Color", PrimitiveKind.INT)
+
+  override fun serialize(encoder: Encoder, value: Color) = encoder.encodeInt(value.toArgb())
+
+  override fun deserialize(decoder: Decoder): Color = Color(decoder.decodeInt())
+}

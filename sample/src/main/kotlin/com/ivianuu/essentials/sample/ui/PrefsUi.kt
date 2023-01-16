@@ -10,7 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
 import com.ivianuu.essentials.compose.getValue
@@ -35,6 +34,7 @@ import com.ivianuu.essentials.ui.prefs.SliderListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
@@ -139,17 +139,17 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
     }
     item {
       ColorListItem(
-        value = Color(prefs.color),
+        value = prefs.color,
         onValueChangeRequest = {
           launch {
             val newColor = navigator.push(
               ColorPickerKey(
-                initialColor = Color(prefs.color),
+                initialColor = prefs.color,
                 title = "Color"
               )
             ) ?: return@launch
             launch {
-              pref.updateData { copy(color = newColor.toArgb()) }
+              pref.updateData { copy(color = newColor) }
             }
           }
         },
@@ -212,7 +212,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
   val slider: Int = 50,
   val steppedSlider: Float = 0.5f,
   val textInput: String = "",
-  val color: Int = Color.Red.toArgb(),
+  @Contextual val color: Color = Color.Red,
   val multiChoice: Set<String> = setOf("A", "B", "C"),
   val singleChoice: String = "C",
 ) {
