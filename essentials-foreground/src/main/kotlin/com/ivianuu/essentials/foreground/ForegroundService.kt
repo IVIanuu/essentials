@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,11 +58,8 @@ class ForegroundService : Service() {
         block = {
           component.foregroundManager.states
             .flatMapLatest { states ->
-              if (states.isEmpty()) flowOf(emptyList())
-              else combine(
-                states
-                  .map { it.notification }
-              ).map { states }
+              combine(states.map { it.notification })
+                .map { states }
             }
             .collect { applyState(it, false) }
         },
