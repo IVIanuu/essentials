@@ -121,9 +121,12 @@ fun incrementingStepPolicy(incValue: Duration): StepPolicy<Duration> = { valueRa
   (((valueRange.endInclusive - valueRange.start) / incValue) - 1).toInt()
 }
 
-context(SliderValueConverter<T>)
-fun <T : Comparable<T>> StepPolicy<T>.stepValue(value: T, valueRange: ClosedRange<T>): T {
-  val steps = this(valueRange)
+fun <T : Comparable<T>> StepPolicy<T>.stepValue(
+  value: T,
+  @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
+  @Inject converter: SliderValueConverter<T>
+): T = with(converter) {
+  val steps = this@stepValue(valueRange)
   val stepFractions = (if (steps == 0) emptyList()
   else List(steps + 2) { it.toFloat() / (steps + 1) })
   val stepValues = stepFractions
