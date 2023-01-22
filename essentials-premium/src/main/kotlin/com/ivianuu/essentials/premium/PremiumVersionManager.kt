@@ -123,6 +123,7 @@ typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
     @Provide fun premiumAdsEnabledProvider() = AdsEnabledProvider(
   isPremiumVersion
+    .map { !it }
     .state(SharingStarted.Eagerly, false)
 )
 
