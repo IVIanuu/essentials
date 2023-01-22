@@ -50,7 +50,7 @@ object Deps {
   }
 
   object AtomicFu {
-    private const val version = "0.18.5"
+    private const val version = "0.19.0"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -65,7 +65,7 @@ object Deps {
 
   object Compose {
     const val version = "1.2.1"
-    const val compilerVersion = "1.4.0-alpha02"
+    const val compilerVersion = "1.4.0"
     const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
@@ -84,7 +84,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1142"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1147"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -96,7 +96,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev695"
+    private const val version = "0.0.1-dev696"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
@@ -110,10 +110,10 @@ object Deps {
 
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
-  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.4.9"
+  const val kotlinCompileTesting = "dev.zacsweers.kctfork:core:0.1.0-1.8.0-Beta01"
 
   object Kotlin {
-    const val version = "1.7.21"
+    const val version = "1.8.0"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"

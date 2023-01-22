@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.kotlin.compiler.optics
 
+import org.jetbrains.kotlin.backend.common.extensions.FirIncompatiblePluginAPI
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.ir.addDispatchReceiver
@@ -40,7 +41,7 @@ import org.jetbrains.kotlin.ir.visitors.IrElementTransformerVoid
 import org.jetbrains.kotlin.ir.visitors.transformChildrenVoid
 import org.jetbrains.kotlin.name.Name
 
-class OpticsIrGenerationExtension : IrGenerationExtension {
+@OptIn(FirIncompatiblePluginAPI::class) class OpticsIrGenerationExtension : IrGenerationExtension {
   override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
     val lens = pluginContext.referenceClass(Lens) ?: return
 
