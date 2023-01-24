@@ -40,8 +40,7 @@ class EsAccessibilityService : AccessibilityService() {
   override fun onServiceConnected() {
     super.onServiceConnected()
     log { "service connected" }
-    serviceComponent.accessibilityServiceRef.accessibilityService
-      .cast<MutableStateFlow<EsAccessibilityService?>>().value = this
+    AccessibilityServiceProvider.state.value = this
     val accessibilityComponent = serviceComponent.accessibilityComponentFactory(Scope(), this)
       .also { this.accessibilityComponent = it }
 
@@ -89,15 +88,15 @@ class EsAccessibilityService : AccessibilityService() {
     log { "service disconnected" }
     accessibilityComponent?.scope?.dispose()
     accessibilityComponent = null
-    serviceComponent.accessibilityServiceRef.accessibilityService
-      .cast<MutableStateFlow<EsAccessibilityService?>>().value = null
+    AccessibilityServiceProvider.state.value = null
     return super.onUnbind(intent)
   }
 }
 
 @JvmInline value class AccessibilityServiceProvider(val accessibilityService: Flow<EsAccessibilityService?>) {
   companion object {
-    @Provide val default = AccessibilityServiceProvider(MutableStateFlow(null))
+    internal val state = MutableStateFlow<EsAccessibilityService?>(null)
+    @Provide val default get() = AccessibilityServiceProvider(state)
   }
 }
 
@@ -105,8 +104,7 @@ class EsAccessibilityService : AccessibilityService() {
 data class EsAccessibilityServiceComponent(
   val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
   val accessibilityComponentFactory: (Scope<AccessibilityScope>, EsAccessibilityService) -> AccessibilityComponent,
-  val logger: Logger,
-  val accessibilityServiceRef: AccessibilityServiceProvider
+  val logger: Logger
 )
 
 @Provide data class AccessibilityComponent(

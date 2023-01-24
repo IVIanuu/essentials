@@ -108,7 +108,7 @@ ToastContext)
 
 @Tag annotation class PremiumVersionSkuTag {
   companion object {
-    @Provide val default get() = Sku("premium_version", Sku.Type.SUBS)
+    @Provide val default: PremiumVersionSku get() = Sku("premium_version", Sku.Type.SUBS)
   }
 }
 typealias PremiumVersionSku = @PremiumVersionSkuTag Sku

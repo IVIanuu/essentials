@@ -126,4 +126,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
   }
 }
 
-@Provide val sampleForceNavBarVisibleState = ForceNavBarVisibleProvider(MutableStateFlow(false))
+private val sampleForceNavBarVisibleState = MutableStateFlow(false)
+
+@Provide val sampleForceNavBarVisibleProvider
+  get() = ForceNavBarVisibleProvider(sampleForceNavBarVisibleState)
