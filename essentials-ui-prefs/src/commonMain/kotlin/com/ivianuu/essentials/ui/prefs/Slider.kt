@@ -5,7 +5,9 @@
 package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.LocalTextStyle
@@ -17,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
@@ -36,36 +40,42 @@ import kotlinx.coroutines.launch
 @Composable fun <T : Comparable<T>> SliderListItem(
   value: T,
   onValueChange: (T) -> Unit,
+  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   title: (@Composable () -> Unit)? = null,
   subtitle: (@Composable () -> Unit)? = null,
   leading: (@Composable () -> Unit)? = null,
-  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
   valueText: @Composable ((T) -> Unit)? = null,
   modifier: Modifier = Modifier,
+  contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+  textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
+  singleLine: Boolean = false,
   @Inject converter: SliderValueConverter<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) = with(converter) {
-  Box(modifier = modifier) {
-    ListItem(
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .padding(bottom = 20.dp),
-      title = title,
-      subtitle = subtitle,
-      leading = leading
-    )
+  var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
 
-    Row(
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .padding(
-          // align the slider with the content
-          start = if (leading != null) 52.dp else 12.dp,
-          end = 16.dp
-        ),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
+  val textPadding = PaddingValues(
+    start = max(textPadding.calculateStartPadding(LocalLayoutDirection.current) - 4.dp, 0.dp),
+    top = textPadding.calculateTopPadding(),
+    bottom = textPadding.calculateBottomPadding(),
+    end = textPadding.calculateEndPadding(LocalLayoutDirection.current)
+  )
+
+  ListItem(
+    modifier = modifier,
+    title = title?.let {
+      {
+        Box(modifier = Modifier.padding(start = 4.dp)) {
+          title()
+        }
+      }
+    },
+    subtitle = {
+      subtitle?.let {
+        Box(modifier = Modifier.padding(start = 4.dp)) {
+          subtitle()
+        }
+      }
 
       var valueChangeJob: Job? by remember { refOf(null) }
       val scope = rememberCoroutineScope()
@@ -90,26 +100,23 @@ import kotlinx.coroutines.launch
           { valueRange ->
             stepPolicy(valueRange.start.toValue()..valueRange.endInclusive.toValue())
           }
-        },
-        modifier = Modifier.weight(1f)
+        }
       )
-
-      if (valueText != null) {
+    },
+    leading = leading,
+    trailing = valueText?.let {
+      {
         Box(
           modifier = Modifier.widthIn(min = 72.dp),
           contentAlignment = Alignment.CenterEnd
         ) {
-          CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.body2
-          ) {
-            val steppedValue = remember(valueRange, stepPolicy, internalValue) {
-              stepPolicy.stepValue(internalValue.toValue(), valueRange)
-            }
-
-            valueText(steppedValue)
+          CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.body2) {
+            valueText(stepPolicy.stepValue(internalValue.toValue(), valueRange))
           }
         }
       }
-    }
-  }
+    },
+    contentPadding = contentPadding,
+    textPadding = textPadding
+  )
 }
