@@ -17,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleProvider
@@ -75,7 +74,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
         Text(
           text = if (hasPermission) {
             when {
-              sampleForceNavBarVisibleState.forceNavBarVisible
+              sampleForceNavBarVisibleState
                 .collectAsState(false)
                 .value -> "Nav bar forced shown"
               navBarPrefs.hideNavBar -> "Nav bar hidden"
@@ -108,8 +107,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
 
       Button(
         onClick = {
-          sampleForceNavBarVisibleState.forceNavBarVisible.cast<MutableStateFlow<Boolean>>()
-            .let { it.value = !it.value }
+          sampleForceNavBarVisibleState.value = !sampleForceNavBarVisibleState.value
         }
       ) { Text("Toggle force nav bar") }
 
