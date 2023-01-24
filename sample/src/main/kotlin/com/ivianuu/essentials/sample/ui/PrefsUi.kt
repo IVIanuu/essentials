@@ -165,10 +165,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
         onValueChangeRequest = {
           launch {
             val newColor = navigator.push(
-              ColorPickerKey(
-                initialColor = prefs.color,
-                title = "Color"
-              )
+              ColorPickerKey(initialColor = prefs.color)
             ) ?: return@launch
             launch {
               pref.updateData { copy(color = newColor) }
