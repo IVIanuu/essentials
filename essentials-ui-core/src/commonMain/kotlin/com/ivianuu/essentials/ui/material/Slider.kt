@@ -9,25 +9,34 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SliderColors
 import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.compose.refOf
+import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.time.toDuration
 import com.ivianuu.essentials.time.toLong
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 
 @Composable fun <T : Comparable<T>> Slider(
   value: T,
-  onValueChange: (T) -> Unit,
+  onValueChange: ((T) -> Unit)? = null,
+  onValueChangeFinished: ((T) -> Unit)? = null,
+  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
+  valueRestoreDuration: Duration = Duration.INFINITE,
   modifier: Modifier = Modifier,
   enabled: Boolean = true,
-  stepPolicy: StepPolicy<T> = NoStepsStepPolicy,
-  onValueChangeFinished: (() -> Unit)? = null,
   interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
   colors: SliderColors = SliderDefaults.colors(
     thumbColor = MaterialTheme.colors.secondary,
@@ -36,14 +45,37 @@ import kotlin.time.Duration
   @Inject converter: SliderValueConverter<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) = with(converter) {
+  var internalValue by remember(value) { mutableStateOf(value.toFloat()) }
+
+  var valueChangeJob: Job? by remember { refOf(null) }
+  val scope = rememberCoroutineScope()
   androidx.compose.material.Slider(
-    value.toFloat(),
-    { onValueChange(it.toValue()) },
+    internalValue,
+    { newInternalValue ->
+      internalValue = newInternalValue
+      val newValue = internalValue.toValue()
+      if (newValue != value)
+        onValueChange?.invoke(newValue)
+
+      valueChangeJob?.cancel()
+      if (valueRestoreDuration < Duration.INFINITE) {
+        valueChangeJob = scope.launch {
+          delay(valueRestoreDuration)
+          internalValue = value.toFloat()
+        }
+      }
+    },
     modifier,
     enabled,
     remember(valueRange) { valueRange.start.toFloat()..valueRange.endInclusive.toFloat() },
-    remember(valueRange) { stepPolicy(valueRange) },
-    onValueChangeFinished,
+    remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
+    onValueChangeFinished?.let {
+      {
+        val currentValue = stepPolicy.stepValue(internalValue.toValue(), valueRange)
+        if (currentValue != value)
+          onValueChangeFinished(currentValue)
+      }
+    },
     interactionSource,
     colors
   )

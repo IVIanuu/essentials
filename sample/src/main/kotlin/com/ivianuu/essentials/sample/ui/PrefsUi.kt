@@ -10,7 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.android.prefs.PrefModule
@@ -81,7 +83,23 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
     item {
       SliderListItem(
         value = prefs.slider,
-        onValueChange = {
+        onValueChangeFinished = {
+          launch {
+            pref.updateData { copy(slider = it) }
+          }
+        },
+        modifier = Modifier.interactive(prefs.switch),
+        leading = { Icon(Icons.Default.ThumbUp) },
+        title = { Text("Slider") },
+        valueRange = 0..100,
+        valueText = { Text(it.toString()) },
+        singleLine = true
+      )
+    }
+    item {
+      SliderListItem(
+        value = prefs.slider,
+        onValueChangeFinished = {
           launch {
             pref.updateData { copy(slider = it) }
           }
@@ -94,9 +112,11 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       )
     }
     item {
+      var value by remember(prefs.steppedSlider) { mutableStateOf(prefs.steppedSlider) }
       SliderListItem(
-        value = prefs.steppedSlider,
-        onValueChange = {
+        value = value,
+        onValueChange = { value = it },
+        onValueChangeFinished = {
           launch {
             pref.updateData { copy(steppedSlider = it) }
           }
@@ -107,7 +127,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
         subtitle = { Text("This is a stepped slider preference") },
         stepPolicy = incrementingStepPolicy(0.05f),
         valueRange = 0.75f..1.5f,
-        valueText = { ScaledPercentageUnitText(it) }
+        valueText = { ScaledPercentageUnitText(value) }
       )
     }
     item {
