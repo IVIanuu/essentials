@@ -116,7 +116,8 @@ import kotlin.time.Duration
                 .padding(12.dp)
             )
 
-            ValueTextContent()
+            if (valueText != null)
+              ValueTextContent()
           }
         }
       }
