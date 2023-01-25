@@ -71,9 +71,7 @@ import kotlin.time.Duration
     remember(stepPolicy, valueRange) { stepPolicy(valueRange) },
     onValueChangeFinished?.let {
       {
-        val currentValue = stepPolicy.stepValue(internalValue.toValue(), valueRange)
-        if (currentValue != value)
-          onValueChangeFinished(currentValue)
+        onValueChangeFinished(stepPolicy.stepValue(internalValue.toValue(), valueRange))
       }
     },
     interactionSource,
