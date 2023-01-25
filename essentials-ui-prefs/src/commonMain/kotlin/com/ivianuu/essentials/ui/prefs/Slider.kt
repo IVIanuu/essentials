@@ -113,7 +113,7 @@ import kotlin.time.Duration
             SliderContent(
               Modifier
                 .weight(1f)
-                .padding(12.dp)
+                .padding(start = 12.dp)
             )
 
             if (valueText != null)
