@@ -8,6 +8,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -173,13 +174,12 @@ class AndroidDb private constructor(
       .filter { tableName == null || it == tableName }
       .onStart { emit(tableName) }
       .map {
-        val cursor = withTransactionOrDefaultContext {
-          AndroidCursor(database.rawQuery(sql, null))
-        }
-        try {
-          transform(cursor)
-        } finally {
-          cursor.dispose()
+        withTransactionOrDefaultContext {
+          bracket(
+            acquire = { AndroidCursor(database.rawQuery(sql, null)) },
+            use = { transform(it) },
+            release = { cursor, _ -> cursor.dispose() }
+          )
         }
       }
       .distinctUntilChanged()
