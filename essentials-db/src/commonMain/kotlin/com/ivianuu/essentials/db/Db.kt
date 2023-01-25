@@ -15,6 +15,8 @@ interface Db : Disposable {
   val schema: Schema
   val coroutineContext: CoroutineContext
 
+  val changes: Flow<String?>
+
   suspend fun <R> transaction(block: suspend context(Db) () -> R): R
 
   suspend fun execute(sql: String, tableName: String?)

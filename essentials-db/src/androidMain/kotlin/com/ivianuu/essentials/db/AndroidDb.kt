@@ -35,7 +35,7 @@ class AndroidDb private constructor(
   private val openHelper: SQLiteOpenHelper?,
   database: SQLiteDatabase?
 ) : Db, CoroutineScope {
-  private val changes = EventFlow<String?>()
+  override val changes = EventFlow<String?>()
 
   private val database by lazy { database ?: openHelper!!.writableDatabase!! }
 
