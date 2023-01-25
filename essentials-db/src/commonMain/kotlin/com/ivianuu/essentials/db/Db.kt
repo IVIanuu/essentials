@@ -7,8 +7,10 @@ package com.ivianuu.essentials.db
 import com.ivianuu.injekt.common.Disposable
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlin.coroutines.CoroutineContext
 
 interface Db : Disposable {
@@ -77,6 +79,23 @@ context(TypeKey<T>) fun <T> Db.selectById(id: Any): Flow<T?> {
   )
     .map { it.singleOrNull() }
 }
+
+context(TypeKey<T>) fun <T, S> Db.selectAllTransform(
+  transform: suspend (T?) -> S?
+): Flow<List<S>> = changes
+  .mapLatest {
+    selectAll()
+      .first()
+      .mapNotNull { transform(it) }
+  }
+  .distinctUntilChanged()
+
+context(TypeKey<T>) fun <T, S> Db.selectTransform(
+  id: Any,
+  transform: suspend (T?) -> S?
+): Flow<S?> = changes
+  .mapLatest { transform(selectById(id).first()) }
+  .distinctUntilChanged()
 
 context(TypeKey<T>) suspend fun <T> Db.deleteById(vararg ids: Any) {
   val descriptor = schema.descriptor<T>()
