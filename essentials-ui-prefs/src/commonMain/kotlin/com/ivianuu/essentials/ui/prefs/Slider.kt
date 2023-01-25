@@ -6,7 +6,6 @@ package com.ivianuu.essentials.ui.prefs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
@@ -49,14 +48,12 @@ import kotlin.time.Duration
   contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
   textPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
   sliderAdjustmentPadding: Dp = 8.dp,
-  singleLine: Boolean = false,
   @Inject converter: SliderValueConverter<T>,
   @Inject valueRange: @DefaultSliderRange ClosedRange<T>,
 ) {
   var internalValue by remember(value) { mutableStateOf(value) }
 
-  val textPadding = if (singleLine) textPadding
-  else PaddingValues(
+  val textPadding = PaddingValues(
     start = max(
       textPadding.calculateStartPadding(LocalLayoutDirection.current) - sliderAdjustmentPadding,
       0.dp
@@ -102,27 +99,12 @@ import kotlin.time.Duration
     modifier = modifier,
     title = title?.let {
       {
-        if (!singleLine) {
-          Box(modifier = Modifier.padding(start = sliderAdjustmentPadding)) {
-            title()
-          }
-        } else {
-          Row(verticalAlignment = Alignment.CenterVertically) {
-            title()
-
-            SliderContent(
-              Modifier
-                .weight(1f)
-                .padding(start = 12.dp)
-            )
-
-            if (valueText != null)
-              ValueTextContent()
-          }
+        Box(modifier = Modifier.padding(start = sliderAdjustmentPadding)) {
+          title()
         }
       }
     },
-    subtitle = if (singleLine) null else ({
+    subtitle = {
       subtitle?.let {
         Box(modifier = Modifier.padding(start = sliderAdjustmentPadding)) {
           subtitle()
@@ -130,11 +112,11 @@ import kotlin.time.Duration
       }
 
       SliderContent()
-    }),
+    },
     leading = leading,
-    trailing = if (singleLine || valueText == null) null else ({
-      ValueTextContent()
-    }),
+    trailing = valueText?.let {
+      { ValueTextContent() }
+    },
     contentPadding = contentPadding,
     textPadding = textPadding
   )

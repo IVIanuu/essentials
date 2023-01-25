@@ -92,8 +92,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
         leading = { Icon(Icons.Default.ThumbUp) },
         title = { Text("Slider") },
         valueRange = 0..100,
-        valueText = { Text(it.toString()) },
-        singleLine = true
+        valueText = { Text(it.toString()) }
       )
     }
     item {
