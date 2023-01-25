@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlin.coroutines.CoroutineContext
 
 interface Db : Disposable {
@@ -83,6 +84,7 @@ context(TypeKey<T>) fun <T> Db.selectById(id: Any): Flow<T?> {
 context(TypeKey<T>) fun <T, S> Db.selectAllTransform(
   transform: suspend (T?) -> S?
 ): Flow<List<S>> = changes
+  .onStart { emit(null) }
   .mapLatest {
     selectAll()
       .first()
@@ -94,6 +96,7 @@ context(TypeKey<T>) fun <T, S> Db.selectTransform(
   id: Any,
   transform: suspend (T?) -> S?
 ): Flow<S?> = changes
+  .onStart { emit(null) }
   .mapLatest { transform(selectById(id).first()) }
   .distinctUntilChanged()
 
