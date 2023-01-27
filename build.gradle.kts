@@ -20,7 +20,6 @@ buildscript {
   dependencies {
     classpath(Deps.androidGradlePlugin)
     classpath(Deps.AtomicFu.gradlePlugin)
-    classpath(Deps.dexcountGradlePlugin)
     classpath(Deps.dokkaGradlePlugin)
     classpath(Deps.essentialsGradlePlugin)
     classpath(Deps.Injekt.gradlePlugin)

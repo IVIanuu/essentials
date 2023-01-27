@@ -82,7 +82,16 @@ private fun <T> Any?.updatePrivateFinalField(
   val field = clazz.java.declaredFields
     .single { it.name == fieldName }
   field.isAccessible = true
-  val modifiersField: Field = Field::class.java.getDeclaredField("modifiers")
+  val modifiersField = try {
+    Field::class.java.getDeclaredField("modifiers")
+  } catch (e: Throwable) {
+    val getDeclaredFields0 =
+      Class::class.java.getDeclaredMethod("getDeclaredFields0", Boolean::class.java)
+    getDeclaredFields0.isAccessible = true
+    getDeclaredFields0.invoke(Field::class.java, false)
+      .cast<Array<Field>>()
+      .single { it.name == "modifiers" }
+  }
   modifiersField.isAccessible = true
   modifiersField.setInt(field, field.modifiers and Modifier.FINAL.inv())
   val currentValue = field.get(this)

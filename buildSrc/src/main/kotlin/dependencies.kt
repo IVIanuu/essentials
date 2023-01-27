@@ -21,7 +21,7 @@ object Deps {
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
   }
 
-  const val androidGradlePlugin = "com.android.tools.build:gradle:7.3.0"
+  const val androidGradlePlugin = "com.android.tools.build:gradle:7.4.0"
 
   object AndroidX {
     object Activity {
@@ -79,12 +79,10 @@ object Deps {
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
   }
 
-  const val dexcountGradlePlugin = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
-
-  const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
+  const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1147"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1153"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -96,7 +94,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev696"
+    private const val version = "0.0.1-dev701"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
