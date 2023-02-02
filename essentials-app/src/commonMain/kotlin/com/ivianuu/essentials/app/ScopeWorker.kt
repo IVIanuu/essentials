@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
@@ -25,11 +26,12 @@ context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
   nameKey: TypeKey<N>,
   workers: () -> List<ServiceElement<ScopeWorker<N>>>
 ) = ScopeWorkerRunner<N> {
-  log { "${nameKey.value} run scope workers" }
   launch {
     guarantee(
       block = {
         supervisorScope {
+          log { "${nameKey.value} run scope workers" }
+
           workers()
             .sortedWithLoadingOrder()
             .forEach { worker ->
@@ -40,7 +42,8 @@ context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
         }
       },
       finalizer = {
-        log { "${nameKey.value} cancel scope workers" }
+        if (it is ExitCase.Cancelled)
+          log { "${nameKey.value} cancel scope workers" }
       }
     )
   }

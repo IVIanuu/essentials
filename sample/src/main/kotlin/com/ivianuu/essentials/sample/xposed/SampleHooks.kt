@@ -7,6 +7,7 @@ package com.ivianuu.essentials.sample.xposed
 import android.bluetooth.BluetoothGattCharacteristic
 import com.ivianuu.essentials.lerp
 import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.xposed.Hooks
 import com.ivianuu.essentials.xposed.arg
 import com.ivianuu.essentials.xposed.hookAllMethods
@@ -23,13 +24,20 @@ context(Logger) @Provide fun sampleHooks() = Hooks {
   ) {
     before {
       val message = arg<ByteArray>(0)
+      log { "message ${message.contentToString()}" }
       if (message.getOrNull(0)?.toInt() == 68) {
         val red = message[5].toColorFloat()
         val green = message[6].toColorFloat()
         val blue = message[7].toColorFloat()
         val white = message[8].toColorFloat()
 
-        println("color = LightColor(${red.toColorString()}f, ${green.toColorString()}f, ${blue.toColorString()}f, ${white.toColorString()}f) ${message.contentToString()}")
+        log {
+          "color = LightColor(${red.toColorString()}f, " +
+              "${green.toColorString()}f, " +
+              "${blue.toColorString()}f, " +
+              "${white.toColorString()}f) " +
+              "${message.contentToString()}"
+        }
       }
     }
   }

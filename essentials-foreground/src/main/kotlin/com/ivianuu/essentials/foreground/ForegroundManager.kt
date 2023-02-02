@@ -50,7 +50,9 @@ context(ForegroundScope) fun Flow<Notification>.updateNotification() {
 }
 
 context(AppContext, Logger)
-@Provide @Scoped<AppScope> class ForegroundManagerImpl() : ForegroundManager {
+@Provide
+@Scoped<AppScope>
+class ForegroundManagerImpl : ForegroundManager {
   internal val states = MutableStateFlow(emptyList<ForegroundState>())
   private val lock = Mutex()
 
