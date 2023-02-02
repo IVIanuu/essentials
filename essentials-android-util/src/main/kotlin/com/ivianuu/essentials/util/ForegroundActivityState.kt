@@ -27,7 +27,7 @@ interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
-  coroutineContext: MainContext
+  mainContext: MainContext
 ) = ScopeWorker<UiScope> worker@ {
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
@@ -35,7 +35,7 @@ interface ForegroundActivityMarker
       if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
         activity else null
   }
-  withContext(coroutineContext) {
+  withContext(mainContext) {
     activity.lifecycle.addObserver(observer)
     onCancel { activity.lifecycle.removeObserver(observer) }
   }
