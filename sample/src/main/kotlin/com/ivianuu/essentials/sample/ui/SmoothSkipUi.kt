@@ -48,7 +48,7 @@ object SmoothSkipKey : Key<Unit>
     item {
       SliderListItem(
         value = prefs.fadeOutDuration,
-        onValueChange = action { value ->
+        onValueChangeFinished = action { value ->
           pref.updateData { copy(fadeOutDuration = value) }
         },
         valueRange = 0.seconds..10.seconds,
@@ -61,7 +61,7 @@ object SmoothSkipKey : Key<Unit>
     item {
       SliderListItem(
         value = prefs.fadeInDuration,
-        onValueChange = action { value ->
+        onValueChangeFinished = action { value ->
           pref.updateData { copy(fadeInDuration = value) }
         },
         valueRange = 0.seconds..10.seconds,
