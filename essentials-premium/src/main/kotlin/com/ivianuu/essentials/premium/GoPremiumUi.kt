@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ads.AdFeatures
 import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.billing.Sku
@@ -334,7 +334,7 @@ data class GoPremiumModel(
   features: List<AppFeature>,
   fullScreenAdManager: FullScreenAdManager,
   premiumVersionManager: PremiumVersionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = Model {
   GoPremiumModel(

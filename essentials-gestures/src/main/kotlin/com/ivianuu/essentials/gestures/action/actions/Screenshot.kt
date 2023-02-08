@@ -6,7 +6,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
@@ -22,11 +22,11 @@ import kotlinx.coroutines.delay
 @Provide object ScreenshotActionId : ActionId("screenshot")
 
 @Provide fun screenshotAction(
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   systemBuildInfo: SystemBuildInfo
 ) = Action(
   id = ScreenshotActionId,
-  title = resourceProvider(R.string.es_action_screenshot),
+  title = resources(R.string.es_action_screenshot),
   icon = staticActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
     if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()

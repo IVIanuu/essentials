@@ -7,7 +7,7 @@ package com.ivianuu.essentials.hidenavbar.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.data.DataStore
@@ -65,7 +65,7 @@ data class NavBarModel(
 @Provide fun navBarModel(
   ctx: KeyUiContext<NavBarKey>,
   permissionManager: PermissionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   pref: DataStore<NavBarPrefs>
 ) = Model {
   val prefs = pref.data.bind(NavBarPrefs())
@@ -84,7 +84,7 @@ data class NavBarModel(
         SingleChoiceListKey(
           items = NavBarRotationMode.values().toList(),
           selectedItem = prefs.navBarRotationMode
-        ) { resourceProvider(it.titleRes) }
+        ) { resources(it.titleRes) }
       )?.let { newRotationMode ->
         pref.updateData { copy(navBarRotationMode = newRotationMode) }
       }

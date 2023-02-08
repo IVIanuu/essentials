@@ -10,7 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
@@ -31,7 +31,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -48,7 +47,7 @@ object AppTrackerKey : Key<Unit>
   foregroundManager: ForegroundManager,
   notificationFactory: NotificationFactory,
   permissionManager: PermissionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = SimpleKeyUi<AppTrackerKey> {
   var isEnabled by remember { mutableStateOf(false) }

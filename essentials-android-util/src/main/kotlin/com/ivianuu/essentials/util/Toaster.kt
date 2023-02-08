@@ -7,7 +7,7 @@ package com.ivianuu.essentials.util
 import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.MainContext
@@ -32,15 +32,15 @@ fun interface Toaster {
   }
 }
 
-operator fun Toaster.invoke(messageRes: Int, @Inject resourceProvider: ResourceProvider) {
-  this(resourceProvider<String>(messageRes))
+operator fun Toaster.invoke(messageRes: Int, @Inject resources: Resources) {
+  this(resources<String>(messageRes))
 }
 
 operator fun Toaster.invoke(
   messageRes: Int,
   vararg args: Any?,
-  @Inject resourceProvider: ResourceProvider
+  @Inject resources: Resources
 ) {
-  this(resourceProvider<String>(messageRes, *args))
+  this(resources<String>(messageRes, *args))
 }
 

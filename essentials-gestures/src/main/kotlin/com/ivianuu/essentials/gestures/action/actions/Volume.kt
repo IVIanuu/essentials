@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.media.AudioManager
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -15,9 +15,9 @@ import com.ivianuu.injekt.android.SystemService
 
 @Provide object VolumeActionId : ActionId("volume")
 
-@Provide fun volumeAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun volumeAction(resources: Resources) = Action(
   id = VolumeActionId,
-  title = resourceProvider(R.string.es_action_volume),
+  title = resources(R.string.es_action_volume),
   icon = staticActionIcon(R.drawable.es_ic_volume_up)
 )
 

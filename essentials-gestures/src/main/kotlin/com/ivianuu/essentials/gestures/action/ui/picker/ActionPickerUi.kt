@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.produceResource
 import com.ivianuu.essentials.gestures.R
@@ -136,7 +136,7 @@ sealed interface ActionPickerItem {
   filter: ActionFilter,
   permissionManager: PermissionManager,
   repository: ActionRepository,
-  resourceProvider: ResourceProvider
+  resources: Resources
 ) = Model {
   ActionPickerModel(
     items = produceResource { getActionPickerItems(ctx.key, filter) },
@@ -157,20 +157,20 @@ private suspend fun getActionPickerItems(
   key: ActionPickerKey,
   filter: ActionFilter,
   @Inject repository: ActionRepository,
-  @Inject resourceProvider: ResourceProvider
+  @Inject resources: Resources
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
   if (key.showDefaultOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resourceProvider(R.string.es_default),
+      title = resources(R.string.es_default),
       getResult = { ActionPickerKey.Result.Default }
     )
   }
 
   if (key.showNoneOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = resourceProvider(R.string.es_none),
+      title = resources(R.string.es_none),
       getResult = { ActionPickerKey.Result.None }
     )
   }

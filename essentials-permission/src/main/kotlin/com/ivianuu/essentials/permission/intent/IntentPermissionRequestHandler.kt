@@ -6,7 +6,7 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.onFailure
@@ -34,7 +34,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
   permissionManager: PermissionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
   toaster: Toaster
 ) = PermissionRequestHandler<P> { permission ->

@@ -7,7 +7,7 @@ package com.ivianuu.essentials.clipboard
 import android.content.ClipData
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
@@ -26,7 +26,7 @@ interface ClipboardManager {
 
 @Provide class ClipboardManagerImpl(
   private val androidClipboardManager: @SystemService AndroidClipboardManager,
-  private val resourceProvider: ResourceProvider,
+  private val resources: Resources,
   private val toaster: Toaster
 ) : ClipboardManager {
   override val clipboardText: Flow<String?>

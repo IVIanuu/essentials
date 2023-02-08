@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -30,7 +30,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
   logger: Logger,
   permissionManager: PermissionManager,
   repository: ActionRepository,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
   toaster: Toaster

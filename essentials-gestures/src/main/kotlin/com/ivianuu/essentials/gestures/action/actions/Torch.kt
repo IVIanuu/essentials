@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -17,11 +17,11 @@ import com.ivianuu.injekt.Provide
 @Provide object TorchActionId : ActionId("torch")
 
 @Provide fun torchAction(
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   torchManager: TorchManager
 ) = Action(
   id = TorchActionId,
-  title = resourceProvider(R.string.es_action_torch),
+  title = resources(R.string.es_action_torch),
   icon = {
     Icon(
       if (torchManager.torchEnabled.bind()) R.drawable.es_ic_flashlight_on

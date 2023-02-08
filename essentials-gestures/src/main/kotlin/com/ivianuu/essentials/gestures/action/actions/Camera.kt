@@ -11,7 +11,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -34,9 +34,9 @@ import kotlin.coroutines.resume
 
 @Provide object CameraActionId : ActionId("camera")
 
-@Provide fun cameraAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun cameraAction(resources: Resources) = Action(
   id = CameraActionId,
-  title = resourceProvider(R.string.es_action_camera),
+  title = resources(R.string.es_action_camera),
   icon = staticActionIcon(R.drawable.es_ic_photo_camera),
   permissions = listOf(
     typeKeyOf<ActionAccessibilityPermission>(),

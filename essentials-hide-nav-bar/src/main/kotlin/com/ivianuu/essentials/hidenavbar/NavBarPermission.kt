@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.hidenavbar
 
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.permission.Permission
@@ -16,9 +16,9 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-@Provide class NavBarPermission(resourceProvider: ResourceProvider) : WriteSecureSettingsPermission(
-  title = resourceProvider(R.string.es_permission_nav_bar),
-  desc = resourceProvider(R.string.es_permission_nav_bar_desc),
+@Provide class NavBarPermission(resources: Resources) : WriteSecureSettingsPermission(
+  title = resources(R.string.es_permission_nav_bar),
+  desc = resources(R.string.es_permission_nav_bar_desc),
   icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
 )
 

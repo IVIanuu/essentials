@@ -7,20 +7,19 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.os.Bundle
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.inject
 
 @Provide object AssistantActionId : ActionId("assistant")
 
-@Provide fun assistantAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun assistantAction(resources: Resources) = Action(
   id = AssistantActionId,
-  title = resourceProvider(R.string.es_action_assistant),
+  title = resources(R.string.es_action_assistant),
   closeSystemDialogs = true,
   turnScreenOn = true,
   icon = staticActionIcon(R.drawable.es_ic_google)

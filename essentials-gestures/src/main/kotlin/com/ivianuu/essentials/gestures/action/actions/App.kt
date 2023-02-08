@@ -7,7 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.content.pm.PackageManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.first
   private val appRepository: AppRepository,
   private val intentSender: ActionIntentSender,
   private val packageManager: PackageManager,
-  private val resourceProvider: ResourceProvider
+  private val resources: Resources
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.first
     return Action<ActionId>(
       id = id,
       title = appRepository.appInfo(packageName).first()?.appName
-        ?: resourceProvider(R.string.es_unknown_action_name),
+        ?: resources(R.string.es_unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
@@ -70,12 +70,12 @@ import kotlinx.coroutines.flow.first
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
   private val navigator: Navigator,
-  private val resourceProvider: ResourceProvider
+  private val resources: Resources
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resourceProvider(R.string.es_action_app)
+    get() = resources(R.string.es_action_app)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_apps) }
 

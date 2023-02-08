@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -16,9 +16,9 @@ import kotlinx.coroutines.delay
 
 @Provide object LastAppNativeActionId : ActionId("last_app_native")
 
-@Provide fun lastAppNativeAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun lastAppNativeAction(resources: Resources) = Action(
   id = LastAppNativeActionId,
-  title = resourceProvider(R.string.es_action_last_app_native),
+  title = resources(R.string.es_action_last_app_native),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
   closeSystemDialogs = true,

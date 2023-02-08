@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action
 
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.ui.navigation.Key
@@ -33,7 +33,7 @@ interface ActionRepository {
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
   private val context: DefaultContext,
-  private val resourceProvider: ResourceProvider,
+  private val resources: Resources,
   private val toaster: Toaster
 ) : ActionRepository {
   override suspend fun getAllActions() = withContext(context) {
@@ -50,7 +50,7 @@ interface ActionRepository {
         ?.createAction(id)
       ?: Action(
         id = "error",
-        title = resourceProvider(R.string.es_error_action),
+        title = resources(R.string.es_error_action),
         icon = staticActionIcon(R.drawable.es_ic_error)
       )
   }

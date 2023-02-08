@@ -8,7 +8,7 @@ import android.app.NotificationManager
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -27,10 +27,10 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide fun doNotDisturbAction(
   icon: DoNotDisturbIcon,
-  resourceProvider: ResourceProvider
+  resources: Resources
 ) = Action(
   id = DoNotDisturbAction,
-  title = resourceProvider(R.string.es_action_do_not_disturb),
+  title = resources(R.string.es_action_do_not_disturb),
   icon = icon,
   permissions = listOf(typeKeyOf<ActionNotificationPolicyPermission>())
 )

@@ -6,7 +6,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -17,9 +17,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LastAppActionId : ActionId("last_app")
 
-@Provide fun lastAppAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun lastAppAction(resources: Resources) = Action(
   id = LastAppActionId,
-  title = resourceProvider(R.string.es_action_last_app),
+  title = resources(R.string.es_action_last_app),
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
   unlockScreen = true,
   closeSystemDialogs = true,

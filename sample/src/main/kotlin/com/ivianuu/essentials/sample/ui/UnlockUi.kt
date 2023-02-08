@@ -13,7 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 object UnlockKey : Key<Unit>
 
 @Provide fun unlockUi(
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,

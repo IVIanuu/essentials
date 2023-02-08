@@ -14,7 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -62,7 +62,7 @@ fun interface ActionRootCommandRunner {
 
 @Provide fun actionRootCommandRunner(
   shell: Shell,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = ActionRootCommandRunner { command ->
   shell.run(command)
@@ -78,7 +78,7 @@ fun interface ActionIntentSender {
 
 @Provide fun actionIntentSender(
   appContext: AppContext,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = ActionIntentSender { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

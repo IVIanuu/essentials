@@ -7,7 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Build
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -18,10 +18,10 @@ import com.ivianuu.injekt.Provide
 @Provide object HomeActionId : ActionId("home")
 
 @Provide fun homeAction(
-  resourceProvider: ResourceProvider
+  resources: Resources
 ) = Action(
   id = HomeActionId,
-  title = resourceProvider(R.string.es_action_home),
+  title = resources(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_action_home)

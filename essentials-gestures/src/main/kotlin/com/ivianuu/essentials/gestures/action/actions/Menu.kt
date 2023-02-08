@@ -6,7 +6,7 @@ package com.ivianuu.essentials.gestures.action.actions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -17,9 +17,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object MenuActionId : ActionId("menu")
 
-@Provide fun menuAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun menuAction(resources: Resources) = Action(
   id = MenuActionId,
-  title = resourceProvider(R.string.es_action_menu),
+  title = resources(R.string.es_action_menu),
   icon = staticActionIcon(Icons.Default.MoreVert),
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )

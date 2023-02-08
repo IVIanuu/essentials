@@ -11,7 +11,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
@@ -55,9 +55,9 @@ interface FullScreenAdManager {
   companion object {
     @Provide fun default(
       buildInfo: BuildInfo,
-      resourceProvider: ResourceProvider
+      resources: Resources
     ) = FullScreenAdId(
-      resourceProvider(
+      resources(
         if (buildInfo.isDebug) R.string.es_test_ad_unit_id_interstitial
         else R.string.es_full_screen_ad_unit_id
       )

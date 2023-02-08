@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -15,9 +15,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object SplitScreenActionId : ActionId("split_screen")
 
-@Provide fun splitScreenAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun splitScreenAction(resources: Resources) = Action(
   id = SplitScreenActionId,
-  title = resourceProvider(R.string.es_action_split_screen),
+  title = resources(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_view_agenda)
 )

@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.material.Icon
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.permission.Permission
@@ -17,43 +17,43 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Provide
 
-@Provide class ActionAccessibilityPermission(resourceProvider: ResourceProvider) :
+@Provide class ActionAccessibilityPermission(resources: Resources) :
   AccessibilityServicePermission(
     serviceClass = EsAccessibilityService::class,
-    title = resourceProvider(R.string.es_action_accessibility_permission_title),
-    desc = resourceProvider(R.string.es_action_accessibility_permission_desc),
+    title = resources(R.string.es_action_accessibility_permission_title),
+    desc = resources(R.string.es_action_accessibility_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_accessibility) }
   )
 
-@Provide class ActionNotificationPolicyPermission(resourceProvider: ResourceProvider) :
+@Provide class ActionNotificationPolicyPermission(resources: Resources) :
   NotificationPolicyPermission(
-    title = resourceProvider(R.string.es_action_notification_policy_permission_title),
-    desc = resourceProvider(R.string.es_action_notification_policy_permission_desc),
+    title = resources(R.string.es_action_notification_policy_permission_title),
+    desc = resources(R.string.es_action_notification_policy_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_notifications) }
   )
 
-@Provide class ActionRootPermission(resourceProvider: ResourceProvider) : RootPermission(
-  title = resourceProvider(R.string.es_action_root_permission_title),
+@Provide class ActionRootPermission(resources: Resources) : RootPermission(
+  title = resources(R.string.es_action_root_permission_title),
   icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
 )
 
-@Provide class ActionSystemOverlayPermission(resourceProvider: ResourceProvider) :
+@Provide class ActionSystemOverlayPermission(resources: Resources) :
   SystemOverlayPermission(
-    title = resourceProvider(R.string.es_action_system_overlay_permission_title),
-    desc = resourceProvider(R.string.es_action_system_overlay_permission_desc),
+    title = resources(R.string.es_action_system_overlay_permission_title),
+    desc = resources(R.string.es_action_system_overlay_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
   )
 
-@Provide class ActionWriteSecureSettingsPermission(resourceProvider: ResourceProvider) :
+@Provide class ActionWriteSecureSettingsPermission(resources: Resources) :
   WriteSecureSettingsPermission(
-    title = resourceProvider(R.string.es_action_write_secure_settings_permission_title),
-    desc = resourceProvider(R.string.es_action_write_secure_settings_permission_desc),
+    title = resources(R.string.es_action_write_secure_settings_permission_title),
+    desc = resources(R.string.es_action_write_secure_settings_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
   )
 
-@Provide class ActionWriteSettingsPermission(resourceProvider: ResourceProvider) :
+@Provide class ActionWriteSettingsPermission(resources: Resources) :
   WriteSettingsPermission(
-    title = resourceProvider(R.string.es_action_write_settings_permission_title),
-    desc = resourceProvider(R.string.es_action_write_settings_permission_desc),
+    title = resources(R.string.es_action_write_settings_permission_title),
+    desc = resources(R.string.es_action_write_settings_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
   )

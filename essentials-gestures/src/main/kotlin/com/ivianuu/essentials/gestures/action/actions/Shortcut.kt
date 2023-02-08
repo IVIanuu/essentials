@@ -12,7 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -70,12 +70,12 @@ import java.io.ByteArrayOutputStream
 @Provide class ShortcutActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val navigator: Navigator,
-  private val resourceProvider: ResourceProvider
+  private val resources: Resources
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resourceProvider(R.string.es_action_shortcut)
+    get() = resources(R.string.es_action_shortcut)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_content_cut) }
 

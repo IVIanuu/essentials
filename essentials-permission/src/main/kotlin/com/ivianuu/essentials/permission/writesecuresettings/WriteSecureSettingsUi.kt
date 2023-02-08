@@ -9,7 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
@@ -78,7 +78,7 @@ data class WriteSecureSettingsModel(
   buildInfo: BuildInfo,
   ctx: KeyUiContext<WriteSecureSettingsKey>,
   permissionManager: PermissionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   shell: Shell,
   toaster: Toaster
 ) = Model {

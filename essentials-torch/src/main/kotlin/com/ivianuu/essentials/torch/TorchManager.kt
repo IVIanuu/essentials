@@ -11,7 +11,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
@@ -50,7 +50,7 @@ interface TorchManager {
   private val foregroundManager: ForegroundManager,
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
-  private val resourceProvider: ResourceProvider,
+  private val resources: Resources,
   private val scope: NamedCoroutineScope<AppScope>,
   private val toaster: Toaster
 ) : TorchManager {
@@ -106,13 +106,13 @@ interface TorchManager {
   @SuppressLint("LaunchActivityFromNotification")
   private fun createTorchNotification(): Notification = notificationFactory(
     NOTIFICATION_CHANNEL_ID,
-    resourceProvider(R.string.es_notif_channel_torch),
+    resources(R.string.es_notif_channel_torch),
     NotificationManager.IMPORTANCE_LOW
   ) {
     setAutoCancel(true)
     setSmallIcon(R.drawable.es_ic_flashlight_on)
-    setContentTitle(resourceProvider(R.string.es_notif_title_torch))
-    setContentText(resourceProvider(R.string.es_notif_text_torch))
+    setContentTitle(resources(R.string.es_notif_title_torch))
+    setContentText(resources(R.string.es_notif_text_torch))
     setContentIntent(
       PendingIntent.getBroadcast(
         context,

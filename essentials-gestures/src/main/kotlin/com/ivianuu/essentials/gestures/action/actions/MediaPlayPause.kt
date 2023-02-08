@@ -7,7 +7,7 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.view.KeyEvent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -18,9 +18,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
 
-@Provide fun playPauseMediaAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun playPauseMediaAction(resources: Resources) = Action(
   id = PlayPauseActionId,
-  title = resourceProvider(R.string.es_action_media_play_pause),
+  title = resources(R.string.es_action_media_play_pause),
   icon = staticActionIcon(Icons.Default.PlayArrow)
 )
 

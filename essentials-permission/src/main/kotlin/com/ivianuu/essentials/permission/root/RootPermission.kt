@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.permission.root
 
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
@@ -25,7 +25,7 @@ abstract class RootPermission(
 
 @Provide fun <P : RootPermission> rootPermissionRequestHandler(
   shell: Shell,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = PermissionRequestHandler<P> {
   if (!shell.isAvailable()) toaster(R.string.es_no_root)

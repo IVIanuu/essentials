@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
@@ -192,7 +192,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
   developerModeSetting: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }

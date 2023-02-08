@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -16,9 +16,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object SkipNextActionId : ActionId("media_skip_next")
 
-@Provide fun skipNextMediaAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun skipNextMediaAction(resources: Resources) = Action(
   id = SkipNextActionId,
-  title = resourceProvider(R.string.es_action_media_skip_next),
+  title = resources(R.string.es_action_media_skip_next),
   icon = staticActionIcon(R.drawable.es_ic_skip_next)
 )
 

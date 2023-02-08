@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.view.KeyEvent
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -16,9 +16,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object StopActionId : ActionId("media_stop")
 
-@Provide fun stopMediaAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun stopMediaAction(resources: Resources) = Action(
   id = StopActionId,
-  title = resourceProvider(R.string.es_action_media_stop),
+  title = resources(R.string.es_action_media_stop),
   icon = staticActionIcon(R.drawable.es_ic_stop)
 )
 

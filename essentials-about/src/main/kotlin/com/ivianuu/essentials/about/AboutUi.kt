@@ -9,7 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
 import com.ivianuu.essentials.donation.DonationKey
@@ -148,7 +148,7 @@ data class AboutModel(
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
   rateUseCases: RateUseCases,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   ctx: KeyUiContext<AboutKey>
 ) = Model {
   AboutModel(
@@ -168,7 +168,7 @@ data class AboutModel(
     openPrivacyPolicy = action {
       ctx.navigator.push(
         WebKey(
-          resourceProvider(R.string.es_about_privacy_policy),
+          resources(R.string.es_about_privacy_policy),
           privacyPolicyUrl!!.value
         )
       )

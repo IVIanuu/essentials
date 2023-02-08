@@ -18,7 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
@@ -127,7 +127,7 @@ data class UiDonation(
   billingService: BillingService,
   ctx: KeyUiContext<DonationKey>,
   donations: Donations,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = Model {
   DonationModel(

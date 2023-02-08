@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -15,9 +15,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object BackActionId : ActionId("back")
 
-@Provide fun backAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun backAction(resources: Resources) = Action(
   id = BackActionId,
-  title = resourceProvider(R.string.es_action_back),
+  title = resources(R.string.es_action_back),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_action_back)
 )

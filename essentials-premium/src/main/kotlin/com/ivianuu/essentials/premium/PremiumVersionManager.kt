@@ -6,7 +6,7 @@ package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
@@ -60,7 +60,7 @@ interface PremiumVersionManager {
   private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
-  private val resourceProvider: ResourceProvider,
+  private val resources: Resources,
   private val scope: NamedCoroutineScope<AppScope>,
   private val screenUnlocker: ScreenUnlocker,
   private val toaster: Toaster

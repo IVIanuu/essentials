@@ -16,15 +16,13 @@ import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-interface ResourceProvider {
+interface Resources {
   operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
 
   operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T
 }
 
-@Provide class ResourceProviderImpl(
-  private val appContext: AppContext
-) : ResourceProvider {
+@Provide class ResourcesImpl(private val appContext: AppContext) : Resources {
   override fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T = loader(appContext, id)
 
   override fun <T> invoke(

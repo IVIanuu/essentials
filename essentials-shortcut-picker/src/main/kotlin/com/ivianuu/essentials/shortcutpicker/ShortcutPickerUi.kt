@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource
@@ -64,7 +64,7 @@ data class ShortcutPickerModel(
 
 @Provide fun shortcutPickerModel(
   ctx: KeyUiContext<ShortcutPickerKey>,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   repository: ShortcutRepository,
   toaster: Toaster
 ) = Model {

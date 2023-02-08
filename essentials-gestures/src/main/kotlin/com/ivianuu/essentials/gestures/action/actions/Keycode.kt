@@ -8,7 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.ACTION_DELIMITER
 import com.ivianuu.essentials.gestures.action.Action
@@ -26,7 +26,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide class KeycodeActionFactory(
   private val rootCommandRunner: ActionRootCommandRunner,
-  private val resourceProvider: ResourceProvider
+  private val resources: Resources
 ) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
@@ -34,7 +34,7 @@ import com.ivianuu.injekt.common.typeKeyOf
     val keycode = id.removePrefix(BASE_ID)
     return Action<ActionId>(
       id = id,
-      title = resourceProvider(R.string.es_action_keycode_suffix, keycode),
+      title = resources(R.string.es_action_keycode_suffix, keycode),
       icon = staticActionIcon(R.drawable.es_ic_keyboard),
       permissions = listOf(typeKeyOf<ActionRootPermission>()),
       enabled = true
@@ -49,19 +49,19 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide class KeycodeActionPickerDelegate(
   private val navigator: Navigator,
-  private val resourceProvider: ResourceProvider
+  private val resources: Resources
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = resourceProvider(R.string.es_action_keycode)
+    get() = resources(R.string.es_action_keycode)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_keyboard) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
     val keycode = navigator.push(
       TextInputKey(
-        label = resourceProvider(R.string.es_keycode_label),
+        label = resources(R.string.es_keycode_label),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         predicate = { it.isNotEmpty() }
       )

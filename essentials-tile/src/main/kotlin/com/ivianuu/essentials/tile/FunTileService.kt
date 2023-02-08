@@ -9,7 +9,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.logging.Logger
@@ -85,12 +85,12 @@ abstract class AbstractFunTileService<T : Any>(
     }
     qsTile.label = when {
       model.label != null -> model.label
-      model.labelRes != null -> component.resourceProvider<String>(model.labelRes)
+      model.labelRes != null -> component.resources<String>(model.labelRes)
       else -> null
     }
     qsTile.contentDescription = when {
       model.description != null -> model.description
-      model.descriptionRes != null -> component.resourceProvider<String>(model.descriptionRes)
+      model.descriptionRes != null -> component.resources<String>(model.descriptionRes)
       else -> null
     }
     qsTile.updateTile()
@@ -99,7 +99,7 @@ abstract class AbstractFunTileService<T : Any>(
 
 @Provide @Element<AppScope> data class FunTileServiceComponent(
   val logger: Logger,
-  val resourceProvider: ResourceProvider,
+  val resources: Resources,
   val tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
 )
 

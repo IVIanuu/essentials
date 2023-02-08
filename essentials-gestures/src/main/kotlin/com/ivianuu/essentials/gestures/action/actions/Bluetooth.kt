@@ -8,7 +8,7 @@ import android.bluetooth.BluetoothAdapter
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -25,10 +25,10 @@ import kotlinx.coroutines.flow.onStart
 
 @Provide fun bluetoothAction(
   broadcastsFactory: BroadcastsFactory,
-  resourceProvider: ResourceProvider
+  resources: Resources
 ) = Action(
   id = BluetoothActionId,
-  title = resourceProvider(R.string.es_action_bluetooth),
+  title = resources(R.string.es_action_bluetooth),
   icon = bluetoothIcon(),
   enabled = BluetoothAdapter.getDefaultAdapter() != null
 )

@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ads
 
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
@@ -25,9 +25,9 @@ import kotlinx.coroutines.flow.StateFlow
   companion object {
     @Provide fun default(
       buildInfo: BuildInfo,
-      resourceProvider: ResourceProvider
+      resources: Resources
     ) = ListAdBannerConfig(
-      id = resourceProvider(
+      id = resources(
         if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_list_ad_banner_ad_unit_id
       ),

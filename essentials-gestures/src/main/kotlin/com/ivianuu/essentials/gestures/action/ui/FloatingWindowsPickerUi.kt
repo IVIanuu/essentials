@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
@@ -92,7 +92,7 @@ data class FloatingWindowsPickerModel(
 @Provide fun floatingWindowsPickerModel(
   appRepository: AppRepository,
   ctx: KeyUiContext<FloatingWindowsPickerKey>,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = Model {
   FloatingWindowsPickerModel(

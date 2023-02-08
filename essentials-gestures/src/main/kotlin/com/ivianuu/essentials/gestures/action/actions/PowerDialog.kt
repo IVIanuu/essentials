@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.gestures.action.actions
 
 import android.accessibilityservice.AccessibilityService
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -15,9 +15,9 @@ import com.ivianuu.injekt.Provide
 
 @Provide object PowerDialogActionId : ActionId("power_dialog")
 
-@Provide fun powerDialogAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun powerDialogAction(resources: Resources) = Action(
   id = PowerDialogActionId,
-  title = resourceProvider(R.string.es_action_power_dialog),
+  title = resources(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_power_settings_new)
 )

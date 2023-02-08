@@ -8,7 +8,7 @@ import android.content.ComponentName
 import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
@@ -19,9 +19,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object SearchActionId : ActionId("search")
 
-@Provide fun searchAction(resourceProvider: ResourceProvider) = Action(
+@Provide fun searchAction(resources: Resources) = Action(
   id = SearchActionId,
-  title = resourceProvider(R.string.es_action_search),
+  title = resources(R.string.es_action_search),
   icon = staticActionIcon(Icons.Default.Search),
   permissions = listOf(typeKeyOf<ActionSystemOverlayPermission>())
 )

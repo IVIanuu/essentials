@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.StateFlow
   companion object {
     @Provide fun default(
       buildInfo: BuildInfo,
-      resourceProvider: ResourceProvider
+      resources: Resources
     ) = ScreenAdBannerConfig(
-      id = resourceProvider(
+      id = resources(
         if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_screen_ad_banner_ad_unit_id
       ),

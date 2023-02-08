@@ -8,9 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
@@ -47,7 +47,7 @@ data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: ()
 
 @Provide fun backupAndRestoreModel(
   backupManager: BackupManager,
-  resourceProvider: ResourceProvider,
+  resources: Resources,
   toaster: Toaster
 ) = Model {
   BackupAndRestoreModel(
