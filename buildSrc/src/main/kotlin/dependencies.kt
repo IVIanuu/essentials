@@ -6,7 +6,7 @@
 
 object Build {
   const val applicationId = "com.ivianuu.essentials.sample"
-  const val compileSdk = 32
+  const val compileSdk = 33
   const val minSdk = 27
   const val targetSdk = 31
   const val versionCode = 1
@@ -25,12 +25,12 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.5.1"
+      private const val version = "1.6.1"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
 
-    const val core = "androidx.core:core-ktx:1.5.0-alpha05"
+    const val core = "androidx.core:core-ktx:1.9.0"
 
     const val dataStore = "androidx.datastore:datastore:1.0.0"
 
@@ -64,7 +64,7 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.2.1"
+    const val version = "1.3.0"
     const val compilerVersion = "1.4.0"
     const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
@@ -82,7 +82,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1153"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1154"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -94,7 +94,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev701"
+    private const val version = "0.0.1-dev703"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
@@ -129,7 +129,7 @@ object Deps {
 
   const val mockk = "io.mockk:mockk:1.12.8"
 
-  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.18.0"
+  const val mavenPublishGradlePlugin = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
 
   const val playBillingKtx = "com.android.billingclient:billing-ktx:5.1.0"
 

@@ -4,95 +4,149 @@
 
 package com.ivianuu.essentials.sample.xposed
 
-import android.bluetooth.BluetoothGattCharacteristic
-import com.ivianuu.essentials.lerp
+import android.app.Application
+import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.time.milliseconds
+import com.ivianuu.essentials.time.seconds
+import com.ivianuu.essentials.util.broadcastsFactory
 import com.ivianuu.essentials.xposed.Hooks
 import com.ivianuu.essentials.xposed.arg
+import com.ivianuu.essentials.xposed.callMethod
+import com.ivianuu.essentials.xposed.hookAllConstructors
 import com.ivianuu.essentials.xposed.hookAllMethods
+import com.ivianuu.essentials.xposed.`this`
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.text.DecimalFormat
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlin.time.Duration
+
+@Serializable data class TransitionData(
+  val fadeInTimestamp: Duration = Duration.ZERO,
+  val fadeInDuration: Duration = 3.seconds,
+  val fadeOutTimestamp: Duration = Duration.INFINITE,
+  val fadeOutDuration: Duration = 3.seconds
+)
+
+@Serializable data class FadeCurve(
+  val startPoint: Double,
+  val endPoint: Double,
+  @SerialName("fade_curve") val fadeCurve: List<Item>
+) {
+  @Serializable data class Item(
+    val x: Double,
+    val y: Double
+  )
+}
+
+// [{\"start_point\":0.0,\"end_point\":1.0," +
+//      "\"fade_curve\":[{\"x\":0.0,\"y\":0.0},{\"x\":0.024,\"y\":0.32662357504185807},{\"x\":0.138,\"y\":0.5520288942883655},{\"x\":0.48,\"y\":0.8023654375445535},{\"x\":0.999,\"y\":0.9996998949404599}]}]
+
+private val FadeInCurve = FadeCurve(
+  0.0,
+  1.0,
+  listOf(
+    FadeCurve.Item(0.0, 0.0),
+    FadeCurve.Item(0.024, 0.32),
+    FadeCurve.Item(0.138, 0.55),
+    FadeCurve.Item(0.48, 0.8),
+    FadeCurve.Item(1.0, 1.0)
+  )
+)
+
+//   [{\"start_point\":0.0,\"end_point\":1.0,\"fade_curve\":[{\"x\":0.0,\"y\":1.0},{\"x\":0.08,\"y\":0.977371522300419},{\"x\":0.192,\"y\":0.9158691305093662},{\"x\":0.448,\"y\":0.7001405982789005},{\"x\":0.999,\"y\":0.0014996249374765735}]}]
+
+private val FadeOutCurve = FadeCurve(
+  0.0,
+  1.0,
+  listOf(
+    FadeCurve.Item(0.0, 1.0),
+    FadeCurve.Item(0.08, 0.97),
+    FadeCurve.Item(0.192, 0.91),
+    FadeCurve.Item(0.44, 0.7),
+    FadeCurve.Item(0.99, 0.001)
+  )
+)
+
+var transitionDatas = emptyMap<String, TransitionData>()
 
 context(Logger) @Provide fun sampleHooks() = Hooks {
-  if (packageName.value != "com.apelabs.wapp") return@Hooks
+  if (packageName.value != "com.spotify.music") return@Hooks
 
   hookAllMethods(
-    BluetoothGattCharacteristic::class,
-    "setValue"
+    Application::class,
+    "onCreate"
   ) {
     before {
-      val message = arg<ByteArray>(0)
-      log { "message ${message.contentToString()}" }
-      if (message.getOrNull(0)?.toInt() == 68) {
-        val red = message[5].toColorFloat()
-        val green = message[6].toColorFloat()
-        val blue = message[7].toColorFloat()
-        val white = message[8].toColorFloat()
+      with(`this`<AppContext>()) {
+        GlobalScope.launch {
+          broadcastsFactory()
+            .broadcasts("track_transitions")
+            .collect {
+              transitionDatas = Json.decodeFromString(it.getStringExtra("data")!!)
 
-        log {
-          "color = LightColor(${red.toColorString()}f, " +
-              "${green.toColorString()}f, " +
-              "${blue.toColorString()}f, " +
-              "${white.toColorString()}f) " +
-              "${message.contentToString()}"
+              log { "data changed $transitionDatas" }
+            }
         }
       }
     }
   }
+
+  hookAllConstructors(
+    classLoader.loadClass("com.spotify.player.model.AutoValue_ContextTrack")!!.kotlin
+  ) {
+    before {
+      val originalMap = arg<Map<String, String>>(2)
+      val id = arg<String>(0).removePrefix("spotify:track:")
+
+      val transitionData = transitionDatas[id] ?: TransitionData()
+
+      args[2] = originalMap.callMethod(
+        "c",
+        originalMap
+          .toMutableMap()
+          .apply {
+            put(
+              "audio.fade_in_start_time",
+              transitionData.fadeInTimestamp.inWholeMilliseconds.toString()
+            )
+            put(
+              "audio.fade_in_duration",
+              transitionData.fadeInDuration.inWholeMilliseconds.toString()
+            )
+            put("audio.fade_in_curves", Json.encodeToString(FadeInCurve))
+
+            val fadeOutTimestamp = if (transitionData.fadeOutTimestamp == Duration.INFINITE)
+              get("duration")?.toInt()?.milliseconds?.let {
+                it - transitionData.fadeOutDuration
+              }?.toString()
+            else
+              transitionData.fadeOutTimestamp.inWholeMilliseconds.toString()
+
+            if (fadeOutTimestamp != null) {
+              put("audio.fade_out_start_time", fadeOutTimestamp)
+              put(
+                "audio.fade_out_duration",
+                transitionData.fadeOutDuration.inWholeMilliseconds.toString()
+              )
+              put("audio.fade_out_curves", Json.encodeToString(FadeOutCurve))
+            } else {
+              log { "No duration ${args.contentToString()}" }
+            }
+
+            put("audio.only_allow_fade_on_advance", "false")
+          }
+      )
+    }
+
+    after {
+      log { "ContextTrack ${args.contentToString()}" }
+    }
+  }
 }
-
-val map = mapOf(
-  "Candlelight Classic" to LightColor(0.72f, 0.19f, 0.00f, 1.00f),
-  "Candlelight Rustic" to LightColor(0.76f, 0.28f, 0.00f, 1.00f),
-  "Soft Amber" to LightColor(0.53f, 0.16f, 0.00f, 1.00f),
-  "Blush Pink" to LightColor(0.46f, 0.00f, 0.19f, 1.00f),
-  "Lilac" to LightColor(0.25f, 0.00f, 0.98f, 1.00f),
-  "Seafoam" to LightColor(0.07f, 0.38f, 0.00f, 1.00f),
-  "Mint" to LightColor(0.09f, 0.62f, 0.00f, 1.00f),
-  "Pastel Blue" to LightColor(0.00f, 0.58f, 1.00f, 0.20f),
-  "Turquoise" to LightColor(0.00f, 1.00f, 0.42f, 0.00f),
-  "Red" to LightColor(1.00f, 0.00f, 0.00f, 0.00f),
-  "Green" to LightColor(0.00f, 1.00f, 0.00f, 0.00f),
-  "Blue" to LightColor(0.00f, 0.00f, 1.00f, 0.00f),
-  "Amber" to LightColor(1.00f, 0.75f, 0.00f, 0.03f),
-  "Amber White" to LightColor(0.40f, 0.10f, 0.00f, 1.00f),
-  "Warm White" to LightColor(0.25f, 0.00f, 0.00f, 1.00f),
-  "White" to LightColor(0.19f, 0.00f, 0.00f, 1.00f),
-  "Cool White" to LightColor(0.00f, 0.19f, 0.08f, 1.00f),
-  "Violet" to LightColor(0.14f, 0.00f, 1.00f, 0.00f),
-  "Purple" to LightColor(0.11f, 0.00f, 1.00f, 0.06f),
-  "Lavender" to LightColor(0.15f, 0.00f, 1.00f, 0.58f),
-  "Magenta" to LightColor(0.85f, 0.00f, 1.00f, 0.00f),
-  "Neon Pink" to LightColor(1.00f, 0.00f, 0.34f, 0.33f),
-  "Coral" to LightColor(1.00f, 0.05f, 0.00f, 0.06f),
-  "Yellow" to LightColor(1.00f, 0.79f, 0.00f, 0.33f),
-  "Orange" to LightColor(1.00f, 0.60f, 0.00f, 0.00f),
-  "Peach" to LightColor(0.72f, 0.00f, 0.00f, 1.00f),
-  "Lime" to LightColor(0.18f, 1.00f, 0.00f, 0.00f),
-  "Slate Blue" to LightColor(0.00f, 0.45f, 1.00f, 0.38f),
-  "Moonlight Blue" to LightColor(0.00f, 0.55f, 1.00f, 0.00f)
-)
-
-private fun Float.toColorByte(): Byte = lerp(0, 255, this)
-  .let { if (it > 127) it - 256 else it }
-  .toByte()
-
-private fun Byte.toColorFloat(): Float {
-  var tmp = toInt()
-  if (tmp < 0) tmp += 256
-  return tmp / 255.0f
-}
-
-private val format = DecimalFormat("0.00")
-
-private fun Float.toColorString(): String = format.format(this)
-  .replace(",", ".")
-
-@Serializable data class LightColor(
-  val red: Float = 0.0f,
-  val green: Float = 0.0f,
-  val blue: Float = 0.0f,
-  val white: Float = 1.0f
-)
