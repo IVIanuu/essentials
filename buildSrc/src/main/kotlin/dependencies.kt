@@ -15,7 +15,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.25.1"
+    private const val version = "0.28.0"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
@@ -82,7 +82,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1154"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1155"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -94,7 +94,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev703"
+    private const val version = "0.0.1-dev704"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"

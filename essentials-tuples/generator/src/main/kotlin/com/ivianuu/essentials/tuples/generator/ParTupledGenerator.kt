@@ -20,7 +20,7 @@ fun generatePar(genDir: File) {
     }
     appendLine()
     (2..TUPLES_SIZE).forEach { tuple ->
-      append("context(Concurrency) suspend fun <")
+      append("suspend fun <")
       (1..tuple).forEachIndexed { index, arg ->
         append("${ALPHABET[index]}")
         if (index != tuple - 1) append(", ")
@@ -31,7 +31,8 @@ fun generatePar(genDir: File) {
         append("block$char: suspend () -> $char")
         if (index != tuple - 1) append(", ")
       }
-      append(", context: CoroutineContext = EmptyCoroutineContext): Tuple$tuple<")
+      append(", context: CoroutineContext = EmptyCoroutineContext")
+      append(", @Inject concurrency: Concurrency): Tuple$tuple<")
       (1..tuple).forEachIndexed { index, arg ->
         append("${ALPHABET[index]}")
         if (index != tuple - 1) append(", ")

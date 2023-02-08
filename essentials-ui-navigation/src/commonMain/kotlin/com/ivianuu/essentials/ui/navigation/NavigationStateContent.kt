@@ -36,19 +36,20 @@ fun interface NavigationStateContent {
   @Composable operator fun invoke(p1: Modifier)
 }
 
-context(NamedCoroutineScope<AppScope>) @Provide fun navigationStateContent(
+@Provide fun navigationStateContent(
   navigator: Navigator,
   optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   decorateUi: (Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
   elementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
-  rootKey: RootKey? = null
+  rootKey: RootKey? = null,
+  scope: NamedCoroutineScope<AppScope>
 ) = NavigationStateContent { modifier ->
   val backStack by navigator.backStack.collectAsState()
 
   if (backStack.size > 1)
     BackHandler {
-      launch {
+      scope.launch {
         navigator.popTop()
       }
     }

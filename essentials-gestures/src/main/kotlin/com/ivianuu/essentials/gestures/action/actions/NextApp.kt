@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.gestures.action.actions
 
+import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
@@ -16,17 +17,21 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object NextAppActionId : ActionId("next_app")
 
-context(ResourceProvider) @Provide fun nextAppAction() = Action(
+@Provide fun nextAppAction(resourceProvider: ResourceProvider) = Action(
   id = NextAppActionId,
-  title = loadResource(R.string.es_action_next_app),
+  title = resourceProvider(R.string.es_action_next_app),
   permissions = accessibilityActionPermissions + typeKeyOf<ActionSystemOverlayPermission>(),
   unlockScreen = true,
   closeSystemDialogs = true,
   icon = staticActionIcon(R.drawable.es_ic_arrow_forward)
 )
 
-context(ActionIntentSender, AppContext, AppSwitchManager)
-    @Provide fun nextAppActionExecutor() = ActionExecutor<NextAppActionId> {
-  nextApp()
+@Provide fun nextAppActionExecutor(
+  appContext: AppContext,
+  appSwitchManager: AppSwitchManager,
+  intentSender: ActionIntentSender,
+  packageManager: PackageManager
+) = ActionExecutor<NextAppActionId> {
+  appSwitchManager.nextApp()
     ?.let { switchToApp(it, R.anim.es_slide_in_left, R.anim.es_slide_out_left) }
 }

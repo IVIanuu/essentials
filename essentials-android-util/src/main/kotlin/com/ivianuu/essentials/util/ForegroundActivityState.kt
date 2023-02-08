@@ -11,31 +11,32 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.coroutines.MainContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
-@JvmInline value class ForegroundActivityProvider(val foregroundActivity: Flow<ComponentActivity?>) {
+@Tag annotation class ForegroundActivityTag {
   companion object {
-    internal val state = MutableStateFlow<ComponentActivity?>(null)
-    @Provide val default get() = ForegroundActivityProvider(state)
+    @Provide val foregroundActivityState = MutableStateFlow<ForegroundActivity>(null)
   }
 }
+
+typealias ForegroundActivity = @ForegroundActivityTag ComponentActivity?
 
 interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
-  mainContext: MainContext
-) = ScopeWorker<UiScope> worker@ {
+  coroutineContext: MainContext,
+  state: MutableStateFlow<ForegroundActivity>
+) = ScopeWorker<UiScope> worker@{
   if (activity !is ForegroundActivityMarker) return@worker
   val observer = LifecycleEventObserver { _, _ ->
-    ForegroundActivityProvider.state.value =
-      if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
-        activity else null
+    state.value = if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED))
+      activity else null
   }
-  withContext(mainContext) {
+  withContext(coroutineContext) {
     activity.lifecycle.addObserver(observer)
     onCancel { activity.lifecycle.removeObserver(observer) }
   }

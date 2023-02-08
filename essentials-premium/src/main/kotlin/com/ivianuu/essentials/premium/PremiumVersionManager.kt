@@ -6,23 +6,22 @@ package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.ads.AdsEnabledProvider
+import com.ivianuu.essentials.ResourceProvider
+import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
-import com.ivianuu.essentials.coroutines.share
-import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppUiStarter
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Eager
@@ -35,6 +34,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -50,35 +51,35 @@ interface PremiumVersionManager {
   suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R?
 }
 
-context(
-AppUiStarter,
-BillingService,
-Logger,
-NamedCoroutineScope<AppScope>,
-ScreenUnlocker,
-ToastContext)
 @Provide @Eager<AppScope> class PremiumVersionManagerImpl(
+  private val appUiStarter: AppUiStarter,
+  private val billingService: BillingService,
   private val downgradeHandlers: () -> List<PremiumDowngradeHandler>,
+  private val logger: Logger,
   private val navigator: Navigator,
   private val pref: DataStore<PremiumPrefs>,
   private val premiumVersionSku: PremiumVersionSku,
-  oldPremiumVersionSkus: List<OldPremiumVersionSku>
+  oldPremiumVersionSkus: List<OldPremiumVersionSku>,
+  private val resourceProvider: ResourceProvider,
+  private val scope: NamedCoroutineScope<AppScope>,
+  private val screenUnlocker: ScreenUnlocker,
+  private val toaster: Toaster
 ) : PremiumVersionManager {
   override val premiumSkuDetails: Flow<SkuDetails>
-    get() = flow { emit(getSkuDetails(premiumVersionSku)!!) }
+    get() = flow { emit(billingService.getSkuDetails(premiumVersionSku)!!) }
 
   override val isPremiumVersion: Flow<Boolean> = combine(
-    isPurchased(premiumVersionSku),
+    billingService.isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
-      combine(oldPremiumVersionSkus.map { isPurchased(it) }).map {
+      combine(oldPremiumVersionSkus.map { billingService.isPurchased(it) }).map {
         it.any { it }
       }
     else flowOf(false)
   ) { a, b -> a || b }
     .onEach { isPremiumVersion ->
-      launch {
+      scope.launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
-          log { "handle premium version downgrade" }
+          logger { "handle premium version downgrade" }
           downgradeHandlers().parForEach { it() }
         }
         pref.updateData {
@@ -86,19 +87,20 @@ ToastContext)
         }
       }
     }
-    .share(SharingStarted.Eagerly, 1)
+    .shareIn(scope, SharingStarted.Eagerly, 1)
 
-  override suspend fun purchasePremiumVersion() = purchase(premiumVersionSku, true, true)
+  override suspend fun purchasePremiumVersion() =
+    billingService.purchase(premiumVersionSku, true, true)
 
-  override suspend fun consumePremiumVersion() = consumePurchase(premiumVersionSku)
+  override suspend fun consumePremiumVersion() = billingService.consumePurchase(premiumVersionSku)
 
   override suspend fun <R> runOnPremiumOrShowHint(block: suspend () -> R): R? {
     if (isPremiumVersion.first()) return block()
 
-    launch {
-      showToast(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
-      if (!unlockScreen()) return@launch
-      startAppUi()
+    scope.launch {
+      toaster(com.ivianuu.essentials.premium.R.string.es_premium_version_hint)
+      if (!screenUnlocker()) return@launch
+      appUiStarter()
       navigator.push(GoPremiumKey(showTryBasicOption = false))
     }
 
@@ -120,12 +122,13 @@ typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 }
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
-context(NamedCoroutineScope<AppScope>, PremiumVersionManager)
-    @Provide fun premiumAdsEnabledProvider() = AdsEnabledProvider(
-  isPremiumVersion
-    .map { !it }
-    .state(SharingStarted.Eagerly, false)
-)
+
+@Provide fun premiumAdsEnabledProvider(
+  premiumVersionManager: PremiumVersionManager,
+  scope: NamedCoroutineScope<AppScope>
+) = premiumVersionManager.isPremiumVersion
+  .map { AdsEnabled(!it) }
+  .stateIn(scope, SharingStarted.Eagerly, false)
 
 @Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {

@@ -13,17 +13,17 @@ import eu.chainfire.libsuperuser.Shell.SU
 import kotlinx.coroutines.withContext
 
 interface Shell {
-  suspend fun isShellAvailable(): Boolean
+  suspend fun isAvailable(): Boolean
 
-  suspend fun runShellCommand(vararg commands: String): Result<List<String>, Throwable>
+  suspend fun run(vararg commands: String): Result<List<String>, Throwable>
 }
 
 @Provide class ShellImpl(private val context: IOContext) : Shell {
-  override suspend fun isShellAvailable() = withContext(context) {
+  override suspend fun isAvailable() = withContext(context) {
     catch { SU.available() }.getOrElse { false }
   }
 
-  override suspend fun runShellCommand(vararg commands: String) = withContext(context) {
+  override suspend fun run(vararg commands: String) = withContext(context) {
     catch { SU.run(commands)!! }
   }
 }

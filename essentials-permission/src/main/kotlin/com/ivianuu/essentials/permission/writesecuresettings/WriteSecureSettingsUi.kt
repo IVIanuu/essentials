@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.onSuccess
@@ -24,8 +25,8 @@ import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first
@@ -73,24 +74,30 @@ data class WriteSecureSettingsModel(
   val grantPermissionsViaRoot: () -> Unit
 )
 
-context(BuildInfo, KeyUiContext<WriteSecureSettingsKey>, PermissionManager, Shell, ToastContext)
-    @Provide fun writeSecureSettingsModel() = Model {
+@Provide fun writeSecureSettingsModel(
+  buildInfo: BuildInfo,
+  ctx: KeyUiContext<WriteSecureSettingsKey>,
+  permissionManager: PermissionManager,
+  resourceProvider: ResourceProvider,
+  shell: Shell,
+  toaster: Toaster
+) = Model {
   WriteSecureSettingsModel(
     openPcInstructions = action {
-      if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
-        navigator.pop(key)
+      if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
+        ctx.navigator.pop(ctx.key)
     },
     grantPermissionsViaRoot = action {
-      runShellCommand("pm grant $packageName android.permission.WRITE_SECURE_SETTINGS")
+      shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
-          if (permissionState(listOf(key.permissionKey)).first()) {
-            showToast(R.string.es_secure_settings_permission_granted)
-            navigator.pop(key)
+          if (permissionManager.permissionState(listOf(ctx.key.permissionKey)).first()) {
+            toaster(R.string.es_secure_settings_permission_granted)
+            ctx.navigator.pop(ctx.key)
           }
         }
         .onFailure {
           it.printStackTrace()
-          showToast(R.string.es_secure_settings_no_root)
+          toaster(R.string.es_secure_settings_no_root)
         }
     }
   )

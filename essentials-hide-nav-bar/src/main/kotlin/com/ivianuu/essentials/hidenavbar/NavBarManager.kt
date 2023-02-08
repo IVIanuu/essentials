@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import android.content.Context
 import android.graphics.Rect
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
@@ -13,12 +14,13 @@ import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.screenstate.DisplayRotation
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.TypeKey
+import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -27,29 +29,28 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-context(
-AppContext,
-CombinedForceNavBarVisibleProvider,
-DisplayRotation.Provider,
-Logger,
-NonSdkInterfaceDetectionDisabler,
-OverscanUpdater,
-PermissionManager
-) @Provide fun navBarManager(
+@Provide fun navBarManager(
+  context: AppContext,
+  displayRotation: Flow<DisplayRotation>,
+  forceNavBarVisibleState: Flow<CombinedForceNavBarVisibleState>,
+  logger: Logger,
   navBarFeatureSupported: NavBarFeatureSupported,
-  pref: DataStore<NavBarPrefs>
+  nonSdkInterfaceDetectionDisabler: NonSdkInterfaceDetectionDisabler,
+  permissionManager: PermissionManager,
+  pref: DataStore<NavBarPrefs>,
+  setOverscan: OverscanUpdater
 ) = ScopeWorker<AppScope> worker@{
   if (!navBarFeatureSupported.value) return@worker
-  permissionState(listOf<TypeKey<NavBarPermission>>())
+  permissionManager.permissionState(listOf(typeKeyOf<NavBarPermission>()))
     .flatMapLatest { hasPermission ->
       if (hasPermission) {
-        forceNavBarVisible
+        forceNavBarVisibleState
           .flatMapLatest { forceVisible ->
             pref.data
               // we wanna ignore changes to the wasNavBarHidden state
               .distinctUntilChangedBy { it.copy(wasNavBarHidden = false) }
               .map {
-                if (!forceVisible) it
+                if (!forceVisible.value) it
                 else it.copy(hideNavBar = false)
               }
           }
@@ -59,7 +60,7 @@ PermissionManager
     }
     .distinctUntilChanged()
     .flatMapLatest { currentPrefs ->
-      log { "current prefs $currentPrefs" }
+      logger { "current prefs $currentPrefs" }
       if (currentPrefs.hideNavBar) {
         displayRotation
           .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
@@ -71,7 +72,7 @@ PermissionManager
       }
     }
     .distinctUntilChanged()
-    .collect { it.apply() }
+    .collect { it.apply(context, nonSdkInterfaceDetectionDisabler, logger, setOverscan) }
 }
 
 private sealed interface NavBarState {
@@ -79,32 +80,40 @@ private sealed interface NavBarState {
   object Visible : NavBarState
 }
 
-context(AppContext, Logger, NonSdkInterfaceDetectionDisabler, OverscanUpdater)
-    private suspend fun NavBarState.apply() {
-  log { "apply nav bar state $this" }
+private suspend fun NavBarState.apply(
+  context: Context,
+  disableNonSdkInterfaceDetection: NonSdkInterfaceDetectionDisabler,
+  logger: Logger,
+  setOverscan: OverscanUpdater
+) {
+  logger { "apply nav bar state $this" }
   catch {
     catch {
       // ensure that we can access non sdk interfaces
       disableNonSdkInterfaceDetection()
     }.onFailure { it.printStackTrace() }
 
-    val rect = when (this) {
+    val rect = when (this@apply) {
       is NavBarState.Hidden -> getOverscanRect(
-        -getNavigationBarHeight(rotation), rotationMode, rotation
+        -getNavigationBarHeight(context, rotation), rotationMode, rotation
       )
+
       NavBarState.Visible -> Rect(0, 0, 0, 0)
     }
-    updateOverscan(rect)
+    setOverscan(rect)
   }.onFailure {
-    log(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
+    logger(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
   }
 }
 
-context(AppContext) private fun getNavigationBarHeight(rotation: DisplayRotation): Int {
+private fun getNavigationBarHeight(
+  context: Context,
+  rotation: DisplayRotation
+): Int {
   val name = if (rotation.isPortrait) "navigation_bar_height"
   else "navigation_bar_width"
-  val id = resources.getIdentifier(name, "dimen", "android")
-  return if (id > 0) resources.getDimensionPixelSize(id) else 0
+  val id = context.resources.getIdentifier(name, "dimen", "android")
+  return if (id > 0) context.resources.getDimensionPixelSize(id) else 0
 }
 
 private fun getOverscanRect(

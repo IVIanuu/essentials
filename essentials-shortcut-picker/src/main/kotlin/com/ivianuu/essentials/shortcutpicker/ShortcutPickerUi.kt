@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bindResource
@@ -31,8 +32,8 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 object ShortcutPickerKey : Key<Shortcut>
@@ -61,20 +62,24 @@ data class ShortcutPickerModel(
   val pickShortcut: (Shortcut) -> Unit
 )
 
-context(KeyUiContext<ShortcutPickerKey>, ShortcutRepository, ToastContext)
-    @Provide fun shortcutPickerModel() = Model {
+@Provide fun shortcutPickerModel(
+  ctx: KeyUiContext<ShortcutPickerKey>,
+  resourceProvider: ResourceProvider,
+  repository: ShortcutRepository,
+  toaster: Toaster
+) = Model {
   ShortcutPickerModel(
-    shortcuts = shortcuts.bindResource(),
+    shortcuts = repository.shortcuts.bindResource(),
     pickShortcut = action { shortcut ->
       catch {
-        val shortcutRequestResult = navigator.push(DefaultIntentKey(shortcut.intent))
+        val shortcutRequestResult = ctx.navigator.push(DefaultIntentKey(shortcut.intent))
           ?.getOrNull()
           ?.data ?: return@catch
-        val finalShortcut = extractShortcut(shortcutRequestResult)
-        navigator.pop(key, finalShortcut)
+        val finalShortcut = repository.extractShortcut(shortcutRequestResult)
+        ctx.navigator.pop(ctx.key, finalShortcut)
       }.onFailure {
         it.printStackTrace()
-        showToast(R.string.es_failed_to_pick_shortcut)
+        toaster(R.string.es_failed_to_pick_shortcut)
       }
     }
   )

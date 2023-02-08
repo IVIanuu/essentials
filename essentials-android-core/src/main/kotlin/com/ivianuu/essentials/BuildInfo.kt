@@ -16,13 +16,13 @@ data class BuildInfo(
   val versionCode: Int,
 ) {
   companion object {
-    context(AppContext) @Provide fun androidBuildInfo(): @Scoped<AppScope> BuildInfo {
-      val appInfo = applicationInfo
-      val packageInfo = packageManager
+    @Provide fun androidBuildInfo(appContext: AppContext): @Scoped<AppScope> BuildInfo {
+      val appInfo = appContext.applicationInfo
+      val packageInfo = appContext.packageManager
         .getPackageInfo(appInfo.packageName, 0)
       return BuildInfo(
         isDebug = appInfo.flags.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
-        appName = appInfo.loadLabel(packageManager).toString(),
+        appName = appInfo.loadLabel(appContext.packageManager).toString(),
         packageName = appInfo.packageName,
         versionName = packageInfo.versionName,
         versionCode = packageInfo.versionCode

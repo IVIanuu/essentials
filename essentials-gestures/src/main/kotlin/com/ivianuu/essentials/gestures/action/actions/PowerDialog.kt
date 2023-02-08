@@ -15,14 +15,15 @@ import com.ivianuu.injekt.Provide
 
 @Provide object PowerDialogActionId : ActionId("power_dialog")
 
-context(ResourceProvider) @Provide fun powerDialogAction() = Action(
+@Provide fun powerDialogAction(resourceProvider: ResourceProvider) = Action(
   id = PowerDialogActionId,
-  title = loadResource(R.string.es_action_power_dialog),
+  title = resourceProvider(R.string.es_action_power_dialog),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_power_settings_new)
 )
 
-context(GlobalActionExecutor)
-    @Provide fun powerDialogActionExecutor() = ActionExecutor<PowerDialogActionId> {
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
+@Provide fun powerDialogActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
+) = ActionExecutor<PowerDialogActionId> {
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_POWER_DIALOG)
 }

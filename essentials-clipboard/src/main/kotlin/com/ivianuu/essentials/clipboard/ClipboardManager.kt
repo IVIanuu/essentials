@@ -7,10 +7,12 @@ package com.ivianuu.essentials.clipboard
 import android.content.ClipData
 import com.ivianuu.essentials.Err
 import com.ivianuu.essentials.Ok
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -22,25 +24,28 @@ interface ClipboardManager {
   suspend fun updateClipboardText(value: String, showMessage: Boolean = true)
 }
 
-context(AndroidClipboardManager, ToastContext)
-@Provide class ClipboardManagerImpl : ClipboardManager {
+@Provide class ClipboardManagerImpl(
+  private val androidClipboardManager: @SystemService AndroidClipboardManager,
+  private val resourceProvider: ResourceProvider,
+  private val toaster: Toaster
+) : ClipboardManager {
   override val clipboardText: Flow<String?>
     get() = callbackFlow<String?> {
       val listener = AndroidClipboardManager.OnPrimaryClipChangedListener {
-        val current = primaryClip?.getItemAt(0)?.text?.toString()
+        val current = androidClipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
         trySend(current)
       }
       listener.onPrimaryClipChanged()
 
-      addPrimaryClipChangedListener(listener)
-      awaitClose { removePrimaryClipChangedListener(listener) }
+      androidClipboardManager.addPrimaryClipChangedListener(listener)
+      awaitClose { androidClipboardManager.removePrimaryClipChangedListener(listener) }
     }
 
   override suspend fun updateClipboardText(value: String, showMessage: Boolean) {
-    catch { setPrimaryClip(ClipData.newPlainText("", value)) }
+    catch { androidClipboardManager.setPrimaryClip(ClipData.newPlainText("", value)) }
       .also { result ->
         if (showMessage) {
-          showToast(
+          toaster(
             when (result) {
               is Ok -> R.string.copied_to_clipboard
               is Err -> R.string.copy_to_clipboard_failed

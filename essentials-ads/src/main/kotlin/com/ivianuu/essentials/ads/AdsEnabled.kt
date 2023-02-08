@@ -4,6 +4,4 @@
 
 package com.ivianuu.essentials.ads
 
-import kotlinx.coroutines.flow.StateFlow
-
-@JvmInline value class AdsEnabledProvider(val adsEnabled: StateFlow<Boolean>)
+@JvmInline value class AdsEnabled(val value: Boolean)

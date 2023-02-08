@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.apps.AppRepository
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOWS_PACKAGE
@@ -31,8 +32,8 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
@@ -88,22 +89,26 @@ data class FloatingWindowsPickerModel(
   val openFullScreen: () -> Unit
 )
 
-context(AppRepository, KeyUiContext<FloatingWindowsPickerKey>, ToastContext)
-    @Provide fun floatingWindowsPickerModel() = Model {
+@Provide fun floatingWindowsPickerModel(
+  appRepository: AppRepository,
+  ctx: KeyUiContext<FloatingWindowsPickerKey>,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
+) = Model {
   FloatingWindowsPickerModel(
-    actionTitle = key.actionTitle,
+    actionTitle = ctx.key.actionTitle,
     openFloatingWindow = action {
-      if (isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
-        navigator.pop(key, true)
+      if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
+        ctx.navigator.pop(ctx.key, true)
       } else {
-        showToast(R.string.es_floating_windows_not_installed)
-        navigator.push(
+        toaster(R.string.es_floating_windows_not_installed)
+        ctx.navigator.push(
           PlayStoreAppDetailsKey(
             FLOATING_WINDOWS_PACKAGE
           )
         )
       }
     },
-    openFullScreen = action { navigator.pop(key, false) }
+    openFullScreen = action { ctx.navigator.pop(ctx.key, false) }
   )
 }

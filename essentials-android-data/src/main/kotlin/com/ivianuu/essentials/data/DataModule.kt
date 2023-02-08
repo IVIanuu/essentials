@@ -11,8 +11,7 @@ import java.io.File
 
 @Tag annotation class DataDirTag {
   companion object {
-    context(AppContext)
-        @Provide fun dataDir(): DataDir = File(applicationInfo.dataDir)
+    @Provide fun dataDir(appContext: AppContext): DataDir = File(appContext.applicationInfo.dataDir)
   }
 }
 

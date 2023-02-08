@@ -11,15 +11,17 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.ScopeInitializer
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
 
 fun interface WorkInitializer : ScopeInitializer<AppScope>
 
-context(AppContext, WorkerFactory) @Provide fun workInitializer() = WorkInitializer {
+@Provide fun workInitializer(
+  appContext: AppContext,
+  workerFactory: WorkerFactory
+) = WorkInitializer {
   WorkManager.initialize(
-    inject(),
+    appContext,
     Configuration.Builder()
-      .setWorkerFactory(inject())
+      .setWorkerFactory(workerFactory)
       .build()
   )
 }

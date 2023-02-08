@@ -8,7 +8,7 @@ import android.content.ContentResolver
 import android.database.ContentObserver
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
@@ -29,7 +29,7 @@ class ContentChangesTest {
     val collector = contentChangesFactory(
       contentResolver,
       dispatcher
-    )(mockk()).testCollect(this)
+    )(mockk()).testCollectIn(this)
 
     observer.onChange(false)
     observer.onChange(false)

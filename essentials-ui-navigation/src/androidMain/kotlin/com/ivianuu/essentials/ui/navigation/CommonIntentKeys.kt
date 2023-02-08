@@ -24,8 +24,8 @@ data class AppInfoKey(val packageName: String) : IntentKey
 
 data class AppKey(val packageName: String) : IntentKey
 
-context(PackageManager) @Provide fun appKeyIntentFactory() = KeyIntentFactory<AppKey> { key ->
-  getLaunchIntentForPackage(key.packageName)!!
+@Provide fun appKeyIntentFactory(packageManager: PackageManager) = KeyIntentFactory<AppKey> { key ->
+  packageManager.getLaunchIntentForPackage(key.packageName)!!
 }
 
 data class ShareKey(val text: String) : IntentKey

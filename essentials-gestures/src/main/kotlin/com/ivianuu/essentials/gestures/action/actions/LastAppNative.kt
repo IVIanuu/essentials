@@ -16,18 +16,19 @@ import kotlinx.coroutines.delay
 
 @Provide object LastAppNativeActionId : ActionId("last_app_native")
 
-context(ResourceProvider) @Provide fun lastAppNativeAction() = Action(
+@Provide fun lastAppNativeAction(resourceProvider: ResourceProvider) = Action(
   id = LastAppNativeActionId,
-  title = loadResource(R.string.es_action_last_app_native),
+  title = resourceProvider(R.string.es_action_last_app_native),
   permissions = accessibilityActionPermissions,
   unlockScreen = true,
   closeSystemDialogs = true,
   icon = staticActionIcon(R.drawable.es_ic_repeat)
 )
 
-context(GlobalActionExecutor)
-    @Provide fun lastAppNativeActionExecutor() = ActionExecutor<LastAppNativeActionId> {
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+@Provide fun lastAppNativeActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
+) = ActionExecutor<LastAppNativeActionId> {
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
   delay(250)
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.data.DataStore
-import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleProvider
+import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
 import com.ivianuu.essentials.hidenavbar.NavBarPrefs
 import com.ivianuu.essentials.permission.PermissionManager
@@ -29,6 +29,7 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -40,8 +41,11 @@ import kotlinx.coroutines.launch
 
 object NavBarKey : Key<Unit>
 
-context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
-  navBarPref: DataStore<NavBarPrefs>
+@Provide fun navBarUi(
+  ctx: KeyUiContext<NavBarKey>,
+  navigator: Navigator,
+  navBarPref: DataStore<NavBarPrefs>,
+  permissionManager: PermissionManager
 ) = SimpleKeyUi<NavBarKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
@@ -55,7 +59,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
       // reshow nav bar when leaving the screen
       DisposableEffect(true) {
         onDispose {
-          launch {
+          ctx.launch {
             navBarPref.updateData {
               copy(hideNavBar = false)
             }
@@ -63,9 +67,10 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
         }
       }
 
-      val hasPermission by permissionState(listOf(typeKeyOf<NavBarPermission>())).collectAsState(
-        false
-      )
+      val hasPermission by permissionManager.permissionState(listOf(typeKeyOf<NavBarPermission>()))
+        .collectAsState(
+          false
+        )
 
       Box(
         modifier = Modifier.fillMaxWidth(),
@@ -74,9 +79,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
         Text(
           text = if (hasPermission) {
             when {
-              sampleForceNavBarVisibleState
-                .collectAsState(false)
-                .value -> "Nav bar forced shown"
+              sampleForceNavBarVisibleState.collectAsState().value.value -> "Nav bar forced shown"
               navBarPrefs.hideNavBar -> "Nav bar hidden"
               else -> "Nav bar shown"
             }
@@ -88,14 +91,14 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
       Button(
         onClick = {
           if (hasPermission) {
-            launch {
+            ctx.launch {
               navBarPref.updateData {
                 copy(hideNavBar = !hideNavBar)
               }
             }
           } else {
-            launch {
-              requestPermissions(listOf(typeKeyOf<NavBarPermission>()))
+            ctx.launch {
+              permissionManager.requestPermissions(listOf(typeKeyOf<NavBarPermission>()))
             }
           }
         }
@@ -107,7 +110,8 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
 
       Button(
         onClick = {
-          sampleForceNavBarVisibleState.value = !sampleForceNavBarVisibleState.value
+          sampleForceNavBarVisibleState.value =
+            ForceNavBarVisibleState(!sampleForceNavBarVisibleState.value.value)
         }
       ) { Text("Toggle force nav bar") }
 
@@ -115,7 +119,7 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
 
       Button(
         onClick = {
-          launch {
+          ctx.launch {
             navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
           }
         }
@@ -124,7 +128,5 @@ context(KeyUiContext<NavBarKey>, PermissionManager) @Provide fun navBarUi(
   }
 }
 
-private val sampleForceNavBarVisibleState = MutableStateFlow(false)
-
-@Provide val sampleForceNavBarVisibleProvider
-  get() = ForceNavBarVisibleProvider(sampleForceNavBarVisibleState)
+@Provide val sampleForceNavBarVisibleState =
+  MutableStateFlow(ForceNavBarVisibleState(false))

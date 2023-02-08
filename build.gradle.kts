@@ -14,7 +14,7 @@ buildscript {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://jitpack.io")
-    maven("https://github.com/IVIanuu/XposedBridge/tree/gh-pages")
+    maven("https://api.xposed.info/")
   }
 
   dependencies {
@@ -37,7 +37,7 @@ allprojects {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://jitpack.io")
-    maven("https://github.com/IVIanuu/XposedBridge/tree/gh-pages")
+    maven("https://api.xposed.info/")
   }
 
   plugins.withId("com.vanniktech.maven.publish") {

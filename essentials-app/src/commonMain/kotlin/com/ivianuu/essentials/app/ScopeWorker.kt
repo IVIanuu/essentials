@@ -7,7 +7,7 @@ package com.ivianuu.essentials.app
 import com.ivianuu.essentials.coroutines.ExitCase
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -22,15 +22,17 @@ fun interface ScopeWorkerRunner<N> {
   operator fun invoke()
 }
 
-context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
+@Provide fun <N> scopeWorkerRunner(
+  logger: Logger,
   nameKey: TypeKey<N>,
+  scope: NamedCoroutineScope<N>,
   workers: () -> List<ServiceElement<ScopeWorker<N>>>
 ) = ScopeWorkerRunner<N> {
-  launch {
+  scope.launch {
     guarantee(
       block = {
         supervisorScope {
-          log { "${nameKey.value} run scope workers" }
+          logger { "${nameKey.value} run scope workers" }
 
           workers()
             .sortedWithLoadingOrder()
@@ -43,7 +45,7 @@ context(Logger, NamedCoroutineScope<N>) @Provide fun <N> scopeWorkerRunner(
       },
       finalizer = {
         if (it is ExitCase.Cancelled)
-          log { "${nameKey.value} cancel scope workers" }
+          logger { "${nameKey.value} cancel scope workers" }
       }
     )
   }

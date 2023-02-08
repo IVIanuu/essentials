@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.compose.action
@@ -36,8 +37,8 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 object DonationKey : PopupKey<Unit>
@@ -122,15 +123,19 @@ data class UiDonation(
   val price: String
 )
 
-context(BillingService, KeyUiContext<DonationKey>, ToastContext) @Provide fun donationModel(
-  donations: Donations
+@Provide fun donationModel(
+  billingService: BillingService,
+  ctx: KeyUiContext<DonationKey>,
+  donations: Donations,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
 ) = Model {
   DonationModel(
     skus = produceResource {
       donations
         .value
         .parMap { donation ->
-          val details = getSkuDetails(donation.sku)!!
+          val details = billingService.getSkuDetails(donation.sku)!!
           UiDonation(
             donation,
             details.title
@@ -140,11 +145,11 @@ context(BillingService, KeyUiContext<DonationKey>, ToastContext) @Provide fun do
           )
         }
     },
-    close = action { navigator.pop(key) },
+    close = action { ctx.navigator.pop(ctx.key) },
     purchase = action { donation ->
-      if (purchase(donation.donation.sku, true, true)) {
-        consumePurchase(donation.donation.sku)
-        showToast(R.string.es_donation_thanks)
+      if (billingService.purchase(donation.donation.sku, true, true)) {
+        billingService.consumePurchase(donation.donation.sku)
+        toaster(R.string.es_donation_thanks)
       }
     }
   )

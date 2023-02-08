@@ -24,33 +24,33 @@ abstract class AccessibilityServicePermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-context(AppContext, BuildInfo)
-    @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider() =
-  PermissionStateProvider<P> provider@{
-    Settings.Secure.getString(
-      contentResolver,
-      Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-    )
-      ?.split(":")
-      ?.map {
-        it.split("/").first()
-      }
-      ?.any { it == packageName } == true
-  }
+@Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionStateProvider(
+  appContext: AppContext
+) = PermissionStateProvider<P> provider@{
+  Settings.Secure.getString(
+    appContext.contentResolver,
+    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+  )
+    ?.split(":")
+    ?.map {
+      it.split("/").first()
+    }
+    ?.any { it == appContext.packageName } == true
+}
 
 @Provide fun <P : AccessibilityServicePermission> accessibilityServiceShowFindPermissionHint(
 ): ShowFindPermissionHint<P> = ShowFindPermissionHint(true)
 
-context(BuildInfo)
-    @Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory() =
-  PermissionIntentFactory<P> { permission ->
-    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-      val componentName = "${packageName}/${permission.serviceClass.java.name}"
-      putExtra(":settings:fragment_args_key", componentName)
-      putExtra(
-        ":settings:show_fragment_args", bundleOf(
-          ":settings:fragment_args_key" to componentName
-        )
+@Provide fun <P : AccessibilityServicePermission> accessibilityServicePermissionIntentFactory(
+  buildInfo: BuildInfo
+) = PermissionIntentFactory<P> { permission ->
+  Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+    val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
+    putExtra(":settings:fragment_args_key", componentName)
+    putExtra(
+      ":settings:show_fragment_args", bundleOf(
+        ":settings:fragment_args_key" to componentName
       )
-    }
+    )
   }
+}

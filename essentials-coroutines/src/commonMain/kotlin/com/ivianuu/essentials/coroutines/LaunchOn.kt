@@ -14,14 +14,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
-fun <T> Flow<T>.launchOnStart(block: suspend context(CoroutineScope) () -> Unit) = flow {
+fun <T> Flow<T>.launchOnStart(block: suspend CoroutineScope.() -> Unit) = flow {
   coroutineScope {
     launch(block = block)
     emitAll(this@launchOnStart)
   }
 }
 
-fun <T> Flow<T>.launchOnEach(block: suspend context(CoroutineScope) (T) -> Unit) = flow {
+fun <T> Flow<T>.launchOnEach(block: suspend CoroutineScope.(T) -> Unit) = flow {
   coroutineScope {
     this@launchOnEach.collect { value ->
       emit(value)
@@ -30,7 +30,7 @@ fun <T> Flow<T>.launchOnEach(block: suspend context(CoroutineScope) (T) -> Unit)
   }
 }
 
-fun <T> Flow<T>.launchOnEachLatest(block: suspend context(CoroutineScope) (T) -> Unit) = flow {
+fun <T> Flow<T>.launchOnEachLatest(block: suspend CoroutineScope.(T) -> Unit) = flow {
   coroutineScope {
     var lastJob: Job? = null
     this@launchOnEachLatest.collect { value ->
@@ -41,7 +41,7 @@ fun <T> Flow<T>.launchOnEachLatest(block: suspend context(CoroutineScope) (T) ->
   }
 }
 
-fun <T> Flow<T>.launchOnCompletion(block: suspend context(CoroutineScope) (Throwable?) -> Unit) = flow {
+fun <T> Flow<T>.launchOnCompletion(block: suspend CoroutineScope.(Throwable?) -> Unit) = flow {
   coroutineScope {
     emitAll(
       this@launchOnCompletion
@@ -54,7 +54,7 @@ fun <T> Flow<T>.launchOnCompletion(block: suspend context(CoroutineScope) (Throw
   }
 }
 
-fun <T> Flow<T>.launchOnCancel(block: suspend context(CoroutineScope) () -> Unit) = flow {
+fun <T> Flow<T>.launchOnCancel(block: suspend CoroutineScope.() -> Unit) = flow {
   coroutineScope {
     emitAll(
       this@launchOnCancel

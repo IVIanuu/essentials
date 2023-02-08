@@ -30,8 +30,11 @@ import kotlinx.coroutines.launch
 
 object SystemWindowKey : Key<Unit>
 
-context(KeyUiContext<SystemWindowKey>, PermissionManager, SystemWindowManager)
-    @Provide fun systemWindowUi() = SimpleKeyUi<SystemWindowKey> {
+@Provide fun systemWindowUi(
+  ctx: KeyUiContext<SystemWindowKey>,
+  permissionManager: PermissionManager,
+  systemWindowManager: SystemWindowManager
+) = SimpleKeyUi<SystemWindowKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("System window") }) }
   ) {
@@ -39,9 +42,9 @@ context(KeyUiContext<SystemWindowKey>, PermissionManager, SystemWindowManager)
       modifier = Modifier.center(),
       onClick = {
         lateinit var job: Job
-        job = launch {
-          if (requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>()))) {
-            attachSystemWindow {
+        job = ctx.launch {
+          if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>()))) {
+            systemWindowManager.attachSystemWindow {
               Box(
                 modifier = Modifier
                   .fillMaxSize()

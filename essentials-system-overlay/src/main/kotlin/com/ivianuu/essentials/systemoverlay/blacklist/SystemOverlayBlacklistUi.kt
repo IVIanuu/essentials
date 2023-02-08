@@ -81,12 +81,13 @@ data class SystemOverlayBlacklistModel(
   val openAppBlacklistSettings: () -> Unit
 )
 
-context(KeyUiContext<SystemOverlayBlacklistKey>) @Provide fun systemOverlayBlacklistModel(
+@Provide fun systemOverlayBlacklistModel(
+  ctx: KeyUiContext<SystemOverlayBlacklistKey>,
   pref: DataStore<SystemOverlayBlacklistPrefs>
 ) = Model {
   val prefs = pref.data.bind(SystemOverlayBlacklistPrefs())
   SystemOverlayBlacklistModel(
-    systemOverlayName = key.systemOverlayName,
+    systemOverlayName = ctx.key.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,
     updateDisableOnKeyboard = action { value ->
       pref.updateData { copy(disableOnKeyboard = value) }
@@ -100,7 +101,7 @@ context(KeyUiContext<SystemOverlayBlacklistKey>) @Provide fun systemOverlayBlack
       pref.updateData { copy(disableOnSecureScreens = value) }
     },
     openAppBlacklistSettings = action {
-      navigator.push(SystemOverlayAppBlacklistKey)
+      ctx.navigator.push(SystemOverlayAppBlacklistKey)
     }
   )
 }

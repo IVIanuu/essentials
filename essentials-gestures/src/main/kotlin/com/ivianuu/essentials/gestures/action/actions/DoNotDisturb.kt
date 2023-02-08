@@ -18,37 +18,47 @@ import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionNotificationPolicyPermission
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 @Provide object DoNotDisturbAction : ActionId("do_not_disturb")
 
-context(ResourceProvider) @Provide fun doNotDisturbAction(icon: DoNotDisturbIcon) = Action(
+@Provide fun doNotDisturbAction(
+  icon: DoNotDisturbIcon,
+  resourceProvider: ResourceProvider
+) = Action(
   id = DoNotDisturbAction,
-  title = loadResource(R.string.es_action_do_not_disturb),
+  title = resourceProvider(R.string.es_action_do_not_disturb),
   icon = icon,
   permissions = listOf(typeKeyOf<ActionNotificationPolicyPermission>())
 )
 
-context(NotificationManager)
-    @Provide fun doNotDisturbActionExecutor() = ActionExecutor<DoNotDisturbAction> {
-  setInterruptionFilter(
-    if (currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+@Provide fun doNotDisturbActionExecutor(
+  notificationManager: @SystemService NotificationManager
+) = ActionExecutor<DoNotDisturbAction> {
+  notificationManager.setInterruptionFilter(
+    if (notificationManager.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_PRIORITY)
       NotificationManager.INTERRUPTION_FILTER_PRIORITY else NotificationManager.INTERRUPTION_FILTER_ALL
   )
 }
 
 fun interface DoNotDisturbIcon : ActionIcon
 
-context(BroadcastsFactory, NotificationManager)
-@Provide fun doNotDisturbIcon() = DoNotDisturbIcon {
+@Provide fun doNotDisturbIcon(
+  broadcastsFactory: BroadcastsFactory,
+  notificationManager: @SystemService NotificationManager
+) = DoNotDisturbIcon {
   val doNotDisturb by remember {
-    broadcasts(
+    broadcastsFactory(
       NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED
     )
       .onStart<Any?> { emit(Unit) }
-      .map { currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_PRIORITY }
+      .map {
+        notificationManager.currentInterruptionFilter ==
+            NotificationManager.INTERRUPTION_FILTER_PRIORITY
+      }
   }.collectAsState(false)
 
   Icon(

@@ -18,7 +18,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
   popupMenuContent: (@Composable () -> Unit)? = null,
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
-  content: context(LazyListScope) () -> Unit
+  content: LazyListScope.() -> Unit
 ) {
   Scaffold(
     topBar = {
@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
   noinline popupMenuContent: (@Composable () -> Unit)? = null,
   noinline floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
-  noinline content: context(LazyListScope) () -> Unit
+  noinline content: LazyListScope.() -> Unit
 ) {
   SimpleListScreen(
     stringResource(titleRes),

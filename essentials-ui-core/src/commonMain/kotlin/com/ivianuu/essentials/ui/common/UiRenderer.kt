@@ -7,10 +7,10 @@ package com.ivianuu.essentials.ui.common
 import com.ivianuu.injekt.Provide
 
 fun interface UiRenderer<T> {
-  fun T.toUiString(): String
+  fun toUiString(x: T): String
 
   companion object {
-    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { name }
-    @Provide val string = UiRenderer<String> { this }
+    @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }
+    @Provide val string = UiRenderer<String> { it }
   }
 }

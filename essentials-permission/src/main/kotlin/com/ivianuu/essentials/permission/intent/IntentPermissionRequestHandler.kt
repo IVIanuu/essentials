@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.onFailure
@@ -16,42 +17,41 @@ import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
-fun interface PermissionIntentFactory<P : Permission> {
-  suspend fun createPermissionIntent(permission: P): Intent
-}
+fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 
 @JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
-context(
-BuildInfo,
-PermissionIntentFactory<P>,
-PermissionManager,
-ToastContext
-) @Provide fun <P : Permission> intentPermissionRequestHandler(
+@Provide fun <P : Permission> intentPermissionRequestHandler(
+  buildInfo: BuildInfo,
+  key: TypeKey<P>,
+  intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
-  permissionKey: TypeKey<P>,
-  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false)
+  permissionManager: PermissionManager,
+  resourceProvider: ResourceProvider,
+  showFindPermissionHint: ShowFindPermissionHint<P> = ShowFindPermissionHint(false),
+  toaster: Toaster
 ) = PermissionRequestHandler<P> { permission ->
   race(
     {
       if (showFindPermissionHint.value)
-        showToast(R.string.es_find_app_here, appName)
+        toaster(R.string.es_find_app_here, buildInfo.appName)
       // wait until user navigates back from the permission screen
-      catch { navigator.push(DefaultIntentKey(createPermissionIntent(permission))) }
+      catch { navigator.push(DefaultIntentKey(intentFactory(permission))) }
         .onFailure {
-          showToast(R.string.es_grant_permission_manually)
+          toaster(R.string.es_grant_permission_manually)
         }
     },
     {
       // wait until user granted permission
-      while (!permissionState(listOf(permissionKey)).first()) delay(100)
+      while (!permissionManager.permissionState(listOf(key)).first())
+        delay(100)
     }
   )
 }

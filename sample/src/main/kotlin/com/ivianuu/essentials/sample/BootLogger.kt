@@ -6,7 +6,7 @@ package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.boot.BootListener
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 
-context(Logger) @Provide fun bootLogger() = BootListener { log { "booted!" } }
+@Provide fun bootLogger(logger: Logger) = BootListener { logger { "booted!" } }

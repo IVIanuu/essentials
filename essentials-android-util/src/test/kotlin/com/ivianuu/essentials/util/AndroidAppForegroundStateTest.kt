@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import org.robolectric.annotation.Config
 class AndroidAppForegroundStateTest {
   @Test fun testAndroidAppForegroundState() = runCancellingBlockingTest {
     val activities = MutableStateFlow<ComponentActivity?>(null)
-    val collector = androidAppForegroundState(activities).testCollect(this)
+    val collector = androidAppForegroundState(activities).testCollectIn(this)
 
     activities.emit(mockk())
     activities.emit(null)

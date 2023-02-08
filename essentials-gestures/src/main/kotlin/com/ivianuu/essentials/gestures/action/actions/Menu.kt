@@ -17,14 +17,14 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object MenuActionId : ActionId("menu")
 
-context(ResourceProvider) @Provide fun menuAction() = Action(
+@Provide fun menuAction(resourceProvider: ResourceProvider) = Action(
   id = MenuActionId,
-  title = loadResource(R.string.es_action_menu),
+  title = resourceProvider(R.string.es_action_menu),
   icon = staticActionIcon(Icons.Default.MoreVert),
   permissions = listOf(typeKeyOf<ActionRootPermission>())
 )
 
-context(ActionRootCommandRunner)
-    @Provide fun menuActionExecutor() = ActionExecutor<MenuActionId> {
-  runActionRootCommand("input keyevent 82")
-}
+@Provide fun menuActionExecutor(rootCommandRunner: ActionRootCommandRunner) =
+  ActionExecutor<MenuActionId> {
+    rootCommandRunner("input keyevent 82")
+  }

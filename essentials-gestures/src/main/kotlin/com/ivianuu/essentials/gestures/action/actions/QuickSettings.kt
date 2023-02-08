@@ -14,7 +14,7 @@ import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -23,28 +23,33 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object QuickSettingsActionId : ActionId("quick_settings")
 
-context(ResourceProvider) @Provide fun quickSettingsAction() = Action(
+@Provide fun quickSettingsAction(resourceProvider: ResourceProvider) = Action(
   id = QuickSettingsActionId,
-  title = loadResource(R.string.es_action_quick_settings),
+  title = resourceProvider(R.string.es_action_quick_settings),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(Icons.Default.Settings)
 )
 
-context(
-AccessibilityServiceProvider,
-AppContext,
-CloseSystemDialogsUseCase,
-GlobalActionExecutor,
-SystemBuildInfo) @Provide @SuppressLint("NewApi")
-fun quickSettingsActionExecutor() = ActionExecutor<QuickSettingsActionId> {
-  val targetState = if (systemSdk < 28) true else catch {
-    val service = accessibilityService.first()!!
+@Provide
+@SuppressLint("NewApi")
+fun quickSettingsActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
+  context: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
+  serviceFlow: Flow<EsAccessibilityService?>,
+  systemBuildInfo: SystemBuildInfo
+) = ActionExecutor<QuickSettingsActionId> {
+  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
+    val service = serviceFlow.first()!!
 
-    val systemUiContext = createPackageContext("com.android.systemui", 0)
+    val systemUiContext = context.createPackageContext(
+      "com.android.systemui", 0
+    )
 
     val id = systemUiContext.resources.getIdentifier(
       "accessibility_desc_quick_settings", "string", "com.android.systemui"
@@ -63,7 +68,7 @@ fun quickSettingsActionExecutor() = ActionExecutor<QuickSettingsActionId> {
   }.getOrElse { true }
 
   if (targetState)
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS)
   else
     closeSystemDialogs()
 }

@@ -10,24 +10,26 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.work.InjektWorker
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.delay
 
-context(AppContext, Logger, WorkerParameters)
-@Provide @InjektWorker class SampleWorker : CoroutineWorker(inject(), inject()) {
+@Provide @InjektWorker class SampleWorker(
+  private val appContext: AppContext,
+  private val logger: Logger,
+  private val params: WorkerParameters
+) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    log { "start work" }
+    logger { "start work" }
     delay(5000)
-    log { "finish work" }
+    logger { "finish work" }
     return Result.success()
   }
 }
 
 fun interface SampleWorkScheduler {
-  suspend fun scheduleWork()
+  suspend operator fun invoke()
 }
 
 @Provide fun sampleWorkScheduler(workManager: WorkManager) = SampleWorkScheduler {

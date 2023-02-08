@@ -16,17 +16,19 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-context(ResourceProvider) @Provide class NavBarPermission : WriteSecureSettingsPermission(
-  title = loadResource(R.string.es_permission_nav_bar),
-  desc = loadResource(R.string.es_permission_nav_bar_desc),
+@Provide class NavBarPermission(resourceProvider: ResourceProvider) : WriteSecureSettingsPermission(
+  title = resourceProvider(R.string.es_permission_nav_bar),
+  desc = resourceProvider(R.string.es_permission_nav_bar_desc),
   icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
 )
 
-context(PermissionManager)
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(
   navBarFeatureSupported: NavBarFeatureSupported,
+  permissionManager: PermissionManager,
   pref: DataStore<NavBarPrefs>
 ) = ScopeWorker<UiScope> {
-  if (navBarFeatureSupported.value && !permissionState(listOf(typeKeyOf<NavBarPermission>())).first())
+  if (navBarFeatureSupported.value &&
+    !permissionManager.permissionState(listOf(typeKeyOf<NavBarPermission>())).first()
+  )
     pref.updateData { copy(hideNavBar = false) }
 }

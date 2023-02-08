@@ -7,7 +7,6 @@ package com.ivianuu.essentials.android.settings
 import android.content.ContentResolver
 import android.provider.Settings
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 
 class AndroidSettingModule<T : S, S>(
@@ -25,14 +25,15 @@ class AndroidSettingModule<T : S, S>(
   private val type: AndroidSettingsType,
   private val defaultValue: T
 ) {
-  context(ContentChangesFactory, NamedCoroutineScope<AppScope>)
-      @Suppress("UNCHECKED_CAST")
-      @Provide fun dataStore(
+  @Suppress("UNCHECKED_CAST")
+  @Provide fun dataStore(
     adapter: AndroidSettingAdapter<S>,
+    contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
-    context: IOContext
+    context: IOContext,
+    scope: NamedCoroutineScope<AppScope>
   ): DataStore<T> = object : DataStore<T> {
-    override val data: Flow<T> = contentChanges(
+    override val data: Flow<T> = contentChangesFactory(
       when (type) {
         AndroidSettingsType.GLOBAL -> Settings.Global.getUriFor(name)
         AndroidSettingsType.SECURE -> Settings.Secure.getUriFor(name)
@@ -45,7 +46,7 @@ class AndroidSettingModule<T : S, S>(
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }
-      .share(SharingStarted.WhileSubscribed(), 1)
+      .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
       .distinctUntilChanged()
 
     override suspend fun updateData(transform: T.() -> T): T {

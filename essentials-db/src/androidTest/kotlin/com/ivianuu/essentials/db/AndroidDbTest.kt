@@ -7,7 +7,7 @@ package com.ivianuu.essentials.db
 import androidx.test.core.app.ApplicationProvider
 import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.cancelAndJoin
@@ -301,7 +301,7 @@ class AndroidDbTest {
       coroutineContext = coroutineContext
     )
 
-    val collector = db.selectAll<MyEntity>().testCollect()
+    val collector = db.selectAll<MyEntity>().testCollectIn()
 
     advanceUntilIdle()
 

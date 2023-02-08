@@ -57,18 +57,21 @@ data class FeedbackModel(
   val sendMail: () -> Unit
 )
 
-context(KeyUiContext<FeedbackKey>, RateUseCases) @Provide fun feedbackModel() = Model {
+@Provide fun feedbackModel(
+  ctx: KeyUiContext<FeedbackKey>,
+  rateUseCases: RateUseCases
+) = Model {
   FeedbackModel(
-    displayShowNever = produce(false) { shouldDisplayShowNever() },
-    showNever = action { showNever() },
-    showLater = action { showLater() },
+    displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
+    showNever = action { rateUseCases.showNever() },
+    showLater = action { rateUseCases.showLater() },
     openReddit = action {
-      navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-      navigator.pop(key)
+      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+      ctx.navigator.pop(ctx.key)
     },
     sendMail = action {
-      navigator.push(FeedbackMailKey)
-      navigator.pop(key)
+      ctx.navigator.push(FeedbackMailKey)
+      ctx.navigator.pop(ctx.key)
     }
   )
 }

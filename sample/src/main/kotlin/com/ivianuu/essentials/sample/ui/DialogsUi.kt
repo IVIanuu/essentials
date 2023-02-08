@@ -51,7 +51,7 @@ import com.ivianuu.injekt.Provide
 
 object DialogsKey : Key<Unit>
 
-context(KeyUiContext<DialogsKey>) @Provide fun dialogsUi() = SimpleKeyUi<DialogsKey> {
+@Provide fun dialogsUi(ctx: KeyUiContext<DialogsKey>) = SimpleKeyUi<DialogsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {

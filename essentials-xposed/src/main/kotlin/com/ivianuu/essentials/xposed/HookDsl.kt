@@ -13,9 +13,9 @@ import kotlin.reflect.KClass
 interface MethodHookBuilder {
   var priority: Int
 
-  fun before(block: context(MethodHookScope) () -> Unit)
+  fun before(block: MethodHookScope.() -> Unit)
 
-  fun after(block: context(MethodHookScope) () -> Unit)
+  fun after(block: MethodHookScope.() -> Unit)
 
   fun build(): XC_MethodHook
 }
@@ -23,14 +23,14 @@ interface MethodHookBuilder {
 class MethodHookBuilderImpl : MethodHookBuilder {
   override var priority: Int = XC_MethodHook.PRIORITY_DEFAULT
 
-  private var before: (context(MethodHookScope) () -> Unit)? = null
-  private var after: (context(MethodHookScope) () -> Unit)? = null
+  private var before: (MethodHookScope.() -> Unit)? = null
+  private var after: (MethodHookScope.() -> Unit)? = null
 
-  override fun before(block: context(MethodHookScope) () -> Unit) {
+  override fun before(block: MethodHookScope.() -> Unit) {
     before = block
   }
 
-  override fun after(block: context(MethodHookScope) () -> Unit) {
+  override fun after(block: MethodHookScope.() -> Unit) {
     after = block
   }
 
@@ -38,8 +38,8 @@ class MethodHookBuilderImpl : MethodHookBuilder {
 
   private class HookImpl(
     priority: Int,
-    private val before: (context(MethodHookScope) () -> Unit)? = null,
-    private val after: (context(MethodHookScope) () -> Unit)? = null
+    private val before: (MethodHookScope.() -> Unit)? = null,
+    private val after: (MethodHookScope.() -> Unit)? = null
   ) : XC_MethodHook(priority) {
     override fun beforeHookedMethod(param: MethodHookParam) {
       before?.invoke(MethodHookScopeImpl(param))
@@ -51,10 +51,10 @@ class MethodHookBuilderImpl : MethodHookBuilder {
   }
 }
 
-inline fun methodHook(block: context(MethodHookBuilder) () -> Unit): XC_MethodHook =
+inline fun methodHook(block: MethodHookBuilder.() -> Unit): XC_MethodHook =
   MethodHookBuilderImpl().apply(block).build()
 
-context(MethodHookBuilder) fun replace(block: context(MethodHookScope) () -> Any?) {
+fun MethodHookBuilder.replace(block: MethodHookScope.() -> Any?) {
   before {
     try {
       result = block()
@@ -64,7 +64,7 @@ context(MethodHookBuilder) fun replace(block: context(MethodHookScope) () -> Any
   }
 }
 
-context(MethodHookBuilder) fun skip() {
+fun MethodHookBuilder.skip() {
   replace { null }
 }
 
@@ -97,47 +97,49 @@ class MethodHookScopeImpl(private val param: XC_MethodHook.MethodHookParam) : Me
   override fun `this`(): Any = param.thisObject
 }
 
-context(MethodHookScope) inline fun <reified T> arg(index: Int): T = args[index] as T
+inline fun <reified T> MethodHookScope.arg(index: Int): T = args[index] as T
 
-context(MethodHookScope) inline fun <reified T> `this`(): T = `this`() as T
+inline fun <reified T> MethodHookScope.`this`(): T = `this`() as T
 
-context(MethodHookScope) inline fun <reified T> result(): T = result as T
+inline fun <reified T> MethodHookScope.result(): T = result as T
 
-context(MethodHookScope) inline fun <reified T : Throwable> throwable(): T = throwable as T
+inline fun <reified T : Throwable> MethodHookScope.throwable(): T = throwable as T
 
 inline fun hookMethod(
   method: Method,
-  block: context(MethodHookBuilder) () -> Unit
+  block: MethodHookBuilder.() -> Unit
 ): XC_MethodHook.Unhook = XposedBridge.hookMethod(method, methodHook(block))
 
 inline fun <T : Any> hookAllMethods(
   methodName: String,
   @Inject hookClass: KClass<T>,
-  block: context(MethodHookBuilder) () -> Unit
+  block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = hookAllMethods(hookClass, methodName, block)
 
-context(ClassLoader) inline fun hookAllMethods(
+inline fun hookAllMethods(
   className: String,
   methodName: String,
-  block: context(MethodHookBuilder) () -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllMethods(getClass(className), methodName, block)
+  @Inject classLoader: ClassLoader,
+  block: MethodHookBuilder.() -> Unit
+): Set<XC_MethodHook.Unhook> = hookAllMethods(classLoader.getClass(className), methodName, block)
 
 inline fun hookAllMethods(
   hookClass: KClass<*>,
   methodName: String,
-  block: context(MethodHookBuilder) () -> Unit
+  block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllMethods(
   hookClass.java,
   methodName,
   methodHook(block)
 )
 
-context(ClassLoader) inline fun hookAllConstructors(
+inline fun hookAllConstructors(
   className: String,
-  block: context(MethodHookBuilder) () -> Unit
-): Set<XC_MethodHook.Unhook> = hookAllConstructors(getClass(className), block)
+  @Inject classLoader: ClassLoader,
+  block: MethodHookBuilder.() -> Unit
+): Set<XC_MethodHook.Unhook> = hookAllConstructors(classLoader.getClass(className), block)
 
 inline fun <T : Any> hookAllConstructors(
   @Inject hookClass: KClass<T>,
-  block: context(MethodHookBuilder) () -> Unit
+  block: MethodHookBuilder.() -> Unit
 ): Set<XC_MethodHook.Unhook> = XposedBridge.hookAllConstructors(hookClass.java, methodHook(block))

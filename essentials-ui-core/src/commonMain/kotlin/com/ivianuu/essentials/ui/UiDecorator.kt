@@ -11,7 +11,7 @@ import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 
@@ -23,8 +23,9 @@ fun interface DecorateUi {
   @Composable fun decorate(content: @Composable () -> Unit)
 }
 
-context(Logger) @Provide fun decorateUi(
-  elements: List<ServiceElement<UiDecorator>>
+@Provide fun decorateUi(
+  elements: List<ServiceElement<UiDecorator>>,
+  logger: Logger
 ) = DecorateUi { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
     elements
@@ -32,14 +33,14 @@ context(Logger) @Provide fun decorateUi(
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            log { "Decorate ui ${element.key.value}" }
+            logger { "Decorate ui ${element.key.value}" }
             element.instance(content)
           }
         }
       }
   }
 
-  log { "decorate with combined $combinedDecorator" }
+  logger { "decorate with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

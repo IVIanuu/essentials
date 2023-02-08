@@ -38,15 +38,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 
 fun interface MediaActionSender {
-  suspend fun sendMediaAction(keycode: Int)
+  suspend operator fun invoke(keycode: Int)
 }
 
-context(AppContext) @Provide fun mediaActionSender(
+@Provide fun mediaActionSender(
+  appContext: AppContext,
   prefs: DataStore<MediaActionPrefs>
 ) = MediaActionSender { keycode ->
   val currentPrefs = prefs.data.first()
-  sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
-  sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
+  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_DOWN, keycode, currentPrefs), null)
+  appContext.sendOrderedBroadcast(mediaIntentFor(KeyEvent.ACTION_UP, keycode, currentPrefs), null)
 }
 
 private fun mediaIntentFor(
@@ -98,17 +99,19 @@ data class MediaActionSettingsModel(
   val updateMediaApp: () -> Unit
 )
 
-context(AppRepository, KeyUiContext<MediaActionSettingsKey>) @Provide fun mediaActionSettingsModel(
+@Provide fun mediaActionSettingsModel(
+  appRepository: AppRepository,
+  ctx: KeyUiContext<MediaActionSettingsKey>,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>
 ) = Model {
   MediaActionSettingsModel(
     mediaApp = pref.data
       .map { it.mediaApp }
-      .flatMapLatest { if (it != null) appInfo(it) else infiniteEmptyFlow() }
+      .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
       .bindResource(),
     updateMediaApp = action {
-      val newMediaApp = navigator.push(
+      val newMediaApp = ctx.navigator.push(
         AppPickerKey(
           intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
         )

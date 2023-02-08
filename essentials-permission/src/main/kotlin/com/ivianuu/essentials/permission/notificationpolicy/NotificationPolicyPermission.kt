@@ -12,6 +12,7 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 
 abstract class NotificationPolicyPermission(
   override val title: String,
@@ -22,9 +23,9 @@ abstract class NotificationPolicyPermission(
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)
 
-context(NotificationManager)
-    @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
-) = PermissionStateProvider<P> { isNotificationPolicyAccessGranted }
+@Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
+  notificationManager: @SystemService NotificationManager
+) = PermissionStateProvider<P> { notificationManager.isNotificationPolicyAccessGranted }
 
 @Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionIntentFactory(
 ) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }

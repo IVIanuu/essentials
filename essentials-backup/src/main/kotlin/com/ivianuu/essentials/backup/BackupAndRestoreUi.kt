@@ -8,15 +8,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.onFailure
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 object BackupAndRestoreKey : Key<Unit>
@@ -44,20 +45,24 @@ object BackupAndRestoreKey : Key<Unit>
 
 data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: () -> Unit)
 
-context(BackupManager, ToastContext) @Provide fun backupAndRestoreModel() = Model {
+@Provide fun backupAndRestoreModel(
+  backupManager: BackupManager,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
+) = Model {
   BackupAndRestoreModel(
     backupData = action {
-      createBackup()
+      backupManager.createBackup()
         .onFailure {
           it.printStackTrace()
-          showToast(R.string.es_backup_error)
+          toaster(R.string.es_backup_error)
         }
     },
     restoreData = action {
-      restoreBackup()
+      backupManager.restoreBackup()
         .onFailure {
           it.printStackTrace()
-          showToast(R.string.es_restore_error)
+          toaster(R.string.es_restore_error)
         }
     }
   )

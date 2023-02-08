@@ -7,25 +7,27 @@ package com.ivianuu.essentials.unlock
 import android.os.PowerManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import kotlin.collections.set
 
-fun interface ScreenActivator {
-  suspend fun activateScreen(): Boolean
-}
+fun interface ScreenActivator : suspend () -> Boolean
 
-context(AppContext, Logger, PowerManager) @Provide fun screenActivator(
-  coroutineContext: DefaultContext
+@Provide fun screenActivator(
+  context: AppContext,
+  coroutineContext: DefaultContext,
+  logger: Logger,
+  powerManager: @SystemService PowerManager
 ) = ScreenActivator {
   withContext(coroutineContext) {
-    log { "on request is off ? ${!isInteractive}" }
-    if (isInteractive) {
-      log { "already on" }
+    logger { "on request is off ? ${!powerManager.isInteractive}" }
+    if (powerManager.isInteractive) {
+      logger { "already on" }
       return@withContext true
     }
 
@@ -33,12 +35,12 @@ context(AppContext, Logger, PowerManager) @Provide fun screenActivator(
     val requestId = UUID.randomUUID().toString()
     requestsById[requestId] = result
 
-    log { "turn screen on $requestId" }
+    logger { "turn screen on $requestId" }
 
-    UnlockActivity.turnScreenOn(requestId)
+    UnlockActivity.turnScreenOn(context, requestId)
 
     return@withContext result.await().also {
-      log { "screen on result $requestId -> $it" }
+      logger { "screen on result $requestId -> $it" }
     }
   }
 }

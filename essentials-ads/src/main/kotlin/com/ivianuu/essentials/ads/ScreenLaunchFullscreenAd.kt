@@ -10,11 +10,13 @@ import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
@@ -34,31 +36,36 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
   }
 }
 
-context(AdsEnabledProvider, IsAdFeatureEnabledUseCase, Logger) @Provide fun screenLaunchFullScreenObserver(
+@Provide fun screenLaunchFullScreenObserver(
+  adsEnabled: StateFlow<AdsEnabled>,
+  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenLaunchFullscreenAdConfig,
   fullScreenAdManager: FullScreenAdManager,
+  logger: Logger,
   navigator: Navigator,
   pref: DataStore<ScreenLaunchPrefs>
 ) = ScopeWorker<UiScope> {
   adsEnabled
     .flatMapLatest {
-      if (!it) infiniteEmptyFlow()
+      if (!it.value) infiniteEmptyFlow()
       else navigator.launchEvents()
     }
     .collectLatest {
       val launchCount = pref
         .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
         .screenLaunchCount
-      log { "screen launched $launchCount" }
+      logger { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
-        log { "try to show full screen ad $launchCount" }
-        if (fullScreenAdManager.loadAndShowFullScreenAd().getOrElse { false })
+        logger { "try to show full screen ad $launchCount" }
+        if (fullScreenAdManager.loadAndShowAd().getOrElse { false })
           pref.updateData { copy(screenLaunchCount = 0) }
       }
     }
 }
 
-context(IsAdFeatureEnabledUseCase) private fun Navigator.launchEvents(): Flow<Unit> {
+private fun Navigator.launchEvents(
+  @Inject isAdFeatureEnabled: IsAdFeatureEnabledUseCase
+): Flow<Unit> {
   var lastBackStack = backStack.value
   return backStack
     .mapNotNull { currentBackStack ->

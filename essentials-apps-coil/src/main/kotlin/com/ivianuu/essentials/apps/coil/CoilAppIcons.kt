@@ -19,17 +19,18 @@ import com.ivianuu.injekt.Provide
 
 data class AppIcon(val packageName: String)
 
-context(AppContext) @Provide class AppIconFetcherFactory : Fetcher.Factory<AppIcon> {
+@Provide class AppIconFetcherFactory(private val appContext: AppContext) :
+  Fetcher.Factory<AppIcon> {
   override fun create(data: AppIcon, options: Options, imageLoader: ImageLoader) =
     Fetcher {
-      val rawDrawable = packageManager.getApplicationIcon(data.packageName)
+      val rawDrawable = appContext.packageManager.getApplicationIcon(data.packageName)
       val finalDrawable = when (val size = options.size) {
         Size.ORIGINAL -> rawDrawable
         else -> rawDrawable.toBitmap(
           width = size.width.pxOrElse { rawDrawable.intrinsicWidth },
           height = size.height.pxOrElse { rawDrawable.intrinsicHeight }
         )
-          .toDrawable(resources)
+          .toDrawable(appContext.resources)
       }
       DrawableResult(finalDrawable, false, DataSource.DISK)
     }

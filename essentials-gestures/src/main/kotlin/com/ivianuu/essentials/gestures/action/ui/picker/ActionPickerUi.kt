@@ -35,6 +35,7 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
 data class ActionPickerKey(
@@ -130,52 +131,59 @@ sealed interface ActionPickerItem {
   suspend fun getResult(): ActionPickerKey.Result?
 }
 
-context(ActionRepository, KeyUiContext<ActionPickerKey>, PermissionManager, ResourceProvider)
-    @Provide fun actionPickerModel(filter: ActionFilter) = Model {
+@Provide fun actionPickerModel(
+  ctx: KeyUiContext<ActionPickerKey>,
+  filter: ActionFilter,
+  permissionManager: PermissionManager,
+  repository: ActionRepository,
+  resourceProvider: ResourceProvider
+) = Model {
   ActionPickerModel(
-    items = produceResource { getActionPickerItems(key, filter) },
-    openActionSettings = action { item -> navigator.push(item.settingsKey!!) },
+    items = produceResource { getActionPickerItems(ctx.key, filter) },
+    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
     pickAction = action { item ->
       val result = item.getResult() ?: return@action
       if (result is ActionPickerKey.Result.Action) {
-        val action = getAction(result.actionId)
-        if (!requestPermissions(action.permissions))
+        val action = repository.getAction(result.actionId)
+        if (!permissionManager.requestPermissions(action.permissions))
           return@action
       }
-      navigator.pop(key, result)
+      ctx.navigator.pop(ctx.key, result)
     }
   )
 }
 
-context(ActionRepository, ResourceProvider) private suspend fun getActionPickerItems(
+private suspend fun getActionPickerItems(
   key: ActionPickerKey,
-  filter: ActionFilter
+  filter: ActionFilter,
+  @Inject repository: ActionRepository,
+  @Inject resourceProvider: ResourceProvider
 ): List<ActionPickerItem> {
   val specialOptions = mutableListOf<ActionPickerItem.SpecialOption>()
 
   if (key.showDefaultOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = loadResource(R.string.es_default),
+      title = resourceProvider(R.string.es_default),
       getResult = { ActionPickerKey.Result.Default }
     )
   }
 
   if (key.showNoneOption) {
     specialOptions += ActionPickerItem.SpecialOption(
-      title = loadResource(R.string.es_none),
+      title = resourceProvider(R.string.es_none),
       getResult = { ActionPickerKey.Result.None }
     )
   }
 
   val actionsAndDelegates = (
-      (getActionPickerDelegates()
+      (repository.getActionPickerDelegates()
         .filter { filter(it.baseId) }
-        .map { ActionPickerItem.PickerDelegate(it) }) + (getAllActions()
+        .map { ActionPickerItem.PickerDelegate(it) }) + (repository.getAllActions()
         .filter { filter(it.id) }
         .map {
           ActionPickerItem.ActionItem(
             it,
-            getActionSettingsKey(it.id)
+            repository.getActionSettingsKey(it.id)
           )
         })
       )

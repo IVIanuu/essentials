@@ -18,6 +18,7 @@ import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.flowAsResource
 import com.ivianuu.essentials.resource.resourceFlow
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.inject
@@ -34,7 +35,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-context(StateContext) fun <T> stateFlow(body: @Composable () -> T): Flow<T> = channelFlow {
+fun <T> stateFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
   launchState(
     emitter = { trySend(it) },
     body = body
@@ -42,7 +43,10 @@ context(StateContext) fun <T> stateFlow(body: @Composable () -> T): Flow<T> = ch
   awaitClose()
 }
 
-context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): StateFlow<T> {
+fun <T> CoroutineScope.state(
+  @Inject context: StateContext,
+  body: @Composable () -> T
+): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
   launchState(
@@ -60,7 +64,8 @@ context(CoroutineScope, StateContext) fun <T> state(body: @Composable () -> T): 
   return flow!!
 }
 
-context(CoroutineScope, StateContext) fun <T> launchState(
+fun <T> CoroutineScope.launchState(
+  @Inject context: StateContext,
   emitter: (T) -> Unit,
   body: @Composable () -> T
 ) {

@@ -17,22 +17,27 @@ import com.ivianuu.injekt.Provide
 
 @Provide object HomeActionId : ActionId("home")
 
-context(ResourceProvider) @Provide fun homeAction() = Action(
+@Provide fun homeAction(
+  resourceProvider: ResourceProvider
+) = Action(
   id = HomeActionId,
-  title = loadResource(R.string.es_action_home),
+  title = resourceProvider(R.string.es_action_home),
   permissions = if (needsHomeIntentWorkaround) emptyList()
   else accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_action_home)
 )
 
-context(ActionIntentSender, CloseSystemDialogsUseCase, GlobalActionExecutor)
-    @Provide fun homeActionExecutor() = ActionExecutor<HomeActionId> {
+@Provide fun homeActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
+  globalActionExecutor: GlobalActionExecutor,
+  intentSender: ActionIntentSender
+) = ActionExecutor<HomeActionId> {
   if (!needsHomeIntentWorkaround) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_HOME)
   } else {
     closeSystemDialogs()
 
-    sendIntent(
+    intentSender(
       Intent(Intent.ACTION_MAIN).apply {
         addCategory(
           Intent.CATEGORY_HOME

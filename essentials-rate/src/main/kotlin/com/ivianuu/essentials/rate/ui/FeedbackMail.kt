@@ -14,15 +14,17 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackMailKey : IntentKey
 
-context(AppContext, ResourceProvider) @Provide fun feedbackMailKeyIntentFactory(
-  email: DeveloperEmail
+@Provide fun feedbackMailKeyIntentFactory(
+  context: AppContext,
+  email: DeveloperEmail,
+  resourceProvider: ResourceProvider
 ) = KeyIntentFactory<FeedbackMailKey> {
   Intent(Intent.ACTION_SENDTO).apply {
     data = Uri.parse("mailto:")
     putExtra(Intent.EXTRA_EMAIL, arrayOf(email.value))
     putExtra(
       Intent.EXTRA_SUBJECT,
-      "Feedback for ${loadResource<String>(applicationInfo.labelRes)}"
+      "Feedback for ${resourceProvider<String>(context.applicationInfo.labelRes)}"
     )
   }
 }

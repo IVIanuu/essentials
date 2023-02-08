@@ -27,27 +27,29 @@ data class TextInputKey(
   val predicate: (String) -> Boolean = { true }
 ) : PopupKey<String>
 
-context(KeyUiContext<TextInputKey>, CommonStrings)
-    @Provide fun textInputUi() = SimpleKeyUi<TextInputKey> {
+@Provide fun textInputUi(
+  ctx: KeyUiContext<TextInputKey>,
+  commonStrings: CommonStrings
+) = SimpleKeyUi<TextInputKey> {
   DialogScaffold {
-    var currentValue by remember { mutableStateOf(key.initial) }
+    var currentValue by remember { mutableStateOf(ctx.key.initial) }
     TextInputDialog(
       value = currentValue,
       onValueChange = { currentValue = it },
-      label = { Text(key.label) },
-      keyboardOptions = key.keyboardOptions,
-      title = key.title?.let { { Text(it) } },
+      label = { Text(ctx.key.label) },
+      keyboardOptions = ctx.key.keyboardOptions,
+      title = ctx.key.title?.let { { Text(it) } },
       buttons = {
-        TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(cancel)
+        TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {
+          Text(commonStrings.cancel)
         }
 
-        val currentValueIsOk = remember(currentValue) { key.predicate(currentValue) }
+        val currentValueIsOk = remember(currentValue) { ctx.key.predicate(currentValue) }
 
         TextButton(
           enabled = currentValueIsOk,
-          onClick = action { navigator.pop(key, currentValue) }
-        ) { Text(ok) }
+          onClick = action { ctx.navigator.pop(ctx.key, currentValue) }
+        ) { Text(commonStrings.ok) }
       }
     )
   }

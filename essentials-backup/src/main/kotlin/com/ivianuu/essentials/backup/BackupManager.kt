@@ -13,7 +13,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.processrestart.ProcessRestarter
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.IOContext
 import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Date
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -33,19 +33,22 @@ interface BackupManager {
   suspend fun restoreBackup(): Result<Unit, Throwable>
 }
 
-context(BuildInfo, Logger, ProcessRestarter) @Provide class BackupManagerImpl(
+@Provide class BackupManagerImpl(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
+  private val buildInfo: BuildInfo,
   private val contentResolver: ContentResolver,
   private val context: IOContext,
   private val dataDir: DataDir,
-  private val navigator: Navigator
+  private val logger: Logger,
+  private val navigator: Navigator,
+  private val processRestarter: ProcessRestarter
 ) : BackupManager {
   override suspend fun createBackup(): Result<Unit, Throwable> = catch {
     withContext(coroutineContext + context) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
-        "${packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+        "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
       val backupFile = backupDir.resolve("$backupFileName.zip")
         .also {
@@ -61,7 +64,7 @@ context(BuildInfo, Logger, ProcessRestarter) @Provide class BackupManagerImpl(
         .filterNot { it.absolutePath in BACKUP_BLACKLIST }
         .filter { it.exists() }
         .forEach { file ->
-          log { "backup file $file" }
+          logger { "backup file $file" }
           val entry = ZipEntry(file.relativeTo(dataDir).toString())
           zipOutputStream.putNextEntry(entry)
           file.inputStream().copyTo(zipOutputStream)
@@ -92,7 +95,7 @@ context(BuildInfo, Logger, ProcessRestarter) @Provide class BackupManagerImpl(
       generateSequence { zipInputStream.nextEntry }
         .forEach { entry ->
           val file = dataDir.resolve(entry.name)
-          log { "restore file $file" }
+          logger { "restore file $file" }
           if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()
@@ -103,7 +106,7 @@ context(BuildInfo, Logger, ProcessRestarter) @Provide class BackupManagerImpl(
 
       zipInputStream.close()
 
-      restartProcess()
+      processRestarter()
     }
   }
 }

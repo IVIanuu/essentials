@@ -48,7 +48,7 @@ import kotlin.math.max
         ownerView.requestApplyInsets()
       }
 
-      override fun onViewDetachedFromWindow(v: View?) {
+      override fun onViewDetachedFromWindow(v: View) {
       }
     }
   }

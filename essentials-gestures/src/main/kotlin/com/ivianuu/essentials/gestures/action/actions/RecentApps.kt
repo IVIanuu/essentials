@@ -15,13 +15,13 @@ import com.ivianuu.injekt.Provide
 
 @Provide object RecentAppsActionId : ActionId("recent_apps")
 
-context(ResourceProvider) @Provide fun recentAppsAction() = Action(
+@Provide fun recentAppsAction(resourceProvider: ResourceProvider) = Action(
   id = RecentAppsActionId,
-  title = loadResource(R.string.es_action_recent_apps),
+  title = resourceProvider(R.string.es_action_recent_apps),
   icon = staticActionIcon(R.drawable.es_ic_action_recent_apps)
 )
 
-context(GlobalActionExecutor)
-    @Provide fun recentAppsActionExecutor() = ActionExecutor<RecentAppsActionId> {
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
-}
+@Provide fun recentAppsActionExecutor(globalActionExecutor: GlobalActionExecutor) =
+  ActionExecutor<RecentAppsActionId> {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_RECENTS)
+  }

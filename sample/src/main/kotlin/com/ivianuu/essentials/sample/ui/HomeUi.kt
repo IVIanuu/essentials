@@ -35,16 +35,18 @@ import com.ivianuu.injekt.Provide
 
 @Provide class HomeKey : RootKey
 
-context(KeyUiContext<HomeKey>, Toaster) @Provide fun homeUi(
+@Provide fun homeUi(
+  ctx: KeyUiContext<HomeKey>,
   isXposedRunning: IsXposedRunning,
-  itemsFactory: () -> List<HomeItem>
+  itemsFactory: () -> List<HomeItem>,
+  toaster: Toaster
 ) = SimpleKeyUi<HomeKey> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",
     popupMenuContent = {
       listOf("Option 1", "Option 2", "Option 3").forEach { title ->
-        PopupMenuItem(onSelected = { showToast("Selected $title") }) {
+        PopupMenuItem(onSelected = { toaster("Selected $title") }) {
           Text(title)
         }
       }
@@ -62,7 +64,7 @@ context(KeyUiContext<HomeKey>, Toaster) @Provide fun homeUi(
       HomeItem(
         item = item,
         color = color,
-        onClick = action { navigator.push(item.keyFactory(color)) }
+        onClick = action { ctx.navigator.push(item.keyFactory(color)) }
       )
     }
 

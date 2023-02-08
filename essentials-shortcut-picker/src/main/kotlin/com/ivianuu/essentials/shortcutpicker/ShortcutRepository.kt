@@ -6,6 +6,7 @@ package com.ivianuu.essentials.shortcutpicker
 
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.ivianuu.essentials.AppContext
@@ -27,11 +28,14 @@ interface ShortcutRepository {
   suspend fun extractShortcut(shortcutRequestResult: Intent): Shortcut
 }
 
-context(AppContext, BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
-  private val coroutineContext: IOContext
+@Provide class ShortcutRepositoryImpl(
+  private val broadcastsFactory: BroadcastsFactory,
+  private val context: AppContext,
+  private val coroutineContext: IOContext,
+  private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>>
-    get() = broadcasts(
+    get() = broadcastsFactory(
       Intent.ACTION_PACKAGE_ADDED,
       Intent.ACTION_PACKAGE_REMOVED,
       Intent.ACTION_PACKAGE_CHANGED,
@@ -72,7 +76,7 @@ context(AppContext, BroadcastsFactory) @Provide class ShortcutRepositoryImpl(
       shortcutRequestResult.getParcelableExtra<Intent.ShortcutIconResource>(Intent.EXTRA_SHORTCUT_ICON_RESOURCE)
 
     @Suppress("DEPRECATION") val icon = when {
-      bitmapIcon != null -> bitmapIcon.toDrawable(resources)
+      bitmapIcon != null -> bitmapIcon.toDrawable(context.resources)
       iconResource != null -> {
         val resources =
           packageManager.getResourcesForApplication(iconResource.packageName)

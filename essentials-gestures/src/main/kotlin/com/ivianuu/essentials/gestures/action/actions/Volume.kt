@@ -11,20 +11,21 @@ import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 
 @Provide object VolumeActionId : ActionId("volume")
 
-context(ResourceProvider) @Provide fun volumeAction() = Action(
+@Provide fun volumeAction(resourceProvider: ResourceProvider) = Action(
   id = VolumeActionId,
-  title = loadResource(R.string.es_action_volume),
+  title = resourceProvider(R.string.es_action_volume),
   icon = staticActionIcon(R.drawable.es_ic_volume_up)
 )
 
-context(AudioManager)
-    @Provide fun volumeActionExecutor() = ActionExecutor<VolumeActionId> {
-  adjustStreamVolume(
-    AudioManager.STREAM_MUSIC,
-    AudioManager.ADJUST_SAME,
-    AudioManager.FLAG_SHOW_UI
-  )
-}
+@Provide fun volumeActionExecutor(audioManager: @SystemService AudioManager) =
+  ActionExecutor<VolumeActionId> {
+    audioManager.adjustStreamVolume(
+      AudioManager.STREAM_MUSIC,
+      AudioManager.ADJUST_SAME,
+      AudioManager.FLAG_SHOW_UI
+    )
+  }

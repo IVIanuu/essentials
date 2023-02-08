@@ -66,9 +66,11 @@ suspend fun Navigator.clear() {
   setBackStack(emptyList())
 }
 
-context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class NavigatorImpl(
+@Provide @Scoped<AppScope> class NavigatorImpl(
   private val keyInterceptors: List<KeyInterceptor<*>>,
-  rootKey: RootKey? = null
+  private val logger: Logger,
+  rootKey: RootKey? = null,
+  private val scope: NamedCoroutineScope<AppScope>
 ) : Navigator {
   val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
   override val backStack: StateFlow<List<Key<*>>> by this::_backStack
@@ -76,7 +78,7 @@ context(Logger, NamedCoroutineScope<AppScope>) @Provide @Scoped<AppScope> class 
   private val _results = EventFlow<Pair<Key<*>, Any?>>()
   override val results: Flow<Pair<Key<*>, Any?>> by this::_results
 
-  private val actor = actor()
+  private val actor = scope.actor()
 
   override suspend fun setBackStack(backStack: List<Key<*>>, results: Map<Key<*>, Any?>) {
     backStack.groupBy { it }

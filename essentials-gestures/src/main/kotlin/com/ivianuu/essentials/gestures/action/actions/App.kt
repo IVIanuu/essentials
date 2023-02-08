@@ -29,8 +29,12 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.first
 
-context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
-@Provide class AppActionFactory : ActionFactory {
+@Provide class AppActionFactory(
+  private val appRepository: AppRepository,
+  private val intentSender: ActionIntentSender,
+  private val packageManager: PackageManager,
+  private val resourceProvider: ResourceProvider
+) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -38,8 +42,8 @@ context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
       .split(ACTION_DELIMITER)[0]
     return Action<ActionId>(
       id = id,
-      title = appInfo(packageName).first()?.appName
-        ?: loadResource(R.string.es_unknown_action_name),
+      title = appRepository.appInfo(packageName).first()?.appName
+        ?: resourceProvider(R.string.es_unknown_action_name),
       unlockScreen = true,
       closeSystemDialogs = true,
       enabled = true,
@@ -53,8 +57,8 @@ context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
       .split(ACTION_DELIMITER)
       .let { it[0] to it[1].toBoolean() }
     return ActionExecutor<ActionId> {
-      sendIntent(
-        getLaunchIntentForPackage(packageName)!!,
+      intentSender(
+        packageManager.getLaunchIntentForPackage(packageName)!!,
         isFloating,
         null
       )
@@ -62,15 +66,16 @@ context(ActionIntentSender, AppRepository, PackageManager, ResourceProvider)
   }
 }
 
-context(ResourceProvider) @Provide class AppActionPickerDelegate(
+@Provide class AppActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
   private val launchableAppPredicate: LaunchableAppPredicate,
-  private val navigator: Navigator
+  private val navigator: Navigator,
+  private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = loadResource(R.string.es_action_app)
+    get() = resourceProvider(R.string.es_action_app)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_apps) }
 

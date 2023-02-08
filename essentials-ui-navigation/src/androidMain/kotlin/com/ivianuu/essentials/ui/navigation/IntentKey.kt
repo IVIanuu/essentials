@@ -17,7 +17,7 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.coroutines.MainContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
@@ -33,11 +33,11 @@ fun interface KeyIntentFactory<T> {
 }
 
 fun interface IntentAppUiStarter {
-  suspend fun startAppUi(): ComponentActivity
+  suspend operator fun invoke(): ComponentActivity
 }
 
-context(IntentAppUiStarter)
-    @Provide fun intentKeyHandler(
+@Provide fun intentKeyHandler(
+  appUiStarter: IntentAppUiStarter,
   context: MainContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
 ) = KeyInterceptor<Result<ActivityResult, Throwable>> handler@{ key ->
@@ -46,7 +46,7 @@ context(IntentAppUiStarter)
     ?: return@handler null
   val intent = intentFactory(key)
   return@handler {
-    val activity = startAppUi()
+    val activity = appUiStarter()
     withContext(context) {
       suspendCancellableCoroutine<Result<ActivityResult, Throwable>> { continuation ->
         val launcher = activity.activityResultRegistry.register(

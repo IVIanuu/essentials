@@ -13,7 +13,7 @@ import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -37,22 +37,19 @@ class FunTileService9 : AbstractFunTileService<FunTileService9>()
 abstract class AbstractFunTileService<T : Any>(
   @Inject private val serviceClass: KClass<T>
 ) : TileService() {
-  private val serviceComponent by lazy {
+  private val component by lazy {
     application
       .cast<AppElementsOwner>()
       .appElements
       .element<FunTileServiceComponent>()
   }
 
-  @Provide private val logger
-    get() = serviceComponent.logger
-
   private var tileComponent: TileModelComponent? = null
 
   override fun onStartListening() {
     super.onStartListening()
-    log { "$serviceClass on start listening" }
-    val tileModelComponent = serviceComponent.tileModelComponent(Scope(), TileId(serviceClass))
+    component.logger { "$serviceClass on start listening" }
+    val tileModelComponent = component.tileModelComponent(Scope(), TileId(serviceClass))
       .also { this.tileComponent = it }
     tileModelComponent.tileModel
       .onEach { applyModel(it) }
@@ -61,14 +58,14 @@ abstract class AbstractFunTileService<T : Any>(
 
   override fun onClick() {
     super.onClick()
-    log { "$serviceClass on click" }
+    component.logger { "$serviceClass on click" }
     tileComponent?.currentModel?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
     tileComponent?.scope?.dispose()
     tileComponent = null
-    log { "$serviceClass on stop listening" }
+    component.logger { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
@@ -86,17 +83,15 @@ abstract class AbstractFunTileService<T : Any>(
       model.iconRes != null -> Icon.createWithResource(this, model.iconRes)
       else -> null
     }
-    with(serviceComponent.resourceProvider) {
-      qsTile.label = when {
-        model.label != null -> model.label
-        model.labelRes != null -> loadResource<String>(model.labelRes)
-        else -> null
-      }
-      qsTile.contentDescription = when {
-        model.description != null -> model.description
-        model.descriptionRes != null -> loadResource<String>(model.descriptionRes)
-        else -> null
-      }
+    qsTile.label = when {
+      model.label != null -> model.label
+      model.labelRes != null -> component.resourceProvider<String>(model.labelRes)
+      else -> null
+    }
+    qsTile.contentDescription = when {
+      model.description != null -> model.description
+      model.descriptionRes != null -> component.resourceProvider<String>(model.descriptionRes)
+      else -> null
     }
     qsTile.updateTile()
   }
@@ -116,7 +111,7 @@ abstract class AbstractFunTileService<T : Any>(
 ) {
   var currentModel: TileModel<*>? = null
 
-  val tileModel = state {
+  val tileModel = coroutineScope.state {
     tileModelElements.toMap()[tileId]
       ?.invoke()
       ?: error("No tile found for $tileId in ${tileModelElements.toMap()}")

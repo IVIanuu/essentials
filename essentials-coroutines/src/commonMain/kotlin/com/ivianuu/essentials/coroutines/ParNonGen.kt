@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -13,10 +14,11 @@ import kotlinx.coroutines.sync.withPermit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-context(Concurrency) suspend fun <T> Iterable<suspend () ->T>.par(
-  context: CoroutineContext = EmptyCoroutineContext
+suspend fun <T> Iterable<suspend () -> T>.par(
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject concurrency: Concurrency
 ): List<T> = coroutineScope {
-  val semaphore = Semaphore(concurrency)
+  val semaphore = Semaphore(concurrency.value)
   map { block ->
     async(context) {
       semaphore.withPermit {
@@ -26,24 +28,27 @@ context(Concurrency) suspend fun <T> Iterable<suspend () ->T>.par(
   }.awaitAll()
 }
 
-context(Concurrency) suspend fun <T> par(
+suspend fun <T> par(
   vararg blocks: suspend () -> T,
-  context: CoroutineContext = EmptyCoroutineContext
+  context: CoroutineContext = EmptyCoroutineContext,
+  @Inject concurrency: Concurrency
 ): List<T> = blocks.asIterable().par(context)
 
-context(Concurrency) suspend fun <T, R> Iterable<T>.parMap(
+suspend fun <T, R> Iterable<T>.parMap(
   context: CoroutineContext = EmptyCoroutineContext,
+  @Inject concurrency: Concurrency,
   transform: suspend (T) -> R
 ): List<R> = map { t -> suspend { transform(t) } }.par(context)
 
-context(Concurrency) suspend fun <T> Iterable<T>.parForEach(
+suspend fun <T> Iterable<T>.parForEach(
   context: CoroutineContext = EmptyCoroutineContext,
+  @Inject concurrency: Concurrency,
   action: suspend (T) -> Unit
 ) {
   parMap(context) { action(it) }
 }
 
-inline class Concurrency(val concurrency: Int)
+inline class Concurrency(val value: Int)
 
 expect object ConcurrencyModule {
   @Provide val defaultConcurrency: Concurrency

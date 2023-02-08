@@ -26,26 +26,26 @@ import kotlinx.coroutines.launch
 
 object ActionsKey : Key<Unit>
 
-context(
-ActionRepository,
-ExecuteActionUseCase,
-KeyUiContext<ActionsKey>,
-Toaster
-) @Provide fun actionsUi() = SimpleKeyUi<ActionsKey> {
+@Provide fun actionsUi(
+  ctx: KeyUiContext<ActionsKey>,
+  repository: ActionRepository,
+  executeAction: ExecuteActionUseCase,
+  toaster: Toaster
+) = SimpleKeyUi<ActionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {
     Button(
       modifier = Modifier.center(),
       onClick = {
-        launch {
-          val actionId = navigator.push(ActionPickerKey())
+        ctx.launch {
+          val actionId = ctx.navigator.push(ActionPickerKey())
             .safeAs<ActionPickerKey.Result.Action>()
             ?.actionId ?: return@launch
 
-          val action = getAction(actionId)
+          val action = repository.getAction(actionId)
 
-          showToast("Execute action ${action.title}")
+          toaster("Execute action ${action.title}")
 
           executeAction(actionId)
         }

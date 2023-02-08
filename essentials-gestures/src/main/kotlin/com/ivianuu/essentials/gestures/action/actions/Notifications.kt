@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.Notifications
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.accessibility.AccessibilityConfig
-import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
@@ -21,23 +21,30 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.injekt.Provide
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object NotificationsActionId : ActionId("notifications")
 
-context(ResourceProvider) @Provide fun notificationsAction() = Action(
+@Provide fun notificationsAction(resourceProvider: ResourceProvider) = Action(
   id = NotificationsActionId,
-  title = loadResource(R.string.es_action_notifications),
+  title = resourceProvider(R.string.es_action_notifications),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(Icons.Default.Notifications)
 )
 
-context(AccessibilityServiceProvider, AppContext, CloseSystemDialogsUseCase, GlobalActionExecutor)
-    @Provide fun notificationsActionExecutor() = ActionExecutor<NotificationsActionId> {
+@Provide fun notificationsActionExecutor(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
+  context: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
+  serviceFlow: Flow<EsAccessibilityService?>
+) = ActionExecutor<NotificationsActionId> {
   val targetState = catch {
-    val service = accessibilityService.first()!!
+    val service = serviceFlow.first()!!
 
-    val systemUiContext = createPackageContext("com.android.systemui", 0)
+    val systemUiContext = context.createPackageContext(
+      "com.android.systemui", 0
+    )
 
     val id = systemUiContext.resources.getIdentifier(
       "accessibility_desc_notification_shade", "string", "com.android.systemui"
@@ -56,7 +63,7 @@ context(AccessibilityServiceProvider, AppContext, CloseSystemDialogsUseCase, Glo
   }.getOrElse { true }
 
   if (targetState)
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS)
   else
     closeSystemDialogs()
 }

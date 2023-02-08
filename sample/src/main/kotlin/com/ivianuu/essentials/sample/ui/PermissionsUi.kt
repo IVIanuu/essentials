@@ -34,16 +34,18 @@ import kotlinx.coroutines.launch
 
 object PermissionsKey : Key<Unit>
 
-context(KeyUiContext<PermissionsKey>, PermissionManager)
-    @Provide fun permissionUi() = SimpleKeyUi<PermissionsKey> {
+@Provide fun permissionUi(
+  ctx: KeyUiContext<PermissionsKey>,
+  permissionManager: PermissionManager
+) = SimpleKeyUi<PermissionsKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {
     Button(
       modifier = Modifier.center(),
       onClick = {
-        launch {
-          requestPermissions(
+        ctx.launch {
+          permissionManager.requestPermissions(
             listOf(
               typeKeyOf<SampleCameraPermission>(),
               typeKeyOf<SamplePhonePermission>(),

@@ -6,7 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import com.ivianuu.injekt.Provide
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -28,7 +28,7 @@ class NavigatorTest {
     )
 
     val collector = navigator._backStack
-      .testCollect(this)
+      .testCollectIn(this)
 
     launch { navigator.push(KeyA) }
     navigator.pop(KeyA)

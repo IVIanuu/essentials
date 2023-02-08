@@ -17,41 +17,43 @@ import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettings
 import com.ivianuu.essentials.permission.writesettings.WriteSettingsPermission
 import com.ivianuu.injekt.Provide
 
-context(ResourceProvider) @Provide class ActionAccessibilityPermission :
+@Provide class ActionAccessibilityPermission(resourceProvider: ResourceProvider) :
   AccessibilityServicePermission(
     serviceClass = EsAccessibilityService::class,
-    title = loadResource(R.string.es_action_accessibility_permission_title),
-    desc = loadResource(R.string.es_action_accessibility_permission_desc),
+    title = resourceProvider(R.string.es_action_accessibility_permission_title),
+    desc = resourceProvider(R.string.es_action_accessibility_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_accessibility) }
   )
 
-context(ResourceProvider) @Provide class ActionNotificationPolicyPermission :
+@Provide class ActionNotificationPolicyPermission(resourceProvider: ResourceProvider) :
   NotificationPolicyPermission(
-    title = loadResource(R.string.es_action_notification_policy_permission_title),
-    desc = loadResource(R.string.es_action_notification_policy_permission_desc),
+    title = resourceProvider(R.string.es_action_notification_policy_permission_title),
+    desc = resourceProvider(R.string.es_action_notification_policy_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_notifications) }
   )
 
-context(ResourceProvider) @Provide class ActionRootPermission : RootPermission(
-  title = loadResource(R.string.es_action_root_permission_title),
+@Provide class ActionRootPermission(resourceProvider: ResourceProvider) : RootPermission(
+  title = resourceProvider(R.string.es_action_root_permission_title),
   icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
 )
 
-context(ResourceProvider) @Provide class ActionSystemOverlayPermission : SystemOverlayPermission(
-  title = loadResource(R.string.es_action_system_overlay_permission_title),
-  desc = loadResource(R.string.es_action_system_overlay_permission_desc),
-  icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
-)
+@Provide class ActionSystemOverlayPermission(resourceProvider: ResourceProvider) :
+  SystemOverlayPermission(
+    title = resourceProvider(R.string.es_action_system_overlay_permission_title),
+    desc = resourceProvider(R.string.es_action_system_overlay_permission_desc),
+    icon = Permission.Icon { Icon(R.drawable.es_ic_adb) }
+  )
 
-context(ResourceProvider) @Provide class ActionWriteSecureSettingsPermission :
+@Provide class ActionWriteSecureSettingsPermission(resourceProvider: ResourceProvider) :
   WriteSecureSettingsPermission(
-    title = loadResource(R.string.es_action_write_secure_settings_permission_title),
-    desc = loadResource(R.string.es_action_write_secure_settings_permission_desc),
+    title = resourceProvider(R.string.es_action_write_secure_settings_permission_title),
+    desc = resourceProvider(R.string.es_action_write_secure_settings_permission_desc),
     icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
   )
 
-context(ResourceProvider) @Provide class ActionWriteSettingsPermission : WriteSettingsPermission(
-  title = loadResource(R.string.es_action_write_settings_permission_title),
-  desc = loadResource(R.string.es_action_write_settings_permission_desc),
-  icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
-)
+@Provide class ActionWriteSettingsPermission(resourceProvider: ResourceProvider) :
+  WriteSettingsPermission(
+    title = resourceProvider(R.string.es_action_write_settings_permission_title),
+    desc = resourceProvider(R.string.es_action_write_settings_permission_desc),
+    icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
+  )

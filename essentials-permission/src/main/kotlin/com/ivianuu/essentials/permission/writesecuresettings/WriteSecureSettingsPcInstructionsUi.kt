@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
@@ -43,8 +44,8 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.stepper.Step
 import com.ivianuu.essentials.util.AppUiStarter
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
@@ -184,15 +185,15 @@ typealias AdbEnabled = @AdbEnabledTag Int
   0
 )
 
-context(
-AppUiStarter,
-BuildInfo,
-KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
-PermissionManager,
-ToastContext)
-    @Provide fun writeSecureSettingsPcInstructionsModel(
+@Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
-  developerModeSetting: DataStore<DeveloperMode>
+  appUiStarter: AppUiStarter,
+  buildInfo: BuildInfo,
+  ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
+  developerModeSetting: DataStore<DeveloperMode>,
+  permissionManager: PermissionManager,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
 ) = Model {
   var currentStep by remember { mutableStateOf(1) }
   var completedStep by remember { mutableStateOf(1) }
@@ -204,7 +205,7 @@ ToastContext)
     3 -> true
     4 -> produce(false) {
       while (true) {
-        value = permissionState(listOf(key.permissionKey)).first()
+        value = permissionManager.permissionState(listOf(ctx.key.permissionKey)).first()
         delay(1000)
       }
     }
@@ -212,13 +213,13 @@ ToastContext)
   }
 
   WriteSecureSettingsPcInstructionsModel(
-    packageName = packageName,
+    packageName = buildInfo.packageName,
     currentStep = currentStep,
     completedStep = completedStep,
     canContinueStep = canContinueStep,
     continueStep = action {
       if (completedStep == 4)
-        navigator.pop(key, true)
+        ctx.navigator.pop(ctx.key, true)
       else {
         completedStep++
         currentStep = completedStep
@@ -233,18 +234,18 @@ ToastContext)
       race(
         { developerModeSetting.data.first { it != 0 } },
         {
-          navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
-            ?.onFailure { showToast(R.string.open_phone_info_failed) }
+          ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
+            ?.onFailure { toaster(R.string.open_phone_info_failed) }
         }
       )
-      startAppUi()
+      appUiStarter()
     },
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
-        { navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
+        { ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
-      startAppUi()
+      appUiStarter()
     }
   )
 }

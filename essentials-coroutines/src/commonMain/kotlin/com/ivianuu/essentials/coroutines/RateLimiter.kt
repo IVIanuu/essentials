@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.essentials.time.Clock
+import com.ivianuu.injekt.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -16,22 +17,24 @@ interface RateLimiter {
   suspend fun tryAcquire(): Boolean
 }
 
-context(Clock) fun RateLimiter(
+fun RateLimiter(
   eventsPerInterval: Int,
-  interval: Duration
-): RateLimiter = RateLimiterImpl(eventsPerInterval, interval)
+  interval: Duration,
+  @Inject clock: Clock
+): RateLimiter = RateLimiterImpl(clock, eventsPerInterval, interval)
 
-context(Clock) internal class RateLimiterImpl(
+internal class RateLimiterImpl(
+  private val clock: Clock,
   eventsPerInterval: Int,
   interval: Duration
 ) : RateLimiter {
   private val lock = Mutex()
   private val permitDuration = interval / eventsPerInterval
 
-  private var cursor = now()
+  private var cursor = clock()
 
   override suspend fun acquire() {
-    val now = now()
+    val now = clock()
 
     val wakeUpTime = lock.withLock {
       val base = if (cursor > now) cursor else now
@@ -43,7 +46,7 @@ context(Clock) internal class RateLimiterImpl(
   }
 
   override suspend fun tryAcquire(): Boolean {
-    val now = now()
+    val now = clock()
 
     val wakeUpTime = lock.withLock {
       if (cursor > now)

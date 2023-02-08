@@ -18,10 +18,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 
 fun interface BroadcastsFactory {
-  fun broadcasts(vararg actions: String): Flow<Intent>
+  operator fun invoke(vararg actions: String): Flow<Intent>
 }
 
-context(AppContext) @Provide fun broadcastsFactory(
+@Provide fun broadcastsFactory(
+  appContext: AppContext,
   coroutineContext: MainContext
 ) = BroadcastsFactory { actions ->
   callbackFlow<Intent> {
@@ -30,12 +31,12 @@ context(AppContext) @Provide fun broadcastsFactory(
         trySend(intent)
       }
     }
-    registerReceiver(broadcastReceiver, IntentFilter().apply {
+    appContext.registerReceiver(broadcastReceiver, IntentFilter().apply {
       actions.forEach { addAction(it) }
     })
     awaitClose {
       catch {
-        unregisterReceiver(broadcastReceiver)
+        appContext.unregisterReceiver(broadcastReceiver)
       }
     }
   }

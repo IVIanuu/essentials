@@ -20,7 +20,7 @@ import com.android.billingclient.api.querySkuDetails
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
@@ -57,11 +57,14 @@ interface BillingService {
   suspend fun acknowledgePurchase(sku: Sku): Boolean
 }
 
-context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<AppScope>)
 @Provide @Scoped<AppScope> class BillingServiceImpl(
+  private val appUiStarter: AppUiStarter,
+  private val appForegroundState: Flow<AppForegroundState>,
   private val billingClient: BillingClient,
   private val context: IOContext,
-  private val refreshes: MutableSharedFlow<BillingRefresh>
+  private val logger: Logger,
+  private val refreshes: MutableSharedFlow<BillingRefresh>,
+  private val scope: NamedCoroutineScope<AppScope>
 ) : BillingService {
   private var isConnected = false
   private val connectionLock = Mutex()
@@ -74,13 +77,13 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
     .onStart { emit(Unit) }
     .map { withConnection { getIsPurchased(sku) } ?: false }
     .distinctUntilChanged()
-    .onEach { log { "is purchased flow for $sku -> $it" } }
+    .onEach { logger { "is purchased flow for $sku -> $it" } }
 
   override suspend fun getSkuDetails(sku: Sku): SkuDetails? = withConnection {
     billingClient.querySkuDetails(sku.toSkuDetailsParams())
       .skuDetailsList
       ?.firstOrNull { it.sku == sku.skuString }
-      .also { log { "got sku details $it for $sku" } }
+      .also { logger { "got sku details $it for $sku" } }
   }
 
   override suspend fun purchase(
@@ -88,7 +91,7 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
     acknowledge: Boolean,
     consumeOldPurchaseIfUnspecified: Boolean
   ): Boolean = withConnection {
-    log {
+    logger {
       "purchase $sku -> acknowledge $acknowledge, consume old $consumeOldPurchaseIfUnspecified"
     }
     if (consumeOldPurchaseIfUnspecified) {
@@ -100,7 +103,7 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
       }
     }
 
-    val activity = startAppUi()
+    val activity = appUiStarter()
 
     val skuDetails = getSkuDetails(sku)
       ?: return@withConnection false
@@ -129,7 +132,7 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
 
     val result = billingClient.consumePurchase(consumeParams)
 
-    log {
+    logger {
       "consume purchase $sku result ${result.billingResult.responseCode} ${result.billingResult.debugMessage}"
     }
 
@@ -150,7 +153,7 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
 
     val result = billingClient.acknowledgePurchase(acknowledgeParams)
 
-    log {
+    logger {
       "acknowledge purchase $sku result ${result.responseCode} ${result.debugMessage}"
     }
 
@@ -159,14 +162,14 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
     return@withConnection success
   } ?: false
 
-  context(BillingService) private suspend fun getIsPurchased(sku: Sku): Boolean {
+  private suspend fun getIsPurchased(sku: Sku): Boolean {
     val purchase = getPurchase(sku) ?: return false
     val isPurchased = purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-    log { "get is purchased for $sku result is $isPurchased for $purchase" }
+    logger { "get is purchased for $sku result is $isPurchased for $purchase" }
     return isPurchased
   }
 
-  context(BillingService) private suspend fun getPurchase(sku: Sku): Purchase? =
+  private suspend fun getPurchase(sku: Sku): Purchase? =
     billingClient.queryPurchasesAsync(
       QueryPurchasesParams.newBuilder()
         .setProductType(sku.type.value)
@@ -174,10 +177,10 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
     )
       .purchasesList
       .firstOrNull { sku.skuString in it.skus }
-      .also { log { "got purchase $it for $sku" } }
+      .also { logger { "got purchase $it for $sku" } }
 
-  internal suspend fun <R> withConnection(block: suspend context(BillingService) () -> R): R? =
-    withContext(coroutineContext + context) {
+  internal suspend fun <R> withConnection(block: suspend BillingService.() -> R): R? =
+    withContext(scope.coroutineContext + context) {
       ensureConnected()
       block()
     }
@@ -185,7 +188,7 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
   private suspend fun ensureConnected(): Unit = connectionLock.withLock {
     if (isConnected) return@withLock
     suspendCoroutine<Unit?> { continuation ->
-      log { "start connection" }
+      logger { "start connection" }
       billingClient.startConnection(
         object : BillingClientStateListener {
           private var completed = false
@@ -195,18 +198,18 @@ context(AppForegroundState.Provider, AppUiStarter, Logger, NamedCoroutineScope<A
             if (!completed) {
               completed = true
               if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                log { "connected" }
+                logger { "connected" }
                 isConnected = true
                 continuation.resume(Unit)
               } else {
-                log { "connecting failed ${result.responseCode} ${result.debugMessage}" }
+                logger { "connecting failed ${result.responseCode} ${result.debugMessage}" }
                 continuation.resume(null)
               }
             }
           }
 
           override fun onBillingServiceDisconnected() {
-            log { "on billing service disconnected" }
+            logger { "on billing service disconnected" }
           }
         }
       )

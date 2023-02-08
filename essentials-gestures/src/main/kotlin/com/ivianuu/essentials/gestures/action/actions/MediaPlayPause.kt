@@ -18,15 +18,16 @@ import com.ivianuu.injekt.Provide
 
 @Provide object PlayPauseActionId : ActionId("media_play_pause")
 
-context(ResourceProvider) @Provide fun playPauseMediaAction() = Action(
+@Provide fun playPauseMediaAction(resourceProvider: ResourceProvider) = Action(
   id = PlayPauseActionId,
-  title = loadResource(R.string.es_action_media_play_pause),
+  title = resourceProvider(R.string.es_action_media_play_pause),
   icon = staticActionIcon(Icons.Default.PlayArrow)
 )
 
-context(MediaActionSender)
-    @Provide fun playPauseMediaActionExecutor() = ActionExecutor<PlayPauseActionId> {
-  sendMediaAction(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
+@Provide fun playPauseMediaActionExecutor(
+  mediaActionSender: MediaActionSender
+) = ActionExecutor<PlayPauseActionId> {
+  mediaActionSender(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 }
 
 @Provide inline val playPauseMediaActionSettingsKey: @ActionSettingsKey<PlayPauseActionId> Key<Unit>

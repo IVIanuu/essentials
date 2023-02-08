@@ -13,7 +13,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
@@ -36,13 +36,11 @@ class EsNotificationListenerService : NotificationListenerService() {
       .element<EsNotificationListenerServiceComponent>()
   }
 
-  @Provide private val logger get() = component.logger
-
   private var notificationScope: Scope<NotificationScope>? = null
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    log { "listener connected" }
+    component.logger { "listener connected" }
     val scope = Scope<NotificationScope>()
       .also { this.notificationScope = it }
     component.notificationElementsFactory(scope, this)
@@ -52,27 +50,27 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    log { "notification posted $sbn" }
+    component.logger { "notification posted $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    log { "notification removed $sbn" }
+    component.logger { "notification removed $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    log { "ranking update $rankingMap" }
+    component.logger { "ranking update $rankingMap" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
-    log { "listener disconnected" }
+    component.logger { "listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
     component.notificationServiceRef.value = null

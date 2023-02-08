@@ -6,11 +6,11 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.recentapps.CurrentAppProvider
+import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
-import com.ivianuu.essentials.systemoverlay.KeyboardVisibleProvider
-import com.ivianuu.essentials.systemoverlay.OnSecureScreenProvider
+import com.ivianuu.essentials.systemoverlay.IsOnSecureScreen
+import com.ivianuu.essentials.systemoverlay.KeyboardVisible
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +25,8 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 
 @JvmInline value class SystemOverlayEnabled(val value: Boolean)
 
-context(Logger) @Provide fun systemOverlayBlacklistState(
+@Provide fun systemOverlayBlacklistState(
+  logger: Logger,
   mainSwitchState: Flow<SystemOverlayEnabled>,
   keyboardState: @Private Flow<@Keyboard SystemOverlayBlacklistState>,
   lockScreenState: @Private Flow<@LockScreen SystemOverlayBlacklistState>,
@@ -38,31 +39,33 @@ context(Logger) @Provide fun systemOverlayBlacklistState(
     else SystemOverlayBlacklistState.DISABLED
   }
   .distinctUntilChanged()
-  .onEach { log { "system overlay enabled $it" } }
+  .onEach { logger { "system overlay enabled $it" } }
   // after that check the lock screen setting
   .switchIfStillEnabled { lockScreenState }
-  .onEach { log { "lock screen state $it" } }
+  .onEach { logger { "lock screen state $it" } }
   // check permission screens
   .switchIfStillEnabled { secureScreenState }
-  .onEach { log { "secure screen state $it" } }
+  .onEach { logger { "secure screen state $it" } }
   // check the user specified blacklist
   .switchIfStillEnabled { userBlacklistState }
-  .onEach { log { "user blacklist state $it" } }
+  .onEach { logger { "user blacklist state $it" } }
   // finally check the keyboard state
   .switchIfStillEnabled { keyboardState }
-  .onEach { log { "keyboard state $it" } }
+  .onEach { logger { "keyboard state $it" } }
   // distinct
   .distinctUntilChanged()
-  .onEach { log { "overlay state changed: $it" } }
+  .onEach { logger { "overlay state changed: $it" } }
   .onCompletion {
     it?.printStackTrace()
-    log { "lol $it" }
+    logger { "lol $it" }
   }
 
 @Tag private annotation class LockScreen
 
-context(Logger, ScreenState.Provider) @Provide fun lockScreenState(
-  pref: DataStore<SystemOverlayBlacklistPrefs>
+@Provide fun lockScreenState(
+  logger: Logger,
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  screenState: Flow<ScreenState>
 ): @Private Flow<@LockScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnLockScreen }
   .distinctUntilChanged()
@@ -70,9 +73,9 @@ context(Logger, ScreenState.Provider) @Provide fun lockScreenState(
     if (disableOnLockScreen) {
       screenState
         .map {
-          log { "screen state $it disable on lock $disableOnLockScreen" }
+          logger { "screen state $it disable on lock $disableOnLockScreen" }
           if (it != ScreenState.UNLOCKED) {
-            log { "hide: on lock screen" }
+            logger { "hide: on lock screen" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED
@@ -85,23 +88,26 @@ context(Logger, ScreenState.Provider) @Provide fun lockScreenState(
 
 @Tag private annotation class SecureScreen
 
-context(Logger, OnSecureScreenProvider, ScreenState.Provider) @Provide fun secureScreenState(
-  pref: DataStore<SystemOverlayBlacklistPrefs>
+@Provide fun secureScreenState(
+  logger: Logger,
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  isOnSecureScreen: Flow<IsOnSecureScreen>,
+  screenState: Flow<ScreenState>
 ): @Private Flow<@SecureScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
-  .onEach { log { "disable on secure screens $it" } }
+  .onEach { logger { "disable on secure screens $it" } }
   .flatMapLatest { disableOnSecureScreen ->
     if (disableOnSecureScreen) {
       screenState
-        .onEach { log { "screen state $it" } }
+        .onEach { logger { "screen state $it" } }
         .flatMapLatest { screenState ->
           if (screenState == ScreenState.UNLOCKED) {
             isOnSecureScreen
-              .onEach { log { "is on secure screen $it" } }
+              .onEach { logger { "is on secure screen $it" } }
               .map {
-                if (it) {
-                  log { "hide: secure screen" }
+                if (it.value) {
+                  logger { "hide: secure screen" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -118,24 +124,27 @@ context(Logger, OnSecureScreenProvider, ScreenState.Provider) @Provide fun secur
 
 @Tag private annotation class UserBlacklist
 
-context(CurrentAppProvider, Logger, ScreenState.Provider) @Provide fun userBlacklistState(
-  pref: DataStore<SystemOverlayBlacklistPrefs>
+@Provide fun userBlacklistState(
+  logger: Logger,
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  currentApp: Flow<CurrentApp?>,
+  screenState: Flow<ScreenState>
 ): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
   .distinctUntilChanged()
-  .onEach { log { "blacklist $it" } }
+  .onEach { logger { "blacklist $it" } }
   .flatMapLatest { blacklist ->
     if (blacklist.isNotEmpty()) {
       screenState
-        .onEach { log { "screen state $it" } }
+        .onEach { logger { "screen state $it" } }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
           if (screenState == ScreenState.UNLOCKED) {
             currentApp
-              .onEach { log { "current app $it" } }
+              .onEach { logger { "current app $it" } }
               .map { currentApp ->
-                if (currentApp in blacklist) {
-                  log { "hide: user blacklist" }
+                if (currentApp?.value in blacklist) {
+                  logger { "hide: user blacklist" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -152,8 +161,10 @@ context(CurrentAppProvider, Logger, ScreenState.Provider) @Provide fun userBlack
 
 @Tag private annotation class Keyboard
 
-context(KeyboardVisibleProvider, Logger) @Provide fun keyboardState(
-  pref: DataStore<SystemOverlayBlacklistPrefs>
+@Provide fun keyboardState(
+  logger: Logger,
+  pref: DataStore<SystemOverlayBlacklistPrefs>,
+  keyboardVisible: Flow<KeyboardVisible>
 ): @Private Flow<@Keyboard SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnKeyboard }
   .distinctUntilChanged()
@@ -161,8 +172,8 @@ context(KeyboardVisibleProvider, Logger) @Provide fun keyboardState(
     if (disableOnKeyboard) {
       keyboardVisible
         .map {
-          if (it) {
-            log { "hide: keyboard" }
+          if (it.value) {
+            logger { "hide: keyboard" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED

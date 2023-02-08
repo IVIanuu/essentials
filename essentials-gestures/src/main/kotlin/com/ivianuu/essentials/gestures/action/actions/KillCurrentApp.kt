@@ -16,37 +16,43 @@ import com.ivianuu.essentials.gestures.action.ActionAccessibilityPermission
 import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionRootPermission
-import com.ivianuu.essentials.recentapps.CurrentAppProvider
+import com.ivianuu.essentials.recentapps.CurrentApp
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 @Provide object KillCurrentAppActionId : ActionId("kill_current_app")
 
-context(ResourceProvider) @Provide fun killCurrentAppAction() = Action(
+@Provide fun killCurrentAppAction(resourceProvider: ResourceProvider) = Action(
   id = KillCurrentAppActionId,
-  title = loadResource(R.string.es_action_kill_current_app),
+  title = resourceProvider(R.string.es_action_kill_current_app),
   icon = staticActionIcon(Icons.Default.Clear),
   permissions = typeKeyOf<ActionAccessibilityPermission>() + typeKeyOf<ActionRootPermission>()
 )
 
-context(ActionRootCommandRunner, BuildInfo, CurrentAppProvider, PackageManager)
-    @Provide fun killCurrentAppActionExecutor() = ActionExecutor<KillCurrentAppActionId> {
-  val currentApp = currentApp.first()
+@Provide fun killCurrentAppActionExecutor(
+  buildInfo: BuildInfo,
+  currentApp: Flow<CurrentApp?>,
+  packageManager: PackageManager,
+  rootCommandRunner: ActionRootCommandRunner
+) = ActionExecutor<KillCurrentAppActionId> {
+  val currentApp = currentApp.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
-    currentApp != packageName && // we have no suicidal intentions :D
-    currentApp != getHomePackage()
+    currentApp != buildInfo.packageName && // we have no suicidal intentions :D
+    currentApp != getHomePackage(packageManager)
   ) {
-    runActionRootCommand("am force-stop $currentApp")
+    rootCommandRunner("am force-stop $currentApp")
   }
 }
 
-context(PackageManager) private fun getHomePackage(): String {
+private fun getHomePackage(@Inject packageManager: PackageManager): String {
   val intent = Intent(Intent.ACTION_MAIN).apply {
     addCategory(Intent.CATEGORY_HOME)
   }
-  return resolveActivity(
+  return packageManager.resolveActivity(
     intent,
     PackageManager.MATCH_DEFAULT_ONLY
   )?.activityInfo?.packageName ?: ""

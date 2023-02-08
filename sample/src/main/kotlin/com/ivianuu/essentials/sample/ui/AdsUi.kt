@@ -6,11 +6,10 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import com.ivianuu.essentials.ads.AdsEnabledProvider
+import androidx.compose.runtime.collectAsState
+import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.ads.FullScreenAdManager
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
@@ -22,23 +21,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 object AdsKey : Key<Unit>
 
-context(AdsEnabledProvider)
-    @Provide fun adsUi(fullScreenAdManager: FullScreenAdManager) = SimpleKeyUi<AdsKey> {
+@Provide fun adsUi(
+  adsEnabled: MutableStateFlow<AdsEnabled>,
+  fullScreenAd: FullScreenAdManager
+) = SimpleKeyUi<AdsKey> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(
-        value = adsEnabled.bind(),
-        onValueChange = { adsEnabled.cast<MutableStateFlow<Boolean>>().value = it },
+        value = adsEnabled.collectAsState().value.value,
+        onValueChange = { adsEnabled.value = AdsEnabled(it) },
         title = { Text("Show ads") }
       )
     }
 
     item {
-      Button(onClick = action { fullScreenAdManager.loadAndShowFullScreenAd() }) {
+      Button(onClick = action { fullScreenAd.loadAndShowAd() }) {
         Text("Show full screen ad")
       }
     }
   }
 }
 
-@Provide val adsEnabledProvider = AdsEnabledProvider(MutableStateFlow(false))
+@Provide val showAds = MutableStateFlow(AdsEnabled(false))

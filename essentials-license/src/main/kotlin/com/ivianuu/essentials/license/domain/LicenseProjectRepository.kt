@@ -18,16 +18,17 @@ interface LicenceProjectRepository {
   suspend fun getLicenseProjects(): Result<List<Project>, Throwable>
 }
 
-context(AppContext, Json)
 @Provide class LicenceProjectRepositoryImpl(
-  private val coroutineContext: IOContext
+  private val appContext: AppContext,
+  private val coroutineContext: IOContext,
+  private val json: Json
 ) : LicenceProjectRepository{
   override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {
     catch {
-      resources.assets.open(LICENSE_JSON_FILE_NAME)
+      appContext.resources.assets.open(LICENSE_JSON_FILE_NAME)
         .readBytes()
         .let { String(it) }
-        .let { decodeFromString(it) }
+        .let { json.decodeFromString(it) }
     }
   }
 

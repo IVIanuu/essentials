@@ -15,7 +15,6 @@ import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.onFailure
@@ -36,21 +35,29 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 class XposedPrefModule<T : Any>(private val prefName: String, private val default: () -> T) {
-  context(AppContext, NamedCoroutineScope<AppScope>, Scope<AppScope>)
-      @SuppressLint("WorldReadableFiles")
-      @Provide fun dataStore(
+  @SuppressLint("WorldReadableFiles")
+  @Provide fun dataStore(
+    appContext: AppContext,
     coroutineContext: IOContext,
+    coroutineScope: NamedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,
+    scope: Scope<AppScope>,
     serializerFactory: () -> KSerializer<T>
   ): @Scoped<AppScope> DataStore<T> {
-    val sharedPrefs by lazy { getSharedPreferences(prefName, Context.MODE_WORLD_READABLE) }
+    val sharedPrefs by lazy {
+      appContext.getSharedPreferences(
+        prefName,
+        Context.MODE_WORLD_READABLE
+      )
+    }
 
     val json by lazy(jsonFactory)
     val serializer by lazy(serializerFactory)
@@ -65,10 +72,10 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
 
     val data = callbackFlow<T> {
-      val listener = scoped {
+      val listener = scope.scoped {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
           launch(coroutineContext) {
-            sendBroadcast(Intent(prefsChangedAction(packageName)))
+            appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))
             send(readData())
           }
         }
@@ -79,9 +86,9 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       .onStart { emit(readData()) }
       .distinctUntilChanged()
       .flowOn(coroutineContext)
-      .share(SharingStarted.WhileSubscribed(), 1)
+      .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
 
-    val actor = actor(coroutineContext)
+    val actor = coroutineScope.actor(coroutineContext)
 
     return object : DataStore<T> {
       override val data: Flow<T>
@@ -99,7 +106,8 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
   }
 
-  context(BroadcastsFactory) @Provide fun xposedPrefFlow(
+  @Provide fun xposedPrefFlow(
+    broadcastsFactory: BroadcastsFactory,
     coroutineContext: IOContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
@@ -120,7 +128,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
       } ?: initial()
     }
 
-    return broadcasts(prefsChangedAction(packageName))
+    return broadcastsFactory(prefsChangedAction(packageName))
       .filter { sharedPrefs.hasFileChanged() }
       .onStart<Any?> { emit(Unit) }
       .map { readData() }

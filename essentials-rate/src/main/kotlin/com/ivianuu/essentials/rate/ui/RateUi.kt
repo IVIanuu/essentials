@@ -116,20 +116,24 @@ data class RateModel(
   val confirmEnabled: Boolean get() = rating != 0
 }
 
-context(BuildInfo, KeyUiContext<RateKey>, RateUseCases) @Provide fun rateModel() = Model {
+@Provide fun rateModel(
+  buildInfo: BuildInfo,
+  ctx: KeyUiContext<RateKey>,
+  rateUseCases: RateUseCases
+) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
-    displayShowNever = produce(false) { shouldDisplayShowNever() },
-    packageName = packageName,
+    displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
+    packageName = buildInfo.packageName,
     rating = rating,
-    showLater = action { showLater() },
-    showNever = action { showNever() },
+    showLater = action { rateUseCases.showLater() },
+    showNever = action { rateUseCases.showNever() },
     updateRating = action { value -> rating = value },
     confirm = action {
       if (rating >= MIN_PLAY_RATING) {
-        navigator.replaceTop(RateOnPlayKey)
+        ctx.navigator.replaceTop(RateOnPlayKey)
       } else {
-        navigator.replaceTop(FeedbackKey)
+        ctx.navigator.replaceTop(FeedbackKey)
       }
     }
   )

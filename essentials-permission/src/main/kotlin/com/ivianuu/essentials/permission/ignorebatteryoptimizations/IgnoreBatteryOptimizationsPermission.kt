@@ -14,6 +14,7 @@ import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,
@@ -21,17 +22,21 @@ abstract class IgnoreBatteryOptimizationsPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-context(BuildInfo, PowerManager)
-    @Provide fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
-) = PermissionStateProvider<P> { isIgnoringBatteryOptimizations(packageName) }
+@Provide
+fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
+  buildInfo: BuildInfo,
+  powerManager: @SystemService PowerManager
+) = PermissionStateProvider<P> {
+  powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
+}
 
-context(BuildInfo)
 @SuppressLint("BatteryLife")
 @Provide
 fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
+  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-    "package:${packageName}".toUri()
+    "package:${buildInfo.packageName}".toUri()
   )
 }

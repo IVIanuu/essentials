@@ -46,7 +46,8 @@ import kotlinx.serialization.Serializable
 
 object PrefsKey : Key<Unit>
 
-context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
+@Provide fun prefsUi(
+  ctx: KeyUiContext<PrefsKey>,
   pref: DataStore<SamplePrefs>
 ) = SimpleKeyUi<PrefsKey> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
@@ -55,7 +56,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       SwitchListItem(
         value = prefs.switch,
         onValueChange = {
-          launch {
+          ctx.launch {
             pref.updateData { copy(switch = it) }
           }
         },
@@ -70,7 +71,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       RadioButtonListItem(
         value = prefs.radioButton,
         onValueChange = {
-          launch {
+          ctx.launch {
             pref.updateData { copy(radioButton = it) }
           }
         },
@@ -84,7 +85,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       SliderListItem(
         value = prefs.slider,
         onValueChangeFinished = {
-          launch {
+          ctx.launch {
             pref.updateData { copy(slider = it) }
           }
         },
@@ -99,7 +100,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       SliderListItem(
         value = prefs.slider,
         onValueChangeFinished = {
-          launch {
+          ctx.launch {
             pref.updateData { copy(slider = it) }
           }
         },
@@ -116,7 +117,7 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
         value = value,
         onValueChange = { value = it },
         onValueChangeFinished = {
-          launch {
+          ctx.launch {
             pref.updateData { copy(steppedSlider = it) }
           }
         },
@@ -138,8 +139,8 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
-              val newTextInput = navigator.push(
+            ctx.launch {
+              val newTextInput = ctx.navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
                   label = "Input",
@@ -162,8 +163,8 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       ColorListItem(
         value = prefs.color,
         onValueChangeRequest = {
-          launch {
-            val newColor = navigator.push(
+          ctx.launch {
+            val newColor = ctx.navigator.push(
               ColorPickerKey(initialColor = prefs.color)
             ) ?: return@launch
             launch {
@@ -181,8 +182,8 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
-              val newItems = navigator.push(
+            ctx.launch {
+              val newItems = ctx.navigator.push(
                 MultiChoiceListKey(
                   items = listOf("A", "B", "C"),
                   selectedItems = prefs.multiChoice
@@ -203,8 +204,8 @@ context(KeyUiContext<PrefsKey>) @Provide fun prefsUi(
       ListItem(
         modifier = Modifier
           .clickable {
-            launch {
-              val newItem = navigator.push(
+            ctx.launch {
+              val newItem = ctx.navigator.push(
                 SingleChoiceListKey(
                   items = listOf("A", "B", "C"),
                   selectedItem = prefs.singleChoice

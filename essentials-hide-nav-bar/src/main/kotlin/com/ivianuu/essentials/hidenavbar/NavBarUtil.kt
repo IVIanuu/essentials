@@ -13,28 +13,30 @@ import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
 fun interface NonSdkInterfaceDetectionDisabler {
-  suspend fun disableNonSdkInterfaceDetection()
+  suspend operator fun invoke()
 }
 
-context(Logger, SystemBuildInfo) @Provide fun nonSdkInterfaceDetectionDisabler(
+@Provide fun nonSdkInterfaceDetectionDisabler(
+  logger: Logger,
+  systemBuildInfo: SystemBuildInfo,
   hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
   hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
   hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>
 ) = NonSdkInterfaceDetectionDisabler {
-  if (systemSdk >= 29) {
-    log { "disable non sdk on 29" }
+  if (systemBuildInfo.sdk >= 29) {
+    logger { "disable non sdk on 29" }
     hiddenApiPolicyStore.updateData { 1 }
-    log { "disabled non sdk on 29" }
-  } else if (systemSdk >= 28) {
-    log { "disable non sdk on p" }
+    logger { "disabled non sdk on 29" }
+  } else if (systemBuildInfo.sdk >= 28) {
+    logger { "disable non sdk on p" }
     hiddenApiPolicyPrePieAppsStore.updateData { 1 }
     hiddenApiPolicyPieAppsStore.updateData { 1 }
-    log { "disabled non sdk on p" }
+    logger { "disabled non sdk on p" }
   }
 }
 
@@ -64,12 +66,11 @@ internal typealias HiddenApiPolicyPieApps = @HiddenApiPolicyPieAppsTag Int
 )
 
 fun interface OverscanUpdater {
-  suspend fun updateOverscan(rect: Rect)
+  suspend operator fun invoke(rect: Rect)
 }
 
-context(Logger)
-@SuppressLint("PrivateApi") @Provide fun overscanUpdater() = OverscanUpdater { rect ->
-  log { "set overscan $rect" }
+@SuppressLint("PrivateApi") @Provide fun overscanUpdater(logger: Logger) = OverscanUpdater { rect ->
+  logger { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")
   val invoke = Class.forName("android.os.ServiceManager")

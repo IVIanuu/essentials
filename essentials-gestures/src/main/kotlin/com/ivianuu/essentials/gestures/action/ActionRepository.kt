@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.staticActionIcon
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.withContext
@@ -25,13 +26,15 @@ interface ActionRepository {
   suspend fun getActionPickerDelegates(): List<ActionPickerDelegate>
 }
 
-context(ToastContext) @Provide class ActionRepositoryImpl(
+@Provide class ActionRepositoryImpl(
   private val actions: () -> Map<String, () -> Action<*>>,
   private val actionFactories: () -> List<() -> ActionFactory>,
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val context: DefaultContext
+  private val context: DefaultContext,
+  private val resourceProvider: ResourceProvider,
+  private val toaster: Toaster
 ) : ActionRepository {
   override suspend fun getAllActions() = withContext(context) {
     actions().values.map { it() }
@@ -47,7 +50,7 @@ context(ToastContext) @Provide class ActionRepositoryImpl(
         ?.createAction(id)
       ?: Action(
         id = "error",
-        title = loadResource(R.string.es_error_action),
+        title = resourceProvider(R.string.es_error_action),
         icon = staticActionIcon(R.drawable.es_ic_error)
       )
   }
@@ -61,7 +64,7 @@ context(ToastContext) @Provide class ActionRepositoryImpl(
         .firstOrNull { it.handles(id) }
         ?.createExecutor(id)
       ?: ActionExecutor {
-        showToast(R.string.es_error_action)
+        toaster(R.string.es_error_action)
       }
   }
 

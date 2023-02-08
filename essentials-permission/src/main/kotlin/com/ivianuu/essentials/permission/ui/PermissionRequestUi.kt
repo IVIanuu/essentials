@@ -68,28 +68,30 @@ data class UiPermission<P : Permission>(
   val isGranted: Boolean
 )
 
-context(AppUiStarter, KeyUiContext<PermissionRequestKey>, PermissionManager) @Provide
-fun permissionRequestModel(
+@Provide fun permissionRequestModel(
+  appUiStarter: AppUiStarter,
+  ctx: KeyUiContext<PermissionRequestKey>,
+  permissionManager: PermissionManager,
   requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
 ) = Model {
   LaunchedEffect(true) {
-    permissionState(key.permissionsKeys)
+    permissionManager.permissionState(ctx.key.permissionsKeys)
       .first { it }
-    navigator.pop(key, true)
+    ctx.navigator.pop(ctx.key, true)
   }
 
   PermissionRequestModel(
-    permissions = key.permissionsKeys
+    permissions = ctx.key.permissionsKeys
       .map { permissionKey ->
         UiPermission(
           permissionKey,
-          permission(permissionKey),
-          permissionState(listOf(permissionKey)).bind(false)
+          permissionManager.permission(permissionKey),
+          permissionManager.permissionState(listOf(permissionKey)).bind(false)
         )
       },
     grantPermission = action { permission ->
       requestHandlers[permission.permissionKey]!!().requestPermission(permission.permission)
-      startAppUi()
+      appUiStarter()
     }
   )
 }

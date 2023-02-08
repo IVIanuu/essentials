@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.db
 
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
@@ -23,7 +24,7 @@ interface Schema {
 
   suspend fun migrate(db: Db, from: Int, to: Int)
 
-  context(TypeKey<T>) fun <T> descriptor(): EntityDescriptor<T>
+  fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T>
 }
 
 fun Schema(
@@ -41,11 +42,11 @@ private class SchemaImpl(
   override val serializersModule: SerializersModule,
   override val embeddedFormat: StringFormat
 ) : Schema {
-  private val _entities = entities.associateBy { it.typeKey.value }
+  private val _entities = entities.associateBy { it.key.value }
 
   override suspend fun create(db: Db) {
     _entities.values
-      .forEach { with(it) { db.createTable() } }
+      .forEach { db.createTable(it) }
   }
 
   override suspend fun migrate(db: Db, from: Int, to: Int) {
@@ -62,8 +63,8 @@ private class SchemaImpl(
     migrationsToExecute.forEach { it.execute(db, from, to) }
   }
 
-  context(TypeKey<T>) override fun <T> descriptor(): EntityDescriptor<T> =
-    _entities[value]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity ${this@TypeKey}")
+  override fun <T> descriptor(@Inject key: TypeKey<T>): EntityDescriptor<T> =
+    _entities[key.value]?.let { it as EntityDescriptor<T> } ?: error("Unknown entity $key")
 }
 
 interface Migration {

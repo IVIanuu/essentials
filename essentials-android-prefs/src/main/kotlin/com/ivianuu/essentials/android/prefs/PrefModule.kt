@@ -7,7 +7,6 @@ package com.ivianuu.essentials.android.prefs
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
-import com.ivianuu.essentials.coroutines.share
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
@@ -16,16 +15,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.elementNames
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 
 class PrefModule<T : Any>(private val default: () -> T) {
-  context(NamedCoroutineScope<AppScope>) @Provide fun dataStore(
-    prefsDataStore: DataStore<Map<String, String?>>,
-    jsonFactory: () -> Json,
+  @Provide fun dataStore(
     initial: () -> @Initial T = default,
+    jsonFactory: () -> Json,
+    prefsDataStore: DataStore<Map<String, String?>>,
+    scope: NamedCoroutineScope<AppScope>,
     serializerFactory: () -> KSerializer<T>,
     serializersModule: SerializersModule
   ): @Scoped<AppScope> DataStore<T> {
@@ -41,7 +42,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
       override val data: Flow<T> = prefsDataStore.data
         .map { it.decode() }
         .distinctUntilChanged()
-        .share(SharingStarted.WhileSubscribed(), 1)
+        .shareIn(scope, SharingStarted.WhileSubscribed(), 1)
 
       override suspend fun updateData(transform: T.() -> T): T =
         prefsDataStore.updateData {

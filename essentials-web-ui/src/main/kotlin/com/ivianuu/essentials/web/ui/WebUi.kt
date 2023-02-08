@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Provide
 
 data class WebKey(val title: String, val url: String) : Key<Unit>
 
-context(KeyUiContext<WebKey>) @Provide fun webUi() = SimpleKeyUi<WebKey> {
+@Provide fun webUi(ctx: KeyUiContext<WebKey>) = SimpleKeyUi<WebKey> {
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {
@@ -46,7 +46,7 @@ context(KeyUiContext<WebKey>) @Provide fun webUi() = SimpleKeyUi<WebKey> {
     }
   }
   Scaffold(
-    topBar = { TopAppBar(title = { Text(key.title) }) },
+    topBar = { TopAppBar(title = { Text(ctx.key.title) }) },
     bottomBar = {
       val backgroundColor = when (LocalAppBarStyle.current) {
         AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
@@ -70,7 +70,7 @@ context(KeyUiContext<WebKey>) @Provide fun webUi() = SimpleKeyUi<WebKey> {
             IconButton(onClick = { webViewRef!!.reload() }) {
               Icon(R.drawable.es_ic_refresh)
             }
-            IconButton(onClick = action { navigator.push(UrlKey(webViewRef!!.url!!)) }) {
+            IconButton(onClick = action { ctx.navigator.push(UrlKey(webViewRef!!.url!!)) }) {
               Icon(R.drawable.es_ic_open_in_browser)
             }
           }
@@ -85,7 +85,7 @@ context(KeyUiContext<WebKey>) @Provide fun webUi() = SimpleKeyUi<WebKey> {
       ) { webView ->
         webViewRef = webView
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl(key.url)
+        webView.loadUrl(ctx.key.url)
         webView.webViewClient = object : WebViewClient() {
           override fun shouldOverrideUrlLoading(
             view: WebView?,

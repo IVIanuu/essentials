@@ -21,14 +21,18 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
+import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ScreenAdBannerFeature : AdFeature
 
 @Tag annotation class ScreenAdBannerConfigTag {
   companion object {
-    context(BuildInfo, ResourceProvider) @Provide fun default() = ScreenAdBannerConfig(
-      id = loadResource(
-        if (isDebug) R.string.es_test_ad_unit_id_banner
+    @Provide fun default(
+      buildInfo: BuildInfo,
+      resourceProvider: ResourceProvider
+    ) = ScreenAdBannerConfig(
+      id = resourceProvider(
+        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_screen_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER
@@ -39,7 +43,9 @@ typealias ScreenAdBannerConfig = @ScreenAdBannerConfigTag AdBannerConfig
 
 fun interface ScreenAdBanner : KeyUiDecorator
 
-context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyUiDecorator(
+@Provide fun adBannerKeyUiDecorator(
+  adsEnabled: StateFlow<AdsEnabled>,
+  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ScreenAdBannerConfig? = null,
   key: Key<*>
 ) = ScreenAdBanner decorator@{ content ->
@@ -59,13 +65,13 @@ context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerKeyU
     Box(modifier = Modifier.weight(1f)) {
       val currentInsets = LocalInsets.current
       CompositionLocalProvider(
-        LocalInsets provides if (!adsEnabled) currentInsets
+        LocalInsets provides if (!adsEnabled.value) currentInsets
         else currentInsets.copy(bottom = 0.dp),
         content = content
       )
     }
 
-    if (adsEnabled) {
+    if (adsEnabled.value) {
       Surface(elevation = 8.dp) {
         InsetsPadding(top = false) {
           AdBanner(config)

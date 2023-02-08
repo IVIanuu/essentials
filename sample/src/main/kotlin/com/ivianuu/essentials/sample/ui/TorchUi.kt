@@ -27,21 +27,20 @@ import com.ivianuu.injekt.Provide
 
 object TorchKey : Key<Unit>
 
-context(TorchManager)
-    @Provide fun torchUi() = SimpleKeyUi<TorchKey> {
+@Provide fun torchUi(torchManager: TorchManager) = SimpleKeyUi<TorchKey> {
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
-        "Torch is ${if (torchEnabled.bind()) "enabled" else "disabled"}",
+        "Torch is ${if (torchManager.torchEnabled.bind()) "enabled" else "disabled"}",
         style = MaterialTheme.typography.h4
       )
 
       Spacer(Modifier.height(8.dp))
 
-      Button(onClick = action { setTorchState(!torchEnabled.value) }) {
+      Button(onClick = action { torchManager.setTorchState(!torchManager.torchEnabled.value) }) {
         Text("Toggle torch")
       }
     }

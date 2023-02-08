@@ -17,11 +17,11 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
@@ -49,12 +49,12 @@ class UnlockActivity : ComponentActivity() {
       return
     }
 
-    @Provide val component = application
+    val component = application
       .cast<AppElementsOwner>()
       .appElements
       .element<UnlockComponent>()
 
-    log {
+    component.logger {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -65,7 +65,7 @@ class UnlockActivity : ComponentActivity() {
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      log { "finish with result $success" }
+      component.logger { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -93,19 +93,19 @@ class UnlockActivity : ComponentActivity() {
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                log { "dismiss succeeded" }
+                component.logger { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                log { "dismiss error" }
+                component.logger { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                log { "dismiss cancelled" }
+                component.logger { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }
@@ -135,9 +135,9 @@ class UnlockActivity : ComponentActivity() {
     private const val REQUEST_TYPE_UNLOCK = 0
     private const val REQUEST_TYPE_SCREEN_ON = 1
 
-    context(Context) fun unlockScreen(requestId: String) {
-      startActivity(
-        Intent(inject(), UnlockActivity::class.java).apply {
+    fun unlockScreen(context: Context, requestId: String) {
+      context.startActivity(
+        Intent(context, UnlockActivity::class.java).apply {
           putExtra(KEY_REQUEST_ID, requestId)
           putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_UNLOCK)
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -145,9 +145,9 @@ class UnlockActivity : ComponentActivity() {
       )
     }
 
-    context(Context) fun turnScreenOn(requestId: String) {
-      startActivity(
-        Intent(inject(), UnlockActivity::class.java).apply {
+    fun turnScreenOn(context: Context, requestId: String) {
+      context.startActivity(
+        Intent(context, UnlockActivity::class.java).apply {
           putExtra(KEY_REQUEST_ID, requestId)
           putExtra(KEY_REQUEST_TYPE, REQUEST_TYPE_SCREEN_ON)
           addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -157,11 +157,10 @@ class UnlockActivity : ComponentActivity() {
   }
 }
 
-@Provide @Element<AppScope>
-data class UnlockComponent(
-  val keyguardManager: () -> KeyguardManager,
+@Provide @Element<AppScope> data class UnlockComponent(
+  val keyguardManager: () -> @SystemService KeyguardManager,
   @Provide val logger: Logger,
-  val powerManager: () -> PowerManager
+  val powerManager: () -> @SystemService PowerManager
 )
 
 internal val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()

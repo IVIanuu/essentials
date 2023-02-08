@@ -6,7 +6,7 @@ package com.ivianuu.essentials.android.prefs
 
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 import java.nio.file.Files
@@ -19,7 +19,7 @@ class DataStoreModuleTest {
       scope = this
     )
 
-    val collector = dataStore.data.testCollect(this)
+    val collector = dataStore.data.testCollectIn(this)
 
     collector.values[0] shouldBe emptyMap()
 

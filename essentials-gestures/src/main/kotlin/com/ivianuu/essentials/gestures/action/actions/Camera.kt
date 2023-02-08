@@ -12,7 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import com.ivianuu.essentials.ResourceProvider
-import com.ivianuu.essentials.accessibility.AccessibilityServiceProvider
+import com.ivianuu.essentials.accessibility.EsAccessibilityService
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -21,20 +21,22 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
-import com.ivianuu.essentials.recentapps.CurrentAppProvider
+import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.typeKeyOf
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 @Provide object CameraActionId : ActionId("camera")
 
-context(ResourceProvider) @Provide fun cameraAction() = Action(
+@Provide fun cameraAction(resourceProvider: ResourceProvider) = Action(
   id = CameraActionId,
-  title = loadResource(R.string.es_action_camera),
+  title = resourceProvider(R.string.es_action_camera),
   icon = staticActionIcon(R.drawable.es_ic_photo_camera),
   permissions = listOf(
     typeKeyOf<ActionAccessibilityPermission>(),
@@ -44,28 +46,28 @@ context(ResourceProvider) @Provide fun cameraAction() = Action(
   closeSystemDialogs = true
 )
 
-context(
-AccessibilityServiceProvider,
-ActionIntentSender,
-CameraManager,
-CurrentAppProvider,
-Logger,
-PackageManager,
-ScreenState.Provider
-)
-    @Provide fun cameraActionExecutor() = ActionExecutor<CameraActionId> {
-  val cameraApp = resolveActivity(
-    Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
-    PackageManager.MATCH_DEFAULT_ONLY
-  )!!
+@Provide fun cameraActionExecutor(
+  accessibilityServiceRef: Flow<EsAccessibilityService?>,
+  actionIntentSender: ActionIntentSender,
+  cameraManager: @SystemService CameraManager,
+  currentApp: Flow<CurrentApp?>,
+  logger: Logger,
+  packageManager: PackageManager,
+  screenState: Flow<ScreenState>
+) = ActionExecutor<CameraActionId> {
+  val cameraApp = packageManager
+    .resolveActivity(
+      Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE),
+      PackageManager.MATCH_DEFAULT_ONLY
+    )!!
 
   val intent = if (cameraApp.activityInfo!!.packageName == "com.motorola.camera2")
-    getLaunchIntentForPackage("com.motorola.camera2")!!
+    packageManager.getLaunchIntentForPackage("com.motorola.camera2")!!
   else Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
 
-  val frontCamera = cameraIdList
+  val frontCamera = cameraManager.cameraIdList
     .firstOrNull {
-      getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
+      cameraManager.getCameraCharacteristics(it)[CameraCharacteristics.LENS_FACING] ==
           CameraCharacteristics.LENS_FACING_FRONT
     }
 
@@ -74,34 +76,34 @@ ScreenState.Provider
   val frontFacing = if (frontCamera != null &&
     currentScreenState != ScreenState.OFF &&
     (currentScreenState == ScreenState.UNLOCKED ||
-        accessibilityService.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
-    cameraApp.activityInfo!!.packageName == currentApp.first()
+        accessibilityServiceRef.first()?.rootInActiveWindow?.packageName != "com.android.systemui") &&
+    cameraApp.activityInfo!!.packageName == currentApp.first()?.value
   )
     suspendCancellableCoroutine<Boolean> { cont ->
-      registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
+      cameraManager.registerAvailabilityCallback(object : CameraManager.AvailabilityCallback() {
         override fun onCameraAvailable(cameraId: String) {
           super.onCameraAvailable(cameraId)
-          unregisterAvailabilityCallback(this)
+          cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
             catch { cont.resume(true) }
         }
 
         override fun onCameraUnavailable(cameraId: String) {
           super.onCameraUnavailable(cameraId)
-          unregisterAvailabilityCallback(this)
+          cameraManager.unregisterAvailabilityCallback(this)
           if (cameraId == frontCamera)
             catch { cont.resume(false) }
         }
-        }, Handler(Looper.getMainLooper()))
-      }
+      }, Handler(Looper.getMainLooper()))
+    }
   else null
 
-  log { "open camera with $frontFacing" }
+  logger { "open camera with $frontFacing" }
 
   if (frontFacing != null)
     intent.addCameraFacingExtras(frontFacing)
 
-  sendIntent(intent, false, null)
+  actionIntentSender(intent, false, null)
 }
 
 fun Intent.addCameraFacingExtras(frontFacing: Boolean) {

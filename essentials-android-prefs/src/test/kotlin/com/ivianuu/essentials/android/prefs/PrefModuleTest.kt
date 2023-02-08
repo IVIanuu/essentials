@@ -7,7 +7,7 @@ package com.ivianuu.essentials.android.prefs
 import com.ivianuu.essentials.data.TestDataStore
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -29,8 +29,8 @@ class PrefModuleTest {
       scope = this
     )
 
-    val prefsCollector = prefsDataStore.data.testCollect(this)
-    val modelCollector = dataStore.data.testCollect(this)
+    val prefsCollector = prefsDataStore.data.testCollectIn(this)
+    val modelCollector = dataStore.data.testCollectIn(this)
 
     delay(100)
 

@@ -16,14 +16,16 @@ import com.ivianuu.injekt.Provide
 
 @Provide object StopActionId : ActionId("media_stop")
 
-context(ResourceProvider) @Provide fun stopMediaAction() = Action(
+@Provide fun stopMediaAction(resourceProvider: ResourceProvider) = Action(
   id = StopActionId,
-  title = loadResource(R.string.es_action_media_stop),
+  title = resourceProvider(R.string.es_action_media_stop),
   icon = staticActionIcon(R.drawable.es_ic_stop)
 )
 
-context(MediaActionSender) @Provide fun stopMediaActionExecutor() = ActionExecutor<StopActionId> {
-  sendMediaAction(KeyEvent.KEYCODE_MEDIA_STOP)
+@Provide fun stopMediaActionExecutor(
+  mediaActionSender: MediaActionSender
+) = ActionExecutor<StopActionId> {
+  mediaActionSender(KeyEvent.KEYCODE_MEDIA_STOP)
 }
 
 @Provide inline val stopMediaActionSettingsKey: @ActionSettingsKey<StopActionId> Key<Unit>

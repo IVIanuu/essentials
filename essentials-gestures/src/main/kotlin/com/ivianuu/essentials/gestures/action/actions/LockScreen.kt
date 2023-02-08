@@ -20,23 +20,29 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 @Provide object LockScreenActionId : ActionId("lock_screen")
 
-context(ResourceProvider, SystemBuildInfo) @Provide fun lockScreenAction() = Action(
+@Provide fun lockScreenAction(
+  resourceProvider: ResourceProvider,
+  systemBuildInfo: SystemBuildInfo
+) = Action(
   id = LockScreenActionId,
-  title = loadResource(R.string.es_action_lock_screen),
+  title = resourceProvider(R.string.es_action_lock_screen),
   icon = staticActionIcon(R.drawable.es_ic_power_settings),
   permissions = listOf(
-    if (systemSdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
+    if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
     else typeKeyOf<ActionRootPermission>()
   )
 )
 
-context(ActionRootCommandRunner, GlobalActionExecutor, SystemBuildInfo)
-    @SuppressLint("InlinedApi")
-    @Provide
-fun lockScreenActionExecutor() = ActionExecutor<LockScreenActionId> {
-  if (systemSdk >= 28) {
-    performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
+@SuppressLint("InlinedApi")
+@Provide
+fun lockScreenActionExecutor(
+  globalActionExecutor: GlobalActionExecutor,
+  rootCommandRunner: ActionRootCommandRunner,
+  systemBuildInfo: SystemBuildInfo
+) = ActionExecutor<LockScreenActionId> {
+  if (systemBuildInfo.sdk >= 28) {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN)
   } else {
-    runActionRootCommand("input keyevent 26")
+    rootCommandRunner("input keyevent 26")
   }
 }

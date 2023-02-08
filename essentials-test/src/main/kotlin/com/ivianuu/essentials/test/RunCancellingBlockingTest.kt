@@ -20,7 +20,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 fun runCancellingBlockingTest(
   context: CoroutineContext = EmptyCoroutineContext,
-  testBody: suspend context(TestCoroutineScope) () -> Unit
+  testBody: suspend TestCoroutineScope.() -> Unit
 ) {
   var testsPassed = false
   try {
@@ -40,8 +40,8 @@ fun runCancellingBlockingTest(
   }
 }
 
-context(TestCoroutineScope) fun runCancellingBlockingTest(
-  testBody: suspend context(TestCoroutineScope) () -> Unit
+fun TestCoroutineScope.runCancellingBlockingTest(
+  testBody: suspend TestCoroutineScope.() -> Unit
 ) {
   var testsPassed = false
   try {

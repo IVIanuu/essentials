@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.SkuDetails
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.ads.AdFeatures
 import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.billing.Sku
@@ -53,8 +54,8 @@ import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
@@ -328,32 +329,35 @@ data class GoPremiumModel(
   val goBack: () -> Unit
 )
 
-context(KeyUiContext<GoPremiumKey>, PremiumVersionManager, ToastContext)
-    @Provide fun goPremiumModel(
+@Provide fun goPremiumModel(
+  ctx: KeyUiContext<GoPremiumKey>,
   features: List<AppFeature>,
-  fullScreenAdManager: FullScreenAdManager
+  fullScreenAdManager: FullScreenAdManager,
+  premiumVersionManager: PremiumVersionManager,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
 ) = Model {
   GoPremiumModel(
     features = features,
-    premiumSkuDetails = premiumSkuDetails.bindResource(),
-    showTryBasicOption = key.showTryBasicOption,
+    premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
+    showTryBasicOption = ctx.key.showTryBasicOption,
     goPremium = action {
-      if (purchasePremiumVersion()) {
-        navigator.pop(key, true)
-        showToast(R.string.es_premium_activated)
+      if (premiumVersionManager.purchasePremiumVersion()) {
+        ctx.navigator.pop(ctx.key, true)
+        toaster(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {
-      navigator.pop(key, false)
+      ctx.navigator.pop(ctx.key, false)
       withContext(NonCancellable) {
-        fullScreenAdManager.loadAndShowFullScreenAd()
+        fullScreenAdManager.loadAndShowAd()
       }
     },
     goBack = action {
-      if (key.allowBackNavigation) {
-        navigator.pop(key, false)
+      if (ctx.key.allowBackNavigation) {
+        ctx.navigator.pop(ctx.key, false)
         withContext(NonCancellable) {
-          fullScreenAdManager.loadAndShowFullScreenAd()
+          fullScreenAdManager.loadAndShowAd()
         }
       }
     }

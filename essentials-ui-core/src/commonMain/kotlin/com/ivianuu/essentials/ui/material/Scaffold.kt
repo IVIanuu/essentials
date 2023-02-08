@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.insets.LocalInsets
   floatingActionButton: (@Composable () -> Unit)? = null,
   floatingActionButtonPosition: FabPosition = FabPosition.End,
   isFloatingActionButtonDocked: Boolean = false,
-  drawerContent: @Composable (context(ColumnScope) () -> Unit)? = null,
+  drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
   drawerShape: Shape = MaterialTheme.shapes.large,
   drawerElevation: Dp = DrawerDefaults.Elevation,
   backgroundColor: Color = MaterialTheme.colors.background,

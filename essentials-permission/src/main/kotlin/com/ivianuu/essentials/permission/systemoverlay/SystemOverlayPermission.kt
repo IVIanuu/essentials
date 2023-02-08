@@ -15,7 +15,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
 
 abstract class SystemOverlayPermission(
   override val title: String,
@@ -23,19 +22,19 @@ abstract class SystemOverlayPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-context(AppContext)
-    @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider() =
-  PermissionStateProvider<P> { Settings.canDrawOverlays(inject()) }
+@Provide fun <P : SystemOverlayPermission> systemOverlayPermissionStateProvider(
+  context: AppContext
+) = PermissionStateProvider<P> { Settings.canDrawOverlays(context) }
 
-context(SystemBuildInfo)
-    @Provide fun <P : SystemOverlayPermission> systemOverlayShowFindPermissionHint() =
-  ShowFindPermissionHint<P>(systemSdk >= 30)
+@Provide fun <P : SystemOverlayPermission> systemOverlayShowFindPermissionHint(
+  systemBuildInfo: SystemBuildInfo
+) = ShowFindPermissionHint<P>(systemBuildInfo.sdk >= 30)
 
-context(BuildInfo)
 @Provide fun <P : SystemOverlayPermission> systemOverlayPermissionIntentFactory(
+  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> {
   Intent(
     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-    "package:${packageName}".toUri()
+    "package:${buildInfo.packageName}".toUri()
   )
 }

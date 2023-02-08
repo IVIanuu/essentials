@@ -29,23 +29,25 @@ interface AppRepository {
   fun isAppInstalled(packageName: String): Flow<Boolean>
 }
 
-context(BroadcastsFactory, PackageManager) @Provide class AppRepositoryImpl(
-  private val context: IOContext
+@Provide class AppRepositoryImpl(
+  private val broadcastsFactory: BroadcastsFactory,
+  private val context: IOContext,
+  private val packageManager: PackageManager
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>>
     get() = merge(
-      broadcasts(Intent.ACTION_PACKAGE_ADDED),
-      broadcasts(Intent.ACTION_PACKAGE_REMOVED),
-      broadcasts(Intent.ACTION_PACKAGE_CHANGED),
-      broadcasts(Intent.ACTION_PACKAGE_REPLACED)
+      broadcastsFactory(Intent.ACTION_PACKAGE_ADDED),
+      broadcastsFactory(Intent.ACTION_PACKAGE_REMOVED),
+      broadcastsFactory(Intent.ACTION_PACKAGE_CHANGED),
+      broadcastsFactory(Intent.ACTION_PACKAGE_REPLACED)
     )
       .onStart<Any?> { emit(Unit) }
       .map {
         withContext(context) {
-          getInstalledApplications(0)
+          packageManager.getInstalledApplications(0)
             .parMap {
               AppInfo(
-                appName = it.loadLabel(inject()).toString(),
+                appName = it.loadLabel(packageManager).toString(),
                 packageName = it.packageName
               )
             }
@@ -56,7 +58,7 @@ context(BroadcastsFactory, PackageManager) @Provide class AppRepositoryImpl(
       }
       .distinctUntilChanged()
 
-  override fun appInfo(packageName: String) = broadcasts(
+  override fun appInfo(packageName: String) = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED,
     Intent.ACTION_PACKAGE_CHANGED,
@@ -66,21 +68,21 @@ context(BroadcastsFactory, PackageManager) @Provide class AppRepositoryImpl(
     .map {
       withContext(context) {
         val applicationInfo = catch {
-          getApplicationInfo(packageName, 0)
+          packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
-        AppInfo(packageName, applicationInfo.loadLabel(inject()).toString())
+        AppInfo(packageName, applicationInfo.loadLabel(packageManager).toString())
       }
     }
     .distinctUntilChanged()
 
-  override fun isAppInstalled(packageName: String) = broadcasts(
+  override fun isAppInstalled(packageName: String) = broadcastsFactory(
     Intent.ACTION_PACKAGE_ADDED,
     Intent.ACTION_PACKAGE_REMOVED
   )
     .onStart<Any?> { emit(Unit) }
     .map {
       withContext(context) {
-        catch { getApplicationInfo(packageName, 0) }
+        catch { packageManager.getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }
     }

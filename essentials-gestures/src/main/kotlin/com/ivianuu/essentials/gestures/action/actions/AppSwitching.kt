@@ -13,22 +13,27 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.launch
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import com.ivianuu.injekt.inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-context(ActionIntentSender, AppContext) fun switchToApp(
+fun switchToApp(
   packageName: String,
   enterAnimResId: Int,
-  exitAnimResId: Int
+  exitAnimResId: Int,
+  @Inject appContext: AppContext,
+  @Inject intentSender: ActionIntentSender,
+  @Inject packageManager: PackageManager
 ) {
   catch {
     val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return@catch
@@ -37,11 +42,11 @@ context(ActionIntentSender, AppContext) fun switchToApp(
           Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or
           Intent.FLAG_ACTIVITY_TASK_ON_HOME
     )
-    sendIntent(
+    intentSender(
       intent,
       false,
       ActivityOptionsCompat.makeCustomAnimation(
-        inject(),
+        appContext,
         enterAnimResId,
         exitAnimResId
       ).toBundle()
@@ -49,8 +54,12 @@ context(ActionIntentSender, AppContext) fun switchToApp(
   }
 }
 
-context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>, PackageManager)
-@Provide @Scoped<AppScope> class AppSwitchManager {
+@Provide @Scoped<AppScope> class AppSwitchManager(
+  private val accessibilityEvents: Flow<AccessibilityEvent>,
+  private val logger: Logger,
+  private val packageManager: PackageManager,
+  private val scope: NamedCoroutineScope<AppScope>
+) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0
   private var isOnHomeScreen = false
@@ -69,7 +78,7 @@ context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>, Pack
       .onEach { topApp ->
         val wasOnHomeScreen = isOnHomeScreen
         if (topApp in getHomePackages(defaultOnly = true)) {
-          log { "moved to home screen" }
+          logger { "moved to home screen" }
           isOnHomeScreen = true
           return@onEach
         } else isOnHomeScreen = false
@@ -77,19 +86,19 @@ context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>, Pack
         if (topApp !in recentApps) {
           recentApps += topApp
           currentIndex = recentApps.lastIndex
-          log { "launched new app $topApp $recentApps $currentIndex" }
+          logger { "launched new app $topApp $recentApps $currentIndex" }
         } else if (wasOnHomeScreen) {
           val indexOfTopApp = recentApps.indexOf(topApp)
           recentApps.removeAt(indexOfTopApp)
           recentApps.add(topApp)
           currentIndex = recentApps.lastIndex
-          log { "relaunched app from home screen $topApp $recentApps $currentIndex" }
+          logger { "relaunched app from home screen $topApp $recentApps $currentIndex" }
         } else {
           currentIndex = recentApps.indexOf(topApp)
-          log { "relaunched app from history $topApp $recentApps $currentIndex" }
+          logger { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
-      .launch()
+      .launchIn(scope)
   }
 
   fun lastApp(): String? = if (isOnHomeScreen) recentApps.lastOrNull()
@@ -98,7 +107,7 @@ context(AccessibilityEvent.Provider, Logger, NamedCoroutineScope<AppScope>, Pack
   fun nextApp(): String? = recentApps.getOrNull(currentIndex + 1)
 
   private fun getHomePackages(defaultOnly: Boolean = true): List<String> =
-    queryIntentActivities(
+    packageManager.queryIntentActivities(
       homeIntent(),
       if (defaultOnly) PackageManager.MATCH_DEFAULT_ONLY
       else PackageManager.MATCH_ALL

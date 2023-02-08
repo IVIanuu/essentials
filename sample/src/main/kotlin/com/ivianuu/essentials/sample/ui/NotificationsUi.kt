@@ -159,26 +159,33 @@ data class UiNotification(
   val sbn: StatusBarNotification
 )
 
-context(AppContext, KeyUiContext<NotificationsKey>, NotificationService, PermissionManager)
-    @Provide fun notificationsModel() = Model {
+@Provide fun notificationsModel(
+  appContext: AppContext,
+  ctx: KeyUiContext<NotificationsKey>,
+  permissionManager: PermissionManager,
+  service: NotificationService
+) = Model {
   NotificationsModel(
-    hasPermissions = permissionState(listOf(typeKeyOf<SampleNotificationsPermission>())).bindResource(),
-    notifications = notifications
+    hasPermissions = permissionManager.permissionState(listOf(typeKeyOf<SampleNotificationsPermission>()))
+      .bindResource(),
+    notifications = service.notifications
       .bind(emptyList())
       .map { it.toUiNotification() },
     requestPermissions = action {
-      requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
+      permissionManager.requestPermissions(listOf(typeKeyOf<SampleNotificationsPermission>()))
     },
     openNotification = action { notification ->
-      openNotification(notification.sbn.notification)
+      service.openNotification(notification.sbn.notification)
     },
     dismissNotification = action { notification ->
-      dismissNotification(notification.sbn.key)
+      service.dismissNotification(notification.sbn.key)
     }
   )
 }
 
-context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNotification(
+private fun StatusBarNotification.toUiNotification(
+  @Inject appContext: AppContext
+) = UiNotification(
   title = notification.extras.getCharSequence(Notification.EXTRA_TITLE)
     ?.toString() ?: "",
   text = notification.extras.getCharSequence(Notification.EXTRA_TEXT)
@@ -191,18 +198,17 @@ context(AppContext) private fun StatusBarNotification.toUiNotification() = UiNot
 
 @Composable private fun NotificationIcon(
   notification: Notification,
-  // todo use context receiver once fixed
-  @Inject context: AppContext
+  @Inject appContext: AppContext
 ) {
   val icon by produceState<ImageBitmap?>(null) {
     value = catch {
       notification.smallIcon
-        .loadDrawable(context)
+        .loadDrawable(appContext)
     }.recover {
       notification.getLargeIcon()
-        .loadDrawable(context)
+        .loadDrawable(appContext)
     }
-      .map { it.toBitmap().toImageBitmap() }
+      .map { it?.toBitmap()?.toImageBitmap() }
       .getOrNull()
   }
 

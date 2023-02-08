@@ -11,19 +11,19 @@ import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
 class StartupReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    @Provide val component = context.applicationContext
+    val component = context.applicationContext
       .cast<AppElementsOwner>()
       .appElements
       .element<StartupReceiverComponent>()
 
-    log { "on system boot" }
+    component.logger { "on system boot" }
     component.bootListeners.forEach { it() }
   }
 }

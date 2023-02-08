@@ -9,7 +9,7 @@ import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -39,14 +39,15 @@ fun interface FirstRunHandler {
   }
 }
 
-context(Logger) @Provide fun firstRunWorker(
+@Provide fun firstRunWorker(
   handlers: () -> List<FirstRunHandler>,
   isFirstRun: Flow<IsFirstRun>,
+  logger: Logger,
   pref: DataStore<FirstRunPrefs>
 ) = ScopeWorker<AppScope> {
   if (!isFirstRun.first().value) return@ScopeWorker
 
-  log { "first run" }
+  logger { "first run" }
 
   handlers().parForEach { it() }
 

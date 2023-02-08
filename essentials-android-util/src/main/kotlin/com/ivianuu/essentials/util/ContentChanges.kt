@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 fun interface ContentChangesFactory {
-  fun contentChanges(uri: Uri): Flow<Unit>
+  operator fun invoke(uri: Uri): Flow<Unit>
 }
 
 @Provide fun contentChangesFactory(

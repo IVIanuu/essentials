@@ -4,12 +4,8 @@
 
 package com.ivianuu.essentials.app
 
-import kotlinx.coroutines.flow.Flow
-
 enum class AppForegroundState {
-  FOREGROUND, BACKGROUND;
-
-  @JvmInline value class Provider(val appForegroundState: Flow<AppForegroundState>)
+  FOREGROUND, BACKGROUND
 }
 
 object AppForegroundScope

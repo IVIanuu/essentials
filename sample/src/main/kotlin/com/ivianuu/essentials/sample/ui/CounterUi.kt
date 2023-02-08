@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.ModelKeyUi
-import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 
 @Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
@@ -48,14 +48,14 @@ object CounterKey : Key<Unit>
 
 data class CounterModel(val count: Int, val inc: () -> Unit, val dec: () -> Unit)
 
-context(ToastContext) @Provide fun counterModel() = Model {
+@Provide fun counterModel(toaster: Toaster) = Model {
   var count by remember { mutableStateOf(0) }
   CounterModel(
     count = count,
     inc = action { count++ },
     dec = action {
       if (count > 0) count--
-      else showToast("Value cannot be less than 0!")
+      else toaster("Value cannot be less than 0!")
     }
   )
 }

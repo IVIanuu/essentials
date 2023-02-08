@@ -16,7 +16,6 @@ import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
 import com.ivianuu.essentials.permission.intent.ShowFindPermissionHint
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
 import kotlin.reflect.KClass
 
 abstract class NotificationListenerPermission(
@@ -29,18 +28,19 @@ abstract class NotificationListenerPermission(
 @Provide fun <P : NotificationListenerPermission> notificationListenerShowFindPermissionHint(
 ) = ShowFindPermissionHint<P>(true)
 
-context(AppContext, BuildInfo)
 @Provide fun <P : NotificationListenerPermission> notificationListenerPermissionStateProvider(
+  appContext: AppContext,
+  buildInfo: BuildInfo
 ) = PermissionStateProvider<P> {
-  NotificationManagerCompat.getEnabledListenerPackages(inject())
-    .any { it == packageName }
+  NotificationManagerCompat.getEnabledListenerPackages(appContext)
+    .any { it == buildInfo.packageName }
 }
 
-context(BuildInfo)
 @Provide fun <P : NotificationListenerPermission> notificationListenerPermissionIntentFactory(
+  buildInfo: BuildInfo
 ) = PermissionIntentFactory<P> { permission ->
   Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
-    val componentName = "${packageName}/${permission.serviceClass.java.name}"
+    val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
     putExtra(":settings:fragment_args_key", componentName)
     putExtra(
       ":settings:show_fragment_args", bundleOf(

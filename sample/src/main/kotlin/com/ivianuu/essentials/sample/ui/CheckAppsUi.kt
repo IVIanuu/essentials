@@ -32,8 +32,9 @@ import kotlinx.serialization.Serializable
 
 object CheckAppsKey : Key<Unit>
 
-context(KeyUiContext<CheckAppsKey>) @Provide fun checkAppsUi(
+@Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
+  ctx: KeyUiContext<CheckAppsKey>,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate
 ) = SimpleKeyUi<CheckAppsKey> {
@@ -43,7 +44,7 @@ context(KeyUiContext<CheckAppsKey>) @Provide fun checkAppsUi(
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
-          launch {
+          ctx.launch {
             db.transaction {
               db.deleteAll<CheckedAppEntity>()
               db.insertAll(
@@ -62,7 +63,7 @@ context(KeyUiContext<CheckAppsKey>) @Provide fun checkAppsUi(
 
 @Tag private annotation class CheckApps
 
-context(AppContext) @Provide fun checkAppsDb(): @Scoped<AppScope> @CheckApps Db = AndroidDb(
+@Provide fun checkAppsDb(appContext: AppContext): @Scoped<AppScope> @CheckApps Db = AndroidDb(
   name = "checked_apps.db",
   schema = Schema(
     version = 1,

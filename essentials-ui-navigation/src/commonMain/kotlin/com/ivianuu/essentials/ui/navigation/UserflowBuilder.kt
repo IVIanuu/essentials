@@ -9,21 +9,22 @@ import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 
 interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
 
-context(Logger) @Provide fun userflowBuilderWorker(
+@Provide fun userflowBuilderWorker(
   elements: List<ServiceElement<UserflowBuilder>>,
+  logger: Logger,
   navigator: Navigator
 ) = ScopeWorker<UiScope> {
   val userflowKeys = elements
     .sortedWithLoadingOrder()
     .flatMap { it.instance() }
 
-  log { "Userflow -> $userflowKeys" }
+  logger { "Userflow -> $userflowKeys" }
 
   if (userflowKeys.isEmpty()) return@ScopeWorker
 

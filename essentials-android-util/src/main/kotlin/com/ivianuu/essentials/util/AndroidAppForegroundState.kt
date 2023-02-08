@@ -13,21 +13,22 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
-context(ForegroundActivityProvider)
-    @Provide fun androidAppForegroundStateContext() = AppForegroundState.Provider(
+@Provide fun androidAppForegroundState(
+  foregroundActivity: Flow<ForegroundActivity>
+): Flow<AppForegroundState> =
   foregroundActivity.map {
     if (it != null) AppForegroundState.FOREGROUND else AppForegroundState.BACKGROUND
   }
-)
 
-context(AppForegroundState.Provider)
 @Provide fun androidAppForegroundScopeHandler(
-  foregroundElementsFactory: (Scope<AppForegroundScope>) -> Elements<AppForegroundScope>
+  foregroundElementsFactory: (Scope<AppForegroundScope>) -> Elements<AppForegroundScope>,
+  foregroundState: Flow<AppForegroundState>
 ) = ScopeWorker<UiScope> {
-  appForegroundState.collectLatest { state ->
+  foregroundState.collectLatest { state ->
     if (state == AppForegroundState.FOREGROUND) {
       bracket(
         acquire = {

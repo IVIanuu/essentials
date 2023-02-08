@@ -16,16 +16,19 @@ import com.ivianuu.injekt.Provide
 
 @Provide object TorchActionId : ActionId("torch")
 
-context(ResourceProvider, TorchManager) @Provide fun torchAction() = Action(
+@Provide fun torchAction(
+  resourceProvider: ResourceProvider,
+  torchManager: TorchManager
+) = Action(
   id = TorchActionId,
-  title = loadResource(R.string.es_action_torch),
+  title = resourceProvider(R.string.es_action_torch),
   icon = {
     Icon(
-      if (torchEnabled.bind()) R.drawable.es_ic_flashlight_on
+      if (torchManager.torchEnabled.bind()) R.drawable.es_ic_flashlight_on
       else R.drawable.es_ic_flashlight_off
     )
   }
 )
 
-context(TorchManager) @Provide fun torchActionExecutor() = ActionExecutor<TorchActionId>
-{ setTorchState(!torchEnabled.value) }
+@Provide fun torchActionExecutor(torchManager: TorchManager) = ActionExecutor<TorchActionId>
+{ torchManager.setTorchState(!torchManager.torchEnabled.value) }

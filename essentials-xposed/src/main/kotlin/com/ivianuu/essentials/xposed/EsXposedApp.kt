@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.xposed
 
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
@@ -27,6 +28,8 @@ abstract class EsXposedApp : IXposedHookLoadPackage {
     }
   }
 
-  context(XposedContext, Scope<XposedScope>)
-  protected abstract fun buildXposedElements(): Elements<XposedScope>
+  protected abstract fun buildXposedElements(
+    @Inject ctx: XposedContext,
+    @Inject scope: Scope<XposedScope>
+  ): Elements<XposedScope>
 }

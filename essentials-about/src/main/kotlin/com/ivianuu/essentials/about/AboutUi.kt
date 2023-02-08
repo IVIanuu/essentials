@@ -142,33 +142,37 @@ data class AboutModel(
 
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
-context(BuildInfo, KeyUiContext<AboutKey>, RateUseCases, ResourceProvider) @Provide fun aboutModel(
+@Provide fun aboutModel(
+  buildInfo: BuildInfo,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
-  email: DeveloperEmail
+  email: DeveloperEmail,
+  rateUseCases: RateUseCases,
+  resourceProvider: ResourceProvider,
+  ctx: KeyUiContext<AboutKey>
 ) = Model {
   AboutModel(
-    version = versionName,
+    version = buildInfo.versionName,
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,
-    donate = action { navigator.push(DonationKey) },
-    openLicenses = action { navigator.push(LicenseKey) },
-    rate = action { rateOnPlay() },
+    donate = action { ctx.navigator.push(DonationKey) },
+    openLicenses = action { ctx.navigator.push(LicenseKey) },
+    rate = action { rateUseCases.rateOnPlay() },
     openMoreApps = action {
-      navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
+      ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))
     },
-    openRedditPage = action { navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps")) },
-    openGithubPage = action { navigator.push(UrlKey("https://github.com/IVIanuu")) },
-    openTwitterPage = action { navigator.push(UrlKey("https://twitter.com/IVIanuu")) },
+    openRedditPage = action { ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps")) },
+    openGithubPage = action { ctx.navigator.push(UrlKey("https://github.com/IVIanuu")) },
+    openTwitterPage = action { ctx.navigator.push(UrlKey("https://twitter.com/IVIanuu")) },
     openPrivacyPolicy = action {
-      navigator.push(
+      ctx.navigator.push(
         WebKey(
-          loadResource(R.string.es_about_privacy_policy),
+          resourceProvider(R.string.es_about_privacy_policy),
           privacyPolicyUrl!!.value
         )
       )
     },
-    sendMail = action { navigator.push(FeedbackMailKey) }
+    sendMail = action { ctx.navigator.push(FeedbackMailKey) }
   )
 }

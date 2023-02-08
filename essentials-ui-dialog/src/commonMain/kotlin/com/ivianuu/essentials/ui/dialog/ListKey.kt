@@ -25,21 +25,18 @@ data class ListKey<T : Any>(
   @Inject val renderable: UiRenderer<T>,
 ) : PopupKey<T>
 
-context(KeyUiContext<ListKey<Any>>)
-    @Provide fun listKeyUi() = SimpleKeyUi<ListKey<Any>> {
+@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = SimpleKeyUi<ListKey<Any>> {
   DialogScaffold {
     Dialog(
-      title = key.title?.let { { Text(it) } },
+      title = ctx.key.title?.let { { Text(it) } },
       content = {
         LazyColumn {
-          items(key.items) { item ->
+          items(ctx.key.items) { item ->
             ListItem(
               modifier = Modifier.clickable(onClick = action {
-                navigator.pop(key, item)
+                ctx.navigator.pop(ctx.key, item)
               }),
-              title = {
-                with(key.renderable) { Text(item.toUiString()) }
-              },
+              title = { ctx.key.renderable.toUiString(item) },
             )
           }
         }

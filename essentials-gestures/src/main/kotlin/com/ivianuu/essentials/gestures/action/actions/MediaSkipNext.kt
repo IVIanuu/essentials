@@ -16,15 +16,16 @@ import com.ivianuu.injekt.Provide
 
 @Provide object SkipNextActionId : ActionId("media_skip_next")
 
-context(ResourceProvider) @Provide fun skipNextMediaAction() = Action(
+@Provide fun skipNextMediaAction(resourceProvider: ResourceProvider) = Action(
   id = SkipNextActionId,
-  title = loadResource(R.string.es_action_media_skip_next),
+  title = resourceProvider(R.string.es_action_media_skip_next),
   icon = staticActionIcon(R.drawable.es_ic_skip_next)
 )
 
-context(MediaActionSender)
-    @Provide fun skipNextMediaActionExecutor() = ActionExecutor<SkipNextActionId> {
-  sendMediaAction(KeyEvent.KEYCODE_MEDIA_NEXT)
+@Provide fun skipNextMediaActionExecutor(
+  mediaActionSender: MediaActionSender
+) = ActionExecutor<SkipNextActionId> {
+  mediaActionSender(KeyEvent.KEYCODE_MEDIA_NEXT)
 }
 
 @Provide inline val skipNextMediaActionSettingsKey: @ActionSettingsKey<SkipNextActionId> Key<Unit>

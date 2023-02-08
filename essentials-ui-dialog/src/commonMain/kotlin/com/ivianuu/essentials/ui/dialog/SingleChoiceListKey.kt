@@ -23,20 +23,20 @@ data class SingleChoiceListKey<T : Any>(
   @Inject val renderable: UiRenderer<T>
 ) : PopupKey<T>
 
-context(KeyUiContext<SingleChoiceListKey<Any>>, CommonStrings)
-    @Provide fun singleChoiceListUi() = SimpleKeyUi<SingleChoiceListKey<Any>> {
+@Provide fun singleChoiceListUi(
+  ctx: KeyUiContext<SingleChoiceListKey<Any>>,
+  commonStrings: CommonStrings
+) = SimpleKeyUi<SingleChoiceListKey<Any>> {
   DialogScaffold {
     SingleChoiceListDialog(
-      items = key.items,
-      selectedItem = key.selectedItem,
-      onSelectionChanged = action { item -> navigator.pop(key, item) },
-      item = { item ->
-        with(key.renderable) { Text(item.toUiString()) }
-      },
-      title = key.title?.let { { Text(it) } },
+      items = ctx.key.items,
+      selectedItem = ctx.key.selectedItem,
+      onSelectionChanged = action { item -> ctx.navigator.pop(ctx.key, item) },
+      item = { ctx.key.renderable.toUiString(it) },
+      title = ctx.key.title?.let { { Text(it) } },
       buttons = {
-        TextButton(onClick = action { navigator.pop(key, null) }) {
-          Text(cancel)
+        TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {
+          Text(commonStrings.cancel)
         }
       }
     )

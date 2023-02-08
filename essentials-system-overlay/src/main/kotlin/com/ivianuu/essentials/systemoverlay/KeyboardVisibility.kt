@@ -10,56 +10,59 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 
-@JvmInline value class KeyboardVisibleProvider(val keyboardVisible: Flow<Boolean>)
+@JvmInline value class KeyboardVisible(val value: Boolean)
 
-context(AccessibilityEvent.Provider, KeyboardHeightProvider, NamedCoroutineScope<AppScope>)
-    @Provide fun keyboardVisibleProvider(): @Scoped<AppScope> KeyboardVisibleProvider =
-  KeyboardVisibleProvider(
-    accessibilityEvents
-      .filter {
-        it.isFullScreen &&
-            it.className == "android.inputmethodservice.SoftInputWindow"
-      }
-      .onStart<Any?> { emit(Unit) }
-      .transformLatest {
-        emit(true)
-        while ((getKeyboardHeight() ?: 0) > 0) {
-          delay(100)
-        }
-        emit(false)
-        awaitCancellation()
-      }
-      .distinctUntilChanged()
-      .state(SharingStarted.WhileSubscribed(1000), false)
-  )
+@Provide fun keyboardVisible(
+  accessibilityEvents: Flow<AccessibilityEvent>,
+  keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
+  scope: NamedCoroutineScope<AppScope>
+): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
+  .filter {
+    it.isFullScreen &&
+        it.className == "android.inputmethodservice.SoftInputWindow"
+  }
+  .onStart<Any?> { emit(Unit) }
+  .transformLatest {
+    emit(true)
+    while ((keyboardHeightProvider() ?: 0) > 0) {
+      delay(100)
+    }
+    emit(false)
+    awaitCancellation()
+  }
+  .map { KeyboardVisible(it) }
+  .distinctUntilChanged()
+  .stateIn(scope, SharingStarted.WhileSubscribed(1000), KeyboardVisible(false))
 
 @Provide val keyboardVisibilityAccessibilityConfig: AccessibilityConfig
   get() = AccessibilityConfig(
     eventTypes = AndroidAccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
   )
 
-fun interface KeyboardHeightProvider {
-  fun getKeyboardHeight(): Int?
-}
+@Tag private annotation class KeyboardHeightProvider
 
-context(InputMethodManager) @Provide fun keyboardHeightProvider() = KeyboardHeightProvider {
+@Provide fun keyboardHeightProvider(
+  inputMethodManager: @SystemService InputMethodManager
+): @KeyboardHeightProvider () -> Int? = {
   catch {
-    val method = InputMethodManager::class.java.getMethod("getInputMethodWindowVisibleHeight")
-    method.invoke(inject<InputMethodManager>()) as Int
+    val method = inputMethodManager.javaClass.getMethod("getInputMethodWindowVisibleHeight")
+    method.invoke(inputMethodManager) as Int
   }.getOrNull()
 }

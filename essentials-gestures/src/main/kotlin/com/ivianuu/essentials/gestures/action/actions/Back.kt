@@ -15,13 +15,14 @@ import com.ivianuu.injekt.Provide
 
 @Provide object BackActionId : ActionId("back")
 
-context(ResourceProvider) @Provide fun backAction() = Action(
+@Provide fun backAction(resourceProvider: ResourceProvider) = Action(
   id = BackActionId,
-  title = loadResource(R.string.es_action_back),
+  title = resourceProvider(R.string.es_action_back),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_action_back)
 )
 
-context(GlobalActionExecutor) @Provide fun backActionExecutor() = ActionExecutor<BackActionId> {
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-}
+@Provide fun backActionExecutor(globalActionExecutor: GlobalActionExecutor) =
+  ActionExecutor<BackActionId> {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_BACK)
+  }

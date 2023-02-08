@@ -4,13 +4,14 @@
 
 package com.ivianuu.essentials.permission.root
 
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.R
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
 abstract class RootPermission(
@@ -19,10 +20,13 @@ abstract class RootPermission(
   override val icon: Permission.Icon? = null
 ) : Permission
 
-context(Shell) @Provide fun <P : RootPermission> rootPermissionStateProvider() =
-  PermissionStateProvider<P> { isShellAvailable() }
+@Provide fun <P : RootPermission> rootPermissionStateProvider(shell: Shell) =
+  PermissionStateProvider<P> { shell.isAvailable() }
 
-context(Shell, ToastContext) @Provide fun <P : RootPermission> rootPermissionRequestHandler() =
-  PermissionRequestHandler<P> {
-    if (!isShellAvailable()) showToast(R.string.es_no_root)
-  }
+@Provide fun <P : RootPermission> rootPermissionRequestHandler(
+  shell: Shell,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
+) = PermissionRequestHandler<P> {
+  if (!shell.isAvailable()) toaster(R.string.es_no_root)
+}

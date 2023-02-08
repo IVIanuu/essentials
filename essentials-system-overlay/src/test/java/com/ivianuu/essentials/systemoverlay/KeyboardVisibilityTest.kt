@@ -7,7 +7,7 @@ package com.ivianuu.essentials.systemoverlay
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.advanceTimeBy
 import org.junit.Test
@@ -20,7 +20,7 @@ class KeyboardVisibilityTest {
       accessibilityEvents,
       { keyboardHeight },
       this
-    ).testCollect(this)
+    ).testCollectIn(this)
 
     keyboardHeight = 1
     accessibilityEvents.emit(

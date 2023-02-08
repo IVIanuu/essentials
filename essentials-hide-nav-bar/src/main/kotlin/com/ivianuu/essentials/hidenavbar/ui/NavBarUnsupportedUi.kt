@@ -63,17 +63,17 @@ object NavBarUnsupportedKey : Key<Unit>
 
 data class NavBarUnsupportedModel(val openMoreInfos: () -> Unit, val openRootMethod: () -> Unit)
 
-context(KeyUiContext<NavBarUnsupportedKey>) @Provide fun navBarUnsupportedModel() = Model {
+@Provide fun navBarUnsupportedModel(ctx: KeyUiContext<NavBarUnsupportedKey>) = Model {
   NavBarUnsupportedModel(
     openMoreInfos = action {
-      navigator.push(
+      ctx.navigator.push(
         UrlKey(
           "https://www.xda-developers.com/google-confirms-overscan-gone-android-11-crippling-third-party-gesture-apps/"
         )
       )
     },
     openRootMethod = action {
-      navigator.push(
+      ctx.navigator.push(
         UrlKey(
           "https://forum.xda-developers.com/t/how-to-remove-nav-bar-in-android-11.4190469/"
         )

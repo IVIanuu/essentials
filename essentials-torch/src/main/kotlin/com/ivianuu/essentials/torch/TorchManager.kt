@@ -11,20 +11,22 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.hardware.camera2.CameraManager
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.NotificationFactory
-import com.ivianuu.essentials.util.ToastContext
+import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.context
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Job
@@ -42,16 +44,16 @@ interface TorchManager {
   suspend fun setTorchState(value: Boolean)
 }
 
-context(
-BroadcastsFactory,
-CameraManager,
-ForegroundManager,
-Logger,
-NamedCoroutineScope<AppScope>,
-NotificationFactory,
-ToastContext
-)
-@Provide @Scoped<AppScope> class TorchManagerImpl : TorchManager {
+@Provide @Scoped<AppScope> class TorchManagerImpl(
+  private val broadcastsFactory: BroadcastsFactory,
+  private val cameraManager: @SystemService CameraManager,
+  private val foregroundManager: ForegroundManager,
+  private val logger: Logger,
+  private val notificationFactory: NotificationFactory,
+  private val resourceProvider: ResourceProvider,
+  private val scope: NamedCoroutineScope<AppScope>,
+  private val toaster: Toaster
+) : TorchManager {
   private val _torchEnabled = MutableStateFlow(false)
   override val torchEnabled: StateFlow<Boolean> by this::_torchEnabled
 
@@ -62,55 +64,55 @@ ToastContext
     torchJobLock.withLock {
       torchJob?.cancel()
       torchJob = null
-      torchJob = launch { doSetTorchState(value) }
+      torchJob = scope.launch { doSetTorchState(value) }
     }
   }
 
   private suspend fun doSetTorchState(value: Boolean) {
-    log { "handle torch state $value" }
+    logger { "handle torch state $value" }
     if (!value) {
       _torchEnabled.value = false
       return
     }
 
-    runInForeground(createTorchNotification()) {
+    foregroundManager.runInForeground(createTorchNotification()) {
       race(
         { enableTorch() },
-        { broadcasts(ACTION_DISABLE_TORCH).first() }
+        { broadcastsFactory(ACTION_DISABLE_TORCH).first() }
       )
     }
   }
 
   private suspend fun enableTorch() {
     catch {
-      val cameraId = cameraIdList[0]
-      log { "enable torch" }
-      setTorchMode(cameraId, true)
+      val cameraId = cameraManager.cameraIdList[0]
+      logger { "enable torch" }
+      cameraManager.setTorchMode(cameraId, true)
       _torchEnabled.value = true
 
       // todo remove dummy block param once fixed
       onCancel(block = { awaitCancellation() }) {
-        log { "disable torch on cancel" }
-        catch { setTorchMode(cameraId, false) }
+        logger { "disable torch on cancel" }
+        catch { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     }.onFailure {
-      log(Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
-      showToast(R.string.es_failed_to_enable_torch)
+      logger(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+      toaster(R.string.es_failed_to_enable_torch)
       setTorchState(false)
     }
   }
 
   @SuppressLint("LaunchActivityFromNotification")
-  private fun createTorchNotification(): Notification = buildNotification(
+  private fun createTorchNotification(): Notification = notificationFactory(
     NOTIFICATION_CHANNEL_ID,
-    loadResource(R.string.es_notif_channel_torch),
+    resourceProvider(R.string.es_notif_channel_torch),
     NotificationManager.IMPORTANCE_LOW
   ) {
     setAutoCancel(true)
     setSmallIcon(R.drawable.es_ic_flashlight_on)
-    setContentTitle(loadResource(R.string.es_notif_title_torch))
-    setContentText(loadResource(R.string.es_notif_text_torch))
+    setContentTitle(resourceProvider(R.string.es_notif_title_torch))
+    setContentText(resourceProvider(R.string.es_notif_text_torch))
     setContentIntent(
       PendingIntent.getBroadcast(
         context,

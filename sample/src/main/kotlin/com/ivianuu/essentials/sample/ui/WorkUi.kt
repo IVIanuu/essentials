@@ -20,13 +20,13 @@ import com.ivianuu.injekt.Provide
 
 object WorkKey : Key<Unit>
 
-context(SampleWorkScheduler) @Provide fun workUi() = SimpleKeyUi<WorkKey> {
+@Provide fun workUi(scheduler: SampleWorkScheduler) = SimpleKeyUi<WorkKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {
     Button(
       modifier = Modifier.center(),
-      onClick = action { scheduleWork() }
+      onClick = action { scheduler() }
     ) {
       Text("Perform work")
     }

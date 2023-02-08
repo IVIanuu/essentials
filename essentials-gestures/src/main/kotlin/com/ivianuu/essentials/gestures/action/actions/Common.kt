@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberAsyncImagePainter
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
@@ -26,8 +27,8 @@ import com.ivianuu.essentials.gestures.action.ui.LocalActionImageSizeModifier
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.shell.Shell
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import com.ivianuu.injekt.inject
@@ -56,24 +57,30 @@ fun staticActionIcon(id: Int) = ActionIcon {
 operator fun TypeKey<Permission>.plus(other: TypeKey<Permission>) = listOf(this, other)
 
 fun interface ActionRootCommandRunner {
-  suspend fun runActionRootCommand(command: String)
+  suspend operator fun invoke(command: String)
 }
 
-context(Shell, ToastContext)
-    @Provide fun actionRootCommandRunner() = ActionRootCommandRunner { command ->
-  runShellCommand(command)
+@Provide fun actionRootCommandRunner(
+  shell: Shell,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
+) = ActionRootCommandRunner { command ->
+  shell.run(command)
     .onFailure {
       it.printStackTrace()
-      showToast(R.string.es_no_root)
+      toaster(R.string.es_no_root)
     }
 }
 
 fun interface ActionIntentSender {
-  fun sendIntent(intent: Intent, isFloating: Boolean, options: Bundle?)
+  operator fun invoke(intent: Intent, isFloating: Boolean, options: Bundle?)
 }
 
-context(AppContext, ToastContext)
-    @Provide fun actionIntentSender() = ActionIntentSender { intent, isFloating, options ->
+@Provide fun actionIntentSender(
+  appContext: AppContext,
+  resourceProvider: ResourceProvider,
+  toaster: Toaster
+) = ActionIntentSender { intent, isFloating, options ->
   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
   if (isFloating)
     intent.addFlags(FLOATING_WINDOW_FLAG)
@@ -87,22 +94,25 @@ context(AppContext, ToastContext)
     ).send()
   }.onFailure {
     it.printStackTrace()
-    showToast(R.string.es_activity_not_found)
+    toaster(R.string.es_activity_not_found)
   }
 }
 
 fun interface CloseSystemDialogsUseCase {
-  suspend fun closeSystemDialogs(): Result<Unit, Throwable>
+  suspend operator fun invoke(): Result<Unit, Throwable>
 }
 
-context(AppContext, GlobalActionExecutor, SystemBuildInfo)
-    @SuppressLint("MissingPermission", "InlinedApi")
-    @Provide
-fun closeSystemDialogsUseCase() = CloseSystemDialogsUseCase {
+@SuppressLint("MissingPermission", "InlinedApi")
+@Provide
+fun closeSystemDialogsUseCase(
+  appContext: AppContext,
+  globalActionExecutor: GlobalActionExecutor,
+  systemBuildInfo: SystemBuildInfo
+) = CloseSystemDialogsUseCase {
   catch {
-    if (systemSdk >= 31)
-      performGlobalAction(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+    if (systemBuildInfo.sdk >= 31)
+      globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
-      sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+      appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
   }
 }

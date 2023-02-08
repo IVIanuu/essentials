@@ -62,7 +62,10 @@ data class NavBarModel(
     get() = hideNavBar
 }
 
-context(KeyUiContext<NavBarKey>, PermissionManager, ResourceProvider) @Provide fun navBarModel(
+@Provide fun navBarModel(
+  ctx: KeyUiContext<NavBarKey>,
+  permissionManager: PermissionManager,
+  resourceProvider: ResourceProvider,
   pref: DataStore<NavBarPrefs>
 ) = Model {
   val prefs = pref.data.bind(NavBarPrefs())
@@ -71,17 +74,17 @@ context(KeyUiContext<NavBarKey>, PermissionManager, ResourceProvider) @Provide f
     updateHideNavBar = action { value ->
       if (!value) {
         pref.updateData { copy(hideNavBar = false) }
-      } else if (requestPermissions(listOf(typeKeyOf<NavBarPermission>()))) {
+      } else if (permissionManager.requestPermissions(listOf(typeKeyOf<NavBarPermission>()))) {
         pref.updateData { copy(hideNavBar = value) }
       }
     },
     navBarRotationMode = prefs.navBarRotationMode,
     updateNavBarRotationMode = action {
-      navigator.push(
+      ctx.navigator.push(
         SingleChoiceListKey(
           items = NavBarRotationMode.values().toList(),
           selectedItem = prefs.navBarRotationMode
-        ) { loadResource(titleRes) }
+        ) { resourceProvider(it.titleRes) }
       )?.let { newRotationMode ->
         pref.updateData { copy(navBarRotationMode = newRotationMode) }
       }

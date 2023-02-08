@@ -24,11 +24,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Provide object AutoRotationActionId : ActionId("auto_rotation")
 
-context(ResourceProvider) @Provide fun autoRotationAction(
-  autoRotation: DataStore<AutoRotation>
+@Provide fun autoRotationAction(
+  autoRotation: DataStore<AutoRotation>,
+  resourceProvider: ResourceProvider
 ) = Action(
   id = AutoRotationActionId,
-  title = loadResource(R.string.es_action_auto_rotation),
+  title = resourceProvider(R.string.es_action_auto_rotation),
   permissions = listOf(typeKeyOf<ActionWriteSettingsPermission>()),
   icon = autoRotation.data.autoRotationIcon()
 )

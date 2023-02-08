@@ -21,14 +21,13 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.inject
 
-context(AppContext)
 @SuppressLint("ViewConstructor")
 @Provide
 class OverlayComposeView(
+  context: AppContext,
   private val content: @Composable () -> Unit,
-) : AbstractComposeView(inject()),
+) : AbstractComposeView(context),
   LifecycleOwner,
   SavedStateRegistryOwner,
   ViewModelStoreOwner {

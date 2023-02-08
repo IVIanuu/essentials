@@ -11,7 +11,7 @@ import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.runCancellingBlockingTest
-import com.ivianuu.essentials.test.testCollect
+import com.ivianuu.essentials.test.testCollectIn
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Test
@@ -83,7 +83,7 @@ class RecentAppsTest {
 
   @Test fun testCurrentApp() = runCancellingBlockingTest {
     val recentApps = EventFlow<RecentAppsProvider>()
-    val collector = currentApp(recentApps).testCollect(this)
+    val collector = currentApp(recentApps).testCollectIn(this)
 
     recentApps.emit(RecentAppsProvider(listOf("a", "b", "c")))
     recentApps.emit(RecentAppsProvider(listOf("a", "b", "c")))

@@ -20,11 +20,11 @@ interface Actor<T> : CoroutineScope {
   fun tryAct(message: T): ChannelResult<Unit>
 }
 
-context(CoroutineScope) fun <T> actor(
+fun <T> CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64,
   start: CoroutineStart = CoroutineStart.LAZY,
-  block: suspend context(ActorScope<T>) () -> Unit
+  block: suspend ActorScope<T>.() -> Unit
 ): Actor<T> = ActorImpl(coroutineContext + context, capacity, start, block)
 
 interface ActorScope<T> : CoroutineScope {
@@ -35,7 +35,7 @@ private class ActorImpl<T>(
   coroutineContext: CoroutineContext,
   capacity: Int,
   start: CoroutineStart,
-  block: suspend context(ActorScope<T>) () -> Unit,
+  block: suspend ActorScope<T>.() -> Unit,
   override val messages: Channel<T> = Channel(capacity = capacity)
 ) : Actor<T>, ActorScope<T> {
   override val coroutineContext: CoroutineContext = coroutineContext.childCoroutineContext()
@@ -53,7 +53,7 @@ private class ActorImpl<T>(
   }
 }
 
-context(CoroutineScope) fun actor(
+fun CoroutineScope.actor(
   context: CoroutineContext = EmptyCoroutineContext,
   capacity: Int = 64
 ): Actor<suspend () -> Unit> = actor(context, capacity) {

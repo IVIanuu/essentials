@@ -5,9 +5,8 @@
 package com.ivianuu.essentials.sample.xposed
 
 import android.app.Application
-import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.util.broadcastsFactory
@@ -76,7 +75,7 @@ private val FadeOutCurve = FadeCurve(
 
 var transitionDatas = emptyMap<String, TransitionData>()
 
-context(Logger) @Provide fun sampleHooks() = Hooks {
+@Provide fun sampleHooks(logger: Logger) = Hooks {
   if (packageName.value != "com.spotify.music") return@Hooks
 
   hookAllMethods(
@@ -84,16 +83,13 @@ context(Logger) @Provide fun sampleHooks() = Hooks {
     "onCreate"
   ) {
     before {
-      with(`this`<AppContext>()) {
-        GlobalScope.launch {
-          broadcastsFactory()
-            .broadcasts("track_transitions")
-            .collect {
-              transitionDatas = Json.decodeFromString(it.getStringExtra("data")!!)
+      GlobalScope.launch {
+        broadcastsFactory(`this`<_>())("track_transitions")
+          .collect {
+            transitionDatas = Json.decodeFromString(it.getStringExtra("data")!!)
 
-              log { "data changed $transitionDatas" }
-            }
-        }
+            logger { "data changed $transitionDatas" }
+          }
       }
     }
   }
@@ -137,7 +133,7 @@ context(Logger) @Provide fun sampleHooks() = Hooks {
               )
               put("audio.fade_out_curves", Json.encodeToString(FadeOutCurve))
             } else {
-              log { "No duration ${args.contentToString()}" }
+              logger { "No duration ${args.contentToString()}" }
             }
 
             put("audio.only_allow_fade_on_advance", "false")
@@ -146,7 +142,7 @@ context(Logger) @Provide fun sampleHooks() = Hooks {
     }
 
     after {
-      log { "ContextTrack ${args.contentToString()}" }
+      logger { "ContextTrack ${args.contentToString()}" }
     }
   }
 }

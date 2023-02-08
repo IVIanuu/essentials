@@ -17,14 +17,18 @@ import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Element
+import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ListAdBannerFeature : AdFeature
 
 @Tag annotation class ListAdBannerConfigTag {
   companion object {
-    context(BuildInfo, ResourceProvider) @Provide fun default() = ListAdBannerConfig(
-      id = loadResource(
-        if (isDebug) R.string.es_test_ad_unit_id_banner
+    @Provide fun default(
+      buildInfo: BuildInfo,
+      resourceProvider: ResourceProvider
+    ) = ListAdBannerConfig(
+      id = resourceProvider(
+        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_list_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER
@@ -35,7 +39,9 @@ typealias ListAdBannerConfig = @ListAdBannerConfigTag AdBannerConfig
 
 fun interface ListAdBanner : ListDecorator
 
-context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerListDecorator(
+@Provide fun adBannerListDecorator(
+  adsEnabled: StateFlow<AdsEnabled>,
+  isAdFeatureEnabled: IsAdFeatureEnabledUseCase,
   config: ListAdBannerConfig? = null
 ) = ListAdBanner decorator@{
   if (config != null && isVertical) {
@@ -43,9 +49,7 @@ context(AdsEnabledProvider, IsAdFeatureEnabledUseCase) @Provide fun adBannerList
       val key = catch {
         LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
-      if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) &&
-        adsEnabled.bind()
-      )
+      if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) && adsEnabled.bind().value)
         AdBanner(config)
     }
   }

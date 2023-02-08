@@ -15,30 +15,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.coroutines.state
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
+import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
 
 object ForegroundKey : Key<Unit>
 
-context(ForegroundManager, KeyUiContext<ForegroundKey>, NotificationFactory)
-    @SuppressLint("NewApi")
-    @Provide fun foregroundUi() = SimpleKeyUi<ForegroundKey> {
+@SuppressLint("NewApi")
+@Provide fun foregroundUi(
+  foregroundManager: ForegroundManager,
+  notificationFactory: NotificationFactory
+) = SimpleKeyUi<ForegroundKey> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
@@ -54,8 +56,8 @@ context(ForegroundManager, KeyUiContext<ForegroundKey>, NotificationFactory)
             delay(1000)
           }
         }
-          .state(SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
-        runInForeground(notifications.value) {
+          .stateIn(this, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
+        foregroundManager.runInForeground(notifications.value) {
           notifications.collect { updateNotification(it) }
         }
       }
@@ -66,10 +68,11 @@ context(ForegroundManager, KeyUiContext<ForegroundKey>, NotificationFactory)
   }
 }
 
-context(NotificationFactory) private fun ForegroundNotification(
+private fun ForegroundNotification(
   color: Color,
-  count: Int
-) = buildNotification(
+  count: Int,
+  @Inject notificationFactory: NotificationFactory
+) = notificationFactory(
   "foreground",
   "Foreground",
   NotificationManager.IMPORTANCE_LOW

@@ -36,7 +36,7 @@ interface AdFeature
 }
 
 fun interface IsAdFeatureEnabledUseCase {
-  fun isAdFeatureEnabled(keyClass: KClass<out Key<*>>, feature: AdFeature): Boolean
+  operator fun invoke(keyClass: KClass<out Key<*>>, feature: AdFeature): Boolean
 }
 
 @Provide fun isAdFeatureEnabledUseCase(

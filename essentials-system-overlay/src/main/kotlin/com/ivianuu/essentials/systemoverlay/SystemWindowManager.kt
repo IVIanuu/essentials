@@ -38,6 +38,7 @@ import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.MainContext
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
@@ -114,10 +115,11 @@ fun Modifier.systemWindowTrigger() = composed {
   }
 }
 
-context(AppContext) @Provide class SystemWindowManagerImpl(
+@Provide class SystemWindowManagerImpl(
+  private val appContext: AppContext,
   private val mainContext: MainContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
-  windowManager: WindowManager
+  windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
   internal val useAccessibility = accessibilityWindowManager != null
   internal val windowManager = accessibilityWindowManager ?: windowManager

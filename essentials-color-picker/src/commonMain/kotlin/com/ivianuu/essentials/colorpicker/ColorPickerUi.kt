@@ -22,17 +22,16 @@ data class ColorPickerKey(
   val showAlphaSelector: Boolean = false,
 ) : PopupKey<Color>
 
-context(KeyUiContext<ColorPickerKey>)
-    @Provide fun colorPickerUi() = SimpleKeyUi<ColorPickerKey> {
+@Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) = SimpleKeyUi<ColorPickerKey> {
   DialogScaffold {
     ColorPickerDialog(
-      initialColor = key.initialColor,
-      onColorSelected = action { color -> navigator.pop(key, color) },
-      onCancel = action { navigator.pop(key, null) },
-      colorPalettes = key.colorPalettes,
-      showAlphaSelector = key.showAlphaSelector,
-      allowCustomArgb = key.allowCustomArgb,
-      title = key.title?.let { { Text(it) } }
+      initialColor = ctx.key.initialColor,
+      onColorSelected = action { color -> ctx.navigator.pop(ctx.key, color) },
+      onCancel = action { ctx.navigator.pop(ctx.key, null) },
+      colorPalettes = ctx.key.colorPalettes,
+      showAlphaSelector = ctx.key.showAlphaSelector,
+      allowCustomArgb = ctx.key.allowCustomArgb,
+      title = ctx.key.title?.let { { Text(it) } }
     )
   }
 }

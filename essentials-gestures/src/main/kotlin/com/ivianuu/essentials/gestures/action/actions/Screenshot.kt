@@ -21,25 +21,30 @@ import kotlinx.coroutines.delay
 
 @Provide object ScreenshotActionId : ActionId("screenshot")
 
-context(ResourceProvider, SystemBuildInfo) @Provide fun screenshotAction() = Action(
+@Provide fun screenshotAction(
+  resourceProvider: ResourceProvider,
+  systemBuildInfo: SystemBuildInfo
+) = Action(
   id = ScreenshotActionId,
-  title = loadResource(R.string.es_action_screenshot),
+  title = resourceProvider(R.string.es_action_screenshot),
   icon = staticActionIcon(R.drawable.es_ic_photo_album),
   permissions = listOf(
-    if (systemSdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
+    if (systemBuildInfo.sdk >= 28) typeKeyOf<ActionAccessibilityPermission>()
     else typeKeyOf<ActionRootPermission>()
   )
 )
 
-context(ActionRootCommandRunner, GlobalActionExecutor, SystemBuildInfo)
-    @SuppressLint("InlinedApi")
-    @Provide
-fun screenshotActionExecutor() =
-  ActionExecutor<ScreenshotActionId> {
-    delay(500)
-    if (systemSdk >= 28) {
-      performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
-    } else {
-      runActionRootCommand("input keyevent 26")
-    }
+@SuppressLint("InlinedApi")
+@Provide
+fun screenshotActionExecutor(
+  globalActionExecutor: GlobalActionExecutor,
+  rootCommandRunner: ActionRootCommandRunner,
+  systemBuildInfo: SystemBuildInfo
+) = ActionExecutor<ScreenshotActionId> {
+  delay(500)
+  if (systemBuildInfo.sdk >= 28) {
+    globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+  } else {
+    rootCommandRunner("input keyevent 26")
   }
+}

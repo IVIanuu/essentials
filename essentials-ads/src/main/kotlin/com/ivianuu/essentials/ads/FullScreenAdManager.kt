@@ -17,17 +17,17 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.UiScope
-import com.ivianuu.essentials.util.ForegroundActivityProvider
+import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.MainContext
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -40,22 +40,25 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.time.Duration
 
 interface FullScreenAdManager {
-  suspend fun isFullScreenAdLoaded(): Boolean
+  suspend fun isAdLoaded(): Boolean
 
-  fun preloadFullScreenAd()
+  fun preloadAd()
 
-  suspend fun loadFullScreenAd(): Result<Boolean, Throwable>
+  suspend fun loadAd(): Result<Boolean, Throwable>
 
-  suspend fun loadAndShowFullScreenAd(): Result<Boolean, Throwable>
+  suspend fun loadAndShowAd(): Result<Boolean, Throwable>
 
-  suspend fun showFullScreenAdIfLoaded(): Boolean
+  suspend fun showAdIfLoaded(): Boolean
 }
 
 @JvmInline value class FullScreenAdId(val value: String) {
   companion object {
-    context(BuildInfo, ResourceProvider) @Provide fun default() = FullScreenAdId(
-      loadResource(
-        if (isDebug) R.string.es_test_ad_unit_id_interstitial
+    @Provide fun default(
+      buildInfo: BuildInfo,
+      resourceProvider: ResourceProvider
+    ) = FullScreenAdId(
+      resourceProvider(
+        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_interstitial
         else R.string.es_full_screen_ad_unit_id
       )
     )
@@ -68,39 +71,43 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   }
 }
 
-context(AdsEnabledProvider, AppContext, ForegroundActivityProvider, Logger, NamedCoroutineScope<AppScope>)
 @Provide @Scoped<UiScope> class FullScreenAdManagerImpl(
+  private val appContext: AppContext,
+  private val adsEnabled: Flow<AdsEnabled>,
   private val id: FullScreenAdId,
   private val config: FullScreenAdConfig,
-  private val mainContext: MainContext
+  private val foregroundActivity: Flow<ForegroundActivity>,
+  private val logger: Logger,
+  private val mainContext: MainContext,
+  private val scope: NamedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null
   private val rateLimiter = RateLimiter(1, config.adsInterval)
 
-  override suspend fun isFullScreenAdLoaded() = getCurrentAd() != null
+  override suspend fun isAdLoaded() = getCurrentAd() != null
 
-  override fun preloadFullScreenAd() {
-    launch { loadFullScreenAd() }
+  override fun preloadAd() {
+    scope.launch { loadAd() }
   }
 
-  override suspend fun loadFullScreenAd() = catch {
-    if (!adsEnabled.first()) return@catch false
+  override suspend fun loadAd() = catch {
+    if (!adsEnabled.first().value) return@catch false
     getOrCreateCurrentAd()
     true
   }
 
-  override suspend fun loadAndShowFullScreenAd() = catch {
-    if (!adsEnabled.first()) return@catch false
+  override suspend fun loadAndShowAd() = catch {
+    if (!adsEnabled.first().value) return@catch false
     getOrCreateCurrentAd()
-      .also { preloadFullScreenAd() }
+      .also { preloadAd() }
       .invoke()
   }
 
-  override suspend fun showFullScreenAdIfLoaded() = getCurrentAd()
+  override suspend fun showAdIfLoaded() = getCurrentAd()
     ?.let {
       it.invoke()
-        .also { preloadFullScreenAd() }
+        .also { preloadAd() }
     } ?: false
 
   private suspend fun getCurrentAd(): (suspend () -> Boolean)? = lock.withLock {
@@ -111,12 +118,12 @@ context(AdsEnabledProvider, AppContext, ForegroundActivityProvider, Logger, Name
   private suspend fun getOrCreateCurrentAd(): suspend () -> Boolean = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
-    } ?: async(mainContext) {
-      log { "start loading ad" }
+    } ?: scope.async(mainContext) {
+      logger { "start loading ad" }
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->
         InterstitialAd.load(
-          inject(),
+          appContext,
           id.value,
           AdRequest.Builder().build(),
           object : InterstitialAdLoadCallback() {
@@ -131,18 +138,18 @@ context(AdsEnabledProvider, AppContext, ForegroundActivityProvider, Logger, Name
         )
       }
 
-      log { "ad loaded" }
+      logger { "ad loaded" }
 
       val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
-          log { "show ad" }
+          logger { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(mainContext) {
             ad.show(foregroundActivity.first()!!)
           }
           true
         } else {
-          log { "do not show ad due to rate limit" }
+          logger { "do not show ad due to rate limit" }
           false
         }
       }
@@ -154,10 +161,11 @@ context(AdsEnabledProvider, AppContext, ForegroundActivityProvider, Logger, Name
 
 class AdLoadingException(val error: LoadAdError) : RuntimeException()
 
-context(AdsEnabledProvider)
-    @Provide fun preloadFullScreenAdWorker(fullScreenAdManager: FullScreenAdManager) =
-  ScopeWorker<UiScope> {
-    adsEnabled
-      .filter { it }
-      .collect { fullScreenAdManager.preloadFullScreenAd() }
-  }
+@Provide fun preloadFullScreenAdWorker(
+  adsEnabled: Flow<AdsEnabled>,
+  fullScreenAdManager: FullScreenAdManager
+) = ScopeWorker<UiScope> {
+  adsEnabled
+    .filter { it.value }
+    .collect { fullScreenAdManager.preloadAd() }
+}

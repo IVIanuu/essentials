@@ -101,7 +101,7 @@ val LocalAppBarStyle = compositionLocalOf { AppBarStyle.PRIMARY }
   elevation: Dp = DefaultAppBarElevation,
   applySystemBarStyle: Boolean = true,
   bottomContent: (@Composable () -> Unit)? = null,
-  content: @Composable context(RowScope) () -> Unit,
+  content: @Composable RowScope.() -> Unit,
 ) {
   val systemBarStyleModifier = if (applySystemBarStyle) {
     Modifier.systemBarStyle(

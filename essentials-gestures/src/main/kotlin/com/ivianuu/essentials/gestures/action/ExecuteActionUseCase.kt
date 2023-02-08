@@ -4,73 +4,73 @@
 
 package com.ivianuu.essentials.gestures.action
 
+import com.ivianuu.essentials.ResourceProvider
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.log
+import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
-import com.ivianuu.essentials.util.ToastContext
-import com.ivianuu.essentials.util.showToast
+import com.ivianuu.essentials.util.Toaster
+import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
-fun interface ExecuteActionUseCase {
-  suspend fun executeAction(id: String): Result<Boolean, Throwable>
-}
+fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwable>
 
-context(
-ActionRepository,
-CloseSystemDialogsUseCase,
-Logger,
-PermissionManager,
-ScreenActivator,
-ScreenUnlocker,
-ToastContext)
-    @Provide fun executeActionUseCase(coroutineContext: DefaultContext) =
-  ExecuteActionUseCase { id ->
-    withContext(coroutineContext) {
-      catch {
-        log { "execute $id" }
-        val action = getAction(id)
+@Provide fun executeActionUseCase(
+  closeSystemDialogs: CloseSystemDialogsUseCase,
+  coroutineContext: DefaultContext,
+  logger: Logger,
+  permissionManager: PermissionManager,
+  repository: ActionRepository,
+  resourceProvider: ResourceProvider,
+  screenActivator: ScreenActivator,
+  screenUnlocker: ScreenUnlocker,
+  toaster: Toaster
+) = ExecuteActionUseCase { id ->
+  withContext(coroutineContext) {
+    catch {
+      logger { "execute $id" }
+      val action = repository.getAction(id)
 
-        // check permissions
-        if (!permissionState(action.permissions).first()) {
-          log { "didn't had permissions for $id ${action.permissions}" }
-          unlockScreen()
-          requestPermissions(action.permissions)
+      // check permissions
+      if (!permissionManager.permissionState(action.permissions).first()) {
+        logger { "didn't had permissions for $id ${action.permissions}" }
+        screenUnlocker()
+        permissionManager.requestPermissions(action.permissions)
         return@catch false
       }
 
-        if (action.turnScreenOn && !activateScreen()) {
-          log { "couldn't turn screen on for $id" }
-          return@catch false
-        }
+      if (action.turnScreenOn && !screenActivator()) {
+        logger { "couldn't turn screen on for $id" }
+        return@catch false
+      }
 
       // unlock screen
-        if (action.unlockScreen && !unlockScreen()) {
-          log { "couldn't unlock screen for $id" }
-          return@catch false
-        }
+      if (action.unlockScreen && !screenUnlocker()) {
+        logger { "couldn't unlock screen for $id" }
+        return@catch false
+      }
 
       // close system dialogs
       if (action.closeSystemDialogs)
         closeSystemDialogs()
 
-      log { "fire $id" }
+      logger { "fire $id" }
 
       // fire
-      getActionExecutor(id).execute()
+      repository.getActionExecutor(id)()
       return@catch true
     }.onFailure {
       it.printStackTrace()
-      showToast(R.string.es_action_execution_failed, id)
+      toaster(R.string.es_action_execution_failed, id)
     }
   }
 }

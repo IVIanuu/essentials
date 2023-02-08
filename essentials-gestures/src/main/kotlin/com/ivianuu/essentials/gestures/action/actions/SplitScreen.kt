@@ -15,14 +15,15 @@ import com.ivianuu.injekt.Provide
 
 @Provide object SplitScreenActionId : ActionId("split_screen")
 
-context(ResourceProvider) @Provide fun splitScreenAction() = Action(
+@Provide fun splitScreenAction(resourceProvider: ResourceProvider) = Action(
   id = SplitScreenActionId,
-  title = loadResource(R.string.es_action_split_screen),
+  title = resourceProvider(R.string.es_action_split_screen),
   permissions = accessibilityActionPermissions,
   icon = staticActionIcon(R.drawable.es_ic_view_agenda)
 )
 
-context(GlobalActionExecutor)
-    @Provide fun splitScreenActionExecutor() = ActionExecutor<SplitScreenActionId> {
-  performGlobalAction(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
+@Provide fun splitScreenActionExecutor(
+  globalActionExecutor: GlobalActionExecutor
+) = ActionExecutor<SplitScreenActionId> {
+  globalActionExecutor(AccessibilityService.GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN)
 }

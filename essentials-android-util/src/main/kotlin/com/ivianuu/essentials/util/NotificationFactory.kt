@@ -11,32 +11,34 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.inject
 
 fun interface NotificationFactory {
-  fun buildNotification(
+  operator fun invoke(
     channelId: String,
     channelName: String,
     importance: Int,
-    builder: context(NotificationCompat.Builder) () -> Unit
+    builder: NotificationCompat.Builder.() -> Unit
   ): Notification
 }
 
 inline val NotificationCompat.Builder.context: Context
   get() = @Suppress("RestrictedLint") mContext
 
-context(AppContext, NotificationManager)
-    @Provide fun notificationFactory() =
-  NotificationFactory { channelId, channelName, importance, builder ->
-    createNotificationChannel(
-      NotificationChannel(
-        channelId,
-        channelName,
-        importance
-      )
+@Provide fun notificationFactory(
+  appContext: AppContext,
+  notificationManager: @SystemService NotificationManager
+) = NotificationFactory { channelId, channelName, importance, builder ->
+  notificationManager.createNotificationChannel(
+    NotificationChannel(
+      channelId,
+      channelName,
+      importance
     )
+  )
 
-    NotificationCompat.Builder(inject(), channelId)
-      .apply(builder)
-      .build()
+  NotificationCompat.Builder(inject(), channelId)
+    .apply(builder)
+    .build()
   }

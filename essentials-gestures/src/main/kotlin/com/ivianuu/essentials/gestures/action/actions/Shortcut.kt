@@ -33,7 +33,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import java.io.ByteArrayOutputStream
 
-context(ActionIntentSender) @Provide class ShortcutActionFactory : ActionFactory {
+@Provide class ShortcutActionFactory(private val intentSender: ActionIntentSender) : ActionFactory {
   override suspend fun handles(id: String): Boolean = id.startsWith(BASE_ID)
 
   override suspend fun createAction(id: String): Action<*> {
@@ -63,18 +63,19 @@ context(ActionIntentSender) @Provide class ShortcutActionFactory : ActionFactory
     val tmp = id.split(ACTION_DELIMITER)
     val intent = Intent.getIntent(tmp[2])
     val isFloating = tmp[4].toBoolean()
-    return ActionExecutor<ActionId> { sendIntent(intent, isFloating, null) }
+    return ActionExecutor<ActionId> { intentSender(intent, isFloating, null) }
   }
 }
 
-context(ResourceProvider) @Provide class ShortcutActionPickerDelegate(
+@Provide class ShortcutActionPickerDelegate(
   private val floatingWindowActionsEnabled: FloatingWindowActionsEnabled,
-  private val navigator: Navigator
+  private val navigator: Navigator,
+  private val resourceProvider: ResourceProvider
 ) : ActionPickerDelegate {
   override val baseId: String
     get() = BASE_ID
   override val title: String
-    get() = loadResource(R.string.es_action_shortcut)
+    get() = resourceProvider(R.string.es_action_shortcut)
   override val icon: @Composable () -> Unit
     get() = { Icon(R.drawable.es_ic_content_cut) }
 
