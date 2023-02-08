@@ -36,7 +36,7 @@ data class ListKey<T : Any>(
               modifier = Modifier.clickable(onClick = action {
                 ctx.navigator.pop(ctx.key, item)
               }),
-              title = { ctx.key.renderable.toUiString(item) },
+              title = { ctx.key.renderable(item) },
             )
           }
         }

@@ -54,7 +54,7 @@ interface PermissionManager {
             .onStart<Any?> { emit(Unit) }
             .map {
               withContext(context) {
-                stateProvider.isPermissionGranted(permission)
+                stateProvider(permission)
               }
             }
         }

@@ -18,7 +18,7 @@ fun interface KeyUiDecorator : Service<KeyUiDecorator> {
 }
 
 fun interface DecorateKeyUi {
-  @Composable fun decorate(content: @Composable () -> Unit)
+  @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
 @Provide fun decorateKeyUi(

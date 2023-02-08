@@ -38,7 +38,7 @@ data class MultiChoiceListKey<T : Any>(
       items = ctx.key.items,
       selectedItems = selectedItems,
       onSelectionsChanged = { selectedItems = it },
-      item = { ctx.key.renderable.toUiString(it) },
+      item = { ctx.key.renderable(it) },
       title = ctx.key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {

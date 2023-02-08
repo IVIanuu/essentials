@@ -90,7 +90,7 @@ data class UiPermission<P : Permission>(
         )
       },
     grantPermission = action { permission ->
-      requestHandlers[permission.permissionKey]!!().requestPermission(permission.permission)
+      requestHandlers[permission.permissionKey]!!()(permission.permission)
       appUiStarter()
     }
   )

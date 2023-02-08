@@ -59,11 +59,11 @@ object PermissionModule {
 }
 
 fun interface PermissionStateProvider<P : Permission> {
-  suspend fun isPermissionGranted(permission: P): Boolean
+  suspend operator fun invoke(permission: P): Boolean
 }
 
 fun interface PermissionRequestHandler<P : Permission> {
-  suspend fun requestPermission(permission: P)
+  suspend operator fun invoke(permission: P)
 }
 
 internal val permissionRefreshes = EventFlow<Unit>()
@@ -73,7 +73,7 @@ internal val permissionRefreshes = EventFlow<Unit>()
 }
 
 private fun <P : Permission> PermissionRequestHandler<P>.intercept() = PermissionRequestHandler<P> {
-  requestPermission(it)
+  this(it)
   permissionRefreshes.emit(Unit)
 }
 

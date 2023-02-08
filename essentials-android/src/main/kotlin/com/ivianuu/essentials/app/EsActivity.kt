@@ -48,7 +48,7 @@ class EsActivity : ComponentActivity(), ForegroundActivityMarker {
 
     setContent {
       CompositionLocalProvider(LocalUiElements provides uiComponent.elements) {
-        uiComponent.decorateUi.decorate {
+        uiComponent.decorateUi {
           uiComponent.appUi()
         }
       }

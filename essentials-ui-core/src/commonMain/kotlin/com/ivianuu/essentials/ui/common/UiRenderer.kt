@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ui.common
 import com.ivianuu.injekt.Provide
 
 fun interface UiRenderer<T> {
-  fun toUiString(x: T): String
+  operator fun invoke(x: T): String
 
   companion object {
     @Provide fun <T : Enum<T>> enum() = UiRenderer<T> { it.name }

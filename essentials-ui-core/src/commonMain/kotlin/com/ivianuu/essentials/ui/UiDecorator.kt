@@ -20,7 +20,7 @@ fun interface UiDecorator : Service<UiDecorator> {
 }
 
 fun interface DecorateUi {
-  @Composable fun decorate(content: @Composable () -> Unit)
+  @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
 @Provide fun decorateUi(
