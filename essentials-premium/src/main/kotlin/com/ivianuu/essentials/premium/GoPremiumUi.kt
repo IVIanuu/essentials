@@ -77,7 +77,7 @@ data class GoPremiumKey(
 }
 
 @Provide val goPremiumUi = ModelKeyUi<GoPremiumKey, GoPremiumModel> {
-  BackHandler(goBack)
+  BackHandler(onBackPress = goBack)
 
   Surface {
     InsetsPadding {

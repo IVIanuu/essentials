@@ -7,7 +7,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.key
@@ -16,71 +15,57 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.coroutines.onCancel
+import com.ivianuu.essentials.ui.LocalUiElements
+import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
-fun interface NavigationStateContent {
-  @Composable operator fun invoke(p1: Modifier)
-}
-
-@Provide fun navigationStateContent(
+@Composable fun NavigatorContent(
+  modifier: Modifier = Modifier,
   navigator: Navigator,
-  optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
-  uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
-  decorateUi: (Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
-  elementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>,
-  rootKey: RootKey? = null,
-  scope: NamedCoroutineScope<AppScope>
-) = NavigationStateContent { modifier ->
+  handleBack: Boolean = true,
+  popRoot: Boolean = false,
+  componentFactory: @Composable () -> NavigationStateContentComponent = {
+    LocalUiElements.current.element()
+  }
+) {
+  val component = componentFactory()
+
   val backStack by navigator.backStack.collectAsState()
 
-  if (backStack.size > 1)
-    BackHandler {
-      scope.launch {
-        navigator.popTop()
-      }
-    }
-
-  LaunchedEffect(true) {
-    onCancel {
-      if (rootKey != null)
-        withTimeoutOrNull(100) {
-          navigator.setRoot(rootKey)
-        }
-      else navigator.clear()
-    }
-  }
-
   val stackChildren = backStack
-    .map { key ->
+    .mapIndexed { index, key ->
       key(key) {
         var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = Scope<KeyUiScope>()
-          val content = uiFactories[key::class]?.invoke(scope, key)
+          val content = component.uiFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(content) { "No ui factory found for $key" }
-          val options = optionFactories[key::class]?.invoke(scope, key)
+          val options = component.optionFactories[key::class]?.invoke(navigator, scope, key)
           content to NavigationContentStateChild(
             key = key,
             options = options,
             content = { currentUi },
-            decorateKeyUi = decorateUi(scope, key),
-            elements = elementsFactory(scope, key),
+            decorateKeyUi = component.decorateUi(scope, key),
+            elements = component.elementsFactory(scope, key),
             scope = scope
           )
+        }
+
+        key(index) {
+          BackHandler(enabled = handleBack && (index > 0 || popRoot), onBackPress = action {
+            navigator.pop(key)
+          })
         }
 
         ObserveScope(
@@ -171,3 +156,9 @@ private class NavigationContentStateChild(
   }
 }
 
+@Provide @Element<UiScope> data class NavigationStateContentComponent(
+  val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
+  val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
+  val decorateUi: (Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
+  val elementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>
+)

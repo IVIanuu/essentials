@@ -13,7 +13,7 @@ interface RootKey : Key<Unit>
 
 interface PopupKey<T> : Key<T> {
   companion object {
-    @Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> { _, _ ->
+    @Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> { _, _, _ ->
       KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
     }
   }

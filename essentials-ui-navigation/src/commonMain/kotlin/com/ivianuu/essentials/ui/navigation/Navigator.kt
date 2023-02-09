@@ -8,10 +8,10 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.actor
-import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,13 +66,22 @@ suspend fun Navigator.clear() {
   setBackStack(emptyList())
 }
 
-@Provide @Scoped<AppScope> class NavigatorImpl(
+fun Navigator(
+  initialBackStack: List<Key<*>> = emptyList(),
+  keyInterceptors: List<KeyInterceptor<*>> = emptyList(),
+  scope: CoroutineScope
+): Navigator = NavigatorImpl(
+  initialBackStack = initialBackStack,
+  keyInterceptors = keyInterceptors,
+  scope = scope
+)
+
+class NavigatorImpl(
+  initialBackStack: List<Key<*>>,
   private val keyInterceptors: List<KeyInterceptor<*>>,
-  private val logger: Logger,
-  rootKey: RootKey? = null,
-  private val scope: NamedCoroutineScope<AppScope>
+  scope: CoroutineScope
 ) : Navigator {
-  val _backStack = MutableStateFlow(listOfNotNull<Key<*>>(rootKey))
+  private val _backStack = MutableStateFlow(initialBackStack)
   override val backStack: StateFlow<List<Key<*>>> by this::_backStack
 
   private val _results = EventFlow<Pair<Key<*>, Any?>>()
@@ -108,5 +117,17 @@ suspend fun Navigator.clear() {
 
       finalResults.forEach { _results.emit(it.key to it.value) }
     }
+  }
+
+  companion object {
+    @Provide fun appNavigator(
+      rootKey: RootKey?,
+      keyInterceptors: List<KeyInterceptor<*>>,
+      scope: NamedCoroutineScope<AppScope>
+    ): @Scoped<AppScope> Navigator = NavigatorImpl(
+      initialBackStack = listOfNotNull(rootKey),
+      keyInterceptors = keyInterceptors,
+      scope = scope
+    )
   }
 }

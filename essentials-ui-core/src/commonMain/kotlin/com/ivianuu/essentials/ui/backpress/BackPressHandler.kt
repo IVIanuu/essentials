@@ -14,7 +14,11 @@ interface BackPressHandler {
 
   fun back()
 
-  fun registerCallback(onBackPress: () -> Unit): Disposable
+  fun registerCallback(enabled: Boolean = true, callback: () -> Unit): BackPressCallbackHandle
+}
+
+interface BackPressCallbackHandle : Disposable {
+  fun updateEnabled(enabled: Boolean)
 }
 
 val LocalBackPressHandler = staticCompositionLocalOf<BackPressHandler> { error("") }

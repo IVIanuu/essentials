@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.ui.app.AppUi
-import com.ivianuu.essentials.ui.navigation.NavigationStateContent
+import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.NavigatorContent
+import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.injekt.Provide
 
-@Provide fun defaultAppUi(navigationStateContent: NavigationStateContent) = AppUi {
-  navigationStateContent(Modifier)
+@Provide fun defaultAppUi(navigator: Navigator, rootKey: RootKey?) = AppUi {
+  NavigatorContent(navigator = navigator)
 }

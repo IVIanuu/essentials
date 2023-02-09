@@ -5,18 +5,34 @@
 package com.ivianuu.essentials.ui.backpress
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import com.ivianuu.essentials.compose.getValue
+import com.ivianuu.essentials.coroutines.bracket
 
-@Composable fun BackHandler(onBackPress: () -> Unit) {
+@Composable fun BackHandler(
+  enabled: Boolean = true,
+  onBackPress: () -> Unit
+) {
   val currentOnBack by rememberUpdatedState(onBackPress)
+  val currentEnabled by rememberUpdatedState(enabled)
 
   val handler = LocalBackPressHandler.current
-  DisposableEffect(handler) {
-    val disposable = handler.registerCallback {
-      currentOnBack()
-    }
-    onDispose { disposable.dispose() }
+  LaunchedEffect(handler) {
+    bracket(
+      acquire = {
+        handler.registerCallback(enabled) {
+          currentOnBack()
+        }
+      },
+      use = { handle ->
+        snapshotFlow { currentEnabled }
+          .collect { handle.updateEnabled(it) }
+      },
+      release = { handle, _ ->
+        handle.dispose()
+      }
+    )
   }
 }

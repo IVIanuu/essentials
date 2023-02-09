@@ -19,9 +19,10 @@ data class KeyUiOptions(
 }
 
 fun interface KeyUiOptionsFactory<K : Key<*>> {
-  operator fun invoke(scope: Scope<KeyUiScope>, key: K): KeyUiOptions
+  operator fun invoke(navigator: Navigator, scope: Scope<KeyUiScope>, key: K): KeyUiOptions
 }
 
-fun <K : Key<*>> noOpKeyUiOptionFactory() = KeyUiOptionsFactory<K> { _, _ -> defaultKeyUiOptions }
+fun <K : Key<*>> noOpKeyUiOptionFactory() =
+  KeyUiOptionsFactory<K> { _, _, _ -> defaultKeyUiOptions }
 
 private val defaultKeyUiOptions = KeyUiOptions()

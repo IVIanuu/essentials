@@ -20,7 +20,7 @@ fun interface KeyUi<K : Key<*>> {
 
 fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
 
-typealias KeyUiFactory<K> = (Scope<KeyUiScope>, K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUi<K>
 
 object KeyUiModule {
   @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUi(

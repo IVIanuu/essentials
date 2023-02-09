@@ -32,10 +32,14 @@ class AndroidBackPressHandler(
     dispatcher.onBackPressed()
   }
 
-  override fun registerCallback(onBackPress: () -> Unit): Disposable =
-    object : OnBackPressedCallback(true), Disposable {
+  override fun registerCallback(enabled: Boolean, callback: () -> Unit): BackPressCallbackHandle =
+    object : OnBackPressedCallback(enabled), BackPressCallbackHandle, Disposable {
       override fun handleOnBackPressed() {
-        onBackPress()
+        callback()
+      }
+
+      override fun updateEnabled(enabled: Boolean) {
+        isEnabled = enabled
       }
 
       override fun dispose() {
