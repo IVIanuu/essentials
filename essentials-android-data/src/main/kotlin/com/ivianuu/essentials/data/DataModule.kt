@@ -17,6 +17,14 @@ import java.io.File
 
 typealias DataDir = @DataDirTag File
 
+@Tag annotation class CacheDirTag {
+  companion object {
+    @Provide fun cacheDir(dataDir: DataDir): CacheDir = dataDir.resolve("cache")
+  }
+}
+
+typealias CacheDir = @DataDirTag File
+
 @Tag annotation class PrefsDirTag {
   companion object {
     @Provide fun prefsDir(dataDir: DataDir): PrefsDir = dataDir.resolve("prefs")
