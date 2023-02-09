@@ -23,7 +23,7 @@ typealias DataDir = @DataDirTag File
   }
 }
 
-typealias CacheDir = @DataDirTag File
+typealias CacheDir = @CacheDirTag File
 
 @Tag annotation class PrefsDirTag {
   companion object {
