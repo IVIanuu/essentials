@@ -56,8 +56,8 @@ import kotlin.reflect.KClass
             key = key,
             options = options,
             content = { currentUi },
-            decorateKeyUi = component.decorateUi(scope, key),
-            elements = component.elementsFactory(scope, key),
+            decorateKeyUi = component.decorateKeyUi(navigator, scope, key),
+            elements = component.elementsFactory(navigator, scope, key),
             scope = scope
           )
         }
@@ -159,6 +159,6 @@ private class NavigationContentStateChild(
 @Provide @Element<UiScope> data class NavigationStateContentComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
-  val decorateUi: (Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
-  val elementsFactory: (Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>
+  val decorateKeyUi: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
+  val elementsFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>
 )
