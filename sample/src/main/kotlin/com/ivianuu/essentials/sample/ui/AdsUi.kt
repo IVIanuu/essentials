@@ -17,9 +17,9 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@Provide val adsHomeItem = HomeItem("Ads") { AdsKey }
+@Provide val adsHomeItem = HomeItem("Ads") { AdsKey() }
 
-object AdsKey : Key<Unit>
+class AdsKey : Key<Unit>
 
 @Provide fun adsUi(
   adsEnabled: MutableStateFlow<AdsEnabled>,

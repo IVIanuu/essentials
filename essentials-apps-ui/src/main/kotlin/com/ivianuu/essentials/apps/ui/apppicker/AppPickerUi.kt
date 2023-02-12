@@ -33,7 +33,7 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 
-data class AppPickerKey(
+class AppPickerKey(
   val appPredicate: AppPredicate = DefaultAppPredicate,
   val title: String? = null,
 ) : Key<AppInfo>

@@ -37,7 +37,7 @@ import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 
-data class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
+class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
 @Provide fun floatingWindowsPickerUi(
   commonStrings: CommonStrings

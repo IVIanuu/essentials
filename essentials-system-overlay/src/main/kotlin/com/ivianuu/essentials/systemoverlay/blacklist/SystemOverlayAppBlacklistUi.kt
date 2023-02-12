@@ -19,7 +19,7 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-object SystemOverlayAppBlacklistKey : Key<Unit>
+class SystemOverlayAppBlacklistKey : Key<Unit>
 
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,

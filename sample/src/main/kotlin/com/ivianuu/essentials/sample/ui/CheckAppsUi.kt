@@ -28,9 +28,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-@Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey }
+@Provide val checkAppsHomeItem = HomeItem("Check apps") { CheckAppsKey() }
 
-object CheckAppsKey : Key<Unit>
+class CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,

@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
 
-object LicenseKey : Key<Unit>
+class LicenseKey : Key<Unit>
 
 @Provide val licenseUi = ModelKeyUi<LicenseKey, LicenseModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {

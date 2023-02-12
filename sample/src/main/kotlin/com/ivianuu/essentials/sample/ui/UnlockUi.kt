@@ -31,9 +31,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Provide val unlockHomeItem = HomeItem("Unlock") { UnlockKey }
+@Provide val unlockHomeItem = HomeItem("Unlock") { UnlockKey() }
 
-object UnlockKey : Key<Unit>
+class UnlockKey : Key<Unit>
 
 @Provide fun unlockUi(
   resources: Resources,

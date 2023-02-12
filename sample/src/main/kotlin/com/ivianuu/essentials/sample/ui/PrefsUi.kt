@@ -42,9 +42,9 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
-@Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey }
+@Provide val prefsHomeItem = HomeItem("Prefs") { PrefsKey() }
 
-object PrefsKey : Key<Unit>
+class PrefsKey : Key<Unit>
 
 @Provide fun prefsUi(
   ctx: KeyUiContext<PrefsKey>,

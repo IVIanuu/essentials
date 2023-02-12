@@ -25,7 +25,7 @@ import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
-object NavBarUnsupportedKey : Key<Unit>
+class NavBarUnsupportedKey : Key<Unit>
 
 @Provide val navBarUnsupportedUi = ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
   Scaffold(

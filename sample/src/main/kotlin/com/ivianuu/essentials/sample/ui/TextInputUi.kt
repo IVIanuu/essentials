@@ -32,9 +32,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 
-@Provide val textInputHomeItem = HomeItem("Text input") { TextInputKey }
+@Provide val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 
-object TextInputKey : Key<Unit>
+class TextInputKey : Key<Unit>
 
 @Provide val textInputUi = SimpleKeyUi<TextInputKey> {
   val state = remember { TextInputState() }

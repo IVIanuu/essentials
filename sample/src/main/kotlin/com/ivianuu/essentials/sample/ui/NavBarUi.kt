@@ -37,9 +37,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey }
+@Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
-object NavBarKey : Key<Unit>
+class NavBarKey : Key<Unit>
 
 @Provide fun navBarUi(
   ctx: KeyUiContext<NavBarKey>,
@@ -120,7 +120,7 @@ object NavBarKey : Key<Unit>
       Button(
         onClick = {
           ctx.launch {
-            navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey)
+            navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
           }
         }
       ) { Text("Settings") }

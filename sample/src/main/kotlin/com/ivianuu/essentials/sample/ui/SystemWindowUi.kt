@@ -26,9 +26,9 @@ import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-@Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowKey }
+@Provide val systemWindowHomeItem = HomeItem("System Window") { SystemWindowKey() }
 
-object SystemWindowKey : Key<Unit>
+class SystemWindowKey : Key<Unit>
 
 @Provide fun systemWindowUi(
   ctx: KeyUiContext<SystemWindowKey>,

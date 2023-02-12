@@ -36,7 +36,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
-object ShortcutPickerKey : Key<Shortcut>
+class ShortcutPickerKey : Key<Shortcut>
 
 @Provide val shortcutPickerUi = ModelKeyUi<ShortcutPickerKey, ShortcutPickerModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {

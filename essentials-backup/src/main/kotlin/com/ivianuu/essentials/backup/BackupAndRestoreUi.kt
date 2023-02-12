@@ -20,7 +20,7 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 
-object BackupAndRestoreKey : Key<Unit>
+class BackupAndRestoreKey : Key<Unit>
 
 @Provide val backupAndRestoreUi = ModelKeyUi<BackupAndRestoreKey, BackupAndRestoreModel> {
   SimpleListScreen(R.string.es_backup_and_restore_title) {

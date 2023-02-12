@@ -34,9 +34,9 @@ import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
-object ChildNavigationKey : Key<Unit>
+class ChildNavigationKey : Key<Unit>
 
-@Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationKey }
+@Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationKey() }
 
 @Provide fun childNavigationUi() = SimpleKeyUi<ChildNavigationKey> {
   Scaffold(

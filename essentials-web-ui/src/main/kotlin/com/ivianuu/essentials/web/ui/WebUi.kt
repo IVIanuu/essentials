@@ -36,7 +36,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
 
-data class WebKey(val title: String, val url: String) : Key<Unit>
+class WebKey(val title: String, val url: String) : Key<Unit>
 
 @Provide fun webUi(ctx: KeyUiContext<WebKey>) = SimpleKeyUi<WebKey> {
   var webViewRef: WebView? by remember { refOf(null) }

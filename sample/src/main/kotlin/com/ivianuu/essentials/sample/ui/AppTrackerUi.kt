@@ -37,9 +37,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-@Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey }
+@Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
-object AppTrackerKey : Key<Unit>
+class AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
   ctx: KeyUiContext<AppTrackerKey>,

@@ -22,9 +22,9 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.launch
 
-@Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey }
+@Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey() }
 
-object ActionsKey : Key<Unit>
+class ActionsKey : Key<Unit>
 
 @Provide fun actionsUi(
   ctx: KeyUiContext<ActionsKey>,

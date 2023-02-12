@@ -23,9 +23,9 @@ import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
-@Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey }
+@Provide val dynamicSystemBarsHomeItem = HomeItem("Dynamic system bars") { DynamicSystemBarsKey() }
 
-object DynamicSystemBarsKey : Key<Unit>
+class DynamicSystemBarsKey : Key<Unit>
 
 @Provide val dynamicSystemBarsUi = SimpleKeyUi<DynamicSystemBarsKey> {
   Box {

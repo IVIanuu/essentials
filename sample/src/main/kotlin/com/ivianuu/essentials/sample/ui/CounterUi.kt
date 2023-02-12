@@ -26,9 +26,9 @@ import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
 
-@Provide val counterHomeItem = HomeItem("Counter") { CounterKey }
+@Provide val counterHomeItem = HomeItem("Counter") { CounterKey() }
 
-object CounterKey : Key<Unit>
+class CounterKey : Key<Unit>
 
 @Provide val counterUi = ModelKeyUi<CounterKey, CounterModel> {
   Scaffold(

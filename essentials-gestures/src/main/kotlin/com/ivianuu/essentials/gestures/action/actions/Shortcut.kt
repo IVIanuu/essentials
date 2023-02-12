@@ -80,7 +80,7 @@ import java.io.ByteArrayOutputStream
     get() = { Icon(R.drawable.es_ic_content_cut) }
 
   override suspend fun pickAction(): ActionPickerKey.Result? {
-    val shortcut = navigator.push(ShortcutPickerKey) ?: return null
+    val shortcut = navigator.push(ShortcutPickerKey()) ?: return null
     val name = shortcut.name
     val icon = shortcut.icon.toBitmap()
     val stream = ByteArrayOutputStream()

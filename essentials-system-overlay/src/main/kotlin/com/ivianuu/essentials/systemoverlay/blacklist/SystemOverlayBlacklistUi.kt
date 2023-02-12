@@ -21,7 +21,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 
-data class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
+class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
 @Provide
 val systemOverlayBlacklistUi = ModelKeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> {
@@ -101,7 +101,7 @@ data class SystemOverlayBlacklistModel(
       pref.updateData { copy(disableOnSecureScreens = value) }
     },
     openAppBlacklistSettings = action {
-      ctx.navigator.push(SystemOverlayAppBlacklistKey)
+      ctx.navigator.push(SystemOverlayAppBlacklistKey())
     }
   )
 }

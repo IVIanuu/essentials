@@ -39,7 +39,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 
-object HelpKey : Key<Unit>
+class HelpKey : Key<Unit>
 
 data class HelpCategory(val title: String? = null, val items: List<HelpItem>)
 

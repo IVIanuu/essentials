@@ -62,9 +62,9 @@ import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
-@Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey }
+@Provide val notificationsHomeItem = HomeItem("Notifications") { NotificationsKey() }
 
-object NotificationsKey : Key<Unit>
+class NotificationsKey : Key<Unit>
 
 @Provide val notificationsUi = ModelKeyUi<NotificationsKey, NotificationsModel> {
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {

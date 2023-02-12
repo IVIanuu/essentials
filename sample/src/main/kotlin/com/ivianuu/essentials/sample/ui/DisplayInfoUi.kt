@@ -20,9 +20,9 @@ import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 
-@Provide val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey }
+@Provide val displayRotationHomeItem = HomeItem("Display rotation") { DisplayRotationKey() }
 
-object DisplayRotationKey : Key<Unit>
+class DisplayRotationKey : Key<Unit>
 
 @Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) = SimpleKeyUi<DisplayRotationKey> {
   Box(

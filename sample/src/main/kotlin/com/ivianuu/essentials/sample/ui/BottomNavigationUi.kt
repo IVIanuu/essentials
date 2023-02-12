@@ -32,9 +32,9 @@ import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
 
-@Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey }
+@Provide val bottomNavigationHomeItem = HomeItem("Bottom navigation") { BottomNavigationKey() }
 
-object BottomNavigationKey : Key<Unit>
+class BottomNavigationKey : Key<Unit>
 
 @Provide val bottomNavigationUi = SimpleKeyUi<BottomNavigationKey> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }

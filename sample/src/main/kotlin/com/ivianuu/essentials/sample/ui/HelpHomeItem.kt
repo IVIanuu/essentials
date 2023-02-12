@@ -11,7 +11,7 @@ import com.ivianuu.essentials.help.HelpKey
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.injekt.Provide
 
-@Provide val helpHomeItem = HomeItem("Help") { HelpKey }
+@Provide val helpHomeItem = HomeItem("Help") { HelpKey() }
 
 @Provide val helpCategories
   get() = listOf(

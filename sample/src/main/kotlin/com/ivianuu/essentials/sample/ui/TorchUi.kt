@@ -23,9 +23,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 
-@Provide val torchHomeItem = HomeItem("Torch") { TorchKey }
+@Provide val torchHomeItem = HomeItem("Torch") { TorchKey() }
 
-object TorchKey : Key<Unit>
+class TorchKey : Key<Unit>
 
 @Provide fun torchUi(torchManager: TorchManager) = SimpleKeyUi<TorchKey> {
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {

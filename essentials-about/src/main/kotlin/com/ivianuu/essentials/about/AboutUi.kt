@@ -28,7 +28,7 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.web.ui.WebKey
 import com.ivianuu.injekt.Provide
 
-object AboutKey : Key<Unit>
+class AboutKey : Key<Unit>
 
 @Provide val aboutUi = ModelKeyUi<AboutKey, AboutModel> {
   SimpleListScreen(R.string.es_about_title) {
@@ -157,7 +157,7 @@ data class AboutModel(
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,
     donate = action { ctx.navigator.push(DonationKey) },
-    openLicenses = action { ctx.navigator.push(LicenseKey) },
+    openLicenses = action { ctx.navigator.push(LicenseKey()) },
     rate = action { rateUseCases.rateOnPlay() },
     openMoreApps = action {
       ctx.navigator.push(UrlKey("https://play.google.com/store/apps/developer?id=Manuel+Wrage"))

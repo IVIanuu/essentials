@@ -25,9 +25,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 
-@Provide val tabsHomeItem = HomeItem("Tabs") { TabsKey }
+@Provide val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
 
-object TabsKey : Key<Unit>
+class TabsKey : Key<Unit>
 
 @OptIn(ExperimentalPagerApi::class)
 @Provide val tabsUi = SimpleKeyUi<TabsKey> {

@@ -38,7 +38,7 @@ import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-data class ActionPickerKey(
+class ActionPickerKey(
   val showDefaultOption: Boolean = false,
   val showNoneOption: Boolean = false,
 ) : Key<ActionPickerKey.Result> {

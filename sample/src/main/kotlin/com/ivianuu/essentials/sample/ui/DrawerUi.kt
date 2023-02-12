@@ -16,9 +16,9 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 
-@Provide val drawerHomeItem = HomeItem("Drawer") { DrawerKey }
+@Provide val drawerHomeItem = HomeItem("Drawer") { DrawerKey() }
 
-object DrawerKey : Key<Unit>
+class DrawerKey : Key<Unit>
 
 @Provide val drawerUi = SimpleKeyUi<DrawerKey> {
   Scaffold(

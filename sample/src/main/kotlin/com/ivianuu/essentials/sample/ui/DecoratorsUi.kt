@@ -29,9 +29,9 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
-@Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey }
+@Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey() }
 
-object DecoratorsKey : Key<Unit>
+class DecoratorsKey : Key<Unit>
 
 @Provide val decoratorsUi = SimpleKeyUi<DecoratorsKey> {
   SimpleListScreen("Decorators") {

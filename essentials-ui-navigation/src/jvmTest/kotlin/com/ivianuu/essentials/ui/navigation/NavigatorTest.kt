@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import org.junit.Test
 
 class NavigatorTest {
-  object KeyA : Key<Unit>
-  object KeyB : Key<Unit>
-  object KeyC : Key<Unit>
+  class KeyA : Key<Unit>
+  class KeyB : Key<Unit>
+  class KeyC : Key<Unit>
 
   @Provide val logger = NoopLogger
 

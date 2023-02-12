@@ -47,9 +47,9 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-@Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey }
+@Provide val dialogsHomeItem = HomeItem("Dialogs") { DialogsKey() }
 
-object DialogsKey : Key<Unit>
+class DialogsKey : Key<Unit>
 
 @Provide fun dialogsUi(ctx: KeyUiContext<DialogsKey>) = SimpleKeyUi<DialogsKey> {
   Scaffold(

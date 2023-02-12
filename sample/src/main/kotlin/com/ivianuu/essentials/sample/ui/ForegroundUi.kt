@@ -32,9 +32,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 
-@Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey }
+@Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
-object ForegroundKey : Key<Unit>
+class ForegroundKey : Key<Unit>
 
 @SuppressLint("NewApi")
 @Provide fun foregroundUi(

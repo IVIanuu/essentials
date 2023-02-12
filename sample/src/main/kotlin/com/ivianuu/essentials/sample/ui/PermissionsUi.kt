@@ -30,9 +30,9 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.launch
 
-@Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey }
+@Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 
-object PermissionsKey : Key<Unit>
+class PermissionsKey : Key<Unit>
 
 @Provide fun permissionUi(
   ctx: KeyUiContext<PermissionsKey>,

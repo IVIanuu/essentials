@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 
-object NavBarKey : Key<Unit>
+class NavBarKey : Key<Unit>
 
 @Provide val navBarUi = ModelKeyUi<NavBarKey, NavBarModel> {
   SimpleListScreen(R.string.es_nav_bar_title) {
