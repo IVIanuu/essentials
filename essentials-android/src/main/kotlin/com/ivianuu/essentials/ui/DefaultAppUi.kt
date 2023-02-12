@@ -10,6 +10,6 @@ import com.ivianuu.essentials.ui.navigation.NavigatorContent
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.injekt.Provide
 
-@Provide fun defaultAppUi(navigator: Navigator, rootKey: RootKey?) = AppUi {
+@Provide fun defaultAppUi(navigator: Navigator) = AppUi {
   NavigatorContent(navigator = navigator)
 }

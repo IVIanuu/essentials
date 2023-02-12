@@ -7,6 +7,7 @@
 package com.ivianuu.essentials
 
 import android.content.Context
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.unit.dp
@@ -16,7 +17,7 @@ import com.ivianuu.essentials.ui.image.toImageBitmap
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-interface Resources {
+@Stable interface Resources {
   operator fun <T> invoke(id: Int, @Inject loader: ResourceLoader<T>): T
 
   operator fun <T> invoke(id: Int, vararg args: Any?, @Inject loader: ResourceLoaderWithArgs<T>): T

@@ -117,11 +117,8 @@ private class AnimatedStackWithItemsState<T>(
   val scope = rememberCoroutineScope()
   val defaultTransition = LocalStackTransition.current
   val state = remember { AnimatedStackState(scope, children, defaultTransition) }
-
-  SideEffect {
-    state.defaultTransition = defaultTransition
-    state.updateChildren(children)
-  }
+  state.defaultTransition = defaultTransition
+  state.updateChildren(children)
 
   Box(
     modifier = modifier,

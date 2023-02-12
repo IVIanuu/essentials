@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.runtime.Stable
 import com.ivianuu.injekt.Provide
 
-interface CommonStrings {
+@Stable interface CommonStrings {
   val cancel: String
   val close: String
   val ok: String

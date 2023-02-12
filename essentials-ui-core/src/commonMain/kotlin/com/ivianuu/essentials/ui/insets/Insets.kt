@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
@@ -60,7 +61,7 @@ import com.ivianuu.injekt.Provide
   }
 }
 
-data class Insets(
+@Immutable data class Insets(
   val left: Dp = 0.dp,
   val top: Dp = 0.dp,
   val right: Dp = 0.dp,

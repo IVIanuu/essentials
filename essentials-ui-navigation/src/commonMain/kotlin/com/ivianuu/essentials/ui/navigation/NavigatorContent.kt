@@ -7,6 +7,7 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.key
@@ -93,7 +94,7 @@ import kotlin.reflect.KClass
   body()
 }
 
-private class NavigationContentStateChild(
+@Stable private class NavigationContentStateChild(
   key: Key<*>,
   options: KeyUiOptions? = null,
   private val content: () -> @Composable () -> Unit,

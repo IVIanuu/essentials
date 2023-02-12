@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.ui.common
 
+import androidx.compose.runtime.Stable
 import com.ivianuu.injekt.Provide
 
-fun interface UiRenderer<T> {
+@Stable fun interface UiRenderer<T> {
   operator fun invoke(x: T): String
 
   companion object {

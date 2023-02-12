@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
@@ -30,7 +31,7 @@ fun interface ListDecorator : Service<ListDecorator> {
   operator fun ListDecoratorScope.invoke()
 }
 
-interface ListDecoratorScope : LazyListScope {
+@Stable interface ListDecoratorScope : LazyListScope {
   val isVertical: Boolean
 
   fun content()

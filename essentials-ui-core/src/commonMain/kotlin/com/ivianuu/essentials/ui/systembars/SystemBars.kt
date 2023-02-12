@@ -11,6 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -69,7 +70,7 @@ fun interface RootSystemBarsStyle : UiDecorator
   }
 }
 
-interface SystemBarManager {
+@Stable interface SystemBarManager {
   fun registerStyle(style: SystemBarStyle)
 
   fun unregisterStyle(style: SystemBarStyle)

@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlin.collections.set
 
-interface Navigator {
+@Stable interface Navigator {
   val backStack: StateFlow<List<Key<*>>>
 
   val results: Flow<Pair<Key<*>, Any?>>
