@@ -11,13 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -121,6 +124,7 @@ val PopupStackTransition: StackTransition = transition@ {
   }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable private fun PopupLayout(
   position: Rect,
   modifier: Modifier,
@@ -175,7 +179,11 @@ val PopupStackTransition: StackTransition = transition@ {
     )
 
     layout(constraints.maxWidth, constraints.maxHeight) {
-      placeable.place(x = x, y = y)
+      val positionInRoot = coordinates?.positionInRoot() ?: Offset.Zero
+      placeable.place(
+        x = x - positionInRoot.x.toInt(),
+        y = y - positionInRoot.y.toInt()
+      )
     }
   }
 }
