@@ -82,7 +82,7 @@ inline fun <S> Model(
 }
 
 @Provide data class KeyUiContext<K : Key<*>>(
-  @Provide val key: K,
-  @Provide val navigator: Navigator,
+  val key: K,
+  val navigator: Navigator,
   private val coroutineScope: NamedCoroutineScope<KeyUiScope>
 ) : CoroutineScope by coroutineScope
