@@ -1,4 +1,4 @@
-package com.ivianuu.spotifyplayer
+package com.ivianuu.essentials.ui.popup
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
