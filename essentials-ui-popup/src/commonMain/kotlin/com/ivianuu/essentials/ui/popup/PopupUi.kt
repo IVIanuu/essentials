@@ -1,8 +1,4 @@
-/*
- * Copyright 2022 Manuel Wrage. Use of this source code is governed by the Apache 2.0 license.
- */
-
-package com.ivianuu.essentials.ui.popup
+package com.ivianuu.spotifyplayer
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -10,8 +6,8 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
@@ -20,6 +16,7 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -43,14 +40,9 @@ import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.popup.PopupKey
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
-
-data class PopupKey(
-  val position: Rect,
-  val onCancel: (() -> Unit)?,
-  val content: @Composable () -> Unit,
-) : com.ivianuu.essentials.ui.navigation.PopupKey<Unit>
 
 @Provide fun popupUi(key: PopupKey, navigator: Navigator) = SimpleKeyUi<PopupKey> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
@@ -124,14 +116,18 @@ val PopupStackTransition: StackTransition = transition@ {
   }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable private fun PopupLayout(
   position: Rect,
   modifier: Modifier,
   content: @Composable () -> Unit,
 ) {
   val insets = LocalInsets.current
-  Layout(content = content, modifier = modifier) { measureables, constraints ->
+  var globalLayoutPosition by remember { mutableStateOf(Offset.Zero) }
+  Layout(
+    content = content,
+    modifier = modifier
+      .onGloballyPositioned { globalLayoutPosition = it.positionInRoot() }
+  ) { measureables, constraints ->
     fun Dp.insetOrMinPadding() = max(this, 16.dp).roundToPx()
 
     val childConstraints = constraints.copy(
@@ -147,7 +143,7 @@ val PopupStackTransition: StackTransition = transition@ {
 
     val placeable = measureables.single().measure(childConstraints)
 
-    var y = position.top.toInt()
+    var y = position.top.toInt() - globalLayoutPosition.y.toInt()
     var x: Int
 
     // Find the ideal horizontal position.
@@ -179,11 +175,7 @@ val PopupStackTransition: StackTransition = transition@ {
     )
 
     layout(constraints.maxWidth, constraints.maxHeight) {
-      val positionInRoot = coordinates?.positionInRoot() ?: Offset.Zero
-      placeable.place(
-        x = x - positionInRoot.x.toInt(),
-        y = y - positionInRoot.y.toInt()
-      )
+      placeable.place(x = x, y = y)
     }
   }
 }
