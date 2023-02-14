@@ -32,7 +32,7 @@ data class SingleChoiceListKey<T : Any>(
       items = ctx.key.items,
       selectedItem = ctx.key.selectedItem,
       onSelectionChanged = action { item -> ctx.navigator.pop(ctx.key, item) },
-      item = { ctx.key.renderable(it) },
+      item = { Text(ctx.key.renderable(it)) },
       title = ctx.key.title?.let { { Text(it) } },
       buttons = {
         TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {

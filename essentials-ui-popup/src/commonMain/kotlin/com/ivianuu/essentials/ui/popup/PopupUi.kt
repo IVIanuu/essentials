@@ -40,9 +40,14 @@ import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
-import com.ivianuu.essentials.ui.popup.PopupKey
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
+
+data class PopupKey(
+  val position: Rect,
+  val onCancel: (() -> Unit)?,
+  val content: @Composable () -> Unit,
+) : com.ivianuu.essentials.ui.navigation.PopupKey<Unit>
 
 @Provide fun popupUi(key: PopupKey, navigator: Navigator) = SimpleKeyUi<PopupKey> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
