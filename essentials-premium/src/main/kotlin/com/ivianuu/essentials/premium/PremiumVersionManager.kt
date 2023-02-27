@@ -15,7 +15,6 @@ import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -123,12 +122,12 @@ typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
 
-@Provide fun premiumAdsEnabledProvider(
+@Provide fun premiumAdsEnabled(
   premiumVersionManager: PremiumVersionManager,
   scope: NamedCoroutineScope<AppScope>
 ) = premiumVersionManager.isPremiumVersion
   .map { AdsEnabled(!it) }
-  .stateIn(scope, SharingStarted.Eagerly, false)
+  .stateIn(scope, SharingStarted.Eagerly, AdsEnabled(false))
 
 @Serializable data class PremiumPrefs(val wasPremiumVersion: Boolean = false) {
   companion object {
