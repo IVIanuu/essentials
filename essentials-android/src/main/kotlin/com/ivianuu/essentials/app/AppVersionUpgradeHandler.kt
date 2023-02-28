@@ -10,7 +10,7 @@ import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
@@ -33,7 +33,7 @@ fun interface AppVersionUpgradeHandler {
 
   if (buildInfo.versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  logger { "upgrade from app version ${prefs.lastAppVersion} to $buildInfo.versionCode" }
+  logger.log { "upgrade from app version ${prefs.lastAppVersion} to $buildInfo.versionCode" }
 
   handlers().parForEach { it(prefs.lastAppVersion, buildInfo.versionCode) }
 

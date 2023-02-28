@@ -9,7 +9,7 @@ import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 
@@ -24,7 +24,7 @@ interface UserflowBuilder : suspend () -> List<Key<*>>, Service<UserflowBuilder>
     .sortedWithLoadingOrder()
     .flatMap { it.instance() }
 
-  logger { "Userflow -> $userflowKeys" }
+  logger.log { "Userflow -> $userflowKeys" }
 
   if (userflowKeys.isEmpty()) return@ScopeWorker
 

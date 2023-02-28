@@ -14,12 +14,11 @@ import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -78,7 +77,7 @@ fun switchToApp(
       .onEach { topApp ->
         val wasOnHomeScreen = isOnHomeScreen
         if (topApp in getHomePackages(defaultOnly = true)) {
-          logger { "moved to home screen" }
+          logger.log { "moved to home screen" }
           isOnHomeScreen = true
           return@onEach
         } else isOnHomeScreen = false
@@ -86,16 +85,16 @@ fun switchToApp(
         if (topApp !in recentApps) {
           recentApps += topApp
           currentIndex = recentApps.lastIndex
-          logger { "launched new app $topApp $recentApps $currentIndex" }
+          logger.log { "launched new app $topApp $recentApps $currentIndex" }
         } else if (wasOnHomeScreen) {
           val indexOfTopApp = recentApps.indexOf(topApp)
           recentApps.removeAt(indexOfTopApp)
           recentApps.add(topApp)
           currentIndex = recentApps.lastIndex
-          logger { "relaunched app from home screen $topApp $recentApps $currentIndex" }
+          logger.log { "relaunched app from home screen $topApp $recentApps $currentIndex" }
         } else {
           currentIndex = recentApps.indexOf(topApp)
-          logger { "relaunched app from history $topApp $recentApps $currentIndex" }
+          logger.log { "relaunched app from history $topApp $recentApps $currentIndex" }
         }
       }
       .launchIn(scope)

@@ -10,7 +10,7 @@ import android.view.Surface
 import android.view.WindowManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -62,7 +62,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
           awaitClose { listener.disable() }
         }
       } else {
-        logger { "do not observe rotation while screen is off" }
+        logger.log { "do not observe rotation while screen is off" }
         emptyFlow()
       }
     }

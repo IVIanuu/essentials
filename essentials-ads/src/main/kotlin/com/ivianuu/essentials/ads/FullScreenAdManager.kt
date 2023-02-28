@@ -17,7 +17,7 @@ import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
@@ -119,7 +119,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
     } ?: scope.async(mainContext) {
-      logger { "start loading ad" }
+      logger.log { "start loading ad" }
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->
         InterstitialAd.load(
@@ -138,18 +138,18 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
         )
       }
 
-      logger { "ad loaded" }
+      logger.log { "ad loaded" }
 
       val result: suspend () -> Boolean = {
         if (rateLimiter.tryAcquire()) {
-          logger { "show ad" }
+          logger.log { "show ad" }
           lock.withLock { deferredAd = null }
           withContext(mainContext) {
             ad.show(foregroundActivity.first()!!)
           }
           true
         } else {
-          logger { "do not show ad due to rate limit" }
+          logger.log { "do not show ad due to rate limit" }
           false
         }
       }

@@ -10,7 +10,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.actions.CloseSystemDialogsUseCase
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.unlock.ScreenActivator
@@ -37,25 +37,25 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 ) = ExecuteActionUseCase { id ->
   withContext(coroutineContext) {
     catch {
-      logger { "execute $id" }
+      logger.log { "execute $id" }
       val action = repository.getAction(id)
 
       // check permissions
       if (!permissionManager.permissionState(action.permissions).first()) {
-        logger { "didn't had permissions for $id ${action.permissions}" }
+        logger.log { "didn't had permissions for $id ${action.permissions}" }
         screenUnlocker()
         permissionManager.requestPermissions(action.permissions)
         return@catch false
       }
 
       if (action.turnScreenOn && !screenActivator()) {
-        logger { "couldn't turn screen on for $id" }
+        logger.log { "couldn't turn screen on for $id" }
         return@catch false
       }
 
       // unlock screen
       if (action.unlockScreen && !screenUnlocker()) {
-        logger { "couldn't unlock screen for $id" }
+        logger.log { "couldn't unlock screen for $id" }
         return@catch false
       }
 
@@ -63,7 +63,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
       if (action.closeSystemDialogs)
         closeSystemDialogs()
 
-      logger { "fire $id" }
+      logger.log { "fire $id" }
 
       // fire
       repository.getActionExecutor(id)()

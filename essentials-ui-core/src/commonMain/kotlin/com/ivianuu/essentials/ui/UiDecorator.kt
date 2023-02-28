@@ -11,7 +11,7 @@ import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 
@@ -33,14 +33,14 @@ fun interface DecorateUi {
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            logger { "Decorate ui ${element.key.value}" }
+            logger.log { "Decorate ui ${element.key.value}" }
             element.instance(content)
           }
         }
       }
   }
 
-  logger { "decorate with combined $combinedDecorator" }
+  logger.log { "decorate with combined $combinedDecorator" }
 
   combinedDecorator(content)
 }

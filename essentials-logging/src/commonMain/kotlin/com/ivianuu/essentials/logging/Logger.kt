@@ -12,26 +12,20 @@ import com.ivianuu.injekt.common.SourceKey
 interface Logger {
   val isLoggingEnabled: LoggingEnabled
 
-  operator fun invoke(priority: Priority = DEBUG, tag: String, message: String)
+  fun logMessage(priority: Priority = DEBUG, tag: String, message: String)
 
   enum class Priority {
     VERBOSE, DEBUG, INFO, WARN, ERROR, WTF
   }
 }
 
-@JvmName("logWithTag") inline operator fun Logger.invoke(
-  tag: String,
-  priority: Logger.Priority = DEBUG,
-  message: () -> String
-) = this(priority, LoggingTag(tag), message)
-
-inline operator fun Logger.invoke(
+inline fun Logger.log(
   priority: Logger.Priority = DEBUG,
   @Inject tag: LoggingTag,
   message: () -> String
 ) {
   if (isLoggingEnabled.value)
-    this(priority, tag.value, message())
+    logMessage(priority, tag.value, message())
 }
 
 expect fun Throwable.asLog(): String
@@ -40,12 +34,12 @@ object NoopLogger : Logger {
   override val isLoggingEnabled: LoggingEnabled
     get() = LoggingEnabled(false)
 
-  override fun invoke(priority: Logger.Priority, tag: String, message: String) {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
   }
 }
 
 @Provide class PrintingLogger(override val isLoggingEnabled: LoggingEnabled) : Logger {
-  override fun invoke(priority: Logger.Priority, tag: String, message: String) {
+  override fun logMessage(priority: Logger.Priority, tag: String, message: String) {
     println("[${priority.name}] $tag $message")
   }
 }

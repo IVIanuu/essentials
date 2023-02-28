@@ -14,7 +14,7 @@ import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.screenstate.DisplayRotation
@@ -60,7 +60,7 @@ import kotlinx.coroutines.flow.onEach
     }
     .distinctUntilChanged()
     .flatMapLatest { currentPrefs ->
-      logger { "current prefs $currentPrefs" }
+      logger.log { "current prefs $currentPrefs" }
       if (currentPrefs.hideNavBar) {
         displayRotation
           .map { NavBarState.Hidden(currentPrefs.navBarRotationMode, it) }
@@ -86,7 +86,7 @@ private suspend fun NavBarState.apply(
   logger: Logger,
   setOverscan: OverscanUpdater
 ) {
-  logger { "apply nav bar state $this" }
+  logger.log { "apply nav bar state $this" }
   catch {
     catch {
       // ensure that we can access non sdk interfaces
@@ -102,7 +102,7 @@ private suspend fun NavBarState.apply(
     }
     setOverscan(rect)
   }.onFailure {
-    logger(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
+    logger.log(Logger.Priority.ERROR) { "Failed to apply nav bar state ${it.asLog()}" }
   }
 }
 

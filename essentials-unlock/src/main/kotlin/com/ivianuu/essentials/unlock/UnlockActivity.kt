@@ -17,7 +17,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
@@ -54,7 +54,7 @@ class UnlockActivity : ComponentActivity() {
       .appElements
       .element<UnlockComponent>()
 
-    component.logger {
+    component.logger.log {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -65,7 +65,7 @@ class UnlockActivity : ComponentActivity() {
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      component.logger { "finish with result $success" }
+      component.logger.log { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -93,19 +93,19 @@ class UnlockActivity : ComponentActivity() {
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                component.logger { "dismiss succeeded" }
+                component.logger.log { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                component.logger { "dismiss error" }
+                component.logger.log { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                component.logger { "dismiss cancelled" }
+                component.logger.log { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }

@@ -18,7 +18,7 @@ import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.asLog
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.essentials.util.NotificationFactory
@@ -69,7 +69,7 @@ interface TorchManager {
   }
 
   private suspend fun doSetTorchState(value: Boolean) {
-    logger { "handle torch state $value" }
+    logger.log { "handle torch state $value" }
     if (!value) {
       _torchEnabled.value = false
       return
@@ -86,18 +86,18 @@ interface TorchManager {
   private suspend fun enableTorch() {
     catch {
       val cameraId = cameraManager.cameraIdList[0]
-      logger { "enable torch" }
+      logger.log { "enable torch" }
       cameraManager.setTorchMode(cameraId, true)
       _torchEnabled.value = true
 
       // todo remove dummy block param once fixed
       onCancel(block = { awaitCancellation() }) {
-        logger { "disable torch on cancel" }
+        logger.log { "disable torch on cancel" }
         catch { cameraManager.setTorchMode(cameraId, false) }
         _torchEnabled.value = false
       }
     }.onFailure {
-      logger(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
+      logger.log(priority = Logger.Priority.ERROR) { "Failed to enable torch ${it.asLog()}" }
       toaster(R.string.es_failed_to_enable_torch)
       setTorchState(false)
     }

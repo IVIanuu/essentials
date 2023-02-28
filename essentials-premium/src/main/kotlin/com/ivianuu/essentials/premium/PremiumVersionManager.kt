@@ -15,6 +15,7 @@ import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -78,7 +79,7 @@ interface PremiumVersionManager {
     .onEach { isPremiumVersion ->
       scope.launch {
         if (!isPremiumVersion && pref.data.first().wasPremiumVersion) {
-          logger { "handle premium version downgrade" }
+          logger.log { "handle premium version downgrade" }
           downgradeHandlers().parForEach { it() }
         }
         pref.updateData {

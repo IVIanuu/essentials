@@ -10,7 +10,7 @@ import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
 import com.ivianuu.essentials.app.sortedWithLoadingOrder
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
 fun interface KeyUiDecorator : Service<KeyUiDecorator> {
@@ -31,7 +31,7 @@ fun interface DecorateKeyUi {
       .fold({ it() }) { acc, element ->
         { content ->
           acc {
-            logger { "Decorate key ui ${element.key.value}" }
+            logger.log { "Decorate key ui ${element.key.value}" }
             element.instance(content)
           }
         }

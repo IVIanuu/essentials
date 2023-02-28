@@ -13,7 +13,7 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -48,7 +48,7 @@ abstract class AbstractFunTileService<T : Any>(
 
   override fun onStartListening() {
     super.onStartListening()
-    component.logger { "$serviceClass on start listening" }
+    component.logger.log { "$serviceClass on start listening" }
     val tileModelComponent = component.tileModelComponent(Scope(), TileId(serviceClass))
       .also { this.tileComponent = it }
     tileModelComponent.tileModel
@@ -58,14 +58,14 @@ abstract class AbstractFunTileService<T : Any>(
 
   override fun onClick() {
     super.onClick()
-    component.logger { "$serviceClass on click" }
+    component.logger.log { "$serviceClass on click" }
     tileComponent?.currentModel?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
     tileComponent?.scope?.dispose()
     tileComponent = null
-    component.logger { "$serviceClass on stop listening" }
+    component.logger.log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 

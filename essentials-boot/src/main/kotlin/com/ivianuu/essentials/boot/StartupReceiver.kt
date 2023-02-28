@@ -11,7 +11,7 @@ import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
@@ -23,7 +23,7 @@ class StartupReceiver : BroadcastReceiver() {
       .appElements
       .element<StartupReceiverComponent>()
 
-    component.logger { "on system boot" }
+    component.logger.log { "on system boot" }
     component.bootListeners.forEach { it() }
   }
 }

@@ -7,13 +7,13 @@ package com.ivianuu.essentials.unlock
 import android.app.KeyguardManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.util.*
 import kotlin.collections.set
 
 fun interface ScreenUnlocker : suspend () -> Boolean
@@ -25,9 +25,9 @@ fun interface ScreenUnlocker : suspend () -> Boolean
   logger: Logger
 ) = ScreenUnlocker {
   withContext(coroutineContext) {
-    logger { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
+    logger.log { "on request is locked ? ${keyguardManager.isKeyguardLocked}" }
     if (!keyguardManager.isKeyguardLocked) {
-      logger { "already unlocked" }
+      logger.log { "already unlocked" }
       return@withContext true
     }
 
@@ -35,12 +35,12 @@ fun interface ScreenUnlocker : suspend () -> Boolean
     val requestId = UUID.randomUUID().toString()
     requestsById[requestId] = result
 
-    logger { "unlock screen $requestId" }
+    logger.log { "unlock screen $requestId" }
 
     UnlockActivity.unlockScreen(context, requestId)
 
     return@withContext result.await().also {
-      logger { "unlock result $requestId -> $it" }
+      logger.log { "unlock result $requestId -> $it" }
     }
   }
 }

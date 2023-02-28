@@ -10,7 +10,7 @@ import com.ivianuu.essentials.coroutines.infiniteEmptyFlow
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.injekt.Inject
@@ -54,9 +54,9 @@ data class ScreenLaunchFullscreenAdConfig(val screenLaunchToShowAdCount: Int = 4
       val launchCount = pref
         .updateData { copy(screenLaunchCount = screenLaunchCount + 1) }
         .screenLaunchCount
-      logger { "screen launched $launchCount" }
+      logger.log { "screen launched $launchCount" }
       if (launchCount >= config.screenLaunchToShowAdCount) {
-        logger { "try to show full screen ad $launchCount" }
+        logger.log { "try to show full screen ad $launchCount" }
         if (fullScreenAdManager.loadAndShowAd().getOrElse { false })
           pref.updateData { copy(screenLaunchCount = 0) }
       }

@@ -13,7 +13,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
@@ -36,14 +36,14 @@ class EsAccessibilityService : AccessibilityService() {
 
   override fun onServiceConnected() {
     super.onServiceConnected()
-    component.logger { "service connected" }
+    component.logger.log { "service connected" }
     component.accessibilityServiceRef.value = this
     val accessibilityComponent = component.accessibilityComponentFactory(Scope(), this)
       .also { this.accessibilityComponent = it }
 
     accessibilityComponent.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
       val configs = accessibilityComponent.configs()
-      component.logger { "update config from $configs" }
+      component.logger.log { "update config from $configs" }
       serviceInfo = serviceInfo?.apply {
         eventTypes = configs
           .map { it.eventTypes }
@@ -67,7 +67,7 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onAccessibilityEvent(event: AccessibilityEvent) {
-    component.logger { "on accessibility event $event" }
+    component.logger.log { "on accessibility event $event" }
     component.accessibilityEvents.tryEmit(
       AccessibilityEvent(
         type = event.eventType,
@@ -82,7 +82,7 @@ class EsAccessibilityService : AccessibilityService() {
   }
 
   override fun onUnbind(intent: Intent?): Boolean {
-    component.logger { "service disconnected" }
+    component.logger.log { "service disconnected" }
     accessibilityComponent?.scope?.dispose()
     accessibilityComponent = null
     component.accessibilityServiceRef.value = null

@@ -9,7 +9,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.stateIn
     IsOnSecureScreen(isOnSecureScreen)
   }
   .distinctUntilChanged()
-  .onEach { logger { "on secure screen changed: $it" } }
+  .onEach { logger.log { "on secure screen changed: $it" } }
   .stateIn(scope, SharingStarted.WhileSubscribed(1000), IsOnSecureScreen(false))
 
 @Provide val isOnSecureScreenAccessibilityConfig: AccessibilityConfig

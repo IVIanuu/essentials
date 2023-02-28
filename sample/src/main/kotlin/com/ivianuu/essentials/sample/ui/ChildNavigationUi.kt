@@ -71,7 +71,7 @@ class ChildNavigationKey : Key<Unit>
   }
 }
 
-class ChildNavigationItemKey(
+data class ChildNavigationItemKey(
   val navigationIndex: Int,
   val index: Int
 ) : Key<Unit>

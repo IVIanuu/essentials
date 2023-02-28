@@ -7,7 +7,7 @@ package com.ivianuu.essentials.sample
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 
@@ -15,6 +15,6 @@ import com.ivianuu.injekt.common.TypeKey
   componentKey: TypeKey<N>,
   logger: Logger
 ) = ScopeWorker<N> {
-  logger { "${componentKey.value} created" }
-  onCancel { logger { "${componentKey.value} disposed" } }
+  logger.log { "${componentKey.value} created" }
+  onCancel { logger.log { "${componentKey.value} disposed" } }
 }

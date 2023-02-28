@@ -6,7 +6,7 @@ package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
 import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Navigator
@@ -62,7 +62,7 @@ interface PermissionManager {
 
   override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean =
     withContext(context) {
-      logger { "request permissions $permissions" }
+      logger.log { "request permissions $permissions" }
 
       if (permissions.all { permissionState(listOf(it)).first() })
         return@withContext true
@@ -70,7 +70,7 @@ interface PermissionManager {
       appUiStarter()
 
       val result = navigator.push(PermissionRequestKey(permissions)) == true
-      logger { "request permissions result $permissions -> $result" }
+      logger.log { "request permissions result $permissions -> $result" }
       return@withContext result
     }
 }

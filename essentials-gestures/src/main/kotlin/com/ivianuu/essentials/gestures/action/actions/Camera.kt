@@ -21,7 +21,7 @@ import com.ivianuu.essentials.gestures.action.ActionExecutor
 import com.ivianuu.essentials.gestures.action.ActionId
 import com.ivianuu.essentials.gestures.action.ActionSystemOverlayPermission
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.injekt.Provide
@@ -98,7 +98,7 @@ import kotlin.coroutines.resume
     }
   else null
 
-  logger { "open camera with $frontFacing" }
+  logger.log { "open camera with $frontFacing" }
 
   if (frontFacing != null)
     intent.addCameraFacingExtras(frontFacing)

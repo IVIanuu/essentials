@@ -6,7 +6,7 @@ package com.ivianuu.essentials.systemoverlay.blacklist
 
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.recentapps.CurrentApp
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.systemoverlay.IsOnSecureScreen
@@ -39,25 +39,25 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
     else SystemOverlayBlacklistState.DISABLED
   }
   .distinctUntilChanged()
-  .onEach { logger { "system overlay enabled $it" } }
+  .onEach { logger.log { "system overlay enabled $it" } }
   // after that check the lock screen setting
   .switchIfStillEnabled { lockScreenState }
-  .onEach { logger { "lock screen state $it" } }
+  .onEach { logger.log { "lock screen state $it" } }
   // check permission screens
   .switchIfStillEnabled { secureScreenState }
-  .onEach { logger { "secure screen state $it" } }
+  .onEach { logger.log { "secure screen state $it" } }
   // check the user specified blacklist
   .switchIfStillEnabled { userBlacklistState }
-  .onEach { logger { "user blacklist state $it" } }
+  .onEach { logger.log { "user blacklist state $it" } }
   // finally check the keyboard state
   .switchIfStillEnabled { keyboardState }
-  .onEach { logger { "keyboard state $it" } }
+  .onEach { logger.log { "keyboard state $it" } }
   // distinct
   .distinctUntilChanged()
-  .onEach { logger { "overlay state changed: $it" } }
+  .onEach { logger.log { "overlay state changed: $it" } }
   .onCompletion {
     it?.printStackTrace()
-    logger { "lol $it" }
+    logger.log { "lol $it" }
   }
 
 @Tag private annotation class LockScreen
@@ -73,9 +73,9 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
     if (disableOnLockScreen) {
       screenState
         .map {
-          logger { "screen state $it disable on lock $disableOnLockScreen" }
+          logger.log { "screen state $it disable on lock $disableOnLockScreen" }
           if (it != ScreenState.UNLOCKED) {
-            logger { "hide: on lock screen" }
+            logger.log { "hide: on lock screen" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED
@@ -96,18 +96,18 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 ): @Private Flow<@SecureScreen SystemOverlayBlacklistState> = pref.data
   .map { it.disableOnSecureScreens }
   .distinctUntilChanged()
-  .onEach { logger { "disable on secure screens $it" } }
+  .onEach { logger.log { "disable on secure screens $it" } }
   .flatMapLatest { disableOnSecureScreen ->
     if (disableOnSecureScreen) {
       screenState
-        .onEach { logger { "screen state $it" } }
+        .onEach { logger.log { "screen state $it" } }
         .flatMapLatest { screenState ->
           if (screenState == ScreenState.UNLOCKED) {
             isOnSecureScreen
-              .onEach { logger { "is on secure screen $it" } }
+              .onEach { logger.log { "is on secure screen $it" } }
               .map {
                 if (it.value) {
-                  logger { "hide: secure screen" }
+                  logger.log { "hide: secure screen" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -132,19 +132,19 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
 ): @Private Flow<@UserBlacklist SystemOverlayBlacklistState> = pref.data
   .map { it.appBlacklist }
   .distinctUntilChanged()
-  .onEach { logger { "blacklist $it" } }
+  .onEach { logger.log { "blacklist $it" } }
   .flatMapLatest { blacklist ->
     if (blacklist.isNotEmpty()) {
       screenState
-        .onEach { logger { "screen state $it" } }
+        .onEach { logger.log { "screen state $it" } }
         .flatMapLatest { screenState ->
           // only check the current app if the screen is on
           if (screenState == ScreenState.UNLOCKED) {
             currentApp
-              .onEach { logger { "current app $it" } }
+              .onEach { logger.log { "current app $it" } }
               .map { currentApp ->
                 if (currentApp?.value in blacklist) {
-                  logger { "hide: user blacklist" }
+                  logger.log { "hide: user blacklist" }
                   SystemOverlayBlacklistState.HIDDEN
                 } else {
                   SystemOverlayBlacklistState.ENABLED
@@ -173,7 +173,7 @@ enum class SystemOverlayBlacklistState { DISABLED, ENABLED, HIDDEN }
       keyboardVisible
         .map {
           if (it.value) {
-            logger { "hide: keyboard" }
+            logger.log { "hide: keyboard" }
             SystemOverlayBlacklistState.HIDDEN
           } else {
             SystemOverlayBlacklistState.ENABLED

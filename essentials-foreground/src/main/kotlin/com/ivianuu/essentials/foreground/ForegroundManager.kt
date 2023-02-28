@@ -12,7 +12,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.essentials.coroutines.par
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
@@ -66,7 +66,7 @@ fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
       acquire = {
         val state = ForegroundState(foregroundId.value, notification)
         lock.withLock { states.value = states.value + state }
-        logger { "start foreground ${foregroundId.value} ${states.value}" }
+        logger.log { "start foreground ${foregroundId.value} ${states.value}" }
 
         ContextCompat.startForegroundService(
           appContext,
@@ -83,7 +83,7 @@ fun Flow<Notification>.updateNotification(scope: ForegroundScope) {
       },
       release = { state, _ ->
         lock.withLock { states.value = states.value - state }
-        logger { "stop foreground $foregroundId ${states.value}" }
+        logger.log { "stop foreground $foregroundId ${states.value}" }
       }
     )
   }

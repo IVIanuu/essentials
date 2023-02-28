@@ -13,7 +13,7 @@ import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 
@@ -29,14 +29,14 @@ fun interface NonSdkInterfaceDetectionDisabler {
   hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>
 ) = NonSdkInterfaceDetectionDisabler {
   if (systemBuildInfo.sdk >= 29) {
-    logger { "disable non sdk on 29" }
+    logger.log { "disable non sdk on 29" }
     hiddenApiPolicyStore.updateData { 1 }
-    logger { "disabled non sdk on 29" }
+    logger.log { "disabled non sdk on 29" }
   } else if (systemBuildInfo.sdk >= 28) {
-    logger { "disable non sdk on p" }
+    logger.log { "disable non sdk on p" }
     hiddenApiPolicyPrePieAppsStore.updateData { 1 }
     hiddenApiPolicyPieAppsStore.updateData { 1 }
-    logger { "disabled non sdk on p" }
+    logger.log { "disabled non sdk on p" }
   }
 }
 
@@ -70,7 +70,7 @@ fun interface OverscanUpdater {
 }
 
 @SuppressLint("PrivateApi") @Provide fun overscanUpdater(logger: Logger) = OverscanUpdater { rect ->
-  logger { "set overscan $rect" }
+  logger.log { "set overscan $rect" }
 
   val cls = Class.forName("android.view.IWindowManager\$Stub")
   val invoke = Class.forName("android.os.ServiceManager")

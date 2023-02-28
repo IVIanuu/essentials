@@ -6,7 +6,7 @@ package com.ivianuu.essentials.rate.domain
 
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.rate.data.RatePrefs
 import com.ivianuu.essentials.rate.ui.RateKey
 import com.ivianuu.essentials.time.Clock
@@ -46,24 +46,24 @@ private suspend fun shouldShowRateDialog(
   val prefs = pref.data.first()
 
   if (prefs.feedbackState == RatePrefs.FeedbackState.COMPLETED)
-    return false.also { logger { "show not: already completed" } }
+    return false.also { logger.log { "show not: already completed" } }
 
   if (prefs.feedbackState == RatePrefs.FeedbackState.NEVER)
-    return false.also { logger { "show not: user selected never" } }
+    return false.also { logger.log { "show not: user selected never" } }
 
   if (prefs.launchTimes < schedule.minLaunchTimes)
     return false.also {
-      logger { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
+      logger.log { "show not: launch times -> ${prefs.launchTimes} < ${schedule.minLaunchTimes}" }
     }
 
   val now = clock()
   val installedDuration = now - prefs.installTime.milliseconds
   if (installedDuration <= schedule.minInstallDuration)
     return false.also {
-      logger { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
+      logger.log { "show not: install duration -> $installedDuration < ${schedule.minInstallDuration}" }
     }
 
-  return true.also { logger { "show" } }
+  return true.also { logger.log { "show" } }
 }
 
 data class RateUiSchedule(

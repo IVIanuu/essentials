@@ -9,7 +9,7 @@ import android.content.pm.PackageManager
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 
 fun interface ProcessRestarter {
@@ -24,7 +24,7 @@ fun interface ProcessRestarter {
 ) = ProcessRestarter {
   val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
     .addFlags(FLAG_ACTIVITY_NEW_TASK)
-  logger { "restart process $intent" }
+  logger.log { "restart process $intent" }
   ProcessRestartActivity.launch(appContext, intent)
   Runtime.getRuntime().exit(0)
 }

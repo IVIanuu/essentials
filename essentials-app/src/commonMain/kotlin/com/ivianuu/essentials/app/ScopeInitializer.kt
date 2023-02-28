@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.ProvidedElement
 import com.ivianuu.injekt.common.TypeKey
@@ -27,7 +27,7 @@ interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
     initializers()
       .sortedWithLoadingOrder()
       .forEach {
-        logger { "${nameKey().value} initialize ${it.key.value}" }
+        logger.log { "${nameKey().value} initialize ${it.key.value}" }
         it.instance()
       }
     workerRunner()()

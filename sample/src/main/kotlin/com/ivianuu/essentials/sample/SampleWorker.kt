@@ -10,7 +10,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.work.InjektWorker
 import kotlinx.coroutines.delay
@@ -21,9 +21,9 @@ import kotlinx.coroutines.delay
   private val params: WorkerParameters
 ) : CoroutineWorker(appContext, params) {
   override suspend fun doWork(): Result {
-    logger { "start work" }
+    logger.log { "start work" }
     delay(5000)
-    logger { "finish work" }
+    logger.log { "finish work" }
     return Result.success()
   }
 }

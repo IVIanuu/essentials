@@ -6,7 +6,7 @@ package com.ivianuu.essentials.sample.xposed
 
 import android.app.Application
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.util.broadcastsFactory
@@ -88,7 +88,7 @@ var transitionDatas = emptyMap<String, TransitionData>()
           .collect {
             transitionDatas = Json.decodeFromString(it.getStringExtra("data")!!)
 
-            logger { "data changed $transitionDatas" }
+            logger.log { "data changed $transitionDatas" }
           }
       }
     }
@@ -133,7 +133,7 @@ var transitionDatas = emptyMap<String, TransitionData>()
               )
               put("audio.fade_out_curves", Json.encodeToString(FadeOutCurve))
             } else {
-              logger { "No duration ${args.contentToString()}" }
+              logger.log { "No duration ${args.contentToString()}" }
             }
 
             put("audio.only_allow_fade_on_advance", "false")
@@ -142,7 +142,7 @@ var transitionDatas = emptyMap<String, TransitionData>()
     }
 
     after {
-      logger { "ContextTrack ${args.contentToString()}" }
+      logger.log { "ContextTrack ${args.contentToString()}" }
     }
   }
 }

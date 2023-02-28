@@ -9,7 +9,7 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Scoped
 import com.ivianuu.injekt.coroutines.NamedCoroutineScope
@@ -61,7 +61,7 @@ import kotlinx.coroutines.flow.shareIn
   }
   .map { RecentApps(it) }
   .distinctUntilChanged()
-  .onEach { logger { "recent apps changed $it" } }
+  .onEach { logger.log { "recent apps changed $it" } }
   .shareIn(scope, SharingStarted.Eagerly, 1)
   .distinctUntilChanged()
 

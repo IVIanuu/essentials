@@ -13,7 +13,7 @@ import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
-import com.ivianuu.essentials.logging.invoke
+import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
@@ -40,7 +40,7 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    component.logger { "listener connected" }
+    component.logger.log { "listener connected" }
     val scope = Scope<NotificationScope>()
       .also { this.notificationScope = it }
     component.notificationElementsFactory(scope, this)
@@ -50,27 +50,27 @@ class EsNotificationListenerService : NotificationListenerService() {
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    component.logger { "notification posted $sbn" }
+    component.logger.log { "notification posted $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    component.logger { "notification removed $sbn" }
+    component.logger.log { "notification removed $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    component.logger { "ranking update $rankingMap" }
+    component.logger.log { "ranking update $rankingMap" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
-    component.logger { "listener disconnected" }
+    component.logger.log { "listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
     component.notificationServiceRef.value = null
