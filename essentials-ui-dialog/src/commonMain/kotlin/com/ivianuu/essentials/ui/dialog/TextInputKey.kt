@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
-data class TextInputKey(
+class TextInputKey(
   val initial: String = "",
   val label: String = "",
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),

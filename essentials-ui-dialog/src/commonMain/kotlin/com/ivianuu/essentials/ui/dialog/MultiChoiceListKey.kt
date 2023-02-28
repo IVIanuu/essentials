@@ -20,7 +20,7 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-data class MultiChoiceListKey<T : Any>(
+class MultiChoiceListKey<T : Any>(
   val items: List<T>,
   val selectedItems: Set<T>,
   val title: String? = null,

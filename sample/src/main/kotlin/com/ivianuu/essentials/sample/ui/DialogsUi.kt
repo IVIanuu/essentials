@@ -285,7 +285,7 @@ class DialogsKey : Key<Unit>
   ) { Text(text) }
 }
 
-data class DialogLauncherKey(
+class DialogLauncherKey(
   val dismissible: Boolean = true,
   val dialog: @Composable () -> Unit
 ) : PopupKey<Unit>

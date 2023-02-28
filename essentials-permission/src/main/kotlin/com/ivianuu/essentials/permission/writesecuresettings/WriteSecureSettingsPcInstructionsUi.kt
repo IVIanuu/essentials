@@ -53,7 +53,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-data class WriteSecureSettingsPcInstructionsKey(
+class WriteSecureSettingsPcInstructionsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : CriticalUserFlowKey<Boolean>
 

@@ -43,7 +43,7 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 
-data class PopupKey(
+class PopupKey(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,

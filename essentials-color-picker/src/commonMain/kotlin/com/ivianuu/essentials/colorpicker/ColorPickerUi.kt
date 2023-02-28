@@ -14,7 +14,7 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
-data class ColorPickerKey(
+class ColorPickerKey(
   val initialColor: Color,
   val colorPalettes: List<ColorPickerPalette> = ColorPickerPalette.values().toList(),
   val title: String? = null,

@@ -16,7 +16,7 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-data class SingleChoiceListKey<T : Any>(
+class SingleChoiceListKey<T : Any>(
   val items: List<T>,
   val selectedItem: T,
   val title: String? = null,

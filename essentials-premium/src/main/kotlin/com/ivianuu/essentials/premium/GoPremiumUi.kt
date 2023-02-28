@@ -67,7 +67,7 @@ data class AppFeature(
   val inBasic: Boolean
 )
 
-data class GoPremiumKey(
+class GoPremiumKey(
   val showTryBasicOption: Boolean,
   val allowBackNavigation: Boolean = true
 ) : CriticalUserFlowKey<Boolean> {

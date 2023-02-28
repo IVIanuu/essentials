@@ -14,7 +14,7 @@ import com.ivianuu.essentials.ui.navigation.KeyIntentFactory
 import com.ivianuu.injekt.Provide
 import java.io.File
 
-data class ShareBackupFileKey(val backupFilePath: String) :
+class ShareBackupFileKey(val backupFilePath: String) :
   IntentKey
 
 @Provide fun shareBackupFileKeyIntentFactory(

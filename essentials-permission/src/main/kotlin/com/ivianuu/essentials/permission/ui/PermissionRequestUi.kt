@@ -31,7 +31,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.first
 
-data class PermissionRequestKey(
+class PermissionRequestKey(
   val permissionsKeys: List<TypeKey<Permission>>
 ) : CriticalUserFlowKey<Boolean>
 

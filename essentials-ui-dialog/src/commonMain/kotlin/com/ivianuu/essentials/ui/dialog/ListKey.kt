@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 
-data class ListKey<T : Any>(
+class ListKey<T : Any>(
   val items: List<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>,
