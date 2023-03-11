@@ -63,6 +63,17 @@ suspend fun Navigator.popTop(): Boolean {
   } else false
 }
 
+suspend fun Navigator.popTo(key: Key<*>) {
+  val index = backStack.value.indexOfLast { it == key }
+  check(index != -1) {
+    "Key $key was not in ${backStack.value}"
+  }
+  setBackStack(
+    backStack.value
+      .take(index + 1)
+  )
+}
+
 suspend fun Navigator.clear() {
   setBackStack(emptyList())
 }
