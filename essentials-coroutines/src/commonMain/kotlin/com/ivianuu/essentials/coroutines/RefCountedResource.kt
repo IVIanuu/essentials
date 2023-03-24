@@ -5,7 +5,9 @@
 package com.ivianuu.essentials.coroutines
 
 import com.ivianuu.injekt.Inject
+
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,24 +40,31 @@ private class RefCountedReleaseImpl<K, T>(
   private val timeout: Duration,
   private val scope: CoroutineScope?
 ) : RefCountedResource<K, T> {
-  private val lock = Mutex()
-  private val values = mutableMapOf<K, Item>()
+  private val itemsLock = Mutex()
+  private val items = mutableMapOf<K, Item>()
 
-  override suspend fun acquire(key: K) = lock.withLock {
-    values.getOrPut(key) { Item(withContext(NonCancellable) { create(key) }, 0) }
-      .also { it.refCount++ }
-  }.value
+  override suspend fun acquire(key: K): T {
+    val item = itemsLock.withLock {
+      items.getOrPut(key) { Item() }
+        .also { it.refCount++ }
+    }
+
+    return item.getOrCreateValue { create(key) }
+  }
 
   override suspend fun release(key: K) {
     suspend fun releaseImpl() {
-      lock.withLock {
-        val item = values[key] ?: return@withLock null
+      itemsLock.withLock {
+        val item = items[key] ?: return@withLock null
         item.refCount--
-        if (item.refCount == 0) values.remove(key) else null
+        if (item.refCount == 0) items.remove(key) else null
       }?.let { removedItem ->
+        removedItem.release()
         if (release != null)
           withContext(NonCancellable) {
-            release.invoke(key, removedItem.value)
+            val value = removedItem.valueOrThis()
+            if (value !== removedItem)
+              release.invoke(key, value as T)
           }
       }
     }
@@ -67,14 +76,24 @@ private class RefCountedReleaseImpl<K, T>(
     }
   }
 
-  private inner class Item(val value: T, var refCount: Int = 0)
-}
+  private inner class Item(var refCount: Int = 0) {
+    private val context = Job()
 
-suspend inline fun <K, T, R> RefCountedResource<K, T>.withResource(
-  key: K,
-  crossinline block: suspend (T) -> R
-): R = bracket(
-  acquire = { acquire(key) },
-  use = block,
-  release = { _, _ -> release(key) }
-)
+    private var _value: Any? = this
+    private val valueLock = Mutex()
+
+    suspend fun getOrCreateValue(create: suspend () -> T): T = valueLock.withLock {
+      val value = _value
+      return@withLock if (value !== this) value as T
+      else withContext(context) {
+        create().also { _value = it }
+      }
+    }
+
+    suspend fun valueOrThis(): Any? = valueLock.withLock { _value }
+
+    fun release() {
+      context.cancel()
+    }
+  }
+}
