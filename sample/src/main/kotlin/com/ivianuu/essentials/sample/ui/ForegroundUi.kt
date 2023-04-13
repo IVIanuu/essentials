@@ -15,8 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
+import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R
+import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
@@ -25,12 +27,9 @@ import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.isActive
 
 @Provide val foregroundHomeItem = HomeItem("Foreground") { ForegroundKey() }
 
@@ -49,13 +48,8 @@ class ForegroundKey : Key<Unit>
 
     if (isEnabled)
       LaunchedEffect(true) {
-        val notifications = flow {
-          var i = 0
-          while (currentCoroutineContext().isActive) {
-            emit(ForegroundNotification(primaryColor, i++))
-            delay(1000)
-          }
-        }
+        val notifications = timerFlow(1.seconds)
+          .map { ForegroundNotification(primaryColor, it.toInt()) }
           .stateIn(this, SharingStarted.Eagerly, ForegroundNotification(primaryColor, 0))
         foregroundManager.runInForeground(notifications.value) {
           notifications.collect { updateNotification(it) }
