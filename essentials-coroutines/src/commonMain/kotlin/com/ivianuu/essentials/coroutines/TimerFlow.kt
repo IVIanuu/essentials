@@ -11,7 +11,7 @@ import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration
 
-fun timer(duration: Duration): Flow<Long> = flow {
+fun timerFlow(duration: Duration): Flow<Long> = flow {
   var value = 0L
   while (coroutineContext.isActive) {
     emit(value++)
