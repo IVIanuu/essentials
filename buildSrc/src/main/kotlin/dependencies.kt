@@ -15,7 +15,7 @@ object Build {
 
 object Deps {
   object Accompanist {
-    private const val version = "0.28.0"
+    private const val version = "0.30.1"
     const val flowLayout = "com.google.accompanist:accompanist-flowlayout:$version"
     const val pager = "com.google.accompanist:accompanist-pager:$version"
     const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$version"
@@ -25,7 +25,7 @@ object Deps {
 
   object AndroidX {
     object Activity {
-      private const val version = "1.6.1"
+      private const val version = "1.7.0"
       const val activity = "androidx.activity:activity:$version"
       const val compose = "androidx.activity:activity-compose:$version"
     }
@@ -35,7 +35,7 @@ object Deps {
     const val dataStore = "androidx.datastore:datastore:1.0.0"
 
     object Lifecycle {
-      private const val version = "2.5.1"
+      private const val version = "2.6.1"
       const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
     }
 
@@ -46,11 +46,11 @@ object Deps {
       const val runner = "androidx.test:runner:1.2.0"
     }
 
-    const val work = "androidx.work:work-runtime-ktx:2.7.1"
+    const val work = "androidx.work:work-runtime-ktx:2.8.1"
   }
 
   object AtomicFu {
-    private const val version = "0.19.0"
+    private const val version = "0.20.2"
     const val gradlePlugin = "org.jetbrains.kotlinx:atomicfu-gradle-plugin:$version"
     const val runtime = "org.jetbrains.kotlinx:atomicfu:$version"
   }
@@ -64,9 +64,9 @@ object Deps {
   }
 
   object Compose {
-    const val version = "1.3.0"
-    const val compilerVersion = "1.4.0"
-    const val compiler = "androidx.compose.compiler:compiler:$compilerVersion"
+    const val version = "1.4.0"
+    const val compilerVersion = "1.4.5"
+    const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
     const val runtime = "org.jetbrains.compose.runtime:runtime:$version"
@@ -79,10 +79,10 @@ object Deps {
     const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
   }
 
-  const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
+  const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1156"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1164"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -94,7 +94,7 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev704"
+    private const val version = "0.0.1-dev705"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
@@ -108,10 +108,10 @@ object Deps {
 
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
-  const val kotlinCompileTesting = "dev.zacsweers.kctfork:core:0.1.0-1.8.0-Beta01"
+  const val kotlinCompileTesting = "dev.zacsweers.kctfork:core:0.2.1"
 
   object Kotlin {
-    const val version = "1.8.0"
+    const val version = "1.8.20"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -120,7 +120,7 @@ object Deps {
 
   object KotlinSerialization {
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:${Kotlin.version}"
-    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
+    const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
   }
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"

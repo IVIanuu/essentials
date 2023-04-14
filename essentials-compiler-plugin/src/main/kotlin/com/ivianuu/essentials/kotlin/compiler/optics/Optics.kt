@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.asSimpleType
 import org.jetbrains.kotlin.types.replace
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
+import org.jetbrains.kotlin.utils.addToStdlib.UnsafeCastFunction
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 fun optics(project: Project) {
@@ -35,12 +36,14 @@ fun optics(project: Project) {
   IrGenerationExtension.registerExtension(project, OpticsIrGenerationExtension())
 }
 
+
 class OpticsResolveExtension : SyntheticResolveExtension {
   override fun getSyntheticCompanionObjectNameIfNeeded(thisDescriptor: ClassDescriptor): Name? =
     if (thisDescriptor.annotations.hasAnnotation(OpticsAnnotation))
       SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT
     else null
 
+  @OptIn(UnsafeCastFunction::class)
   override fun getSyntheticFunctionNames(thisDescriptor: ClassDescriptor): List<Name> =
     if (thisDescriptor.isCompanionObject &&
       thisDescriptor.containingDeclaration.cast<ClassDescriptor>()

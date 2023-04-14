@@ -13,8 +13,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
@@ -32,15 +32,17 @@ class OverlayComposeView(
   SavedStateRegistryOwner,
   ViewModelStoreOwner {
   private val _lifecycle = LifecycleRegistry(this)
+  override val lifecycle: Lifecycle
+    get() = _lifecycle
   private val savedStateRegistryController = SavedStateRegistryController.create(this)
-  private val viewModelStore = ViewModelStore()
+  override val viewModelStore = ViewModelStore()
 
   init {
     setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
-    ViewTreeLifecycleOwner.set(this, this)
+    setViewTreeLifecycleOwner(this)
     savedStateRegistryController.performRestore(null)
     setViewTreeSavedStateRegistryOwner(this)
-    ViewTreeViewModelStoreOwner.set(this, this)
+    setViewTreeViewModelStoreOwner(this)
     _lifecycle.currentState = Lifecycle.State.CREATED
   }
 
@@ -57,10 +59,6 @@ class OverlayComposeView(
     _lifecycle.currentState = Lifecycle.State.CREATED
     super.onDetachedFromWindow()
   }
-
-  override fun getLifecycle(): Lifecycle = _lifecycle
-
-  override fun getViewModelStore(): ViewModelStore = viewModelStore
 
   override val savedStateRegistry: SavedStateRegistry
     get() = savedStateRegistryController.savedStateRegistry

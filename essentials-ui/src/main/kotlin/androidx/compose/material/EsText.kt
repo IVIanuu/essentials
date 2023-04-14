@@ -33,12 +33,15 @@ import androidx.compose.ui.unit.TextUnit
   overflow: TextOverflow = TextOverflow.Clip,
   softWrap: Boolean = true,
   maxLines: Int = Int.MAX_VALUE,
+  minLines: Int = 1,
   noinline onTextLayout: (TextLayoutResult) -> Unit = {},
   style: TextStyle = LocalTextStyle.current
 ) {
-  Text(stringResource(textResId), modifier, color, fontSize, fontStyle, fontWeight,
+  Text(
+    stringResource(textResId), modifier, color, fontSize, fontStyle, fontWeight,
     fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
-    softWrap, maxLines, onTextLayout, style)
+    softWrap, maxLines, minLines, onTextLayout, style
+  )
 }
 
 @Composable inline fun Text(
@@ -57,10 +60,13 @@ import androidx.compose.ui.unit.TextUnit
   overflow: TextOverflow = TextOverflow.Clip,
   softWrap: Boolean = true,
   maxLines: Int = Int.MAX_VALUE,
+  minLines: Int = 1,
   noinline onTextLayout: (TextLayoutResult) -> Unit = {},
   style: TextStyle = LocalTextStyle.current
 ) {
-  Text(stringResource(textResId, *textFormatArgs), modifier, color, fontSize, fontStyle, fontWeight,
+  Text(
+    stringResource(textResId, *textFormatArgs), modifier, color, fontSize, fontStyle, fontWeight,
     fontFamily, letterSpacing, textDecoration, textAlign, lineHeight, overflow,
-    softWrap, maxLines, onTextLayout, style)
+    softWrap, maxLines, minLines, onTextLayout, style
+  )
 }
