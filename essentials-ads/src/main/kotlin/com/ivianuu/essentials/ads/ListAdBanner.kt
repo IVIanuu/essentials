@@ -12,8 +12,8 @@ import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
+import com.ivianuu.essentials.ui.navigation.KeyScope
+import com.ivianuu.essentials.ui.navigation.LocalKeyElements
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Element
@@ -47,7 +47,7 @@ fun interface ListAdBanner : ListDecorator
   if (config != null && isVertical) {
     item(null) {
       val key = catch {
-        LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
+        LocalKeyElements.current.element<ListAdBannerComponent>().key::class
       }.getOrNull()
       if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) && adsEnabled.bind().value)
         AdBanner(config)
@@ -57,5 +57,5 @@ fun interface ListAdBanner : ListDecorator
   content()
 }
 
-@Provide @Element<KeyUiScope>
+@Provide @Element<KeyScope>
 data class ListAdBannerComponent(val key: Key<*>)

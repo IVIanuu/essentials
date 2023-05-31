@@ -19,7 +19,7 @@ data class KeyUiOptions(
 }
 
 fun interface KeyUiOptionsFactory<K : Key<*>> {
-  operator fun invoke(navigator: Navigator, scope: Scope<KeyUiScope>, key: K): KeyUiOptions
+  operator fun invoke(navigator: Navigator, scope: Scope<KeyScope>, key: K): KeyUiOptions
 }
 
 fun <K : Key<*>> noOpKeyUiOptionFactory() =

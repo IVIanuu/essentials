@@ -19,7 +19,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
@@ -40,7 +40,7 @@ class UnlockKey : Key<Unit>
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: NamedCoroutineScope<KeyScope>,
   toaster: Toaster
 ) = SimpleKeyUi<UnlockKey> {
   Scaffold(

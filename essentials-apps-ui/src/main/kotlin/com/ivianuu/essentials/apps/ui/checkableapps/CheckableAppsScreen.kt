@@ -30,7 +30,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.material.TopAppBar
-import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.KeyScope
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
@@ -113,8 +113,8 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 @Provide fun checkableAppsModel(
   params: CheckableAppsParams,
   repository: AppRepository,
-  scope: NamedCoroutineScope<KeyUiScope>
-): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state {
+  scope: NamedCoroutineScope<KeyScope>
+): @Scoped<KeyScope> StateFlow<CheckableAppsModel> = scope.state {
   val checkedApps = params.checkedApps.bind(emptySet())
   val allApps = repository.installedApps.bindResource()
 
