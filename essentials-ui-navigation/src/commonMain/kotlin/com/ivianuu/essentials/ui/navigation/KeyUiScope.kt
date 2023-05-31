@@ -7,6 +7,6 @@ package com.ivianuu.essentials.ui.navigation
 import androidx.compose.runtime.compositionLocalOf
 import com.ivianuu.injekt.common.Elements
 
-object KeyScope
+object KeyUiScope
 
-val LocalKeyElements = compositionLocalOf<Elements<KeyScope>> { error("No key elements provided") }
+val LocalKeyUiElements = compositionLocalOf<Elements<KeyUiScope>> { error("No key ui elements provided") }

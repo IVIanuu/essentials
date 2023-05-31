@@ -20,7 +20,7 @@ fun interface KeyUi<K : Key<*>> {
 
 fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
 
-typealias KeyUiFactory<K> = (Navigator, Scope<KeyScope>, K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUi<K>
 
 object KeyUiModule {
   @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUi(
@@ -84,5 +84,5 @@ inline fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   val key: K,
   val navigator: Navigator,
-  private val coroutineScope: NamedCoroutineScope<KeyScope>
+  private val coroutineScope: NamedCoroutineScope<KeyUiScope>
 ) : CoroutineScope by coroutineScope
