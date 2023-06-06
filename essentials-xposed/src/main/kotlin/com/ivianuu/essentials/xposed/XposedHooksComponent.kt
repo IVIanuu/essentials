@@ -4,10 +4,9 @@
 
 package com.ivianuu.essentials.xposed
 
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
-object XposedScope
-
-@Provide @Element<XposedScope>
+@Provide @Element<AppScope>
 data class XposedHooksComponent(val hooks: () -> List<Hooks>)
