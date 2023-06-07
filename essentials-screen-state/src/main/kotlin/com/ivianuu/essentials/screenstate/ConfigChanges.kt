@@ -8,7 +8,7 @@ import android.content.ComponentCallbacks2
 import android.content.res.Configuration
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -18,7 +18,7 @@ object ConfigChange
 
 @Provide fun configChanges(
   appContext: AppContext,
-  coroutineContext: MainContext,
+  coroutineContext: MainCoroutineContext,
 ): Flow<ConfigChange> = callbackFlow<ConfigChange> {
   val callbacks = object : ComponentCallbacks2 {
     override fun onConfigurationChanged(newConfig: Configuration) {

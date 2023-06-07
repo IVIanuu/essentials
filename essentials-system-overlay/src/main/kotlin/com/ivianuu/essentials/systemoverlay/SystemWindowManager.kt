@@ -23,8 +23,10 @@ import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -34,12 +36,10 @@ import androidx.compose.ui.platform.LocalView
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.accessibility.AccessibilityWindowManager
 import com.ivianuu.essentials.catch
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
@@ -117,7 +117,7 @@ fun Modifier.systemWindowTrigger() = composed {
 
 @Provide class SystemWindowManagerImpl(
   private val appContext: AppContext,
-  private val mainContext: MainContext,
+  private val mainCoroutineContext: MainCoroutineContext,
   accessibilityWindowManager: AccessibilityWindowManager? = null,
   windowManager: @SystemService WindowManager
 ) : SystemWindowManager {
@@ -127,7 +127,7 @@ fun Modifier.systemWindowTrigger() = composed {
   override suspend fun attachSystemWindow(
     state: SystemWindowState,
     content: @Composable () -> Unit
-  ): Nothing = withContext(mainContext) {
+  ): Nothing = withContext(mainCoroutineContext) {
     lateinit var contentView: View
     contentView = OverlayComposeView() {
       Window(contentView, state, content)

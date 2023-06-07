@@ -22,9 +22,9 @@ import com.ivianuu.essentials.time.seconds
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.MainCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.MainContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -75,10 +75,10 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val appContext: AppContext,
   private val adsEnabled: Flow<AdsEnabled>,
   private val id: FullScreenAdId,
-  private val config: FullScreenAdConfig,
+  config: FullScreenAdConfig,
   private val foregroundActivity: Flow<ForegroundActivity>,
   private val logger: Logger,
-  private val mainContext: MainContext,
+  private val mainCoroutineContext: MainCoroutineContext,
   private val scope: NamedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
   private val lock = Mutex()
@@ -118,7 +118,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private suspend fun getOrCreateCurrentAd(): suspend () -> Boolean = lock.withLock {
     deferredAd?.takeUnless {
       it.isCompleted && it.getCompletionExceptionOrNull() != null
-    } ?: scope.async(mainContext) {
+    } ?: scope.async(mainCoroutineContext) {
       logger.log { "start loading ad" }
 
       val ad = suspendCoroutine<InterstitialAd> { cont ->
@@ -144,7 +144,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
         if (rateLimiter.tryAcquire()) {
           logger.log { "show ad" }
           lock.withLock { deferredAd = null }
-          withContext(mainContext) {
+          withContext(mainCoroutineContext) {
             ad.show(foregroundActivity.first()!!)
           }
           true

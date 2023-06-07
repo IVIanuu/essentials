@@ -14,7 +14,7 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -43,7 +43,7 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 
 @Provide fun displayRotation(
   appContext: AppContext,
-  ioContext: IOContext,
+  ioCoroutineContext: IOCoroutineContext,
   logger: Logger,
   screenState: () -> Flow<ScreenState>,
   windowManager: @SystemService WindowManager
@@ -73,9 +73,9 @@ enum class DisplayRotation(val isPortrait: Boolean) {
 }
 
 private suspend fun getCurrentDisplayRotation(
-  @Inject context: IOContext,
+  @Inject ioCoroutineContext: IOCoroutineContext,
   @Inject windowManager: @SystemService WindowManager,
-) = withContext(context) {
+) = withContext(ioCoroutineContext) {
   when (windowManager.defaultDisplay.rotation) {
     Surface.ROTATION_0 -> DisplayRotation.PORTRAIT_UP
     Surface.ROTATION_90 -> DisplayRotation.LANDSCAPE_LEFT

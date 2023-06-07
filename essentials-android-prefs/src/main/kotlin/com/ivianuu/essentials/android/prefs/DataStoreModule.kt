@@ -17,9 +17,9 @@ import com.ivianuu.essentials.coroutines.childCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.data.PrefsDir
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.IOCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -32,7 +32,7 @@ import java.io.OutputStream
 
 class DataStoreModule<T : Any>(private val name: String, private val default: () -> T) {
   @Provide fun dataStore(
-    context: IOContext,
+    coroutineContext: IOCoroutineContext,
     initial: () -> @Initial T = default,
     json: Json,
     serializerFactory: () -> KSerializer<T>,
@@ -66,7 +66,7 @@ class DataStoreModule<T : Any>(private val name: String, private val default: ()
         initial()
       },
       produceFile = { prefsDir().resolve(name) },
-      scope = scope.childCoroutineScope(context)
+      scope = scope.childCoroutineScope(coroutineContext)
     )
 
     return object : DataStore<T> {

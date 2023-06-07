@@ -14,8 +14,8 @@ import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.DefaultCoroutineContext
 import com.ivianuu.injekt.common.TypeKey
-import com.ivianuu.injekt.coroutines.DefaultContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -34,7 +34,7 @@ interface PermissionManager {
 @Provide class PermissionManagerImpl(
   private val appUiStarter: AppUiStarter,
   private val clock: Clock,
-  private val context: DefaultContext,
+  private val context: DefaultCoroutineContext,
   private val logger: Logger,
   private val navigator: Navigator,
   private val permissions: Map<TypeKey<Permission>, () -> Permission>,

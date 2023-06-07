@@ -10,8 +10,8 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.MainContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.MainCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 fun interface Toaster {
@@ -20,10 +20,10 @@ fun interface Toaster {
 
 @Provide fun toaster(
   appContext: AppContext,
-  mainContext: MainContext,
+  mainCoroutineContext: MainCoroutineContext,
   scope: NamedCoroutineScope<AppScope>
 ) = Toaster { message ->
-  scope.launch(mainContext) {
+  scope.launch(mainCoroutineContext) {
     Toast.makeText(
       appContext,
       message,

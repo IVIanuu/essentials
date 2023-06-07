@@ -20,8 +20,8 @@ import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.Element
-import com.ivianuu.injekt.coroutines.MainContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.MainCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -79,7 +79,7 @@ class ForegroundService : Service() {
   private suspend fun applyState(
     states: List<ForegroundManagerImpl.ForegroundState>,
     fromStop: Boolean
-  ) = withContext(component.mainContext) {
+  ) = withContext(component.mainCoroutineContext) {
     component.logger.log { "apply states: $states" }
 
     previousStates
@@ -125,6 +125,6 @@ class ForegroundService : Service() {
   val foregroundManager: ForegroundManagerImpl,
   val notificationManager: @SystemService NotificationManager,
   val logger: Logger,
-  val mainContext: MainContext,
+  val mainCoroutineContext: MainCoroutineContext,
   val scope: NamedCoroutineScope<AppScope>
 )

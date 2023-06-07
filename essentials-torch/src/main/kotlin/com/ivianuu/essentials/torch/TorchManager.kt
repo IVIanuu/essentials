@@ -27,8 +27,8 @@ import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow

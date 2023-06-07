@@ -18,8 +18,8 @@ import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scope
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass

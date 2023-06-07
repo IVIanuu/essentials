@@ -18,7 +18,7 @@ import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.DefaultContext
+import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
@@ -26,7 +26,7 @@ fun interface ExecuteActionUseCase : suspend (String) -> Result<Boolean, Throwab
 
 @Provide fun executeActionUseCase(
   closeSystemDialogs: CloseSystemDialogsUseCase,
-  coroutineContext: DefaultContext,
+  coroutineContext: DefaultCoroutineContext,
   logger: Logger,
   permissionManager: PermissionManager,
   repository: ActionRepository,

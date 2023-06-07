@@ -65,7 +65,7 @@ object Deps {
 
   object Compose {
     const val version = "1.4.0"
-    const val compilerVersion = "1.4.5"
+    const val compilerVersion = "1.4.6-dev-k1.8.21-290a127309e"
     const val compiler = "org.jetbrains.compose.compiler:compiler:$compilerVersion"
     const val foundation = "org.jetbrains.compose.foundation:foundation:$version"
     const val material = "org.jetbrains.compose.material:material:$version"
@@ -82,7 +82,7 @@ object Deps {
   const val dokkaGradlePlugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
   const val essentialsGradlePlugin =
-    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1164"
+    "com.ivianuu.essentials:essentials-gradle-plugin:0.0.1-dev1165"
 
   object Firebase {
     const val ads = "com.google.firebase:firebase-ads:20.6.0"
@@ -94,12 +94,11 @@ object Deps {
   const val googlePlayServicesGradlePlugin = "com.google.gms:google-services:4.3.10"
 
   object Injekt {
-    private const val version = "0.0.1-dev705"
+    private const val version = "0.0.1-dev707"
     const val android = "com.ivianuu.injekt:injekt-android:$version"
     const val androidWork = "com.ivianuu.injekt:injekt-android-work:$version"
     const val common = "com.ivianuu.injekt:injekt-common:$version"
     const val core = "com.ivianuu.injekt:injekt-core:$version"
-    const val coroutines = "com.ivianuu.injekt:injekt-coroutines:$version"
     const val compilerPlugin = "com.ivianuu.injekt:injekt-compiler-plugin:$version"
     const val gradlePlugin = "com.ivianuu.injekt:injekt-gradle-plugin:$version"
   }
@@ -108,10 +107,10 @@ object Deps {
 
   const val kotestAssertions = "io.kotest:kotest-assertions-core:5.4.2"
 
-  const val kotlinCompileTesting = "dev.zacsweers.kctfork:core:0.2.1"
+  const val kotlinCompileTesting = "com.github.tschuchortdev:kotlin-compile-testing:1.5.0"
 
   object Kotlin {
-    const val version = "1.8.20"
+    const val version = "1.8.21"
     const val compilerEmbeddable = "org.jetbrains.kotlin:kotlin-compiler-embeddable:$version"
     const val compiler = "org.jetbrains.kotlin:kotlin-compiler:$version"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
@@ -133,7 +132,7 @@ object Deps {
 
   const val playBillingKtx = "com.android.billingclient:billing-ktx:5.1.0"
 
-  const val roboelectric = "org.robolectric:robolectric:4.4"
+  const val roboelectric = "org.robolectric:robolectric:4.10.3"
 
   const val shadowGradlePlugin = "gradle.plugin.com.github.johnrengelman:shadow:7.1.0"
 

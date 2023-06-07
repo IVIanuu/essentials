@@ -10,7 +10,7 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.DefaultContext
+import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -20,7 +20,7 @@ fun interface ScreenActivator : suspend () -> Boolean
 
 @Provide fun screenActivator(
   context: AppContext,
-  coroutineContext: DefaultContext,
+  coroutineContext: DefaultCoroutineContext,
   logger: Logger,
   powerManager: @SystemService PowerManager
 ) = ScreenActivator {

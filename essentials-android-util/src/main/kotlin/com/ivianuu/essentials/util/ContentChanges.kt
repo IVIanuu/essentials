@@ -10,7 +10,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Looper
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -23,7 +23,7 @@ fun interface ContentChangesFactory {
 
 @Provide fun contentChangesFactory(
   contentResolver: ContentResolver,
-  coroutineContext: MainContext,
+  coroutineContext: MainCoroutineContext,
 ) = ContentChangesFactory { uri ->
   callbackFlow<Unit> {
     val observer = withContext(coroutineContext) {

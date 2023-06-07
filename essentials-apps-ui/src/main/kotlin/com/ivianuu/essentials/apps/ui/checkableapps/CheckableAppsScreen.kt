@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -21,7 +22,6 @@ import com.ivianuu.essentials.apps.ui.R
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.compose.bindResource
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
@@ -35,8 +35,8 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

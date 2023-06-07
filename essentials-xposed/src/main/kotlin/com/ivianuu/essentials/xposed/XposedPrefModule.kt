@@ -21,10 +21,10 @@ import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
+import com.ivianuu.injekt.common.IOCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,7 +44,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   @SuppressLint("WorldReadableFiles")
   @Provide fun dataStore(
     appContext: AppContext,
-    coroutineContext: IOContext,
+    coroutineContext: IOCoroutineContext,
     coroutineScope: NamedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
@@ -108,7 +108,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
 
   @Provide fun xposedPrefFlow(
     broadcastsFactory: BroadcastsFactory,
-    coroutineContext: IOContext,
+    coroutineContext: IOCoroutineContext,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,

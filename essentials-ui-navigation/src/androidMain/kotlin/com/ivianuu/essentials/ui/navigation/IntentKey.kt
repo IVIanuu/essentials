@@ -14,10 +14,10 @@ import com.ivianuu.essentials.err
 import com.ivianuu.essentials.ok
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 
@@ -38,7 +38,7 @@ fun interface IntentAppUiStarter {
 
 @Provide fun intentKeyHandler(
   appUiStarter: IntentAppUiStarter,
-  context: MainContext,
+  context: MainCoroutineContext,
   intentFactories: () -> Map<KClass<IntentKey>, KeyIntentFactory<IntentKey>>
 ) = KeyInterceptor<Result<ActivityResult, Throwable>> handler@{ key ->
   if (key !is IntentKey) return@handler null

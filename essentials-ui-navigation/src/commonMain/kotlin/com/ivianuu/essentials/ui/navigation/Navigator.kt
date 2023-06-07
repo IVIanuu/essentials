@@ -10,8 +10,8 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

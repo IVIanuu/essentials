@@ -51,7 +51,7 @@ class AndroidSettingsStateTest {
     val setting = module.dataStore(
       scope = this,
       adapter = adapter,
-      context = coroutineContext[CoroutineDispatcher.Key]!!,
+      coroutineContext = coroutineContext[CoroutineDispatcher.Key]!!,
       contentChangesFactory = { contentChanges },
       contentResolver = mockk()
     )

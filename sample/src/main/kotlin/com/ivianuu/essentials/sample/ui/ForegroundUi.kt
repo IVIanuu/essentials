@@ -9,12 +9,12 @@ import android.app.NotificationManager
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.timerFlow
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.sample.R

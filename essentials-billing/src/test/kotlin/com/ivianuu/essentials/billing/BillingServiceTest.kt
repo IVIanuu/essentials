@@ -16,7 +16,7 @@ import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.inject
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.every
@@ -49,7 +49,7 @@ class BillingServiceTest {
             )
         }
       },
-      context = dispatcher,
+      coroutineContext = dispatcher,
       refreshes = MutableSharedFlow()
     )
     var ran = false
@@ -76,7 +76,7 @@ class BillingServiceTest {
           )
         }
       },
-      context = dispatcher,
+      coroutineContext = dispatcher,
       refreshes = MutableSharedFlow()
     )
     var ran = false
@@ -90,7 +90,7 @@ class BillingServiceTest {
 
     val service = BillingServiceImpl(
       billingClient = TestBillingClient { refreshes.tryEmit(BillingRefresh) }.withTestSku(),
-      context = dispatcher
+      coroutineContext = dispatcher
     )
     service.purchase(TestSku).shouldBeTrue()
   }

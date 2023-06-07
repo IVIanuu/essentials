@@ -12,8 +12,7 @@ import com.ivianuu.essentials.fold
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.inject
+import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -31,7 +30,7 @@ interface AppRepository {
 
 @Provide class AppRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
-  private val context: IOContext,
+  private val coroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : AppRepository {
   override val installedApps: Flow<List<AppInfo>>
@@ -43,7 +42,7 @@ interface AppRepository {
     )
       .onStart<Any?> { emit(Unit) }
       .map {
-        withContext(context) {
+        withContext(coroutineContext) {
           packageManager.getInstalledApplications(0)
             .parMap {
               AppInfo(
@@ -66,7 +65,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(context) {
+      withContext(coroutineContext) {
         val applicationInfo = catch {
           packageManager.getApplicationInfo(packageName, 0)
         }.getOrNull() ?: return@withContext null
@@ -81,7 +80,7 @@ interface AppRepository {
   )
     .onStart<Any?> { emit(Unit) }
     .map {
-      withContext(context) {
+      withContext(coroutineContext) {
         catch { packageManager.getApplicationInfo(packageName, 0) }
           .fold(success = { true }, failure = { false })
       }

@@ -6,13 +6,13 @@ package com.ivianuu.essentials.ui.insets
 
 import android.view.View
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsCompat
-import com.ivianuu.essentials.compose.getValue
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
 

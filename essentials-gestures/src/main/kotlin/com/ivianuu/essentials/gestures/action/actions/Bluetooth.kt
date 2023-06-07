@@ -7,9 +7,9 @@ package com.ivianuu.essentials.gestures.action.actions
 import android.bluetooth.BluetoothAdapter
 import androidx.compose.material.Icon
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Resources
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
 import com.ivianuu.essentials.gestures.action.ActionExecutor

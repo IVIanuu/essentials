@@ -23,9 +23,9 @@ import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.IOCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -61,7 +61,7 @@ interface BillingService {
   private val appUiStarter: AppUiStarter,
   private val appForegroundState: Flow<AppForegroundState>,
   private val billingClient: BillingClient,
-  private val context: IOContext,
+  private val coroutineContext: IOCoroutineContext,
   private val logger: Logger,
   private val refreshes: MutableSharedFlow<BillingRefresh>,
   private val scope: NamedCoroutineScope<AppScope>
@@ -180,7 +180,7 @@ interface BillingService {
       .also { logger.log { "got purchase $it for $sku" } }
 
   internal suspend fun <R> withConnection(block: suspend BillingService.() -> R): R? =
-    withContext(scope.coroutineContext + context) {
+    withContext(scope.coroutineContext + coroutineContext) {
       ensureConnected()
       block()
     }

@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 @Provide val restartProcessHomeItem = HomeItem("Restart process") { RestartProcessKey() }

@@ -11,7 +11,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.DefaultContext
+import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.withContext
 
 interface ActionRepository {
@@ -32,15 +32,15 @@ interface ActionRepository {
   private val actionsExecutors: () -> Map<String, () -> ActionExecutor<*>>,
   private val actionSettings: () -> Map<String, () -> @ActionSettingsKey<ActionId> Key<Unit>>,
   private val actionPickerDelegates: () -> List<() -> ActionPickerDelegate>,
-  private val context: DefaultContext,
+  private val coroutineContext: DefaultCoroutineContext,
   private val resources: Resources,
   private val toaster: Toaster
 ) : ActionRepository {
-  override suspend fun getAllActions() = withContext(context) {
+  override suspend fun getAllActions() = withContext(coroutineContext) {
     actions().values.map { it() }
   }
 
-  override suspend fun getAction(id: String) = withContext(context) {
+  override suspend fun getAction(id: String) = withContext(coroutineContext) {
     actions()[id]
       ?.invoke()
       ?: actionFactories()
@@ -55,7 +55,7 @@ interface ActionRepository {
       )
   }
 
-  override suspend fun getActionExecutor(id: String) = withContext(context) {
+  override suspend fun getActionExecutor(id: String) = withContext(coroutineContext) {
     actionsExecutors()[id]
       ?.invoke()
       ?: actionFactories()
@@ -69,8 +69,8 @@ interface ActionRepository {
   }
 
   override suspend fun getActionSettingsKey(id: String) =
-    withContext(context) { actionSettings()[id]?.invoke() }
+    withContext(coroutineContext) { actionSettings()[id]?.invoke() }
 
   override suspend fun getActionPickerDelegates() =
-    withContext(context) { actionPickerDelegates().map { it() } }
+    withContext(coroutineContext) { actionPickerDelegates().map { it() } }
 }

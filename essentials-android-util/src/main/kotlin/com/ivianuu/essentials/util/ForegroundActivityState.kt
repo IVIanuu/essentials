@@ -12,7 +12,7 @@ import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.coroutines.MainContext
+import com.ivianuu.injekt.common.MainCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
@@ -28,7 +28,7 @@ interface ForegroundActivityMarker
 
 @Provide fun foregroundActivityStateWorker(
   activity: ComponentActivity,
-  coroutineContext: MainContext,
+  coroutineContext: MainCoroutineContext,
   state: MutableStateFlow<ForegroundActivity>
 ) = ScopeWorker<UiScope> worker@{
   if (activity !is ForegroundActivityMarker) return@worker

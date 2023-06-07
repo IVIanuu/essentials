@@ -19,8 +19,8 @@ import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IOContext
-import kotlinx.coroutines.GlobalScope.coroutineContext
+import com.ivianuu.injekt.common.IOCoroutineContext
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.zip.ZipEntry
@@ -38,14 +38,14 @@ interface BackupManager {
   private val backupFiles: List<BackupFile>,
   private val buildInfo: BuildInfo,
   private val contentResolver: ContentResolver,
-  private val context: IOContext,
+  private val coroutineContext: IOCoroutineContext,
   private val dataDir: DataDir,
   private val logger: Logger,
   private val navigator: Navigator,
   private val processRestarter: ProcessRestarter
 ) : BackupManager {
   override suspend fun createBackup(): Result<Unit, Throwable> = catch {
-    withContext(coroutineContext + context) {
+    withContext(GlobalScope.coroutineContext + coroutineContext) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
         "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -78,7 +78,7 @@ interface BackupManager {
   }
 
   override suspend fun restoreBackup(): Result<Unit, Throwable> = catch {
-    withContext(coroutineContext + context) {
+    withContext(GlobalScope.coroutineContext + coroutineContext) {
       val uri = navigator.push(
         DefaultIntentKey(
           Intent.createChooser(

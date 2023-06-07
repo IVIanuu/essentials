@@ -14,10 +14,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission

@@ -11,7 +11,7 @@ import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.coroutines.DefaultContext
+import com.ivianuu.injekt.common.DefaultCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -37,11 +37,11 @@ enum class ScreenState(val isOn: Boolean) {
 @Tag private annotation class CurrentScreenStateProvider
 
 @Provide fun currentScreenStateProvider(
-  context: DefaultContext,
+  coroutineContext: DefaultCoroutineContext,
   keyguardManager: @SystemService KeyguardManager,
   powerManager: @SystemService PowerManager,
 ): @CurrentScreenStateProvider suspend () -> ScreenState = {
-  withContext(context) {
+  withContext(coroutineContext) {
     if (powerManager.isInteractive) {
       if (keyguardManager.isDeviceLocked) {
         ScreenState.LOCKED

@@ -12,8 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,9 +26,7 @@ import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.produce
-import com.ivianuu.essentials.compose.setValue
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure

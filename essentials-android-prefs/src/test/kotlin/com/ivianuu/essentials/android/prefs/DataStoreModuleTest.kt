@@ -14,7 +14,7 @@ import java.nio.file.Files
 class DataStoreModuleTest {
   @Test fun testBasic() = runCancellingBlockingTest {
     val dataStore = prefsDataStoreModule.dataStore(
-      context = dispatcher,
+      coroutineContext = dispatcher,
       prefsDir = { Files.createTempDirectory("tmp").toFile() },
       scope = this
     )

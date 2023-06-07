@@ -10,8 +10,8 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.util.ContentChangesFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IOContext
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.IOCoroutineContext
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -30,7 +30,7 @@ class AndroidSettingModule<T : S, S>(
     adapter: AndroidSettingAdapter<S>,
     contentChangesFactory: ContentChangesFactory,
     contentResolver: ContentResolver,
-    context: IOContext,
+    coroutineContext: IOCoroutineContext,
     scope: NamedCoroutineScope<AppScope>
   ): DataStore<T> = object : DataStore<T> {
     override val data: Flow<T> = contentChangesFactory(
@@ -42,7 +42,7 @@ class AndroidSettingModule<T : S, S>(
     )
       .onStart { emit(Unit) }
       .map {
-        withContext(context) {
+        withContext(coroutineContext) {
           adapter.get(contentResolver, name, type, defaultValue) as T
         }
       }

@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
-import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen

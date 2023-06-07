@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MonotonicFrameClock
 import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import com.ivianuu.essentials.resource.Idle
 import com.ivianuu.essentials.resource.Resource

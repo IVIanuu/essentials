@@ -9,8 +9,8 @@ import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.Scoped
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged

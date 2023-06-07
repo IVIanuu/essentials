@@ -9,7 +9,7 @@ import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -20,7 +20,7 @@ interface LicenceProjectRepository {
 
 @Provide class LicenceProjectRepositoryImpl(
   private val appContext: AppContext,
-  private val coroutineContext: IOContext,
+  private val coroutineContext: IOCoroutineContext,
   private val json: Json
 ) : LicenceProjectRepository{
   override suspend fun getLicenseProjects(): Result<List<Project>, Throwable> = withContext(coroutineContext) {

@@ -15,7 +15,7 @@ import com.ivianuu.essentials.coroutines.parMap
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.coroutines.IOContext
+import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.mapLatest
@@ -31,7 +31,7 @@ interface ShortcutRepository {
 @Provide class ShortcutRepositoryImpl(
   private val broadcastsFactory: BroadcastsFactory,
   private val context: AppContext,
-  private val coroutineContext: IOContext,
+  private val coroutineContext: IOCoroutineContext,
   private val packageManager: PackageManager
 ) : ShortcutRepository {
   override val shortcuts: Flow<List<Shortcut>>

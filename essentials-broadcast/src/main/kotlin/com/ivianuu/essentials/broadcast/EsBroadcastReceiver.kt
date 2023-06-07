@@ -13,7 +13,7 @@ import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
-import com.ivianuu.injekt.coroutines.NamedCoroutineScope
+import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 class EsBroadcastReceiver : BroadcastReceiver() {
