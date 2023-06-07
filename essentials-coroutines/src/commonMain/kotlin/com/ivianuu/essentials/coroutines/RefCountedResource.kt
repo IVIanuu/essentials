@@ -34,6 +34,15 @@ fun <K, T> RefCountedResource(
   @Inject scope: CoroutineScope
 ): RefCountedResource<K, T> = RefCountedReleaseImpl(create, release, timeout, scope)
 
+suspend inline fun <K, T, R> RefCountedResource<K, T>.withResource(
+  key: K,
+  crossinline block: suspend (T) -> R
+): R = bracket(
+  acquire = { acquire(key) },
+  use = block,
+  release = { _, _ -> release(key) }
+)
+
 private class RefCountedReleaseImpl<K, T>(
   private val create: suspend (K) -> T,
   private val release: (suspend (K, T) -> Unit)?,
