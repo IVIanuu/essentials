@@ -45,7 +45,10 @@ fun interface DecorateUi {
   combinedDecorator(content)
 }
 
-fun interface AppTheme : UiDecorator
-
-@Provide val appThemeConfig = LoadingOrder<AppTheme>()
-  .after<SystemBarManagerProvider>()
+fun interface AppThemeDecorator : UiDecorator {
+  companion object {
+    @Provide val loadingOrder: LoadingOrder<AppThemeDecorator>
+      get() = LoadingOrder<AppThemeDecorator>()
+        .after<SystemBarManagerProvider>()
+  }
+}

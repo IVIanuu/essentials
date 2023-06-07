@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.ui.AppTheme
+import com.ivianuu.essentials.ui.AppThemeDecorator
 import com.ivianuu.essentials.ui.UiDecorator
 import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
 import com.ivianuu.essentials.ui.util.isLight
@@ -56,17 +56,23 @@ import com.ivianuu.injekt.Provide
   onGloballyPositioned { style.bounds = it.boundsInWindow() }
 }
 
-fun interface RootSystemBarsStyle : UiDecorator
-
-@Provide val rootSystemBarsStyle = RootSystemBarsStyle { content ->
-  Surface {
-    Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .systemBarStyle()
-    ) {
-      content()
+fun interface RootSystemBarsStyle : UiDecorator {
+  companion object {
+    @Provide val impl = RootSystemBarsStyle { content ->
+      Surface {
+        Box(
+          modifier = Modifier
+            .fillMaxSize()
+            .systemBarStyle()
+        ) {
+          content()
+        }
+      }
     }
+
+    @Provide val loadingOrder = LoadingOrder<RootSystemBarsStyle>()
+      .after<AppThemeDecorator>()
+      .after<SystemBarManagerProvider>()
   }
 }
 
@@ -84,16 +90,15 @@ class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
   var elevation by mutableStateOf(elevation)
 }
 
-fun interface SystemBarManagerProvider : UiDecorator
+fun interface SystemBarManagerProvider : UiDecorator {
+  companion object {
+    @Provide val loadingOrder: LoadingOrder<SystemBarManagerProvider>
+      get() = LoadingOrder<SystemBarManagerProvider>()
+        .after<WindowInsetsProvider>()
+  }
+}
 
 @Provide expect val systemBarManagerProvider: SystemBarManagerProvider
-
-@Provide val systemBarManagerProviderLoadingOrder = LoadingOrder<SystemBarManagerProvider>()
-  .after<WindowInsetsProvider>()
-
-@Provide val rootSystemBarsStyleLoadingOrder = LoadingOrder<RootSystemBarsStyle>()
-  .after<AppTheme>()
-  .after<SystemBarManagerProvider>()
 
 val LocalSystemBarManager = staticCompositionLocalOf<SystemBarManager> {
   error("No system bar manager provided")

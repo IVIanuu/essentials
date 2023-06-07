@@ -66,8 +66,6 @@ private class AndroidSystemBarManager : SystemBarManager {
       }
     }
 
-    val stylesSnapshot = styles.toList()
-
     val statusBarStyle = styles
       .sortedBy { it.elevation }
       .lastOrNull { it.bounds.contains(statusBarHitPoint) }

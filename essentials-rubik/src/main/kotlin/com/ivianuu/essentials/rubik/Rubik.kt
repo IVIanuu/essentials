@@ -8,8 +8,10 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.ivianuu.essentials.ui.AppFont
+import com.ivianuu.injekt.Provide
 
-val Rubik = FontFamily(
+@Provide val Rubik: AppFont = FontFamily(
   Font(R.font.rubik_light, FontWeight.Light, FontStyle.Normal),
   Font(R.font.rubik_light_italic, FontWeight.Light, FontStyle.Italic),
   Font(R.font.rubik_regular, FontWeight.Normal, FontStyle.Normal),

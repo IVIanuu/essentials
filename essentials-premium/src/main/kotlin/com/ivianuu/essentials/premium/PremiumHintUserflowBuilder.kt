@@ -19,8 +19,9 @@ import kotlinx.coroutines.flow.first
 
 fun interface PremiumHintUserflowBuilder : UserflowBuilder {
   companion object {
-    @Provide val loadingOrder = LoadingOrder<PremiumHintUserflowBuilder>()
-      .last()
+    @Provide val loadingOrder: LoadingOrder<PremiumHintUserflowBuilder>
+      get() = LoadingOrder<PremiumHintUserflowBuilder>()
+        .last()
   }
 }
 
