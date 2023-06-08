@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -59,9 +58,7 @@ import kotlin.collections.set
   itemContent: @Composable BoxScope.(T) -> Unit
 ) {
   val state = remember { AnimatedStackWithItemsState(transition, itemContent, items) }
-  SideEffect {
-    state.update(transition, itemContent, items)
-  }
+  state.update(transition, itemContent, items)
   AnimatedStack(
     modifier = modifier,
     contentAlignment = contentAlignment,
@@ -115,9 +112,8 @@ private class AnimatedStackWithItemsState<T>(
   children: List<AnimatedStackChild<T>>,
 ) {
   val scope = rememberCoroutineScope()
-  val defaultTransition = LocalStackTransition.current
-  val state = remember { AnimatedStackState(scope, children, defaultTransition) }
-  state.defaultTransition = defaultTransition
+  val state = remember { AnimatedStackState(scope, children, NoOpStackTransition) }
+  state.defaultTransition = LocalStackTransition.current
   state.updateChildren(children)
 
   Box(
