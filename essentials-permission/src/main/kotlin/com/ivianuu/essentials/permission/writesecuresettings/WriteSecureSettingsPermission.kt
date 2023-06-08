@@ -6,6 +6,7 @@ package com.ivianuu.essentials.permission.writesecuresettings
 
 import android.Manifest
 import android.content.pm.PackageManager
+import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -18,7 +19,7 @@ import com.ivianuu.injekt.common.TypeKey
 abstract class WriteSecureSettingsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: Permission.Icon? = null
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission
 
 @Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
