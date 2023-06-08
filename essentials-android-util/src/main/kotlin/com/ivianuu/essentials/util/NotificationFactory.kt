@@ -8,8 +8,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import com.ivianuu.essentials.AppContext
+import com.ivianuu.essentials.ui.AppColors
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.inject
@@ -28,6 +30,7 @@ inline val NotificationCompat.Builder.context: Context
 
 @Provide fun notificationFactory(
   appContext: AppContext,
+  appColors: AppColors,
   notificationManager: @SystemService NotificationManager
 ) = NotificationFactory { channelId, channelName, importance, builder ->
   notificationManager.createNotificationChannel(
@@ -39,6 +42,7 @@ inline val NotificationCompat.Builder.context: Context
   )
 
   NotificationCompat.Builder(inject(), channelId)
+    .apply { color = appColors.primary.toArgb() }
     .apply(builder)
     .build()
   }
