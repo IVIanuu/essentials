@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.shareIn
 @JvmInline value class RecentApps(val values: List<String>)
 
 @Provide fun recentApps(
-
   accessibilityEvents: Flow<AccessibilityEvent>,
   logger: Logger,
   scope: NamedCoroutineScope<AppScope>
