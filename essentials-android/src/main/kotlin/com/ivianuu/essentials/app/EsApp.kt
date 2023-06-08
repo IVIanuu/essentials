@@ -14,12 +14,6 @@ import com.ivianuu.injekt.common.Scope
 
 abstract class EsApp : Application(), AppElementsOwner {
   @Provide private val scope = Scope<AppScope>()
-
-  override lateinit var appElements: Elements<AppScope>
-  override fun onCreate() {
-    appElements = buildAppElements()
-    super.onCreate()
-  }
-
+  override val appElements by lazy { buildAppElements() }
   protected abstract fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope>
 }
