@@ -13,7 +13,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.ivianuu.essentials.coroutines.guarantee
@@ -47,7 +46,7 @@ fun ContentAnimationStackTransition(
 ): StackTransition = {
   val fromModifier = fromElementModifier(ContentAnimationElementKey)
   val toModifier = toElementModifier(ContentAnimationElementKey)
-  if (isPush) toModifier?.value = Modifier.alpha(0f)
+  block(fromModifier, toModifier, 0f)
   attachTo()
   guarantee(
     block = { animate(spec) { block(fromModifier, toModifier, it) } },
