@@ -6,13 +6,11 @@ package com.ivianuu.essentials.ide
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.ivianuu.essentials.kotlin.compiler.optics.optics
 import com.ivianuu.essentials.kotlin.compiler.serializationfix.serializationFix
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 class EssentialsProjectInitializer : ProjectManagerListener {
   override fun projectOpened(project: Project) {
-    optics(project.cast())
     serializationFix(project.cast())
   }
 }

@@ -14,7 +14,6 @@ kotlin {
       dependencies {
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
-        api(project(":essentials-optics"))
         api(project(":essentials-tuples"))
       }
     }

@@ -42,7 +42,6 @@ include(
   ":essentials-logging",
   ":essentials-logging-android",
   ":essentials-notification-listener",
-  ":essentials-optics",
   ":essentials-permission",
   ":essentials-premium",
   ":essentials-process-restart",
