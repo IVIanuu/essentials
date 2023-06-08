@@ -22,7 +22,7 @@ import com.ivianuu.injekt.Provide
 class ListKey<T : Any>(
   val items: List<T>,
   val title: String? = null,
-  @Inject val renderable: UiRenderer<T>,
+  @Inject val renderer: UiRenderer<T>,
 ) : OverlayKey<T>
 
 @Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = KeyUi<ListKey<Any>, Unit> {
@@ -36,7 +36,7 @@ class ListKey<T : Any>(
               modifier = Modifier.clickable(onClick = action {
                 ctx.navigator.pop(ctx.key, item)
               }),
-              title = { Text(ctx.key.renderable(item)) },
+              title = { Text(ctx.key.renderer(item)) },
             )
           }
         }
