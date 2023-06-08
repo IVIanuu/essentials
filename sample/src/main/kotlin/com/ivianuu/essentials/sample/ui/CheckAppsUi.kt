@@ -10,9 +10,10 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.db.AbstractEntityDescriptor
 import com.ivianuu.essentials.db.AndroidDb
 import com.ivianuu.essentials.db.Db
+import com.ivianuu.essentials.db.Entity
+import com.ivianuu.essentials.db.EntityDescriptor
 import com.ivianuu.essentials.db.PrimaryKey
 import com.ivianuu.essentials.db.Schema
 import com.ivianuu.essentials.db.deleteAll
@@ -67,10 +68,8 @@ class CheckAppsKey : Key<Unit>
   name = "checked_apps.db",
   schema = Schema(
     version = 1,
-    entities = listOf(CheckedAppEntity)
+    entities = listOf(EntityDescriptor<CheckedAppEntity>("checked_apps"))
   )
 )
 
-@Serializable data class CheckedAppEntity(@PrimaryKey val packageName: String) {
-  companion object : AbstractEntityDescriptor<CheckedAppEntity>("checked_apps")
-}
+@Serializable @Entity data class CheckedAppEntity(@PrimaryKey val packageName: String)
