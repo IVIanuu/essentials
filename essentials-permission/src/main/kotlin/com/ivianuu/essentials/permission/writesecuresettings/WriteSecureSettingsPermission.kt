@@ -19,19 +19,22 @@ import com.ivianuu.injekt.common.TypeKey
 abstract class WriteSecureSettingsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : WriteSecureSettingsPermission> stateProvider(
+      appContext: AppContext
+    ) = PermissionStateProvider<P> {
+      appContext
+        .checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
+    }
 
-@Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionStateProvider(
-  appContext: AppContext
-) = PermissionStateProvider<P> {
-  appContext
-    .checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
+    @Provide fun <P : WriteSecureSettingsPermission> requestHandler(
+      navigator: Navigator,
+      permissionKey: TypeKey<P>
+    ) = PermissionRequestHandler<P> {
+      navigator.push(WriteSecureSettingsKey(permissionKey))
+    }
+  }
 }
 
-@Provide fun <P : WriteSecureSettingsPermission> writeSecureSettingsPermissionsRequestHandler(
-  navigator: Navigator,
-  permissionKey: TypeKey<P>
-) = PermissionRequestHandler<P> {
-  navigator.push(WriteSecureSettingsKey(permissionKey))
-}

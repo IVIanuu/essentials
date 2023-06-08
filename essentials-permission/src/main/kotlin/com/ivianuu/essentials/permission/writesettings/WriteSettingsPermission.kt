@@ -18,19 +18,20 @@ import com.ivianuu.injekt.Provide
 abstract class WriteSettingsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : WriteSettingsPermission> stateProvider(
+      appContext: AppContext
+    ) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }
 
-
-@Provide fun <P : WriteSettingsPermission> writeSettingsPermissionStateProvider(
-  appContext: AppContext
-) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }
-
-@Provide fun <P : WriteSettingsPermission> writeSettingsPermissionIntentFactory(
-  buildInfo: BuildInfo
-) = PermissionIntentFactory<P> {
-  Intent(
-    Settings.ACTION_MANAGE_WRITE_SETTINGS,
-    "package:${buildInfo.packageName}".toUri()
-  )
+    @Provide fun <P : WriteSettingsPermission> intentFactory(
+      buildInfo: BuildInfo
+    ) = PermissionIntentFactory<P> {
+      Intent(
+        Settings.ACTION_MANAGE_WRITE_SETTINGS,
+        "package:${buildInfo.packageName}".toUri()
+      )
+    }
+  }
 }

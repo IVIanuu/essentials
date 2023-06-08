@@ -18,16 +18,19 @@ import com.ivianuu.injekt.Provide
 abstract class RootPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : RootPermission> stateProvider(shell: Shell) =
+      PermissionStateProvider<P> { shell.isAvailable() }
 
-@Provide fun <P : RootPermission> rootPermissionStateProvider(shell: Shell) =
-  PermissionStateProvider<P> { shell.isAvailable() }
-
-@Provide fun <P : RootPermission> rootPermissionRequestHandler(
-  shell: Shell,
-  resources: Resources,
-  toaster: Toaster
-) = PermissionRequestHandler<P> {
-  if (!shell.isAvailable()) toaster(R.string.es_no_root)
+    @Provide fun <P : RootPermission> requestHandler(
+      shell: Shell,
+      resources: Resources,
+      toaster: Toaster
+    ) = PermissionRequestHandler<P> {
+      if (!shell.isAvailable()) toaster(R.string.es_no_root)
+    }
+  }
 }
+

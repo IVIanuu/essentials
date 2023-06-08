@@ -18,15 +18,18 @@ import com.ivianuu.injekt.android.SystemService
 abstract class NotificationPolicyPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : NotificationPolicyPermission> showFindPermissionHint() =
+      ShowFindPermissionHint<P>(true)
 
-@Provide fun <P : NotificationPolicyPermission> notificationPolicyShowFindPermissionHint(
-) = ShowFindPermissionHint<P>(true)
+    @Provide fun <P : NotificationPolicyPermission> stateProvider(
+      notificationManager: @SystemService NotificationManager
+    ) = PermissionStateProvider<P> { notificationManager.isNotificationPolicyAccessGranted }
 
-@Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionStateProvider(
-  notificationManager: @SystemService NotificationManager
-) = PermissionStateProvider<P> { notificationManager.isNotificationPolicyAccessGranted }
+    @Provide fun <P : NotificationPolicyPermission> intentFactory(
+    ) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }
+  }
+}
 
-@Provide fun <P : NotificationPolicyPermission> notificationPolicyPermissionIntentFactory(
-) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }

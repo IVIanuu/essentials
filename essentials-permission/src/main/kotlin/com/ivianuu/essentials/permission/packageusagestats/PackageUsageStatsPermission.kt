@@ -21,30 +21,33 @@ import com.ivianuu.injekt.android.SystemService
 abstract class PackageUsageStatsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : PackageUsageStatsPermission> showFindPermissionHint() =
+      ShowFindPermissionHint<P>(true)
 
-@Provide fun <P : PackageUsageStatsPermission> packageUsageStatsShowFindPermissionHint(
-) = ShowFindPermissionHint<P>(true)
+    @Suppress("DEPRECATION")
+    @Provide
+    fun <P : PackageUsageStatsPermission> stateProvider(
+      appOpsManager: @SystemService AppOpsManager,
+      buildInfo: BuildInfo
+    ) = PermissionStateProvider<P> {
+      appOpsManager.checkOpNoThrow(
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        Process.myUid(),
+        buildInfo.packageName
+      ) == AppOpsManager.MODE_ALLOWED
+    }
 
-@Suppress("DEPRECATION")
-@Provide
-fun <P : PackageUsageStatsPermission> packageUsageStatsPermissionStateProvider(
-  appOpsManager: @SystemService AppOpsManager,
-  buildInfo: BuildInfo
-) = PermissionStateProvider<P> {
-  appOpsManager.checkOpNoThrow(
-    AppOpsManager.OPSTR_GET_USAGE_STATS,
-    Process.myUid(),
-    buildInfo.packageName
-  ) == AppOpsManager.MODE_ALLOWED
+    @Provide fun <P : PackageUsageStatsPermission> intentFactory(
+      buildInfo: BuildInfo
+    ) = PermissionIntentFactory<P> {
+      Intent(
+        Settings.ACTION_USAGE_ACCESS_SETTINGS,
+        Uri.parse("package:${buildInfo.packageName}")
+      )
+    }
+  }
 }
 
-@Provide fun <P : PackageUsageStatsPermission> notificationListenerPermissionIntentFactory(
-  buildInfo: BuildInfo
-) = PermissionIntentFactory<P> {
-  Intent(
-    Settings.ACTION_USAGE_ACCESS_SETTINGS,
-    Uri.parse("package:${buildInfo.packageName}")
-  )
-}

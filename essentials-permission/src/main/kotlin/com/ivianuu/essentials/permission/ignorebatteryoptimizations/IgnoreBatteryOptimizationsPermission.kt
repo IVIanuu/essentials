@@ -20,24 +20,25 @@ import com.ivianuu.injekt.android.SystemService
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(
+      buildInfo: BuildInfo,
+      powerManager: @SystemService PowerManager
+    ) = PermissionStateProvider<P> {
+      powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
+    }
 
-@Provide
-fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionStateProvider(
-  buildInfo: BuildInfo,
-  powerManager: @SystemService PowerManager
-) = PermissionStateProvider<P> {
-  powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
-}
-
-@SuppressLint("BatteryLife")
-@Provide
-fun <P : IgnoreBatteryOptimizationsPermission> ignoreBatteryOptimizationsPermissionIntentFactory(
-  buildInfo: BuildInfo
-) = PermissionIntentFactory<P> {
-  Intent(
-    Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-    "package:${buildInfo.packageName}".toUri()
-  )
+    @SuppressLint("BatteryLife")
+    @Provide
+    fun <P : IgnoreBatteryOptimizationsPermission> intentFactory(
+      buildInfo: BuildInfo
+    ) = PermissionIntentFactory<P> {
+      Intent(
+        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        "package:${buildInfo.packageName}".toUri()
+      )
+    }
+  }
 }

@@ -20,20 +20,22 @@ abstract class RuntimePermission(
   val permissionName: String,
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
-) : Permission
+  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+) : Permission {
+  companion object {
+    @Provide fun <P : RuntimePermission> stateProvider(
+      appContext: AppContext
+    ) = PermissionStateProvider<P> { permission ->
+      appContext.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
+    }
 
-@Provide fun <P : RuntimePermission> runtimePermissionStateProvider(
-  appContext: AppContext
-) = PermissionStateProvider<P> { permission ->
-  appContext.checkSelfPermission(permission.permissionName) == PackageManager.PERMISSION_GRANTED
-}
-
-@Provide fun <P : RuntimePermission> runtimePermissionRequestHandler(
-  appContext: AppContext,
-  navigator: Navigator
-) = PermissionRequestHandler<P> { permission ->
-  val contract = ActivityResultContracts.RequestPermission()
-  val intent = contract.createIntent(appContext, permission.permissionName)
-  navigator.push(DefaultIntentKey(intent))
+    @Provide fun <P : RuntimePermission> requestHandler(
+      appContext: AppContext,
+      navigator: Navigator
+    ) = PermissionRequestHandler<P> { permission ->
+      val contract = ActivityResultContracts.RequestPermission()
+      val intent = contract.createIntent(appContext, permission.permissionName)
+      navigator.push(DefaultIntentKey(intent))
+    }
+  }
 }

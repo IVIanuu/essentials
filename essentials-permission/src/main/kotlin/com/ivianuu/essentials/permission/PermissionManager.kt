@@ -8,7 +8,6 @@ import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestKey
-import com.ivianuu.essentials.time.Clock
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unsafeCast
@@ -33,7 +32,6 @@ interface PermissionManager {
 
 @Provide class PermissionManagerImpl(
   private val appUiStarter: AppUiStarter,
-  private val clock: Clock,
   private val context: DefaultCoroutineContext,
   private val logger: Logger,
   private val navigator: Navigator,
