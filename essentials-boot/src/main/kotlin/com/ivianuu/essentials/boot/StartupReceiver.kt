@@ -7,26 +7,18 @@ package com.ivianuu.essentials.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.AppElementsOwner
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 
-class StartupReceiver : BroadcastReceiver() {
+@Provide @AndroidComponent class StartupReceiver(
+  private val bootListeners: List<BootListener>,
+  private val logger: Logger
+) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-    val component = context.applicationContext
-      .cast<AppElementsOwner>()
-      .appElements
-      .element<StartupReceiverComponent>()
-
-    component.logger.log { "on system boot" }
-    component.bootListeners.forEach { it() }
+    logger.log { "on system boot" }
+    bootListeners.forEach { it() }
   }
 }
-
-@Provide @Element<AppScope>
-data class StartupReceiverComponent(val bootListeners: List<BootListener>, @Provide val logger: Logger)

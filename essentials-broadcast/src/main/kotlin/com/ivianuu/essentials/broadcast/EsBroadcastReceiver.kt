@@ -7,31 +7,23 @@ package com.ivianuu.essentials.broadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.ivianuu.essentials.AppElementsOwner
+import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
-class EsBroadcastReceiver : BroadcastReceiver() {
+@Provide @AndroidComponent class EsBroadcastReceiver(
+  private val handlers: List<BroadcastHandler>,
+  private val scope: NamedCoroutineScope<AppScope>
+) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
-    val component = context.applicationContext
-      .cast<AppElementsOwner>()
-      .appElements
-      .element<EsBroadcastReceiverComponent>()
-    component.scope.launch {
-      component.handlers.parForEach { it(intent) }
+    scope.launch {
+      handlers.parForEach { it(intent) }
     }
   }
 }
-
-@Provide @Element<AppScope> data class EsBroadcastReceiverComponent(
-  val handlers: List<BroadcastHandler>,
-  val scope: NamedCoroutineScope<AppScope>
-)
 
 fun interface BroadcastHandler {
   suspend operator fun invoke(intent: Intent)

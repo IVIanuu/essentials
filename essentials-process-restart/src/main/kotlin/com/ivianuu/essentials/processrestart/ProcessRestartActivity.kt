@@ -9,8 +9,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.ComponentActivity
+import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.injekt.Provide
 
-class ProcessRestartActivity : ComponentActivity() {
+@Provide @AndroidComponent class ProcessRestartActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val restartIntent = intent.getParcelableExtra<Parcelable>(KEY_RESTART_INTENT)

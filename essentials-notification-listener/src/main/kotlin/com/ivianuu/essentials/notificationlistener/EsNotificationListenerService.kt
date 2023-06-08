@@ -6,74 +6,68 @@ package com.ivianuu.essentials.notificationlistener
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.ivianuu.essentials.AppElementsOwner
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.getOrElse
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class EsNotificationListenerService : NotificationListenerService() {
+@Provide @AndroidComponent class EsNotificationListenerService(
+  private val logger: Logger,
+  private val notificationElementsFactory: (Scope<NotificationScope>, EsNotificationListenerService) -> Elements<NotificationScope>,
+  private val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
+) : NotificationListenerService() {
   private val _notifications = MutableStateFlow(emptyList<StatusBarNotification>())
   internal val notifications: Flow<List<StatusBarNotification>> get() = _notifications
 
   private val _events: MutableSharedFlow<NotificationEvent> = EventFlow()
   internal val events: Flow<NotificationEvent> get() = _events
 
-  private val component by lazy {
-    application
-      .cast<AppElementsOwner>()
-      .appElements
-      .element<EsNotificationListenerServiceComponent>()
-  }
-
   private var notificationScope: Scope<NotificationScope>? = null
 
   override fun onListenerConnected() {
     super.onListenerConnected()
-    component.logger.log { "listener connected" }
+    logger.log { "listener connected" }
     val scope = Scope<NotificationScope>()
       .also { this.notificationScope = it }
-    component.notificationElementsFactory(scope, this)
-    component.notificationServiceRef.value = this
+    notificationElementsFactory(scope, this)
+    notificationServiceRef.value = this
     updateNotifications()
   }
 
   override fun onNotificationPosted(sbn: StatusBarNotification) {
     super.onNotificationPosted(sbn)
-    component.logger.log { "notification posted $sbn" }
+    logger.log { "notification posted $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationPosted(sbn))
   }
 
   override fun onNotificationRemoved(sbn: StatusBarNotification) {
     super.onNotificationRemoved(sbn)
-    component.logger.log { "notification removed $sbn" }
+    logger.log { "notification removed $sbn" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.NotificationRemoved(sbn))
   }
 
   override fun onNotificationRankingUpdate(rankingMap: RankingMap) {
     super.onNotificationRankingUpdate(rankingMap)
-    component.logger.log { "ranking update $rankingMap" }
+    logger.log { "ranking update $rankingMap" }
     updateNotifications()
     _events.tryEmit(NotificationEvent.RankingUpdate(rankingMap))
   }
 
   override fun onListenerDisconnected() {
-    component.logger.log { "listener disconnected" }
+    logger.log { "listener disconnected" }
     notificationScope?.dispose()
     notificationScope = null
-    component.notificationServiceRef.value = null
+    notificationServiceRef.value = null
     super.onListenerDisconnected()
   }
 
@@ -86,10 +80,3 @@ class EsNotificationListenerService : NotificationListenerService() {
     @Provide val notificationListenerRef = MutableStateFlow<EsNotificationListenerService?>(null)
   }
 }
-
-@Provide @Element<AppScope>
-data class EsNotificationListenerServiceComponent(
-  val logger: Logger,
-  val notificationElementsFactory: (Scope<NotificationScope>, EsNotificationListenerService) -> Elements<NotificationScope>,
-  val notificationServiceRef: MutableStateFlow<EsNotificationListenerService?>
-)

@@ -5,5 +5,7 @@
 package com.ivianuu.essentials.backup
 
 import androidx.core.content.FileProvider
+import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.injekt.Provide
 
-class BackupFileProvider : FileProvider()
+@Provide @AndroidComponent class BackupFileProvider : FileProvider()

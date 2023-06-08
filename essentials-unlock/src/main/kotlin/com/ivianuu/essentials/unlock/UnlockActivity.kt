@@ -12,16 +12,13 @@ import android.os.PowerManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.ivianuu.essentials.AppElementsOwner
-import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.cast
+import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.Element
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
@@ -33,7 +30,11 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Requests a screen unlock
  */
-class UnlockActivity : ComponentActivity() {
+@Provide @AndroidComponent class UnlockActivity(
+  private val keyguardManager: @SystemService KeyguardManager,
+  private val logger: Logger,
+  private val powerManager: @SystemService PowerManager
+) : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -49,12 +50,7 @@ class UnlockActivity : ComponentActivity() {
       return
     }
 
-    val component = application
-      .cast<AppElementsOwner>()
-      .appElements
-      .element<UnlockComponent>()
-
-    component.logger.log {
+    logger.log {
       when (requestType) {
         REQUEST_TYPE_UNLOCK -> "unlock screen for $requestId"
         REQUEST_TYPE_SCREEN_ON -> "turn screen on $requestId"
@@ -65,7 +61,7 @@ class UnlockActivity : ComponentActivity() {
     var hasResult = false
 
     fun finishWithResult(success: Boolean) {
-      component.logger.log { "finish with result $success" }
+      logger.log { "finish with result $success" }
       hasResult = true
       requestsById.remove(requestId)?.complete(success)
       finish()
@@ -87,25 +83,25 @@ class UnlockActivity : ComponentActivity() {
         lifecycleScope.launch {
           delay(50)
 
-          component.keyguardManager().requestDismissKeyguard(
+          keyguardManager.requestDismissKeyguard(
             this@UnlockActivity,
             object :
               KeyguardManager.KeyguardDismissCallback() {
               override fun onDismissSucceeded() {
                 super.onDismissSucceeded()
-                component.logger.log { "dismiss succeeded" }
+                logger.log { "dismiss succeeded" }
                 finishWithResult(true)
               }
 
               override fun onDismissError() {
                 super.onDismissError()
-                component.logger.log { "dismiss error" }
+                logger.log { "dismiss error" }
                 finishWithResult(true)
               }
 
               override fun onDismissCancelled() {
                 super.onDismissCancelled()
-                component.logger.log { "dismiss cancelled" }
+                logger.log { "dismiss cancelled" }
                 finishWithResult(false)
               }
             }
@@ -114,8 +110,6 @@ class UnlockActivity : ComponentActivity() {
       }
       REQUEST_TYPE_SCREEN_ON -> {
         lifecycleScope.launch {
-          val powerManager = component.powerManager()
-
           withTimeoutOrNull(1.seconds) {
             while (!powerManager.isInteractive)
               yield()
@@ -156,11 +150,5 @@ class UnlockActivity : ComponentActivity() {
     }
   }
 }
-
-@Provide @Element<AppScope> data class UnlockComponent(
-  val keyguardManager: () -> @SystemService KeyguardManager,
-  @Provide val logger: Logger,
-  val powerManager: () -> @SystemService PowerManager
-)
 
 internal val requestsById = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
