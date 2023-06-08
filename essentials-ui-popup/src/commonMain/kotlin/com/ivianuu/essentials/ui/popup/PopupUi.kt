@@ -37,10 +37,10 @@ import com.ivianuu.essentials.ui.animation.transition.fromElementModifier
 import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.insets.LocalInsets
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiOptions
 import com.ivianuu.essentials.ui.navigation.KeyUiOptionsFactory
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
@@ -51,7 +51,7 @@ class PopupKey(
   val content: @Composable () -> Unit,
 ) : com.ivianuu.essentials.ui.navigation.PopupKey<Unit>
 
-@Provide fun popupUi(key: PopupKey, navigator: Navigator) = SimpleKeyUi<PopupKey> {
+@Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey, Unit> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
 
   BoxWithConstraints {

@@ -26,10 +26,10 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorContent
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -38,7 +38,7 @@ class ChildNavigationKey : Key<Unit>
 
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationKey() }
 
-@Provide fun childNavigationUi() = SimpleKeyUi<ChildNavigationKey> {
+@Provide fun childNavigationUi() = KeyUi<ChildNavigationKey, Unit> {
   Scaffold(
     topBar = {
       TopAppBar(title = { Text("Child Navigation") })
@@ -78,7 +78,7 @@ data class ChildNavigationItemKey(
 
 @Provide fun childNavigationItemUi(
   ctx: KeyUiContext<ChildNavigationItemKey>
-) = SimpleKeyUi<ChildNavigationItemKey> {
+) = KeyUi<ChildNavigationItemKey, Unit> {
   val color = Colors.shuffled().first()
 
   Surface(

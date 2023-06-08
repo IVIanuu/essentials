@@ -26,9 +26,9 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -41,7 +41,7 @@ class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
 @Provide fun floatingWindowsPickerUi(
   commonStrings: CommonStrings
-) = ModelKeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> {
+) = KeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {

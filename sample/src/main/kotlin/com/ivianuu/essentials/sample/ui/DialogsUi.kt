@@ -38,10 +38,10 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PopupKey
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Inject
@@ -54,7 +54,7 @@ class DialogsKey : Key<Unit>
 @Provide fun dialogsUi(
   ctx: KeyUiContext<DialogsKey>,
   navigator: Navigator
-) = SimpleKeyUi<DialogsKey> {
+) = KeyUi<DialogsKey, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -290,6 +290,6 @@ class DialogLauncherKey(
   val dialog: @Composable () -> Unit
 ) : PopupKey<Unit>
 
-@Provide fun dialogLauncherUi(key: DialogLauncherKey) = SimpleKeyUi<DialogLauncherKey> {
+@Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey, Unit> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }

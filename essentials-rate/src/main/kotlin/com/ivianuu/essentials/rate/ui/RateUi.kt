@@ -35,16 +35,16 @@ import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.PopupKey
 import com.ivianuu.essentials.ui.navigation.replaceTop
 import com.ivianuu.injekt.Provide
 
 object RateKey : PopupKey<Unit>
 
-@Provide val rateUi = ModelKeyUi<RateKey, RateModel> {
+@Provide val rateUi = KeyUi<RateKey, RateModel> {
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {

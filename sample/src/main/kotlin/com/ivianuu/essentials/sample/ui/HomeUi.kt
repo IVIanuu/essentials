@@ -23,9 +23,9 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.RootKey
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
@@ -40,7 +40,7 @@ import com.ivianuu.injekt.Provide
   isXposedRunning: IsXposedRunning,
   itemsFactory: () -> List<HomeItem>,
   toaster: Toaster
-) = SimpleKeyUi<HomeKey> {
+) = KeyUi<HomeKey, Unit> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",

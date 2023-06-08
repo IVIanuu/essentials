@@ -18,9 +18,9 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
@@ -28,7 +28,7 @@ import com.ivianuu.injekt.Provide
 
 class LicenseKey : Key<Unit>
 
-@Provide val licenseUi = ModelKeyUi<LicenseKey, LicenseModel> {
+@Provide val licenseUi = KeyUi<LicenseKey, LicenseModel> {
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
     ResourceVerticalListFor(projects) { project ->
       ListItem(

@@ -22,10 +22,10 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Element
 
@@ -33,7 +33,7 @@ import com.ivianuu.injekt.common.Element
 
 class DecoratorsKey : Key<Unit>
 
-@Provide val decoratorsUi = SimpleKeyUi<DecoratorsKey> {
+@Provide val decoratorsUi = KeyUi<DecoratorsKey, Unit> {
   SimpleListScreen("Decorators") {
     (1..10).forEach { itemIndex ->
       item {

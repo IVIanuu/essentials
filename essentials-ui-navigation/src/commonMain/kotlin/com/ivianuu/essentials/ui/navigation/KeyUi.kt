@@ -14,56 +14,59 @@ import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
-fun interface KeyUi<K : Key<*>> {
-  @Composable operator fun invoke(): @Composable () -> Unit
+// todo make fun interface once compose is fixed
+interface KeyUi<K : Key<*>, M> {
+  @Composable operator fun M.invoke()
 }
 
-fun <K: Key<*>> SimpleKeyUi(block: @Composable () -> Unit) = KeyUi<K> { block }
+inline fun <K : Key<*>, M> KeyUi(
+  crossinline block: @Composable M.() -> Unit
+): KeyUi<K, M> = object : KeyUi<K, M> {
+  @Composable override fun M.invoke() {
+    block()
+  }
+}
 
-typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUi<K>
+typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUiWithModel<K>
 
 object KeyUiModule {
-  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUi(
+  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyUi(
     keyClass: KClass<K>,
     keyUiFactory: KeyUiFactory<K>
   ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
     (keyClass to keyUiFactory) as Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>>
 
-  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyUiOptionFactory(
+  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyUiOptionFactory(
     keyClass: KClass<K>,
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
     (keyClass to keyUiOptionsFactory) as Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
 
-  @Provide fun <@Spread T : KeyUi<K>, K : Key<*>> keyTypeKey(
+  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyTypeKey(
     keyClass: KClass<K>,
     keyType: TypeKey<K>
   ): Pair<KClass<Key<*>>, TypeKey<Key<*>>> =
     (keyClass to keyType) as Pair<KClass<Key<*>>, TypeKey<Key<*>>>
 }
 
-// todo make fun interface once compose is fixed
-interface ModelKeyUi<K : Key<*>, S> {
-  @Composable operator fun S.invoke()
-}
-inline fun <K : Key<*>, S> ModelKeyUi(
-  crossinline block: @Composable S.() -> Unit
-): ModelKeyUi<K, S> = object : ModelKeyUi<K, S> {
-  @Composable override fun S.invoke() {
-    block()
-  }
-}
+interface KeyUiWithModel<K : Key<*>> {
+  @Composable operator fun invoke(): @Composable () -> Unit
 
-@Provide fun <@Spread U : ModelKeyUi<K, S>, K : Key<*>, S> modelKeyUi(
-  ui: U,
-  model: Model<S>
-): KeyUi<K> = KeyUi {
-  val currentModel = model()
-  remember(currentModel) {
-    {
-      with(ui) {
-        with(currentModel) {
-          invoke()
+  companion object {
+    @Provide fun <@Spread U : KeyUi<K, M>, K : Key<*>, M> impl(
+      ui: U,
+      model: Model<M>
+    ): KeyUiWithModel<K> = object : KeyUiWithModel<K> {
+      @Composable override fun invoke(): @Composable () -> Unit {
+        val currentModel = model()
+        return remember(currentModel) {
+          {
+            with(ui) {
+              with(currentModel) {
+                invoke()
+              }
+            }
+          }
         }
       }
     }
@@ -73,6 +76,11 @@ inline fun <K : Key<*>, S> ModelKeyUi(
 // todo make fun interface once compose is fixed
 interface Model<out S> {
   @Composable operator fun invoke(): S
+
+  companion object {
+    @Provide fun unit() = Model {
+    }
+  }
 }
 
 inline fun <S> Model(

@@ -18,16 +18,16 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
 class NavBarUnsupportedKey : Key<Unit>
 
-@Provide val navBarUnsupportedUi = ModelKeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
+@Provide val navBarUnsupportedUi = KeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_unsupported_title) }) }
   ) {

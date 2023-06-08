@@ -19,8 +19,8 @@ import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.Scoped
@@ -37,7 +37,7 @@ class CheckAppsKey : Key<Unit>
   ctx: KeyUiContext<CheckAppsKey>,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate
-) = SimpleKeyUi<CheckAppsKey> {
+) = KeyUi<CheckAppsKey, Unit> {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(

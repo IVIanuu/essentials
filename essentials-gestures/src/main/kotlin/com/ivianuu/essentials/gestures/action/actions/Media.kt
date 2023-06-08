@@ -27,9 +27,9 @@ import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.first
@@ -75,7 +75,7 @@ private fun mediaIntentFor(
 class MediaActionSettingsKey : Key<Unit>
 
 @Provide
-val mediaActionSettingsUi = ModelKeyUi<MediaActionSettingsKey, MediaActionSettingsModel> {
+val mediaActionSettingsUi = KeyUi<MediaActionSettingsKey, MediaActionSettingsModel> {
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(

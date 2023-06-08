@@ -13,9 +13,9 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.PopupKey
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -30,7 +30,7 @@ class MultiChoiceListKey<T : Any>(
 @Provide fun multiChoiceListUi(
   ctx: KeyUiContext<MultiChoiceListKey<Any>>,
   commonStrings: CommonStrings
-) = SimpleKeyUi<MultiChoiceListKey<Any>> {
+) = KeyUi<MultiChoiceListKey<Any>, Unit> {
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(ctx.key.selectedItems) }
 

@@ -37,9 +37,9 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.ModelKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.stepper.Step
@@ -58,17 +58,17 @@ class WriteSecureSettingsPcInstructionsKey(
 ) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsPcInstructionsUi =
-  ModelKeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {
-  SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
-    item {
-      SecureSettingsHeader(
-        text = stringResource(R.string.es_secure_settings_pc_instructions_desc)
-      )
-    }
+  KeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {
+    SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
+      item {
+        SecureSettingsHeader(
+          text = stringResource(R.string.es_secure_settings_pc_instructions_desc)
+        )
+      }
 
-    item {
-      Step(
-        step = 1,
+      item {
+        Step(
+          step = 1,
         isCompleted = completedStep > 1,
         isCurrent = currentStep == 1,
         onClick = { openStep(1) },

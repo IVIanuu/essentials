@@ -8,9 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.PopupKey
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
@@ -22,7 +22,7 @@ class ColorPickerKey(
   val showAlphaSelector: Boolean = false,
 ) : PopupKey<Color>
 
-@Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) = SimpleKeyUi<ColorPickerKey> {
+@Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) = KeyUi<ColorPickerKey, Unit> {
   DialogScaffold {
     ColorPickerDialog(
       initialColor = ctx.key.initialColor,

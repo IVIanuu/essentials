@@ -24,8 +24,8 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
+import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.SimpleKeyUi
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Inject
@@ -49,7 +49,7 @@ class AppTrackerKey : Key<Unit>
   permissionManager: PermissionManager,
   resources: Resources,
   toaster: Toaster
-) = SimpleKeyUi<AppTrackerKey> {
+) = KeyUi<AppTrackerKey, Unit> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)
