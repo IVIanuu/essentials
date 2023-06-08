@@ -23,7 +23,6 @@ import com.ivianuu.essentials.resource.resourceFlow
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -72,8 +71,6 @@ fun <T> CoroutineScope.launchState(
   body: @Composable () -> T
 ) {
   if (!coroutineContext.isActive) return
-
-  val context = inject<StateContext>()
 
   val recomposer = Recomposer(coroutineContext + context)
   val composition = Composition(UnitApplier, recomposer)
@@ -125,20 +122,13 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
     onFrame(0L)
 }
 
-@Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T {
-  val state = remember(*args) { mutableStateOf(initial) }
-
-  LaunchedEffect(state) {
-    collect { state.value = it }
-  }
-
-  return state.value
-}
+@Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T =
+  produce(initial, this, *args) { collect { value = it } }
 
 @Composable fun <T> StateFlow<T>.bind(vararg args: Any?): T = bind(initial = value, args = *args)
 
 @Composable fun <T> Flow<T>.bindResource(vararg args: Any?): Resource<T> =
-  flowAsResource().bind(initial = Idle, args = *args)
+  remember(this) { flowAsResource() }.bind(initial = Idle, args = *args)
 
 interface ProduceScope<T> : CoroutineScope {
   var value: T
@@ -149,9 +139,9 @@ interface ProduceScope<T> : CoroutineScope {
   vararg args: Any?,
   block: suspend ProduceScope<T>.() -> Unit
 ): T {
-  val state = remember(*args) { mutableStateOf(initial) }
+  val state = remember { mutableStateOf(initial) }
 
-  LaunchedEffect(state) {
+  LaunchedEffect(*args) {
     block(
       object : ProduceScope<T>, CoroutineScope by this {
         override var value by state
@@ -165,9 +155,9 @@ interface ProduceScope<T> : CoroutineScope {
 @Composable fun <T> produceResource(
   vararg args: Any?,
   block: suspend () -> T
-): Resource<T> = remember(*args) {
-  resourceFlow { emit(block()) }
-}.bind(Idle)
+): Resource<T> = produce<Resource<T>>(Idle, *args) {
+  resourceFlow<T> { block() }.collect { value = it }
+}
 
 @Composable fun action(block: suspend () -> Unit): () -> Unit {
   val scope = rememberCoroutineScope()
