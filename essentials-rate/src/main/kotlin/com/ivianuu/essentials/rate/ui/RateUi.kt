@@ -38,11 +38,11 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.replaceTop
 import com.ivianuu.injekt.Provide
 
-object RateKey : PopupKey<Unit>
+object RateKey : OverlayKey<Unit>
 
 @Provide val rateUi = KeyUi<RateKey, RateModel> {
   DialogScaffold(dismissible = false) {

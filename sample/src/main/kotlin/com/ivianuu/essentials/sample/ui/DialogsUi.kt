@@ -41,7 +41,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.popTop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Inject
@@ -288,7 +288,7 @@ class DialogsKey : Key<Unit>
 class DialogLauncherKey(
   val dismissible: Boolean = true,
   val dialog: @Composable () -> Unit
-) : PopupKey<Unit>
+) : OverlayKey<Unit>
 
 @Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey, Unit> {
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }

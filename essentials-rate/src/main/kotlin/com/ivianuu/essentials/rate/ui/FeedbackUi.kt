@@ -15,13 +15,13 @@ import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 
-object FeedbackKey : PopupKey<Unit>
+object FeedbackKey : OverlayKey<Unit>
 
 @Provide val feedbackUi = KeyUi<FeedbackKey, FeedbackModel> {
   DialogScaffold(dismissible = false) {

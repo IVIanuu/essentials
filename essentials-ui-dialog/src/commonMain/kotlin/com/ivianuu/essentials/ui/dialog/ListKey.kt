@@ -14,7 +14,7 @@ import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -23,7 +23,7 @@ class ListKey<T : Any>(
   val items: List<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>,
-) : PopupKey<T>
+) : OverlayKey<T>
 
 @Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = KeyUi<ListKey<Any>, Unit> {
   DialogScaffold {

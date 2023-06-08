@@ -11,11 +11,12 @@ interface Key<T>
 
 interface RootKey : Key<Unit>
 
-interface PopupKey<T> : Key<T> {
+interface OverlayKey<T> : Key<T> {
   companion object {
-    @Provide fun <T : PopupKey<*>> popupKeyUiOptionsFactory() = KeyUiOptionsFactory<T> { _, _, _ ->
-      KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
-    }
+    @Provide fun <T : OverlayKey<*>> overlayKeyUiOptionsFactory() =
+      KeyUiOptionsFactory<T> { _, _, _ ->
+        KeyUiOptions(opaque = true, transition = FadeScaleStackTransition())
+      }
   }
 }
 

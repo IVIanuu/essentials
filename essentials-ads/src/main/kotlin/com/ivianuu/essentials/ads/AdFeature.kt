@@ -7,7 +7,7 @@ package com.ivianuu.essentials.ads
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
@@ -23,7 +23,8 @@ interface AdFeature
     @Provide fun <K : RootKey> defaultRootKeyAdFeatures(allFeatures: List<AdFeature>): AdFeatures<K> =
       AdFeatures(allFeatures.filter { it != ListAdBannerFeature })
 
-    @Provide fun <K : PopupKey<*>> defaultPopupAdFeatures(): AdFeatures<K> = AdFeatures(emptyList())
+    @Provide fun <K : OverlayKey<*>> defaultPopupAdFeatures(): AdFeatures<K> =
+      AdFeatures(emptyList())
 
     @Provide fun <K : CriticalUserFlowKey<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
       AdFeatures(listOf(ScreenAdBannerFeature))

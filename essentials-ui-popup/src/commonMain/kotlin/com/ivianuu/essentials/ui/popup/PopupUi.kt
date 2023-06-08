@@ -49,7 +49,7 @@ class PopupKey(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : com.ivianuu.essentials.ui.navigation.PopupKey<Unit>
+) : com.ivianuu.essentials.ui.navigation.OverlayKey<Unit>
 
 @Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey, Unit> {
   var previousConstraints by remember { refOf<Constraints?>(null) }

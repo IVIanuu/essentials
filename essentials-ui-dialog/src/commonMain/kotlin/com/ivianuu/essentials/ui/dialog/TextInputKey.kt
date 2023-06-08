@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
@@ -25,7 +25,7 @@ class TextInputKey(
   val keyboardOptions: KeyboardOptions = KeyboardOptions(),
   val title: String? = null,
   val predicate: (String) -> Boolean = { true }
-) : PopupKey<String>
+) : OverlayKey<String>
 
 @Provide fun textInputUi(
   ctx: KeyUiContext<TextInputKey>,

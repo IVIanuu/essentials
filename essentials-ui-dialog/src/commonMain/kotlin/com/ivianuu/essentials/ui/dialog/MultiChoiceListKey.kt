@@ -15,7 +15,7 @@ import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -25,7 +25,7 @@ class MultiChoiceListKey<T : Any>(
   val selectedItems: Set<T>,
   val title: String? = null,
   @Inject val renderable: UiRenderer<T>
-) : PopupKey<Set<T>>
+) : OverlayKey<Set<T>>
 
 @Provide fun multiChoiceListUi(
   ctx: KeyUiContext<MultiChoiceListKey<Any>>,

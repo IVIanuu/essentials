@@ -10,7 +10,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
-import com.ivianuu.essentials.ui.navigation.PopupKey
+import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
@@ -20,7 +20,7 @@ class ColorPickerKey(
   val title: String? = null,
   val allowCustomArgb: Boolean = true,
   val showAlphaSelector: Boolean = false,
-) : PopupKey<Color>
+) : OverlayKey<Color>
 
 @Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) = KeyUi<ColorPickerKey, Unit> {
   DialogScaffold {
