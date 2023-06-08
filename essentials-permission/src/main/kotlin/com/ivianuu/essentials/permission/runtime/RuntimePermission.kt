@@ -6,7 +6,6 @@ package com.ivianuu.essentials.permission.runtime
 
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -20,7 +19,7 @@ abstract class RuntimePermission(
   val permissionName: String,
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
+  override val icon: Permission.Icon? = null
 ) : Permission {
   companion object {
     @Provide fun <P : RuntimePermission> stateProvider(

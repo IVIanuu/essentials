@@ -4,7 +4,6 @@
 
 package com.ivianuu.essentials.permission.root
 
-import androidx.compose.runtime.Composable
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionRequestHandler
@@ -18,7 +17,7 @@ import com.ivianuu.injekt.Provide
 abstract class RootPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
+  override val icon: Permission.Icon? = null
 ) : Permission {
   companion object {
     @Provide fun <P : RootPermission> stateProvider(shell: Shell) =

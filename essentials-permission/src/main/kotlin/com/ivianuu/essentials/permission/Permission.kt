@@ -18,7 +18,19 @@ import kotlinx.coroutines.flow.first
 interface Permission {
   val title: String
   val desc: String? get() = null
-  val icon: (@Composable () -> Unit)? get() = null
+  val icon: Icon? get() = null
+
+  interface Icon {
+    @Composable operator fun invoke()
+
+    companion object {
+      inline operator fun invoke(crossinline icon: @Composable () -> Unit) = object : Icon {
+        @Composable override fun invoke() {
+          icon()
+        }
+      }
+    }
+  }
 }
 
 object PermissionModule {

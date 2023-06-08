@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.data.DataStore
+import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.writesecuresettings.WriteSecureSettingsPermission
 import com.ivianuu.essentials.ui.UiScope
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.first
 @Provide class NavBarPermission(resources: Resources) : WriteSecureSettingsPermission(
   title = resources(R.string.es_permission_nav_bar),
   desc = resources(R.string.es_permission_nav_bar_desc),
-  icon = { Icon(R.drawable.es_ic_settings) }
+  icon = Permission.Icon { Icon(R.drawable.es_ic_settings) }
 )
 
 @Provide fun disableHideNavBarWhenPermissionRevokedWorker(

@@ -8,7 +8,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
-import androidx.compose.runtime.Composable
 import androidx.core.net.toUri
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.permission.Permission
@@ -20,7 +19,7 @@ import com.ivianuu.injekt.android.SystemService
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: (@Composable () -> Unit)? = null
+  override val icon: Permission.Icon? = null
 ) : Permission {
   companion object {
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(
