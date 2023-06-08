@@ -18,7 +18,7 @@ import com.ivianuu.injekt.android.SystemService
 abstract class NotificationPolicyPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   companion object {
     @Provide fun <P : NotificationPolicyPermission> showFindPermissionHint() =

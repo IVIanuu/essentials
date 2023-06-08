@@ -20,7 +20,7 @@ abstract class RuntimePermission(
   val permissionName: String,
   override val title: String,
   override val desc: String? = null,
-  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   companion object {
     @Provide fun <P : RuntimePermission> stateProvider(

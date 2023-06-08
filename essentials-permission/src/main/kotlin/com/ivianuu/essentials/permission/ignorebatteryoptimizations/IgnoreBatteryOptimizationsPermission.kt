@@ -20,7 +20,7 @@ import com.ivianuu.injekt.android.SystemService
 abstract class IgnoreBatteryOptimizationsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   companion object {
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(

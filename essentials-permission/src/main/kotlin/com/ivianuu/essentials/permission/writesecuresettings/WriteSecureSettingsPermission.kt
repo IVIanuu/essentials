@@ -19,7 +19,7 @@ import com.ivianuu.injekt.common.TypeKey
 abstract class WriteSecureSettingsPermission(
   override val title: String,
   override val desc: String? = null,
-  override val icon: @Composable () -> Unit = { Permission.NullIcon }
+  override val icon: (@Composable () -> Unit)? = null
 ) : Permission {
   companion object {
     @Provide fun <P : WriteSecureSettingsPermission> stateProvider(
