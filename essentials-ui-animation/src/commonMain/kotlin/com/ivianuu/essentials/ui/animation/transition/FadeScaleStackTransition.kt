@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import com.ivianuu.essentials.lerp
 import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import com.ivianuu.essentials.ui.animation.util.interval
@@ -23,9 +24,10 @@ fun FadeScaleStackTransition(
   enterSpec: AnimationSpec<Float> = defaultAnimationSpec(150.milliseconds),
   exitSpec: AnimationSpec<Float> = defaultAnimationSpec(75.milliseconds)
 ): StackTransition = {
+  val scrim = toElementModifier(ScrimAnimationElementKey)
+  val popup = toElementModifier(PopupAnimationElementKey)
+
   if (isPush) {
-    val scrim = toElementModifier(ScrimAnimationElementKey)
-    val popup = toElementModifier(PopupAnimationElementKey)
     val from = if (fromWillBeRemoved) fromElementModifier(ContentAnimationElementKey) else null
     scrim?.value = Modifier.alpha(0f)
     popup?.value = Modifier.alpha(0f)
@@ -37,13 +39,11 @@ fun FadeScaleStackTransition(
         .graphicsLayer {
           transformOrigin = origin
           alpha = interval(0f, 0.3f, value)
-          scaleX = com.ivianuu.essentials.lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
-          scaleY = com.ivianuu.essentials.lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
+          scaleX = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
+          scaleY = lerp(0.8f, 1f, LinearOutSlowInEasing.transform(value))
         }
     }
   } else {
-    val scrim = fromElementModifier(ScrimAnimationElementKey)
-    val popup = fromElementModifier(PopupAnimationElementKey)
     animate(exitSpec) { value ->
       scrim?.value = Modifier.alpha(1f - value)
       popup?.value = Modifier.alpha(1f - value)
