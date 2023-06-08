@@ -156,7 +156,7 @@ interface ProduceScope<T> : CoroutineScope {
   vararg args: Any?,
   block: suspend () -> T
 ): Resource<T> = produce<Resource<T>>(Idle, *args) {
-  resourceFlow<T> { block() }.collect { value = it }
+  resourceFlow { emit(block()) }.collect { value = it }
 }
 
 @Composable fun action(block: suspend () -> Unit): () -> Unit {
