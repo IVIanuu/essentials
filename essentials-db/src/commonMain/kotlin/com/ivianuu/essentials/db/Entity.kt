@@ -20,7 +20,6 @@ interface EntityDescriptor<T> {
   val serializer: KSerializer<T>
 }
 
-// todo replace @Inject with context receivers once supported
 abstract class AbstractEntityDescriptor<T>(
   tableName: String,
   @Inject K: TypeKey<T>,
