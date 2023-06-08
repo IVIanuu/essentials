@@ -5,13 +5,12 @@
 package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.runtime.remember
-import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
-import com.ivianuu.essentials.db.AndroidDb
 import com.ivianuu.essentials.db.Db
+import com.ivianuu.essentials.db.DbFactory
 import com.ivianuu.essentials.db.Entity
 import com.ivianuu.essentials.db.EntityDescriptor
 import com.ivianuu.essentials.db.PrimaryKey
@@ -64,7 +63,7 @@ class CheckAppsKey : Key<Unit>
 
 @Tag private annotation class CheckApps
 
-@Provide fun checkAppsDb(appContext: AppContext): @Scoped<AppScope> @CheckApps Db = AndroidDb(
+@Provide fun checkAppsDb(dbFactory: DbFactory): @Scoped<AppScope> @CheckApps Db = dbFactory(
   name = "checked_apps.db",
   schema = Schema(
     version = 1,

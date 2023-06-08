@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.ivianuu.essentials.coroutines.EventFlow
 import com.ivianuu.essentials.coroutines.bracket
 import com.ivianuu.injekt.Inject
+import com.ivianuu.injekt.Provide
+import com.ivianuu.injekt.common.IOCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -187,6 +189,18 @@ class AndroidDb private constructor(
   override fun dispose() {
     openHelper?.close() ?: database.close()
   }
+}
+
+@Provide class AndroidDbFactory(
+  private val context: Context,
+  private val ioCoroutineContext: IOCoroutineContext
+) : DbFactory {
+  override fun invoke(name: String, schema: Schema) = AndroidDb(
+    name = name,
+    schema = schema,
+    coroutineContext = ioCoroutineContext,
+    context = context
+  )
 }
 
 private class AndroidCursor(private val cursor: android.database.Cursor) : Cursor {

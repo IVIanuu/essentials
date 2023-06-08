@@ -208,3 +208,7 @@ suspend fun Db.dropAllAndRecreateTables() {
   tableNames().first().forEach { dropTable(it) }
   schema.entities.forEach { createTable(it) }
 }
+
+fun interface DbFactory {
+  operator fun invoke(name: String, schema: Schema): Db
+}
