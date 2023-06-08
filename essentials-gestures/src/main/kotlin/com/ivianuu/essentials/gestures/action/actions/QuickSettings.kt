@@ -41,10 +41,9 @@ fun quickSettingsActionExecutor(
   closeSystemDialogs: CloseSystemDialogsUseCase,
   context: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  serviceFlow: Flow<EsAccessibilityService?>,
-  systemBuildInfo: SystemBuildInfo
+  serviceFlow: Flow<EsAccessibilityService?>
 ) = ActionExecutor<QuickSettingsActionId> {
-  val targetState = if (systemBuildInfo.sdk < 28) true else catch {
+  val targetState = catch {
     val service = serviceFlow.first()!!
 
     val systemUiContext = context.createPackageContext(

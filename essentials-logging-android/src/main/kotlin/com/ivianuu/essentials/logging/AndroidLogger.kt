@@ -7,7 +7,6 @@ package com.ivianuu.essentials.logging
 import android.util.Log
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.logging.Logger.Priority
 import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
 import com.ivianuu.essentials.logging.Logger.Priority.ERROR
@@ -20,16 +19,9 @@ import com.ivianuu.injekt.common.Scope
 import kotlin.math.min
 
 @Provide class AndroidLogger(
-  override val isLoggingEnabled: LoggingEnabled,
-  private val systemBuildInfo: SystemBuildInfo
+  override val isLoggingEnabled: LoggingEnabled
 ) : Logger {
   override fun logMessage(priority: Priority, tag: String, message: String) {
-    val trimmedTag = if (tag.length <= MAX_TAG_LENGTH || systemBuildInfo.sdk >= 26) {
-      tag
-    } else {
-      tag.substring(0, MAX_TAG_LENGTH)
-    }
-
     var i = 0
     val length = message.length
     while (i < length) {
@@ -38,7 +30,7 @@ import kotlin.math.min
       do {
         val end = min(newline, i + MAX_LOG_LENGTH)
         val part = message.substring(i, end)
-        logToLogcat(priority, trimmedTag, part)
+        logToLogcat(priority, tag, part)
         i = end
       } while (i < newline)
       i++
@@ -58,7 +50,6 @@ import kotlin.math.min
 
   companion object {
     private const val MAX_LOG_LENGTH = 4000
-    private const val MAX_TAG_LENGTH = 23
 
     @Provide inline fun androidLogger(
       crossinline loggingEnabled: () -> LoggingEnabled,
