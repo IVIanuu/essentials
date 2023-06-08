@@ -123,7 +123,7 @@ private fun immediateFrameClock() = object : MonotonicFrameClock {
 }
 
 @Composable fun <T> Flow<T>.bind(initial: T, vararg args: Any?): T =
-  produce(initial, this, *args) { collect { value = it } }
+  produce(initial, *args) { collect { value = it } }
 
 @Composable fun <T> StateFlow<T>.bind(vararg args: Any?): T = bind(initial = value, args = *args)
 
