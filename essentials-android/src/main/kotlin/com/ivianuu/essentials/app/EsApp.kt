@@ -13,7 +13,9 @@ import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.Scope
 
 abstract class EsApp : Application(), AppElementsOwner {
-  @Provide private val scope = Scope<AppScope>()
   override val appElements by lazy { buildAppElements() }
+
+  @Provide private val scope = Scope<AppScope>()
+
   protected abstract fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope>
 }
