@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
@@ -25,7 +26,7 @@ data class ServiceElement<T : Service<*>>(
       initializer: T,
       key: TypeKey<T>,
       loadingOrder: LoadingOrder<T> = LoadingOrder()
-    ): ServiceElement<B> = ServiceElement(key, initializer, loadingOrder) as ServiceElement<B>
+    ): ServiceElement<B> = ServiceElement(key, initializer, loadingOrder).cast()
 
     @Provide fun <T : Service<*>> defaultServices(): List<ServiceElement<T>> = emptyList()
   }
