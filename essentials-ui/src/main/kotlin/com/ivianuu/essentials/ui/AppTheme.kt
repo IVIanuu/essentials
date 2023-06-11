@@ -174,4 +174,3 @@ typealias AppTransition = @AppTransitionTag StackTransition
     )
   }
 }
-

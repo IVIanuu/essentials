@@ -20,10 +20,10 @@ sealed interface LoadingOrder<T> {
       fun last() = Last<T>()
 
       fun <S> before(@Inject key: TypeKey<S>): Topological.Before<T> =
-        Topological.Before<S>(key).cast()
+        Topological.Before(key).cast()
 
       fun <S> after(@Inject key: TypeKey<S>): Topological.After<T> =
-        Topological.After<S>(key).cast()
+        Topological.After(key).cast()
     }
   }
 
