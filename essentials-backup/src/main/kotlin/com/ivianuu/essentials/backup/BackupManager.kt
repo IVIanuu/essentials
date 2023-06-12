@@ -7,7 +7,7 @@ package com.ivianuu.essentials.backup
 import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataDir
@@ -36,7 +36,7 @@ interface BackupManager {
 @Provide class BackupManagerImpl(
   private val backupDir: BackupDir,
   private val backupFiles: List<BackupFile>,
-  private val buildInfo: BuildInfo,
+  private val appConfig: AppConfig,
   private val contentResolver: ContentResolver,
   private val coroutineContext: IOCoroutineContext,
   private val dataDir: DataDir,
@@ -48,7 +48,7 @@ interface BackupManager {
     withContext(GlobalScope.coroutineContext + coroutineContext) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
-        "${buildInfo.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
+        "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
 
       val backupFile = backupDir.resolve("$backupFileName.zip")
         .also {

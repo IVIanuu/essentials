@@ -6,8 +6,8 @@ package com.ivianuu.essentials.util
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.ui.navigation.IntentAppUiStarter
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
@@ -20,11 +20,11 @@ fun interface AppUiStarter : IntentAppUiStarter
 
 @Provide fun appUiStarter(
   appContext: AppContext,
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   foregroundActivity: Flow<ForegroundActivity>,
   packageManager: PackageManager,
 ) = AppUiStarter {
-  val intent = packageManager.getLaunchIntentForPackage(buildInfo.packageName)!!
+  val intent = packageManager.getLaunchIntentForPackage(appConfig.packageName)!!
   appContext.startActivity(
     intent.apply {
       addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

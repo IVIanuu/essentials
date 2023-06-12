@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
@@ -75,7 +75,7 @@ data class WriteSecureSettingsModel(
 )
 
 @Provide fun writeSecureSettingsModel(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   ctx: KeyUiContext<WriteSecureSettingsKey>,
   permissionManager: PermissionManager,
   resources: Resources,
@@ -88,7 +88,7 @@ data class WriteSecureSettingsModel(
         ctx.navigator.pop(ctx.key)
     },
     grantPermissionsViaRoot = action {
-      shell.run("pm grant ${buildInfo.packageName} android.permission.WRITE_SECURE_SETTINGS")
+      shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
           if (permissionManager.permissionState(listOf(ctx.key.permissionKey)).first()) {
             toaster(R.string.es_secure_settings_permission_granted)

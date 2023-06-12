@@ -9,8 +9,8 @@ import android.provider.Settings
 import android.service.notification.NotificationListenerService
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
@@ -30,17 +30,17 @@ abstract class NotificationListenerPermission(
 
     @Provide fun <P : NotificationListenerPermission> stateProvider(
       appContext: AppContext,
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionStateProvider<P> {
       NotificationManagerCompat.getEnabledListenerPackages(appContext)
-        .any { it == buildInfo.packageName }
+        .any { it == appConfig.packageName }
     }
 
     @Provide fun <P : NotificationListenerPermission> intentFactory(
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionIntentFactory<P> { permission ->
       Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
-        val componentName = "${buildInfo.packageName}/${permission.serviceClass.java.name}"
+        val componentName = "${appConfig.packageName}/${permission.serviceClass.java.name}"
         putExtra(":settings:fragment_args_key", componentName)
         putExtra(
           ":settings:show_fragment_args", bundleOf(

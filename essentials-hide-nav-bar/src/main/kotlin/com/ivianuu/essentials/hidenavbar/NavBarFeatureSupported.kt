@@ -4,10 +4,10 @@
 
 package com.ivianuu.essentials.hidenavbar
 
-import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.injekt.Provide
 
 @JvmInline value class NavBarFeatureSupported(val value: Boolean)
 
-@Provide fun navBarFeatureSupported(systemBuildInfo: SystemBuildInfo) =
-  NavBarFeatureSupported(systemBuildInfo.sdk < 30)
+@Provide fun navBarFeatureSupported(appConfig: AppConfig) =
+  NavBarFeatureSupported(appConfig.sdk < 30)

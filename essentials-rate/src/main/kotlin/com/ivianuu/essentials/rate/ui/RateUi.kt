@@ -26,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.apps.coil.AppIcon
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.produce
@@ -117,14 +117,14 @@ data class RateModel(
 }
 
 @Provide fun rateModel(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   ctx: KeyUiContext<RateKey>,
   rateUseCases: RateUseCases
 ) = Model {
   var rating by remember { mutableStateOf(0) }
   RateModel(
     displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
-    packageName = buildInfo.packageName,
+    packageName = appConfig.packageName,
     rating = rating,
     showLater = action { rateUseCases.showLater() },
     showNever = action { rateUseCases.showNever() },

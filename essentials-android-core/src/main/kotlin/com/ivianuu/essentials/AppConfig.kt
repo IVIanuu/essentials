@@ -5,26 +5,33 @@
 package com.ivianuu.essentials
 
 import android.content.pm.ApplicationInfo
+import android.os.Build
 import com.ivianuu.injekt.Provide
 
-data class BuildInfo(
+data class AppConfig(
   val isDebug: Boolean,
   val appName: String,
   val packageName: String,
   val versionName: String,
   val versionCode: Int,
+  val sdk: Int,
+  val deviceModel: String,
+  val deviceManufacturer: String
 ) {
   companion object {
-    @Provide fun androidBuildInfo(appContext: AppContext): @Scoped<AppScope> BuildInfo {
+    @Provide fun androidAppConfig(appContext: AppContext): @Scoped<AppScope> AppConfig {
       val appInfo = appContext.applicationInfo
       val packageInfo = appContext.packageManager
         .getPackageInfo(appInfo.packageName, 0)
-      return BuildInfo(
+      return AppConfig(
         isDebug = appInfo.flags.hasFlag(ApplicationInfo.FLAG_DEBUGGABLE),
         appName = appInfo.loadLabel(appContext.packageManager).toString(),
         packageName = appInfo.packageName,
         versionName = packageInfo.versionName,
-        versionCode = packageInfo.versionCode
+        versionCode = packageInfo.versionCode,
+        sdk = Build.VERSION.SDK_INT,
+        deviceModel = Build.MODEL,
+        deviceManufacturer = Build.MANUFACTURER
       )
     }
   }

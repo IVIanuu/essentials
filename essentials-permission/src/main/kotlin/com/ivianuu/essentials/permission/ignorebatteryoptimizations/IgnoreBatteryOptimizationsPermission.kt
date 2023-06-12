@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
@@ -23,20 +23,20 @@ abstract class IgnoreBatteryOptimizationsPermission(
 ) : Permission {
   companion object {
     @Provide fun <P : IgnoreBatteryOptimizationsPermission> stateProvider(
-      buildInfo: BuildInfo,
+      appConfig: AppConfig,
       powerManager: @SystemService PowerManager
     ) = PermissionStateProvider<P> {
-      powerManager.isIgnoringBatteryOptimizations(buildInfo.packageName)
+      powerManager.isIgnoringBatteryOptimizations(appConfig.packageName)
     }
 
     @SuppressLint("BatteryLife")
     @Provide
     fun <P : IgnoreBatteryOptimizationsPermission> intentFactory(
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionIntentFactory<P> {
       Intent(
         Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-        "package:${buildInfo.packageName}".toUri()
+        "package:${appConfig.packageName}".toUri()
       )
     }
   }

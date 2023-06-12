@@ -8,7 +8,7 @@ import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.IBinder
 import android.view.Display
-import com.ivianuu.essentials.SystemBuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
 import com.ivianuu.essentials.data.DataStore
@@ -23,16 +23,16 @@ fun interface NonSdkInterfaceDetectionDisabler {
 
 @Provide fun nonSdkInterfaceDetectionDisabler(
   logger: Logger,
-  systemBuildInfo: SystemBuildInfo,
+  appConfig: AppConfig,
   hiddenApiPolicyStore: DataStore<HiddenApiPolicy>,
   hiddenApiPolicyPrePieAppsStore: DataStore<HiddenApiPolicyPieApps>,
   hiddenApiPolicyPieAppsStore: DataStore<HiddenApiPolicyPieApps>
 ) = NonSdkInterfaceDetectionDisabler {
-  if (systemBuildInfo.sdk >= 29) {
+  if (appConfig.sdk >= 29) {
     logger.log { "disable non sdk on 29" }
     hiddenApiPolicyStore.updateData { 1 }
     logger.log { "disabled non sdk on 29" }
-  } else if (systemBuildInfo.sdk >= 28) {
+  } else {
     logger.log { "disable non sdk on p" }
     hiddenApiPolicyPrePieAppsStore.updateData { 1 }
     hiddenApiPolicyPieAppsStore.updateData { 1 }

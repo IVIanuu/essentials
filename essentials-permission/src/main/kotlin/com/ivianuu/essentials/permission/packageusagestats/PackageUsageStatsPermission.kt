@@ -9,7 +9,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Process
 import android.provider.Settings
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
@@ -30,21 +30,21 @@ abstract class PackageUsageStatsPermission(
     @Provide
     fun <P : PackageUsageStatsPermission> stateProvider(
       appOpsManager: @SystemService AppOpsManager,
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionStateProvider<P> {
       appOpsManager.checkOpNoThrow(
         AppOpsManager.OPSTR_GET_USAGE_STATS,
         Process.myUid(),
-        buildInfo.packageName
+        appConfig.packageName
       ) == AppOpsManager.MODE_ALLOWED
     }
 
     @Provide fun <P : PackageUsageStatsPermission> intentFactory(
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionIntentFactory<P> {
       Intent(
         Settings.ACTION_USAGE_ACCESS_SETTINGS,
-        Uri.parse("package:${buildInfo.packageName}")
+        Uri.parse("package:${appConfig.packageName}")
       )
     }
   }

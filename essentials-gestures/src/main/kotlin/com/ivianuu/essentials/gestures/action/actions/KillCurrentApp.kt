@@ -8,7 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.gestures.R
 import com.ivianuu.essentials.gestures.action.Action
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.first
 )
 
 @Provide fun killCurrentAppActionExecutor(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   currentApp: Flow<CurrentApp?>,
   packageManager: PackageManager,
   rootCommandRunner: ActionRootCommandRunner
@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.first
   val currentApp = currentApp.first()?.value
   if (currentApp != "android" &&
     currentApp != "com.android.systemui" &&
-    currentApp != buildInfo.packageName && // we have no suicidal intentions :D
+    currentApp != appConfig.packageName && // we have no suicidal intentions :D
     currentApp != getHomePackage(packageManager)
   ) {
     rootCommandRunner("am force-stop $currentApp")

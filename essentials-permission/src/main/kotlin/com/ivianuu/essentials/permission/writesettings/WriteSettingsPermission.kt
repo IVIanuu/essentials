@@ -7,8 +7,8 @@ package com.ivianuu.essentials.permission.writesettings
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
@@ -25,11 +25,11 @@ abstract class WriteSettingsPermission(
     ) = PermissionStateProvider<P> { Settings.System.canWrite(appContext) }
 
     @Provide fun <P : WriteSettingsPermission> intentFactory(
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionIntentFactory<P> {
       Intent(
         Settings.ACTION_MANAGE_WRITE_SETTINGS,
-        "package:${buildInfo.packageName}".toUri()
+        "package:${appConfig.packageName}".toUri()
       )
     }
   }

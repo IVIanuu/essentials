@@ -4,7 +4,7 @@
 
 package com.ivianuu.essentials.rate.domain
 
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.onFailure
@@ -29,7 +29,7 @@ interface RateUseCases {
 }
 
 @Provide class RateUsecasesImpl(
-  private val buildInfo: BuildInfo,
+  private val appConfig: AppConfig,
   private val clock: Clock,
   private val key: Key<*>,
   private val navigator: Navigator,
@@ -37,7 +37,7 @@ interface RateUseCases {
 ) : RateUseCases {
   override suspend fun rateOnPlay() {
     catch {
-      navigator.push(PlayStoreAppDetailsKey(buildInfo.packageName))
+      navigator.push(PlayStoreAppDetailsKey(appConfig.packageName))
       pref.updateData { copy(feedbackState = RatePrefs.FeedbackState.COMPLETED) }
     }.onFailure { it.printStackTrace() }
   }

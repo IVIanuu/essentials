@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.hidenavbar
 
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Initial
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.injekt.Provide
 import kotlinx.serialization.Serializable
@@ -16,9 +16,9 @@ import kotlinx.serialization.Serializable
   val wasNavBarHidden: Boolean = false
 ) {
   companion object {
-    @Provide fun initial(systemBuildInfo: SystemBuildInfo): @Initial NavBarPrefs = NavBarPrefs(
+    @Provide fun initial(appConfig: AppConfig): @Initial NavBarPrefs = NavBarPrefs(
       hideNavBar = false,
-      navBarRotationMode = if (systemBuildInfo.sdk >= 24) {
+      navBarRotationMode = if (appConfig.sdk >= 24) {
         NavBarRotationMode.NOUGAT
       } else {
         NavBarRotationMode.MARSHMALLOW

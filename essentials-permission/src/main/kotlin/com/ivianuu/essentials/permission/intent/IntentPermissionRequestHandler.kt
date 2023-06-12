@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.permission.intent
 
 import android.content.Intent
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.race
@@ -29,7 +29,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
 @JvmInline value class ShowFindPermissionHint<P : Permission>(val value: Boolean)
 
 @Provide fun <P : Permission> intentPermissionRequestHandler(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   key: TypeKey<P>,
   intentFactory: PermissionIntentFactory<P>,
   navigator: Navigator,
@@ -41,7 +41,7 @@ fun interface PermissionIntentFactory<P : Permission> : (P) -> Intent
   race(
     {
       if (showFindPermissionHint.value)
-        toaster(R.string.es_find_app_here, buildInfo.appName)
+        toaster(R.string.es_find_app_here, appConfig.appName)
       // wait until user navigates back from the permission screen
       catch { navigator.push(DefaultIntentKey(intentFactory(permission))) }
         .onFailure {

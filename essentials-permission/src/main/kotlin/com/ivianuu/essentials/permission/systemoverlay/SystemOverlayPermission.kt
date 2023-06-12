@@ -7,9 +7,8 @@ package com.ivianuu.essentials.permission.systemoverlay
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
-import com.ivianuu.essentials.BuildInfo
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionStateProvider
 import com.ivianuu.essentials.permission.intent.PermissionIntentFactory
@@ -27,15 +26,15 @@ abstract class SystemOverlayPermission(
     ) = PermissionStateProvider<P> { Settings.canDrawOverlays(context) }
 
     @Provide fun <P : SystemOverlayPermission> showFindPermissionHint(
-      systemBuildInfo: SystemBuildInfo
-    ) = ShowFindPermissionHint<P>(systemBuildInfo.sdk >= 30)
+      appConfig: AppConfig
+    ) = ShowFindPermissionHint<P>(appConfig.sdk >= 30)
 
     @Provide fun <P : SystemOverlayPermission> intentFactory(
-      buildInfo: BuildInfo
+      appConfig: AppConfig
     ) = PermissionIntentFactory<P> {
       Intent(
         Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-        "package:${buildInfo.packageName}".toUri()
+        "package:${appConfig.packageName}".toUri()
       )
     }
   }

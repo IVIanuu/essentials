@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.ads.AdSize
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
@@ -28,11 +28,11 @@ import kotlinx.coroutines.flow.StateFlow
 @Tag annotation class ScreenAdBannerConfigTag {
   companion object {
     @Provide fun default(
-      buildInfo: BuildInfo,
+      appConfig: AppConfig,
       resources: Resources
     ) = ScreenAdBannerConfig(
       id = resources(
-        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
+        if (appConfig.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_screen_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER

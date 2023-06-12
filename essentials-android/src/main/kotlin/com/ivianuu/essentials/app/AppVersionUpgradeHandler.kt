@@ -4,8 +4,8 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
@@ -24,20 +24,20 @@ fun interface AppVersionUpgradeHandler {
 }
 
 @Provide fun appVersionUpgradeWorker(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   handlers: () -> List<AppVersionUpgradeHandler>,
   logger: Logger,
   pref: DataStore<AppVersionUpgradePrefs>
 ) = ScopeWorker<AppScope> {
   val prefs = pref.data.first()
 
-  if (buildInfo.versionCode <= prefs.lastAppVersion) return@ScopeWorker
+  if (appConfig.versionCode <= prefs.lastAppVersion) return@ScopeWorker
 
-  logger.log { "upgrade from app version ${prefs.lastAppVersion} to $buildInfo.versionCode" }
+  logger.log { "upgrade from app version ${prefs.lastAppVersion} to $appConfig.versionCode" }
 
-  handlers().parForEach { it(prefs.lastAppVersion, buildInfo.versionCode) }
+  handlers().parForEach { it(prefs.lastAppVersion, appConfig.versionCode) }
 
-  pref.updateData { copy(lastAppVersion = buildInfo.versionCode) }
+  pref.updateData { copy(lastAppVersion = appConfig.versionCode) }
 }
 
 @Serializable data class AppVersionUpgradePrefs(val lastAppVersion: Int = 0) {

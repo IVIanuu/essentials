@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.donation.Donation
@@ -143,7 +143,7 @@ data class AboutModel(
 @JvmInline value class PrivacyPolicyUrl(val value: String)
 
 @Provide fun aboutModel(
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   privacyPolicyUrl: PrivacyPolicyUrl? = null,
   donations: (() -> List<Donation>)? = null,
   email: DeveloperEmail,
@@ -152,7 +152,7 @@ data class AboutModel(
   ctx: KeyUiContext<AboutKey>
 ) = Model {
   AboutModel(
-    version = buildInfo.versionName,
+    version = appConfig.versionName,
     email = email,
     privacyPolicyUrl = privacyPolicyUrl,
     showDonate = donations != null,

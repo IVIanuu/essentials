@@ -13,10 +13,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.rememberAsyncImagePainter
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.SystemBuildInfo
 import com.ivianuu.essentials.accessibility.GlobalActionExecutor
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.floatingwindows.FLOATING_WINDOW_FLAG
@@ -105,12 +105,12 @@ fun interface CloseSystemDialogsUseCase {
 @SuppressLint("MissingPermission", "InlinedApi")
 @Provide
 fun closeSystemDialogsUseCase(
+  appConfig: AppConfig,
   appContext: AppContext,
   globalActionExecutor: GlobalActionExecutor,
-  systemBuildInfo: SystemBuildInfo
 ) = CloseSystemDialogsUseCase {
   catch {
-    if (systemBuildInfo.sdk >= 31)
+    if (appConfig.sdk >= 31)
       globalActionExecutor(AccessibilityService.GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
     else
       appContext.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))

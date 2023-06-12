@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ads
 
 import com.google.android.gms.ads.AdSize
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.catch
@@ -24,11 +24,11 @@ import kotlinx.coroutines.flow.StateFlow
 @Tag annotation class ListAdBannerConfigTag {
   companion object {
     @Provide fun default(
-      buildInfo: BuildInfo,
+      appConfig: AppConfig,
       resources: Resources
     ) = ListAdBannerConfig(
       id = resources(
-        if (buildInfo.isDebug) R.string.es_test_ad_unit_id_banner
+        if (appConfig.isDebug) R.string.es_test_ad_unit_id_banner
         else R.string.es_list_ad_banner_ad_unit_id
       ),
       size = AdSize.LARGE_BANNER

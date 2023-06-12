@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ivianuu.essentials.BuildInfo
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.android.settings.AndroidSettingModule
 import com.ivianuu.essentials.android.settings.AndroidSettingsType
@@ -188,7 +188,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
 @Provide fun writeSecureSettingsPcInstructionsModel(
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
-  buildInfo: BuildInfo,
+  appConfig: AppConfig,
   ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
   developerModeSetting: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
@@ -213,7 +213,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
   }
 
   WriteSecureSettingsPcInstructionsModel(
-    packageName = buildInfo.packageName,
+    packageName = appConfig.packageName,
     currentStep = currentStep,
     completedStep = completedStep,
     canContinueStep = canContinueStep,

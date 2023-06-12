@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.logging
 
 import android.util.Log
+import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.logging.Logger.Priority
 import com.ivianuu.essentials.logging.Logger.Priority.DEBUG
@@ -62,4 +62,4 @@ import kotlin.math.min
   }
 }
 
-@Provide fun androidLoggingEnabled(buildInfo: BuildInfo) = LoggingEnabled(buildInfo.isDebug)
+@Provide fun androidLoggingEnabled(appConfig: AppConfig) = LoggingEnabled(appConfig.isDebug)
