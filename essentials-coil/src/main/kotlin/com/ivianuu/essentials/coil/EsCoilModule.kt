@@ -42,9 +42,9 @@ object EsCoilModule {
   @Provide val defaultFetcherFactoryBindings get() = emptyList<FetcherFactoryBinding<*>>()
 
   @Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherBinding(
-    typeClass: KClass<T>,
+    type: KClass<T>,
     instance: F
-  ): FetcherFactoryBinding<*> = FetcherFactoryBinding(typeClass, instance)
+  ): FetcherFactoryBinding<*> = FetcherFactoryBinding(type, instance)
 
   data class FetcherFactoryBinding<T : Any>(
     val type: KClass<T>,
