@@ -36,7 +36,7 @@ interface Scope<N> : Disposable {
 @Provide class ScopeImpl<N>(
   override val name: TypeKey<N>,
   override val parent: @ParentScope Scope<*>? = null,
-  services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>> = { _, _ -> emptyList() }
+  services: (Scope<N>, @ParentScope Scope<*>?) -> List<ProvidedService<N, *>>
 ) : Scope<N>, SynchronizedObject() {
   private val services = buildMap {
     for (service in services(this@ScopeImpl, this@ScopeImpl))
