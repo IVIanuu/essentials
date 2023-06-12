@@ -11,11 +11,11 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.transformLatest
 @Provide fun keyboardVisible(
   accessibilityEvents: Flow<AccessibilityEvent>,
   keyboardHeightProvider: @KeyboardHeightProvider () -> Int?,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ScopedCoroutineScope<AppScope>
 ): @Scoped<AppScope> Flow<KeyboardVisible> = accessibilityEvents
   .filter {
     it.isFullScreen &&

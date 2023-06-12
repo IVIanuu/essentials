@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.screenstate.ScreenState
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -40,7 +40,7 @@ class UnlockKey : Key<Unit>
   screenState: Flow<ScreenState>,
   screenActivator: ScreenActivator,
   screenUnlocker: ScreenUnlocker,
-  scope: NamedCoroutineScope<KeyUiScope>,
+  scope: ScopedCoroutineScope<KeyUiScope>,
   toaster: Toaster
 ) = KeyUi<UnlockKey, Unit> {
   Scaffold(

@@ -5,17 +5,18 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 
 // todo make fun interface once compose is fixed
-interface KeyUi<K : Key<*>, M> {
+@Stable interface KeyUi<K : Key<*>, M> {
   @Composable operator fun M.invoke()
 }
 
@@ -74,7 +75,7 @@ interface KeyUiWithModel<K : Key<*>> {
 }
 
 // todo make fun interface once compose is fixed
-interface Model<out S> {
+@Stable interface Model<out S> {
   @Composable operator fun invoke(): S
 
   companion object {
@@ -92,5 +93,5 @@ inline fun <S> Model(
 @Provide data class KeyUiContext<K : Key<*>>(
   val key: K,
   val navigator: Navigator,
-  private val coroutineScope: NamedCoroutineScope<KeyUiScope>
+  private val coroutineScope: ScopedCoroutineScope<KeyUiScope>
 ) : CoroutineScope by coroutineScope

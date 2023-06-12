@@ -11,10 +11,10 @@ import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.addFlag
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,5 +91,5 @@ import kotlinx.coroutines.launch
 
 @Provide data class AccessibilityComponent(
   val configs: () -> List<AccessibilityConfig>,
-  val coroutineScope: NamedCoroutineScope<AccessibilityScope>
+  val coroutineScope: ScopedCoroutineScope<AccessibilityScope>
 )

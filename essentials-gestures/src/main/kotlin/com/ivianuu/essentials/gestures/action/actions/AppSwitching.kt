@@ -14,11 +14,11 @@ import com.ivianuu.essentials.accessibility.AccessibilityConfig
 import com.ivianuu.essentials.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.accessibility.AndroidAccessibilityEvent
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -57,7 +57,7 @@ fun switchToApp(
   private val accessibilityEvents: Flow<AccessibilityEvent>,
   private val logger: Logger,
   private val packageManager: PackageManager,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>
 ) {
   private val recentApps = mutableListOf<String>()
   private var currentIndex = 0

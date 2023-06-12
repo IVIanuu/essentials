@@ -4,10 +4,11 @@
 
 package com.ivianuu.essentials.ui.navigation
 
+import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.injekt.Provide
 
-interface Key<T>
+@Stable interface Key<T>
 
 interface RootKey : Key<Unit>
 

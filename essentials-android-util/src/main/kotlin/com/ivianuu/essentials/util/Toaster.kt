@@ -8,10 +8,10 @@ import android.widget.Toast
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.MainCoroutineContext
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 fun interface Toaster {
@@ -21,7 +21,7 @@ fun interface Toaster {
 @Provide fun toaster(
   appContext: AppContext,
   mainCoroutineContext: MainCoroutineContext,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ScopedCoroutineScope<AppScope>
 ) = Toaster { message ->
   scope.launch(mainCoroutineContext) {
     Toast.makeText(

@@ -17,6 +17,7 @@ import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.time.seconds
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.MainCoroutineContext
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -79,7 +79,7 @@ data class FullScreenAdConfig(val adsInterval: Duration) {
   private val foregroundActivity: Flow<ForegroundActivity>,
   private val logger: Logger,
   private val mainCoroutineContext: MainCoroutineContext,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>
 ) : FullScreenAdManager {
   private val lock = Mutex()
   private var deferredAd: Deferred<suspend () -> Boolean>? = null

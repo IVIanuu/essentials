@@ -9,9 +9,9 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -135,7 +135,7 @@ class NavigatorImpl(
     @Provide fun appNavigator(
       rootKey: RootKey?,
       keyInterceptors: List<KeyInterceptor<*>>,
-      scope: NamedCoroutineScope<AppScope>
+      scope: ScopedCoroutineScope<AppScope>
     ): @Scoped<AppScope> Navigator = NavigatorImpl(
       initialBackStack = listOfNotNull(rootKey),
       keyInterceptors = keyInterceptors,

@@ -12,6 +12,7 @@ import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
@@ -25,7 +26,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -61,7 +61,7 @@ interface PremiumVersionManager {
   private val premiumVersionSku: PremiumVersionSku,
   oldPremiumVersionSkus: List<OldPremiumVersionSku>,
   private val resources: Resources,
-  private val scope: NamedCoroutineScope<AppScope>,
+  private val scope: ScopedCoroutineScope<AppScope>,
   private val screenUnlocker: ScreenUnlocker,
   private val toaster: Toaster
 ) : PremiumVersionManager {
@@ -122,10 +122,9 @@ typealias PremiumVersionSku = @PremiumVersionSkuTag Sku
 }
 typealias OldPremiumVersionSku = @OldPremiumVersionSkuTag Sku
 
-
 @Provide fun premiumAdsEnabled(
   premiumVersionManager: PremiumVersionManager,
-  scope: NamedCoroutineScope<AppScope>
+  scope: ScopedCoroutineScope<AppScope>
 ) = premiumVersionManager.isPremiumVersion
   .map { AdsEnabled(!it) }
   .stateIn(scope, SharingStarted.Eagerly, AdsEnabled(false))

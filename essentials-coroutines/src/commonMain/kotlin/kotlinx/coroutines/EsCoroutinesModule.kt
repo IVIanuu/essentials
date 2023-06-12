@@ -4,9 +4,9 @@
 
 package kotlinx.coroutines
 
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 
 object EsCoroutinesModule {
-  @Provide inline fun coroutinesScope(scope: NamedCoroutineScope<*>): CoroutineScope = scope
+  @Provide inline fun coroutinesScope(scope: ScopedCoroutineScope<*>): CoroutineScope = scope
 }

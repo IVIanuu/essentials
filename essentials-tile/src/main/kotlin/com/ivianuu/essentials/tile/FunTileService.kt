@@ -12,12 +12,12 @@ import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.compose.state
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -140,7 +140,7 @@ abstract class AbstractFunTileService<T : Any>(
 @Provide @Service<TileScope> data class TileComponent(
   val tileId: TileId,
   val tileModelElements: List<Pair<TileId, Model<TileModel<*>>>>,
-  val coroutineScope: NamedCoroutineScope<TileScope>,
+  val coroutineScope: ScopedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
   val tileModel = coroutineScope.state {

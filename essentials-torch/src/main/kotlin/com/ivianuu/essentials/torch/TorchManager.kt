@@ -14,6 +14,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.coroutines.race
 import com.ivianuu.essentials.foreground.ForegroundManager
@@ -28,7 +29,6 @@ import com.ivianuu.essentials.util.context
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,7 +51,7 @@ interface TorchManager {
   private val logger: Logger,
   private val notificationFactory: NotificationFactory,
   private val resources: Resources,
-  private val scope: NamedCoroutineScope<AppScope>,
+  private val scope: ScopedCoroutineScope<AppScope>,
   private val toaster: Toaster
 ) : TorchManager {
   private val _torchEnabled = MutableStateFlow(false)

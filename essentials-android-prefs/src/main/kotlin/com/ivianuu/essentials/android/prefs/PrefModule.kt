@@ -8,9 +8,9 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.Scoped
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,7 +26,7 @@ class PrefModule<T : Any>(private val default: () -> T) {
     initial: () -> @Initial T = default,
     jsonFactory: () -> Json,
     prefsDataStore: DataStore<Map<String, String?>>,
-    scope: NamedCoroutineScope<AppScope>,
+    scope: ScopedCoroutineScope<AppScope>,
     serializerFactory: () -> KSerializer<T>,
     serializersModule: SerializersModule
   ): @Scoped<AppScope> DataStore<T> {

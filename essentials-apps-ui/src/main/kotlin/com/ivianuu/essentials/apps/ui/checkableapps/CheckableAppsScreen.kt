@@ -24,6 +24,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.compose.state
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.resource.Resource
 import com.ivianuu.essentials.resource.get
 import com.ivianuu.essentials.resource.map
@@ -36,7 +37,6 @@ import com.ivianuu.essentials.ui.popup.PopupMenuButton
 import com.ivianuu.essentials.ui.popup.PopupMenuItem
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -113,7 +113,7 @@ data class CheckableApp(val info: AppInfo, val isChecked: Boolean)
 @Provide fun checkableAppsModel(
   params: CheckableAppsParams,
   repository: AppRepository,
-  scope: NamedCoroutineScope<KeyUiScope>
+  scope: ScopedCoroutineScope<KeyUiScope>
 ): @Scoped<KeyUiScope> StateFlow<CheckableAppsModel> = scope.state {
   val checkedApps = params.checkedApps.bind(emptySet())
   val allApps = repository.installedApps.bindResource()

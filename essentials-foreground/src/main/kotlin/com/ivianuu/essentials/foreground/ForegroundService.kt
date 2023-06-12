@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
@@ -19,7 +20,6 @@ import com.ivianuu.essentials.time.seconds
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.android.SystemService
 import com.ivianuu.injekt.common.MainCoroutineContext
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -36,7 +36,7 @@ import kotlin.time.Duration
   private val notificationManager: @SystemService NotificationManager,
   private val logger: Logger,
   private val mainCoroutineContext: MainCoroutineContext,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>
 ) : Service() {
   private var previousStates = emptyList<ForegroundManagerImpl.ForegroundState>()
 

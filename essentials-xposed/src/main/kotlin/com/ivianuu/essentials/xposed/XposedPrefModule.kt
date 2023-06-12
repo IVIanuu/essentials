@@ -15,6 +15,7 @@ import com.ivianuu.essentials.InitialOrDefault
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.actAndReply
 import com.ivianuu.essentials.coroutines.actor
 import com.ivianuu.essentials.data.DataStore
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.util.BroadcastsFactory
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.IOCoroutineContext
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import de.robv.android.xposed.XSharedPreferences
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +45,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
   @Provide fun dataStore(
     appContext: AppContext,
     coroutineContext: IOCoroutineContext,
-    coroutineScope: NamedCoroutineScope<AppScope>,
+    coroutineScope: ScopedCoroutineScope<AppScope>,
     jsonFactory: () -> Json,
     initial: () -> @Initial T = default,
     packageName: ModulePackageName,

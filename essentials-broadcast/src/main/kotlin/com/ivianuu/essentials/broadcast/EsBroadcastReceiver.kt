@@ -9,14 +9,14 @@ import android.content.Context
 import android.content.Intent
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsBroadcastReceiver(
   private val handlers: List<BroadcastHandler>,
-  private val scope: NamedCoroutineScope<AppScope>
+  private val scope: ScopedCoroutineScope<AppScope>
 ) : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     scope.launch {

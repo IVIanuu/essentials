@@ -11,12 +11,12 @@ import com.android.billingclient.api.BillingResult
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.app.AppForegroundState
 import com.ivianuu.essentials.coroutines.EventFlow
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.logging.NoopLogger
 import com.ivianuu.essentials.test.dispatcher
 import com.ivianuu.essentials.test.runCancellingBlockingTest
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.inject
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.every
@@ -36,7 +36,7 @@ class BillingServiceTest {
   @Provide val appUiStarter = AppUiStarter { mockk() }
 
   @Test fun testWithConnection() = runCancellingBlockingTest {
-    @Provide val scope: NamedCoroutineScope<AppScope> = inject<CoroutineScope>()
+    @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
     val context = BillingServiceImpl(
       billingClient = mockk {
@@ -58,7 +58,7 @@ class BillingServiceTest {
   }
 
   @Test fun testWithConnectionWithMultipleCallsToFinish() = runCancellingBlockingTest {
-    @Provide val scope: NamedCoroutineScope<AppScope> = inject<CoroutineScope>()
+    @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
 
     val context = BillingServiceImpl(
       billingClient = mockk {
@@ -85,7 +85,7 @@ class BillingServiceTest {
   }
 
   @Test fun testPurchaseUseCase() = runCancellingBlockingTest {
-    @Provide val scope: NamedCoroutineScope<AppScope> = inject<CoroutineScope>()
+    @Provide val scope: ScopedCoroutineScope<AppScope> = inject<CoroutineScope>()
     @Provide val refreshes = EventFlow<BillingRefresh>()
 
     val service = BillingServiceImpl(

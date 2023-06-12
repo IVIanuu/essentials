@@ -5,11 +5,11 @@
 package com.ivianuu.essentials.app
 
 import com.ivianuu.essentials.coroutines.ExitCase
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.coroutines.guarantee
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.NamedCoroutineScope
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -25,7 +25,7 @@ fun interface ScopeWorkerRunner<N> {
 @Provide fun <N> scopeWorkerRunner(
   logger: Logger,
   nameKey: TypeKey<N>,
-  scope: NamedCoroutineScope<N>,
+  scope: ScopedCoroutineScope<N>,
   workers: () -> List<ServiceElement<ScopeWorker<N>>>
 ) = ScopeWorkerRunner<N> {
   scope.launch {
