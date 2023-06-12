@@ -37,7 +37,7 @@ class AndroidDb private constructor(
   private val openHelper: SQLiteOpenHelper?,
   database: SQLiteDatabase?
 ) : Db, CoroutineScope {
-  override val changes = EventFlow<String?>()
+  override val tableChanges = EventFlow<String?>()
 
   private val database by lazy { database ?: openHelper!!.writableDatabase!! }
 
@@ -140,7 +140,7 @@ class AndroidDb private constructor(
         controlJob.cancel()
         this@AndroidDb.launch {
           synchronized(changedTableNames) { changedTableNames.toList() }
-            .forEach { changes.emit(it) }
+            .forEach { tableChanges.emit(it) }
         }
       }
     }
@@ -168,11 +168,11 @@ class AndroidDb private constructor(
         synchronized(it.changedTableNames) {
           it.changedTableNames += tableName
         }
-      } ?: changes.emit(tableName)
+      } ?: tableChanges.emit(tableName)
   }
 
   override fun <T> query(sql: String, tableName: String?, transform: (Cursor) -> T): Flow<T> =
-    changes
+    tableChanges
       .filter { tableName == null || it == tableName }
       .onStart { emit(tableName) }
       .map {

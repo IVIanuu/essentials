@@ -17,9 +17,10 @@ import kotlin.coroutines.CoroutineContext
 
 interface Db : Disposable {
   val schema: Schema
+
   val coroutineContext: CoroutineContext
 
-  val changes: Flow<String?>
+  val tableChanges: Flow<String?>
 
   suspend fun <R> transaction(block: suspend Db.() -> R): R
 
@@ -34,8 +35,7 @@ fun <T> Db.query(
   sql: String,
   tableName: String?,
   @Inject key: TypeKey<T>
-): Flow<List<T>> =
-  query(sql, tableName) { it.toList(schema) }
+): Flow<List<T>> = query(sql, tableName) { it.toList(schema) }
 
 suspend fun <T> Db.insert(
   entity: T,
@@ -91,7 +91,7 @@ fun <T> Db.selectById(id: Any, @Inject key: TypeKey<T>): Flow<T?> {
 fun <T, S> Db.selectAllTransform(
   @Inject key: TypeKey<T>,
   transform: suspend (T?) -> S?
-): Flow<List<S>> = changes
+): Flow<List<S>> = tableChanges
   .onStart { emit(null) }
   .mapLatest {
     selectAll<T>()
@@ -104,7 +104,7 @@ fun <T, S> Db.selectTransform(
   id: Any,
   @Inject key: TypeKey<T>,
   transform: suspend (T?) -> S?
-): Flow<S?> = changes
+): Flow<S?> = tableChanges
   .onStart { emit(null) }
   .mapLatest { transform(selectById<T>(id).first()) }
   .distinctUntilChanged()
