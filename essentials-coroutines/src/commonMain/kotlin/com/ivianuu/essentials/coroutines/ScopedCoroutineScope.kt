@@ -4,11 +4,12 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.DefaultCoroutineContext
-import com.ivianuu.injekt.common.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -20,9 +21,9 @@ typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
   companion object {
     @Provide fun <N> scope(
       context: ScopeCoroutineContext<N>
-    ): @Scoped<N> ScopedCoroutineScope<N> = object : CoroutineScope, Disposable {
+    ): @Scoped<N> ScopedCoroutineScope<N> = object : CoroutineScope, ScopeObserver {
       override val coroutineContext: CoroutineContext = context + SupervisorJob()
-      override fun dispose() {
+      override fun onExit(scope: Scope<*>) {
         coroutineContext.cancel()
       }
     }

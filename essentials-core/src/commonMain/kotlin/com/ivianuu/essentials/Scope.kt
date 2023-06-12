@@ -90,6 +90,10 @@ interface Scope<N> : Disposable {
       if (!_isDisposed) {
         _isDisposed = true
         observers.toList().forEach { it.onExit(this) }
+        cache.values.toList().forEach {
+          if (it is ScopeObserver)
+            it.onExit(this)
+        }
       }
     }
   }
