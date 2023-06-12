@@ -46,32 +46,24 @@ import kotlin.reflect.KClass
   val stackChildren = backStack
     .mapIndexed { index, key ->
       key(key) {
-        var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
-        val (keyUi, child) = remember {
+        var currentModel by remember { mutableStateOf<Any?>(null) }
+        val (model, child) = remember {
           val scope = component.keyUiScopeFactory(navigator, key)
           val ui = component.uiFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(ui) { "No ui factory found for $key" }
           val options = component.optionFactories[key::class]?.invoke(navigator, scope, key)
           val model = component.modelFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(model) { "No model found for $key" }
-
-          val function: @Composable () -> @Composable () -> Unit = {
-            val currentModel = model() as Any
-            remember(currentModel) {
-              {
-                with(ui as KeyUi<Key<*>, Any>) {
-                  with(currentModel) {
-                    invoke()
-                  }
-                }
-              }
-            }
-          }
-
-          function to NavigationContentStateChild(
+          model to NavigationContentStateChild(
             key = key,
             options = options,
-            content = { currentUi },
+            content = {
+              with(ui as KeyUi<*, Any>) {
+                with(currentModel as Any) {
+                  invoke()
+                }
+              }
+            },
             decorateKeyUi = component.decorateKeyUi(navigator, scope, key),
             scope = scope
           )
@@ -86,7 +78,7 @@ import kotlin.reflect.KClass
         ObserveScope(
           remember {
             {
-              currentUi = keyUi()
+              currentModel = model()
 
               DisposableEffect(true) {
                 onDispose {
@@ -111,7 +103,7 @@ import kotlin.reflect.KClass
 @Stable private class NavigationContentStateChild(
   key: Key<*>,
   options: KeyUiOptions? = null,
-  private val content: () -> @Composable () -> Unit,
+  private val content: @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
   private val scope: Scope<KeyUiScope>
 ) {
@@ -137,7 +129,7 @@ import kotlin.reflect.KClass
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
       decorateKeyUi {
-        content()()
+        content()
       }
 
       DisposableEffect(true) {
