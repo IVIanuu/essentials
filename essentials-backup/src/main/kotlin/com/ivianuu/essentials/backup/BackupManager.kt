@@ -8,8 +8,10 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import com.ivianuu.essentials.AppConfig
+import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Result
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
 import com.ivianuu.essentials.logging.Logger
@@ -20,7 +22,6 @@ import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.IOCoroutineContext
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.zip.ZipEntry
@@ -42,10 +43,11 @@ interface BackupManager {
   private val dataDir: DataDir,
   private val logger: Logger,
   private val navigator: Navigator,
-  private val processRestarter: ProcessRestarter
+  private val processRestarter: ProcessRestarter,
+  private val scope: ScopedCoroutineScope<AppScope>
 ) : BackupManager {
   override suspend fun createBackup(): Result<Unit, Throwable> = catch {
-    withContext(GlobalScope.coroutineContext + coroutineContext) {
+    withContext(scope.coroutineContext + coroutineContext) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
         "${appConfig.packageName.replace(".", "_")}_${dateFormat.format(Date())}"
@@ -78,7 +80,7 @@ interface BackupManager {
   }
 
   override suspend fun restoreBackup(): Result<Unit, Throwable> = catch {
-    withContext(GlobalScope.coroutineContext + coroutineContext) {
+    withContext(scope.coroutineContext + coroutineContext) {
       val uri = navigator.push(
         DefaultIntentKey(
           Intent.createChooser(
