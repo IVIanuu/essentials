@@ -76,8 +76,8 @@ class GoPremiumKey(
   }
 }
 
-@Provide val goPremiumUi = KeyUi<GoPremiumKey, GoPremiumModel> {
-  BackHandler(onBackPress = goBack)
+@Provide val goPremiumUi = KeyUi<GoPremiumKey, GoPremiumModel> { model ->
+  BackHandler(onBackPress = model.goBack)
 
   Surface {
     InsetsPadding {
@@ -90,15 +90,15 @@ class GoPremiumKey(
 
           Spacer(Modifier.height(32.dp))
 
-          PremiumUiFeatures(Modifier.weight(1f), features)
+          PremiumUiFeatures(Modifier.weight(1f), model.features)
 
           Spacer(Modifier.height(8.dp))
 
           PremiumUiFooter(
-            skuDetails = premiumSkuDetails.getOrNull(),
-            showTryBasicOption = showTryBasicOption,
-            onGoPremiumClick = goPremium,
-            onTryBasicVersionClick = tryBasicVersion
+            skuDetails = model.premiumSkuDetails.getOrNull(),
+            showTryBasicOption = model.showTryBasicOption,
+            onGoPremiumClick = model.goPremium,
+            onTryBasicVersionClick = model.tryBasicVersion
           )
         }
       } else {
@@ -112,17 +112,17 @@ class GoPremiumKey(
             Spacer(Modifier.height(8.dp))
 
             PremiumUiFooter(
-              skuDetails = premiumSkuDetails.getOrNull(),
-              showTryBasicOption = showTryBasicOption,
-              onGoPremiumClick = goPremium,
-              onTryBasicVersionClick = tryBasicVersion
+              skuDetails = model.premiumSkuDetails.getOrNull(),
+              showTryBasicOption = model.showTryBasicOption,
+              onGoPremiumClick = model.goPremium,
+              onTryBasicVersionClick = model.tryBasicVersion
             )
           }
 
           Spacer(Modifier.width(16.dp))
 
           Column(modifier = Modifier.weight(1f)) {
-            PremiumUiFeatures(Modifier.weight(1f), features)
+            PremiumUiFeatures(Modifier.weight(1f), model.features)
           }
         }
       }

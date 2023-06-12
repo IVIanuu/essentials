@@ -61,7 +61,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
 
 @Provide fun donationUi(
   commonStrings: CommonStrings
-) = KeyUi<DonationKey, DonationModel> {
+) = KeyUi<DonationKey, DonationModel> { model ->
   DialogScaffold {
     Dialog(
       applyContentPadding = false,
@@ -69,7 +69,7 @@ data class Donation(val sku: Sku, val iconRes: Int)
       content = {
         ResourceVerticalListFor(
           modifier = Modifier.animateContentSize(),
-          resource = skus,
+          resource = model.skus,
           loading = {
             CircularProgressIndicator(
               modifier = Modifier
@@ -81,12 +81,12 @@ data class Donation(val sku: Sku, val iconRes: Int)
         ) { donation ->
           Donation(
             donation = donation,
-            onClick = { purchase(donation) }
+            onClick = { model.purchase(donation) }
           )
         }
       },
       buttons = {
-        TextButton(onClick = close) {
+        TextButton(onClick = model.close) {
           Text(commonStrings.cancel)
         }
       }

@@ -30,7 +30,7 @@ class MultiChoiceListKey<T : Any>(
 @Provide fun multiChoiceListUi(
   ctx: KeyUiContext<MultiChoiceListKey<Any>>,
   commonStrings: CommonStrings
-) = KeyUi<MultiChoiceListKey<Any>, Unit> {
+) = KeyUi<MultiChoiceListKey<Any>, Unit> { model ->
   DialogScaffold {
     var selectedItems by remember { mutableStateOf(ctx.key.selectedItems) }
 

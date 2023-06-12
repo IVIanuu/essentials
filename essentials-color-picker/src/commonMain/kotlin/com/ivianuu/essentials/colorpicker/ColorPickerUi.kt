@@ -22,16 +22,17 @@ class ColorPickerKey(
   val showAlphaSelector: Boolean = false,
 ) : OverlayKey<Color>
 
-@Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) = KeyUi<ColorPickerKey, Unit> {
-  DialogScaffold {
-    ColorPickerDialog(
-      initialColor = ctx.key.initialColor,
-      onColorSelected = action { color -> ctx.navigator.pop(ctx.key, color) },
-      onCancel = action { ctx.navigator.pop(ctx.key, null) },
-      colorPalettes = ctx.key.colorPalettes,
-      showAlphaSelector = ctx.key.showAlphaSelector,
-      allowCustomArgb = ctx.key.allowCustomArgb,
-      title = ctx.key.title?.let { { Text(it) } }
-    )
+@Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) =
+  KeyUi<ColorPickerKey, Unit> { model ->
+    DialogScaffold {
+      ColorPickerDialog(
+        initialColor = ctx.key.initialColor,
+        onColorSelected = action { color -> ctx.navigator.pop(ctx.key, color) },
+        onCancel = action { ctx.navigator.pop(ctx.key, null) },
+        colorPalettes = ctx.key.colorPalettes,
+        showAlphaSelector = ctx.key.showAlphaSelector,
+        allowCustomArgb = ctx.key.allowCustomArgb,
+        title = ctx.key.title?.let { { Text(it) } }
+      )
   }
 }

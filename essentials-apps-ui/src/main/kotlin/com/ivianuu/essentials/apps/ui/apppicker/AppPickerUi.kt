@@ -38,19 +38,19 @@ class AppPickerKey(
   val title: String? = null,
 ) : Key<AppInfo>
 
-@Provide val appPickerUi = KeyUi<AppPickerKey, AppPickerModel> {
+@Provide val appPickerUi = KeyUi<AppPickerKey, AppPickerModel> { model ->
   Scaffold(
     topBar = {
       TopAppBar(
         title = {
-          Text(title ?: stringResource(R.string.es_title_app_picker))
+          Text(model.title ?: stringResource(R.string.es_title_app_picker))
         }
       )
     }
   ) {
-    ResourceVerticalListFor(filteredApps) { app ->
+    ResourceVerticalListFor(model.filteredApps) { app ->
       ListItem(
-        modifier = Modifier.clickable { pickApp(app) },
+        modifier = Modifier.clickable { model.pickApp(app) },
         title = { Text(app.appName) },
         leading = {
           Image(

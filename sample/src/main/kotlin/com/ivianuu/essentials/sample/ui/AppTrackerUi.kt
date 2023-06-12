@@ -49,7 +49,7 @@ class AppTrackerKey : Key<Unit>
   permissionManager: PermissionManager,
   resources: Resources,
   toaster: Toaster
-) = KeyUi<AppTrackerKey, Unit> {
+) = KeyUi<AppTrackerKey, Unit> { model ->
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)

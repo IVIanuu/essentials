@@ -49,16 +49,16 @@ class ActionPickerKey(
   }
 }
 
-@Provide val actionPickerUi = KeyUi<ActionPickerKey, ActionPickerModel> {
+@Provide val actionPickerUi = KeyUi<ActionPickerKey, ActionPickerModel> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_action_picker_title) }) }
   ) {
-    ResourceVerticalListFor(items) { item ->
+    ResourceVerticalListFor(model.items) { item ->
       ListItem(
-        modifier = Modifier.clickable { pickAction(item) },
+        modifier = Modifier.clickable { model.pickAction(item) },
         leading = { item.Icon(Modifier.size(24.dp)) },
         trailing = if (item.settingsKey != null) ({
-          IconButton(onClick = { openActionSettings(item) }) {
+          IconButton(onClick = { model.openActionSettings(item) }) {
             Icon(R.drawable.es_ic_settings)
           }
         }) else null,

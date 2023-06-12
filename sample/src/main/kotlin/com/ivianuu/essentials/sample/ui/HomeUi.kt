@@ -40,7 +40,7 @@ import com.ivianuu.injekt.Provide
   isXposedRunning: IsXposedRunning,
   itemsFactory: () -> List<HomeItem>,
   toaster: Toaster
-) = KeyUi<HomeKey, Unit> {
+) = KeyUi<HomeKey, Unit> { model ->
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",

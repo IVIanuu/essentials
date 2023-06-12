@@ -24,17 +24,18 @@ import kotlinx.coroutines.flow.Flow
 
 class DisplayRotationKey : Key<Unit>
 
-@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) = KeyUi<DisplayRotationKey, Unit> {
-  Box(
-    modifier = Modifier.fillMaxSize()
-      .background(MaterialTheme.colors.primary)
-      .systemBarStyle(MaterialTheme.colors.primary),
-    contentAlignment = Alignment.Center
-  ) {
-    val currentDisplayInfo by displayInfo.collectAsState(null)
-    Text(
-      text = currentDisplayInfo.toString(),
-      style = MaterialTheme.typography.h4
+@Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) =
+  KeyUi<DisplayRotationKey, Unit> { model ->
+    Box(
+      modifier = Modifier.fillMaxSize()
+        .background(MaterialTheme.colors.primary)
+        .systemBarStyle(MaterialTheme.colors.primary),
+      contentAlignment = Alignment.Center
+    ) {
+      val currentDisplayInfo by displayInfo.collectAsState(null)
+      Text(
+        text = currentDisplayInfo.toString(),
+        style = MaterialTheme.typography.h4
     )
   }
 }

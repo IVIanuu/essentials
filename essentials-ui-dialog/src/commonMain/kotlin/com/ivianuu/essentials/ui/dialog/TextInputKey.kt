@@ -30,7 +30,7 @@ class TextInputKey(
 @Provide fun textInputUi(
   ctx: KeyUiContext<TextInputKey>,
   commonStrings: CommonStrings
-) = KeyUi<TextInputKey, Unit> {
+) = KeyUi<TextInputKey, Unit> { model ->
   DialogScaffold {
     var currentValue by remember { mutableStateOf(ctx.key.initial) }
     TextInputDialog(

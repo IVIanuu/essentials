@@ -75,17 +75,17 @@ private fun mediaIntentFor(
 class MediaActionSettingsKey : Key<Unit>
 
 @Provide
-val mediaActionSettingsUi = KeyUi<MediaActionSettingsKey, MediaActionSettingsModel> {
+val mediaActionSettingsUi = KeyUi<MediaActionSettingsKey, MediaActionSettingsModel> { model ->
   SimpleListScreen(R.string.es_media_app_settings_ui_title) {
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = updateMediaApp),
+        modifier = Modifier.clickable(onClick = model.updateMediaApp),
         title = { Text(R.string.es_pref_media_app) },
         subtitle = {
           Text(
             stringResource(
               R.string.es_pref_media_app_summary,
-              mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
+              model.mediaApp.getOrNull()?.appName ?: stringResource(R.string.es_none)
             )
           )
         }

@@ -54,7 +54,7 @@ class DialogsKey : Key<Unit>
 @Provide fun dialogsUi(
   ctx: KeyUiContext<DialogsKey>,
   navigator: Navigator
-) = KeyUi<DialogsKey, Unit> {
+) = KeyUi<DialogsKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {
@@ -290,6 +290,6 @@ class DialogLauncherKey(
   val dialog: @Composable () -> Unit
 ) : OverlayKey<Unit>
 
-@Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey, Unit> {
+@Provide fun dialogLauncherUi(key: DialogLauncherKey) = KeyUi<DialogLauncherKey, Unit> { model ->
   DialogScaffold(dismissible = key.dismissible) { key.dialog() }
 }

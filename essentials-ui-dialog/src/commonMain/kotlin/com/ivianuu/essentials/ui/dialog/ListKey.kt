@@ -25,7 +25,7 @@ class ListKey<T : Any>(
   @Inject val renderer: UiRenderer<T>,
 ) : OverlayKey<T>
 
-@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = KeyUi<ListKey<Any>, Unit> {
+@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = KeyUi<ListKey<Any>, Unit> { model ->
   DialogScaffold {
     Dialog(
       title = ctx.key.title?.let { { Text(it) } },

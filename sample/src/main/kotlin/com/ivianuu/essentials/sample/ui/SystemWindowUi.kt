@@ -34,7 +34,7 @@ class SystemWindowKey : Key<Unit>
   ctx: KeyUiContext<SystemWindowKey>,
   permissionManager: PermissionManager,
   systemWindowManager: SystemWindowManager
-) = KeyUi<SystemWindowKey, Unit> {
+) = KeyUi<SystemWindowKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("System window") }) }
   ) {

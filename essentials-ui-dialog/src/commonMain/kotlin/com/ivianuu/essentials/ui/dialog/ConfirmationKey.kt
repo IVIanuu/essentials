@@ -22,7 +22,7 @@ class ConfirmationKey<T : Any>(
 ) : OverlayKey<T>
 
 @Provide fun confirmationUi(ctx: KeyUiContext<ConfirmationKey<Any>>) =
-  KeyUi<ConfirmationKey<Any>, Unit> {
+  KeyUi<ConfirmationKey<Any>, Unit> { model ->
     DialogScaffold {
       Dialog(
         title = { Text(ctx.key.title) },

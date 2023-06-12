@@ -42,7 +42,7 @@ class UnlockKey : Key<Unit>
   screenUnlocker: ScreenUnlocker,
   scope: ScopedCoroutineScope<KeyUiScope>,
   toaster: Toaster
-) = KeyUi<UnlockKey, Unit> {
+) = KeyUi<UnlockKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {

@@ -38,7 +38,7 @@ class ChildNavigationKey : Key<Unit>
 
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationKey() }
 
-@Provide fun childNavigationUi() = KeyUi<ChildNavigationKey, Unit> {
+@Provide fun childNavigationUi() = KeyUi<ChildNavigationKey, Unit> { model ->
   Scaffold(
     topBar = {
       TopAppBar(title = { Text("Child Navigation") })
@@ -78,7 +78,7 @@ data class ChildNavigationItemKey(
 
 @Provide fun childNavigationItemUi(
   ctx: KeyUiContext<ChildNavigationItemKey>
-) = KeyUi<ChildNavigationItemKey, Unit> {
+) = KeyUi<ChildNavigationItemKey, Unit> { model ->
   val color = Colors.shuffled().first()
 
   Surface(

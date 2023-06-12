@@ -41,14 +41,14 @@ class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
 
 @Provide fun floatingWindowsPickerUi(
   commonStrings: CommonStrings
-) = KeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> {
+) = KeyUi<FloatingWindowsPickerKey, FloatingWindowsPickerModel> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_floating_window_picker_title) }) }
   ) {
     Column {
       Text(
         modifier = Modifier.padding(16.dp),
-        text = stringResource(R.string.es_floating_window_picker_content, actionTitle),
+        text = stringResource(R.string.es_floating_window_picker_content, model.actionTitle),
         style = MaterialTheme.typography.body2
       )
 
@@ -58,7 +58,7 @@ class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
         modifier = Modifier
           .height(48.dp)
           .fillMaxWidth()
-          .clickable(onClick = openFloatingWindow)
+          .clickable(onClick = model.openFloatingWindow)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
         text = commonStrings.yes,
@@ -71,7 +71,7 @@ class FloatingWindowsPickerKey(val actionTitle: String) : Key<Boolean>
         modifier = Modifier
           .height(48.dp)
           .fillMaxWidth()
-          .clickable(onClick = openFullScreen)
+          .clickable(onClick = model.openFullScreen)
           .align(Alignment.CenterStart)
           .padding(horizontal = 16.dp),
         text = commonStrings.no,

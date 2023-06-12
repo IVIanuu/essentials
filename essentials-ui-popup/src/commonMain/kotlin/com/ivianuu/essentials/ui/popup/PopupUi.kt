@@ -51,7 +51,7 @@ class PopupKey(
   val content: @Composable () -> Unit,
 ) : com.ivianuu.essentials.ui.navigation.OverlayKey<Unit>
 
-@Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey, Unit> {
+@Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey, Unit> { model ->
   var previousConstraints by remember { refOf<Constraints?>(null) }
 
   BoxWithConstraints {

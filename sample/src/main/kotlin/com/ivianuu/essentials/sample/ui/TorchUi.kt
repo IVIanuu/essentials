@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Provide
 
 class TorchKey : Key<Unit>
 
-@Provide fun torchUi(torchManager: TorchManager) = KeyUi<TorchKey, Unit> {
+@Provide fun torchUi(torchManager: TorchManager) = KeyUi<TorchKey, Unit> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),

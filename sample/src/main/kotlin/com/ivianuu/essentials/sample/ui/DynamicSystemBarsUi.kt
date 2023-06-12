@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Provide
 
 class DynamicSystemBarsKey : Key<Unit>
 
-@Provide val dynamicSystemBarsUi = KeyUi<DynamicSystemBarsKey, Unit> {
+@Provide val dynamicSystemBarsUi = KeyUi<DynamicSystemBarsKey, Unit> { model ->
   Box {
     val colors = rememberSaveable {
       ColorPickerPalette.values()

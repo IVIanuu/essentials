@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 
 class CounterKey : Key<Unit>
 
-@Provide val counterUi = KeyUi<CounterKey, CounterModel> {
+@Provide val counterUi = KeyUi<CounterKey, CounterModel> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Counter") }) }
   ) {
@@ -39,9 +39,9 @@ class CounterKey : Key<Unit>
       verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Text(text = "Count: $count", style = MaterialTheme.typography.h3)
-      ExtendedFloatingActionButton(onClick = inc, text = { Text("Inc") })
-      ExtendedFloatingActionButton(onClick = dec, text = { Text("dec") })
+      Text(text = "Count: ${model.count}", style = MaterialTheme.typography.h3)
+      ExtendedFloatingActionButton(onClick = model.inc, text = { Text("Inc") })
+      ExtendedFloatingActionButton(onClick = model.dec, text = { Text("dec") })
     }
   }
 }

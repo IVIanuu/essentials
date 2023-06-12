@@ -44,7 +44,7 @@ import com.ivianuu.injekt.Provide
 
 object RateKey : OverlayKey<Unit>
 
-@Provide val rateUi = KeyUi<RateKey, RateModel> {
+@Provide val rateUi = KeyUi<RateKey, RateModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       content = {
@@ -54,7 +54,7 @@ object RateKey : OverlayKey<Unit>
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Image(
-            painter = rememberAsyncImagePainter(AppIcon(packageName)),
+            painter = rememberAsyncImagePainter(AppIcon(model.packageName)),
             modifier = Modifier.size(96.dp)
           )
 
@@ -76,9 +76,9 @@ object RateKey : OverlayKey<Unit>
                   .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false)
-                  ) { updateRating(currentRating) },
+                  ) { model.updateRating(currentRating) },
                 painterResId = R.drawable.es_ic_star,
-                tint = if (currentRating <= rating) MaterialTheme.colors.secondary
+                tint = if (currentRating <= model.rating) MaterialTheme.colors.secondary
                 else LocalContentColor.current.copy(alpha = 0.12f)
               )
             }
@@ -86,17 +86,17 @@ object RateKey : OverlayKey<Unit>
         }
       },
       buttons = {
-        if (displayShowNever) {
-          TextButton(onClick = showNever) {
+        if (model.displayShowNever) {
+          TextButton(onClick = model.showNever) {
             Text(R.string.es_never)
           }
         }
 
-        TextButton(onClick = showLater) {
+        TextButton(onClick = model.showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(enabled = confirmEnabled, onClick = confirm) {
+        TextButton(enabled = model.confirmEnabled, onClick = model.confirm) {
           Text(R.string.es_confirm)
         }
       }

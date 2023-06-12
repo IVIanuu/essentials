@@ -24,12 +24,12 @@ class SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
   resources: Resources
-) = KeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> {
+) = KeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> { model ->
   remember {
     checkableAppsPageFactory(
       CheckableAppsParams(
-        checkedApps = appBlacklist,
-        onCheckedAppsChanged = updateAppBlacklist,
+        checkedApps = model.appBlacklist,
+        onCheckedAppsChanged = model.updateAppBlacklist,
         appPredicate = DefaultAppPredicate,
         appBarTitle = resources(R.string.es_system_overlay_blacklist_title)
       )

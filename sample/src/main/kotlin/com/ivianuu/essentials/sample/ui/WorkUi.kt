@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Provide
 
 class WorkKey : Key<Unit>
 
-@Provide fun workUi(scheduler: SampleWorkScheduler) = KeyUi<WorkKey, Unit> {
+@Provide fun workUi(scheduler: SampleWorkScheduler) = KeyUi<WorkKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {

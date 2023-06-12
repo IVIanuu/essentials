@@ -39,7 +39,7 @@ class ForegroundKey : Key<Unit>
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
   notificationFactory: NotificationFactory
-) = KeyUi<ForegroundKey, Unit> {
+) = KeyUi<ForegroundKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {

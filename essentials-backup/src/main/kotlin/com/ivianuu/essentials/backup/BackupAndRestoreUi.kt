@@ -23,11 +23,11 @@ import com.ivianuu.injekt.Provide
 
 class BackupAndRestoreKey : Key<Unit>
 
-@Provide val backupAndRestoreUi = KeyUi<BackupAndRestoreKey, BackupAndRestoreModel> {
+@Provide val backupAndRestoreUi = KeyUi<BackupAndRestoreKey, BackupAndRestoreModel> { model ->
   SimpleListScreen(R.string.es_backup_and_restore_title) {
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = backupData),
+        modifier = Modifier.clickable(onClick = model.backupData),
         leading = { Icon(R.drawable.es_ic_save) },
         title = { Text(R.string.es_pref_backup) },
         subtitle = { Text(R.string.es_pref_backup_summary) }
@@ -35,7 +35,7 @@ class BackupAndRestoreKey : Key<Unit>
     }
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = restoreData),
+        modifier = Modifier.clickable(onClick = model.restoreData),
         leading = { Icon(R.drawable.es_ic_restore) },
         title = { Text(R.string.es_pref_restore) },
         subtitle = { Text(R.string.es_pref_restore_summary) }

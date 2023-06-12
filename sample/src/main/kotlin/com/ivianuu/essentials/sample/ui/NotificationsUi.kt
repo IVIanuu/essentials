@@ -66,17 +66,17 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 class NotificationsKey : Key<Unit>
 
-@Provide val notificationsUi = KeyUi<NotificationsKey, NotificationsModel> {
+@Provide val notificationsUi = KeyUi<NotificationsKey, NotificationsModel> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
-    ResourceBox(hasPermissions) { hasPermission ->
+    ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {
         NotificationsList(
-          notifications = notifications,
-          onNotificationClick = { openNotification(it) },
-          onDismissNotificationClick = { dismissNotification(it) }
+          notifications = model.notifications,
+          onNotificationClick = { model.openNotification(it) },
+          onDismissNotificationClick = { model.dismissNotification(it) }
         )
       } else {
-        NotificationPermissions(requestPermissions)
+        NotificationPermissions(model.requestPermissions)
       }
     }
   }

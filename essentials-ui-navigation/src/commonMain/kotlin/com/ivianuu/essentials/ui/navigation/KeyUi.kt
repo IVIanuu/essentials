@@ -17,14 +17,14 @@ import kotlin.reflect.KClass
 
 // todo make fun interface once compose is fixed
 @Stable interface KeyUi<K : Key<*>, M> {
-  @Composable operator fun M.invoke()
+  @Composable operator fun invoke(model: M)
 }
 
 inline fun <K : Key<*>, M> KeyUi(
-  crossinline block: @Composable M.() -> Unit
+  crossinline block: @Composable (M) -> Unit
 ): KeyUi<K, M> = object : KeyUi<K, M> {
-  @Composable override fun M.invoke() {
-    block()
+  @Composable override fun invoke(model: M) {
+    block(model)
   }
 }
 

@@ -21,19 +21,19 @@ import com.ivianuu.injekt.Provide
 
 object RateOnPlayKey : OverlayKey<Unit>
 
-@Provide val rateOnPlayUi = KeyUi<RateOnPlayKey, RateOnPlayModel> {
+@Provide val rateOnPlayUi = KeyUi<RateOnPlayKey, RateOnPlayModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_rate_on_play_title) },
       content = { Text(R.string.es_rate_on_play_content) },
       buttons = {
-        if (displayShowNever) {
-          TextButton(onClick = showNever) { Text(R.string.es_never) }
+        if (model.displayShowNever) {
+          TextButton(onClick = model.showNever) { Text(R.string.es_never) }
         }
 
-        TextButton(onClick = showLater) { Text(R.string.es_later) }
+        TextButton(onClick = model.showLater) { Text(R.string.es_later) }
 
-        TextButton(onClick = rate) { Text(R.string.es_rate) }
+        TextButton(onClick = model.rate) { Text(R.string.es_rate) }
       }
     )
   }

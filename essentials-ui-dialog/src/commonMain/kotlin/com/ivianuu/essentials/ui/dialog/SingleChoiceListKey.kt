@@ -26,7 +26,7 @@ class SingleChoiceListKey<T : Any>(
 @Provide fun singleChoiceListUi(
   ctx: KeyUiContext<SingleChoiceListKey<Any>>,
   commonStrings: CommonStrings
-) = KeyUi<SingleChoiceListKey<Any>, Unit> {
+) = KeyUi<SingleChoiceListKey<Any>, Unit> { model ->
   DialogScaffold {
     SingleChoiceListDialog(
       items = ctx.key.items,

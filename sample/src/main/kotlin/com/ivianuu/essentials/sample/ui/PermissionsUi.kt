@@ -37,7 +37,7 @@ class PermissionsKey : Key<Unit>
 @Provide fun permissionUi(
   ctx: KeyUiContext<PermissionsKey>,
   permissionManager: PermissionManager
-) = KeyUi<PermissionsKey, Unit> {
+) = KeyUi<PermissionsKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {

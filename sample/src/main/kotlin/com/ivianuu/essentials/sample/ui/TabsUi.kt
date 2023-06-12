@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 class TabsKey : Key<Unit>
 
 @OptIn(ExperimentalPagerApi::class)
-@Provide val tabsUi = KeyUi<TabsKey, Unit> {
+@Provide val tabsUi = KeyUi<TabsKey, Unit> { model ->
   val pagerState = rememberPagerState()
   Scaffold(
     topBar = {

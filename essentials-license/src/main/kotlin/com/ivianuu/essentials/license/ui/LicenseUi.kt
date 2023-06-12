@@ -27,11 +27,11 @@ import com.ivianuu.injekt.Provide
 
 class LicenseKey : Key<Unit>
 
-@Provide val licenseUi = KeyUi<LicenseKey, LicenseModel> {
+@Provide val licenseUi = KeyUi<LicenseKey, LicenseModel> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_licenses_title) }) }) {
-    ResourceVerticalListFor(projects) { project ->
+    ResourceVerticalListFor(model.projects) { project ->
       ListItem(
-        modifier = Modifier.clickable { openProject(project) },
+        modifier = Modifier.clickable { model.openProject(project) },
         title = { Text(project.project) }
       )
     }

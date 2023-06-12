@@ -31,20 +31,20 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 class NavBarKey : Key<Unit>
 
-@Provide val navBarUi = KeyUi<NavBarKey, NavBarModel> {
+@Provide val navBarUi = KeyUi<NavBarKey, NavBarModel> { model ->
   SimpleListScreen(R.string.es_nav_bar_title) {
     item {
       SwitchListItem(
-        value = hideNavBar,
-        onValueChange = updateHideNavBar,
+        value = model.hideNavBar,
+        onValueChange = model.updateHideNavBar,
         title = { Text(R.string.es_pref_hide_nav_bar) }
       )
     }
     item {
       ListItem(
         modifier = Modifier
-          .clickable(onClick = updateNavBarRotationMode)
-          .interactive(canChangeNavBarRotationMode),
+          .clickable(onClick = model.updateNavBarRotationMode)
+          .interactive(model.canChangeNavBarRotationMode),
         title = { Text(R.string.es_pref_nav_bar_rotation_mode) },
         subtitle = { Text(R.string.es_pref_nav_bar_rotation_mode_summary) }
       )

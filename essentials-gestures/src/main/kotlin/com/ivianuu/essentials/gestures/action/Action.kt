@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.gestures.action
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.ui.navigation.Key
@@ -13,7 +14,7 @@ import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.TypeKey
 
-data class Action<I : ActionId>(
+@Immutable data class Action<I : ActionId>(
   val id: String,
   val title: String,
   val permissions: List<TypeKey<Permission>> = emptyList(),

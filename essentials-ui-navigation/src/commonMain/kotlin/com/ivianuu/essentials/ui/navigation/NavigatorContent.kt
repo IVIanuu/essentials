@@ -61,7 +61,7 @@ import kotlin.reflect.KClass
             content = {
               with(ui as KeyUi<*, Any>) {
                 with(currentModel as Any) {
-                  invoke()
+                  invoke(this)
                 }
               }
             },

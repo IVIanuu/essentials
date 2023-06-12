@@ -35,11 +35,11 @@ class PermissionRequestKey(
   val permissionsKeys: List<TypeKey<Permission>>
 ) : CriticalUserFlowKey<Boolean>
 
-@Provide val permissionRequestUi = KeyUi<PermissionRequestKey, PermissionRequestModel> {
+@Provide val permissionRequestUi = KeyUi<PermissionRequestKey, PermissionRequestModel> { model ->
   SimpleListScreen(R.string.es_request_permission_title) {
-    items(permissions) { permission ->
+    items(model.permissions) { permission ->
       ListItem(
-        modifier = Modifier.clickable { grantPermission(permission) },
+        modifier = Modifier.clickable { model.grantPermission(permission) },
         title = { Text(permission.permission.title) },
         subtitle = permission.permission.desc?.let {
           {

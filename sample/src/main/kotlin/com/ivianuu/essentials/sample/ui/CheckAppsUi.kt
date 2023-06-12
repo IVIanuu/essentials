@@ -37,7 +37,7 @@ class CheckAppsKey : Key<Unit>
   ctx: KeyUiContext<CheckAppsKey>,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate
-) = KeyUi<CheckAppsKey, Unit> {
+) = KeyUi<CheckAppsKey, Unit> { model ->
   remember {
     checkableAppsScreen(
       CheckableAppsParams(

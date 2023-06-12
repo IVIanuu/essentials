@@ -30,29 +30,29 @@ import com.ivianuu.injekt.Provide
 
 class AboutKey : Key<Unit>
 
-@Provide val aboutUi = KeyUi<AboutKey, AboutModel> {
+@Provide val aboutUi = KeyUi<AboutKey, AboutModel> { model ->
   SimpleListScreen(R.string.es_about_title) {
     item {
       ListItem(
         leading = { Icon(R.drawable.es_ic_info) },
         title = { Text(R.string.es_about_version) },
-        subtitle = { Text(version) }
+        subtitle = { Text(model.version) }
       )
     }
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = rate),
+        modifier = Modifier.clickable(onClick = model.rate),
         leading = { Icon(R.drawable.es_ic_star) },
         title = { Text(R.string.es_about_rate) },
         subtitle = { Text(R.string.es_about_rate_desc) }
       )
     }
 
-    if (showDonate) {
+    if (model.showDonate) {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = donate),
+          modifier = Modifier.clickable(onClick = model.donate),
           leading = { Icon(R.drawable.es_ic_favorite) },
           title = { Text(R.string.es_about_donate) }
         )
@@ -61,7 +61,7 @@ class AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = openMoreApps),
+        modifier = Modifier.clickable(onClick = model.openMoreApps),
         leading = { Icon(R.drawable.es_ic_google_play) },
         title = { Text(R.string.es_about_more_apps) },
         subtitle = { Text(R.string.es_about_more_apps_desc) }
@@ -70,7 +70,7 @@ class AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = openRedditPage),
+        modifier = Modifier.clickable(onClick = model.openRedditPage),
         leading = { Icon(R.drawable.es_ic_reddit) },
         title = { Text(R.string.es_about_reddit) },
         subtitle = { Text(R.string.es_about_reddit_desc) }
@@ -79,7 +79,7 @@ class AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = openGithubPage),
+        modifier = Modifier.clickable(onClick = model.openGithubPage),
         leading = { Icon(R.drawable.es_ic_github) },
         title = { Text(R.string.es_about_github) },
         subtitle = { Text(R.string.es_about_github_desc) }
@@ -88,7 +88,7 @@ class AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = openTwitterPage),
+        modifier = Modifier.clickable(onClick = model.openTwitterPage),
         leading = { Icon(R.drawable.es_ic_twitter) },
         title = { Text(R.string.es_about_twitter) },
         subtitle = { Text(R.string.es_about_twitter_desc) }
@@ -97,25 +97,25 @@ class AboutKey : Key<Unit>
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = sendMail),
+        modifier = Modifier.clickable(onClick = model.sendMail),
         leading = { Icon(R.drawable.es_ic_email) },
         title = { Text(R.string.es_about_feedback) },
-        subtitle = { Text(email.value) }
+        subtitle = { Text(model.email.value) }
       )
     }
 
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = openLicenses),
+        modifier = Modifier.clickable(onClick = model.openLicenses),
         leading = { Icon(R.drawable.es_ic_assignment) },
         title = { Text(R.string.es_licenses_title) }
       )
     }
 
-    if (privacyPolicyUrl != null) {
+    if (model.privacyPolicyUrl != null) {
       item {
         ListItem(
-          modifier = Modifier.clickable(onClick = openPrivacyPolicy),
+          modifier = Modifier.clickable(onClick = model.openPrivacyPolicy),
           leading = { Icon(R.drawable.es_ic_policy) },
           title = { Text(R.string.es_about_privacy_policy) }
         )

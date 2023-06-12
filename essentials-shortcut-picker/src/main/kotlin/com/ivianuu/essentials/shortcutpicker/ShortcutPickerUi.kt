@@ -38,11 +38,11 @@ import com.ivianuu.injekt.Provide
 
 class ShortcutPickerKey : Key<Shortcut>
 
-@Provide val shortcutPickerUi = KeyUi<ShortcutPickerKey, ShortcutPickerModel> {
+@Provide val shortcutPickerUi = KeyUi<ShortcutPickerKey, ShortcutPickerModel> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text(R.string.es_title_shortcut_picker) }) }) {
-    ResourceVerticalListFor(shortcuts) { shortcut ->
+    ResourceVerticalListFor(model.shortcuts) { shortcut ->
       ListItem(
-        modifier = Modifier.clickable { pickShortcut(shortcut) },
+        modifier = Modifier.clickable { model.pickShortcut(shortcut) },
         leading = {
           Image(
             modifier = Modifier.size(40.dp),

@@ -31,7 +31,7 @@ class ActionsKey : Key<Unit>
   repository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   toaster: Toaster
-) = KeyUi<ActionsKey, Unit> {
+) = KeyUi<ActionsKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {

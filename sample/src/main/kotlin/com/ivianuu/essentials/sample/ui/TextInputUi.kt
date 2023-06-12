@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Provide
 
 class TextInputKey : Key<Unit>
 
-@Provide val textInputUi = KeyUi<TextInputKey, Unit> {
+@Provide val textInputUi = KeyUi<TextInputKey, Unit> { model ->
   val state = remember { TextInputState() }
 
   if (!state.searchVisible) {

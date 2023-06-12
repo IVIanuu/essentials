@@ -49,7 +49,7 @@ class PrefsKey : Key<Unit>
 @Provide fun prefsUi(
   ctx: KeyUiContext<PrefsKey>,
   pref: DataStore<SamplePrefs>
-) = KeyUi<PrefsKey, Unit> {
+) = KeyUi<PrefsKey, Unit> { model ->
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
     item {

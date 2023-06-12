@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Provide
 
 class NavBarUnsupportedKey : Key<Unit>
 
-@Provide val navBarUnsupportedUi = KeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> {
+@Provide val navBarUnsupportedUi = KeyUi<NavBarUnsupportedKey, NavBarUnsupportedModel> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text(R.string.es_nav_bar_unsupported_title) }) }
   ) {
@@ -43,7 +43,7 @@ class NavBarUnsupportedKey : Key<Unit>
           modifier = Modifier
             .width(200.dp)
             .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-          onClick = openMoreInfos
+          onClick = model.openMoreInfos
         ) {
           Text(R.string.es_more_infos)
         }
@@ -52,7 +52,7 @@ class NavBarUnsupportedKey : Key<Unit>
           modifier = Modifier
             .width(200.dp)
             .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-          onClick = openRootMethod
+          onClick = model.openRootMethod
         ) {
           Text(R.string.es_root_method)
         }

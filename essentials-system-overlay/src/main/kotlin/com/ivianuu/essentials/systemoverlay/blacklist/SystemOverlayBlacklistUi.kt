@@ -24,46 +24,47 @@ import com.ivianuu.injekt.Provide
 class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
 @Provide
-val systemOverlayBlacklistUi = KeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> {
-  SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = openAppBlacklistSettings),
-        title = {
-          Text(R.string.es_pref_system_overlay_app_blacklist, systemOverlayName)
-        }
-      )
-    }
+val systemOverlayBlacklistUi =
+  KeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> { model ->
+    SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openAppBlacklistSettings),
+          title = {
+            Text(R.string.es_pref_system_overlay_app_blacklist, model.systemOverlayName)
+          }
+        )
+      }
 
     item {
       SwitchListItem(
-        value = disableOnKeyboard,
-        onValueChange = updateDisableOnKeyboard,
+        value = model.disableOnKeyboard,
+        onValueChange = model.updateDisableOnKeyboard,
         title = { Text(R.string.es_pref_disable_on_keyboard) },
         subtitle = {
-          Text(R.string.es_pref_disable_on_keyboard_summary, systemOverlayName)
+          Text(R.string.es_pref_disable_on_keyboard_summary, model.systemOverlayName)
         }
       )
     }
 
     item {
       SwitchListItem(
-        value = disableOnLockScreen,
-        onValueChange = updateDisableOnLockScreen,
+        value = model.disableOnLockScreen,
+        onValueChange = model.updateDisableOnLockScreen,
         title = { Text(R.string.es_pref_disable_on_lock_screen) },
         subtitle = {
-          Text(R.string.es_pref_disable_on_lock_screen_summary, systemOverlayName)
+          Text(R.string.es_pref_disable_on_lock_screen_summary, model.systemOverlayName)
         }
       )
     }
 
     item {
       SwitchListItem(
-        value = disableOnSecureScreens,
-        onValueChange = updateDisableOnSecureScreens,
+        value = model.disableOnSecureScreens,
+        onValueChange = model.updateDisableOnSecureScreens,
         title = { Text(R.string.es_pref_disable_on_secure_screens) },
         subtitle = {
-          Text(R.string.es_pref_disable_on_secure_screens_summary, systemOverlayName)
+          Text(R.string.es_pref_disable_on_secure_screens_summary, model.systemOverlayName)
         }
       )
     }

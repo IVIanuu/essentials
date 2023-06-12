@@ -23,25 +23,25 @@ import com.ivianuu.injekt.Provide
 
 object FeedbackKey : OverlayKey<Unit>
 
-@Provide val feedbackUi = KeyUi<FeedbackKey, FeedbackModel> {
+@Provide val feedbackUi = KeyUi<FeedbackKey, FeedbackModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_feedback_title) },
       content = { Text(R.string.es_feedback_content) },
       buttons = {
-        if (displayShowNever) {
-          TextButton(onClick = showNever) {
+        if (model.displayShowNever) {
+          TextButton(onClick = model.showNever) {
             Text(R.string.es_never)
           }
         }
-        TextButton(onClick = showLater) {
+        TextButton(onClick = model.showLater) {
           Text(R.string.es_later)
         }
 
-        TextButton(onClick = openReddit) {
+        TextButton(onClick = model.openReddit) {
           Text(R.string.es_open_reddit)
         }
-        TextButton(onClick = sendMail) {
+        TextButton(onClick = model.sendMail) {
           Text(R.string.es_send_mail)
         }
       }

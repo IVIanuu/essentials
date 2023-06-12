@@ -58,7 +58,7 @@ class WriteSecureSettingsPcInstructionsKey(
 ) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsPcInstructionsUi =
-  KeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> {
+  KeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> { model ->
     SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
       item {
         SecureSettingsHeader(
@@ -69,22 +69,22 @@ class WriteSecureSettingsPcInstructionsKey(
       item {
         Step(
           step = 1,
-        isCompleted = completedStep > 1,
-        isCurrent = currentStep == 1,
-        onClick = { openStep(1) },
-        title = { Text(R.string.es_secure_settings_step_1_title) },
-        content = {
-          Text(
-            textResId = R.string.es_secure_settings_step_1_content,
-            style = MaterialTheme.typography.body2
-          )
-        },
-        actions = {
-          Button(
-            onClick = continueStep,
-            enabled = canContinueStep
-          ) { Text(R.string.es_continue) }
-          OutlinedButton(onClick = openPhoneInfo) { Text(R.string.open_phone_info) }
+          isCompleted = model.completedStep > 1,
+          isCurrent = model.currentStep == 1,
+          onClick = { model.openStep(1) },
+          title = { Text(R.string.es_secure_settings_step_1_title) },
+          content = {
+            Text(
+              textResId = R.string.es_secure_settings_step_1_content,
+              style = MaterialTheme.typography.body2
+            )
+          },
+          actions = {
+            Button(
+              onClick = model.continueStep,
+              enabled = model.canContinueStep
+            ) { Text(R.string.es_continue) }
+            OutlinedButton(onClick = model.openPhoneInfo) { Text(R.string.open_phone_info) }
         }
       )
     }
@@ -92,9 +92,9 @@ class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 2,
-        isCompleted = completedStep > 2,
-        isCurrent = currentStep == 2,
-        onClick = { openStep(2) },
+        isCompleted = model.completedStep > 2,
+        isCurrent = model.currentStep == 2,
+        onClick = { model.openStep(2) },
         title = { Text(R.string.es_secure_settings_step_2_title) },
         content = {
           Text(
@@ -103,8 +103,11 @@ class WriteSecureSettingsPcInstructionsKey(
           )
         },
         actions = {
-          Button(onClick = continueStep, enabled = canContinueStep) { Text(R.string.es_continue) }
-          OutlinedButton(onClick = openDeveloperSettings) { Text(R.string.open_developer_settings) }
+          Button(
+            onClick = model.continueStep,
+            enabled = model.canContinueStep
+          ) { Text(R.string.es_continue) }
+          OutlinedButton(onClick = model.openDeveloperSettings) { Text(R.string.open_developer_settings) }
         }
       )
     }
@@ -112,13 +115,16 @@ class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 3,
-        isCompleted = completedStep > 3,
-        isCurrent = currentStep == 3,
-        onClick = { openStep(3) },
+        isCompleted = model.completedStep > 3,
+        isCurrent = model.currentStep == 3,
+        onClick = { model.openStep(3) },
         title = { Text(R.string.es_secure_settings_step_3_title) },
         content = { Text(R.string.es_secure_settings_step_3_content) },
         actions = {
-          Button(onClick = continueStep, enabled = canContinueStep) { Text(R.string.es_continue) }
+          Button(
+            onClick = model.continueStep,
+            enabled = model.canContinueStep
+          ) { Text(R.string.es_continue) }
         }
       )
     }
@@ -126,9 +132,9 @@ class WriteSecureSettingsPcInstructionsKey(
     item {
       Step(
         step = 4,
-        isCompleted = completedStep > 4,
-        isCurrent = currentStep == 4,
-        onClick = { openStep(4) },
+        isCompleted = model.completedStep > 4,
+        isCurrent = model.currentStep == 4,
+        onClick = { model.openStep(4) },
         title = { Text(R.string.es_secure_settings_step_4_title) },
         content = {
           Text(R.string.es_secure_settings_step_4_content)
@@ -138,14 +144,14 @@ class WriteSecureSettingsPcInstructionsKey(
               .padding(top = 8.dp)
               .background(LocalContentColor.current.copy(alpha = 0.12f), RoundedCornerShape(4.dp))
               .padding(4.dp),
-            text = adbCommand,
+            text = model.adbCommand,
             style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
           )
         },
         actions = {
           Button(
-            onClick = continueStep,
-            enabled = canContinueStep
+            onClick = model.continueStep,
+            enabled = model.canContinueStep
           ) { Text(R.string.es_complete) }
         }
       )

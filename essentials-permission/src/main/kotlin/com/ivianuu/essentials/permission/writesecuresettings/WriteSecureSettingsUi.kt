@@ -35,32 +35,33 @@ class WriteSecureSettingsKey(
   val permissionKey: TypeKey<WriteSecureSettingsPermission>
 ) : CriticalUserFlowKey<Boolean>
 
-@Provide val writeSecureSettingsUi = KeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> {
-  SimpleListScreen(R.string.es_secure_settings_title) {
-    item {
-      SecureSettingsHeader(
-        stringResource(R.string.es_secure_settings_desc)
-      )
-    }
-    item {
-      ListItem(
-        modifier = Modifier.clickable(onClick = openPcInstructions),
-        title = { Text(R.string.es_use_pc) },
-        subtitle = { Text(R.string.es_use_pc_summary) },
-        trailing = {
-          Button(onClick = openPcInstructions) {
-            Text(R.string.es_grant)
+@Provide val writeSecureSettingsUi =
+  KeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> { model ->
+    SimpleListScreen(R.string.es_secure_settings_title) {
+      item {
+        SecureSettingsHeader(
+          stringResource(R.string.es_secure_settings_desc)
+        )
+      }
+      item {
+        ListItem(
+          modifier = Modifier.clickable(onClick = model.openPcInstructions),
+          title = { Text(R.string.es_use_pc) },
+          subtitle = { Text(R.string.es_use_pc_summary) },
+          trailing = {
+            Button(onClick = model.openPcInstructions) {
+              Text(R.string.es_grant)
+            }
           }
-        }
-      )
+        )
     }
     item {
       ListItem(
-        modifier = Modifier.clickable(onClick = grantPermissionsViaRoot),
+        modifier = Modifier.clickable(onClick = model.grantPermissionsViaRoot),
         title = { Text(R.string.es_use_root) },
         subtitle = { Text(R.string.es_use_root_summary) },
         trailing = {
-          Button(onClick = grantPermissionsViaRoot) {
+          Button(onClick = model.grantPermissionsViaRoot) {
             Text(R.string.es_grant)
           }
         }

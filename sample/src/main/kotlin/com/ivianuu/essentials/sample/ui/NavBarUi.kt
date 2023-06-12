@@ -46,7 +46,7 @@ class NavBarKey : Key<Unit>
   navigator: Navigator,
   navBarPref: DataStore<NavBarPrefs>,
   permissionManager: PermissionManager
-) = KeyUi<NavBarKey, Unit> {
+) = KeyUi<NavBarKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
   ) {

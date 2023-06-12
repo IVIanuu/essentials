@@ -38,7 +38,7 @@ import com.ivianuu.injekt.Provide
 
 class WebKey(val title: String, val url: String) : Key<Unit>
 
-@Provide fun webUi(ctx: KeyUiContext<WebKey>) = KeyUi<WebKey, Unit> {
+@Provide fun webUi(ctx: KeyUiContext<WebKey>) = KeyUi<WebKey, Unit> { model ->
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {
