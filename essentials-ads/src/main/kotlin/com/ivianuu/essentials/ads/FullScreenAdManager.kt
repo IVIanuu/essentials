@@ -13,6 +13,7 @@ import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Result
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.app.ScopeWorker
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.RateLimiter
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.util.ForegroundActivity
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.MainCoroutineContext
 import com.ivianuu.injekt.common.NamedCoroutineScope
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow

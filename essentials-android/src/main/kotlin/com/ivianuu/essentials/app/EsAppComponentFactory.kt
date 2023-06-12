@@ -19,7 +19,7 @@ class EsAppComponentFactory : AppComponentFactory() {
   private lateinit var app: EsApp
 
   private val factories: Map<KClass<*>, Map<String, (Intent?) -> Any>> by lazy(LazyThreadSafetyMode.NONE) {
-    app.appElements.element<AndroidComponentFactoryComponent>()
+    app.appScope.service<AndroidComponentFactoryComponent>()
       .factories
       .groupBy { it.first }
       .mapValues { (_, factories) ->

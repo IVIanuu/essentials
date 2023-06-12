@@ -4,10 +4,8 @@
 
 package com.ivianuu.essentials
 
-import com.ivianuu.injekt.common.Elements
-
 object AppScope
 
-interface AppElementsOwner {
-  val appElements: Elements<AppScope>
+interface AppScopeOwner {
+  val appScope: Scope<AppScope>
 }

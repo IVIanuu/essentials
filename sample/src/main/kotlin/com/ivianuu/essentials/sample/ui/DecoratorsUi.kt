@@ -14,8 +14,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.insets.InsetsPadding
@@ -25,9 +27,7 @@ import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey() }
 
@@ -47,8 +47,8 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val key = catch { LocalKeyUiElements.current }.getOrNull()
-      ?.element<SampleDecoratorComponent>()?.key
+    val key = catch { LocalScope.current }.getOrNull()
+      ?.service<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator before content $key")
   }
@@ -56,8 +56,8 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val key = catch { LocalKeyUiElements.current }.getOrNull()
-      ?.element<SampleDecoratorComponent>()?.key
+    val key = catch { LocalScope.current }.getOrNull()
+      ?.service<SampleDecoratorComponent>()?.key
     if (key is DecoratorsKey)
       Text("Sample decorator after content $key")
   }
@@ -66,7 +66,7 @@ fun interface SampleListDecorator : ListDecorator
 fun interface SampleKeyUiDecorator : KeyUiDecorator
 
 @Provide val sampleKeyUiDecorator = SampleKeyUiDecorator decorator@ { content ->
-  val key = LocalKeyUiElements.current.element<SampleDecoratorComponent>().key
+  val key = LocalScope.current.service<SampleDecoratorComponent>().key
   if (key !is DecoratorsKey) {
     content()
     return@decorator
@@ -97,5 +97,5 @@ fun interface SampleKeyUiDecorator : KeyUiDecorator
   }
 }
 
-@Provide @Element<KeyUiScope>
+@Provide @Service<KeyUiScope>
 data class SampleDecoratorComponent(val key: Key<*>)

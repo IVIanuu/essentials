@@ -6,10 +6,10 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.ivianuu.essentials.Scope
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.NamedCoroutineScope
-import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass

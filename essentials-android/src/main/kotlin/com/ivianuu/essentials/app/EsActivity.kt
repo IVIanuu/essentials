@@ -11,20 +11,20 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateUi
-import com.ivianuu.essentials.ui.LocalUiElements
+import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsActivity(
-  private val uiComponent: (Scope<UiScope>, ComponentActivity) -> UiComponent
+  private val uiScopeFactory: (ComponentActivity) -> Scope<UiScope>
 ) : ComponentActivity(), ForegroundActivityMarker {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -33,16 +33,16 @@ import kotlinx.coroutines.launch
       finish()
     }
 
-    val uiScope = Scope<UiScope>()
+    val uiScope = uiScopeFactory(this)
 
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { uiScope.dispose() }
     }
 
-    val uiComponent = uiComponent(uiScope, this)
+    val uiComponent = uiScope.service<UiComponent>()
 
     setContent {
-      CompositionLocalProvider(LocalUiElements provides uiComponent.elements) {
+      CompositionLocalProvider(LocalScope provides uiScope) {
         uiComponent.decorateUi {
           uiComponent.appUi()
         }
@@ -51,8 +51,4 @@ import kotlinx.coroutines.launch
   }
 }
 
-@Provide data class UiComponent(
-  val appUi: AppUi,
-  val decorateUi: DecorateUi,
-  val elements: Elements<UiScope>
-)
+@Provide @Service<UiScope> data class UiComponent(val appUi: AppUi, val decorateUi: DecorateUi)

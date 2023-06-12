@@ -9,13 +9,12 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import com.ivianuu.essentials.AndroidComponent
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.addFlag
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Elements
 import com.ivianuu.injekt.common.NamedCoroutineScope
-import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,18 +22,19 @@ import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsAccessibilityService(
   private val accessibilityEvents: MutableSharedFlow<com.ivianuu.essentials.accessibility.AccessibilityEvent>,
-  private val accessibilityComponentFactory: (Scope<AccessibilityScope>, EsAccessibilityService) -> AccessibilityComponent,
+  private val accessibilityScopeFactory: (EsAccessibilityService) -> Scope<AccessibilityScope>,
   private val logger: Logger,
   private val accessibilityServiceRef: MutableStateFlow<EsAccessibilityService?>
 ) : AccessibilityService() {
-  private var accessibilityComponent: AccessibilityComponent? = null
+  private var accessibilityScope: Scope<AccessibilityScope>? = null
 
   override fun onServiceConnected() {
     super.onServiceConnected()
     logger.log { "service connected" }
     accessibilityServiceRef.value = this
-    val accessibilityComponent = accessibilityComponentFactory(Scope(), this)
-      .also { this.accessibilityComponent = it }
+    accessibilityScope = accessibilityScopeFactory(this)
+    val accessibilityComponent = accessibilityScope!!
+      .service<AccessibilityComponent>()
 
     accessibilityComponent.coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
       val configs = accessibilityComponent.configs()
@@ -78,8 +78,8 @@ import kotlinx.coroutines.launch
 
   override fun onUnbind(intent: Intent?): Boolean {
     logger.log { "service disconnected" }
-    accessibilityComponent?.scope?.dispose()
-    accessibilityComponent = null
+    accessibilityScope?.dispose()
+    accessibilityScope = null
     accessibilityServiceRef.value = null
     return super.onUnbind(intent)
   }
@@ -91,7 +91,5 @@ import kotlinx.coroutines.launch
 
 @Provide data class AccessibilityComponent(
   val configs: () -> List<AccessibilityConfig>,
-  val coroutineScope: NamedCoroutineScope<AccessibilityScope>,
-  val elements: Elements<AccessibilityScope>,
-  val scope: Scope<AccessibilityScope>
+  val coroutineScope: NamedCoroutineScope<AccessibilityScope>
 )

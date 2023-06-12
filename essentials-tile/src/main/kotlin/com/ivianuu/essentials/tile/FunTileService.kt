@@ -9,15 +9,15 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.compose.state
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 import com.ivianuu.injekt.common.NamedCoroutineScope
-import com.ivianuu.injekt.common.Scope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.reflect.KClass
@@ -25,90 +25,92 @@ import kotlin.reflect.KClass
 @Provide @AndroidComponent class FunTileService1(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService1>()
 
 @Provide @AndroidComponent class FunTileService2(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService2>()
 
 @Provide @AndroidComponent class FunTileService3(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService3>()
 
 @Provide @AndroidComponent class FunTileService4(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService4>()
 
 @Provide @AndroidComponent class FunTileService5(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService5>()
 
 @Provide @AndroidComponent class FunTileService6(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService6>()
 
 @Provide @AndroidComponent class FunTileService7(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService7>()
 
 @Provide @AndroidComponent class FunTileService8(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService8>()
 
 @Provide @AndroidComponent class FunTileService9(
   logger: Logger,
   resources: Resources,
-  tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : AbstractFunTileService<FunTileService9>()
 
 abstract class AbstractFunTileService<T : Any>(
   @Inject private val logger: Logger,
   @Inject private val resources: Resources,
   @Inject private val serviceClass: KClass<T>,
-  @Inject private val tileModelComponent: (Scope<TileScope>, TileId) -> TileModelComponent
+  @Inject private val tileScopeFactory: (TileId) -> Scope<TileScope>
 ) : TileService() {
-  private var tileComponent: TileModelComponent? = null
+  private var tileScope: Scope<TileScope>? = null
+  private var currentModel: TileModel<*>? = null
 
   override fun onStartListening() {
     super.onStartListening()
     logger.log { "$serviceClass on start listening" }
-    val tileModelComponent = tileModelComponent(Scope(), TileId(serviceClass))
-      .also { this.tileComponent = it }
-    tileModelComponent.tileModel
+    tileScope = tileScopeFactory(TileId(serviceClass))
+    val tileComponent = tileScope!!.service<TileComponent>()
+    tileComponent
+      .tileModel
       .onEach { applyModel(it) }
-      .launchIn(tileModelComponent.coroutineScope)
+      .launchIn(tileComponent.coroutineScope)
   }
 
   override fun onClick() {
     super.onClick()
     logger.log { "$serviceClass on click" }
-    tileComponent?.currentModel?.onTileClicked?.invoke()
+    currentModel?.onTileClicked?.invoke()
   }
 
   override fun onStopListening() {
-    tileComponent?.scope?.dispose()
-    tileComponent = null
+    tileScope?.dispose()
+    tileScope = null
     logger.log { "$serviceClass on stop listening" }
     super.onStopListening()
   }
 
   private fun applyModel(model: TileModel<*>) {
-    tileComponent?.currentModel = model
+    currentModel = model
     val qsTile = qsTile ?: return
 
     qsTile.state = when (model.status) {
@@ -135,14 +137,12 @@ abstract class AbstractFunTileService<T : Any>(
   }
 }
 
-@Provide @Element<TileScope> data class TileModelComponent(
+@Provide @Service<TileScope> data class TileComponent(
   val tileId: TileId,
   val tileModelElements: List<Pair<TileId, Model<TileModel<*>>>>,
   val coroutineScope: NamedCoroutineScope<TileScope>,
   val scope: Scope<TileScope>
 ) {
-  var currentModel: TileModel<*>? = null
-
   val tileModel = coroutineScope.state {
     tileModelElements.toMap()[tileId]
       ?.invoke()

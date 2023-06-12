@@ -5,15 +5,13 @@
 package com.ivianuu.essentials.sample
 
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.app.EsApp
-import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Providers
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
 import com.ivianuu.injekt.inject
 
 class SampleApp : EsApp() {
-  override fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope> =
+  override fun buildAppScope(): Scope<AppScope> =
     @Providers(
       ".**",
       "com.ivianuu.essentials.logging.AndroidLogger.Companion.androidLogger"

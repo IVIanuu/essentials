@@ -5,8 +5,8 @@
 package kotlinx.serialization.json
 
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.serialization.modules.SerializersModule
 
 object JsonModule {

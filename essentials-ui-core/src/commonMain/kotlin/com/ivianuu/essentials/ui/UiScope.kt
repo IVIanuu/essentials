@@ -5,8 +5,8 @@
 package com.ivianuu.essentials.ui
 
 import androidx.compose.runtime.compositionLocalOf
-import com.ivianuu.injekt.common.Elements
+import com.ivianuu.essentials.Scope
 
 object UiScope
 
-val LocalUiElements = compositionLocalOf<Elements<UiScope>> { error("No ui elements provided") }
+val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }

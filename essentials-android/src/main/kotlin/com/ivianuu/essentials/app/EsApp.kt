@@ -5,17 +5,12 @@
 package com.ivianuu.essentials.app
 
 import android.app.Application
-import com.ivianuu.essentials.AppElementsOwner
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.injekt.Inject
-import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
+import com.ivianuu.essentials.AppScopeOwner
+import com.ivianuu.essentials.Scope
 
-abstract class EsApp : Application(), AppElementsOwner {
-  override val appElements by lazy { buildAppElements() }
+abstract class EsApp : Application(), AppScopeOwner {
+  override val appScope by lazy { buildAppScope() }
 
-  @Provide private val scope = Scope<AppScope>()
-
-  protected abstract fun buildAppElements(@Inject scope: Scope<AppScope>): Elements<AppScope>
+  protected abstract fun buildAppScope(): Scope<AppScope>
 }

@@ -7,10 +7,10 @@ package com.ivianuu.essentials.android.prefs
 import com.ivianuu.essentials.AppScope
 import com.ivianuu.essentials.Initial
 import com.ivianuu.essentials.InitialOrDefault
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.NamedCoroutineScope
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged

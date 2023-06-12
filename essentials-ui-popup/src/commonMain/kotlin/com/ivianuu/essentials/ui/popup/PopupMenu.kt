@@ -13,23 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
 
-@Provide @Element<KeyUiScope>
+@Provide @Service<KeyUiScope>
 data class PopupMenuComponent(val key: Key<*>, val navigator: Navigator)
 
 @Composable fun PopupMenuItem(
   onSelected: () -> Unit,
   content: @Composable () -> Unit,
 ) {
-  val component = LocalKeyUiElements.current.element<PopupMenuComponent>()
+  val component = LocalScope.current.service<PopupMenuComponent>()
 
   Box(
     modifier = Modifier.widthIn(min = 200.dp)

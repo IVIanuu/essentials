@@ -5,14 +5,12 @@
 package com.ivianuu.essentials
 
 import android.app.Activity
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ContentProvider
 import android.content.Intent
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Element
 import kotlin.reflect.KClass
 
 @Tag annotation class AndroidComponent {
@@ -23,11 +21,11 @@ import kotlin.reflect.KClass
     ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
       Activity::class to (componentClass to factory)
 
-    @Provide fun <@Spread T : @AndroidComponent S, S : Service> service(
+    @Provide fun <@Spread T : @AndroidComponent S, S : android.app.Service> service(
       componentClass: KClass<T>,
       factory: (Intent?) -> T
     ): Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>> =
-      Service::class to (componentClass to factory)
+      android.app.Service::class to (componentClass to factory)
 
     @Provide fun <@Spread T : @AndroidComponent S, S : BroadcastReceiver> receiver(
       componentClass: KClass<T>,
@@ -45,6 +43,6 @@ import kotlin.reflect.KClass
   }
 }
 
-@Provide @Element<AppScope> class AndroidComponentFactoryComponent(
+@Provide @Service<AppScope> class AndroidComponentFactoryComponent(
   val factories: List<Pair<KClass<*>, Pair<KClass<*>, (Intent?) -> Any>>>
 )

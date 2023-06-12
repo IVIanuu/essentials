@@ -12,9 +12,9 @@ import coil.key.Keyer
 import coil.map.Mapper
 import com.ivianuu.essentials.AppContext
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
-import com.ivianuu.injekt.common.Scoped
 import kotlin.reflect.KClass
 
 @Provide fun imageLoader(

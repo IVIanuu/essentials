@@ -4,10 +4,13 @@
 
 package com.ivianuu.essentials.app
 
+import com.ivianuu.essentials.ProvidedService
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.ScopeObserver
+import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.ProvidedElement
 import com.ivianuu.injekt.common.TypeKey
 
 interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
@@ -15,24 +18,24 @@ interface ScopeInitializer<N> : () -> Unit, Service<ScopeInitializer<N>>
 @Provide inline fun <N> scopeInitializerRunner(
   crossinline key: () -> TypeKey<ScopeInitializerRunner>,
   crossinline nameKey: () -> TypeKey<N>,
-  crossinline initializers: () -> List<ServiceElement<ScopeInitializer<N>>>,
-  crossinline workerRunner: () -> ScopeWorkerRunner<N>,
-  crossinline logger: () -> Logger
-) = object : ProvidedElement<N, ScopeInitializerRunner> {
+  crossinline initializers: (Scope<N>) -> List<ServiceElement<ScopeInitializer<N>>>,
+  crossinline workerRunner: (Scope<N>) -> ScopeWorkerRunner<N>,
+  crossinline logger: (Scope<N>) -> Logger
+): ProvidedService<N, ScopeInitializerRunner> = object : ProvidedService<N, ScopeInitializerRunner>, ScopeObserver {
   override val key: TypeKey<ScopeInitializerRunner>
     get() = key()
 
-  override fun init() {
-    initializers()
+  override fun onEnter(scope: Scope<*>) {
+    initializers(scope.cast())
       .sortedWithLoadingOrder()
       .forEach {
-        logger().log { "${nameKey().value} initialize ${it.key.value}" }
+        logger(scope.cast()).log { "${nameKey().value} initialize ${it.key.value}" }
         it.instance()
       }
-    workerRunner()()
+    workerRunner(scope.cast())()
   }
 
-  override fun get(): ScopeInitializerRunner = ScopeInitializerRunner
+  override fun get(scope: Scope<N>) = ScopeInitializerRunner
 }
 
 object ScopeInitializerRunner

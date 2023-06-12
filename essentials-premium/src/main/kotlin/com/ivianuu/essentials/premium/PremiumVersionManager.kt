@@ -6,6 +6,7 @@ package com.ivianuu.essentials.premium
 
 import com.android.billingclient.api.SkuDetails
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Eager
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.ads.AdsEnabled
 import com.ivianuu.essentials.android.prefs.PrefModule
@@ -24,7 +25,6 @@ import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Eager
 import com.ivianuu.injekt.common.NamedCoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

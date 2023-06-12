@@ -18,16 +18,15 @@ import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.Scope
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.LocalUiElements
+import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.animation.AnimatedStack
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.backpress.BackHandler
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Element
-import com.ivianuu.injekt.common.Elements
-import com.ivianuu.injekt.common.Scope
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
@@ -37,7 +36,7 @@ import kotlin.reflect.KClass
   handleBack: Boolean = true,
   popRoot: Boolean = false,
   componentFactory: @Composable () -> NavigationStateContentComponent = {
-    LocalUiElements.current.element()
+    LocalScope.current.service()
   }
 ) {
   val component = componentFactory()
@@ -49,7 +48,7 @@ import kotlin.reflect.KClass
       key(key) {
         var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
-          val scope = Scope<KeyUiScope>()
+          val scope = component.keyUiScopeFactory(navigator, key)
           val content = component.uiFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(content) { "No ui factory found for $key" }
           val options = component.optionFactories[key::class]?.invoke(navigator, scope, key)
@@ -58,7 +57,6 @@ import kotlin.reflect.KClass
             options = options,
             content = { currentUi },
             decorateKeyUi = component.decorateKeyUi(navigator, scope, key),
-            elements = component.elementsFactory(navigator, scope, key),
             scope = scope
           )
         }
@@ -99,7 +97,6 @@ import kotlin.reflect.KClass
   options: KeyUiOptions? = null,
   private val content: () -> @Composable () -> Unit,
   private val decorateKeyUi: DecorateKeyUi,
-  private val elements: Elements<KeyUiScope>,
   private val scope: Scope<KeyUiScope>
 ) {
   val stackChild = AnimatedStackChild(
@@ -120,7 +117,7 @@ import kotlin.reflect.KClass
     }
 
     CompositionLocalProvider(
-      LocalKeyUiElements provides elements,
+      LocalScope provides scope,
       LocalSaveableStateRegistry provides savableStateRegistry
     ) {
       decorateKeyUi {
@@ -157,9 +154,9 @@ import kotlin.reflect.KClass
   }
 }
 
-@Provide @Element<UiScope> data class NavigationStateContentComponent(
+@Provide @Service<UiScope> data class NavigationStateContentComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val decorateKeyUi: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
-  val elementsFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> Elements<KeyUiScope>
+  val keyUiScopeFactory: (Navigator, Key<*>) -> Scope<KeyUiScope>
 )

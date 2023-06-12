@@ -6,7 +6,6 @@ package com.ivianuu.essentials
 
 import android.content.pm.ApplicationInfo
 import com.ivianuu.injekt.Provide
-import com.ivianuu.injekt.common.Scoped
 
 data class BuildInfo(
   val isDebug: Boolean,

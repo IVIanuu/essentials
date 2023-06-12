@@ -5,11 +5,11 @@
 package kotlinx.serialization
 
 import com.ivianuu.essentials.AppScope
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.serialization.modules.SerializersModule
 import kotlin.reflect.KClass
 

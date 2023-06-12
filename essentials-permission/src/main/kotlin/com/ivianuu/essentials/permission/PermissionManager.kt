@@ -65,7 +65,9 @@ interface PermissionManager {
       if (permissions.all { permissionState(listOf(it)).first() })
         return@withContext true
 
+      println("pre app ui")
       appUiStarter()
+      println("post app ui")
 
       val result = navigator.push(PermissionRequestKey(permissions)) == true
       logger.log { "request permissions result $permissions -> $result" }

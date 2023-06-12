@@ -7,16 +7,16 @@ package com.ivianuu.essentials.ads
 import com.google.android.gms.ads.AdSize
 import com.ivianuu.essentials.BuildInfo
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
-import com.ivianuu.essentials.ui.navigation.LocalKeyUiElements
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
-import com.ivianuu.injekt.common.Element
 import kotlinx.coroutines.flow.StateFlow
 
 @Provide object ListAdBannerFeature : AdFeature
@@ -47,7 +47,7 @@ fun interface ListAdBanner : ListDecorator
   if (config != null && isVertical) {
     item(null) {
       val key = catch {
-        LocalKeyUiElements.current.element<ListAdBannerComponent>().key::class
+        LocalScope.current.service<ListAdBannerComponent>().key::class
       }.getOrNull()
       if ((key == null || isAdFeatureEnabled(key, ListAdBannerFeature)) && adsEnabled.bind().value)
         AdBanner(config)
@@ -57,5 +57,5 @@ fun interface ListAdBanner : ListDecorator
   content()
 }
 
-@Provide @Element<KeyUiScope>
+@Provide @Service<KeyUiScope>
 data class ListAdBannerComponent(val key: Key<*>)
