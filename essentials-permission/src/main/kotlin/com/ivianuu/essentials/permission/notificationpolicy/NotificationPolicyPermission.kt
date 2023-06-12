@@ -31,4 +31,3 @@ abstract class NotificationPolicyPermission(
     ) = PermissionIntentFactory<P> { Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) }
   }
 }
-
