@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.ui.animation
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -37,7 +36,7 @@ import kotlin.collections.set
   transition: StackTransition = CrossFadeStackTransition(),
   contentAlignment: Alignment = Alignment.TopStart,
   propagateMinConstraints: Boolean = false,
-  itemContent: @Composable BoxScope.(T) -> Unit
+  itemContent: @Composable (T) -> Unit
 ) {
   AnimatedStack(
     modifier = modifier,
@@ -55,7 +54,7 @@ import kotlin.collections.set
   transition: StackTransition = LocalStackTransition.current,
   contentAlignment: Alignment = Alignment.TopStart,
   propagateMinConstraints: Boolean = false,
-  itemContent: @Composable BoxScope.(T) -> Unit
+  itemContent: @Composable (T) -> Unit
 ) {
   val state = remember { AnimatedStackWithItemsState(transition, itemContent, items) }
   state.update(transition, itemContent, items)
@@ -69,7 +68,7 @@ import kotlin.collections.set
 
 private class AnimatedStackWithItemsState<T>(
   transition: StackTransition,
-  itemContent: @Composable BoxScope.(T) -> Unit,
+  itemContent: @Composable (T) -> Unit,
   items: List<T>
 ) {
   var children by mutableStateOf(emptyList<AnimatedStackChild<T>>())
@@ -81,19 +80,18 @@ private class AnimatedStackWithItemsState<T>(
 
   fun update(
     transition: StackTransition,
-    itemContent: @Composable BoxScope.(T) -> Unit,
+    itemContent: @Composable (T) -> Unit,
     items: List<T>
   ) {
     children = items.map { getOrCreateChild(it, transition, itemContent) }
   }
 
-  @Suppress("UNCHECKED_CAST")
   private fun getOrCreateChild(
     item: T,
     transition: StackTransition,
-    itemContent: @Composable BoxScope.(T) -> Unit
+    itemContent: @Composable (T) -> Unit
   ): AnimatedStackChild<T> {
-    val content: @Composable BoxScope.() -> Unit = { itemContent(item) }
+    val content: @Composable () -> Unit = { itemContent(item) }
     children.firstOrNull { it.key == item }
       ?.let {
         it.enterTransition = transition
@@ -132,7 +130,7 @@ private class AnimatedStackWithItemsState<T>(
   opaque: Boolean = false,
   enterTransition: StackTransition? = null,
   exitTransition: StackTransition? = null,
-  content: @Composable BoxScope.() -> Unit
+  content: @Composable () -> Unit
 ) {
   var opaque by mutableStateOf(opaque)
   var enterTransition by mutableStateOf(enterTransition)
@@ -144,7 +142,7 @@ private class AnimatedStackWithItemsState<T>(
     key: T,
     opaque: Boolean = false,
     transition: StackTransition? = null,
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable () -> Unit
   ) : this(key, opaque, transition, transition, content)
 
   @Composable internal fun Content() {
