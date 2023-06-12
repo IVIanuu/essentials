@@ -59,7 +59,7 @@ import kotlin.math.min
       if (loggingEnabled().value) androidLoggerFactory()
       else NoopLogger
     }
+
+    @Provide fun androidLoggingEnabled(appConfig: AppConfig) = LoggingEnabled(appConfig.isDebug)
   }
 }
-
-@Provide fun androidLoggingEnabled(appConfig: AppConfig) = LoggingEnabled(appConfig.isDebug)
