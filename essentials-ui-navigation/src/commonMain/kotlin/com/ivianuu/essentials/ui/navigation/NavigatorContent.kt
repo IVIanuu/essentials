@@ -36,7 +36,8 @@ import kotlin.reflect.KClass
   handleBack: Boolean = true,
   popRoot: Boolean = false,
   componentFactory: @Composable () -> NavigationStateContentComponent = {
-    LocalScope.current.service()
+    val scope = LocalScope.current
+    remember(scope) { scope.service() }
   }
 ) {
   val component = componentFactory()
@@ -47,7 +48,7 @@ import kotlin.reflect.KClass
     .mapIndexed { index, key ->
       key(key) {
         var currentModel by remember { mutableStateOf<Any?>(null) }
-        val (model, child) = remember {
+        val (keyUi, child) = remember {
           val scope = component.keyUiScopeFactory(navigator, key)
           val ui = component.uiFactories[key::class]?.invoke(navigator, scope, key)
           checkNotNull(ui) { "No ui factory found for $key" }
@@ -64,7 +65,7 @@ import kotlin.reflect.KClass
                 }
               }
             },
-            decorateKeyUi = component.decorateKeyUi(navigator, scope, key),
+            decorateKeyUi = component.decorateKeyUiFactory(navigator, scope, key),
             scope = scope
           )
         }
@@ -78,7 +79,7 @@ import kotlin.reflect.KClass
         ObserveScope(
           remember {
             {
-              currentModel = model()
+              currentModel = keyUi()
 
               DisposableEffect(true) {
                 onDispose {
@@ -166,6 +167,6 @@ import kotlin.reflect.KClass
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
   val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
-  val decorateKeyUi: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
+  val decorateKeyUiFactory: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
   val keyUiScopeFactory: (Navigator, Key<*>) -> Scope<KeyUiScope>
 )
