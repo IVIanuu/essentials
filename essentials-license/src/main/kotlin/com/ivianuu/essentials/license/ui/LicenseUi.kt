@@ -8,8 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.compose.produceResource
-import com.ivianuu.essentials.getOrThrow
+import com.ivianuu.essentials.compose.bindResource
 import com.ivianuu.essentials.license.R
 import com.ivianuu.essentials.license.data.Project
 import com.ivianuu.essentials.license.domain.LicenceProjectRepository
@@ -49,7 +48,7 @@ data class LicenseModel(
   repository: LicenceProjectRepository
 ) = Model {
   LicenseModel(
-    projects = produceResource { repository.getLicenseProjects().getOrThrow() },
+    projects = repository.licenseProjects.bindResource(),
     openProject = action { project ->
       if (project.url != null)
         ctx.navigator.push(UrlKey(project.url))

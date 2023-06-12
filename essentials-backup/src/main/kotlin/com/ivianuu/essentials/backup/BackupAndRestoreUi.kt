@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.Resources
+import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.onFailure
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -52,14 +53,14 @@ data class BackupAndRestoreModel(val backupData: () -> Unit, val restoreData: ()
 ) = Model {
   BackupAndRestoreModel(
     backupData = action {
-      backupManager.createBackup()
+      catch { backupManager.createBackup() }
         .onFailure {
           it.printStackTrace()
           toaster(R.string.es_backup_error)
         }
     },
     restoreData = action {
-      backupManager.restoreBackup()
+      catch { backupManager.restoreBackup() }
         .onFailure {
           it.printStackTrace()
           toaster(R.string.es_restore_error)

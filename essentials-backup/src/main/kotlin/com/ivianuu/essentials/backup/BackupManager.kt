@@ -9,11 +9,10 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.AppScope
-import com.ivianuu.essentials.Result
-import com.ivianuu.essentials.catch
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.data.DataDir
 import com.ivianuu.essentials.getOrNull
+import com.ivianuu.essentials.getOrThrow
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.processrestart.ProcessRestarter
@@ -29,9 +28,9 @@ import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 interface BackupManager {
-  suspend fun createBackup(): Result<Unit, Throwable>
+  suspend fun createBackup()
 
-  suspend fun restoreBackup(): Result<Unit, Throwable>
+  suspend fun restoreBackup()
 }
 
 @Provide class BackupManagerImpl(
@@ -46,7 +45,7 @@ interface BackupManager {
   private val processRestarter: ProcessRestarter,
   private val scope: ScopedCoroutineScope<AppScope>
 ) : BackupManager {
-  override suspend fun createBackup(): Result<Unit, Throwable> = catch {
+  override suspend fun createBackup(): Unit =
     withContext(scope.coroutineContext + coroutineContext) {
       val dateFormat = SimpleDateFormat("dd_MM_yyyy_HH_mm_ss")
       val backupFileName =
@@ -75,41 +74,38 @@ interface BackupManager {
 
       zipOutputStream.close()
 
-      navigator.push(ShareBackupFileKey(backupFile.absolutePath))
+      navigator.push(ShareBackupFileKey(backupFile.absolutePath))?.getOrThrow()
     }
-  }
 
-  override suspend fun restoreBackup(): Result<Unit, Throwable> = catch {
-    withContext(scope.coroutineContext + coroutineContext) {
-      val uri = navigator.push(
-        DefaultIntentKey(
-          Intent.createChooser(
-            Intent(Intent.ACTION_GET_CONTENT).apply {
-              type = "application/zip"
-            },
-            ""
-          )
+  override suspend fun restoreBackup() = withContext(scope.coroutineContext + coroutineContext) {
+    val uri = navigator.push(
+      DefaultIntentKey(
+        Intent.createChooser(
+          Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "application/zip"
+          },
+          ""
         )
-      )?.getOrNull()?.data?.data ?: return@withContext
+      )
+    )?.getOrNull()?.data?.data ?: return@withContext
 
-      val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
+    val zipInputStream = ZipInputStream(contentResolver.openInputStream(uri)!!)
 
-      generateSequence { zipInputStream.nextEntry }
-        .forEach { entry ->
-          val file = dataDir.resolve(entry.name)
-          logger.log { "restore file $file" }
-          if (!file.exists()) {
-            file.parentFile.mkdirs()
-            file.createNewFile()
-          }
-          zipInputStream.copyTo(file.outputStream())
-          zipInputStream.closeEntry()
+    generateSequence { zipInputStream.nextEntry }
+      .forEach { entry ->
+        val file = dataDir.resolve(entry.name)
+        logger.log { "restore file $file" }
+        if (!file.exists()) {
+          file.parentFile.mkdirs()
+          file.createNewFile()
         }
+        zipInputStream.copyTo(file.outputStream())
+        zipInputStream.closeEntry()
+      }
 
-      zipInputStream.close()
+    zipInputStream.close()
 
-      processRestarter()
-    }
+    processRestarter()
   }
 }
 
