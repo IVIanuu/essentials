@@ -4,11 +4,11 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.Scoped
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import com.ivianuu.injekt.common.Disposable
-import com.ivianuu.injekt.common.Scoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
