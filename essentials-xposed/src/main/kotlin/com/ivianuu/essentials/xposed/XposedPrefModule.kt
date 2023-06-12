@@ -72,7 +72,7 @@ class XposedPrefModule<T : Any>(private val prefName: String, private val defaul
     }
 
     val data = callbackFlow<T> {
-      val listener = scope.cached {
+      val listener = scope.scoped {
         SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
           launch(coroutineContext) {
             appContext.sendBroadcast(Intent(prefsChangedAction(packageName)))

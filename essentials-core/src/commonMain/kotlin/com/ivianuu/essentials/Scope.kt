@@ -22,10 +22,10 @@ interface Scope<N> : Disposable {
 
   fun addObserver(observer: ScopeObserver): Disposable
 
-  fun <T> cached(key: Any, compute: () -> T): T
+  fun <T> scoped(key: Any, compute: () -> T): T
 
-  fun <T> cached(@Inject key: TypeKey<T>, compute: () -> T): T =
-    cached(key.value, compute)
+  fun <T> scoped(@Inject key: TypeKey<T>, compute: () -> T): T =
+    scoped(key.value, compute)
 
   fun <T : Any> serviceOrNull(@Inject key: TypeKey<T>): T?
 
@@ -77,11 +77,11 @@ interface Scope<N> : Disposable {
     return it.get(this) as T
   } ?: parent?.serviceOrNull(key)
 
-  override fun <T> cached(key: Any, compute: () -> T): T = synchronized(this) {
+  override fun <T> scoped(key: Any, compute: () -> T): T = synchronized(this) {
     checkDisposed()
     val value = cache.getOrPut(key) { compute() ?: NULL }
     if (value is ScopeObserver)
-        addObserver(value)
+      addObserver(value)
     (if (value !== NULL) value else null) as T
   }
 
@@ -127,7 +127,7 @@ interface ScopeObserver {
       crossinline init: () -> T,
       scope: Scope<N>,
       key: TypeKey<S>
-    ): S = scope.cached(key) { init() }
+    ): S = scope.scoped(key) { init() }
   }
 }
 

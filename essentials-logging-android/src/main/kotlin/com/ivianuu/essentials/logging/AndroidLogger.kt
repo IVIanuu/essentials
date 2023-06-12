@@ -55,7 +55,7 @@ import kotlin.math.min
       crossinline loggingEnabled: () -> LoggingEnabled,
       crossinline androidLoggerFactory: () -> AndroidLogger,
       scope: Scope<AppScope>
-    ): Logger = scope.cached {
+    ): Logger = scope.scoped {
       if (loggingEnabled().value) androidLoggerFactory()
       else NoopLogger
     }
