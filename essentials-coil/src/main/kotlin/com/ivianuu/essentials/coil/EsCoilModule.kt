@@ -17,52 +17,57 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
 
-@Provide fun imageLoader(
-  appContext: AppContext,
-  decoderFactories: List<Decoder.Factory>,
-  fetcherFactories: List<FetcherPair<*>>,
-  keyers: List<KeyerPair<*>>,
-  interceptors: List<Interceptor>,
-  mappers: List<MapperPair<*>>,
-): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
-  .components {
-    decoderFactories.forEach { add(it) }
-    interceptors.forEach { add(it) }
-    keyers.forEach { add(it.keyer as Keyer<Any>, it.type.java as Class<Any>) }
-    fetcherFactories
-      .forEach { add(it.factory as Fetcher.Factory<Any>, it.type.java as Class<Any>) }
-    mappers
-      .forEach { add(it.mapper as Mapper<Any, Any>, it.type.java as Class<Any>) }
-  }
-  .build()
+object EsCoilModule {
+  @Provide fun imageLoader(
+    appContext: AppContext,
+    decoderFactories: List<Decoder.Factory>,
+    fetcherFactories: List<FetcherFactoryBinding<*>>,
+    keyers: List<KeyerBinding<*>>,
+    interceptors: List<Interceptor>,
+    mappers: List<MapperBinding<*>>,
+  ): @Scoped<AppScope> ImageLoader = ImageLoader.Builder(appContext)
+    .components {
+      decoderFactories.forEach { add(it) }
+      interceptors.forEach { add(it) }
+      keyers.forEach { add(it.keyer as Keyer<Any>, it.type.java as Class<Any>) }
+      fetcherFactories
+        .forEach { add(it.factory as Fetcher.Factory<Any>, it.type.java as Class<Any>) }
+      mappers
+        .forEach { add(it.mapper as Mapper<Any, Any>, it.type.java as Class<Any>) }
+    }
+    .build()
 
-@Provide val defaultDecoderFactories get() = emptyList<Decoder.Factory>()
+  @Provide val defaultDecoderFactories get() = emptyList<Decoder.Factory>()
 
-@Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherFactoryPair(
-  instance: F,
-  typeClass: KClass<T>
-): FetcherPair<*> = FetcherPair(instance, typeClass)
+  @Provide val defaultFetcherFactoryBindings get() = emptyList<FetcherFactoryBinding<*>>()
 
-@Provide val defaultFetcherFactories get() = emptyList<FetcherPair<*>>()
+  @Provide fun <@Spread F : Fetcher.Factory<T>, T : Any> fetcherBinding(
+    typeClass: KClass<T>,
+    instance: F
+  ): FetcherFactoryBinding<*> = FetcherFactoryBinding(typeClass, instance)
 
-data class FetcherPair<T : Any>(val factory: Fetcher.Factory<T>, val type: KClass<T>)
+  data class FetcherFactoryBinding<T : Any>(
+    val type: KClass<T>,
+    val factory: Fetcher.Factory<T>
+  )
 
-@Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperPair(
-  instance: M,
-  typeClass: KClass<T>
-): MapperPair<*> = MapperPair(instance, typeClass)
+  data class MapperBinding<T : Any>(val type: KClass<T>, val mapper: Mapper<T, *>)
 
-data class MapperPair<T : Any>(val mapper: Mapper<T, *>, val type: KClass<T>)
+  @Provide fun <@Spread M : Mapper<T, V>, T : Any, V : Any> mapperBinding(
+    type: KClass<T>,
+    instance: M
+  ): MapperBinding<*> = MapperBinding(type, instance)
 
-@Provide val defaultMappers get() = emptyList<MapperPair<*>>()
+  @Provide val defaultMappers get() = emptyList<MapperBinding<*>>()
 
-@Provide val defaultInterceptors get() = emptyList<Interceptor>()
+  @Provide val defaultInterceptors get() = emptyList<Interceptor>()
 
-@Provide fun <@Spread K : Keyer<T>, T : Any> keyerPair(
-  instance: K,
-  typeClass: KClass<T>
-): KeyerPair<*> = KeyerPair(instance, typeClass)
+  data class KeyerBinding<T : Any>(val type: KClass<T>, val keyer: Keyer<T>)
 
-data class KeyerPair<T : Any>(val keyer: Keyer<T>, val type: KClass<T>)
+  @Provide fun <@Spread K : Keyer<T>, T : Any> keyerBinding(
+    type: KClass<T>,
+    instance: K
+  ): KeyerBinding<*> = KeyerBinding(type, instance)
 
-@Provide val defaultKeyers get() = emptyList<KeyerPair<*>>()
+  @Provide val defaultKeyers get() = emptyList<KeyerBinding<*>>()
+}
