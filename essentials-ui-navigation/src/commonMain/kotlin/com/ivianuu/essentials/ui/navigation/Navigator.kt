@@ -42,12 +42,13 @@ suspend fun <R> Navigator.push(key: Key<R>): R? {
 }
 
 suspend fun <R> Navigator.replaceTop(key: Key<R>): R? {
-  val newBackStack = backStack.value.toMutableList()
-  if (newBackStack.lastOrNull() == key)
+  val currentBackStack = backStack.value
+  if (currentBackStack.lastOrNull() == key)
     return awaitResult(key)
-  newBackStack.removeLast()
-  newBackStack += key
-  setBackStack(newBackStack)
+  setBackStack(
+    currentBackStack
+      .dropLast(1) + key
+  )
   return awaitResult(key)
 }
 
