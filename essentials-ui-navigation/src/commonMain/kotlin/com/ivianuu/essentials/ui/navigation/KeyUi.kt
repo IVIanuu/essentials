@@ -6,9 +6,9 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
+import com.ivianuu.essentials.unsafeCast
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import com.ivianuu.injekt.common.TypeKey
@@ -28,50 +28,32 @@ inline fun <K : Key<*>, M> KeyUi(
   }
 }
 
-typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUiWithModel<K>
+typealias KeyUiFactory<K> = (Navigator, Scope<KeyUiScope>, K) -> KeyUi<K, *>
 
 object KeyUiModule {
   @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyUi(
     keyClass: KClass<K>,
     keyUiFactory: KeyUiFactory<K>
   ): Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>> =
-    (keyClass to keyUiFactory) as Pair<KClass<Key<*>>, KeyUiFactory<Key<*>>>
+    (keyClass to keyUiFactory).unsafeCast()
 
-  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyUiOptionFactory(
+  @Provide fun <@Spread T : KeyUi<K, M>, K : Key<*>, M> model(
+    keyClass: KClass<K>,
+    modelFactory: ModelFactory<K, M>
+  ): Pair<KClass<Key<*>>, ModelFactory<*, *>> =
+    (keyClass to modelFactory).unsafeCast()
+
+  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> optionsFactory(
     keyClass: KClass<K>,
     keyUiOptionsFactory: KeyUiOptionsFactory<K> = noOpKeyUiOptionFactory()
   ): Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>> =
-    (keyClass to keyUiOptionsFactory) as Pair<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>
+    (keyClass to keyUiOptionsFactory).unsafeCast()
 
-  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> keyTypeKey(
+  @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> typeKey(
     keyClass: KClass<K>,
     keyType: TypeKey<K>
   ): Pair<KClass<Key<*>>, TypeKey<Key<*>>> =
-    (keyClass to keyType) as Pair<KClass<Key<*>>, TypeKey<Key<*>>>
-}
-
-interface KeyUiWithModel<K : Key<*>> {
-  @Composable operator fun invoke(): @Composable () -> Unit
-
-  companion object {
-    @Provide fun <@Spread U : KeyUi<K, M>, K : Key<*>, M> impl(
-      ui: U,
-      model: Model<M>
-    ): KeyUiWithModel<K> = object : KeyUiWithModel<K> {
-      @Composable override fun invoke(): @Composable () -> Unit {
-        val currentModel = model()
-        return remember(currentModel) {
-          {
-            with(ui) {
-              with(currentModel) {
-                invoke()
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+    (keyClass to keyType).unsafeCast()
 }
 
 // todo make fun interface once compose is fixed
@@ -89,6 +71,8 @@ inline fun <S> Model(
 ): Model<S> = object : Model<S> {
   @Composable override fun invoke() = block()
 }
+
+typealias ModelFactory<K, S> = (Navigator, Scope<KeyUiScope>, K) -> Model<S>
 
 @Provide data class KeyUiContext<K : Key<*>>(
   val key: K,

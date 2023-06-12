@@ -49,10 +49,26 @@ import kotlin.reflect.KClass
         var currentUi by remember { mutableStateOf<@Composable () -> Unit>({}) }
         val (keyUi, child) = remember {
           val scope = component.keyUiScopeFactory(navigator, key)
-          val content = component.uiFactories[key::class]?.invoke(navigator, scope, key)
-          checkNotNull(content) { "No ui factory found for $key" }
+          val ui = component.uiFactories[key::class]?.invoke(navigator, scope, key)
+          checkNotNull(ui) { "No ui factory found for $key" }
           val options = component.optionFactories[key::class]?.invoke(navigator, scope, key)
-          content to NavigationContentStateChild(
+          val model = component.modelFactories[key::class]?.invoke(navigator, scope, key)
+          checkNotNull(model) { "No model found for $key" }
+
+          val function: @Composable () -> @Composable () -> Unit = {
+            val currentModel = model() as Any
+            remember(currentModel) {
+              {
+                with(ui as KeyUi<Key<*>, Any>) {
+                  with(currentModel) {
+                    invoke()
+                  }
+                }
+              }
+            }
+          }
+
+          function to NavigationContentStateChild(
             key = key,
             options = options,
             content = { currentUi },
@@ -157,6 +173,7 @@ import kotlin.reflect.KClass
 @Provide @Service<UiScope> data class NavigationStateContentComponent(
   val optionFactories: Map<KClass<Key<*>>, KeyUiOptionsFactory<Key<*>>>,
   val uiFactories: Map<KClass<Key<*>>, KeyUiFactory<Key<*>>>,
+  val modelFactories: Map<KClass<Key<*>>, ModelFactory<Key<*>, *>>,
   val decorateKeyUi: (Navigator, Scope<KeyUiScope>, Key<*>) -> DecorateKeyUi,
   val keyUiScopeFactory: (Navigator, Key<*>) -> Scope<KeyUiScope>
 )
