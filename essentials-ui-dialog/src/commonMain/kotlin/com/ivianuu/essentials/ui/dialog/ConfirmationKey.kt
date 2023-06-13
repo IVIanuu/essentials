@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -21,18 +21,20 @@ class ConfirmationKey<T : Any>(
   @Inject val renderer: UiRenderer<T>,
 ) : OverlayKey<T>
 
-@Provide fun confirmationUi(ctx: KeyUiContext<ConfirmationKey<Any>>) =
-  Ui<ConfirmationKey<Any>, Unit> { model ->
-    DialogScaffold {
-      Dialog(
-        title = { Text(ctx.key.title) },
-        buttons = {
-          ctx.key.items.forEach { item ->
-            TextButton(onClick = action { ctx.navigator.pop(ctx.key, item) }) {
-              Text(ctx.key.renderer(item))
-            }
+@Provide fun confirmationUi(
+  key: ConfirmationKey<Any>,
+  navigator: Navigator
+) = Ui<ConfirmationKey<Any>, Unit> {
+  DialogScaffold {
+    Dialog(
+      title = { Text(key.title) },
+      buttons = {
+        key.items.forEach { item ->
+          TextButton(onClick = action { navigator.pop(key, item) }) {
+            Text(key.renderer(item))
           }
         }
-      )
+      }
+    )
     }
   }

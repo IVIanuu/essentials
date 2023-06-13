@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.android.prefs.PrefModule
 import com.ivianuu.essentials.colorpicker.ColorPickerKey
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.ui.common.IconPlaceholder
 import com.ivianuu.essentials.ui.common.SimpleListScreen
@@ -29,7 +30,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ColorListItem
@@ -38,7 +39,6 @@ import com.ivianuu.essentials.ui.prefs.ScaledPercentageUnitText
 import com.ivianuu.essentials.ui.prefs.SliderListItem
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
@@ -47,7 +47,7 @@ import kotlinx.serialization.Serializable
 class PrefsKey : Key<Unit>
 
 @Provide fun prefsUi(
-  ctx: KeyUiContext<PrefsKey>,
+  navigator: Navigator,
   pref: DataStore<SamplePrefs>
 ) = Ui<PrefsKey, Unit> { model ->
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
@@ -55,10 +55,8 @@ class PrefsKey : Key<Unit>
     item {
       SwitchListItem(
         value = prefs.switch,
-        onValueChange = {
-          ctx.launch {
-            pref.updateData { copy(switch = it) }
-          }
+        onValueChange = action { value ->
+          pref.updateData { copy(switch = value) }
         },
         leading = { IconPlaceholder() },
         title = { Text("Switch") }
@@ -70,10 +68,8 @@ class PrefsKey : Key<Unit>
     item {
       RadioButtonListItem(
         value = prefs.radioButton,
-        onValueChange = {
-          ctx.launch {
-            pref.updateData { copy(radioButton = it) }
-          }
+        onValueChange = action { value ->
+          pref.updateData { copy(radioButton = value) }
         },
         modifier = Modifier.interactive(prefs.switch),
         leading = { IconPlaceholder() },
@@ -84,10 +80,8 @@ class PrefsKey : Key<Unit>
     item {
       SliderListItem(
         value = prefs.slider,
-        onValueChangeFinished = {
-          ctx.launch {
-            pref.updateData { copy(slider = it) }
-          }
+        onValueChangeFinished = action { value ->
+          pref.updateData { copy(slider = value) }
         },
         modifier = Modifier.interactive(prefs.switch),
         leading = { Icon(Icons.Default.ThumbUp) },
@@ -99,10 +93,8 @@ class PrefsKey : Key<Unit>
     item {
       SliderListItem(
         value = prefs.slider,
-        onValueChangeFinished = {
-          ctx.launch {
-            pref.updateData { copy(slider = it) }
-          }
+        onValueChangeFinished = action { value ->
+          pref.updateData { copy(slider = value) }
         },
         modifier = Modifier.interactive(prefs.switch),
         leading = { Icon(Icons.Default.ThumbUp) },
@@ -116,10 +108,8 @@ class PrefsKey : Key<Unit>
       SliderListItem(
         value = value,
         onValueChange = { value = it },
-        onValueChangeFinished = {
-          ctx.launch {
-            pref.updateData { copy(steppedSlider = it) }
-          }
+        onValueChangeFinished = action { value ->
+          pref.updateData { copy(steppedSlider = value) }
         },
         modifier = Modifier.interactive(prefs.switch),
         leading = { IconPlaceholder() },
@@ -138,21 +128,19 @@ class PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier
-          .clickable {
-            ctx.launch {
-              val newTextInput = ctx.navigator.push(
+          .clickable(
+            onClick = action {
+              val newTextInput = navigator.push(
                 TextInputKey(
                   initial = prefs.textInput,
                   label = "Input",
                   title = "Text input",
                   predicate = { it.isNotEmpty() }
                 )
-              ) ?: return@launch
-              launch {
-                pref.updateData { copy(textInput = newTextInput) }
-              }
+              ) ?: return@action
+              pref.updateData { copy(textInput = newTextInput) }
             }
-          }
+          )
           .interactive(prefs.switch),
         leading = { IconPlaceholder() },
         title = { Text("Text input") },
@@ -162,15 +150,11 @@ class PrefsKey : Key<Unit>
     item {
       ColorListItem(
         value = prefs.color,
-        onValueChangeRequest = {
-          ctx.launch {
-            val newColor = ctx.navigator.push(
-              ColorPickerKey(initialColor = prefs.color)
-            ) ?: return@launch
-            launch {
-              pref.updateData { copy(color = newColor) }
-            }
-          }
+        onValueChangeRequest = action {
+          val newColor = navigator.push(
+            ColorPickerKey(initialColor = prefs.color)
+          ) ?: return@action
+          pref.updateData { copy(color = newColor) }
         },
         modifier = Modifier.interactive(prefs.switch),
         leading = { IconPlaceholder() },
@@ -181,19 +165,15 @@ class PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier
-          .clickable {
-            ctx.launch {
-              val newItems = ctx.navigator.push(
-                MultiChoiceListKey(
-                  items = listOf("A", "B", "C"),
-                  selectedItems = prefs.multiChoice
-                )
-              ) ?: return@launch
-              launch {
-                pref.updateData { copy(multiChoice = newItems) }
-              }
-            }
-          }
+          .clickable(onClick = action {
+            val newItems = navigator.push(
+              MultiChoiceListKey(
+                items = listOf("A", "B", "C"),
+                selectedItems = prefs.multiChoice
+              )
+            ) ?: return@action
+            pref.updateData { copy(multiChoice = newItems) }
+          })
           .interactive(prefs.switch),
         leading = { IconPlaceholder() },
         title = { Text("Multi select list") },
@@ -203,19 +183,15 @@ class PrefsKey : Key<Unit>
     item {
       ListItem(
         modifier = Modifier
-          .clickable {
-            ctx.launch {
-              val newItem = ctx.navigator.push(
-                SingleChoiceListKey(
-                  items = listOf("A", "B", "C"),
-                  selectedItem = prefs.singleChoice
-                )
-              ) ?: return@launch
-              launch {
-                pref.updateData { copy(singleChoice = newItem) }
-              }
-            }
-          }
+          .clickable(onClick = action {
+            val newItem = navigator.push(
+              SingleChoiceListKey(
+                items = listOf("A", "B", "C"),
+                selectedItem = prefs.singleChoice
+              )
+            ) ?: return@action
+            pref.updateData { copy(singleChoice = newItem) }
+          })
           .interactive(prefs.switch),
         leading = { IconPlaceholder() },
         title = { Text("Single item list") },

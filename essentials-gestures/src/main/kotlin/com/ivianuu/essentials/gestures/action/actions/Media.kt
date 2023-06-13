@@ -27,8 +27,8 @@ import com.ivianuu.essentials.resource.getOrNull
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
@@ -101,7 +101,7 @@ data class MediaActionSettingsModel(
 
 @Provide fun mediaActionSettingsModel(
   appRepository: AppRepository,
-  ctx: KeyUiContext<MediaActionSettingsKey>,
+  navigator: Navigator,
   intentAppPredicateFactory: (Intent) -> IntentAppPredicate,
   pref: DataStore<MediaActionPrefs>
 ) = Model {
@@ -111,7 +111,7 @@ data class MediaActionSettingsModel(
       .flatMapLatest { if (it != null) appRepository.appInfo(it) else infiniteEmptyFlow() }
       .bindResource(),
     updateMediaApp = action {
-      val newMediaApp = ctx.navigator.push(
+      val newMediaApp = navigator.push(
         AppPickerKey(
           intentAppPredicateFactory(Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER)), null
         )

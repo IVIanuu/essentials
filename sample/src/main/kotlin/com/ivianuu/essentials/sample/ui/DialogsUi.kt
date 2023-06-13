@@ -38,7 +38,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -51,10 +50,7 @@ import com.ivianuu.injekt.Provide
 
 class DialogsKey : Key<Unit>
 
-@Provide fun dialogsUi(
-  ctx: KeyUiContext<DialogsKey>,
-  navigator: Navigator
-) = Ui<DialogsKey, Unit> { model ->
+@Provide fun dialogsUi(navigator: Navigator) = Ui<DialogsKey, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Dialogs") }) }
   ) {

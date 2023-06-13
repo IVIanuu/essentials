@@ -17,8 +17,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
@@ -44,14 +44,14 @@ data class LicenseModel(
 )
 
 @Provide fun licenseModel(
-  ctx: KeyUiContext<LicenseKey>,
+  navigator: Navigator,
   repository: LicenceProjectRepository
 ) = Model {
   LicenseModel(
     projects = repository.licenseProjects.bindResource(),
     openProject = action { project ->
       if (project.url != null)
-        ctx.navigator.push(UrlKey(project.url))
+        navigator.push(UrlKey(project.url))
     }
   )
 }

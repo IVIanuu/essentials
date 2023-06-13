@@ -23,7 +23,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.RootKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
@@ -36,11 +36,11 @@ import com.ivianuu.injekt.Provide
 @Provide class HomeKey : RootKey
 
 @Provide fun homeUi(
-  ctx: KeyUiContext<HomeKey>,
   isXposedRunning: IsXposedRunning,
   itemsFactory: () -> List<HomeItem>,
+  navigator: Navigator,
   toaster: Toaster
-) = Ui<HomeKey, Unit> { model ->
+) = Ui<HomeKey, Unit> {
   val finalItems = remember { itemsFactory().sortedBy { it.title } }
   SimpleListScreen(
     title = "Home",
@@ -64,7 +64,7 @@ import com.ivianuu.injekt.Provide
       HomeItem(
         item = item,
         color = color,
-        onClick = action { ctx.navigator.push(item.keyFactory(color)) }
+        onClick = action { navigator.push(item.keyFactory(color)) }
       )
     }
 

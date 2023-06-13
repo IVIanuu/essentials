@@ -20,8 +20,8 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -77,7 +77,8 @@ data class WriteSecureSettingsModel(
 
 @Provide fun writeSecureSettingsModel(
   appConfig: AppConfig,
-  ctx: KeyUiContext<WriteSecureSettingsKey>,
+  key: WriteSecureSettingsKey,
+  navigator: Navigator,
   permissionManager: PermissionManager,
   resources: Resources,
   shell: Shell,
@@ -85,15 +86,15 @@ data class WriteSecureSettingsModel(
 ) = Model {
   WriteSecureSettingsModel(
     openPcInstructions = action {
-      if (ctx.navigator.push(WriteSecureSettingsPcInstructionsKey(ctx.key.permissionKey)) == true)
-        ctx.navigator.pop(ctx.key)
+      if (navigator.push(WriteSecureSettingsPcInstructionsKey(key.permissionKey)) == true)
+        navigator.pop(key)
     },
     grantPermissionsViaRoot = action {
       shell.run("pm grant ${appConfig.packageName} android.permission.WRITE_SECURE_SETTINGS")
         .onSuccess {
-          if (permissionManager.permissionState(listOf(ctx.key.permissionKey)).first()) {
+          if (permissionManager.permissionState(listOf(key.permissionKey)).first()) {
             toaster(R.string.es_secure_settings_permission_granted)
-            ctx.navigator.pop(ctx.key)
+            navigator.pop(key)
           }
         }
         .onFailure {

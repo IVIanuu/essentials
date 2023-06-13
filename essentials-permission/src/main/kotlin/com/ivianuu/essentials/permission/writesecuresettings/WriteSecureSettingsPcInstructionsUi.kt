@@ -37,8 +37,8 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -195,7 +195,8 @@ typealias AdbEnabled = @AdbEnabledTag Int
   adbEnabledSetting: DataStore<AdbEnabled>,
   appUiStarter: AppUiStarter,
   appConfig: AppConfig,
-  ctx: KeyUiContext<WriteSecureSettingsPcInstructionsKey>,
+  key: WriteSecureSettingsPcInstructionsKey,
+  navigator: Navigator,
   developerModeSetting: DataStore<DeveloperMode>,
   permissionManager: PermissionManager,
   resources: Resources,
@@ -211,7 +212,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     3 -> true
     4 -> produce(false) {
       while (true) {
-        value = permissionManager.permissionState(listOf(ctx.key.permissionKey)).first()
+        value = permissionManager.permissionState(listOf(key.permissionKey)).first()
         delay(1000)
       }
     }
@@ -225,7 +226,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     canContinueStep = canContinueStep,
     continueStep = action {
       if (completedStep == 4)
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
       else {
         completedStep++
         currentStep = completedStep
@@ -240,7 +241,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
       race(
         { developerModeSetting.data.first { it != 0 } },
         {
-          ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
+          navigator.push(DefaultIntentKey(Intent(Settings.ACTION_DEVICE_INFO_SETTINGS)))
             ?.onFailure { toaster(R.string.open_phone_info_failed) }
         }
       )
@@ -249,7 +250,7 @@ typealias AdbEnabled = @AdbEnabledTag Int
     openDeveloperSettings = action {
       race(
         { adbEnabledSetting.data.first { it != 0 } },
-        { ctx.navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
+        { navigator.push(DefaultIntentKey(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) }
       )
       appUiStarter()
     }

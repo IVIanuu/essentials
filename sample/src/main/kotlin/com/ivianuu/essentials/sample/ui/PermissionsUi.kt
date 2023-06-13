@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.notificationlistener.EsNotificationListenerService
 import com.ivianuu.essentials.permission.Permission
 import com.ivianuu.essentials.permission.PermissionManager
@@ -24,39 +25,34 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
-import kotlinx.coroutines.launch
 
 @Provide val permissionsHomeItem: HomeItem = HomeItem("Permissions") { PermissionsKey() }
 
 class PermissionsKey : Key<Unit>
 
 @Provide fun permissionUi(
-  ctx: KeyUiContext<PermissionsKey>,
   permissionManager: PermissionManager
-) = Ui<PermissionsKey, Unit> { model ->
+) = Ui<PermissionsKey, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Permissions") }) }
   ) {
     Button(
       modifier = Modifier.center(),
-      onClick = {
-        ctx.launch {
-          permissionManager.requestPermissions(
-            listOf(
-              typeKeyOf<SampleCameraPermission>(),
-              typeKeyOf<SamplePhonePermission>(),
-              typeKeyOf<SampleAccessibilityPermission>(),
-              typeKeyOf<SampleNotificationListenerPermission>(),
-              typeKeyOf<SampleSystemOverlayPermission>(),
-              typeKeyOf<SampleWriteSecureSettingsPermission>(),
-              typeKeyOf<SampleWriteSettingsPermission>()
-            )
+      onClick = action {
+        permissionManager.requestPermissions(
+          listOf(
+            typeKeyOf<SampleCameraPermission>(),
+            typeKeyOf<SamplePhonePermission>(),
+            typeKeyOf<SampleAccessibilityPermission>(),
+            typeKeyOf<SampleNotificationListenerPermission>(),
+            typeKeyOf<SampleSystemOverlayPermission>(),
+            typeKeyOf<SampleWriteSecureSettingsPermission>(),
+            typeKeyOf<SampleWriteSettingsPermission>()
           )
-        }
+        )
       }
     ) {
       Text("Request")

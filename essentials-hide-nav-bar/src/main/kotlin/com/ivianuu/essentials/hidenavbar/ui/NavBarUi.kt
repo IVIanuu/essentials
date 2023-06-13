@@ -21,8 +21,8 @@ import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
@@ -63,7 +63,7 @@ data class NavBarModel(
 }
 
 @Provide fun navBarModel(
-  ctx: KeyUiContext<NavBarKey>,
+  navigator: Navigator,
   permissionManager: PermissionManager,
   resources: Resources,
   pref: DataStore<NavBarPrefs>
@@ -80,7 +80,7 @@ data class NavBarModel(
     },
     navBarRotationMode = prefs.navBarRotationMode,
     updateNavBarRotationMode = action {
-      ctx.navigator.push(
+      navigator.push(
         SingleChoiceListKey(
           items = NavBarRotationMode.values().toList(),
           selectedItem = prefs.navBarRotationMode

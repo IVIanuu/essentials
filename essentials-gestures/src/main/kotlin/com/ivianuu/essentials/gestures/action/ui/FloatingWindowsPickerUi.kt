@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.material.HorizontalDivider
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.PlayStoreAppDetailsKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -91,24 +91,25 @@ data class FloatingWindowsPickerModel(
 
 @Provide fun floatingWindowsPickerModel(
   appRepository: AppRepository,
-  ctx: KeyUiContext<FloatingWindowsPickerKey>,
+  key: FloatingWindowsPickerKey,
+  navigator: Navigator,
   resources: Resources,
   toaster: Toaster
 ) = Model {
   FloatingWindowsPickerModel(
-    actionTitle = ctx.key.actionTitle,
+    actionTitle = key.actionTitle,
     openFloatingWindow = action {
       if (appRepository.isAppInstalled(FLOATING_WINDOWS_PACKAGE).first()) {
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
       } else {
         toaster(R.string.es_floating_windows_not_installed)
-        ctx.navigator.push(
+        navigator.push(
           PlayStoreAppDetailsKey(
             FLOATING_WINDOWS_PACKAGE
           )
         )
       }
     },
-    openFullScreen = action { ctx.navigator.pop(ctx.key, false) }
+    openFullScreen = action { navigator.pop(key, false) }
   )
 }

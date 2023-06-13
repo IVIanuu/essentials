@@ -12,8 +12,8 @@ import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -47,14 +47,15 @@ data class RateOnPlayModel(
 )
 
 @Provide fun rateOnPlayModel(
-  ctx: KeyUiContext<RateOnPlayKey>,
+  key: RateOnPlayKey,
+  navigator: Navigator,
   rateUseCases: RateUseCases
 ) = Model {
   RateOnPlayModel(
     displayShowNever = produce(false) { rateUseCases.shouldDisplayShowNever() },
     rate = action {
       rateUseCases.rateOnPlay()
-      ctx.navigator.pop(ctx.key)
+      navigator.pop(key)
     },
     showLater = action { rateUseCases.showLater() },
     showNever = action { rateUseCases.showNever() }

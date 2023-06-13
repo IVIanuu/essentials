@@ -10,6 +10,7 @@ import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.apps.ui.LaunchableAppPredicate
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsParams
 import com.ivianuu.essentials.apps.ui.checkableapps.CheckableAppsScreen
+import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
 import com.ivianuu.essentials.db.Db
 import com.ivianuu.essentials.db.DbFactory
 import com.ivianuu.essentials.db.Entity
@@ -20,7 +21,7 @@ import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.KeyUiScope
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
@@ -34,17 +35,17 @@ class CheckAppsKey : Key<Unit>
 
 @Provide fun checkAppsUi(
   checkableAppsScreen: (CheckableAppsParams) -> CheckableAppsScreen,
-  ctx: KeyUiContext<CheckAppsKey>,
   db: @CheckApps Db,
-  launchableAppPredicate: LaunchableAppPredicate
-) = Ui<CheckAppsKey, Unit> { model ->
+  launchableAppPredicate: LaunchableAppPredicate,
+  scope: ScopedCoroutineScope<KeyUiScope>
+) = Ui<CheckAppsKey, Unit> {
   remember {
     checkableAppsScreen(
       CheckableAppsParams(
         db.selectAll<CheckedAppEntity>()
           .map { it.map { it.packageName }.toSet() },
         { checkedApps ->
-          ctx.launch {
+          scope.launch {
             db.transaction {
               db.deleteAll<CheckedAppEntity>()
               db.insertAll(

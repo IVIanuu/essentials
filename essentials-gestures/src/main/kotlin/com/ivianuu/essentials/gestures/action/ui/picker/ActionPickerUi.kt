@@ -29,8 +29,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -132,15 +132,16 @@ sealed interface ActionPickerItem {
 }
 
 @Provide fun actionPickerModel(
-  ctx: KeyUiContext<ActionPickerKey>,
   filter: ActionFilter,
+  key: ActionPickerKey,
+  navigator: Navigator,
   permissionManager: PermissionManager,
   repository: ActionRepository,
   resources: Resources
 ) = Model {
   ActionPickerModel(
-    items = produceResource { getActionPickerItems(ctx.key, filter) },
-    openActionSettings = action { item -> ctx.navigator.push(item.settingsKey!!) },
+    items = produceResource { getActionPickerItems(key, filter) },
+    openActionSettings = action { item -> navigator.push(item.settingsKey!!) },
     pickAction = action { item ->
       val result = item.getResult() ?: return@action
       if (result is ActionPickerKey.Result.Action) {
@@ -148,7 +149,7 @@ sealed interface ActionPickerItem {
         if (!permissionManager.requestPermissions(action.permissions))
           return@action
       }
-      ctx.navigator.pop(ctx.key, result)
+      navigator.pop(key, result)
     }
   )
 }

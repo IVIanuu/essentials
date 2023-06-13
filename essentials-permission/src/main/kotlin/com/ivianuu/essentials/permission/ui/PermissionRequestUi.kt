@@ -22,8 +22,8 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.AppUiStarter
@@ -70,18 +70,19 @@ data class UiPermission<P : Permission>(
 
 @Provide fun permissionRequestModel(
   appUiStarter: AppUiStarter,
-  ctx: KeyUiContext<PermissionRequestKey>,
+  key: PermissionRequestKey,
+  navigator: Navigator,
   permissionManager: PermissionManager,
   requestHandlers: Map<TypeKey<Permission>, () -> PermissionRequestHandler<Permission>>
 ) = Model {
   LaunchedEffect(true) {
-    permissionManager.permissionState(ctx.key.permissionsKeys)
+    permissionManager.permissionState(key.permissionsKeys)
       .first { it }
-    ctx.navigator.pop(ctx.key, true)
+    navigator.pop(key, true)
   }
 
   PermissionRequestModel(
-    permissions = ctx.key.permissionsKeys
+    permissions = key.permissionsKeys
       .map { permissionKey ->
         UiPermission(
           permissionKey,

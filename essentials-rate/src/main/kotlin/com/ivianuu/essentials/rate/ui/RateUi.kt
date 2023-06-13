@@ -35,8 +35,8 @@ import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.replaceTop
@@ -118,7 +118,8 @@ data class RateModel(
 
 @Provide fun rateModel(
   appConfig: AppConfig,
-  ctx: KeyUiContext<RateKey>,
+  key: RateKey,
+  navigator: Navigator,
   rateUseCases: RateUseCases
 ) = Model {
   var rating by remember { mutableStateOf(0) }
@@ -131,9 +132,9 @@ data class RateModel(
     updateRating = action { value -> rating = value },
     confirm = action {
       if (rating >= MIN_PLAY_RATING) {
-        ctx.navigator.replaceTop(RateOnPlayKey)
+        navigator.replaceTop(RateOnPlayKey)
       } else {
-        ctx.navigator.replaceTop(FeedbackKey)
+        navigator.replaceTop(FeedbackKey)
       }
     }
   )

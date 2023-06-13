@@ -13,7 +13,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -28,24 +28,25 @@ class MultiChoiceListKey<T : Any>(
 ) : OverlayKey<Set<T>>
 
 @Provide fun multiChoiceListUi(
-  ctx: KeyUiContext<MultiChoiceListKey<Any>>,
-  commonStrings: CommonStrings
-) = Ui<MultiChoiceListKey<Any>, Unit> { model ->
+  commonStrings: CommonStrings,
+  key: MultiChoiceListKey<Any>,
+  navigator: Navigator
+) = Ui<MultiChoiceListKey<Any>, Unit> {
   DialogScaffold {
-    var selectedItems by remember { mutableStateOf(ctx.key.selectedItems) }
+    var selectedItems by remember { mutableStateOf(key.selectedItems) }
 
     MultiChoiceListDialog(
-      items = ctx.key.items,
+      items = key.items,
       selectedItems = selectedItems,
       onSelectionsChanged = { selectedItems = it },
-      item = { Text(ctx.key.renderable(it)) },
-      title = ctx.key.title?.let { { Text(it) } },
+      item = { Text(key.renderable(it)) },
+      title = key.title?.let { { Text(it) } },
       buttons = {
-        TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {
+        TextButton(onClick = action { navigator.pop(key, null) }) {
           Text(commonStrings.cancel)
         }
 
-        TextButton(onClick = action { ctx.navigator.pop(ctx.key, selectedItems) }) {
+        TextButton(onClick = action { navigator.pop(key, selectedItems) }) {
           Text(commonStrings.ok)
         }
       }

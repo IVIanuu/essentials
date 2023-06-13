@@ -50,8 +50,8 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.Toaster
@@ -330,9 +330,10 @@ data class GoPremiumModel(
 )
 
 @Provide fun goPremiumModel(
-  ctx: KeyUiContext<GoPremiumKey>,
   features: List<AppFeature>,
   fullScreenAdManager: FullScreenAdManager,
+  key: GoPremiumKey,
+  navigator: Navigator,
   premiumVersionManager: PremiumVersionManager,
   resources: Resources,
   toaster: Toaster
@@ -340,22 +341,22 @@ data class GoPremiumModel(
   GoPremiumModel(
     features = features,
     premiumSkuDetails = premiumVersionManager.premiumSkuDetails.bindResource(),
-    showTryBasicOption = ctx.key.showTryBasicOption,
+    showTryBasicOption = key.showTryBasicOption,
     goPremium = action {
       if (premiumVersionManager.purchasePremiumVersion()) {
-        ctx.navigator.pop(ctx.key, true)
+        navigator.pop(key, true)
         toaster(R.string.es_premium_activated)
       }
     },
     tryBasicVersion = action {
-      ctx.navigator.pop(ctx.key, false)
+      navigator.pop(key, false)
       withContext(NonCancellable) {
         fullScreenAdManager.loadAndShowAd()
       }
     },
     goBack = action {
-      if (ctx.key.allowBackNavigation) {
-        ctx.navigator.pop(ctx.key, false)
+      if (key.allowBackNavigation) {
+        navigator.pop(key, false)
         withContext(NonCancellable) {
           fullScreenAdManager.loadAndShowAd()
         }

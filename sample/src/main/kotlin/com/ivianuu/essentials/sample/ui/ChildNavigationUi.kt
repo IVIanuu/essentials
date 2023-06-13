@@ -26,7 +26,6 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.material.guessingContentColorFor
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.NavigatorContent
 import com.ivianuu.essentials.ui.navigation.Ui
@@ -77,8 +76,9 @@ data class ChildNavigationItemKey(
 ) : Key<Unit>
 
 @Provide fun childNavigationItemUi(
-  ctx: KeyUiContext<ChildNavigationItemKey>
-) = Ui<ChildNavigationItemKey, Unit> { model ->
+  key: ChildNavigationItemKey,
+  navigator: Navigator
+) = Ui<ChildNavigationItemKey, Unit> {
   val color = Colors.shuffled().first()
 
   Surface(
@@ -91,17 +91,17 @@ data class ChildNavigationItemKey(
       horizontalArrangement = Arrangement.Center,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      Text("${ctx.key.navigationIndex} ${ctx.key.index}")
+      Text("${key.navigationIndex} ${key.index}")
 
       Button(
-        enabled = ctx.key.index > 0,
-        onClick = action { ctx.navigator.popTop() }
+        enabled = key.index > 0,
+        onClick = action { navigator.popTop() }
       ) {
         Text("Previous")
       }
 
       Button(onClick = action {
-        ctx.navigator.push(ctx.key.copy(index = ctx.key.index.inc()))
+        navigator.push(key.copy(index = key.index.inc()))
       }) {
         Text("Next")
       }

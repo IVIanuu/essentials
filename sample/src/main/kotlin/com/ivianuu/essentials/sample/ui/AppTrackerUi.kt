@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.accessibility.EsAccessibilityService
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.foreground.ForegroundManager
 import com.ivianuu.essentials.permission.PermissionManager
 import com.ivianuu.essentials.permission.accessibility.AccessibilityServicePermission
@@ -24,7 +25,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.essentials.util.Toaster
@@ -35,16 +36,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @Provide val appTrackerHomeItem = HomeItem("App tracker") { AppTrackerKey() }
 
 class AppTrackerKey : Key<Unit>
 
 @Provide fun appTrackerUi(
-  ctx: KeyUiContext<AppTrackerKey>,
   currentApp: Flow<CurrentApp?>,
   foregroundManager: ForegroundManager,
+  navigator: Navigator,
   notificationFactory: NotificationFactory,
   permissionManager: PermissionManager,
   resources: Resources,
@@ -67,12 +67,9 @@ class AppTrackerKey : Key<Unit>
   ) {
     Button(
       modifier = Modifier.center(),
-      onClick = {
-        ctx.launch {
-          if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleAccessibilityPermission>()))) {
-            isEnabled = !isEnabled
-          }
-        }
+      onClick = action {
+        if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleAccessibilityPermission>())))
+          isEnabled = !isEnabled
       }
     ) {
       Text("Toggle tracking")

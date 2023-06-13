@@ -29,7 +29,7 @@ import com.ivianuu.essentials.ui.material.LocalAppBarStyle
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlKey
 import com.ivianuu.essentials.ui.navigation.push
@@ -38,7 +38,10 @@ import com.ivianuu.injekt.Provide
 
 class WebKey(val title: String, val url: String) : Key<Unit>
 
-@Provide fun webUi(ctx: KeyUiContext<WebKey>) = Ui<WebKey, Unit> { model ->
+@Provide fun webUi(
+  key: WebKey,
+  navigator: Navigator
+) = Ui<WebKey, Unit> {
   var webViewRef: WebView? by remember { refOf(null) }
   DisposableEffect(true) {
     onDispose {
@@ -46,7 +49,7 @@ class WebKey(val title: String, val url: String) : Key<Unit>
     }
   }
   Scaffold(
-    topBar = { TopAppBar(title = { Text(ctx.key.title) }) },
+    topBar = { TopAppBar(title = { Text(key.title) }) },
     bottomBar = {
       val backgroundColor = when (LocalAppBarStyle.current) {
         AppBarStyle.PRIMARY -> MaterialTheme.colors.primary
@@ -70,7 +73,7 @@ class WebKey(val title: String, val url: String) : Key<Unit>
             IconButton(onClick = { webViewRef!!.reload() }) {
               Icon(R.drawable.es_ic_refresh)
             }
-            IconButton(onClick = action { ctx.navigator.push(UrlKey(webViewRef!!.url!!)) }) {
+            IconButton(onClick = action { navigator.push(UrlKey(webViewRef!!.url!!)) }) {
               Icon(R.drawable.es_ic_open_in_browser)
             }
           }
@@ -85,7 +88,7 @@ class WebKey(val title: String, val url: String) : Key<Unit>
       ) { webView ->
         webViewRef = webView
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl(ctx.key.url)
+        webView.loadUrl(key.url)
         webView.webViewClient = object : WebViewClient() {
           override fun shouldOverrideUrlLoading(
             view: WebView?,

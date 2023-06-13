@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.permission.PermissionManager
@@ -19,7 +20,6 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -31,18 +31,18 @@ import kotlinx.coroutines.launch
 class SystemWindowKey : Key<Unit>
 
 @Provide fun systemWindowUi(
-  ctx: KeyUiContext<SystemWindowKey>,
   permissionManager: PermissionManager,
   systemWindowManager: SystemWindowManager
-) = Ui<SystemWindowKey, Unit> { model ->
+) = Ui<SystemWindowKey, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("System window") }) }
   ) {
+    val scope = rememberCoroutineScope()
     Button(
       modifier = Modifier.center(),
       onClick = {
         lateinit var job: Job
-        job = ctx.launch {
+        job = scope.launch {
           if (permissionManager.requestPermissions(listOf(typeKeyOf<SampleSystemOverlayPermission>()))) {
             systemWindowManager.attachSystemWindow {
               Box(

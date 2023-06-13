@@ -12,8 +12,8 @@ import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.UrlKey
@@ -58,7 +58,8 @@ data class FeedbackModel(
 )
 
 @Provide fun feedbackModel(
-  ctx: KeyUiContext<FeedbackKey>,
+  key: FeedbackKey,
+  navigator: Navigator,
   rateUseCases: RateUseCases
 ) = Model {
   FeedbackModel(
@@ -66,12 +67,12 @@ data class FeedbackModel(
     showNever = action { rateUseCases.showNever() },
     showLater = action { rateUseCases.showLater() },
     openReddit = action {
-      ctx.navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
-      ctx.navigator.pop(ctx.key)
+      navigator.push(UrlKey("https://www.reddit.com/r/manuelwrageapps"))
+      navigator.pop(key)
     },
     sendMail = action {
-      ctx.navigator.push(FeedbackMailKey)
-      ctx.navigator.pop(ctx.key)
+      navigator.push(FeedbackMailKey)
+      navigator.pop(key)
     }
   )
 }

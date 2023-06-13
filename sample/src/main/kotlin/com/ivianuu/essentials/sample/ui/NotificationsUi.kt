@@ -54,7 +54,6 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.resource.ResourceBox
@@ -161,7 +160,6 @@ data class UiNotification(
 
 @Provide fun notificationsModel(
   appContext: AppContext,
-  ctx: KeyUiContext<NotificationsKey>,
   permissionManager: PermissionManager,
   service: NotificationService
 ) = Model {

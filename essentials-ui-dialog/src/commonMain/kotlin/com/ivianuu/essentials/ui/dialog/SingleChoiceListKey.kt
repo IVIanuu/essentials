@@ -9,7 +9,7 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -24,18 +24,19 @@ class SingleChoiceListKey<T : Any>(
 ) : OverlayKey<T>
 
 @Provide fun singleChoiceListUi(
-  ctx: KeyUiContext<SingleChoiceListKey<Any>>,
-  commonStrings: CommonStrings
-) = Ui<SingleChoiceListKey<Any>, Unit> { model ->
+  commonStrings: CommonStrings,
+  key: SingleChoiceListKey<Any>,
+  navigator: Navigator
+) = Ui<SingleChoiceListKey<Any>, Unit> {
   DialogScaffold {
     SingleChoiceListDialog(
-      items = ctx.key.items,
-      selectedItem = ctx.key.selectedItem,
-      onSelectionChanged = action { item -> ctx.navigator.pop(ctx.key, item) },
-      item = { Text(ctx.key.renderable(it)) },
-      title = ctx.key.title?.let { { Text(it) } },
+      items = key.items,
+      selectedItem = key.selectedItem,
+      onSelectionChanged = action { item -> navigator.pop(key, item) },
+      item = { Text(key.renderable(it)) },
+      title = key.title?.let { { Text(it) } },
       buttons = {
-        TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {
+        TextButton(onClick = action { navigator.pop(key, null) }) {
           Text(commonStrings.cancel)
         }
       }

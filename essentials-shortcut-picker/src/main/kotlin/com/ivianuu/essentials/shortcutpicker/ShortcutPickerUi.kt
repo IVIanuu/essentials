@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
@@ -63,7 +63,8 @@ data class ShortcutPickerModel(
 )
 
 @Provide fun shortcutPickerModel(
-  ctx: KeyUiContext<ShortcutPickerKey>,
+  key: ShortcutPickerKey,
+  navigator: Navigator,
   resources: Resources,
   repository: ShortcutRepository,
   toaster: Toaster
@@ -72,11 +73,11 @@ data class ShortcutPickerModel(
     shortcuts = repository.shortcuts.bindResource(),
     pickShortcut = action { shortcut ->
       catch {
-        val shortcutRequestResult = ctx.navigator.push(DefaultIntentKey(shortcut.intent))
+        val shortcutRequestResult = navigator.push(DefaultIntentKey(shortcut.intent))
           ?.getOrNull()
           ?.data ?: return@catch
         val finalShortcut = repository.extractShortcut(shortcutRequestResult)
-        ctx.navigator.pop(ctx.key, finalShortcut)
+        navigator.pop(key, finalShortcut)
       }.onFailure {
         it.printStackTrace()
         toaster(R.string.es_failed_to_pick_shortcut)

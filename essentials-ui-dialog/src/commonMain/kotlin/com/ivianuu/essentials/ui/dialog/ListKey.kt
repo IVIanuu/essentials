@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -25,18 +25,21 @@ class ListKey<T : Any>(
   @Inject val renderer: UiRenderer<T>,
 ) : OverlayKey<T>
 
-@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = Ui<ListKey<Any>, Unit> { model ->
+@Provide fun listKeyUi(
+  key: ListKey<Any>,
+  navigator: Navigator
+) = Ui<ListKey<Any>, Unit> {
   DialogScaffold {
     Dialog(
-      title = ctx.key.title?.let { { Text(it) } },
+      title = key.title?.let { { Text(it) } },
       content = {
         LazyColumn {
-          items(ctx.key.items) { item ->
+          items(key.items) { item ->
             ListItem(
               modifier = Modifier.clickable(onClick = action {
-                ctx.navigator.pop(ctx.key, item)
+                navigator.pop(key, item)
               }),
-              title = { Text(ctx.key.renderer(item)) },
+              title = { Text(key.renderer(item)) },
             )
           }
         }

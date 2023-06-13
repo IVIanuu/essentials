@@ -26,8 +26,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.resource.ResourceVerticalListFor
@@ -74,13 +74,14 @@ data class AppPickerModel(
 }
 
 @Provide fun appPickerModel(
-  ctx: KeyUiContext<AppPickerKey>,
+  key: AppPickerKey,
+  navigator: Navigator,
   repository: AppRepository
 ) = Model {
   AppPickerModel(
-    appPredicate = ctx.key.appPredicate,
-    title = ctx.key.title,
+    appPredicate = key.appPredicate,
+    title = key.title,
     allApps = repository.installedApps.bindResource(),
-    pickApp = action { app -> ctx.navigator.pop(ctx.key, app) }
+    pickApp = action { app -> navigator.pop(key, app) }
   )
 }

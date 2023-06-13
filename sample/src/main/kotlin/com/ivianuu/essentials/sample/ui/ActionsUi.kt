@@ -6,6 +6,7 @@ package com.ivianuu.essentials.sample.ui
 
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.gestures.action.ActionRepository
 import com.ivianuu.essentials.gestures.action.ExecuteActionUseCase
 import com.ivianuu.essentials.gestures.action.ui.picker.ActionPickerKey
@@ -15,19 +16,18 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.injekt.Provide
-import kotlinx.coroutines.launch
 
 @Provide val actionsHomeItem = HomeItem("Actions") { ActionsKey() }
 
 class ActionsKey : Key<Unit>
 
 @Provide fun actionsUi(
-  ctx: KeyUiContext<ActionsKey>,
+  navigator: Navigator,
   repository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   toaster: Toaster
@@ -37,18 +37,16 @@ class ActionsKey : Key<Unit>
   ) {
     Button(
       modifier = Modifier.center(),
-      onClick = {
-        ctx.launch {
-          val actionId = ctx.navigator.push(ActionPickerKey())
-            .safeAs<ActionPickerKey.Result.Action>()
-            ?.actionId ?: return@launch
+      onClick = action {
+        val actionId = navigator.push(ActionPickerKey())
+          .safeAs<ActionPickerKey.Result.Action>()
+          ?.actionId ?: return@action
 
-          val action = repository.getAction(actionId)
+        val action = repository.getAction(actionId)
 
-          toaster("Execute action ${action.title}")
+        toaster("Execute action ${action.title}")
 
-          executeAction(actionId)
-        }
+        executeAction(actionId)
       }
     ) { Text("Pick action") }
   }

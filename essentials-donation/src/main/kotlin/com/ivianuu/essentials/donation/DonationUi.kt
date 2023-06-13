@@ -31,8 +31,8 @@ import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -125,8 +125,9 @@ data class UiDonation(
 
 @Provide fun donationModel(
   billingService: BillingService,
-  ctx: KeyUiContext<DonationKey>,
   donations: Donations,
+  key: DonationKey,
+  navigator: Navigator,
   resources: Resources,
   toaster: Toaster
 ) = Model {
@@ -145,7 +146,7 @@ data class UiDonation(
           )
         }
     },
-    close = action { ctx.navigator.pop(ctx.key) },
+    close = action { navigator.pop(key) },
     purchase = action { donation ->
       if (billingService.purchase(donation.donation.sku, true, true)) {
         billingService.consumePurchase(donation.donation.sku)

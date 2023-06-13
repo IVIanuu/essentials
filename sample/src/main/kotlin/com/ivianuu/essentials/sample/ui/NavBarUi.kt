@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ivianuu.essentials.compose.action
+import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.hidenavbar.ForceNavBarVisibleState
 import com.ivianuu.essentials.hidenavbar.NavBarPermission
@@ -28,25 +30,22 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 @Provide val navBarHomeItem = HomeItem("Nav bar") { NavBarKey() }
 
 class NavBarKey : Key<Unit>
 
 @Provide fun navBarUi(
-  ctx: KeyUiContext<NavBarKey>,
   navigator: Navigator,
   navBarPref: DataStore<NavBarPrefs>,
   permissionManager: PermissionManager
-) = Ui<NavBarKey, Unit> { model ->
+) = Ui<NavBarKey, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
   ) {
@@ -57,12 +56,10 @@ class NavBarKey : Key<Unit>
     ) {
       val navBarPrefs by navBarPref.data.collectAsState(NavBarPrefs())
       // reshow nav bar when leaving the screen
-      DisposableEffect(true) {
-        onDispose {
-          ctx.launch {
-            navBarPref.updateData {
-              copy(hideNavBar = false)
-            }
+      LaunchedEffect(true) {
+        onCancel {
+          navBarPref.updateData {
+            copy(hideNavBar = false)
           }
         }
       }
@@ -89,17 +86,13 @@ class NavBarKey : Key<Unit>
       }
 
       Button(
-        onClick = {
+        onClick = action {
           if (hasPermission) {
-            ctx.launch {
-              navBarPref.updateData {
-                copy(hideNavBar = !hideNavBar)
-              }
+            navBarPref.updateData {
+              copy(hideNavBar = !hideNavBar)
             }
           } else {
-            ctx.launch {
-              permissionManager.requestPermissions(listOf(typeKeyOf<NavBarPermission>()))
-            }
+            permissionManager.requestPermissions(listOf(typeKeyOf<NavBarPermission>()))
           }
         }
       ) {
@@ -118,10 +111,8 @@ class NavBarKey : Key<Unit>
       Spacer(Modifier.height(8.dp))
 
       Button(
-        onClick = {
-          ctx.launch {
-            navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
-          }
+        onClick = action {
+          navigator.push(com.ivianuu.essentials.hidenavbar.ui.NavBarKey())
         }
       ) { Text("Settings") }
     }

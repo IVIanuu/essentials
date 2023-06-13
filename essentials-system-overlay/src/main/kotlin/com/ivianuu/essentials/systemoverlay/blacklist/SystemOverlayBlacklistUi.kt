@@ -14,8 +14,8 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
@@ -83,12 +83,13 @@ data class SystemOverlayBlacklistModel(
 )
 
 @Provide fun systemOverlayBlacklistModel(
-  ctx: KeyUiContext<SystemOverlayBlacklistKey>,
+  key: SystemOverlayBlacklistKey,
+  navigator: Navigator,
   pref: DataStore<SystemOverlayBlacklistPrefs>
 ) = Model {
   val prefs = pref.data.bind(SystemOverlayBlacklistPrefs())
   SystemOverlayBlacklistModel(
-    systemOverlayName = ctx.key.systemOverlayName,
+    systemOverlayName = key.systemOverlayName,
     disableOnKeyboard = prefs.disableOnKeyboard,
     updateDisableOnKeyboard = action { value ->
       pref.updateData { copy(disableOnKeyboard = value) }
@@ -102,7 +103,7 @@ data class SystemOverlayBlacklistModel(
       pref.updateData { copy(disableOnSecureScreens = value) }
     },
     openAppBlacklistSettings = action {
-      ctx.navigator.push(SystemOverlayAppBlacklistKey())
+      navigator.push(SystemOverlayAppBlacklistKey())
     }
   )
 }

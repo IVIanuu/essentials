@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Navigator
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
@@ -28,27 +28,28 @@ class TextInputKey(
 ) : OverlayKey<String>
 
 @Provide fun textInputUi(
-  ctx: KeyUiContext<TextInputKey>,
-  commonStrings: CommonStrings
+  commonStrings: CommonStrings,
+  key: TextInputKey,
+  navigator: Navigator
 ) = Ui<TextInputKey, Unit> { model ->
   DialogScaffold {
-    var currentValue by remember { mutableStateOf(ctx.key.initial) }
+    var currentValue by remember { mutableStateOf(key.initial) }
     TextInputDialog(
       value = currentValue,
       onValueChange = { currentValue = it },
-      label = { Text(ctx.key.label) },
-      keyboardOptions = ctx.key.keyboardOptions,
-      title = ctx.key.title?.let { { Text(it) } },
+      label = { Text(key.label) },
+      keyboardOptions = key.keyboardOptions,
+      title = key.title?.let { { Text(it) } },
       buttons = {
-        TextButton(onClick = action { ctx.navigator.pop(ctx.key, null) }) {
+        TextButton(onClick = action { navigator.pop(key, null) }) {
           Text(commonStrings.cancel)
         }
 
-        val currentValueIsOk = remember(currentValue) { ctx.key.predicate(currentValue) }
+        val currentValueIsOk = remember(currentValue) { key.predicate(currentValue) }
 
         TextButton(
           enabled = currentValueIsOk,
-          onClick = action { ctx.navigator.pop(ctx.key, currentValue) }
+          onClick = action { navigator.pop(key, currentValue) }
         ) { Text(commonStrings.ok) }
       }
     )
