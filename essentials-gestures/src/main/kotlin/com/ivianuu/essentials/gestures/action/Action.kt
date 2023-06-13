@@ -42,7 +42,7 @@ fun interface ActionIcon {
 
 abstract class ActionId(val value: String)
 
-@Provide fun <@Spread T : Action<I>, I : ActionId> actionPair(
+@Provide fun <@Spread T : Action<I>, I : ActionId> actionBinding(
   id: I,
   provider: () -> T,
 ): Pair<String, () -> Action<I>> = id.value to provider
@@ -51,7 +51,7 @@ fun interface ActionExecutor<I : ActionId> {
   suspend operator fun invoke()
 }
 
-@Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorPair(
+@Provide fun <@Spread T : ActionExecutor<I>, I : ActionId> actionExecutorBinding(
   id: I,
   provider: () -> T
 ): Pair<String, () -> ActionExecutor<*>> = id.value to provider
@@ -66,7 +66,7 @@ interface ActionFactory {
 
 @Tag annotation class ActionSettingsKey<I : ActionId>
 
-@Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyPair(
+@Provide fun <@Spread T : @ActionSettingsKey<I> Screen<Unit>, I : ActionId> actionSettingsKeyBinding(
   id: I,
   provider: () -> T,
 ): Pair<String, () -> @ActionSettingsKey<ActionId> Screen<Unit>> = id.value to provider
