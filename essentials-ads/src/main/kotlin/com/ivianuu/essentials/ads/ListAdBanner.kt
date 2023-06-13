@@ -9,9 +9,9 @@ import com.ivianuu.essentials.AppConfig
 import com.ivianuu.essentials.Resources
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.catch
+import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.bind
 import com.ivianuu.essentials.getOrNull
-import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.common.ListDecorator
 import com.ivianuu.essentials.ui.navigation.Key
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
