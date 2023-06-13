@@ -42,7 +42,7 @@ class UnlockScreen : Screen<Unit>
   screenUnlocker: ScreenUnlocker,
   scope: ScopedCoroutineScope<ScreenScope>,
   toaster: Toaster
-) = Ui<UnlockScreen, Unit> { model ->
+) = Ui<UnlockScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {

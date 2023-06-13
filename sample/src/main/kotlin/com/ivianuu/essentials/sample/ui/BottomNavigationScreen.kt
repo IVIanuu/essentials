@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Provide
 
 class BottomNavigationScreen : Screen<Unit>
 
-@Provide val bottomNavigationUi = Ui<BottomNavigationScreen, Unit> { model ->
+@Provide val bottomNavigationUi = Ui<BottomNavigationScreen, Unit> {
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
   Scaffold(

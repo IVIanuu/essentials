@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 class DisplayRotationScreen : Screen<Unit>
 
 @Provide fun displayRotationUi(displayInfo: Flow<DisplayInfo>) =
-  Ui<DisplayRotationScreen, Unit> { model ->
+  Ui<DisplayRotationScreen, Unit> {
     Box(
       modifier = Modifier.fillMaxSize()
         .background(MaterialTheme.colors.primary)

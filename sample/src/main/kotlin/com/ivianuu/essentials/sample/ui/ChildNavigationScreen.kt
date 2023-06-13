@@ -37,7 +37,7 @@ class ChildNavigationScreen : Screen<Unit>
 
 @Provide val childNavigationHomeItem = HomeItem("Child Navigation") { ChildNavigationScreen() }
 
-@Provide fun childNavigationUi() = Ui<ChildNavigationScreen, Unit> { model ->
+@Provide fun childNavigationUi() = Ui<ChildNavigationScreen, Unit> {
   Scaffold(
     topBar = {
       TopAppBar(title = { Text("Child Navigation") })

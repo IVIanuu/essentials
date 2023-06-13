@@ -31,7 +31,7 @@ class ActionsScreen : Screen<Unit>
   repository: ActionRepository,
   executeAction: ExecuteActionUseCase,
   toaster: Toaster
-) = Ui<ActionsScreen, Unit> { model ->
+) = Ui<ActionsScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Actions") }) }
   ) {

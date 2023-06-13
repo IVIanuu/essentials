@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 class TabsScreen : Screen<Unit>
 
 @OptIn(ExperimentalPagerApi::class)
-@Provide val tabsUi = Ui<TabsScreen, Unit> { model ->
+@Provide val tabsUi = Ui<TabsScreen, Unit> {
   val pagerState = rememberPagerState()
   Scaffold(
     topBar = {

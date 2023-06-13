@@ -32,7 +32,7 @@ import com.ivianuu.injekt.Provide
 
 class DecoratorsScreen : Screen<Unit>
 
-@Provide val decoratorsUi = Ui<DecoratorsScreen, Unit> { model ->
+@Provide val decoratorsUi = Ui<DecoratorsScreen, Unit> {
   SimpleListScreen("Decorators") {
     (1..10).forEach { itemIndex ->
       item {

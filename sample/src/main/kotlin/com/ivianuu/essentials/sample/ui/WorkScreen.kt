@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Provide
 
 class WorkScreen : Screen<Unit>
 
-@Provide fun workUi(scheduler: SampleWorkScheduler) = Ui<WorkScreen, Unit> { model ->
+@Provide fun workUi(scheduler: SampleWorkScheduler) = Ui<WorkScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {

@@ -25,7 +25,7 @@ class RestartProcessScreen : Screen<Unit>
 @Provide fun restartProcessUi(
   processRestarter: ProcessRestarter,
   scope: ScopedCoroutineScope<ScreenScope>
-) = Ui<RestartProcessScreen, Unit> { model ->
+) = Ui<RestartProcessScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Restart process") }) }
   ) {

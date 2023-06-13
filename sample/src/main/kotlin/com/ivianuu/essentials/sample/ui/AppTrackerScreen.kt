@@ -49,7 +49,7 @@ class AppTrackerScreen : Screen<Unit>
   permissionManager: PermissionManager,
   resources: Resources,
   toaster: Toaster
-) = Ui<AppTrackerScreen, Unit> { model ->
+) = Ui<AppTrackerScreen, Unit> {
   var isEnabled by remember { mutableStateOf(false) }
 
   if (isEnabled)

@@ -286,6 +286,6 @@ class DialogLauncherScreen(
   val dialog: @Composable () -> Unit
 ) : OverlayScreen<Unit>
 
-@Provide fun dialogLauncherUi(screen: DialogLauncherScreen) = Ui<DialogLauncherScreen, Unit> { model ->
+@Provide fun dialogLauncherUi(screen: DialogLauncherScreen) = Ui<DialogLauncherScreen, Unit> {
   DialogScaffold(dismissible = screen.dismissible) { screen.dialog() }
 }

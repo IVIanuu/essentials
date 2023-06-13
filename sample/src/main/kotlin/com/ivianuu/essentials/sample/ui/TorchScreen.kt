@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Provide
 
 class TorchScreen : Screen<Unit>
 
-@Provide fun torchUi(torchManager: TorchManager) = Ui<TorchScreen, Unit> { model ->
+@Provide fun torchUi(torchManager: TorchManager) = Ui<TorchScreen, Unit> {
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),

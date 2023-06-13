@@ -20,7 +20,7 @@ import com.ivianuu.injekt.Provide
 
 class DrawerScreen : Screen<Unit>
 
-@Provide val drawerUi = Ui<DrawerScreen, Unit> { model ->
+@Provide val drawerUi = Ui<DrawerScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Drawer") }) },
     drawerContent = {

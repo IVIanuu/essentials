@@ -39,7 +39,7 @@ class ForegroundScreen : Screen<Unit>
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
   notificationFactory: NotificationFactory
-) = Ui<ForegroundScreen, Unit> { model ->
+) = Ui<ForegroundScreen, Unit> {
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {
