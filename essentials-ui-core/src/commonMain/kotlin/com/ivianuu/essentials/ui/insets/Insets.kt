@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.lerp
 import com.ivianuu.essentials.compose.getValue
 import com.ivianuu.essentials.compose.refOf
 import com.ivianuu.essentials.compose.setValue
-import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
 
 @Composable fun InsetsPadding(
@@ -107,7 +107,7 @@ val LocalInsets = compositionLocalOf { Insets() }
   CompositionLocalProvider(LocalInsets provides insets, content = content)
 }
 
-fun interface WindowInsetsProvider : UiDecorator
+fun interface WindowInsetsProvider : AppUiDecorator
 
 @Provide expect val windowInsetsProvider: WindowInsetsProvider
 

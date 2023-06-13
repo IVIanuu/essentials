@@ -14,7 +14,7 @@ import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
 import com.ivianuu.essentials.coroutines.onCancel
-import com.ivianuu.essentials.ui.DecorateUi
+import com.ivianuu.essentials.ui.DecorateAppUi
 import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
 import com.ivianuu.essentials.ui.app.AppUi
@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 
     setContent {
       CompositionLocalProvider(LocalScope provides uiScope) {
-        uiComponent.decorateUi {
+        uiComponent.decorateAppUi {
           uiComponent.appUi()
         }
       }
@@ -51,4 +51,7 @@ import kotlinx.coroutines.launch
   }
 }
 
-@Provide @Service<UiScope> data class UiComponent(val appUi: AppUi, val decorateUi: DecorateUi)
+@Provide @Service<UiScope> data class UiComponent(
+  val appUi: AppUi,
+  val decorateAppUi: DecorateAppUi
+)

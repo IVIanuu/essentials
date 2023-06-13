@@ -5,7 +5,7 @@
 package com.ivianuu.essentials.ui.backpress
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.Disposable
 
@@ -23,6 +23,6 @@ interface BackPressCallbackHandle : Disposable {
 
 val LocalBackPressHandler = staticCompositionLocalOf<BackPressHandler> { error("") }
 
-fun interface BackPressHandlerProvider : UiDecorator
+fun interface BackPressHandlerProvider : AppUiDecorator
 
 @Provide expect val backPressHandlerProvider: BackPressHandlerProvider

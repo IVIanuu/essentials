@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.app.LoadingOrder
 import com.ivianuu.essentials.ui.AppThemeDecorator
-import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.WindowInsetsProvider
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
@@ -56,7 +56,7 @@ import com.ivianuu.injekt.Provide
   onGloballyPositioned { style.bounds = it.boundsInWindow() }
 }
 
-fun interface RootSystemBarsStyle : UiDecorator {
+fun interface RootSystemBarsStyle : AppUiDecorator {
   companion object {
     @Provide val impl = RootSystemBarsStyle { content ->
       Surface {
@@ -90,7 +90,7 @@ class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
   var elevation by mutableStateOf(elevation)
 }
 
-fun interface SystemBarManagerProvider : UiDecorator {
+fun interface SystemBarManagerProvider : AppUiDecorator {
   companion object {
     @Provide val loadingOrder: LoadingOrder<SystemBarManagerProvider>
       get() = LoadingOrder<SystemBarManagerProvider>()

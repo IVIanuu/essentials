@@ -15,18 +15,18 @@ import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.systembars.SystemBarManagerProvider
 import com.ivianuu.injekt.Provide
 
-fun interface UiDecorator : Service<UiDecorator> {
+fun interface AppUiDecorator : Service<AppUiDecorator> {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-fun interface DecorateUi {
+fun interface DecorateAppUi {
   @Composable operator fun invoke(content: @Composable () -> Unit)
 }
 
-@Provide fun decorateUi(
-  elements: List<ServiceElement<UiDecorator>>,
+@Provide fun decorateAppUi(
+  elements: List<ServiceElement<AppUiDecorator>>,
   logger: Logger
-) = DecorateUi { content ->
+) = DecorateAppUi { content ->
   val combinedDecorator: @Composable (@Composable () -> Unit) -> Unit = remember(elements) {
     elements
       .sortedWithLoadingOrder()
@@ -45,7 +45,7 @@ fun interface DecorateUi {
   combinedDecorator(content)
 }
 
-fun interface AppThemeDecorator : UiDecorator {
+fun interface AppThemeDecorator : AppUiDecorator {
   companion object {
     @Provide val loadingOrder: LoadingOrder<AppThemeDecorator>
       get() = LoadingOrder<AppThemeDecorator>()

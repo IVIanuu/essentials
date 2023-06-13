@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.app.Service
 import com.ivianuu.essentials.app.ServiceElement
-import com.ivianuu.essentials.ui.UiDecorator
+import com.ivianuu.essentials.ui.AppUiDecorator
 import com.ivianuu.essentials.ui.insets.localHorizontalInsetsPadding
 import com.ivianuu.essentials.ui.insets.localVerticalInsetsPadding
 import com.ivianuu.injekt.Provide
@@ -41,7 +41,7 @@ val LocalListDecorators = staticCompositionLocalOf<() -> List<ServiceElement<Lis
   { emptyList() }
 }
 
-fun interface ListDecoratorsProvider : UiDecorator
+fun interface ListDecoratorsProvider : AppUiDecorator
 
 @Provide fun listDecoratorsProvider(
   decorators: () -> List<ServiceElement<ListDecorator>>
