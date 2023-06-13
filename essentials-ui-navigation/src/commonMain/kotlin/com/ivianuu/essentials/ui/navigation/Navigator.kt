@@ -144,7 +144,7 @@ class NavigatorImpl(
       scope = scope
     )
 
-    @Provide fun rootNavigatorService(navigator: Navigator) =
-      ProvidedService<UiScope, Navigator> { navigator }
+    @Provide inline fun rootNavigatorService(crossinline navigator: () -> Navigator) =
+      ProvidedService<UiScope, Navigator>(factory = navigator)
   }
 }

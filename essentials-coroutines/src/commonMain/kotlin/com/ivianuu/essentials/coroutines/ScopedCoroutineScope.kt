@@ -4,6 +4,7 @@
 
 package com.ivianuu.essentials.coroutines
 
+import com.ivianuu.essentials.ProvidedService
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.ScopeObserver
 import com.ivianuu.essentials.Scoped
@@ -27,6 +28,9 @@ typealias ScopedCoroutineScope<N> = @ScopedCoroutineScopeTag<N> CoroutineScope
         coroutineContext.cancel()
       }
     }
+
+    @Provide inline fun <N> service(crossinline scope: () -> ScopedCoroutineScope<N>) =
+      ProvidedService<N, CoroutineScope>(factory = scope)
   }
 }
 
