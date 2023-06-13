@@ -47,7 +47,7 @@ fun interface DecorateAppUi {
 
 fun interface AppThemeDecorator : AppUiDecorator {
   companion object {
-    @Provide val loadingOrder: LoadingOrder<AppThemeDecorator>
+    @Provide val loadingOrder
       get() = LoadingOrder<AppThemeDecorator>()
         .after<SystemBarManagerProvider>()
   }

@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +40,9 @@ import com.ivianuu.injekt.Provide
   elevation: Dp = 0.dp
 ): Modifier = composed {
   val style = remember { SystemBarStyle(bgColor, lightIcons, elevation) }
-  SideEffect {
-    style.barColor = bgColor
-    style.lightIcons = lightIcons
-    style.elevation = elevation
-  }
+  style.barColor = bgColor
+  style.lightIcons = lightIcons
+  style.elevation = elevation
 
   val systemBarManager = LocalSystemBarManager.current
   DisposableEffect(systemBarManager, style) {
@@ -70,9 +67,10 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
       }
     }
 
-    @Provide val loadingOrder = LoadingOrder<RootSystemBarsStyle>()
-      .after<AppThemeDecorator>()
-      .after<SystemBarManagerProvider>()
+    @Provide val loadingOrder
+      get() = LoadingOrder<RootSystemBarsStyle>()
+        .after<AppThemeDecorator>()
+        .after<SystemBarManagerProvider>()
   }
 }
 
@@ -83,7 +81,7 @@ fun interface RootSystemBarsStyle : AppUiDecorator {
 }
 
 
-class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
+@Stable class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
   var barColor by mutableStateOf(barColor)
   var lightIcons by mutableStateOf(lightIcons)
   var bounds by mutableStateOf(Rect(0f, 0f, 0f, 0f))
@@ -92,7 +90,7 @@ class SystemBarStyle(barColor: Color, lightIcons: Boolean, elevation: Dp) {
 
 fun interface SystemBarManagerProvider : AppUiDecorator {
   companion object {
-    @Provide val loadingOrder: LoadingOrder<SystemBarManagerProvider>
+    @Provide val loadingOrder
       get() = LoadingOrder<SystemBarManagerProvider>()
         .after<WindowInsetsProvider>()
   }
