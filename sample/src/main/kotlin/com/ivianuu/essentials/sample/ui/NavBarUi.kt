@@ -28,9 +28,9 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
@@ -46,7 +46,7 @@ class NavBarKey : Key<Unit>
   navigator: Navigator,
   navBarPref: DataStore<NavBarPrefs>,
   permissionManager: PermissionManager
-) = KeyUi<NavBarKey, Unit> { model ->
+) = Ui<NavBarKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Nav bar settings") }) }
   ) {

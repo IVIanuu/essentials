@@ -50,9 +50,9 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.TextButton
 import com.ivianuu.essentials.ui.material.esButtonColors
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.Toaster
 import com.ivianuu.essentials.util.invoke
@@ -76,7 +76,7 @@ class GoPremiumKey(
   }
 }
 
-@Provide val goPremiumUi = KeyUi<GoPremiumKey, GoPremiumModel> { model ->
+@Provide val goPremiumUi = Ui<GoPremiumKey, GoPremiumModel> { model ->
   BackHandler(onBackPress = model.goBack)
 
   Surface {

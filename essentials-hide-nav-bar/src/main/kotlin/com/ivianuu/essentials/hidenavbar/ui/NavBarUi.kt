@@ -21,9 +21,9 @@ import com.ivianuu.essentials.ui.common.interactive
 import com.ivianuu.essentials.ui.dialog.SingleChoiceListKey
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
@@ -31,7 +31,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 class NavBarKey : Key<Unit>
 
-@Provide val navBarUi = KeyUi<NavBarKey, NavBarModel> { model ->
+@Provide val navBarUi = Ui<NavBarKey, NavBarModel> { model ->
   SimpleListScreen(R.string.es_nav_bar_title) {
     item {
       SwitchListItem(

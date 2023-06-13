@@ -20,9 +20,9 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.util.Toaster
@@ -36,7 +36,7 @@ class WriteSecureSettingsKey(
 ) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsUi =
-  KeyUi<WriteSecureSettingsKey, WriteSecureSettingsModel> { model ->
+  Ui<WriteSecureSettingsKey, WriteSecureSettingsModel> { model ->
     SimpleListScreen(R.string.es_secure_settings_title) {
       item {
         SecureSettingsHeader(

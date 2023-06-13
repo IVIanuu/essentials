@@ -20,8 +20,8 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiScope
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.unlock.ScreenActivator
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.Toaster
@@ -42,7 +42,7 @@ class UnlockKey : Key<Unit>
   screenUnlocker: ScreenUnlocker,
   scope: ScopedCoroutineScope<KeyUiScope>,
   toaster: Toaster
-) = KeyUi<UnlockKey, Unit> { model ->
+) = Ui<UnlockKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Unlock") }) }
   ) {

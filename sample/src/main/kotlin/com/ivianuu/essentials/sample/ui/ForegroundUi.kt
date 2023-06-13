@@ -23,7 +23,7 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.util.NotificationFactory
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -39,7 +39,7 @@ class ForegroundKey : Key<Unit>
 @Provide fun foregroundUi(
   foregroundManager: ForegroundManager,
   notificationFactory: NotificationFactory
-) = KeyUi<ForegroundKey, Unit> { model ->
+) = Ui<ForegroundKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Foreground") }) }
   ) {

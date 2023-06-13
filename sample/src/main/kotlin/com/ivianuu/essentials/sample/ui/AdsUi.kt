@@ -12,7 +12,7 @@ import com.ivianuu.essentials.ads.FullScreenAdManager
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ class AdsKey : Key<Unit>
 @Provide fun adsUi(
   adsEnabled: MutableStateFlow<AdsEnabled>,
   fullScreenAd: FullScreenAdManager
-) = KeyUi<AdsKey, Unit> {
+) = Ui<AdsKey, Unit> {
   SimpleListScreen("Ads") {
     item {
       SwitchListItem(

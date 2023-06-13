@@ -29,8 +29,8 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.material.incrementingStepPolicy
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.ColorListItem
 import com.ivianuu.essentials.ui.prefs.RadioButtonListItem
@@ -49,7 +49,7 @@ class PrefsKey : Key<Unit>
 @Provide fun prefsUi(
   ctx: KeyUiContext<PrefsKey>,
   pref: DataStore<SamplePrefs>
-) = KeyUi<PrefsKey, Unit> { model ->
+) = Ui<PrefsKey, Unit> { model ->
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
     item {

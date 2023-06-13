@@ -13,14 +13,14 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 @Provide val workHomeItem = HomeItem("Work") { WorkKey() }
 
 class WorkKey : Key<Unit>
 
-@Provide fun workUi(scheduler: SampleWorkScheduler) = KeyUi<WorkKey, Unit> { model ->
+@Provide fun workUi(scheduler: SampleWorkScheduler) = Ui<WorkKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("Work") }) }
   ) {

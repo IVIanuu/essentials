@@ -23,15 +23,15 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiDecorator
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsKey() }
 
 class DecoratorsKey : Key<Unit>
 
-@Provide val decoratorsUi = KeyUi<DecoratorsKey, Unit> { model ->
+@Provide val decoratorsUi = Ui<DecoratorsKey, Unit> { model ->
   SimpleListScreen("Decorators") {
     (1..10).forEach { itemIndex ->
       item {

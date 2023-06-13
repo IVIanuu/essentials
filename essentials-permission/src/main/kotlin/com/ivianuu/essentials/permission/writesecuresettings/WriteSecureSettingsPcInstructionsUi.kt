@@ -37,9 +37,9 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.OutlinedButton
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
 import com.ivianuu.essentials.ui.navigation.DefaultIntentKey
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.stepper.Step
@@ -58,7 +58,7 @@ class WriteSecureSettingsPcInstructionsKey(
 ) : CriticalUserFlowKey<Boolean>
 
 @Provide val writeSecureSettingsPcInstructionsUi =
-  KeyUi<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> { model ->
+  Ui<WriteSecureSettingsPcInstructionsKey, WriteSecureSettingsPcInstructionsModel> { model ->
     SimpleListScreen(R.string.es_secure_settings_pc_instructions_title) {
       item {
         SecureSettingsHeader(

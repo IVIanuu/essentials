@@ -22,7 +22,7 @@ import com.ivianuu.essentials.ui.layout.center
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 @Provide val tabsHomeItem = HomeItem("Tabs") { TabsKey() }
@@ -30,7 +30,7 @@ import com.ivianuu.injekt.Provide
 class TabsKey : Key<Unit>
 
 @OptIn(ExperimentalPagerApi::class)
-@Provide val tabsUi = KeyUi<TabsKey, Unit> { model ->
+@Provide val tabsUi = Ui<TabsKey, Unit> { model ->
   val pagerState = rememberPagerState()
   Scaffold(
     topBar = {

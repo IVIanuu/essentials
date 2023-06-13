@@ -8,9 +8,9 @@ import androidx.compose.material.Text
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -22,7 +22,7 @@ class ConfirmationKey<T : Any>(
 ) : OverlayKey<T>
 
 @Provide fun confirmationUi(ctx: KeyUiContext<ConfirmationKey<Any>>) =
-  KeyUi<ConfirmationKey<Any>, Unit> { model ->
+  Ui<ConfirmationKey<Any>, Unit> { model ->
     DialogScaffold {
       Dialog(
         title = { Text(ctx.key.title) },

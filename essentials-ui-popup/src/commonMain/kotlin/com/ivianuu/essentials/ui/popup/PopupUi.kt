@@ -38,8 +38,9 @@ import com.ivianuu.essentials.ui.animation.transition.rootCoordinates
 import com.ivianuu.essentials.ui.animation.transition.toElementModifier
 import com.ivianuu.essentials.ui.insets.LocalInsets
 import com.ivianuu.essentials.ui.navigation.KeyConfig
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 import kotlin.math.max
@@ -48,9 +49,9 @@ class PopupKey(
   val position: Rect,
   val onCancel: (() -> Unit)?,
   val content: @Composable () -> Unit,
-) : com.ivianuu.essentials.ui.navigation.OverlayKey<Unit>
+) : OverlayKey<Unit>
 
-@Provide fun popupUi(key: PopupKey, navigator: Navigator) = KeyUi<PopupKey, Unit> { model ->
+@Provide fun popupUi(key: PopupKey, navigator: Navigator) = Ui<PopupKey, Unit> {
   var previousConstraints by remember { refOf<Constraints?>(null) }
 
   BoxWithConstraints {

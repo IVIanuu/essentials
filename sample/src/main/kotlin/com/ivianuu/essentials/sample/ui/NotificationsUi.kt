@@ -54,9 +54,9 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.resource.ResourceBox
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -66,7 +66,7 @@ import com.ivianuu.injekt.common.typeKeyOf
 
 class NotificationsKey : Key<Unit>
 
-@Provide val notificationsUi = KeyUi<NotificationsKey, NotificationsModel> { model ->
+@Provide val notificationsUi = Ui<NotificationsKey, NotificationsModel> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }) }) {
     ResourceBox(model.hasPermissions) { hasPermission ->
       if (hasPermission) {

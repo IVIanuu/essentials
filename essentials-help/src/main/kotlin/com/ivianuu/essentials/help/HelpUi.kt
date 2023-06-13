@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.Subheader
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 class HelpKey : Key<Unit>
@@ -49,7 +49,7 @@ data class HelpItem(
   val actions: (@Composable () -> Unit)? = null
 )
 
-@Provide fun helpUi(categories: List<HelpCategory>) = KeyUi<HelpKey, Unit> { model ->
+@Provide fun helpUi(categories: List<HelpCategory>) = Ui<HelpKey, Unit> { model ->
   var expandedItem: HelpItem? by remember {
     mutableStateOf(
       categories

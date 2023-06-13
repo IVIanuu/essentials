@@ -6,9 +6,9 @@ package com.ivianuu.essentials.ads
 
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.OverlayKey
 import com.ivianuu.essentials.ui.navigation.RootKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Spread
 import kotlin.reflect.KClass
@@ -29,7 +29,7 @@ interface AdFeature
     @Provide fun <K : CriticalUserFlowKey<*>> defaultCriticalUserFlowAdFeatures(): AdFeatures<K> =
       AdFeatures(listOf(ScreenAdBannerFeature))
 
-    @Provide fun <@Spread T : KeyUi<K, *>, K : Key<*>> adFeatureConfigMapEntry(
+    @Provide fun <@Spread T : Ui<K, *>, K : Key<*>> adFeatureConfigMapEntry(
       keyClass: KClass<K>,
       features: AdFeatures<K>
     ): Pair<KClass<out Key<*>>, AdFeatures<*>> = keyClass to features

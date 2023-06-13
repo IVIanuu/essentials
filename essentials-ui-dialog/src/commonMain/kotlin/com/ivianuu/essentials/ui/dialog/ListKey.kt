@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.ListItem
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -25,7 +25,7 @@ class ListKey<T : Any>(
   @Inject val renderer: UiRenderer<T>,
 ) : OverlayKey<T>
 
-@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = KeyUi<ListKey<Any>, Unit> { model ->
+@Provide fun listKeyUi(ctx: KeyUiContext<ListKey<Any>>) = Ui<ListKey<Any>, Unit> { model ->
   DialogScaffold {
     Dialog(
       title = ctx.key.title?.let { { Text(it) } },

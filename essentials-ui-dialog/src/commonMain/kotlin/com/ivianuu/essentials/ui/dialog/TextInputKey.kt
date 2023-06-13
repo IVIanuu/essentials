@@ -13,9 +13,9 @@ import androidx.compose.runtime.setValue
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
@@ -30,7 +30,7 @@ class TextInputKey(
 @Provide fun textInputUi(
   ctx: KeyUiContext<TextInputKey>,
   commonStrings: CommonStrings
-) = KeyUi<TextInputKey, Unit> { model ->
+) = Ui<TextInputKey, Unit> { model ->
   DialogScaffold {
     var currentValue by remember { mutableStateOf(ctx.key.initial) }
     TextInputDialog(

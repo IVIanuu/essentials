@@ -29,14 +29,14 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 @Provide val textInputHomeItem = HomeItem("Text input") { TextInputKey() }
 
 class TextInputKey : Key<Unit>
 
-@Provide val textInputUi = KeyUi<TextInputKey, Unit> { model ->
+@Provide val textInputUi = Ui<TextInputKey, Unit> { model ->
   val state = remember { TextInputState() }
 
   if (!state.searchVisible) {

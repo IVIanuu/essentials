@@ -19,8 +19,8 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.typeKeyOf
 import kotlinx.coroutines.Job
@@ -34,7 +34,7 @@ class SystemWindowKey : Key<Unit>
   ctx: KeyUiContext<SystemWindowKey>,
   permissionManager: PermissionManager,
   systemWindowManager: SystemWindowManager
-) = KeyUi<SystemWindowKey, Unit> { model ->
+) = Ui<SystemWindowKey, Unit> { model ->
   Scaffold(
     topBar = { TopAppBar(title = { Text("System window") }) }
   ) {

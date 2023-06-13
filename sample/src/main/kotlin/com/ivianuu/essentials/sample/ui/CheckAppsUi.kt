@@ -20,8 +20,8 @@ import com.ivianuu.essentials.db.deleteAll
 import com.ivianuu.essentials.db.insertAll
 import com.ivianuu.essentials.db.selectAll
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.Tag
 import kotlinx.coroutines.flow.map
@@ -37,7 +37,7 @@ class CheckAppsKey : Key<Unit>
   ctx: KeyUiContext<CheckAppsKey>,
   db: @CheckApps Db,
   launchableAppPredicate: LaunchableAppPredicate
-) = KeyUi<CheckAppsKey, Unit> { model ->
+) = Ui<CheckAppsKey, Unit> { model ->
   remember {
     checkableAppsScreen(
       CheckableAppsParams(

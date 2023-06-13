@@ -9,9 +9,9 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.common.CommonStrings
 import com.ivianuu.essentials.ui.common.UiRenderer
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Inject
 import com.ivianuu.injekt.Provide
@@ -26,7 +26,7 @@ class SingleChoiceListKey<T : Any>(
 @Provide fun singleChoiceListUi(
   ctx: KeyUiContext<SingleChoiceListKey<Any>>,
   commonStrings: CommonStrings
-) = KeyUi<SingleChoiceListKey<Any>, Unit> { model ->
+) = Ui<SingleChoiceListKey<Any>, Unit> { model ->
   DialogScaffold {
     SingleChoiceListDialog(
       items = ctx.key.items,

@@ -13,8 +13,8 @@ import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,7 +24,7 @@ class SystemOverlayAppBlacklistKey : Key<Unit>
 @Provide fun systemOverlayAppBlacklistUi(
   checkableAppsPageFactory: (CheckableAppsParams) -> CheckableAppsScreen,
   resources: Resources
-) = KeyUi<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> { model ->
+) = Ui<SystemOverlayAppBlacklistKey, SystemOverlayAppBlacklistModel> { model ->
   remember {
     checkableAppsPageFactory(
       CheckableAppsParams(

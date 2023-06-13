@@ -18,7 +18,7 @@ import com.ivianuu.essentials.colorpicker.ColorPickerPalette
 import com.ivianuu.essentials.ui.common.VerticalList
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
 import com.ivianuu.injekt.Provide
@@ -27,7 +27,7 @@ import com.ivianuu.injekt.Provide
 
 class DynamicSystemBarsKey : Key<Unit>
 
-@Provide val dynamicSystemBarsUi = KeyUi<DynamicSystemBarsKey, Unit> { model ->
+@Provide val dynamicSystemBarsUi = Ui<DynamicSystemBarsKey, Unit> { model ->
   Box {
     val colors = rememberSaveable {
       ColorPickerPalette.values()

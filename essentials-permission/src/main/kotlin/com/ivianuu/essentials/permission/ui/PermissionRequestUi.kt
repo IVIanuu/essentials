@@ -22,9 +22,9 @@ import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.material.Switch
 import com.ivianuu.essentials.ui.navigation.CriticalUserFlowKey
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.essentials.util.AppUiStarter
 import com.ivianuu.injekt.Provide
@@ -35,7 +35,7 @@ class PermissionRequestKey(
   val permissionsKeys: List<TypeKey<Permission>>
 ) : CriticalUserFlowKey<Boolean>
 
-@Provide val permissionRequestUi = KeyUi<PermissionRequestKey, PermissionRequestModel> { model ->
+@Provide val permissionRequestUi = Ui<PermissionRequestKey, PermissionRequestModel> { model ->
   SimpleListScreen(R.string.es_request_permission_title) {
     items(model.permissions) { permission ->
       ListItem(

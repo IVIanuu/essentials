@@ -12,16 +12,16 @@ import com.ivianuu.essentials.rate.domain.RateUseCases
 import com.ivianuu.essentials.ui.dialog.Dialog
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
 import com.ivianuu.essentials.ui.material.TextButton
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
 object RateOnPlayKey : OverlayKey<Unit>
 
-@Provide val rateOnPlayUi = KeyUi<RateOnPlayKey, RateOnPlayModel> { model ->
+@Provide val rateOnPlayUi = Ui<RateOnPlayKey, RateOnPlayModel> { model ->
   DialogScaffold(dismissible = false) {
     Dialog(
       title = { Text(R.string.es_rate_on_play_title) },

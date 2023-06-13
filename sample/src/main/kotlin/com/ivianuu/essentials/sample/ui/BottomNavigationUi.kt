@@ -26,7 +26,7 @@ import com.ivianuu.essentials.ui.insets.InsetsPadding
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.systembars.overlaySystemBarBgColor
 import com.ivianuu.essentials.ui.systembars.systemBarStyle
 import com.ivianuu.essentials.ui.util.isLight
@@ -36,7 +36,7 @@ import com.ivianuu.injekt.Provide
 
 class BottomNavigationKey : Key<Unit>
 
-@Provide val bottomNavigationUi = KeyUi<BottomNavigationKey, Unit> { model ->
+@Provide val bottomNavigationUi = Ui<BottomNavigationKey, Unit> { model ->
   var selectedItem by remember { mutableStateOf(BottomNavItem.values().first()) }
 
   Scaffold(

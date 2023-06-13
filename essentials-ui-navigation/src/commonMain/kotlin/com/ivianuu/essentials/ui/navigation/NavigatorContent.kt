@@ -59,7 +59,7 @@ import kotlin.reflect.KClass
             key = key,
             config = config,
             content = {
-              with(ui as KeyUi<*, Any>) {
+              with(ui as Ui<*, Any>) {
                 with(currentModel as Any) {
                   invoke(this)
                 }

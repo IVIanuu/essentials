@@ -11,13 +11,13 @@ import com.ivianuu.injekt.Provide
 import kotlinx.coroutines.CoroutineScope
 
 // todo make fun interface once compose is fixed
-@Stable interface KeyUi<K : Key<*>, M> {
+@Stable interface Ui<K : Key<*>, M> {
   @Composable operator fun invoke(model: M)
 }
 
-inline fun <K : Key<*>, M> KeyUi(
+inline fun <K : Key<*>, M> Ui(
   crossinline block: @Composable (M) -> Unit
-): KeyUi<K, M> = object : KeyUi<K, M> {
+): Ui<K, M> = object : Ui<K, M> {
   @Composable override fun invoke(model: M) {
     block(model)
   }

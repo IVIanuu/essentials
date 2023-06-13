@@ -20,14 +20,14 @@ import com.ivianuu.essentials.ui.material.Button
 import com.ivianuu.essentials.ui.material.Scaffold
 import com.ivianuu.essentials.ui.material.TopAppBar
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.injekt.Provide
 
 @Provide val torchHomeItem = HomeItem("Torch") { TorchKey() }
 
 class TorchKey : Key<Unit>
 
-@Provide fun torchUi(torchManager: TorchManager) = KeyUi<TorchKey, Unit> { model ->
+@Provide fun torchUi(torchManager: TorchManager) = Ui<TorchKey, Unit> { model ->
   Scaffold(topBar = { TopAppBar(title = { Text("Torch") }) }) {
     Column(
       modifier = Modifier.center(),

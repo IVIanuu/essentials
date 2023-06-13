@@ -14,9 +14,9 @@ import com.ivianuu.essentials.systemoverlay.R
 import com.ivianuu.essentials.ui.common.SimpleListScreen
 import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Key
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.Model
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.ui.prefs.SwitchListItem
 import com.ivianuu.injekt.Provide
@@ -25,7 +25,7 @@ class SystemOverlayBlacklistKey(val systemOverlayName: String) : Key<Unit>
 
 @Provide
 val systemOverlayBlacklistUi =
-  KeyUi<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> { model ->
+  Ui<SystemOverlayBlacklistKey, SystemOverlayBlacklistModel> { model ->
     SimpleListScreen(R.string.es_system_overlay_blacklist_title) {
       item {
         ListItem(

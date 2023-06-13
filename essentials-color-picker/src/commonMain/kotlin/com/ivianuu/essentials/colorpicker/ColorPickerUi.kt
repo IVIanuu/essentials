@@ -8,9 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.ui.graphics.Color
 import com.ivianuu.essentials.compose.action
 import com.ivianuu.essentials.ui.dialog.DialogScaffold
-import com.ivianuu.essentials.ui.navigation.KeyUi
 import com.ivianuu.essentials.ui.navigation.KeyUiContext
 import com.ivianuu.essentials.ui.navigation.OverlayKey
+import com.ivianuu.essentials.ui.navigation.Ui
 import com.ivianuu.essentials.ui.navigation.pop
 import com.ivianuu.injekt.Provide
 
@@ -23,7 +23,7 @@ class ColorPickerKey(
 ) : OverlayKey<Color>
 
 @Provide fun colorPickerUi(ctx: KeyUiContext<ColorPickerKey>) =
-  KeyUi<ColorPickerKey, Unit> { model ->
+  Ui<ColorPickerKey, Unit> { model ->
     DialogScaffold {
       ColorPickerDialog(
         initialColor = ctx.key.initialColor,
