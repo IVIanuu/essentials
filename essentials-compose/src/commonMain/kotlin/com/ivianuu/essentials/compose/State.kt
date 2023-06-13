@@ -36,21 +36,21 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-fun <T> stateFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
-  launchState(
+fun <T> composedFlow(@Inject context: StateContext, body: @Composable () -> T): Flow<T> = channelFlow {
+  launchComposedEmitter(
     emitter = { trySend(it) },
     body = body
   )
   awaitClose()
 }
 
-fun <T> CoroutineScope.state(
+fun <T> CoroutineScope.composedState(
   @Inject context: StateContext,
   body: @Composable () -> T
 ): StateFlow<T> {
   var flow: MutableStateFlow<T>? = null
 
-  launchState(
+  launchComposedEmitter(
     emitter = { value ->
       val outputFlow = flow
       if (outputFlow != null) {
@@ -65,7 +65,7 @@ fun <T> CoroutineScope.state(
   return flow!!
 }
 
-fun <T> CoroutineScope.launchState(
+fun <T> CoroutineScope.launchComposedEmitter(
   @Inject context: StateContext,
   emitter: (T) -> Unit,
   body: @Composable () -> T
