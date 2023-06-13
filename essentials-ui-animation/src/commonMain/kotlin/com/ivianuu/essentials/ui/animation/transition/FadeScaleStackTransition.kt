@@ -12,12 +12,13 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import com.ivianuu.essentials.lerp
 import com.ivianuu.essentials.time.milliseconds
+import com.ivianuu.essentials.ui.animation.AnimationElementKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import com.ivianuu.essentials.ui.animation.util.interval
 
-object ScrimAnimationElementKey
+val ScrimAnimationElementKey = AnimationElementKey()
 
-object PopupAnimationElementKey
+val PopupAnimationElementKey = AnimationElementKey()
 
 fun FadeScaleStackTransition(
   origin: TransformOrigin = TransformOrigin.Center,

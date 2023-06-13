@@ -21,6 +21,7 @@ import com.ivianuu.essentials.time.milliseconds
 import com.ivianuu.essentials.ui.animation.AnimatedStackChild
 import com.ivianuu.essentials.ui.animation.AnimatedStackState
 import com.ivianuu.essentials.ui.animation.AnimationElement
+import com.ivianuu.essentials.ui.animation.AnimationElementKey
 import com.ivianuu.essentials.ui.animation.AnimationElementPropKey
 import com.ivianuu.essentials.ui.animation.ContentAnimationElementKey
 import kotlinx.coroutines.CompletableDeferred
@@ -87,46 +88,43 @@ fun defaultAnimationSpec(
   easing = easing
 )
 
-fun StackTransitionScope.fromElement(key: Any): AnimationElement? = from?.let { element(it, key) }
+fun StackTransitionScope.fromElement(key: AnimationElementKey): AnimationElement? =
+  from?.let { element(it, key) }
 
-fun StackTransitionScope.toElement(key: Any): AnimationElement? = to?.let { element(it, key) }
+fun StackTransitionScope.toElement(key: AnimationElementKey): AnimationElement? =
+  to?.let { element(it, key) }
 
-private var refKeys = 0
-
-fun StackTransitionScope.element(child: AnimatedStackChild<*>, key: Any): AnimationElement {
-  val refKey = refKeys++
-  val element = child.elementStore.referenceElement(key, refKey)
-  coroutineContext.job.invokeOnCompletion {
-    child.elementStore.disposeRef(key, refKey)
-  }
-  return element
-}
+fun StackTransitionScope.element(
+  child: AnimatedStackChild<*>,
+  key: AnimationElementKey
+): AnimationElement =
+  child.elementStore.elementFor(key)
 
 fun <T> StackTransitionScope.fromElementProp(
-  elementKey: Any,
+  elementKey: AnimationElementKey,
   propKey: AnimationElementPropKey<T>
 ) = from?.let { elementProp(it, elementKey, propKey) }
 
 fun <T> StackTransitionScope.toElementProp(
-  elementKey: Any,
+  elementKey: AnimationElementKey,
   propKey: AnimationElementPropKey<T>
 ) = to?.let { elementProp(it, elementKey, propKey) }
 
 fun <T> StackTransitionScope.elementProp(
   child: AnimatedStackChild<*>,
-  elementKey: Any,
+  elementKey: AnimationElementKey,
   propKey: AnimationElementPropKey<T>,
 ) = element(child, elementKey)[propKey]
 
-fun StackTransitionScope.fromElementModifier(key: Any): MutableState<Modifier>? =
+fun StackTransitionScope.fromElementModifier(key: AnimationElementKey): MutableState<Modifier>? =
   from?.let { elementModifier(it, key) }
 
-fun StackTransitionScope.toElementModifier(key: Any): MutableState<Modifier>? =
+fun StackTransitionScope.toElementModifier(key: AnimationElementKey): MutableState<Modifier>? =
   to?.let { elementModifier(it, key) }
 
 fun StackTransitionScope.elementModifier(
   child: AnimatedStackChild<*>,
-  key: Any,
+  key: AnimationElementKey,
 ): MutableState<Modifier> {
   val modifier = mutableStateOf<Modifier>(Modifier)
   val element = element(child, key)
