@@ -4,9 +4,10 @@
 
 package com.ivianuu.essentials.ui
 
-import androidx.compose.runtime.compositionLocalOf
 import com.ivianuu.essentials.Scope
 
 object UiScope
 
-val LocalScope = compositionLocalOf<Scope<*>> { error("No scope provided") }
+interface UiScopeOwner {
+  val uiScope: Scope<UiScope>
+}

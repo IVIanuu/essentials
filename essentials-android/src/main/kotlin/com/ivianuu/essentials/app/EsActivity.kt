@@ -13,10 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import com.ivianuu.essentials.AndroidComponent
 import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Service
+import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.coroutines.onCancel
 import com.ivianuu.essentials.ui.DecorateAppUi
-import com.ivianuu.essentials.ui.LocalScope
 import com.ivianuu.essentials.ui.UiScope
+import com.ivianuu.essentials.ui.UiScopeOwner
 import com.ivianuu.essentials.ui.app.AppUi
 import com.ivianuu.essentials.util.ForegroundActivityMarker
 import com.ivianuu.injekt.Provide
@@ -25,7 +26,9 @@ import kotlinx.coroutines.launch
 
 @Provide @AndroidComponent class EsActivity(
   private val uiScopeFactory: (ComponentActivity) -> Scope<UiScope>
-) : ComponentActivity(), ForegroundActivityMarker {
+) : ComponentActivity(), ForegroundActivityMarker, UiScopeOwner {
+  override lateinit var uiScope: Scope<UiScope>
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -33,25 +36,25 @@ import kotlinx.coroutines.launch
       finish()
     }
 
-    val uiScope = uiScopeFactory(this)
+    uiScope = uiScopeFactory(this)
 
     lifecycleScope.launch(start = CoroutineStart.UNDISPATCHED) {
       onCancel { uiScope.dispose() }
     }
 
-    val uiComponent = uiScope.service<UiComponent>()
+    val esActivityComponent = uiScope.service<EsActivityComponent>()
 
     setContent {
       CompositionLocalProvider(LocalScope provides uiScope) {
-        uiComponent.decorateAppUi {
-          uiComponent.appUi()
+        esActivityComponent.decorateAppUi {
+          esActivityComponent.appUi()
         }
       }
     }
   }
 }
 
-@Provide @Service<UiScope> data class UiComponent(
+@Provide @Service<UiScope> data class EsActivityComponent(
   val appUi: AppUi,
   val decorateAppUi: DecorateAppUi
 )
