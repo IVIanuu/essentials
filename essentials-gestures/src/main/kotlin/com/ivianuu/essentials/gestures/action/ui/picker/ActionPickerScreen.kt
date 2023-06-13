@@ -140,7 +140,7 @@ sealed interface ActionPickerItem {
   screen: ActionPickerScreen
 ) = Model {
   ActionPickerModel(
-    items = produceResource { getActionPickerItems(screen, filter) },
+    items = produceResource { getActionPickerItems(filter, screen) },
     openActionSettings = action { item -> navigator.push(item.settingsScreen!!) },
     pickAction = action { item ->
       val result = item.getResult() ?: return@action
