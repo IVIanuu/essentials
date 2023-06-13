@@ -49,7 +49,7 @@ class PrefsScreen : Screen<Unit>
 @Provide fun prefsUi(
   navigator: Navigator,
   pref: DataStore<SamplePrefs>
-) = Ui<PrefsScreen, Unit> { model ->
+) = Ui<PrefsScreen, Unit> {
   val prefs by pref.data.collectAsState(remember { SamplePrefs() })
   SimpleListScreen("Prefs") {
     item {
