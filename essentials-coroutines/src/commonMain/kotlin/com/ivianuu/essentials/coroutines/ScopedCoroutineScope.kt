@@ -38,6 +38,9 @@ typealias ScopeCoroutineContext<N> = @ScopeCoroutineContextTag<N> CoroutineConte
 
 @Tag annotation class ScopeCoroutineContextTag<N> {
   companion object {
-    @Provide inline fun <N> context(context: DefaultCoroutineContext): ScopeCoroutineContext<N> = context
+    @Provide inline fun <N> context(context: DefaultCoroutineContext): ScopeCoroutineContext<N> =
+      context
   }
 }
+
+val Scope<*>.coroutineScope: CoroutineScope get() = service()

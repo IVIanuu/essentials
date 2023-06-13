@@ -20,7 +20,7 @@ import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.ui.UiScopeOwner
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 import com.ivianuu.essentials.unlock.ScreenUnlocker
 import com.ivianuu.essentials.util.AppUiStarter
@@ -104,7 +104,7 @@ interface PremiumVersionManager {
       appUiStarter()
         .cast<UiScopeOwner>()
         .uiScope
-        .service<Navigator>()
+        .navigator
         .push(GoPremiumScreen(showTryBasicOption = false))
     }
 

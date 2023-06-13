@@ -6,6 +6,7 @@ package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Stable
 import com.ivianuu.essentials.ProvidedService
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.Scoped
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.EventFlow
@@ -148,3 +149,5 @@ class NavigatorImpl(
       ProvidedService<UiScope, Navigator>(factory = navigator)
   }
 }
+
+val Scope<*>.navigator: Navigator get() = service()

@@ -28,7 +28,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.navigation.Navigator
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.push
 
 @Composable fun PopupMenuButton(
@@ -56,7 +56,7 @@ import com.ivianuu.essentials.ui.navigation.push
   onCancel: (() -> Unit)? = null,
   popupContent: @Composable () -> Unit
 ) = composed {
-  val navigator = LocalScope.current.service<Navigator>()
+  val navigator = LocalScope.current.navigator
 
   var coordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 

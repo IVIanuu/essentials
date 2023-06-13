@@ -15,16 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ivianuu.essentials.compose.LocalScope
 import com.ivianuu.essentials.compose.action
-import com.ivianuu.essentials.ui.navigation.Navigator
-import com.ivianuu.essentials.ui.navigation.Screen
+import com.ivianuu.essentials.ui.navigation.navigator
 import com.ivianuu.essentials.ui.navigation.pop
+import com.ivianuu.essentials.ui.navigation.screen
 
 @Composable fun PopupMenuItem(
   onSelected: () -> Unit,
   content: @Composable () -> Unit,
 ) {
-  val navigator = LocalScope.current.service<Navigator>()
-  val screen = LocalScope.current.service<Screen<*>>()
+  val navigator = LocalScope.current.navigator
+  val screen = LocalScope.current.screen
 
   Box(
     modifier = Modifier.widthIn(min = 200.dp)

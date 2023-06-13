@@ -5,6 +5,7 @@
 package com.ivianuu.essentials.ui.navigation
 
 import androidx.compose.runtime.Stable
+import com.ivianuu.essentials.Scope
 import com.ivianuu.essentials.ui.animation.transition.FadeScaleStackTransition
 import com.ivianuu.injekt.Provide
 
@@ -20,3 +21,5 @@ interface OverlayScreen<T> : Screen<T> {
 }
 
 interface CriticalUserFlowScreen<T> : Screen<T>
+
+val Scope<*>.screen: Screen<*> get() = service()

@@ -25,6 +25,7 @@ import com.ivianuu.essentials.ui.material.ListItem
 import com.ivianuu.essentials.ui.navigation.Screen
 import com.ivianuu.essentials.ui.navigation.ScreenDecorator
 import com.ivianuu.essentials.ui.navigation.Ui
+import com.ivianuu.essentials.ui.navigation.screen
 import com.ivianuu.injekt.Provide
 
 @Provide val decoratorsHomeItem = HomeItem("Decorators") { DecoratorsScreen() }
@@ -45,8 +46,7 @@ fun interface SampleListDecorator : ListDecorator
 
 @Provide val sampleListDecorator = SampleListDecorator {
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()
-      ?.service<Screen<*>>()
+    val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator before content $screen")
   }
@@ -54,8 +54,7 @@ fun interface SampleListDecorator : ListDecorator
   content()
 
   item(null) {
-    val screen = catch { LocalScope.current }.getOrNull()
-      ?.service<Screen<*>>()
+    val screen = catch { LocalScope.current }.getOrNull()?.screen
     if (screen is DecoratorsScreen)
       Text("Sample decorator after content $screen")
   }
@@ -64,7 +63,7 @@ fun interface SampleListDecorator : ListDecorator
 fun interface SampleScreenDecorator : ScreenDecorator
 
 @Provide val sampleKeyUiDecorator = SampleScreenDecorator decorator@ { content ->
-  val screen = LocalScope.current.service<Screen<*>>()
+  val screen = LocalScope.current.screen
   if (screen !is DecoratorsScreen) {
     content()
     return@decorator
