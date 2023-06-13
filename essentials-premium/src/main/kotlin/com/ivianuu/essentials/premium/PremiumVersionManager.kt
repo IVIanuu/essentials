@@ -14,7 +14,6 @@ import com.ivianuu.essentials.billing.BillingService
 import com.ivianuu.essentials.billing.Sku
 import com.ivianuu.essentials.cast
 import com.ivianuu.essentials.coroutines.ScopedCoroutineScope
-import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.coroutines.parForEach
 import com.ivianuu.essentials.data.DataStore
 import com.ivianuu.essentials.logging.Logger
@@ -72,7 +71,7 @@ interface PremiumVersionManager {
   override val isPremiumVersion: Flow<Boolean> = combine(
     billingService.isPurchased(premiumVersionSku),
     if (oldPremiumVersionSkus.isNotEmpty())
-      combine(oldPremiumVersionSkus.map { billingService.isPurchased(it) }).map {
+      combine(oldPremiumVersionSkus.map { billingService.isPurchased(it) }) {
         it.any { it }
       }
     else flowOf(false)

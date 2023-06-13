@@ -58,8 +58,6 @@ include(
   ":essentials-tile",
   ":essentials-time",
   ":essentials-torch",
-  ":essentials-tuples",
-  ":essentials-tuples:generator",
   ":essentials-ui",
   ":essentials-ui-animation",
   ":essentials-ui-core",

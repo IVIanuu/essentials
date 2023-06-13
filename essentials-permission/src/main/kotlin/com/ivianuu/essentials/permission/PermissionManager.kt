@@ -5,7 +5,6 @@
 package com.ivianuu.essentials.permission
 
 import com.ivianuu.essentials.cast
-import com.ivianuu.essentials.coroutines.combine
 import com.ivianuu.essentials.logging.Logger
 import com.ivianuu.essentials.logging.log
 import com.ivianuu.essentials.permission.ui.PermissionRequestScreen
@@ -18,6 +17,7 @@ import com.ivianuu.injekt.Provide
 import com.ivianuu.injekt.common.DefaultCoroutineContext
 import com.ivianuu.injekt.common.TypeKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -57,7 +57,7 @@ interface PermissionManager {
               }
             }
         }
-    ).map { states -> states.all { it } }
+    ) { states -> states.all { it } }
 
   override suspend fun requestPermissions(permissions: List<TypeKey<Permission>>): Boolean =
     withContext(context) {

@@ -15,7 +15,6 @@ kotlin {
       dependencies {
         api(project(":essentials-core"))
         api(project(":essentials-time"))
-        api(project(":essentials-tuples"))
         api(Deps.Coroutines.core)
         api(Deps.Injekt.core)
         api(Deps.Injekt.common)
